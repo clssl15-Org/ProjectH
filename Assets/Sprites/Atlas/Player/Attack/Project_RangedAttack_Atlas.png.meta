@@ -1,0 +1,391 @@
+fileFormatVersion: 2
+guid: 8835e208d181c564799ee0ccd7618708
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 450
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_0
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 2835
+        width: 805
+        height: 834
+      alignment: 9
+      pivot: {x: 0.72210926, y: 0.020553771}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d54e199d15159c44be22321b2196b57
+      internalID: 181394386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_1
+      rect:
+        serializedVersion: 2
+        x: 1306
+        y: 2835
+        width: 808
+        height: 807
+      alignment: 9
+      pivot: {x: 0.7172613, y: 0.012569461}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bac3b77b69539c249b92814335cb20aa
+      internalID: 1275201023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_2
+      rect:
+        serializedVersion: 2
+        x: 2490
+        y: 2835
+        width: 808
+        height: 778
+      alignment: 9
+      pivot: {x: 0.71726066, y: 0.02365026}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12e993e2f715c2e418f363e7b8e0a2d1
+      internalID: 79474596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_3
+      rect:
+        serializedVersion: 2
+        x: 3542
+        y: 2835
+        width: 806
+        height: 780
+      alignment: 9
+      pivot: {x: 0.72183293, y: 0.020703752}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5e8972cc0bea6c4e9ba0828550119c2
+      internalID: 1043828480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_4
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 1606
+        width: 1083
+        height: 779
+      alignment: 9
+      pivot: {x: 0.53902245, y: 0.011742412}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 629741bb75a139f41b48f75952e63098
+      internalID: 746852193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_5
+      rect:
+        serializedVersion: 2
+        x: 1306
+        y: 1606
+        width: 1083
+        height: 779
+      alignment: 9
+      pivot: {x: 0.53902227, y: 0.01591568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0d612b9472ddcc488958303b7b09790
+      internalID: 258053969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_6
+      rect:
+        serializedVersion: 2
+        x: 2490
+        y: 1606
+        width: 1056
+        height: 1083
+      alignment: 9
+      pivot: {x: 0.5584909, y: 0.007715903}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 515f5af34efe1c247af5e6d6c069f9d6
+      internalID: -611886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_7
+      rect:
+        serializedVersion: 2
+        x: 3542
+        y: 1606
+        width: 806
+        height: 1219
+      alignment: 9
+      pivot: {x: 0.72183293, y: 0.006634857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c7e59f06afe04a4d97e7f6fe45fd9eb
+      internalID: 1204331225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_8
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 187
+        width: 1029
+        height: 1110
+      alignment: 9
+      pivot: {x: 0.7716959, y: 0.007975371}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd4c2914c1d430643903721c94499353
+      internalID: -540670333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_9
+      rect:
+        serializedVersion: 2
+        x: 1226
+        y: 187
+        width: 1027
+        height: 1110
+      alignment: 9
+      pivot: {x: 0.7817212, y: 0.005046645}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c98ae65cd60f1f4bad2f078f26a1e78
+      internalID: -1791321135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_10
+      rect:
+        serializedVersion: 2
+        x: 2271
+        y: 187
+        width: 1027
+        height: 1110
+      alignment: 9
+      pivot: {x: 0.78172094, y: 0.013832794}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 036cfbdadafdfba45982a1faa2b7fea5
+      internalID: 481948182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_RangedAttack_Atlas_11
+      rect:
+        serializedVersion: 2
+        x: 3321
+        y: 187
+        width: 1027
+        height: 1110
+      alignment: 9
+      pivot: {x: 0.7817207, y: 0.010904082}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb01c09635a3ad64894a0cb28cb9cfe2
+      internalID: 473205532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Project_RangedAttack_Atlas_0: 181394386
+      Project_RangedAttack_Atlas_1: 1275201023
+      Project_RangedAttack_Atlas_10: 481948182
+      Project_RangedAttack_Atlas_11: 473205532
+      Project_RangedAttack_Atlas_2: 79474596
+      Project_RangedAttack_Atlas_3: 1043828480
+      Project_RangedAttack_Atlas_4: 746852193
+      Project_RangedAttack_Atlas_5: 258053969
+      Project_RangedAttack_Atlas_6: -611886
+      Project_RangedAttack_Atlas_7: 1204331225
+      Project_RangedAttack_Atlas_8: -540670333
+      Project_RangedAttack_Atlas_9: -1791321135
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,308 @@
+fileFormatVersion: 2
+guid: 1ded24f7312ce6a4ab43d9f78c5bed46
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 450
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_0
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 1537
+        width: 1352
+        height: 1021
+      alignment: 9
+      pivot: {x: 0.71194506, y: 0.16206658}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 189643af2fbc66942882e6a1a6864db0
+      internalID: -248403241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_1
+      rect:
+        serializedVersion: 2
+        x: 1759
+        y: 1537
+        width: 1538
+        height: 1021
+      alignment: 9
+      pivot: {x: 0.73574287, y: 0.15633944}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5569764637a4bf64dbd2a78d7a7e1359
+      internalID: 409832444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_2
+      rect:
+        serializedVersion: 2
+        x: 3362
+        y: 1498
+        width: 1836
+        height: 1099
+      alignment: 9
+      pivot: {x: 0.77073836, y: 0.1966937}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9047e97e0b99c744db6d52e94f488903
+      internalID: -1008713608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_3
+      rect:
+        serializedVersion: 2
+        x: 5231
+        y: 1453
+        width: 2085
+        height: 1099
+      alignment: 9
+      pivot: {x: 0.8029154, y: 0.21265736}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a26a84a3cf9a2443a8e56283505bc8c
+      internalID: 110000278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_4
+      rect:
+        serializedVersion: 2
+        x: 7454
+        y: 1400
+        width: 2387
+        height: 1158
+      alignment: 9
+      pivot: {x: 0.82338905, y: 0.25254735}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be7e9bb8b47fff84c9cd0fb40736491d
+      internalID: 1667476952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_6
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 96
+        width: 2600
+        height: 1168
+      alignment: 9
+      pivot: {x: 0.83513266, y: 0.2546665}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf5363eeb592a1447953e1fcf9be25a3
+      internalID: 439370168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_8
+      rect:
+        serializedVersion: 2
+        x: 3032
+        y: 102
+        width: 2825
+        height: 1156
+      alignment: 9
+      pivot: {x: 0.85605246, y: 0.2521194}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11ba2d676bb96e4458c8e77d2ec50602
+      internalID: -377593856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Project_Dash_Atlas_10
+      rect:
+        serializedVersion: 2
+        x: 5962
+        y: 102
+        width: 2976
+        height: 1156
+      alignment: 9
+      pivot: {x: 0.861567, y: 0.25211978}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b2d493b439907d47ba786c1244fec05
+      internalID: 492906611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Project_Dash_Atlas_0: -248403241
+      Project_Dash_Atlas_1: 409832444
+      Project_Dash_Atlas_10: 492906611
+      Project_Dash_Atlas_11: -1295902521
+      Project_Dash_Atlas_12: -1414122559
+      Project_Dash_Atlas_2: -1008713608
+      Project_Dash_Atlas_3: 110000278
+      Project_Dash_Atlas_4: 1667476952
+      Project_Dash_Atlas_5: 1544924804
+      Project_Dash_Atlas_6: 439370168
+      Project_Dash_Atlas_7: -263218142
+      Project_Dash_Atlas_8: -377593856
+      Project_Dash_Atlas_9: -155614415
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
