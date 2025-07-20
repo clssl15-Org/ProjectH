@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class CharacterState : MonoBehaviour
+{
+    [SerializeField]
+    RuntimeAnimatorController runtimeAnimatorController = null;
+    public RuntimeAnimatorController RuntimeAnimatorController => runtimeAnimatorController;
+
+    CharacterBrain characterBrain = null;
+
+    public CharacterActions CharacterActions => characterBrain.CharacterActions;
+
+    protected virtual void Awake()
+    {
+        // find the CharacterBrain component in the root of the hierarchy.
+        // If there are multiple target components under the root, it may not work correctly.
+        characterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
+    }
+
+    // This method runs once when the state has entered the state machine.
+    public virtual void EnterBehaviour(float dt)
+    {
+    }
+
+    // This methods runs before the main Update method.
+    public virtual void PreUpdateBehaviour(float dt)
+    {
+    }
+    // This method runs frame by frame, and should be implemented by the derived state class.
+
+    public abstract void UpdateBehaviour(float dt);
+
+    // This methods runs after the main Update method.
+    public virtual void PostUpdateBehaviour(float dt)
+    {
+    }
+
+    // This methods runs just before the character physics simulation.
+    public virtual void PreCharacterSimulation(float dt)
+    {
+    }
+
+    // This methods runs after the character physics simulation.
+    public virtual void PostCharacterSimulation(float dt)
+    {
+    }
+
+    // This method runs once when the state has exited the state machine.
+    public virtual void ExitBehaviour(float dt)
+    {
+    }
+
+    // Checks if the required conditions to exit this state are true. If so it returns the desired state (null otherwise). After this the state machine will
+    // proceed to evaluate the "enter transition" condition on the target state.
+    public virtual void CheckExitTransition()
+    {
+    }
+
+    // Checks if the required conditions to enter this state are true. If so the state machine will automatically change the current state to the desired one.
+    public virtual bool CheckEnterTransition(CharacterState fromState)
+    {
+        return true;
+    }
+}
