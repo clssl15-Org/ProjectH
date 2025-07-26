@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class CharacterActor : MonoBehaviour
 {
-    public RigidbodyComponent RigidbodyComponent { get; }
-    public Vector3 Velocity
+    Rigidbody2D _rigidbody = null;
+    CapsuleCollider2D _collider = null;
+    public Vector2 Velocity
     {
-        get => RigidbodyComponent.Velocity;
-        set => RigidbodyComponent.Velocity = value;
+        get => _rigidbody.velocity;
+        set => _rigidbody.velocity = value;
     }
 
-    public Vector3 Position
+    public Vector2 Position
     {
-        get => RigidbodyComponent.Position;
-        set => RigidbodyComponent.Position = value;
+        get => new Vector2(_rigidbody.position.x, _rigidbody.position.y);
+        set => _rigidbody.position = value;
     }
     public Quaternion Rotation
     {
@@ -31,7 +32,7 @@ public class CharacterActor : MonoBehaviour
 
     void ProcessVelocity(float dt)
     {
-        Vector3 position = Position;
+        Vector2 position = Position;
 
         if (IsGrounded)
             ProcessStableMovement();
@@ -51,6 +52,18 @@ public class CharacterActor : MonoBehaviour
 
     }
 
+    private void Awake()
+    {
+        if (!gameObject.TryGetComponent(out Rigidbody2D rigid))
+            rigid = gameObject.AddComponent<Rigidbody2D>();
+
+        _rigidbody = rigid;
+
+        if (!gameObject.TryGetComponent(out CapsuleCollider2D col))
+            col = gameObject.AddComponent<CapsuleCollider2D>();
+
+        _collider = col;
+    }
     private void FixedUpdate()
     {
         float dt = Time.deltaTime;

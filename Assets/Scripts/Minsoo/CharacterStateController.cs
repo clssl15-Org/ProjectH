@@ -11,6 +11,10 @@ public class CharacterStateController : MonoBehaviour
 
     private Queue<CharacterState> transitionQueue = new Queue<CharacterState>();
 
+    public Vector2 InputMovementReference { get; private set; }
+
+    public Vector2 MovementReferenceRight { get; private set; }
+
     private bool machineStarted = false;
 
     public CharacterBrain CharacterBrain { get; private set; }
@@ -134,6 +138,12 @@ public class CharacterStateController : MonoBehaviour
         return false;
     }
 
+    private void UpdateMovementData(Vector2 movementInput)
+    {
+        MovementReferenceRight = Vector2.right;
+        InputMovementReference = MovementReferenceRight * movementInput.x;
+    }
+
     private void Awake()
     {
         CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
@@ -155,6 +165,9 @@ public class CharacterStateController : MonoBehaviour
 
             machineStarted = true;
         }
+
+        if (CharacterBrain != null)
+            UpdateMovementData(CharacterBrain.CharacterActions.movement.value);
 
         bool valiidTransition = CheckForTransitions();
 

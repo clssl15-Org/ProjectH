@@ -7,16 +7,18 @@ public abstract class CharacterState : MonoBehaviour
     [SerializeField]
     RuntimeAnimatorController runtimeAnimatorController = null;
     public RuntimeAnimatorController RuntimeAnimatorController => runtimeAnimatorController;
+    public CharacterActor CharacterActor { get; private set; }
+    CharacterBrain CharacterBrain = null;
 
-    CharacterBrain characterBrain = null;
-
-    public CharacterActions CharacterActions => characterBrain.CharacterActions;
-
+    public CharacterActions CharacterActions => CharacterBrain.CharacterActions;
+    public CharacterStateController CharacterStateController { get; private set; }
     protected virtual void Awake()
     {
         // find the CharacterBrain component in the root of the hierarchy.
         // If there are multiple target components under the root, it may not work correctly.
-        characterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
+        CharacterActor = this.transform.root.GetComponentInChildren<CharacterActor>();
+        CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
+        CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
     }
 
     // This method runs once when the state has entered the state machine.
