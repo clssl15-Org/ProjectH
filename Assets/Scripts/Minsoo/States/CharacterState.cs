@@ -39,16 +39,6 @@ public abstract class CharacterState : MonoBehaviour
     {
     }
 
-    // This methods runs just before the character physics simulation.
-    public virtual void PreCharacterSimulation(float dt)
-    {
-    }
-
-    // This methods runs after the character physics simulation.
-    public virtual void PostCharacterSimulation(float dt)
-    {
-    }
-
     // This method runs once when the state has exited the state machine.
     public virtual void ExitBehaviour(float dt)
     {

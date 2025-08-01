@@ -18,10 +18,13 @@ public class CharacterStateController : MonoBehaviour
     private bool machineStarted = false;
 
     public CharacterBrain CharacterBrain { get; private set; }
+    public CharacterActor CharacterActor { get; private set; }
 
     public CharacterState CurrentState { get; private set; }
 
     public CharacterState PreviousState { get; private set; }
+    public SpriteRenderer PlayerSpriteRenderer { get; private set; }
+    public Animator Animator => CharacterActor.Animator;
 
     public CharacterState GetState(string stateName)
     {
@@ -142,11 +145,26 @@ public class CharacterStateController : MonoBehaviour
     {
         MovementReferenceRight = Vector2.right;
         InputMovementReference = MovementReferenceRight * movementInput.x;
+
+        ChangeFlipX(InputMovementReference);
+    }
+
+    public void ChangeFlipX(Vector2 inputValue)
+    {
+        if (inputValue.x == 0f)
+            return;
+
+        if (inputValue.x > 0f)
+            PlayerSpriteRenderer.flipX = false;
+        else
+            PlayerSpriteRenderer.flipX = true;
     }
 
     private void Awake()
     {
         CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
+        CharacterActor = this.transform.root.GetComponentInChildren<CharacterActor>();
+        PlayerSpriteRenderer = this.transform.root.GetComponentInChildren<SpriteRenderer>();
 
         AddStates();
     }
@@ -164,19 +182,23 @@ public class CharacterStateController : MonoBehaviour
             CurrentState.EnterBehaviour(0f);
 
             machineStarted = true;
+
+            Animator.runtimeAnimatorController = CurrentState.RuntimeAnimatorController;
         }
 
         if (CharacterBrain != null)
             UpdateMovementData(CharacterBrain.CharacterActions.movement.value);
 
         bool valiidTransition = CheckForTransitions();
-
+        
         transitionQueue.Clear();
 
         float dt = Time.deltaTime;
         if (valiidTransition)
         {
             PreviousState.ExitBehaviour(dt);
+
+            Animator.runtimeAnimatorController = CurrentState.RuntimeAnimatorController;
 
             CurrentState.EnterBehaviour(dt);
         }

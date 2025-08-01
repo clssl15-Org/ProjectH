@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterBrain : MonoBehaviour
 {
-    private InputHandler inputHandler = new InputHandler();
+    private InputHandler inputHandler;
     private CharacterActions characterActions = new CharacterActions();
 
     public CharacterActions CharacterActions => characterActions;
@@ -26,6 +26,7 @@ public class CharacterBrain : MonoBehaviour
     private void Awake()
     {
         characterActions.InitializeActions();
+        inputHandler = GetComponent<InputHandler>();
     }
 
     private void OnEnable()

@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class CharacterActor : MonoBehaviour
 {
+    [Header("Ground Check")]
+    public float groundCheckRadius = 0.15f;
+    public LayerMask groundLayer = ~0;
+
     Rigidbody2D _rigidbody = null;
     CapsuleCollider2D _collider = null;
+    public Animator Animator { get; private set; }
     public Vector2 Velocity
     {
         get => _rigidbody.velocity;
         set => _rigidbody.velocity = value;
+    }
+    public Vector2 PlanarVelocity
+    {
+        get => new Vector2(Velocity.x, 0);
     }
 
     public Vector2 Position
@@ -38,8 +47,9 @@ public class CharacterActor : MonoBehaviour
             ProcessStableMovement();
         else
             ProcessUnstableMovement();
-
-        Velocity = (position - Position) / dt;
+        
+        //Velocity = (position - Position) / dt;
+        //Debug.Log("Velocity: " + Velocity + " Position: " + Position);
     }
 
     void ProcessStableMovement()
@@ -52,8 +62,35 @@ public class CharacterActor : MonoBehaviour
 
     }
 
+    void ProbeGround(float dt)
+    {
+        Vector2 circleOrigin = Position + Vector2.down * ((_collider.size.y * 0.5f) - (_collider.size.x * 0.5f));
+
+        IsGrounded = Physics2D.OverlapCircle(
+            circleOrigin,
+            groundCheckRadius,
+            groundLayer
+        ) != null;
+    }
+
+#if UNITY_EDITOR
+    // Draws a wire sphere in the editor to visualize the ground check area
+    private void OnDrawGizmosSelected()
+    {
+        if (!TryGetComponent(out CapsuleCollider2D c)) return;
+
+        Vector2 circleOrigin = (Vector2)transform.position + Vector2.down *
+            ((c.size.y * 0.5f) - (c.size.x * 0.5f));
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(circleOrigin, groundCheckRadius);
+    }
+#endif
+
     private void Awake()
     {
+        Animator = this.transform.root.GetComponentInChildren<Animator>();
+
         if (!gameObject.TryGetComponent(out Rigidbody2D rigid))
             rigid = gameObject.AddComponent<Rigidbody2D>();
 
@@ -68,15 +105,9 @@ public class CharacterActor : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        PreSimulationUpdate(dt);
-        
-        //이 함수로 인해 위치 값이 변경됨. position을 바꿔주는 기능과 input값을 받아들이는 함수는 어디?
-        transform.SetPositionAndRotation(Position, Rotation);
-        //오히려 physicsActor의 PlanarVelocity가 바꿔주는것 같기도
-        // 일단, CharacterStateController - FixedUpdate - movementReferenceParameters에서 @movement값 전달
-        // forward * @movement값이 movementReferenceParameters의 InputMovementReference 변수에 저장되는데
-        // 결국, CharacterStateController가 프로퍼티로 가지고 있으며, 외부에서 이것을 참조함.
-        // zeroGravity의 ProcessVelocity()함수 에서 이 값을 사용하여 CharacterActor.Velocity값을 바꿔줌.
-        // zeroGravity는 CharacterState를 상속받으며, UpdateBehaviour에서 ProcessVelocity()함수를 매프레임 실행함.
+        ProbeGround(dt);
+        //PreSimulationUpdate(dt);
+
+        //transform.SetPositionAndRotation(Position, Rotation);
     }
 }
