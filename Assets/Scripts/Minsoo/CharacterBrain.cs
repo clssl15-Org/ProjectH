@@ -45,7 +45,7 @@ public class CharacterBrain : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        CharacterActions.Reset();
+        characterActions.Reset();
         UpdateBrainValues(dt);
     }
 }

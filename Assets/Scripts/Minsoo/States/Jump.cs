@@ -8,6 +8,7 @@ public class Jump : CharacterState
     private float jumpForce = 10f;
 
     private bool isDone = false;
+    private float motionTimer = 0f;
 
     public override void CheckExitTransition()
     {
@@ -32,5 +33,6 @@ public class Jump : CharacterState
     public void ResetJump()
     {
         isDone = false;
+        motionTimer = 0f;
     }
 }
