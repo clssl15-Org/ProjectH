@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerAttackData : MonoBehaviour
 {
-    [SerializeField] private float damage = 1f; // 이 무기의 기본 데미지
+    [SerializeField] private int damage = 1; // 이 무기의 기본 데미지
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -1,22 +1,22 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
   <diagram name="페이지-1" id="8upeaDAv0m2pSRYjm0oK">
-    <mxGraphModel dx="1055" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2000" math="0" shadow="0">
+    <mxGraphModel dx="1019" dy="601" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="_vtGoKqPHr6L5y4YgvUA-2" value="&lt;i&gt;Monster&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="120" y="110" width="240" height="170" as="geometry">
+          <mxGeometry x="120" y="110" width="240" height="150" as="geometry">
             <mxRectangle x="110" y="120" width="80" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="_vtGoKqPHr6L5y4YgvUA-3" value="&lt;div&gt;+ HP: int&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;# Rigidbody: Rigidbody2D&lt;/div&gt;&lt;/div&gt;&lt;div&gt;# DetectionRange: Collider&lt;/div&gt;&lt;div&gt;# BelongingPlatform: IPlatform&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="_vtGoKqPHr6L5y4YgvUA-2" vertex="1">
+        <mxCell id="_vtGoKqPHr6L5y4YgvUA-3" value="&lt;div&gt;+ HP: int&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;# Rigidbody: Rigidbody2D&lt;/div&gt;&lt;/div&gt;&lt;div&gt;# DetectionCollider: Collider&lt;/div&gt;&lt;div&gt;# BelongingPlatform: IPlatform&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="_vtGoKqPHr6L5y4YgvUA-2" vertex="1">
           <mxGeometry y="26" width="240" height="84" as="geometry" />
         </mxCell>
         <mxCell id="_vtGoKqPHr6L5y4YgvUA-4" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="_vtGoKqPHr6L5y4YgvUA-2" vertex="1">
           <mxGeometry y="110" width="240" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="_vtGoKqPHr6L5y4YgvUA-5" value="# &lt;i&gt;Attack&lt;/i&gt;(player: PlayerHitted): void&lt;div&gt;# OnDamaged(damage: int): void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="_vtGoKqPHr6L5y4YgvUA-2" vertex="1">
-          <mxGeometry y="120" width="240" height="50" as="geometry" />
+        <mxCell id="_vtGoKqPHr6L5y4YgvUA-5" value="&lt;div&gt;# OnDamaged(damage: int): void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="_vtGoKqPHr6L5y4YgvUA-2" vertex="1">
+          <mxGeometry y="120" width="240" height="30" as="geometry" />
         </mxCell>
         <mxCell id="_vtGoKqPHr6L5y4YgvUA-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;endSize=12;" parent="1" source="_vtGoKqPHr6L5y4YgvUA-19" target="_vtGoKqPHr6L5y4YgvUA-2" edge="1">
           <mxGeometry relative="1" as="geometry" />

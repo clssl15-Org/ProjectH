@@ -31,7 +31,7 @@ public class PlatformManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 이 메서드를 호출하여 Platform을 생성할 수 있습니다.
+    /// 플랫폼을 생성하려면 이 메서드를 호출하세요.
     /// </summary>
     public void SetPlatforms(Predicate<Vector3Int> predicate)
     {
@@ -86,6 +86,6 @@ public class PlatformManager : MonoBehaviour
     private void ThrowIfNotInitialized()
     {
         if (!initialized)
-            throw new InvalidOperationException("PlatformManager가 초기화되지 않았기 때문에 작업을 수행할 수 없습니다.");
+            throw new InvalidOperationException("Platform Manager가 초기화되지 않았기 때문에 작업을 수행할 수 없습니다.");
     }
 }

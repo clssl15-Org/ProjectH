@@ -1,20 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class MonsterHitted : MonoBehaviour
 {
-    [SerializeField] private MonsterBase monsterBase;
+    public event Action<int> OnTakeDamage;
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
-        if (monsterBase.currentState == MonsterBase.State.Dead) return;
-        monsterBase.currentHP -= damage;
-        monsterBase.ChangeState(MonsterBase.State.Hit);
-
-        if (monsterBase.currentHP <= 0)
+        if (damage < 0)
         {
-            monsterBase.ChangeState(MonsterBase.State.Dead);
+            throw new ArgumentOutOfRangeException(
+                nameof(damage), $"damage 값은 0 이상이어야 합니다. 입력된 값: {damage}");
         }
+
+        OnTakeDamage?.Invoke(damage);
     }
 }
