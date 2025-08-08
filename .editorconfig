@@ -1,0 +1,64 @@
+﻿[*.{cs,vb}]
+
+# IDE0044: 읽기 전용 한정자 추가
+dotnet_diagnostic.IDE0044.severity = none
+
+# IDE0040: 접근성 한정자 추가
+dotnet_diagnostic.IDE0040.severity = none
+
+# IDE1006: 명명 스타일
+dotnet_diagnostic.IDE1006.severity = none
+
+# IDE0062: 로컬 함수를 '정적'으로 지정
+dotnet_diagnostic.IDE0062.severity = none
+
+# IDE0071: 보간 단순화
+dotnet_diagnostic.IDE0071.severity = none
+
+# IDE0019: 패턴 일치 사용
+dotnet_diagnostic.IDE0019.severity = none
+
+# IDE0220: 명시적 캐스트 추가
+dotnet_diagnostic.IDE0220.severity = none
+
+# UNT0007: Null coalescing on Unity objects
+dotnet_diagnostic.UNT0007.severity = none
+
+# UNT0008: Null propagation on Unity objects
+dotnet_diagnostic.UNT0008.severity = none
+
+# UNT0023: Coalescing assignment on Unity objects
+dotnet_diagnostic.UNT0023.severity = none
+
+# IDE0039: 로컬 함수 사용
+dotnet_diagnostic.IDE0039.severity = none
+
+# IDE0072: 누락된 사례 추가
+dotnet_diagnostic.IDE0072.severity = none
+
+# CS8509: switch 식에서 입력 형식의 가능한 값을 모두 처리하지는 않습니다(전체 아님).
+dotnet_diagnostic.CS8509.severity = none
+
+# CS8524: switch 식에서 명명되지 않은 열거형 값이 사용되는 입력 형식의 일부 값을 처리하지 않습니다.
+dotnet_diagnostic.CS8524.severity = none
+
+# CS8846
+dotnet_diagnostic.CS8846.severity = none
+
+dotnet_diagnostic.UNT0006.severity = none
+dotnet_diagnostic.UNT0033.severity = none
+
+# IDE0051: 사용되지 않는 private 멤버 제거
+dotnet_diagnostic.IDE0051.severity = none
+
+# IDE0018: 인라인 변수 선언
+dotnet_diagnostic.IDE0018.severity = none
+
+# IDE0016: throw' 식 사용
+dotnet_diagnostic.IDE0016.severity = none
+
+# IDE0090: 'new(...)' 사용
+dotnet_diagnostic.IDE0090.severity = none
+
+# # CS0809: 사용되지 않는 멤버가 사용되는 멤버를 재정의합니다.
+# dotnet_diagnostic.CS0809.severity = none
