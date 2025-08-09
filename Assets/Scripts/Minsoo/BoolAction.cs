@@ -24,7 +24,7 @@ public struct BoolAction
     public void Initialize()
     {
         value = false;
-        previousValue = true;
+        previousValue = false;
     }
 
     public void Reset()

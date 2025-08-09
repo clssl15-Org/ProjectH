@@ -1,12 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class CharacterActor : MonoBehaviour
 {
     [Header("Ground Check")]
-    public float groundCheckRadius = 0.15f;
-    public LayerMask groundLayer = ~0;
+    [SerializeField]
+    private float groundCheckRadius = 0.15f;
+
+    [SerializeField]
+    private float groundCheckOffset = 0.5f;
+
+    [SerializeField]
+    private LayerMask groundLayer = ~0;
+
+    [Header("LandedCheck")]
+    [SerializeField]
+    private float landedTimer = 0.1f;
 
     Rigidbody2D _rigidbody = null;
     CapsuleCollider2D _collider = null;
@@ -19,6 +30,10 @@ public class CharacterActor : MonoBehaviour
     public Vector2 PlanarVelocity
     {
         get => new Vector2(Velocity.x, 0);
+    }
+    public Vector2 VerticalVelocity
+    {
+        get => new Vector2(0, Velocity.y);
     }
 
     public Vector2 Position
@@ -33,6 +48,11 @@ public class CharacterActor : MonoBehaviour
     }
 
     public bool IsGrounded { get; private set; }
+    public bool PreviousIsGrounded { get; private set; }
+    public bool IsLanded { get; private set; }
+
+    private bool isGroundedFlag = false;
+    private float landedCursor = 0f;
 
     private void PreSimulationUpdate(float dt)
     {
@@ -62,9 +82,40 @@ public class CharacterActor : MonoBehaviour
 
     }
 
+    void UpdateLandingState(float dt)
+    {
+        // Maintain the landing state as true for a short duration after
+        // touching the ground to ensure accurate detection and prevent flickering.
+
+        float landedDt = landedTimer / dt;
+        landedCursor += landedDt;
+
+        if (landedCursor >= 1f)
+            IsLanded = false;
+
+        // Detect landing moment precisely by confirming vertical velocity is zero
+        // while grounded, then reset flags and timers to track landing duration.
+
+        if (Velocity.y != 0f)
+            isGroundedFlag = true;
+
+        if (!isGroundedFlag)
+            return;
+
+        IsLanded = IsGrounded && (Velocity.y == 0f);
+
+        if (IsLanded)
+        {
+            isGroundedFlag = false;
+            landedCursor = 0f;
+        }
+    }
+
     void ProbeGround(float dt)
     {
-        Vector2 circleOrigin = Position + Vector2.down * ((_collider.size.y * 0.5f) - (_collider.size.x * 0.5f));
+        PreviousIsGrounded = IsGrounded;
+
+        Vector2 circleOrigin = Position + Vector2.down * ((_collider.size.y * 0.5f) - (_collider.size.x * 0.5f) - groundCheckOffset);
 
         IsGrounded = Physics2D.OverlapCircle(
             circleOrigin,
@@ -80,7 +131,7 @@ public class CharacterActor : MonoBehaviour
         if (!TryGetComponent(out CapsuleCollider2D c)) return;
 
         Vector2 circleOrigin = (Vector2)transform.position + Vector2.down *
-            ((c.size.y * 0.5f) - (c.size.x * 0.5f));
+            ((c.size.y * 0.5f) - (c.size.x * 0.5f) - groundCheckOffset);
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(circleOrigin, groundCheckRadius);
@@ -93,12 +144,10 @@ public class CharacterActor : MonoBehaviour
 
         if (!gameObject.TryGetComponent(out Rigidbody2D rigid))
             rigid = gameObject.AddComponent<Rigidbody2D>();
-
         _rigidbody = rigid;
 
         if (!gameObject.TryGetComponent(out CapsuleCollider2D col))
             col = gameObject.AddComponent<CapsuleCollider2D>();
-
         _collider = col;
     }
     private void FixedUpdate()
@@ -106,6 +155,7 @@ public class CharacterActor : MonoBehaviour
         float dt = Time.deltaTime;
 
         ProbeGround(dt);
+        UpdateLandingState(dt);
         //PreSimulationUpdate(dt);
 
         //transform.SetPositionAndRotation(Position, Rotation);

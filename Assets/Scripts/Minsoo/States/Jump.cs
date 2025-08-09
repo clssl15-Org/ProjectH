@@ -6,9 +6,16 @@ public class Jump : CharacterState
 {
     [SerializeField]
     private float jumpForce = 10f;
+    [SerializeField]
+    private float baseSpeed = 5f;
+    [SerializeField]
+    private float acceleration = 50f;
+    [SerializeField]
+    private float doubleJumpBufferTime = 0.1f;
+
+    protected string heightParameter = "Height";
 
     private bool isDone = false;
-    private float motionTimer = 0f;
 
     public override void CheckExitTransition()
     {
@@ -24,15 +31,25 @@ public class Jump : CharacterState
     }
     public override void UpdateBehaviour(float dt)
     {
-        if (CharacterActor.IsGrounded)
+
+        ProcessVelocity(dt);
+
+        if (CharacterActor.IsLanded)
         {
             isDone = true;
         }
+    }
+    private void ProcessVelocity(float dt)
+    {
+        Vector3 targetVelocity = CharacterStateController.InputMovementReference * baseSpeed;
+        CharacterActor.Velocity = Vector2.MoveTowards(CharacterActor.Velocity, targetVelocity, acceleration * dt);
+    }
+    public override void PostUpdateBehaviour(float dt)
+    {
     }
 
     public void ResetJump()
     {
         isDone = false;
-        motionTimer = 0f;
     }
 }

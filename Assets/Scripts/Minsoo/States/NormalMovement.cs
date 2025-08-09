@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class NormalMovement : CharacterState
 {
-    protected string planarSpeedParameter = "PlanarSpeed";
+    [SerializeField]
+    private float baseSpeed = 5f;
+    [SerializeField]
+    private float acceleration = 50f;
 
-    public float baseSpeed = 100f;
-    public float acceleration = 1000f;
+    protected string planarSpeedParameter = "PlanarSpeed";
 
     public override void CheckExitTransition()
     {
-        if (CharacterActions.Jump.Started)
+        if (CharacterActions.jump.Started)
         {
             CharacterStateController.EnqueueTransition<Jump>();
         }

@@ -21,6 +21,7 @@ public class CharacterBrain : MonoBehaviour
 
         characterActions.SetValues(inputHandler);
         characterActions.Update(dt);
+        
     }
 
     private void Awake()
@@ -41,10 +42,10 @@ public class CharacterBrain : MonoBehaviour
         characterActions.Reset();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         float dt = Time.deltaTime;
-
+        
         characterActions.Reset();
         UpdateBrainValues(dt);
     }

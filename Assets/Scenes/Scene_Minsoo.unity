@@ -9844,10 +9844,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c922331b3571234eb49ea5b26f86852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckRadius: 0.15
+  groundCheckRadius: 0.1
+  groundCheckOffset: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  landedTimer: 0.1
 --- !u!4 &1828150558
 Transform:
   m_ObjectHideFlags: 0
@@ -10031,7 +10033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 36c21c6f536c8ec4b84bc22005f2d3b7, type: 2}
   baseSpeed: 5
-  acceleration: 50
+  acceleration: 60
 --- !u!114 &1973654079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10070,8 +10072,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea7bcae05a2f9c4a8599da043b4b48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeAnimatorController: {fileID: 0}
-  jumpForce: 25
+  runtimeAnimatorController: {fileID: 9100000, guid: 199e98b270f870b4198dc9793ad74bdf, type: 2}
+  jumpForce: 30
+  baseSpeed: 5
+  acceleration: 30
+  doubleJumpBufferTime: 0.1
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0
