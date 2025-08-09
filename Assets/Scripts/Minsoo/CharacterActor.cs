@@ -87,9 +87,9 @@ public class CharacterActor : MonoBehaviour
         // Maintain the landing state as true for a short duration after
         // touching the ground to ensure accurate detection and prevent flickering.
 
-        float landedDt = landedTimer / dt;
+        float landedDt = dt / landedTimer;
         landedCursor += landedDt;
-
+        
         if (landedCursor >= 1f)
             IsLanded = false;
 
@@ -157,7 +157,7 @@ public class CharacterActor : MonoBehaviour
         ProbeGround(dt);
         UpdateLandingState(dt);
         //PreSimulationUpdate(dt);
-
+        
         //transform.SetPositionAndRotation(Position, Rotation);
     }
 }

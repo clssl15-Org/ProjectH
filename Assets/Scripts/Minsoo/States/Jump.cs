@@ -11,16 +11,22 @@ public class Jump : CharacterState
     [SerializeField]
     private float acceleration = 50f;
     [SerializeField]
-    private float doubleJumpBufferTime = 0.1f;
+    private int maxJumps = 2;
+    [SerializeField]
+    private float jumpInterval = 0.1f;
+
+    private int extraJumpCount;
 
     protected string heightParameter = "Height";
 
     private bool isDone = false;
+    private float jumpCursor;
 
     public override void CheckExitTransition()
     {
         if (isDone)
         {
+            Debug.Log("Exit");
             CharacterStateController.EnqueueTransition<NormalMovement>();
         }
     }
@@ -28,11 +34,21 @@ public class Jump : CharacterState
     {
         ResetJump();
         CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
+        extraJumpCount--;
     }
     public override void UpdateBehaviour(float dt)
     {
-
         ProcessVelocity(dt);
+        
+        float jumpIntervalDt = dt / jumpInterval;
+        jumpCursor += jumpIntervalDt;
+        
+        if (CharacterActions.jump.Started && extraJumpCount > 0 && (jumpCursor >= 1f))
+        {
+            CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
+            extraJumpCount--;
+            jumpCursor = 0f;
+        }
 
         if (CharacterActor.IsLanded)
         {
@@ -51,5 +67,7 @@ public class Jump : CharacterState
     public void ResetJump()
     {
         isDone = false;
+        extraJumpCount = maxJumps;
+        jumpCursor = 0f;
     }
 }

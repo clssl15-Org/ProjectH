@@ -9844,8 +9844,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c922331b3571234eb49ea5b26f86852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckRadius: 0.1
-  groundCheckOffset: 0.2
+  groundCheckRadius: 0.01
+  groundCheckOffset: 0.45
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -10076,7 +10076,8 @@ MonoBehaviour:
   jumpForce: 30
   baseSpeed: 5
   acceleration: 30
-  doubleJumpBufferTime: 0.1
+  maxJumps: 2
+  jumpInterval: 0.2
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0
