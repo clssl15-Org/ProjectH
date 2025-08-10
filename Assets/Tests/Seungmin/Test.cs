@@ -17,8 +17,7 @@ namespace Tests.Seungmin
             if (!platformManager)
                 return;
 
-            platformManager.SetPlatforms(_ => true);
-            print(platformManager.GetPlatformID(coord));
+            print(platformManager.GetPlatformId(coord));
         }
 
         private void GetPlatform()
@@ -40,7 +39,7 @@ namespace Tests.Seungmin
 
 
         [CustomEditor(typeof(Test))]
-        private class CubeGenerateButton : Editor
+        private class TestEditor : Editor
         {
             public override void OnInspectorGUI()
             {

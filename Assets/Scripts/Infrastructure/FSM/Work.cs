@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Infrastructure
@@ -28,8 +30,8 @@ namespace Infrastructure
         public event Action OnStopping;
         public event Action OnStopped;
 
-        private readonly HierarchyManager hierarchyManager;
-        //private readonly StreamManager streamManager;
+        protected readonly HierarchyManager hierarchyManager;
+
 
         // Internal
         protected Action start;
@@ -42,17 +44,21 @@ namespace Infrastructure
 
 
         // Content
-        public Work(string name)
+        public Work()
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException($"The name cannot be empty.", nameof(name));
-            
-            Name = name;
+            Name = GetType().Name;
             hierarchyManager = new(this);
-            //streamManager = new(this);
+        }
+        public Work(object name)
+        {
+            if (name is null)
+                throw new ArgumentException($"The name cannot be null.", nameof(name));
+            
+            Name = GetName(name);
+            hierarchyManager = new(this);
         }
 
-        public virtual void Open(params object[] args)
+        public void Open(params object[] args)
         {
             ThrowIfDisposed();
             if (!hierarchyManager.CanOpen)
@@ -85,15 +91,12 @@ namespace Infrastructure
             hierarchyManager.Open();
             if (!CheckToken(token)) return;
 
-            //if (hierarchyManager.Parent == null)
-            //    streamManager.Start();
-
             currentToken = null;
         }
         protected virtual void Start(params object[] args) { }
 
 
-        public virtual void Invoke()
+        public void Invoke()
         {
             ThrowIfDisposed();
             if (!_active) return;
@@ -124,7 +127,7 @@ namespace Infrastructure
         protected virtual void Update() { }
 
 
-        public virtual void Close()
+        public void Close()
         {
             if (!_active) return;
             _active = false;
@@ -151,8 +154,6 @@ namespace Infrastructure
             Stop();
             if (!CheckToken(token)) return;
 
-            //streamManager.Stop();
-
 
             foreach (Action action in OnStopped?.GetInvocationList()?.ToArray() ?? none)
             {
@@ -167,15 +168,15 @@ namespace Infrastructure
         private bool CheckToken(object token) => token == currentToken;
 
 
-        public void SetNext(string next, bool restartIfPossible = false)
+        public void SetNext(object next, bool restartIfPossible = false)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetNext(next, restartIfPossible);
+            hierarchyManager.SetNext(GetName(next), restartIfPossible);
         }
-        public void SetNextWith(string next, params object[] args)
+        public void SetNextWith(object next, params object[] args)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetNext(next, true, args);
+            hierarchyManager.SetNext(GetName(next), true, args);
         }
         public void ClearNext()
         {
@@ -213,10 +214,10 @@ namespace Infrastructure
         /// <param name="name">The name of the new child to create.</param>
         /// <param name="primary">Indicates whether this new child is considered primary.</param>
         /// <returns>The newly created child <see cref="Work"/>.</returns>
-        public Work AddChild(string name, bool primary = false)
+        public Work AddChild(object name, bool primary = false)
         {
             ThrowIfDisposed();
-            return hierarchyManager.AddChild(name, primary);
+            return hierarchyManager.AddChild(GetName(name), primary);
         }
 
         /// <summary>
@@ -252,10 +253,10 @@ namespace Infrastructure
         /// </summary>
         /// <param name="name">The name of the child to remove.</param>
         /// <returns>The removed child <see cref="Work"/>.</returns>
-        public Work RemoveChild(string name)
+        public Work RemoveChild(object name)
         {
             ThrowIfDisposed();
-            return hierarchyManager.RemoveChild(name);
+            return hierarchyManager.RemoveChild(GetName(name));
         }
 
         /// <summary>
@@ -264,10 +265,10 @@ namespace Infrastructure
         /// </summary>
         /// <param name="name">The name of the child to remove.</param>
         /// <returns>This <see cref="Work"/> instance (the parent), enabling chained calls.</returns>
-        public Work Delete(string name)
+        public Work Delete(object name)
         {
             ThrowIfDisposed();
-            hierarchyManager.RemoveChild(name);
+            hierarchyManager.RemoveChild(GetName(name));
             return this;
         }
 
@@ -277,13 +278,52 @@ namespace Infrastructure
         /// </summary>
         /// <param name="name">The name of the child to mark as primary.</param>
         /// <returns>This <see cref="Work"/> instance (the parent), enabling chained calls.</returns>
-        public Work SetPrimary(string name)
+        public Work SetPrimary(object name)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetPrimary(name);
+            hierarchyManager.SetPrimary(GetName(name));
             return this;
         }
+
+        /// <summary>
+        /// Attempts to retrieve the current child of the specified type.
+        /// </summary>
+        public bool TryGetCurrentChild<T>(out T current) where T : Work
+        {
+            current = null;
+
+            if (hierarchyManager.CurrentChild is null)
+                return false;
+            if (hierarchyManager.CurrentChild is not T _current)
+                return false;
+
+            current = _current;
+            return true;
+        }
         #endregion
+
+
+        public string GetFullState()
+        {
+            var logs = new List<string>();
+            var current = this;
+
+            do
+            {
+                logs.Add(current.Name);
+            } while (current.TryGetCurrentChild(out current));
+
+            return string.Join(" - ", logs);
+        }
+
+        private string GetName(object source) => source switch
+        {
+            null => string.Empty,
+            string name => name,
+            Type type => type.Name,
+            Work work => work.GetType().Name,
+            _ => source.ToString()
+        };
 
         void ThrowIfDisposed()
         {
@@ -297,12 +337,11 @@ namespace Infrastructure
             isDisposing = true;
 
             Close();
-
-            //streamManager.Dispose();
             hierarchyManager.Dispose();
 
             IsDisposed = true;
         }
+
 
 
         public static implicit operator string(Work work) => work?.Name ?? "null";

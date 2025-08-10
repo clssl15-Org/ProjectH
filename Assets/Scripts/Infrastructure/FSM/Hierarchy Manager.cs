@@ -5,7 +5,7 @@ namespace Infrastructure
 {
     public partial class Work
     {
-        private class HierarchyManager : IDisposable
+        public class HierarchyManager : IDisposable
         {
             // Front
             public bool Active { get; private set; } = false;
