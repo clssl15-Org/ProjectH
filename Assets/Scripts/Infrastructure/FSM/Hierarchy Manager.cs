@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure
 {
@@ -117,9 +118,9 @@ namespace Infrastructure
             public Work RemoveChild(string name)
             {
                 if (string.IsNullOrWhiteSpace(name))
-                    throw new ArgumentNullException($"[Work: {owner.Name}]: The name cannot be empty.");
+                    throw new ArgumentException($"[Work: {owner.Name}]: The name cannot be empty.", nameof(name));
                 if (!children.ContainsKey(name))
-                    throw new ArgumentException($"[Work: {owner.Name}]: Cannot remove child '{name}' because it does not exist.");
+                    throw new ArgumentException($"[Work: {owner.Name}]: Cannot remove child '{name}' because it does not exist.", nameof(name));
 
                 var work = children[name];
                 work.Close();
@@ -152,6 +153,9 @@ namespace Infrastructure
             {
                 Close();
                 ClearNext();
+
+                foreach (var child in children.Values.ToList())
+                    child.Dispose();
             }
         }
     }

@@ -12,10 +12,9 @@ public partial class Dokkaebi : Monster
     [SerializeField, TextArea(3, 10)]
     private string stateDisplay = string.Empty;
     private readonly StringBuilder sb = new();
-
+    
     // Internal
     private Brain brain;
-    private Direction movingDirection = Direction.Center;
 
 
     // Content
@@ -32,6 +31,10 @@ public partial class Dokkaebi : Monster
 
     protected void Start()
     {
+        Direction = UnityEngine.Random.Range(0, 2) == 0
+            ? Direction.Left
+            : Direction.Right;
+
         brain = new(this);
         brain.Open();
     }
@@ -47,6 +50,7 @@ public partial class Dokkaebi : Monster
     {
         sb.Clear();
         sb.AppendLine($"HP: {HP}");
+        sb.AppendLine($"Direction: {Direction.ToString()}");
         sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
 
         if (brain is not null)

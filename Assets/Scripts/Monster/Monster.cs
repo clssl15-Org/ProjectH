@@ -7,8 +7,26 @@ public abstract class Monster : MonoBehaviour
     // Front
     public int HP
     {
-        get => hp;
-        protected set => hp = Mathf.Clamp(value, 0, maxHp);
+        get => _hp;
+        protected set => _hp = Mathf.Clamp(value, 0, maxHp);
+    }
+
+    public int AttackPower => attackPower;
+    public int MoveSpeed => moveSpeed;
+
+    public Direction Direction
+    {
+        get => _direction;
+        protected set
+        {
+            if (_direction == value) return;
+            _direction = value;
+
+            if (_direction == Direction.Left)
+                transform.localScale = new Vector3(defaultIsRight ? -1f : 1f, 1f, 1f);
+            else if (_direction == Direction.Right)
+                transform.localScale = new Vector3(defaultIsRight ? 1f : -1f, 1f, 1f);
+        }
     }
 
     // Property 
@@ -16,6 +34,7 @@ public abstract class Monster : MonoBehaviour
     [SerializeField, Min(0)] private int maxHp;
     [SerializeField, Min(0)] private int attackPower;
     [SerializeField, Min(0)] private int moveSpeed;
+    [SerializeField] private bool defaultIsRight;
 
     [Header("Bindings")]
     [SerializeField] private PlatformManager platformManager;
@@ -25,7 +44,8 @@ public abstract class Monster : MonoBehaviour
     protected int BelongingPlatform { get; set; } = 1;
     protected PlatformDetector PlatformDetector { get; private set; }
 
-    private int hp;
+    private int _hp;
+    private Direction _direction = Direction.Center;
 
     private MonsterHitted hitDetector;
     private MonsterPlayerDetector playerDetector;
@@ -57,7 +77,7 @@ public abstract class Monster : MonoBehaviour
         hitDetector = GetComponent<MonsterHitted>();
         hitDetector.OnTakeDamage += OnDamaged;
 
-        hp = maxHp;
+        _hp = maxHp;
     }
 
     protected abstract void OnPlayerDetected(GameObject player);

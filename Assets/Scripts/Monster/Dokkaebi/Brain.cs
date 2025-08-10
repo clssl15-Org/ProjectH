@@ -21,7 +21,7 @@ public partial class Dokkaebi
         }
 
 
-        // Forwardings
+        // Forwarding
         public void TakeDamage(int damage)
         {
             if (TryGetCurrentChild<Alive>(out var current))

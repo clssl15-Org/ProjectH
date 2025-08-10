@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnityEngine;
 
 namespace Infrastructure
 {
@@ -61,11 +59,9 @@ namespace Infrastructure
         public void Open(params object[] args)
         {
             ThrowIfDisposed();
+
             if (!hierarchyManager.CanOpen)
-            {
-                Debug.LogWarning($"Cannot activate because parent is not active.");
-                return;
-            }
+                throw new InvalidOperationException($"Cannot activate Work '{Name}' because parent is not active.");
 
             if (_active) return;
             _active = true;
@@ -321,7 +317,7 @@ namespace Infrastructure
             null => string.Empty,
             string name => name,
             Type type => type.Name,
-            Work work => work.GetType().Name,
+            Work work => work.Name,
             _ => source.ToString()
         };
 

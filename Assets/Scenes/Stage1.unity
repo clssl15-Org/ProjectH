@@ -202,7 +202,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -5.66, y: 2.39, z: 0.004500015}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 536693428}
   m_Father: {fileID: 828006787}
@@ -369,6 +369,7 @@ MonoBehaviour:
   maxHp: 10
   attackPower: 1
   moveSpeed: 1
+  defaultIsRight: 0
   platformManager: {fileID: 1374360485}
   laserPrefab: {fileID: 8805659128304783242, guid: ef1ad469c5e09bd499dbb1f8431c6d52, type: 3}
   stateDisplay: 
@@ -386,7 +387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   platformManager: {fileID: 0}
   detectionHeight: 1
-  detectionRange: 1
+  detectionRange: 0.7
 --- !u!1 &49274273
 GameObject:
   m_ObjectHideFlags: 0
@@ -6651,7 +6652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1309707469}
-  enableDebugger: 0
+  enableDebugger: 1
 --- !u!1 &1382280797
 GameObject:
   m_ObjectHideFlags: 0
