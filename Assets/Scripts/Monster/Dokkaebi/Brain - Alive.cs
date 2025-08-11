@@ -18,17 +18,10 @@ public partial class Dokkaebi
                 AddChild(new Hit());
             }
 
-            public bool CheckPlatform(Direction direction, out int detectedPlatformId)
-            {
-                return Dokkaebi.PlatformDetector.CheckPlatform(
-                    direction, Dokkaebi.BelongingPlatform, out detectedPlatformId);
-            }
-
             public void TakeDamage(int damage)
             {
                 if (TryGetCurrentChild<Hit>(out _))
                     return;
-
 
                 var hp = Dokkaebi.HP - damage;
 

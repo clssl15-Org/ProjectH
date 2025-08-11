@@ -9,9 +9,9 @@ namespace Infrastructure
         /// <summary>
         /// 입력 Tilemap에서 start 좌표를 기준으로, predicate를 만족하며 수평으로 연결된 타일들을 반환합니다.
         /// </summary>
-        public static bool TryGetPlatform(this Tilemap tilemap, Vector3Int start, Predicate<Vector3Int> predicate, out Vector3Int[] platformcells)
+        public static bool TryGetPlatform(this Tilemap tilemap, Vector3Int start, Predicate<Vector3Int> predicate, out Vector3Int[] platformCells)
         {
-            platformcells = Array.Empty<Vector3Int>();
+            platformCells = Array.Empty<Vector3Int>();
 
             if (tilemap == null)
                 throw new ArgumentNullException(nameof(tilemap), "입력 Tilemap이 null입니다.");
@@ -49,10 +49,10 @@ namespace Infrastructure
             }
 
 
-            platformcells = new Vector3Int[rightX - leftX + 1];
+            platformCells = new Vector3Int[rightX - leftX + 1];
 
-            for (int i = 0; i < platformcells.Length; i++)
-                platformcells[i] = new Vector3Int(leftX++, y, z);
+            for (int i = 0; i < platformCells.Length; i++)
+                platformCells[i] = new Vector3Int(leftX++, y, z);
 
             return true;
         }

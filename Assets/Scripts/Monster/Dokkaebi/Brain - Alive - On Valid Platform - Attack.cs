@@ -39,6 +39,11 @@ public partial class Dokkaebi
                     if (!attacking)
                         Parent.SetNext<DoCooldown>();
                 }
+
+                protected override void Stop()
+                {
+                    Parent.Dokkaebi.StopAttack();
+                }
             }
 
             private class DoCooldown : Work<Attack>

@@ -20,23 +20,6 @@ namespace Tests.Seungmin
             print(platformManager.GetPlatformId(coord));
         }
 
-        private void GetPlatform()
-        {
-            if (!tilemap)
-                return;
-
-            if (tilemap.TryGetPlatform(
-                coord, t => tilemap.GetTile(t).name == "Tileset1_37", out var coords))
-            {
-                foreach (var tile in coords)
-                    print($"{tile}, {tilemap.GetSprite(tile)}");
-            }
-            else
-            {
-                print("Failed to get platform");
-            }
-        }
-
 
         [CustomEditor(typeof(Test))]
         private class TestEditor : Editor

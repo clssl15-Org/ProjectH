@@ -77,7 +77,7 @@ public abstract class Monster : MonoBehaviour
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다.");
 
         hitDetector = GetComponent<MonsterHitted>();
-        hitDetector.OnTakeDamage += OnDamaged;
+        hitDetector.Damaged += OnDamaged;
 
         _hp = maxHp;
     }
@@ -86,7 +86,7 @@ public abstract class Monster : MonoBehaviour
     protected virtual void OnDamaged(int damage) { }
 
     protected bool TryMove() => TryMove(Direction);
-    protected virtual bool TryMove(Direction direction)
+    protected bool TryMove(Direction direction)
     {
         if (Direction == Direction.Center)
             return true;
@@ -126,7 +126,7 @@ public abstract class Monster : MonoBehaviour
     protected virtual void OnDestroy()
     {
         if (hitDetector)
-            hitDetector.OnTakeDamage -= OnDamaged;
+            hitDetector.Damaged -= OnDamaged;
 
         if (playerDetector)
             playerDetector.PlayerDetected -= OnPlayerDetected;

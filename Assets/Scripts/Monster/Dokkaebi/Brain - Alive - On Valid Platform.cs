@@ -21,7 +21,8 @@ public partial class Dokkaebi
 
             protected override void Update()
             {
-                if (!Parent.CheckPlatform(Direction.Center, out var _))
+                if (!Dokkaebi.PlatformDetector.CheckPlatform(
+                    Direction.Center, Dokkaebi.BelongingPlatform, out _))
                 {
                     Dokkaebi.BelongingPlatform = -1;
                     Parent.SetNext<SetPlatform>();

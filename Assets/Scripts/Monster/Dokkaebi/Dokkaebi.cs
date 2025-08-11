@@ -97,7 +97,7 @@ public partial class Dokkaebi : Monster
 
         IEnumerator DoAttack()
         {
-            while (attackTime > 0)
+            while (attacking && attackTime > 0)
             {
                 attackTime -= Time.deltaTime;
                 yield return null;
@@ -112,6 +112,8 @@ public partial class Dokkaebi : Monster
 
         return true;
     }
+
+    protected void StopAttack() => attacking = false;
 
     protected bool TryGetDamage(Action callback = null)
     {

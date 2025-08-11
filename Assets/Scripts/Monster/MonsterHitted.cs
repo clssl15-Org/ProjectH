@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MonsterHitted : MonoBehaviour
 {
-    public event Action<int> OnTakeDamage;
+    public event Action<int> Damaged;
 
     public void TakeDamage(int damage)
     {
@@ -13,6 +13,6 @@ public class MonsterHitted : MonoBehaviour
                 nameof(damage), $"damage 값은 0 이상이어야 합니다. 입력된 값: {damage}");
         }
 
-        OnTakeDamage?.Invoke(damage);
+        Damaged?.Invoke(damage);
     }
 }

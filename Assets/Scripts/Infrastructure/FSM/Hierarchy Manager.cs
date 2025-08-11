@@ -107,6 +107,8 @@ namespace Infrastructure
                     throw new ArgumentException($"[Work: {owner.Name}]: A child with the name '{work.Name}' already exists.");
                 if (owner == work)
                     throw new ArgumentException($"[Work: {owner.Name}]: A work cannot be its own child.");
+                if (work.hierarchyManager.Parent != null)
+                    throw new InvalidOperationException($"Child '{work.Name}' already has a parent.");
 
                 work.hierarchyManager.Parent = owner;
                 children.Add(work.Name, work);
@@ -125,6 +127,7 @@ namespace Infrastructure
                 var work = children[name];
                 work.Close();
 
+                if (CurrentChild == work) CurrentChild = null;
                 if (ReservedChild == name) ReservedChild = string.Empty;
                 if (PrimaryChild == name) PrimaryChild = string.Empty;
 

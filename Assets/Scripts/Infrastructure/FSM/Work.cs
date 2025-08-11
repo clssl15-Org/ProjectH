@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Infrastructure
 {
@@ -29,13 +28,12 @@ namespace Infrastructure
         public event Action Stopped;
 
         protected readonly HierarchyManager hierarchyManager;
-
+        //private readonly StreamManager streamManager;
 
         // Internal
         protected Action start;
         protected Action update;
         protected Action stop;
-        private readonly Action[] none = Array.Empty<Action>();
 
         private bool _active = false;
         private object currentToken = null;
@@ -46,14 +44,16 @@ namespace Infrastructure
         {
             Name = GetType().Name;
             hierarchyManager = new(this);
+            //streamManager = new(this);
         }
         public Work(object name)
         {
             if (name is null)
                 throw new ArgumentException($"The name cannot be null.", nameof(name));
-            
+
             Name = GetName(name);
             hierarchyManager = new(this);
+            //streamManager = new(this);
         }
 
         public void Open(params object[] args)
@@ -72,13 +72,13 @@ namespace Infrastructure
             Start(args);
             if (!CheckToken(token)) return;
 
-            foreach (Action action in start?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in start?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
 
-            foreach (Action action in Started?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Started?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -86,6 +86,9 @@ namespace Infrastructure
 
             hierarchyManager.Open();
             if (!CheckToken(token)) return;
+
+            //if (hierarchyManager.Parent == null)
+            //    streamManager.Start();
 
             currentToken = null;
         }
@@ -103,13 +106,13 @@ namespace Infrastructure
             Update();
             if (!CheckToken(token)) return;
 
-            foreach (Action action in update?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in update?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
 
-            foreach (Action action in Updated?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Updated?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -132,7 +135,7 @@ namespace Infrastructure
             currentToken = token;
 
 
-            foreach (Action action in Stopping?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Stopping?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -141,7 +144,7 @@ namespace Infrastructure
             hierarchyManager.Close();
             if (!CheckToken(token)) return;
 
-            foreach (Action action in stop?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in stop?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -150,8 +153,9 @@ namespace Infrastructure
             Stop();
             if (!CheckToken(token)) return;
 
+            //streamManager.Stop();
 
-            foreach (Action action in Stopped?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Stopped?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -162,6 +166,29 @@ namespace Infrastructure
         protected virtual void Stop() { }
 
         private bool CheckToken(object token) => token == currentToken;
+
+
+        //public virtual Work SetStream(EventStream stream)
+        //{
+        //    ThrowIfDisposed();
+
+        //    streamManager.SetStream(stream);
+        //    return this;
+        //}
+        //public virtual Work SetStream(Func<EventStream> streamFactory)
+        //{
+        //    ThrowIfDisposed();
+
+        //    streamManager.SetStream(streamFactory);
+        //    return this;
+        //}
+        //public virtual Work RemoveStream()
+        //{
+        //    ThrowIfDisposed();
+
+        //    streamManager.RemoveStream();
+        //    return this;
+        //}
 
 
         public void SetNext(object next, bool restartIfPossible = false)
@@ -324,7 +351,8 @@ namespace Infrastructure
 
         private string GetName(object source) => source switch
         {
-            null => string.Empty,
+            null => throw new ArgumentNullException(nameof(source), $"[Work: {Name}] : Name source cannot be null."),
+            string name when string.IsNullOrWhiteSpace(name) => throw new ArgumentException($"[Work: {Name}] : Name cannot be empty.", nameof(source)),
             string name => name,
             Type type => type.Name,
             _ => source.ToString()
@@ -342,18 +370,17 @@ namespace Infrastructure
             isDisposing = true;
 
             Close();
+
+            //streamManager.Dispose();
             hierarchyManager.Dispose();
 
             IsDisposed = true;
         }
 
 
-
-        public static implicit operator string(Work work) => work?.Name ?? "null";
-
         public override string ToString()
         {
-            return $"{Name}, Active: {Active}" +
+            return $"{Name}, Active: {Active}\n" +
                 $"Current: {hierarchyManager.CurrentChild?.Name ?? "None"}\n" +
                 $"Primary: {(!string.IsNullOrWhiteSpace(hierarchyManager.PrimaryChild) ? hierarchyManager.PrimaryChild : "None")}\n" +
                 $"Reserved: {(!string.IsNullOrWhiteSpace(hierarchyManager.ReservedChild) ? hierarchyManager.ReservedChild : "None")}";

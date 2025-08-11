@@ -81,8 +81,10 @@ public class PlatformManager : MonoBehaviour
         }
     }
 
-    // 여기에서 플랫폼 구분 규칙을 설정하세요.
-    private Predicate<Vector3Int> GetPredicate(Vector3Int criteria)
+    /// <summary>
+    /// 이 메서드를 재정의하여 플랫폼 구분 규칙을 설정하세요.
+    /// </summary>
+    protected virtual Predicate<Vector3Int> GetPredicate(Vector3Int criteria)
     {
         return cell => true;
     }
