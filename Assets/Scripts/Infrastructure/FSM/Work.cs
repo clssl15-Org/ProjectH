@@ -23,10 +23,10 @@ namespace Infrastructure
         private bool isDisposing = false;
 
         // Property
-        public event Action OnStarted;
-        public event Action OnUpdated;
-        public event Action OnStopping;
-        public event Action OnStopped;
+        public event Action Started;
+        public event Action Updated;
+        public event Action Stopping;
+        public event Action Stopped;
 
         protected readonly HierarchyManager hierarchyManager;
 
@@ -78,7 +78,7 @@ namespace Infrastructure
                 if (!CheckToken(token)) return;
             }
 
-            foreach (Action action in OnStarted?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Started?.GetInvocationList()?.ToArray() ?? none)
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -109,7 +109,7 @@ namespace Infrastructure
                 if (!CheckToken(token)) return;
             }
 
-            foreach (Action action in OnUpdated?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Updated?.GetInvocationList()?.ToArray() ?? none)
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -132,7 +132,7 @@ namespace Infrastructure
             currentToken = token;
 
 
-            foreach (Action action in OnStopping?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Stopping?.GetInvocationList()?.ToArray() ?? none)
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -151,7 +151,7 @@ namespace Infrastructure
             if (!CheckToken(token)) return;
 
 
-            foreach (Action action in OnStopped?.GetInvocationList()?.ToArray() ?? none)
+            foreach (Action action in Stopped?.GetInvocationList()?.ToArray() ?? none)
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -169,10 +169,20 @@ namespace Infrastructure
             ThrowIfDisposed();
             hierarchyManager.SetNext(GetName(next), restartIfPossible);
         }
+        public void SetNext<T>(bool restartIfPossible = false)
+        {
+            ThrowIfDisposed();
+            hierarchyManager.SetNext(GetName(typeof(T)), restartIfPossible);
+        }
         public void SetNextWith(object next, params object[] args)
         {
             ThrowIfDisposed();
             hierarchyManager.SetNext(GetName(next), true, args);
+        }
+        public void SetNextWith<T>(params object[] args)
+        {
+            ThrowIfDisposed();
+            hierarchyManager.SetNext(GetName(typeof(T)), true, args);
         }
         public void ClearNext()
         {
@@ -317,7 +327,6 @@ namespace Infrastructure
             null => string.Empty,
             string name => name,
             Type type => type.Name,
-            Work work => work.Name,
             _ => source.ToString()
         };
 

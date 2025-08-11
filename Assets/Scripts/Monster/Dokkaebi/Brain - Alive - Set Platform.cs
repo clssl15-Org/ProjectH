@@ -16,7 +16,7 @@ public partial class Dokkaebi
                 if (Dokkaebi.PlatformDetector.TryGetCurrentPlatformId(out var platformId))
                 {
                     Dokkaebi.BelongingPlatform = platformId;
-                    Parent.SetNext(typeof(OnValidPlatform));
+                    Parent.SetNext<OnValidPlatform>();
                 }
             }
         }

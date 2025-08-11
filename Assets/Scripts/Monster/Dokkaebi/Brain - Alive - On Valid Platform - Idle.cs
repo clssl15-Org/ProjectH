@@ -24,12 +24,26 @@ public partial class Dokkaebi
                 AddChild(new Patrol());
             }
 
-            protected override void Start(params object[] _)
+            /// <summary>
+            /// startWithIdle이 참이면 첫 상태로 Rest를 선택합니다.
+            /// </summary>
+            protected override void Start(params object[] startWithIdle)
             {
-                if (Random.Range(0, 3) == 0)
-                    SetNext(typeof(Rest));
+                if (startWithIdle.Length > 0 && (bool)startWithIdle[0])
+                    SetNext<Rest>();
                 else
-                    SetNext(typeof(Patrol));
+                {
+                    if (Random.Range(0, 3) == 0)
+                        SetNext<Rest>();
+                    else
+                        SetNext<Patrol>();
+                }
+            }
+
+            protected override void Update()
+            {
+                if (Parent.CheckPlayer(out _))
+                    Parent.SetNext<Engaged>();
             }
 
 
@@ -54,7 +68,7 @@ public partial class Dokkaebi
                     remainingTime -= Time.deltaTime;
 
                     if (remainingTime <= 0)
-                        Parent.SetNext(typeof(Patrol));
+                        Parent.SetNext<Patrol>();
                 }
             }
 
@@ -67,6 +81,9 @@ public partial class Dokkaebi
                 protected override void Start(params object[] _)
                 {
                     remainingTime = Random.Range(Parent.MinPatrolTime, Parent.MaxPatrolTime);
+
+                    if (Dokkaebi.Direction != Direction.Left && Dokkaebi.Direction != Direction.Right)
+                        Dokkaebi.Direction = Random.Range(0, 2) == 0 ? Direction.Left : Direction.Right;
                 }
 
                 protected override void Update()
@@ -74,39 +91,15 @@ public partial class Dokkaebi
                     remainingTime -= Time.deltaTime;
 
                     if (remainingTime <= 0)
-                        Parent.SetNext(typeof(Rest));
+                        Parent.SetNext<Rest>();
 
-                    if (Dokkaebi.Direction == Direction.Left)
+
+                    if (!Dokkaebi.TryMove())
                     {
-                        if (!Dokkaebi.PlatformDetector.CheckPlatform(Direction.Left, Dokkaebi.BelongingPlatform, out _))
-                        {
-                            Dokkaebi.Direction = Direction.Right;
-                            return;
-                        }
-
-                        Dokkaebi.Rigidbody.velocity = new Vector2
-                        {
-                            x = -Dokkaebi.MoveSpeed,
-                            y = Dokkaebi.Rigidbody.velocity.y,
-                        };
+                        Dokkaebi.Direction = (Dokkaebi.Direction == Direction.Left)
+                            ? Direction.Right
+                            : Direction.Left;
                     }
-                    else if (Dokkaebi.Direction == Direction.Right)
-                    {
-                        if (!Dokkaebi.PlatformDetector.CheckPlatform(Direction.Right, Dokkaebi.BelongingPlatform, out _))
-                        {
-                            Dokkaebi.Direction = Direction.Left;
-                            return;
-                        }
-
-                        Dokkaebi.Rigidbody.velocity = new Vector2
-                        {
-                            x = Dokkaebi.MoveSpeed,
-                            y = Dokkaebi.Rigidbody.velocity.y,
-                        };
-                    }
-                    else
-                        throw new System.InvalidOperationException(
-                            $"Left 혹은 Right를 향하고 있지 않은 도깨비를 이동할 수 없습니다. 현재 방향: {Dokkaebi.Direction}");
                 }
 
                 protected override void Stop()

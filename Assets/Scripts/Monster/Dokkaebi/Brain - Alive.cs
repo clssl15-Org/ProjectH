@@ -15,6 +15,7 @@ public partial class Dokkaebi
             {
                 AddChild(new SetPlatform(), true);
                 AddChild(new OnValidPlatform());
+                AddChild(new Hit());
             }
 
             public bool CheckPlatform(Direction direction, out int detectedPlatformId)
@@ -25,16 +26,21 @@ public partial class Dokkaebi
 
             public void TakeDamage(int damage)
             {
+                if (TryGetCurrentChild<Hit>(out _))
+                    return;
+
+
                 var hp = Dokkaebi.HP - damage;
 
-                if (Dokkaebi.HP <= 0)
+                if (hp <= 0)
                 {
                     Dokkaebi.HP = 0;
-                    Parent.SetNext(typeof(Dead));
+                    Parent.SetNext<Dead>();
                 }
                 else
                 {
                     Dokkaebi.HP = hp;
+                    SetNext<Hit>();
                 }
             }
         }

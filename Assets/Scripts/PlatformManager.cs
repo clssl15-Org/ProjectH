@@ -129,6 +129,7 @@ public class PlatformManager : MonoBehaviour
         return platforms.TryGetValue(cell, out id);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (!enableDebugger || !initialized || !tilemap)
@@ -155,6 +156,7 @@ public class PlatformManager : MonoBehaviour
             Gizmos.DrawWireCube(center, size);
         }
     }
+#endif
 
     private void ThrowIfNotInitialized()
     {

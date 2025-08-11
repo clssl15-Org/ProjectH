@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Infrastructure;
 
 public partial class Dokkaebi
@@ -9,15 +6,9 @@ public partial class Dokkaebi
     {
         private class Dead : Work<Brain>
         {
-            public Dead()
-            {
-
-            }
-
             protected override void Start(params object[] _)
             {
-                Debug.Log($"{Parent.Dokkaebi.name} »ç¸Á");
-                Parent.Close();
+                Parent.Dokkaebi.TryDie();
             }
         }
     }

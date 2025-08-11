@@ -44,6 +44,8 @@ public abstract class Monster : MonoBehaviour
     protected int BelongingPlatform { get; set; } = 1;
     protected PlatformDetector PlatformDetector { get; private set; }
 
+    protected GameObject DetectedPlayer => playerDetector.CurrentPlayer;
+
     private int _hp;
     private Direction _direction = Direction.Center;
 
@@ -68,7 +70,7 @@ public abstract class Monster : MonoBehaviour
         playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
 
         if (playerDetector)
-            playerDetector.OnPlayerDetected += OnPlayerDetected;
+            playerDetector.PlayerDetected += OnPlayerDetected;
         else
             Debug.LogWarning(
                 $"이 몬스터({name})은(는) {nameof(MonsterPlayerDetector)}를 가지고 있지 않습니다.\n" +
@@ -80,8 +82,46 @@ public abstract class Monster : MonoBehaviour
         _hp = maxHp;
     }
 
-    protected abstract void OnPlayerDetected(GameObject player);
-    protected abstract void OnDamaged(int damage);
+    protected virtual void OnPlayerDetected(GameObject player) { }
+    protected virtual void OnDamaged(int damage) { }
+
+    protected bool TryMove() => TryMove(Direction);
+    protected virtual bool TryMove(Direction direction)
+    {
+        if (Direction == Direction.Center)
+            return true;
+
+        if (direction == Direction.Left)
+        {
+            if (!PlatformDetector.CheckPlatform(Direction.Left, BelongingPlatform, out _))
+                return false;
+
+            Rigidbody.velocity = new Vector2
+            {
+                x = -MoveSpeed,
+                y = Rigidbody.velocity.y,
+            };
+
+            return true;
+        }
+
+        if (direction == Direction.Right)
+        {
+            if (!PlatformDetector.CheckPlatform(Direction.Right, BelongingPlatform, out _))
+                return false;
+
+            Rigidbody.velocity = new Vector2
+            {
+                x = MoveSpeed,
+                y = Rigidbody.velocity.y,
+            };
+
+            return true;
+        }
+
+        throw new InvalidOperationException(
+            $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드를 수행할 수 없습니다.");
+    }
 
     protected virtual void OnDestroy()
     {
@@ -89,6 +129,6 @@ public abstract class Monster : MonoBehaviour
             hitDetector.OnTakeDamage -= OnDamaged;
 
         if (playerDetector)
-            playerDetector.OnPlayerDetected -= OnPlayerDetected;
+            playerDetector.PlayerDetected -= OnPlayerDetected;
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Infrastructure;
 
@@ -17,6 +15,8 @@ public partial class Dokkaebi
             public OnValidPlatform()
             {
                 AddChild(new Idle(), true);
+                AddChild(new Engaged());
+                AddChild(new Attack());
             }
 
             protected override void Update()
@@ -24,10 +24,21 @@ public partial class Dokkaebi
                 if (!Parent.CheckPlatform(Direction.Center, out var _))
                 {
                     Dokkaebi.BelongingPlatform = -1;
-                    Parent.SetNext(typeof(SetPlatform));
+                    Parent.SetNext<SetPlatform>();
 
                     return;
                 }
+            }
+
+            public bool CheckPlayer(out GameObject player)
+            {
+                player = Dokkaebi.DetectedPlayer;
+
+                if (!player)
+                    return false;
+
+                var playerPlatform = player.GetComponent<TestPlayer>().CurrentPlatform;
+                return playerPlatform >= 0 && playerPlatform == Dokkaebi.BelongingPlatform;
             }
         }
     }
