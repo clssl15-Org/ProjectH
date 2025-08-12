@@ -11,7 +11,7 @@ public partial class Dokkaebi
 
 
             // Content
-            protected override void Update()
+            protected override void OnUpdate()
             {
                 if (Dokkaebi.PlatformDetector.TryGetCurrentPlatformId(out var platformId))
                 {

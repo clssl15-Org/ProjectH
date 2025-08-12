@@ -17,7 +17,7 @@ public partial class Dokkaebi
 
 
             // Content
-            protected override void Update()
+            protected override void OnUpdate()
             {
                 if (!Parent.CheckPlayer(out var player))
                 {

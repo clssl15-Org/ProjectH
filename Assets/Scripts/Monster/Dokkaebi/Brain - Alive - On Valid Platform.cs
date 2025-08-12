@@ -19,7 +19,7 @@ public partial class Dokkaebi
                 AddChild(new Attack());
             }
 
-            protected override void Update()
+            protected override void OnUpdate()
             {
                 if (!Dokkaebi.PlatformDetector.CheckPlatform(
                     Direction.Center, Dokkaebi.BelongingPlatform, out _))
