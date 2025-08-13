@@ -6,7 +6,7 @@ public partial class Dokkaebi
     {
         private class Dead : Work<Brain>
         {
-            protected override void OnEnter(params object[] _)
+            protected override void Start(params object[] _)
             {
                 Parent.Dokkaebi.TryDie();
             }

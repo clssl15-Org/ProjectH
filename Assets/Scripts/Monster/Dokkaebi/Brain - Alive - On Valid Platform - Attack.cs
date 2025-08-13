@@ -28,7 +28,7 @@ public partial class Dokkaebi
             // Substates
             private class DoAttack : Work<Attack>
             {
-                protected override void OnEnter(params object[] _)
+                protected override void Start(params object[] _)
                 {
                     var attacking = Parent.Dokkaebi.TryAttack(() =>
                     {
@@ -40,7 +40,7 @@ public partial class Dokkaebi
                         Parent.SetNext<DoCooldown>();
                 }
 
-                protected override void OnExit()
+                protected override void Stop()
                 {
                     Parent.Dokkaebi.StopAttack();
                 }
@@ -50,12 +50,12 @@ public partial class Dokkaebi
             {
                 private float cooldown;
 
-                protected override void OnEnter(params object[] _)
+                protected override void Start(params object[] _)
                 {
                     cooldown = Parent.Cooldown;
                 }
 
-                protected override void OnUpdate()
+                protected override void Update()
                 {
                     cooldown -= Time.deltaTime;
                     if (cooldown <= 0)

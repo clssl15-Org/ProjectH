@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -53,7 +54,7 @@ public class PlatformDetector : MonoBehaviour
         if (!platformManager)
         {
             throw new InvalidOperationException(
-                "PlatformDetector를 사용하려면 platformManager가 할당되어 있어야 합니다.");
+                "PlatformDetector 객체를 사용하려면 platformManager가 할당되어 있어야 합니다.");
         }
 
         var cellHeight = platformManager.CellSize.y;

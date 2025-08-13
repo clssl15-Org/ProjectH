@@ -30,7 +30,7 @@ namespace Infrastructure
             // Content
             public HierarchyManager(Work owner) => this.owner = owner;
 
-            public void Enter(params object[] args)
+            public void Open(params object[] args)
             {
                 if (Active) return;
                 Active = true;
@@ -46,16 +46,16 @@ namespace Infrastructure
                 }
 
                 ClearNext();
-                CurrentChild?.Enter(args);
+                CurrentChild?.Open(args);
             }
 
-            public void Update()
+            public void Invoke()
             {
                 if (!Active) return;
-                CurrentChild?.OnUpdate();
+                CurrentChild?.Invoke();
             }
 
-            public void Exit()
+            public void Close()
             {
                 if (!Active) return;
                 Active = false;
@@ -63,7 +63,7 @@ namespace Infrastructure
                 var currentChild = CurrentChild;
                 CurrentChild = null;
 
-                currentChild?.Exit();
+                currentChild?.Close();
             }
 
             public void SetNext(string next, bool restartIfPossible, params object[] args)
@@ -71,7 +71,7 @@ namespace Infrastructure
                 if (string.IsNullOrWhiteSpace(next))
                 {
                     ClearNext();
-                    Exit();
+                    Close();
 
                     return;
                 }
@@ -88,8 +88,8 @@ namespace Infrastructure
 
                 if (!Active) return;
 
-                Exit();
-                Enter();
+                Close();
+                Open();
             }
 
             public void ClearNext()
@@ -108,7 +108,7 @@ namespace Infrastructure
                 if (owner == work)
                     throw new ArgumentException($"[Work: {owner.Name}]: A work cannot be its own child.");
                 if (work.hierarchyManager.Parent != null)
-                    throw new InvalidOperationException($"[Work: {owner.Name}]: Child '{work.Name}' already has a parent.");
+                    throw new InvalidOperationException($"Child '{work.Name}' already has a parent.");
 
                 work.hierarchyManager.Parent = owner;
                 children.Add(work.Name, work);
@@ -125,7 +125,7 @@ namespace Infrastructure
                     throw new ArgumentException($"[Work: {owner.Name}]: Cannot remove child '{name}' because it does not exist.", nameof(name));
 
                 var work = children[name];
-                work.Exit();
+                work.Close();
 
                 if (CurrentChild == work) CurrentChild = null;
                 if (ReservedChild == name) ReservedChild = string.Empty;
@@ -154,7 +154,7 @@ namespace Infrastructure
 
             public void Dispose()
             {
-                Exit();
+                Close();
                 ClearNext();
 
                 foreach (var child in children.Values.ToList())

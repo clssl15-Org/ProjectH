@@ -27,7 +27,7 @@ public partial class Dokkaebi
             /// <summary>
             /// startWithIdle이 참이면 첫 상태로 Rest를 선택합니다.
             /// </summary>
-            protected override void OnEnter(params object[] startWithIdle)
+            protected override void Start(params object[] startWithIdle)
             {
                 if (startWithIdle.Length > 0 && (bool)startWithIdle[0])
                     SetNext<Rest>();
@@ -40,7 +40,7 @@ public partial class Dokkaebi
                 }
             }
 
-            protected override void OnUpdate()
+            protected override void Update()
             {
                 if (Parent.CheckPlayer(out _))
                     Parent.SetNext<Engaged>();
@@ -52,7 +52,7 @@ public partial class Dokkaebi
             {
                 private float remainingTime = 0;
 
-                protected override void OnEnter(params object[] _)
+                protected override void Start(params object[] _)
                 {
                     remainingTime = Random.Range(Parent.MinRestTime, Parent.MaxRestTime);
 
@@ -63,7 +63,7 @@ public partial class Dokkaebi
                     };
                 }
 
-                protected override void OnUpdate()
+                protected override void Update()
                 {
                     remainingTime -= Time.deltaTime;
 
@@ -78,7 +78,7 @@ public partial class Dokkaebi
                 private float remainingTime = 0;
 
 
-                protected override void OnEnter(params object[] _)
+                protected override void Start(params object[] _)
                 {
                     remainingTime = Random.Range(Parent.MinPatrolTime, Parent.MaxPatrolTime);
 
@@ -86,7 +86,7 @@ public partial class Dokkaebi
                         Dokkaebi.Direction = Random.Range(0, 2) == 0 ? Direction.Left : Direction.Right;
                 }
 
-                protected override void OnUpdate()
+                protected override void Update()
                 {
                     remainingTime -= Time.deltaTime;
 
@@ -102,7 +102,7 @@ public partial class Dokkaebi
                     }
                 }
 
-                protected override void OnExit()
+                protected override void Stop()
                 {
                     Dokkaebi.Rigidbody.velocity = new Vector2
                     {
