@@ -13,8 +13,8 @@ namespace Infrastructure
             get => _active;
             set
             {
-                if (value) Open();
-                else Close();
+                if (value) Enter();
+                else Exit();
             }
         }
 
@@ -22,18 +22,18 @@ namespace Infrastructure
         private bool isDisposing = false;
 
         // Property
-        public event Action Started;
+        public event Action Entered;
         public event Action Updated;
-        public event Action Stopping;
-        public event Action Stopped;
+        public event Action Exiting;
+        public event Action Exited;
 
         protected readonly HierarchyManager hierarchyManager;
         //private readonly StreamManager streamManager;
 
         // Internal
-        protected Action start;
-        protected Action update;
-        protected Action stop;
+        protected Action onEnter;
+        protected Action onUpdate;
+        protected Action onExit;
 
         private bool _active = false;
         private object currentToken = null;
@@ -56,12 +56,12 @@ namespace Infrastructure
             //streamManager = new(this);
         }
 
-        public void Open(params object[] args)
+        public void Enter(params object[] args)
         {
             ThrowIfDisposed();
 
             if (!hierarchyManager.CanOpen)
-                throw new InvalidOperationException($"Cannot activate Work '{Name}' because parent is not active.");
+                throw new InvalidOperationException($"Cannot enter Work '{Name}' because parent is not active.");
 
             if (_active) return;
             _active = true;
@@ -69,33 +69,33 @@ namespace Infrastructure
             var token = new object();
             currentToken = token;
 
-            Start(args);
+            OnEnter(args);
             if (!CheckToken(token)) return;
 
-            foreach (Action action in start?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in onEnter?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
 
-            foreach (Action action in Started?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in Entered?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
 
-            hierarchyManager.Open();
+            hierarchyManager.Enter();
             if (!CheckToken(token)) return;
 
             //if (hierarchyManager.Parent == null)
-            //    streamManager.Start();
+            //    streamManager.Enter();
 
             currentToken = null;
         }
-        protected virtual void Start(params object[] args) { }
+        protected virtual void OnEnter(params object[] args) { }
 
 
-        public void Invoke()
+        public void Update()
         {
             ThrowIfDisposed();
             if (!_active) return;
@@ -103,10 +103,10 @@ namespace Infrastructure
             var token = new object();
             currentToken = token;
 
-            Update();
+            OnUpdate();
             if (!CheckToken(token)) return;
 
-            foreach (Action action in update?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in onUpdate?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -118,15 +118,15 @@ namespace Infrastructure
                 if (!CheckToken(token)) return;
             }
 
-            hierarchyManager.Invoke();
+            hierarchyManager.Update();
             if (!CheckToken(token)) return;
 
             currentToken = null;
         }
-        protected virtual void Update() { }
+        protected virtual void OnUpdate() { }
 
 
-        public void Close()
+        public void Exit()
         {
             if (!_active) return;
             _active = false;
@@ -135,27 +135,27 @@ namespace Infrastructure
             currentToken = token;
 
 
-            foreach (Action action in Stopping?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in Exiting?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
 
-            hierarchyManager.Close();
+            hierarchyManager.Exit();
             if (!CheckToken(token)) return;
 
-            foreach (Action action in stop?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in onExit?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
 
-            Stop();
+            OnExit();
             if (!CheckToken(token)) return;
 
-            //streamManager.Stop();
+            //streamManager.Exit();
 
-            foreach (Action action in Stopped?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in Exited?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -163,7 +163,7 @@ namespace Infrastructure
 
             currentToken = null;
         }
-        protected virtual void Stop() { }
+        protected virtual void OnExit() { }
 
         private bool CheckToken(object token) => token == currentToken;
 
@@ -219,17 +219,17 @@ namespace Infrastructure
 
         public Work SetStartAction(Action action)
         {
-            start = action;
+            onEnter = action;
             return this;
         }
         public Work SetUpdateAction(Action action)
         {
-            update = action;
+            onUpdate = action;
             return this;
         }
         public Work SetStopAction(Action action)
         {
-            stop = action;
+            onExit = action;
             return this;
         }
         public Work SetActive(bool active)
@@ -369,7 +369,7 @@ namespace Infrastructure
             if (isDisposing) return;
             isDisposing = true;
 
-            Close();
+            Exit();
 
             //streamManager.Dispose();
             hierarchyManager.Dispose();

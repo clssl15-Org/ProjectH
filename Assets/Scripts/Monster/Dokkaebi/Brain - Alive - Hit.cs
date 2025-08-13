@@ -6,7 +6,7 @@ public partial class Dokkaebi
     {
         private class Hit : Work<Alive>
         {
-            protected override void Start(params object[] _)
+            protected override void OnEnter(params object[] _)
             {
                 var damaging = Parent.Dokkaebi.TryGetDamage(() =>
                 {

@@ -46,13 +46,13 @@ public partial class Dokkaebi : Monster
             : Direction.Right;
 
         brain = new(this);
-        brain.Open();
+        brain.Enter();
     }
 
 
     private void Update()
     {
-        brain?.Invoke();
+        brain?.Update();
 
 #if UNITY_EDITOR
         UpdateStateDisplay();
