@@ -17,6 +17,11 @@ public class NormalMovement : CharacterState
         {
             CharacterStateController.EnqueueTransition<Jump>();
         }
+
+        if (CharacterActions.attack.Started)
+        {
+            CharacterStateController.EnqueueTransition<Attack1>();
+        }
     }
     public override void UpdateBehaviour(float dt)
     {

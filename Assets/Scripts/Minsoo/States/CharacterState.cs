@@ -55,4 +55,9 @@ public abstract class CharacterState : MonoBehaviour
     {
         return true;
     }
+
+    // 
+    public virtual void UpdateBufferedActions(float dt)
+    {
+    }
 }

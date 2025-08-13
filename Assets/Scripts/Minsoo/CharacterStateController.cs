@@ -11,6 +11,10 @@ public class CharacterStateController : MonoBehaviour
 
     private Queue<CharacterState> transitionQueue = new Queue<CharacterState>();
 
+    private Dictionary<string, CharacterState> bufferedStateDictionary = new Dictionary<string, CharacterState>();
+
+    List<string> bufferedStatesToRemove = new List<string>();
+
     public Vector2 InputMovementReference { get; private set; }
 
     public Vector2 MovementReferenceRight { get; private set; }
@@ -111,6 +115,58 @@ public class CharacterStateController : MonoBehaviour
         }
     }
 
+    public void AddBufferedState(CharacterState state)
+    {
+        if (state == null)
+        {
+            return;
+        }
+
+        string stateName = state.name;
+        if (bufferedStateDictionary.ContainsKey(stateName))
+        {
+            return;
+        }
+
+        bufferedStateDictionary.Add(stateName, state);
+    }
+
+    public void AddBufferedState<T>() where T : CharacterState
+    {
+        CharacterState state = GetState<T>();
+
+        if (state == null)
+        {
+            return;
+        }
+
+        AddBufferedState(state);
+    }
+
+    public void RemoveBufferedState(CharacterState state)
+    {
+        if (state == null)
+        {
+            return;
+        }
+
+        string stateName = state.name;
+        bufferedStatesToRemove.Add(stateName);
+    }
+
+    public void RemoveBufferedState<T>() where T : CharacterState
+    {
+        CharacterState state = GetState<T>();
+
+        if (state == null)
+        {
+            return;
+        }
+
+        string stateName = state.name;
+        bufferedStatesToRemove.Add(stateName);
+    }
+
     private bool CheckForTransitions()
     {
         CurrentState.CheckExitTransition();
@@ -206,5 +262,17 @@ public class CharacterStateController : MonoBehaviour
         CurrentState.PreUpdateBehaviour(dt);
         CurrentState.UpdateBehaviour(dt);
         CurrentState.PostUpdateBehaviour(dt);
+
+        foreach (var bufferedState in bufferedStateDictionary.Values)
+        {
+            bufferedState.UpdateBufferedActions(dt);
+        }
+
+        foreach (var key in bufferedStatesToRemove)
+        {
+            bufferedStateDictionary.Remove(key);
+        }
+
+        bufferedStatesToRemove.Clear();
     }
 }

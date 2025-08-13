@@ -9996,6 +9996,8 @@ GameObject:
   - component: {fileID: 1973654079}
   - component: {fileID: 1973654078}
   - component: {fileID: 1973654080}
+  - component: {fileID: 1973654082}
+  - component: {fileID: 1973654083}
   - component: {fileID: 1973654081}
   m_Layer: 0
   m_Name: States
@@ -10059,7 +10061,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cbcf7f523e5a2e4a802e6508bc251fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeAnimatorController: {fileID: 0}
+  runtimeAnimatorController: {fileID: 9100000, guid: 741d1bab4c27aa4469fec3ecd64588d3, type: 2}
+  attackDuration: 0.7
+  comboTimeWindow: 0.1
+  nextComboTime: 0.9
+  comboInputTimeWindow: 0.7
+  damageMultiplier: 1
 --- !u!114 &1973654081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10078,6 +10085,39 @@ MonoBehaviour:
   acceleration: 30
   maxJumps: 2
   jumpInterval: 0.2
+--- !u!114 &1973654082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973654076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 371bf6ffb2bae2d408104489c8ec4461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: 35211715565348640ab8daad52c5d67e, type: 2}
+  attackDuration: 0.7
+  comboTimeWindow: 0.1
+  nextComboTime: 0.9
+  comboInputTimeWindow: 0.7
+  damageMultiplier: 1
+--- !u!114 &1973654083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973654076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1111ae7840772428586eb6c1fc2191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: fd4a4b3344e5ef64c9b8dc1e03eba9e3, type: 2}
+  attackDuration: 0.7
+  damageMultiplier: 1
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0

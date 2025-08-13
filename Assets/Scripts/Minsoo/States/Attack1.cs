@@ -16,28 +16,42 @@ public class Attack1 : CharacterState
     [SerializeField]
     private float nextComboTime = 0.5f;
 
+    // Duration allowed for chaining the next combo input
+    [SerializeField]
+    private float comboInputTimeWindow = 0.7f;
+
     [SerializeField]
     private float damageMultiplier = 1.0f;
 
-    private Vector2 attackDirection = Vector2.right;
-
     private float attackCursor = 0f;
+    private float attackElapsedCursor = 0f;
 
     private bool comboAvailable = false;
     private bool isDone = false;
+    private bool isNextComboReady = false;
 
+    public override void CheckExitTransition()
+    {
+        if (isNextComboReady)
+        {
+            CharacterStateController.EnqueueTransition<NormalMovement>();
+            return;
+        }
+
+        if (isDone)
+        {
+            CharacterStateController.EnqueueTransition<NormalMovement>();
+            CharacterStateController.AddBufferedState<Attack1>();
+        }
+    }
     public override void EnterBehaviour(float dt)
     {
-        SetAttackDirection();
+        CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
 
     }
-    private void SetAttackDirection()
-    {
-        CharacterActor.Velocity = new Vector2(0, 0);
-        attackDirection = CharacterActor.Forward;
-    }
+
     public override void UpdateBehaviour(float dt)
     {
         float animationDt = dt / attackDuration;
@@ -47,11 +61,44 @@ public class Attack1 : CharacterState
         {
             isDone = true;
         }
+
+        if (!CharacterActions.attack.Started)
+            return;
+
+        if (attackCursor >= comboTimeWindow)
+        {
+            comboAvailable = true;
+        }
+
+        if (attackCursor >= nextComboTime && comboAvailable)
+        {
+            isNextComboReady = true;
+        }
+    }
+
+    public override void UpdateBufferedActions(float dt)
+    {
+        float animationDt = dt / comboInputTimeWindow;
+        attackElapsedCursor += animationDt;
+
+        if (attackElapsedCursor >= 1f)
+        {
+            CharacterStateController.RemoveBufferedState<Attack1>();
+        }
+
+        if (CharacterActions.attack.Started)
+        {
+            CharacterStateController.EnqueueTransition<Attack2>();
+            CharacterStateController.RemoveBufferedState<Attack1>();
+        }
     }
 
     private void ResetAttack()
     {
         attackCursor = 0f;
+        attackElapsedCursor = 0f;
         comboAvailable = false;
+        isDone = false;
+        isNextComboReady = false;
     }
 }
