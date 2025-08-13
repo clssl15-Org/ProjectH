@@ -46,6 +46,10 @@ public class CharacterActor : MonoBehaviour
         get => transform.rotation;
         set => transform.rotation = value;
     }
+    public Vector2 Forward
+    {
+        get => Rotation * Vector2.right;
+    }
 
     public bool IsGrounded { get; private set; }
     public bool PreviousIsGrounded { get; private set; }
