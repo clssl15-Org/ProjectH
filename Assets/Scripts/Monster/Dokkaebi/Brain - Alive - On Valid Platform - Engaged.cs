@@ -1,9 +1,9 @@
-using Infrastructure;
 using UnityEngine;
+using UniEngine.StateMachines.FSM;
 
 public partial class Dokkaebi
 {
-    private partial class Brain
+    private partial class DokkaebiBrain
     {
         private class Engaged : Work<OnValidPlatform>
         {

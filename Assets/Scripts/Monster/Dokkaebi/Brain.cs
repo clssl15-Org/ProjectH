@@ -1,15 +1,15 @@
-using Infrastructure;
+using UniEngine.StateMachines.FSM;
 
 public partial class Dokkaebi
 {
-    private partial class Brain : Work
+    private partial class DokkaebiBrain : Work
     {
         // Internal
         protected Dokkaebi Dokkaebi { get; private set; }
 
         
         // Content
-        public Brain(Dokkaebi dokkaebi)
+        public DokkaebiBrain(Dokkaebi dokkaebi)
         {
             Dokkaebi = dokkaebi;
 

@@ -1,10 +1,10 @@
-using Infrastructure;
+using UniEngine.StateMachines.FSM;
 
 public partial class Dokkaebi
 {
-    private partial class Brain
+    private partial class DokkaebiBrain
     {
-        private class Dead : Work<Brain>
+        private class Dead : Work<DokkaebiBrain>
         {
             protected override void OnEnter(params object[] _)
             {

@@ -2,16 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Infrastructure
+namespace UniEngine.StateMachines.FSM
 {
     public partial class Work
     {
-        public class HierarchyManager : IDisposable
+        protected class HierarchyManager : IDisposable
         {
             // Front
             public bool Active { get; private set; } = false;
 
-            public Work Parent { get; private set; }
+            public Work Parent
+            {
+                get => _parent;
+                private set
+                {
+                    ThrowIfActive();
+                    _parent = value;
+                }
+            }
             public Work CurrentChild { get; private set; }
 
             public string ReservedChild { get; private set; } = string.Empty;
@@ -23,12 +31,15 @@ namespace Infrastructure
             public bool CanOpen => Parent?.Active ?? true;
 
             // Internal
-            private readonly Work owner;
+            private readonly Work ownerWork;
+            private Work _parent;
             private readonly Dictionary<string, Work> children = new();
+
+            private bool isDisposed = false;
 
 
             // Content
-            public HierarchyManager(Work owner) => this.owner = owner;
+            public HierarchyManager(Work owner) => this.ownerWork = owner;
 
             public void Enter(params object[] args)
             {
@@ -78,7 +89,7 @@ namespace Infrastructure
 
 
                 if (!children.ContainsKey(next))
-                    throw new ArgumentException($"[Work-Hierarchy: {owner.Name}]: No child with the name '{next}' exists.");
+                    throw new ArgumentException(Ctx($"No child named '{next}' exists."), nameof(next));
 
                 if (Active && next == CurrentChild?.Name && !restartIfPossible)
                     return;
@@ -103,14 +114,16 @@ namespace Infrastructure
             public Work AddChild(string name, bool primary = false) => AddChild(new Work(name), primary);
             public T AddChild<T>(T work, bool primary = false) where T : Work
             {
-                if (children.ContainsKey(work.Name))
-                    throw new ArgumentException($"[Work: {owner.Name}]: A child with the name '{work.Name}' already exists.");
-                if (owner == work)
-                    throw new ArgumentException($"[Work: {owner.Name}]: A work cannot be its own child.");
-                if (work.hierarchyManager.Parent != null)
-                    throw new InvalidOperationException($"[Work: {owner.Name}]: Child '{work.Name}' already has a parent.");
+                ThrowIfActive();
 
-                work.hierarchyManager.Parent = owner;
+                if (children.ContainsKey(work.Name))
+                    throw new ArgumentException(Ctx($"A child named '{work.Name}' already exists."), nameof(work));
+                if (ownerWork == work)
+                    throw new ArgumentException(Ctx("A work cannot be its own child."), nameof(work));
+                if (work.hierarchy.Parent != null)
+                    throw new InvalidOperationException(Ctx($"Child '{work.Name}' already has a parent ({work.hierarchy.Parent.Name})."));
+
+                work.hierarchy.Parent = ownerWork;
                 children.Add(work.Name, work);
 
                 if (primary) SetPrimary(work.Name);
@@ -119,10 +132,12 @@ namespace Infrastructure
 
             public Work RemoveChild(string name)
             {
+                ThrowIfActive();
+
                 if (string.IsNullOrWhiteSpace(name))
-                    throw new ArgumentException($"[Work: {owner.Name}]: The name cannot be empty.", nameof(name));
+                    throw new ArgumentException(Ctx("Name cannot be null or whitespace."), nameof(name));
                 if (!children.ContainsKey(name))
-                    throw new ArgumentException($"[Work: {owner.Name}]: Cannot remove child '{name}' because it does not exist.", nameof(name));
+                    throw new ArgumentException(Ctx($"This work does not contain a child named '{name}'."), nameof(name));
 
                 var work = children[name];
                 work.Exit();
@@ -131,7 +146,7 @@ namespace Infrastructure
                 if (ReservedChild == name) ReservedChild = string.Empty;
                 if (PrimaryChild == name) PrimaryChild = string.Empty;
 
-                work.hierarchyManager.Parent = null;
+                work.hierarchy.Parent = null;
                 children.Remove(name);
 
                 return work;
@@ -146,20 +161,32 @@ namespace Infrastructure
                 }
 
                 if (!children.ContainsKey(name))
-                    throw new ArgumentException($"[Work: {owner.Name}]: No child with the name '{name}' exists.");
+                    throw new ArgumentException(Ctx($"No child named '{name}' exists."), nameof(name));
 
                 PrimaryChild = name;
             }
             #endregion
 
+            private void ThrowIfActive()
+            {
+                if (ownerWork.Active)
+                    throw new InvalidOperationException(Ctx("Cannot change the hierarchy while it is active."));
+            }
+
             public void Dispose()
             {
+                if (isDisposed) return;
+                isDisposed = true;
+
                 Exit();
                 ClearNext();
 
                 foreach (var child in children.Values.ToList())
                     child.Dispose();
             }
+
+
+            private string Ctx(string message) => ownerWork.Ctx(message);
         }
     }
 }

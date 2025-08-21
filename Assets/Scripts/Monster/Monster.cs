@@ -1,14 +1,17 @@
 using System;
+using System.Text;
 using UnityEngine;
+using Infrastructure;
+using MonsterBT;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(PlatformDetector), typeof(MonsterHitted))]
-public abstract class Monster : MonoBehaviour
+public abstract partial class Monster : MonoBehaviour
 {
     // Front
     public int HP
     {
         get => _hp;
-        protected set => _hp = Mathf.Clamp(value, 0, maxHp);
+        internal set => _hp = Mathf.Clamp(value, 0, maxHp);
     }
 
     public int AttackPower => attackPower;
@@ -17,7 +20,7 @@ public abstract class Monster : MonoBehaviour
     public Direction Direction
     {
         get => _direction;
-        protected set
+        internal set
         {
             if (_direction == value) return;
             _direction = value;
@@ -39,18 +42,59 @@ public abstract class Monster : MonoBehaviour
     [Header("Bindings")]
     [SerializeField] private PlatformManager platformManager;
 
-    // Internal
-    protected Rigidbody2D Rigidbody { get; private set; }
-    protected int BelongingPlatform { get; set; } = 1;
-    protected PlatformDetector PlatformDetector { get; private set; }
+    internal bool HasAnimator => animatorCallbackNotifier;
+    /// <summary>
+    /// Monster가 애니메이션을 가지고 있을 경우, 애니메이션의 시작과 끝 지점에 콜백을 등록할 수 있습니다.
+    /// <para>HasAnimator 프로퍼티가 true일 때만 이 프로퍼티를 사용할 수 있습니다.</para>
+    /// </summary>
+    internal event AnimatorCallbackDelegate AnimatorCallback
+    {
+        add
+        {
+            if (!HasAnimator)
+                throw new InvalidOperationException(Ctx(
+                    "애니메이터가 없기 때문에 AnimatorCallback 이벤트를 사용할 수 없습니다."));
 
-    protected GameObject DetectedPlayer => playerDetector.CurrentPlayer;
+            _animationCallback += value;
+        }
+        remove
+        {
+            if (!HasAnimator)
+                throw new InvalidOperationException(Ctx(
+                    "애니메이터가 없기 때문에 AnimatorCallback 이벤트를 사용할 수 없습니다."));
+
+            _animationCallback -= value;
+        }
+    }
+
+    // Display
+    [SerializeField, Header("Display"), TextArea(3, 10)]
+    private string stateDisplay = string.Empty;
+    private readonly StringBuilder sb = new();
+
+    // Internal
+    internal Rigidbody2D Rigidbody { get; private set; }
+    internal int BelongingPlatform { get; set; } = 1;
+    internal PlatformDetector PlatformDetector { get; private set; }
+
+    internal GameObject DetectedPlayer => playerDetector.CurrentPlayer;
+
+    private Animator animator;
+    private AnimatorCallbackDelegate _animationCallback;
 
     private int _hp;
     private Direction _direction = Direction.Center;
 
+    private AnimatorCallbackNotifier animatorCallbackNotifier;
     private MonsterHitted hitDetector;
     private MonsterPlayerDetector playerDetector;
+
+    protected MonsterBrain Brain { get; set; }
+
+    // Internal State
+    protected bool Attacking { get; set; } = false;
+    protected bool Damaging { get; set; } = false;
+    protected bool Alive { get; set; } = true;
 
 
     // Content
@@ -58,10 +102,16 @@ public abstract class Monster : MonoBehaviour
     {
         Rigidbody = GetComponent<Rigidbody2D>();
 
+        if (TryGetComponent(out animator))
+        {
+            animatorCallbackNotifier = animator.GetBehaviour<AnimatorCallbackNotifier>();
+            if (animatorCallbackNotifier) animatorCallbackNotifier.Callback += OnAnimationChanged;
+        }
+
         if (!platformManager)
         {
-            throw new InvalidOperationException(
-                $"platformManager가 등록되어 있지 않기 때문에 몬스터 '{name}'을(를) 시작할 수 없습니다.");
+            throw new InvalidOperationException(Ctx(
+                $"PlatformManager가 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
         }
 
         PlatformDetector = GetComponent<PlatformDetector>();
@@ -72,9 +122,9 @@ public abstract class Monster : MonoBehaviour
         if (playerDetector)
             playerDetector.PlayerDetected += OnPlayerDetected;
         else
-            Debug.LogWarning(
-                $"이 몬스터({name})은(는) {nameof(MonsterPlayerDetector)}를 가지고 있지 않습니다.\n" +
-                "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다.");
+            Debug.LogWarning(Ctx(
+                $"이 몬스터는 {nameof(MonsterPlayerDetector)}를 가지고 있지 않습니다. " +
+                "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
         hitDetector = GetComponent<MonsterHitted>();
         hitDetector.Damaged += OnDamaged;
@@ -82,11 +132,21 @@ public abstract class Monster : MonoBehaviour
         _hp = maxHp;
     }
 
-    protected virtual void OnPlayerDetected(GameObject player) { }
-    protected virtual void OnDamaged(int damage) { }
+    protected virtual void Update()
+    {
+        Brain?.Tick();
 
-    protected bool TryMove() => TryMove(Direction);
-    protected bool TryMove(Direction direction)
+#if UNITY_EDITOR
+        stateDisplay = GetDisplayContent();
+#endif
+    }
+
+
+    protected virtual void OnPlayerDetected(GameObject player) { }
+    protected virtual void OnDamaged(int damage) => HP -= damage;
+
+    internal bool TryMove() => TryMove(Direction);
+    internal bool TryMove(Direction direction)
     {
         if (Direction == Direction.Center)
             return true;
@@ -119,16 +179,52 @@ public abstract class Monster : MonoBehaviour
             return true;
         }
 
-        throw new InvalidOperationException(
-            $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드를 수행할 수 없습니다.");
+        throw new InvalidOperationException(Ctx(
+            $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드를 수행할 수 없습니다."));
+    }
+
+    private void OnAnimationChanged(AnimatorStateInfo stateInfo, bool isEnter) => _animationCallback?.Invoke(stateInfo, isEnter);
+
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 
     protected virtual void OnDestroy()
     {
+        Brain?.Dispose();
+
+        if (animatorCallbackNotifier)
+            animatorCallbackNotifier.Callback -= OnAnimationChanged;
+
         if (hitDetector)
             hitDetector.Damaged -= OnDamaged;
 
         if (playerDetector)
             playerDetector.PlayerDetected -= OnPlayerDetected;
+    }
+
+
+    protected string Ctx(string message) => $"[Monster '{GetType().Name}'] {message}";
+
+    protected virtual string GetDisplayContent()
+    {
+        sb.Clear();
+        sb.AppendLine($"HP: {HP}");
+        sb.AppendLine($"Direction: {Direction.ToString()}");
+        sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
+        sb.AppendLine("----------------");
+        sb.AppendLine($"Alive: {Alive}");
+        sb.AppendLine($"Attacking: {Attacking}");
+        sb.AppendLine($"GettingDamage: {Damaging}");
+
+        if (Brain != null)
+        {
+            sb.AppendLine("----------------");
+            //sb.AppendLine(Brain.GetFullState());
+        }
+
+        return sb.ToString();
     }
 }

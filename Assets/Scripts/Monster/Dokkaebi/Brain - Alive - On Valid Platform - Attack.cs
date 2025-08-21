@@ -1,9 +1,9 @@
-using Infrastructure;
 using UnityEngine;
+using UniEngine.StateMachines.FSM;
 
 public partial class Dokkaebi
 {
-    private partial class Brain
+    private partial class DokkaebiBrain
     {
         private class Attack : Work<OnValidPlatform>
         {
@@ -30,7 +30,7 @@ public partial class Dokkaebi
             {
                 protected override void OnEnter(params object[] _)
                 {
-                    var attacking = Parent.Dokkaebi.TryAttack(() =>
+                    var attacking = Parent.Dokkaebi.TryDoAction(MonsterAction.Attack, () =>
                     {
                         if (Active)
                             Parent.SetNext<DoCooldown>();
@@ -42,7 +42,7 @@ public partial class Dokkaebi
 
                 protected override void OnExit()
                 {
-                    Parent.Dokkaebi.StopAttack();
+                    Parent.Dokkaebi.TryDoAction(MonsterAction.None);
                 }
             }
 

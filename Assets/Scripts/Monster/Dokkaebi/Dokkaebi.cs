@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Text;
 using UnityEngine;
 
 public partial class Dokkaebi : Monster
@@ -13,18 +12,9 @@ public partial class Dokkaebi : Monster
     [SerializeField, Min(0)] private float damagingTime;
     [SerializeField, Min(0)] private float dyingTime;
 
-    // Inspector
-    [SerializeField, TextArea(3, 10)]
-    private string stateDisplay = string.Empty;
-    private readonly StringBuilder sb = new();
-
     // Internal
     private GameObject laser;
-    private bool attacking = false;
-    private bool damaging = false;
-    private bool alive = true;
-
-    private Brain brain;
+    private DokkaebiBrain brain;
 
 
     // Content
@@ -49,42 +39,33 @@ public partial class Dokkaebi : Monster
         brain.Enter();
     }
 
-
-    private void Update()
+    protected override void Update()
     {
         brain?.Update();
-
-#if UNITY_EDITOR
-        UpdateStateDisplay();
-#endif
+        base.Update();
     }
 
-    private void UpdateStateDisplay()
+    protected override string GetDisplayContent()
     {
-        sb.Clear();
-        sb.AppendLine($"HP: {HP}");
-        sb.AppendLine($"Direction: {Direction.ToString()}");
-        sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
-        sb.AppendLine("----------------");
-        sb.AppendLine($"Alive: {alive}");
-        sb.AppendLine($"Attacking: {attacking}");
-        sb.AppendLine($"GettingDamage: {damaging}");
+        if (brain == null)
+            return base.GetDisplayContent();
 
-        if (brain is not null)
-        {
-            sb.AppendLine("----------------");
-            sb.AppendLine($"State: {brain.GetFullState()}");
-        }
-
-        stateDisplay = sb.ToString();
+        return
+            base.GetDisplayContent() +
+            "\n----------------\n" +
+            brain.GetFullState();
     }
 
-    protected override void OnDamaged(int damage) => brain.TakeDamage(damage);
-
-    protected bool TryAttack(Action callback = null)
+    protected override void OnDamaged(int damage)
     {
-        if (attacking) return false;
-        attacking = true;
+        brain.TakeDamage(damage);
+        base.OnDamaged(damage);
+    }
+
+    protected override bool DoAttack(Action callback = null)
+    {
+        if (Attacking) return false;
+        Attacking = true;
 
         laser = Instantiate(laserPrefab);
         laser.transform.SetParent(transform);
@@ -97,7 +78,7 @@ public partial class Dokkaebi : Monster
 
         IEnumerator DoAttack()
         {
-            while (attacking && attackTime > 0)
+            while (Attacking && attackTime > 0)
             {
                 attackTime -= Time.deltaTime;
                 yield return null;
@@ -106,19 +87,17 @@ public partial class Dokkaebi : Monster
             Destroy(laser);
             laser = null;
 
-            attacking = false;
+            Attacking = false;
             callback?.Invoke();
         }
 
         return true;
     }
 
-    protected void StopAttack() => attacking = false;
-
     protected bool TryGetDamage(Action callback = null)
     {
-        if (damaging) return false;
-        damaging = true;
+        if (Damaging) return false;
+        Damaging = true;
 
         var damageTime = damagingTime;
         StartCoroutine(DoGetDamage());
@@ -137,7 +116,7 @@ public partial class Dokkaebi : Monster
             if (gameObject.TryGetComponent(out sr))
                 sr.color = Color.white;
 
-            damaging = false;
+            Damaging = false;
             callback?.Invoke();
         }
 
@@ -146,8 +125,8 @@ public partial class Dokkaebi : Monster
 
     protected bool TryDie(Action callback = null)
     {
-        if (!alive) return false;
-        alive = false;
+        if (!Alive) return false;
+        Alive = false;
 
         var dieTime = dyingTime;
         StartCoroutine(DoDie());

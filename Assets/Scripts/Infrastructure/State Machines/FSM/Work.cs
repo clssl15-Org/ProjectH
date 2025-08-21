@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using static UniEngine.StateMachines.Tools;
 
-namespace Infrastructure
+namespace UniEngine.StateMachines.FSM
 {
     public partial class Work : IDisposable
     {
@@ -22,16 +23,14 @@ namespace Infrastructure
         private bool isDisposing = false;
 
         // Property
-        public event Action Entered;
-        public event Action Updated;
-        public event Action Exiting;
-        public event Action Exited;
-
-        protected readonly HierarchyManager hierarchyManager;
-        //private readonly StreamManager streamManager;
+        protected readonly HierarchyManager hierarchy;
+#if UNIENGINE
+        private readonly StreamManager stream;
+#endif
 
         // Internal
         protected Action onEnter;
+        protected Action<object[]> onEnterWith;
         protected Action onUpdate;
         protected Action onExit;
 
@@ -40,28 +39,22 @@ namespace Infrastructure
 
 
         // Content
-        public Work()
+        public Work(string name = null)
         {
-            Name = GetType().Name;
-            hierarchyManager = new(this);
-            //streamManager = new(this);
-        }
-        public Work(object name)
-        {
-            if (name is null)
-                throw new ArgumentException($"The name cannot be null.", nameof(name));
+            Name = name ?? GetName(GetType());
 
-            Name = GetName(name);
-            hierarchyManager = new(this);
-            //streamManager = new(this);
+            hierarchy = new(this);
+#if UNIENGINE
+            stream = new(this);
+#endif
         }
 
         public void Enter(params object[] args)
         {
             ThrowIfDisposed();
 
-            if (!hierarchyManager.CanOpen)
-                throw new InvalidOperationException($"Cannot enter Work '{Name}' because parent is not active.");
+            if (!hierarchy.CanOpen)
+                throw new InvalidOperationException(Ctx("Cannot enter because the parent is not active."));
 
             if (_active) return;
             _active = true;
@@ -77,18 +70,19 @@ namespace Infrastructure
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
-
-            foreach (Action action in Entered?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action<object[]> action in onEnterWith?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
-                action.Invoke();
+                action.Invoke(args);
                 if (!CheckToken(token)) return;
             }
 
-            hierarchyManager.Enter();
+            hierarchy.Enter();
             if (!CheckToken(token)) return;
 
-            //if (hierarchyManager.Parent == null)
-            //    streamManager.Enter();
+#if UNIENGINE
+            if (hierarchy.Parent == null)
+                stream.Enter();
+#endif
 
             currentToken = null;
         }
@@ -112,13 +106,7 @@ namespace Infrastructure
                 if (!CheckToken(token)) return;
             }
 
-            foreach (Action action in Updated?.GetInvocationList() ?? Array.Empty<Delegate>())
-            {
-                action.Invoke();
-                if (!CheckToken(token)) return;
-            }
-
-            hierarchyManager.Update();
+            hierarchy.Update();
             if (!CheckToken(token)) return;
 
             currentToken = null;
@@ -135,13 +123,7 @@ namespace Infrastructure
             currentToken = token;
 
 
-            foreach (Action action in Exiting?.GetInvocationList() ?? Array.Empty<Delegate>())
-            {
-                action.Invoke();
-                if (!CheckToken(token)) return;
-            }
-
-            hierarchyManager.Exit();
+            hierarchy.Exit();
             if (!CheckToken(token)) return;
 
             foreach (Action action in onExit?.GetInvocationList() ?? Array.Empty<Delegate>())
@@ -153,13 +135,9 @@ namespace Infrastructure
             OnExit();
             if (!CheckToken(token)) return;
 
-            //streamManager.Exit();
-
-            foreach (Action action in Exited?.GetInvocationList() ?? Array.Empty<Delegate>())
-            {
-                action.Invoke();
-                if (!CheckToken(token)) return;
-            }
+#if UNIENGINE
+            stream.Exit();
+#endif
 
             currentToken = null;
         }
@@ -167,59 +145,64 @@ namespace Infrastructure
 
         private bool CheckToken(object token) => token == currentToken;
 
+#if UNIENGINE
+        public virtual Work SetStream(EventStream stream)
+        {
+            ThrowIfDisposed();
 
-        //public virtual Work SetStream(EventStream stream)
-        //{
-        //    ThrowIfDisposed();
+            this.stream.SetStream(stream);
+            return this;
+        }
+        public virtual Work SetStream(Func<EventStream> streamFactory)
+        {
+            ThrowIfDisposed();
 
-        //    streamManager.SetStream(stream);
-        //    return this;
-        //}
-        //public virtual Work SetStream(Func<EventStream> streamFactory)
-        //{
-        //    ThrowIfDisposed();
+            stream.SetStream(streamFactory);
+            return this;
+        }
+        public virtual Work RemoveStream()
+        {
+            ThrowIfDisposed();
 
-        //    streamManager.SetStream(streamFactory);
-        //    return this;
-        //}
-        //public virtual Work RemoveStream()
-        //{
-        //    ThrowIfDisposed();
-
-        //    streamManager.RemoveStream();
-        //    return this;
-        //}
-
+            stream.RemoveStream();
+            return this;
+        }
+#endif
 
         public void SetNext(object next, bool restartIfPossible = false)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetNext(GetName(next), restartIfPossible);
+            hierarchy.SetNext(GetName(next), restartIfPossible);
         }
         public void SetNext<T>(bool restartIfPossible = false)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetNext(GetName(typeof(T)), restartIfPossible);
+            hierarchy.SetNext(GetName(typeof(T)), restartIfPossible);
         }
         public void SetNextWith(object next, params object[] args)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetNext(GetName(next), true, args);
+            hierarchy.SetNext(GetName(next), true, args);
         }
         public void SetNextWith<T>(params object[] args)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetNext(GetName(typeof(T)), true, args);
+            hierarchy.SetNext(GetName(typeof(T)), true, args);
         }
         public void ClearNext()
         {
             ThrowIfDisposed();
-            hierarchyManager.ClearNext();
+            hierarchy.ClearNext();
         }
 
         public Work SetStartAction(Action action)
         {
             onEnter = action;
+            return this;
+        }
+        public Work SetStartAction(Action<object[]> action)
+        {
+            onEnterWith = action;
             return this;
         }
         public Work SetUpdateAction(Action action)
@@ -250,7 +233,7 @@ namespace Infrastructure
         public Work AddChild(object name, bool primary = false)
         {
             ThrowIfDisposed();
-            return hierarchyManager.AddChild(GetName(name), primary);
+            return hierarchy.AddChild(GetName(name), primary);
         }
 
         /// <summary>
@@ -263,7 +246,7 @@ namespace Infrastructure
         public T AddChild<T>(T work, bool primary = false) where T : Work
         {
             ThrowIfDisposed();
-            return hierarchyManager.AddChild(work, primary);
+            return hierarchy.AddChild(work, primary);
         }
 
         /// <summary>
@@ -276,7 +259,7 @@ namespace Infrastructure
         public Work Append<T>(T work, bool primary = false) where T : Work
         {
             ThrowIfDisposed();
-            hierarchyManager.AddChild(work, primary);
+            hierarchy.AddChild(work, primary);
             return this;
         }
 
@@ -289,7 +272,7 @@ namespace Infrastructure
         public Work RemoveChild(object name)
         {
             ThrowIfDisposed();
-            return hierarchyManager.RemoveChild(GetName(name));
+            return hierarchy.RemoveChild(GetName(name));
         }
 
         /// <summary>
@@ -301,7 +284,7 @@ namespace Infrastructure
         public Work Delete(object name)
         {
             ThrowIfDisposed();
-            hierarchyManager.RemoveChild(GetName(name));
+            hierarchy.RemoveChild(GetName(name));
             return this;
         }
 
@@ -314,7 +297,7 @@ namespace Infrastructure
         public Work SetPrimary(object name)
         {
             ThrowIfDisposed();
-            hierarchyManager.SetPrimary(GetName(name));
+            hierarchy.SetPrimary(GetName(name));
             return this;
         }
 
@@ -325,9 +308,9 @@ namespace Infrastructure
         {
             current = null;
 
-            if (hierarchyManager.CurrentChild is null)
+            if (hierarchy.CurrentChild is null)
                 return false;
-            if (hierarchyManager.CurrentChild is not T _current)
+            if (hierarchy.CurrentChild is not T _current)
                 return false;
 
             current = _current;
@@ -349,19 +332,11 @@ namespace Infrastructure
             return string.Join(" - ", logs);
         }
 
-        private string GetName(object source) => source switch
-        {
-            null => throw new ArgumentNullException(nameof(source), $"[Work: {Name}] : Name source cannot be null."),
-            string name when string.IsNullOrWhiteSpace(name) => throw new ArgumentException($"[Work: {Name}] : Name cannot be empty.", nameof(source)),
-            string name => name,
-            Type type => type.Name,
-            _ => source.ToString()
-        };
 
-        void ThrowIfDisposed()
+        private void ThrowIfDisposed()
         {
             if (IsDisposed)
-                throw new ObjectDisposedException(GetType().Name, $"[Work: {Name}] : Work has been disposed.");
+                throw new ObjectDisposedException(GetType().Name, Ctx("The work has been disposed."));
         }
 
         public void Dispose()
@@ -371,19 +346,24 @@ namespace Infrastructure
 
             Exit();
 
-            //streamManager.Dispose();
-            hierarchyManager.Dispose();
+#if UNIENGINE
+            stream.Dispose();
+#endif
+            hierarchy.Dispose();
 
             IsDisposed = true;
         }
+        public virtual void OnDispose() { }
 
+
+        private string Ctx(string message) => $"[Work '{Name}'] {message}";
 
         public override string ToString()
         {
             return $"{Name}, Active: {Active}\n" +
-                $"Current: {hierarchyManager.CurrentChild?.Name ?? "None"}\n" +
-                $"Primary: {(!string.IsNullOrWhiteSpace(hierarchyManager.PrimaryChild) ? hierarchyManager.PrimaryChild : "None")}\n" +
-                $"Reserved: {(!string.IsNullOrWhiteSpace(hierarchyManager.ReservedChild) ? hierarchyManager.ReservedChild : "None")}";
+                $"Current: {hierarchy.CurrentChild?.Name ?? "None"}\n" +
+                $"Primary: {(!string.IsNullOrWhiteSpace(hierarchy.PrimaryChild) ? hierarchy.PrimaryChild : "None")}\n" +
+                $"Reserved: {(!string.IsNullOrWhiteSpace(hierarchy.ReservedChild) ? hierarchy.ReservedChild : "None")}";
         }
     }
 }
