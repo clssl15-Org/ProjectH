@@ -211,9 +211,16 @@ public class CharacterStateController : MonoBehaviour
             return;
 
         if (inputValue.x > 0f)
+        {
             PlayerSpriteRenderer.flipX = false;
+            CharacterActor.FacingDirection = Vector2.right;
+        }
+
         else
+        {
             PlayerSpriteRenderer.flipX = true;
+            CharacterActor.FacingDirection = Vector2.left;
+        }
     }
 
     private void Awake()

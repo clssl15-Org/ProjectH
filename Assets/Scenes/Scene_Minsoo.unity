@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 46505909}
   - component: {fileID: 46505911}
   - component: {fileID: 46505910}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DokkaebiMonster (2)
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -10067,6 +10067,11 @@ MonoBehaviour:
   nextComboTime: 0.9
   comboInputTimeWindow: 0.7
   damageMultiplier: 1
+  attackRange: 1.5
+  attackAngle: 90
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1973654081
 MonoBehaviour:
   m_ObjectHideFlags: 0

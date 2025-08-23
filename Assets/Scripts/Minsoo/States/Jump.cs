@@ -26,7 +26,6 @@ public class Jump : CharacterState
     {
         if (isDone)
         {
-            Debug.Log("Exit");
             CharacterStateController.EnqueueTransition<NormalMovement>();
         }
     }

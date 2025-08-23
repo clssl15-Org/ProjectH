@@ -22,6 +22,15 @@ public class CharacterActor : MonoBehaviour
     Rigidbody2D _rigidbody = null;
     CapsuleCollider2D _collider = null;
     public Animator Animator { get; private set; }
+
+    public CapsuleCollider2D Collider
+    {
+        get => _collider;
+    }
+    public Vector2 ColliderCenter
+    {
+        get => (Vector2)transform.position + _collider.offset;
+    }
     public Vector2 Velocity
     {
         get => _rigidbody.velocity;
@@ -46,15 +55,21 @@ public class CharacterActor : MonoBehaviour
         get => transform.rotation;
         set => transform.rotation = value;
     }
+    public Vector2 FacingDirection
+    {
+        get => facingDirection;
+        set => facingDirection = value;
+    }
     public Vector2 Forward
     {
-        get => Rotation * Vector2.right;
+        get => Rotation * Vector2.right * facingDirection;
     }
 
     public bool IsGrounded { get; private set; }
     public bool PreviousIsGrounded { get; private set; }
     public bool IsLanded { get; private set; }
 
+    private Vector2 facingDirection = Vector2.right;
     private bool isGroundedFlag = false;
     private float landedCursor = 0f;
 

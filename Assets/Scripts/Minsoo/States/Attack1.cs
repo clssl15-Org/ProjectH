@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Attack1 : CharacterState
 {
+    [Header("Attack Timing Settings")]
     // The duration of the attack animation
     [SerializeField]
     private float attackDuration = 1f;
@@ -20,8 +21,20 @@ public class Attack1 : CharacterState
     [SerializeField]
     private float comboInputTimeWindow = 0.7f;
 
+    [Header("Attack Stats")]
     [SerializeField]
     private float damageMultiplier = 1.0f;
+
+    [SerializeField]
+    private float attackRange = 1.0f;
+
+    [SerializeField]
+    private float attackAngle = 90f;
+
+    [Header("Other Settings")]
+    [SerializeField]
+    private LayerMask enemyLayers;
+
 
     private float attackCursor = 0f;
     private float attackElapsedCursor = 0f;
@@ -29,6 +42,32 @@ public class Attack1 : CharacterState
     private bool comboAvailable = false;
     private bool isDone = false;
     private bool isNextComboReady = false;
+
+    private void Start()
+    {
+        enemyLayers = LayerMask.GetMask("Monster");
+    }
+    private void TakeDamageToEnemy()
+    {
+        Vector2 attackPoint = CharacterActor.ColliderCenter;
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
+            attackPoint,
+            attackRange,
+            enemyLayers
+        );
+        
+        foreach(Collider2D enemy in hitEnemies)
+        {
+            Vector2 directionToEnemy = ((Vector2)enemy.transform.position - attackPoint).normalized;
+            float angle = Vector2.Angle(CharacterActor.Forward, directionToEnemy);
+
+            if (angle <= attackAngle)
+            {
+                Debug.Log("Enemy hitted!");
+                //enemy.GetComponent<EnemyHealth>().TakeDamage(damage);
+            }
+        }
+    }
 
     public override void CheckExitTransition()
     {
@@ -50,6 +89,7 @@ public class Attack1 : CharacterState
 
         ResetAttack();
 
+        TakeDamageToEnemy();
     }
 
     public override void UpdateBehaviour(float dt)
@@ -101,4 +141,52 @@ public class Attack1 : CharacterState
         isDone = false;
         isNextComboReady = false;
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (CharacterActor == null) return;
+
+        Vector2 attackPoint = CharacterActor.ColliderCenter;
+        float attackRange = this.attackRange;
+
+        // Draw attack center point
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(attackPoint, 0.1f);
+
+        // Visualize partial attack range
+        Gizmos.color = Color.green;
+
+        // Number of segments dividing the half circle
+        int segments = 30;
+
+        // Half of the field of view angle
+        float halfFOV = attackAngle;
+
+        Vector2 forward = CharacterActor.Forward.normalized;
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float angleA = -halfFOV + (i * (halfFOV * 2) / segments);
+            float angleB = -halfFOV + ((i + 1) * (halfFOV * 2) / segments);
+
+            Vector2 dirA = RotateVector(forward, angleA);
+            Vector2 dirB = RotateVector(forward, angleB);
+
+            Vector2 pointA = attackPoint + dirA * attackRange;
+            Vector2 pointB = attackPoint + dirB * attackRange;
+
+            Gizmos.DrawLine(attackPoint, pointA);
+            Gizmos.DrawLine(pointA, pointB);
+        }
+    }
+
+    Vector2 RotateVector(Vector2 v, float degrees)
+    {
+        float rad = degrees * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+        return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+    }
+#endif
 }
