@@ -62,37 +62,37 @@ public partial class Dokkaebi : Monster
         base.OnDamaged(damage);
     }
 
-    protected override bool DoAttack(Action callback = null)
-    {
-        if (Attacking) return false;
-        Attacking = true;
+    //protected override bool DoAttack(Action callback = null)
+    //{
+    //    if (Attacking) return false;
+    //    Attacking = true;
 
-        laser = Instantiate(laserPrefab);
-        laser.transform.SetParent(transform);
-        laser.name = laserPrefab.name;
-        laser.transform.localPosition = laserPosition;
-        laser.transform.localScale = Vector3.one;
+    //    laser = Instantiate(laserPrefab);
+    //    laser.transform.SetParent(transform);
+    //    laser.name = laserPrefab.name;
+    //    laser.transform.localPosition = laserPosition;
+    //    laser.transform.localScale = Vector3.one;
 
-        var attackTime = laserTime;
-        StartCoroutine(DoAttack());
+    //    var attackTime = laserTime;
+    //    StartCoroutine(DoAttack());
 
-        IEnumerator DoAttack()
-        {
-            while (Attacking && attackTime > 0)
-            {
-                attackTime -= Time.deltaTime;
-                yield return null;
-            }
+    //    IEnumerator DoAttack()
+    //    {
+    //        while (Attacking && attackTime > 0)
+    //        {
+    //            attackTime -= Time.deltaTime;
+    //            yield return null;
+    //        }
 
-            Destroy(laser);
-            laser = null;
+    //        Destroy(laser);
+    //        laser = null;
 
-            Attacking = false;
-            callback?.Invoke();
-        }
+    //        Attacking = false;
+    //        callback?.Invoke();
+    //    }
 
-        return true;
-    }
+    //    return true;
+    //}
 
     protected bool TryGetDamage(Action callback = null)
     {

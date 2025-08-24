@@ -1,19 +1,19 @@
 namespace UniEngine.StateMachines.BT
 {
-    public partial class BTNode
+    public partial class BTNode<TOwner, TBlackboard>
     {
-        private partial class HierarchyManager
+        private partial class Hierarchy
         {
             private class Sequence : IHierarchyComponent
             {
                 // Internal
-                private readonly HierarchyManager parent;
+                private readonly Hierarchy parent;
 
 
                 // Content
-                public Sequence(HierarchyManager parent) => this.parent = parent;
+                public Sequence(Hierarchy parent) => this.parent = parent;
 
-                public bool ReadUpper(IBTNodeInternal child)
+                public bool ReadUpper(IBTNodeInternal<TOwner, TBlackboard> child)
                 {
                     parent.GetPolicy(child, out _, out var lowerPriority);
 
@@ -28,22 +28,22 @@ namespace UniEngine.StateMachines.BT
                     return true;
                 }
 
-                public bool ReadCurrent(IBTNodeInternal child)
+                public bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child)
                 {
                     if (child.IsRunning)
                     {
                         parent.GetPolicy(child, out var self, out _);
 
                         if (self && !child.CheckCondition())
-                            parent.CurrentChild.Halt(DetailedNodeStatus.AbortedSelf);
+                            child.Halt(DetailedNodeStatus.AbortedSelf);
                         else
                             return false;
                     }
 
-                    var reason = parent.CurrentChild.NodeStatus;
+                    var result = parent.CurrentChild.NodeStatus;
                     parent.CurrentChild = null;
 
-                    if (reason == NodeStatus.Failure)
+                    if (result == NodeStatus.Failure || result == NodeStatus.Aborted)
                     {
                         if (parent.LoopType == LoopType.Forced)
                             return false;
@@ -61,7 +61,7 @@ namespace UniEngine.StateMachines.BT
                     return true;
                 }
 
-                public bool ReadLower(IBTNodeInternal child)
+                public bool ReadLower(IBTNodeInternal<TOwner, TBlackboard> child)
                 {
                     if (child.CheckCondition())
                     {

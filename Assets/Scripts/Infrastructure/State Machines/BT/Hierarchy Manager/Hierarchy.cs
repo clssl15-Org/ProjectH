@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace UniEngine.StateMachines.BT
 {
-    public partial class BTNode
+    public partial class BTNode<TOwner, TBlackboard>
     {
-        private partial class HierarchyManager : IDisposable
+        private partial class Hierarchy : IDisposable
         {
             // Front
             public HierarchyMode HierarchyMode
@@ -43,31 +43,31 @@ namespace UniEngine.StateMachines.BT
                 }
             }
 
-            protected IReadOnlyList<IBTNodeInternal> Children { get; }
+            protected IReadOnlyList<IBTNodeInternal<TOwner, TBlackboard>> Children { get; }
             public bool IsDisposed { get; private set; } = false;
 
             // Internal
-            private readonly BTNode OwnerNode;
+            private readonly BTNode<TOwner, TBlackboard> OwnerNode;
 
             private interface IHierarchyComponent
             {
-                bool ReadUpper(IBTNodeInternal child);
-                bool ReadCurrent(IBTNodeInternal child);
-                bool ReadLower(IBTNodeInternal child);
+                bool ReadUpper(IBTNodeInternal<TOwner, TBlackboard> child);
+                bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child);
+                bool ReadLower(IBTNodeInternal<TOwner, TBlackboard> child);
             }
 
             private IHierarchyComponent hierarchyComponent;
             private HierarchyMode _hierarchyMode = HierarchyMode.None;
 
-            private readonly List<IBTNodeInternal> children;
-            protected IBTNodeInternal CurrentChild { get; set; }
+            private readonly List<IBTNodeInternal<TOwner, TBlackboard>> children;
+            internal IBTNodeInternal<TOwner, TBlackboard> CurrentChild { get; private set; }
 
             private LoopType _loopType = LoopType.None;
             private bool isDisposing = false;
 
 
             // Content
-            public HierarchyManager(BTNode ownerNode)
+            public Hierarchy(BTNode<TOwner, TBlackboard> ownerNode)
             {
                 OwnerNode = ownerNode;
 
@@ -96,7 +96,8 @@ namespace UniEngine.StateMachines.BT
 
                         if (i < currentIndex)
                         {
-                            if (!hierarchyComponent.ReadUpper(child))
+                            if (child.IsSelectable
+                                && !hierarchyComponent.ReadUpper(child))
                                 break;
                         }
                         else if (i == currentIndex)
@@ -106,7 +107,8 @@ namespace UniEngine.StateMachines.BT
                         }
                         else
                         {
-                            if (!hierarchyComponent.ReadLower(child))
+                            if (child.IsSelectable
+                                && !hierarchyComponent.ReadLower(child))
                                 break;
                         }
                     }
@@ -125,7 +127,7 @@ namespace UniEngine.StateMachines.BT
                     break;
                 }
             }
-            protected void GetPolicy(IBTNode node, out bool self, out bool lowerPriority)
+            protected void GetPolicy(IBTNode<TOwner, TBlackboard> node, out bool self, out bool lowerPriority)
             {
 #if UNIENGINE
                 lowerPriority = ((int)node.AbortPolicy).HasAll((int)AbortPolicies.LowerPriority);
@@ -143,8 +145,48 @@ namespace UniEngine.StateMachines.BT
             }
 
 
+            public void SelectChild(IEnumerable<SelectionRequest> requests)
+            {
+                SelectionRequest.ThrowIfNullOrEmpty(requests, Ctx);
+                var request = requests.First();
+
+                if (request.Predicate == null)
+                    throw new ArgumentNullException(nameof(request.Predicate), Ctx("Predicate cannot be null."));
+
+
+                foreach (var child in children)
+                {
+                    switch (child.CheckSelectionCondition(request))
+                    {
+                        case SelectionResult.NotMatched:
+                            continue;
+
+                        case SelectionResult.ConditionFailure:
+                            return;
+
+                        case SelectionResult.Selected:
+                            {
+                                if (CurrentChild != null && CurrentChild != child)
+                                    CurrentChild.Halt(DetailedNodeStatus.HaltedByParent);
+
+                                CurrentChild = child;
+                                child.SelectChildInternal(requests);
+                            }
+                            return;
+
+                        default:
+                            throw new InvalidOperationException(Ctx($"Unknown SelectionResult type detected while checking '{child.Name}'"));
+                    }
+                }
+
+                if (request.ThrowIfNotFound)
+                    throw new InvalidOperationException(Ctx("Failed to find the corresponding Child.\n" +
+                        $"Children: {string.Join(", ", Children.Select(c => c.Name))}"));
+            }
+
+
             #region Child Management
-            public void AddChild(IBTNode node, int index = -1)
+            public void AddChild(IBTNode<TOwner, TBlackboard> node, int index = -1)
             {
                 ThrowIfDisposed();
                 ThrowIfRunning();
@@ -153,16 +195,16 @@ namespace UniEngine.StateMachines.BT
                     throw new ArgumentNullException(nameof(node), Ctx("Cannot add null node"));
                 if (node.IsDisposed)
                     throw new ArgumentException(Ctx($"Cannot add node '{node.Name}' as a child because it has already been disposed."), nameof(node));
-                if (node is not IBTNodeInternal _node)
-                    throw new ArgumentException(Ctx($"Child node must be of type '{typeof(IBTNodeInternal).Name}' or its derivative type."), nameof(node));
+                if (node is not IBTNodeInternal<TOwner, TBlackboard> _node)
+                    throw new ArgumentException(Ctx($"Child node must be of type '{typeof(IBTNodeInternal<TOwner, TBlackboard>).Name}' or its derivative type."), nameof(node));
                 if (children.Contains(_node))
                     throw new ArgumentException(Ctx($"This node '{node.Name}' is already a child."), nameof(node));
                 if (children.Any(n => n.Name == node.Name))
                     throw new ArgumentException(Ctx($"A child named '{node.Name}' already exists."), nameof(node));
                 if (OwnerNode == node)
                     throw new ArgumentException(Ctx("A node cannot be its own child."), nameof(node));
-                if (node.Parent != null)
-                    throw new InvalidOperationException(Ctx($"Child '{node.Name}' already has a parent ({node.Parent.Name})."));
+                if (node.ParentNode != null)
+                    throw new InvalidOperationException(Ctx($"Child '{node.Name}' already has a parent ({node.ParentNode.Name})."));
 
 
                 if (index >= 0)
@@ -170,7 +212,7 @@ namespace UniEngine.StateMachines.BT
                 else
                     children.Add(_node);
 
-                _node.Parent = OwnerNode;
+                _node.SetParent(OwnerNode);
             }
 
             public void RemoveChild(string name)
@@ -185,7 +227,7 @@ namespace UniEngine.StateMachines.BT
                 ThrowIfDisposed();
                 ThrowIfRunning();
 
-                var child = children.Find(predicate);
+                var child = children.FirstOrDefault(n => predicate((IBTNode)n));
                 if (child == null) return;
 
                 child.Halt();
@@ -194,7 +236,7 @@ namespace UniEngine.StateMachines.BT
                     CurrentChild = null;
 
                 children.Remove(child);
-                child.Parent = null;
+                child.SetParent(null);
             }
             #endregion
 
@@ -207,7 +249,7 @@ namespace UniEngine.StateMachines.BT
             private void ThrowIfDisposed()
             {
                 if (IsDisposed)
-                    throw new ObjectDisposedException(GetType().Name, Ctx("This hierarchy manager has been disposed."));
+                    throw new ObjectDisposedException(GetType().Name, Ctx("This hierarchy has been disposed."));
             }
 
             public void Dispose()
@@ -225,7 +267,7 @@ namespace UniEngine.StateMachines.BT
             }
 
 
-            private string Ctx(string message) => OwnerNode.Ctx(message);
+            private string Ctx(string message) => OwnerNode.Ctx($"(hierarchy) {message}");
         }
     }
 }

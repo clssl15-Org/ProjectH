@@ -23,9 +23,9 @@ namespace MonsterBT
             }
         }
 
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
-            Owner.TryDoAction(MonsterAction.Run);
+            Owner.DoAction(MonsterAction.Run);
         }
 
         protected override void OnTick()
@@ -47,11 +47,6 @@ namespace MonsterBT
             }
 
             Complete();
-        }
-
-        protected override void OnHalt(DetailedNodeStatus _)
-        {
-            Blackboard.WasEngaged = true;
         }
     }
 }

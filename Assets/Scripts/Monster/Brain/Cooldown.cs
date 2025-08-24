@@ -15,10 +15,10 @@ namespace MonsterBT
             CooldownTime = cooldownTime;
         }
 
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
             remainingCooldownTime = CooldownTime;
-            Owner.TryDoAction(MonsterAction.Idle);
+            Owner.DoAction(MonsterAction.Idle);
         }
 
         protected override void OnTick()

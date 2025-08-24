@@ -14,21 +14,7 @@ namespace MonsterBT
 
 
         // Content
-        protected override bool CheckCondition()
-        {
-            // 이전이 Engaged 상태였으면 즉시 휴식
-            if (Blackboard.WasEngaged)
-            {
-                Blackboard.WasEngaged = false;
-                return true;
-            }
-
-            // 33%의 확률로 Rest
-            return Random.Range(0, 3) == 0;
-        }
-
-
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
             remainingTime = Random.Range(MinRestTime, MaxRestTime);
 
@@ -38,7 +24,7 @@ namespace MonsterBT
                 y = Owner.Rigidbody.velocity.y,
             };
 
-            Owner.TryDoAction(MonsterAction.Idle);
+            Owner.DoAction(MonsterAction.Idle);
         }
 
         protected override void OnTick()

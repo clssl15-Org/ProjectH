@@ -86,7 +86,7 @@ namespace UniEngine.StateMachines.FSM
 
             currentToken = null;
         }
-        protected virtual void OnEnter(params object[] args) { }
+        protected virtual void OnEnter(params object[] inputs) { }
 
 
         public void Update()
@@ -121,7 +121,6 @@ namespace UniEngine.StateMachines.FSM
 
             var token = new object();
             currentToken = token;
-
 
             hierarchy.Exit();
             if (!CheckToken(token)) return;
@@ -332,7 +331,6 @@ namespace UniEngine.StateMachines.FSM
             return string.Join(" - ", logs);
         }
 
-
         private void ThrowIfDisposed()
         {
             if (IsDisposed)
@@ -356,7 +354,7 @@ namespace UniEngine.StateMachines.FSM
         public virtual void OnDispose() { }
 
 
-        private string Ctx(string message) => $"[Work '{Name}'] {message}";
+        protected string Ctx(string message) => $"[Work '{Name}'] {message}";
 
         public override string ToString()
         {

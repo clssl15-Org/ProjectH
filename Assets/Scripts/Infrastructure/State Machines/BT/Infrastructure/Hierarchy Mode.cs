@@ -4,6 +4,7 @@ namespace UniEngine.StateMachines.BT
     {
         None,
         Selector,
-        Sequence
+        Sequence,
+        Parallel
     }
 }

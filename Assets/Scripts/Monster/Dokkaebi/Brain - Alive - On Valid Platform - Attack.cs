@@ -30,7 +30,7 @@ public partial class Dokkaebi
             {
                 protected override void OnEnter(params object[] _)
                 {
-                    var attacking = Parent.Dokkaebi.TryDoAction(MonsterAction.Attack, () =>
+                    var attacking = Parent.Dokkaebi.DoAction(MonsterAction.Attack, () =>
                     {
                         if (Active)
                             Parent.SetNext<DoCooldown>();

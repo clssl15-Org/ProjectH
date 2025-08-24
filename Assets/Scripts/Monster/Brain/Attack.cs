@@ -11,19 +11,18 @@ namespace MonsterBT
 
 
         // Content
-        protected override bool CheckCondition()
-        {
-            return Owner.TryDoAction(MonsterAction.Attack, Complete);
-        }
+        protected override bool CheckCondition() => Owner.IsAttacking;
 
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
+            Owner.IsAttacking = true;
+            Owner.DoAction(MonsterAction.Attack, Complete);
             Blackboard.Committing = true;
         }
 
         protected override void OnHalt(DetailedNodeStatus _)
         {
-            Owner.TryDoAction(MonsterAction.None);
+            Owner.DoAction(MonsterAction.Idle);
             Blackboard.Committing = false;
         }
     }

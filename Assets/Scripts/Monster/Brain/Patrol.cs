@@ -14,14 +14,14 @@ namespace MonsterBT
 
 
         // Content
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
             remainingTime = Random.Range(MinPatrolTime, MaxPatrolTime);
 
             if (Owner.Direction != Direction.Left && Owner.Direction != Direction.Right)
                 Owner.Direction = Random.Range(0, 2) == 0 ? Direction.Left : Direction.Right;
 
-            Owner.TryDoAction(MonsterAction.Walk);
+            Owner.DoAction(MonsterAction.Walk);
         }
 
         protected override void OnTick()

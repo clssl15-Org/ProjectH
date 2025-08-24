@@ -1,14 +1,13 @@
 using UniEngine.StateMachines.BT;
-using UnityEngine;
 
 namespace MonsterBT
 {
     public class Dead : BTNode<Monster, MonsterBlackboard>
     {
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
-            if (!Owner.TryDoAction(MonsterAction.Dead, Complete))
-                Complete();
+            Owner.IsDying = true;
+            Owner.DoAction(MonsterAction.Dead, Complete);
         }
 
         protected override void OnHalt(DetailedNodeStatus _)

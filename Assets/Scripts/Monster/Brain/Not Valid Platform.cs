@@ -23,9 +23,9 @@ namespace MonsterBT
             return true;
         }
 
-        protected override void OnOpen()
+        protected override void OnOpen(object[] _)
         {
-            Owner.TryDoAction(MonsterAction.Blink);
+            Owner.DoAction(MonsterAction.Idle);
         }
 
         protected override void OnTick()

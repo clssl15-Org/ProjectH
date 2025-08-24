@@ -1,3 +1,4 @@
+using UniEngine.StateMachines.BT;
 using MonsterBT;
 
 public class Dynastid : Monster
@@ -35,7 +36,11 @@ public class Dynastid : Monster
 
     protected override void OnDamaged(int damage)
     {
-        Brain.Blackboard.TakenDamage += damage;
-        base.OnDamaged(damage);
+        Brain.SelectChild(new SelectionRequest[]
+        {
+            new(true),
+            new(true),
+            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+        });
     }
 }
