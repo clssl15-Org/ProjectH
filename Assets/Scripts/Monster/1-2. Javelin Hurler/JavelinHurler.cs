@@ -49,7 +49,7 @@ public partial class JavelinHurler : Monster
             AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
-            AddChild(new AttackAction());
+            AddChild(new JavelinHurlerAttackAction());
             AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
         }

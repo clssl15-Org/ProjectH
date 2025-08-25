@@ -1,16 +1,26 @@
+using UnityEngine;
 using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
+using System;
 
-public partial class ThornySnail : Monster
+public partial class SpikeSnail : Monster
 {
+    // Property
+    [Header("Spike Snail")]
+    [SerializeField, Min(0)] internal float spikeSpeed;
+    [SerializeField, Min(0)] private float launchTime;
+    [SerializeField, Min(0)] private float playAfterlaunchTime;
+    [SerializeField, Min(0)] private float waitingTime;
+
+
     // Internal
     private class ThornySnailBrain : MonsterBrain
     {
         public ThornySnailBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
-                .AddChild(new Hit(MonsterAction.Dead)) // TODO: 깜빡이로 변경
+                .AddChild(new Hit(MonsterAction.Idle)) // TODO: 깜빡이로 변경
                 .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
@@ -37,14 +47,28 @@ public partial class ThornySnail : Monster
             AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
-            AddChild(new AttackAction());
+            AddChild(new SpikeSnailAttackAction());
             AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
         }
     }
 
+    private SpikeLauncher spikeLauncher;
+
 
     // Content
+    protected override void Awake()
+    {
+        base.Awake();
+
+        spikeLauncher = GetComponentInChildren<SpikeLauncher>(true);
+
+        if (!spikeLauncher)
+            throw new InvalidOperationException("가시달팽이는 spikeLauncher 컴포넌트를 가지고 있어야 합니다.");
+
+        spikeLauncher.Initialize(this, platformManager, "Ground");
+    }
+
     protected void Start()
     {
         Direction = UnityEngine.Random.Range(0, 2) == 0

@@ -3,7 +3,7 @@ using MonsterActions;
 
 public partial class JavelinHurler
 {
-    private class AttackAction : MonsteActionState
+    private class JavelinHurlerAttackAction : MonsteActionState
     {
         // Internal
         private float playtime;
@@ -11,7 +11,7 @@ public partial class JavelinHurler
 
 
         // Content
-        public AttackAction() : base(MonsterAction.Attack.ToString()) { }
+        public JavelinHurlerAttackAction() : base(MonsterAction.Attack.ToString()) { }
 
         protected override void OnEnter(params object[] inputs)
         {
@@ -34,7 +34,7 @@ public partial class JavelinHurler
                 thrown = true;
 
                 var javelin = Instantiate(owner.javelinPrefab).GetComponent<Javelin>();
-                javelin.platformManager = owner.platformManager;
+                javelin.Initialize(owner.platformManager, "Ground");
 
                 javelin.transform.SetParent(owner.transform);
                 javelin.transform.localPosition = owner.javelinPosition;

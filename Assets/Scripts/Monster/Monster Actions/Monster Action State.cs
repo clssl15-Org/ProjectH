@@ -18,7 +18,7 @@ namespace MonsterActions
         }
 
         private float? _callbackToleranceTime;
-        protected float? RemainingTime { get; private set; }
+        protected float? RemainingTime { get; set; }
 
 
         // Content
