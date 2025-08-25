@@ -49,7 +49,7 @@ public abstract partial class Monster : MonoBehaviour
     private readonly StringBuilder sb = new();
 
     // Front
-    public bool IsAlive { get; internal set; } = false;
+    public bool IsAlive { get; internal set; } = true;
 
     // Internal
     internal Rigidbody2D Rigidbody { get; private set; }
@@ -172,6 +172,8 @@ public abstract partial class Monster : MonoBehaviour
         => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime);
 
     internal MonsterAction GetCurrentAction() => ActionController.GetCurrentAction();
+    internal bool TryGetCurrentAction(out string name) => ActionController.TryGetCurrentAction(out name);
+
     internal void StopCurrentAction() => ActionController.StopCurrentAction();
 
 
@@ -202,6 +204,7 @@ public abstract partial class Monster : MonoBehaviour
         sb.AppendLine($"HP: {HP}");
         sb.AppendLine($"Direction: {Direction.ToString()}");
         sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
+        sb.AppendLine($"Is Alive: {IsAlive}");
         sb.AppendLine($"Current Action: {GetCurrentAction().ToString()}");
 
         if (Brain != null)

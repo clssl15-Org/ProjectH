@@ -1,10 +1,8 @@
-using System;
-using UnityEngine;
 using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
 
-public partial class ThornySnail: Monster
+public partial class ThornySnail : Monster
 {
     // Internal
     private class ThornySnailBrain : MonsterBrain
@@ -12,7 +10,7 @@ public partial class ThornySnail: Monster
         public ThornySnailBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
-                .AddChild(new Hit(MonsterAction.Dead) { InvincibleTime = 10 }) // TODO: ±ôºýÀÌ·Î º¯°æ
+                .AddChild(new Hit(MonsterAction.Dead)) // TODO: ±ôºýÀÌ·Î º¯°æ
                 .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()

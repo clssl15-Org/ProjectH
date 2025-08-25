@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Linq;
 using UniEngine.StateMachines.FSM;
 
 namespace MonsterActions
@@ -64,27 +65,39 @@ namespace MonsterActions
 
         public MonsterAction GetCurrentAction()
         {
-            if (TryGetCurrentChild<MonsteActionState>(out var child))
+            if (TryGetCurrentAction(out var name))
             {
-                if (child.Name == MonsterAction.Idle.ToString())
+                if (name == MonsterAction.Idle.ToString())
                     return MonsterAction.Idle;
-                if (child.Name == MonsterAction.Alert.ToString())
+                if (name == MonsterAction.Alert.ToString())
                     return MonsterAction.Alert;
-                if (child.Name == MonsterAction.Walk.ToString())
+                if (name == MonsterAction.Walk.ToString())
                     return MonsterAction.Walk;
-                if (child.Name == MonsterAction.Run.ToString())
+                if (name == MonsterAction.Run.ToString())
                     return MonsterAction.Run;
-                if (child.Name == MonsterAction.Attack.ToString())
+                if (name == MonsterAction.Attack.ToString())
                     return MonsterAction.Attack;
-                if (child.Name == MonsterAction.Hit.ToString())
+                if (name == MonsterAction.Hit.ToString())
                     return MonsterAction.Hit;
-                if (child.Name == MonsterAction.Dead.ToString())
+                if (name == MonsterAction.Dead.ToString())
                     return MonsterAction.Dead;
 
                 return MonsterAction.Unknown;
             }
 
             return MonsterAction.None;
+        }
+
+        public bool TryGetCurrentAction(out string name)
+        {
+            if (TryGetCurrentChild<MonsteActionState>(out var child))
+            {
+                name = child.Name;
+                return true;
+            }
+
+            name = string.Empty;
+            return false;
         }
 
         public void StopCurrentAction() => SetNextToNone();

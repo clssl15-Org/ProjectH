@@ -25,7 +25,7 @@ namespace MonsterBT
             this.monsterAction = monsterAction;
         }
 
-        public override bool CheckCondition() => Owner.GetCurrentAction() != MonsterAction.Hit;
+        public override bool CheckCondition() => Owner.GetCurrentAction() != monsterAction;
 
         protected override void OnOpen(object[] inputs)
         {
