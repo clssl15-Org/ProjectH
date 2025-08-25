@@ -14,7 +14,7 @@ namespace MonsterActions
         }
 
         public bool TryDoAction(
-            MonsterAction monsterAction,
+            string monsterAction,
             out ActionResult reason,
             Action<ActionResult> callback = null,
             bool stopPreviousAction = true,
@@ -23,12 +23,12 @@ namespace MonsterActions
         {
             if (TryGetCurrentChild<MonsteActionState>(out var current))
             {
-                if (current.Name != monsterAction.ToString())
+                if (current.Name != monsterAction)
                 {
                     if (!stopPreviousAction)
                     {
                         reason = new(ActionResult.ResultType.OtherActionExecuting,
-                            $"이미 다른 행동({current.Name}) 이 실행 중이기 때문에 입력한 행동({monsterAction.ToString()})을 실행할 수 없습니다.");
+                            $"이미 다른 행동({current.Name})이 실행 중이기 때문에 입력한 행동({monsterAction})을 실행할 수 없습니다.");
 
                         return false;
                     }
@@ -38,7 +38,7 @@ namespace MonsterActions
                     if (!allowRestart)
                     {
                         reason = new(ActionResult.ResultType.AlreadyDoing,
-                            $"이미 입력한 행동({monsterAction.ToString()})이 실행 중입니다.");
+                            $"이미 입력한 행동({monsterAction})이 실행 중입니다.");
 
                         return false;
                     }
@@ -48,7 +48,7 @@ namespace MonsterActions
 
             try
             {
-                SetNextWith(monsterAction.ToString(), callback, playTime);
+                SetNextWith(monsterAction, callback, playTime);
 
                 reason = new(ActionResult.ResultType.Success);
                 return true;
@@ -56,7 +56,7 @@ namespace MonsterActions
             catch (ArgumentException ex)
             {
                 reason = new(ActionResult.ResultType.NotFound,
-                    $"입력한 행동({monsterAction.ToString()})을 찾는 데 실패했습니다.", ex);
+                    $"입력한 행동 상태({monsterAction})를 찾는 데 실패했습니다.", ex);
 
                 return false;
             }
@@ -80,6 +80,8 @@ namespace MonsterActions
                     return MonsterAction.Hit;
                 if (child.Name == MonsterAction.Dead.ToString())
                     return MonsterAction.Dead;
+
+                return MonsterAction.Unknown;
             }
 
             return MonsterAction.None;

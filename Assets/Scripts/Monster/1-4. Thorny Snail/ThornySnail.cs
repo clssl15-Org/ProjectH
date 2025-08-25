@@ -4,36 +4,26 @@ using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
 
-public partial class JavelinHurler : Monster
+public partial class ThornySnail: Monster
 {
-    // Property
-    [Header("Javelin Hurler")]
-    [SerializeField] private GameObject javelinPrefab;
-    [SerializeField, Min(0)] private float javelinScale = 1;
-    [SerializeField] private Vector2 javelinPosition;
-    [SerializeField, Min(0)] private float throwTime = 1;
-    [SerializeField, Range(0, 90)] private float throwAngle;
-    [SerializeField, Min(0)] private float throwPower;
-
-
     // Internal
-    private class JavelinHurlerBrain : MonsterBrain
+    private class ThornySnailBrain : MonsterBrain
     {
-        public JavelinHurlerBrain(JavelinHurler owner) : base(owner)
+        public ThornySnailBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
-                .AddChild(new Hit())
+                .AddChild(new Hit(MonsterAction.Dead) { InvincibleTime = 10 }) // TODO: 깜빡이로 변경
                 .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
                         {
-                            TargetAttackRange = 5f,
+                            TargetAttackRange = 3f,
                             UpperRangeTolerance = 0.1f,
                             LowerRangeTolerance = 0.3f
                         })
                         .AddChild(new Attack()))
-                        // 창던지개는 Cooldown을 가지지 않습니다.
+                        // 가시달팽이는 Cooldown을 가지지 않습니다.
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
                         .AddChild(new Patrol()))));
@@ -41,9 +31,9 @@ public partial class JavelinHurler : Monster
         }
     }
 
-    private class JavelinHurlerActionController : MonsterActionController
+    private class ThornySnailActionController : MonsterActionController
     {
-        public JavelinHurlerActionController(Monster monster) : base(monster)
+        public ThornySnailActionController(Monster monster) : base(monster)
         {
             AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
@@ -57,24 +47,16 @@ public partial class JavelinHurler : Monster
 
 
     // Content
-    protected override void Awake()
-    {
-        if (!javelinPrefab)
-            throw new InvalidOperationException("창던지개는 javelinPrefab을 가지고 있어야 합니다.");
-
-        base.Awake();
-    }
-
     protected void Start()
     {
         Direction = UnityEngine.Random.Range(0, 2) == 0
             ? Direction.Left
             : Direction.Right;
 
-        ActionController = new JavelinHurlerActionController(this);
+        ActionController = new ThornySnailActionController(this);
         ActionController.Enter();
 
-        Brain = new JavelinHurlerBrain(this);
+        Brain = new ThornySnailBrain(this);
     }
 
     protected override void OnDamaged(int damage)

@@ -7,7 +7,7 @@ public static partial class Tools
     /// <summary>
     /// Animator(및 AnimatorOverrideController 포함)에서 이름으로 AnimationClip을 찾습니다.
     /// </summary>
-    public static AnimationClip FindClip(this Animator animator, string clipName)
+    public static AnimationClip FindClip(this Animator animator, string clipName, StringComparison stringComparison = StringComparison.Ordinal)
     {
         if (!animator) throw new ArgumentNullException(nameof(animator));
         var rac = animator.runtimeAnimatorController;
@@ -21,7 +21,7 @@ public static partial class Tools
             foreach (var kv in list)
             {
                 var candidate = kv.Value != null ? kv.Value : kv.Key; // 오버라이드가 없으면 원본
-                if (candidate && string.Equals(candidate.name, clipName, StringComparison.Ordinal))
+                if (candidate && string.Equals(candidate.name, clipName, stringComparison))
                     return candidate;
             }
         }
@@ -29,7 +29,7 @@ public static partial class Tools
         // 2) 일반 컨트롤러(또는 보조 탐색): 이 컨트롤러가 사용하는 모든 클립 열거
         foreach (var clip in rac.animationClips) // 컨트롤러가 사용하는 모든 AnimationClip 반환 :contentReference[oaicite:2]{index=2}
         {
-            if (clip && string.Equals(clip.name, clipName, StringComparison.Ordinal))
+            if (clip && string.Equals(clip.name, clipName, stringComparison))
                 return clip;
         }
 

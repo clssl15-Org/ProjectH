@@ -43,23 +43,14 @@ namespace UniEngine.StateMachines.BT
                     var reason = child.NodeStatus;
                     parent.CurrentChild = null;
 
-                    if (reason == NodeStatus.Success)
+                    if (parent.LoopType == LoopType.None)
                     {
-                        if (parent.LoopType == LoopType.None)
-                            parent.OwnerNode.Halt(DetailedNodeStatus.ChildCompleted);
-
-                        return false;
+                        parent.OwnerNode.Halt(reason == NodeStatus.Success
+                            ? DetailedNodeStatus.ChildCompleted
+                            : DetailedNodeStatus.ChildFailed);
                     }
 
-                    if (parent.Children[^1] == child)
-                    {
-                        if (parent.LoopType != LoopType.Forced)
-                            parent.OwnerNode.Halt(DetailedNodeStatus.ChildFailed);
-
-                        return false;
-                    }
-
-                    return true;
+                    return false;
                 }
 
                 public bool ReadLower(IBTNodeInternal<TOwner, TBlackboard> child)

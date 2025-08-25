@@ -196,7 +196,7 @@ namespace UniEngine.StateMachines.BT
                 if (node.IsDisposed)
                     throw new ArgumentException(Ctx($"Cannot add node '{node.Name}' as a child because it has already been disposed."), nameof(node));
                 if (node is not IBTNodeInternal<TOwner, TBlackboard> _node)
-                    throw new ArgumentException(Ctx($"Child node must be of type '{typeof(IBTNodeInternal<TOwner, TBlackboard>).Name}' or its derivative type."), nameof(node));
+                    throw new ArgumentException(Ctx($"Child node must be of type '{typeof(IBTNodeInternal<TOwner, TBlackboard>).Name}' or its derivative type but was '{node.GetType().Name}'."), nameof(node));
                 if (children.Contains(_node))
                     throw new ArgumentException(Ctx($"This node '{node.Name}' is already a child."), nameof(node));
                 if (children.Any(n => n.Name == node.Name))

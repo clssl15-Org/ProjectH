@@ -160,6 +160,15 @@ public abstract partial class Monster : MonoBehaviour
         bool stopPreviousAction = true,
         bool allowRestart = false,
         float? playTime = null)
+        => ActionController.TryDoAction(monsterAction.ToString(), out reason, callback, stopPreviousAction, allowRestart, playTime);
+
+    internal bool TryDoAction(
+        string monsterAction,
+        out ActionResult reason,
+        Action<ActionResult> callback = null,
+        bool stopPreviousAction = true,
+        bool allowRestart = false,
+        float? playTime = null)
         => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime);
 
     internal MonsterAction GetCurrentAction() => ActionController.GetCurrentAction();

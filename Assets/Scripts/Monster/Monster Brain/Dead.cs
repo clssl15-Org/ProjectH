@@ -5,6 +5,8 @@ namespace MonsterBT
 {
     public class Dead : BTNode<Monster, MonsterBlackboard>
     {
+        public override bool CheckCondition() => Owner.IsAlive;
+
         protected override void OnOpen(object[] _)
         {
             Owner.IsAlive = false;

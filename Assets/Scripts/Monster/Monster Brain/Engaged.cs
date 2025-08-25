@@ -10,7 +10,7 @@ namespace MonsterBT
         public float UpperRangeTolerance { get; set; } = 0.1f;
         public float LowerRangeTolerance { get; set; } = 0.3f;
 
-        // Private
+        // Internal
         private MonsterAction monsterAction;
 
 

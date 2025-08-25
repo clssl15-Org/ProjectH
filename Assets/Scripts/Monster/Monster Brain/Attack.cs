@@ -5,13 +5,6 @@ namespace MonsterBT
 {
     public class Attack : BTNode<Monster, MonsterBlackboard>
     {
-        // Front
-        public float TargetAttackRange { get; set; } = 3f;
-        public float UpperRangeTolerance { get; set; } = 0.1f;
-        public float LowerRangeTolerance { get; set; } = 0.3f;
-
-
-        // Content
         protected override void OnOpen(object[] _)
         {
             if (!Owner.TryDoAction(MonsterAction.Attack, out var reason, result => Complete(result)))

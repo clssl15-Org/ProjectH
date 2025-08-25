@@ -26,7 +26,12 @@ namespace MonsterActions
 
         protected override void OnEnter(params object[] inputs)
         {
-            var clip = Owner.Animator.FindClip(Name);
+            var clipName = Name;
+
+            var clip = Owner.Animator.FindClip(clipName);
+
+            if (clip == null) clipName = Name.ToLower();
+            clip = Owner.Animator.FindClip(clipName);
 
             if (clip == null) throw new ArgumentException(
                 Owner.Ctx($"애니메이터가 동작 {Name}을(를) 가지고 있지 않습니다."));
@@ -34,8 +39,8 @@ namespace MonsterActions
             callback = (Action<ActionResult>)inputs[0];
             Playtime = (float?)inputs[1];
 
-            RemainingTime = Playtime ?? (clip.isLooping ? clip.length : null);
-            Owner.Animator.Play(Name);
+            RemainingTime = Playtime ?? (!clip.isLooping ? clip.length : null);
+            Owner.Animator.Play(clipName);
         }
 
         protected override void OnUpdate()
