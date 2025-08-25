@@ -2,21 +2,18 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Projectile : MonoBehaviour
+public class Projectile<TProjectile> : MonoBehaviour where TProjectile : Projectile<TProjectile>
 {
     private PlatformManager platformManager;
     private string[] collisionTags;
 
 
-    public T Initialize<T>(PlatformManager platformManager, params string[] collisionTags) where T : Projectile
-    {
-        Initialize(platformManager, collisionTags);
-        return (T)this;
-    }
-    public virtual void Initialize(PlatformManager platformManager, params string[] collisionTags) 
+    public virtual TProjectile Initialize(PlatformManager platformManager, params string[] collisionTags) 
     {
         this.platformManager = platformManager;
         this.collisionTags = collisionTags;
+
+        return (TProjectile)this;
     }
 
     protected virtual void Update()

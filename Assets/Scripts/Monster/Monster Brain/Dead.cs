@@ -11,8 +11,10 @@ namespace MonsterBT
         {
             Owner.IsAlive = false;
 
-            if (!Owner.TryDoAction(MonsterAction.Dead, out var reason, result => Complete(),
-                allowRestart: true, playTime: 1))
+            if (!Owner.TryDoAction(MonsterAction.Dead, out var reason,
+                result => Complete(),
+                allowRestart: true,
+                stayTimeAfterFinised: 1f))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"Dead 행동에 실패하였기 때문에 Dead 상태로 진입할 수 없습니다.\n{reason}"));

@@ -1,14 +1,23 @@
+using System;
 using MonsterActions;
+using UniEngine.StateMachines.FSM;
+using UnityEngine;
 
 public partial class SpikeSnail : Monster
 {
-    private class SpikeSnailAttackAction : MonsteActionState
+    private class SpikeSnailAttackAction : Work<MonsterActionController>
     {
         // Internal
+        private SpikeSnail Owner => (SpikeSnail)Parent.Owner;
+
         private float playtime;
         private bool launched;
         private bool paused;
         private bool restarted;
+
+        private float targetPlayTime;
+        private bool isCompleted;
+        private Action<ActionResult> callback;
 
 
         // Content
@@ -16,42 +25,49 @@ public partial class SpikeSnail : Monster
 
         protected override void OnEnter(params object[] inputs)
         {
+            if (!Owner.Animator.TryFindClip(MonsterAction.Attack.ToString(), out var clip))
+                throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
+
+            callback = (Action<ActionResult>)inputs[0];
+
             launched = false;
             paused = false;
             restarted = false;
 
-            base.OnEnter(inputs);
+            playtime = 0;
+            targetPlayTime = clip.length + Owner.waitingTime;
 
-            if (!RemainingTime.HasValue)
-                throw new System.InvalidOperationException("가시달팽이의 Attack 행동은 종료 시간이 존재해야 합니다.");
-
-            RemainingTime += ((SpikeSnail)Owner).waitingTime;
-            playtime = RemainingTime.Value;
+            isCompleted = false;
         }
-        
+
         protected override void OnUpdate()
         {
-            base.OnUpdate();
+            playtime += Time.deltaTime;
 
-            var owner = (SpikeSnail)Owner;
-            var currentPlaytime = playtime - RemainingTime;
-
-            if (!launched && currentPlaytime >= owner.launchTime)
+            if (!launched && playtime >= Owner.launchTime)
             {
                 launched = true;
-                owner.spikeLauncher.Launch();
+
+                Owner.spikeLauncher.Launch(Owner.spikeSpeed,
+                    new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) });
             }
 
-            if (!paused && currentPlaytime >= (owner.launchTime + owner.playAfterlaunchTime))
+            if (!paused && playtime >= (Owner.launchTime + Owner.playtimeBeforeWaiting))
             {
                 paused = true;
                 Owner.Animator.speed = 0f;
             }
 
-            if (!restarted && currentPlaytime >= (owner.launchTime + owner.playAfterlaunchTime + owner.waitingTime))
+            if (!restarted && playtime >= (Owner.launchTime + Owner.playtimeBeforeWaiting + Owner.waitingTime))
             {
                 restarted = true;
                 Owner.Animator.speed = 1f;
+            }
+
+            if (playtime >= targetPlayTime)
+            {
+                isCompleted = true;
+                Exit();
             }
         }
 
@@ -59,6 +75,13 @@ public partial class SpikeSnail : Monster
         {
             if (Owner.Animator)
                 Owner.Animator.speed = 1f;
+
+            var callback = this.callback;
+            this.callback = null;
+
+            callback?.Invoke(new(isCompleted
+                ? ActionResult.ResultType.Success
+                : ActionResult.ResultType.Interrupted));
         }
     }
 }

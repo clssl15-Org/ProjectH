@@ -62,3 +62,5 @@ dotnet_diagnostic.IDE0090.severity = none
 
 # # CS0809: 사용되지 않는 멤버가 사용되는 멤버를 재정의합니다.
 # dotnet_diagnostic.CS0809.severity = none
+
+dotnet_sort_system_directives_first = true

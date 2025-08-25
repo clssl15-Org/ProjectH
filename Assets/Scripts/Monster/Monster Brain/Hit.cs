@@ -11,12 +11,13 @@ namespace MonsterBT
         public float InvincibleTime { get; set; } = 0.5f;
 
         // Internal
-        private MonsterAction monsterAction;
+        private string monsterAction;
         private float remainingTime;
 
 
         // Content
-        public Hit(MonsterAction monsterAction = MonsterAction.Hit)
+        public Hit(MonsterAction monsterAction = MonsterAction.Hit) : this(monsterAction.ToString()) { }
+        public Hit(string monsterAction)
         {
             IsSelectable = false;
             AbortPolicy = AbortPolicies.LowerPriority;
@@ -25,7 +26,7 @@ namespace MonsterBT
             this.monsterAction = monsterAction;
         }
 
-        public override bool CheckCondition() => Owner.GetCurrentAction() != monsterAction;
+        public override bool CheckCondition() => !Owner.TryGetCurrentAction(out var _monsterAction) || _monsterAction != monsterAction;
 
         protected override void OnOpen(object[] inputs)
         {

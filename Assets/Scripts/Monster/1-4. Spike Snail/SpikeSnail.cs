@@ -1,8 +1,8 @@
+using System;
 using UnityEngine;
 using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
-using System;
 
 public partial class SpikeSnail : Monster
 {
@@ -10,7 +10,7 @@ public partial class SpikeSnail : Monster
     [Header("Spike Snail")]
     [SerializeField, Min(0)] internal float spikeSpeed;
     [SerializeField, Min(0)] private float launchTime;
-    [SerializeField, Min(0)] private float playAfterlaunchTime;
+    [SerializeField, Min(0)] private float playtimeBeforeWaiting;
     [SerializeField, Min(0)] private float waitingTime;
 
 
@@ -26,9 +26,7 @@ public partial class SpikeSnail : Monster
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
                         {
-                            TargetAttackRange = 3f,
-                            UpperRangeTolerance = 0.1f,
-                            LowerRangeTolerance = 0.3f
+                            TargetAttackRange = 3f
                         })
                         .AddChild(new Attack()))
                         // 가시달팽이는 Cooldown을 가지지 않습니다.
@@ -53,7 +51,7 @@ public partial class SpikeSnail : Monster
         }
     }
 
-    private SpikeLauncher spikeLauncher;
+    private KinematicProjectileLauncher spikeLauncher;
 
 
     // Content
@@ -61,7 +59,7 @@ public partial class SpikeSnail : Monster
     {
         base.Awake();
 
-        spikeLauncher = GetComponentInChildren<SpikeLauncher>(true);
+        spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
         if (!spikeLauncher)
             throw new InvalidOperationException("가시달팽이는 spikeLauncher 컴포넌트를 가지고 있어야 합니다.");

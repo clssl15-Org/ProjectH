@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Spike : Projectile
+public class KinematicProjectile : Projectile<KinematicProjectile>
 {
     private Vector3 direction;
     private float speed;

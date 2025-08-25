@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6443737745047481722}
-  - component: {fileID: 4730022253027616879}
+  - component: {fileID: 4252529398177760558}
   m_Layer: 0
   m_Name: Spike Launcher
   m_TagString: Untagged
@@ -37,7 +37,7 @@ Transform:
   - {fileID: 5125082395420708770}
   m_Father: {fileID: 9061239059274336577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4730022253027616879
+--- !u!114 &4252529398177760558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,10 +46,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 594412661026032469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac09ed1a13ecd1a4d98cbaa6a6acae8d, type: 3}
+  m_Script: {fileID: 11500000, guid: 82a67d4adf15808448d8547a089ad83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikes:
+  projectiles:
   - {fileID: 1494748829261589236}
   - {fileID: 5581453143816760349}
   - {fileID: 1778174568955841781}
@@ -1041,7 +1041,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 0.7}
   m_Direction: 1
 --- !u!50 &8298912697572752862
@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26185970ee2a8c4da1852179012bdc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 10
+  maxHP: 5
   attackPower: 1
   moveSpeed: 1
   defaultIsRight: 0
@@ -1118,5 +1118,5 @@ MonoBehaviour:
   stateDisplay: 
   spikeSpeed: 5
   launchTime: 0.21
-  playAfterlaunchTime: 0.1
+  playtimeBeforeWaiting: 0.1
   waitingTime: 0.5

@@ -7,7 +7,8 @@ public readonly struct ActionResult
         Success,
         AlreadyDoing,
         OtherActionExecuting,
-        NotFound
+        NotFound,
+        Interrupted
     }
 
     public ResultType Result { get; }
@@ -32,7 +33,7 @@ public readonly struct ActionResult
         if (Exception != null)
             result += "\n" + Exception.ToString();
 
-        return result ;
+        return result;
     }
 
     public static implicit operator bool(ActionResult result) => result.Result == ResultType.Success;

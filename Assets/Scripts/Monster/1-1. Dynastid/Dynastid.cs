@@ -7,7 +7,7 @@ public class Dynastid : Monster
     // Internal
     private class DynastidBrain : MonsterBrain
     {
-        public DynastidBrain(Dynastid owner) : base(owner)
+        public DynastidBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())

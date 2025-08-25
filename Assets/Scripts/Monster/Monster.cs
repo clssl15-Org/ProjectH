@@ -1,8 +1,8 @@
 using System;
 using System.Text;
-using UnityEngine;
-using MonsterBT;
 using MonsterActions;
+using MonsterBT;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 [RequireComponent(typeof(PlatformDetector), typeof(MonsterHitted))]
@@ -12,7 +12,7 @@ public abstract partial class Monster : MonoBehaviour
     public int HP
     {
         get => _hp;
-        internal set => _hp = Mathf.Clamp(value, 0, maxHp);
+        internal set => _hp = Mathf.Clamp(value, 0, maxHP);
     }
 
     public int AttackPower => attackPower;
@@ -35,7 +35,7 @@ public abstract partial class Monster : MonoBehaviour
 
     // Property 
     [Header("Parameters")]
-    [SerializeField, Min(0)] private int maxHp;
+    [SerializeField, Min(0)] internal int maxHP;
     [SerializeField, Min(0)] private int attackPower;
     [SerializeField, Min(0)] private int moveSpeed;
     [SerializeField] protected bool defaultIsRight;
@@ -94,7 +94,7 @@ public abstract partial class Monster : MonoBehaviour
         hitDetector = GetComponent<MonsterHitted>();
         hitDetector.Damaged += OnDamaged;
 
-        _hp = maxHp;
+        _hp = maxHP;
     }
 
     protected virtual void Update()
@@ -159,8 +159,9 @@ public abstract partial class Monster : MonoBehaviour
         Action<ActionResult> callback = null,
         bool stopPreviousAction = true,
         bool allowRestart = false,
-        float? playTime = null)
-        => ActionController.TryDoAction(monsterAction.ToString(), out reason, callback, stopPreviousAction, allowRestart, playTime);
+        float? playTime = null,
+        float stayTimeAfterFinised = 0f)
+        => ActionController.TryDoAction(monsterAction.ToString(), out reason, callback, stopPreviousAction, allowRestart, playTime, stayTimeAfterFinised);
 
     internal bool TryDoAction(
         string monsterAction,

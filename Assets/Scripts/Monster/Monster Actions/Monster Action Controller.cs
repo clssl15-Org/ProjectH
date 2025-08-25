@@ -19,7 +19,8 @@ namespace MonsterActions
             Action<ActionResult> callback = null,
             bool stopPreviousAction = true,
             bool allowRestart = false,
-            float? playTime = null)
+            float? playTime = null,
+            float stayTimeAfterFinised = 0f)
         {
             if (TryGetCurrentChild<MonsteActionState>(out var current))
             {
@@ -48,7 +49,7 @@ namespace MonsterActions
 
             try
             {
-                SetNextWith(monsterAction, callback, playTime);
+                SetNextWith(monsterAction, callback, playTime, stayTimeAfterFinised);
 
                 reason = new(ActionResult.ResultType.Success);
                 return true;
