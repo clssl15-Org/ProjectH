@@ -4,42 +4,46 @@ using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
 
-public partial class Dokkaebi : Monster
+public partial class JavelinHurler : Monster
 {
     // Property
-    [Header("Dokkaebi")]
-    [SerializeField] private GameObject laserPrefab;
-    [SerializeField] private Vector2 laserPosition;
+    [Header("Javelin Hurler")]
+    [SerializeField] private GameObject javelinPrefab;
+    [SerializeField, Min(0)] private float javelinScale = 1;
+    [SerializeField] private Vector2 javelinPosition;
+    [SerializeField, Min(0)] private float throwTime = 1;
+    [SerializeField, Range(0, 90)] private float throwAngle;
+    [SerializeField, Min(0)] private float throwPower;
 
 
     // Internal
-    private class DokkaebiBrain : MonsterBrain
+    private class JavelinHurlerBrain : MonsterBrain
     {
-        public DokkaebiBrain(Dokkaebi owner) : base(owner)
+        public JavelinHurlerBrain(JavelinHurler owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
                 .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(monsterAction: MonsterAction.Idle)
+                        .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
                         {
-                            TargetAttackRange = 3f,
+                            TargetAttackRange = 5f,
                             UpperRangeTolerance = 0.1f,
                             LowerRangeTolerance = 0.3f
                         })
-                        .AddChild(new Attack())
-                        .AddChild(new Cooldown()))
+                        .AddChild(new Attack()))
+                        // 창던지개는 Cooldown을 가지지 않습니다.
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(monsterAction: MonsterAction.Idle)))));
+                        .AddChild(new Patrol()))));
             AddChild(new Dead());
         }
     }
 
-    private class DynastidActionController : MonsterActionController
+    private class JavelinHurlerActionController : MonsterActionController
     {
-        public DynastidActionController(Monster monster) : base(monster)
+        public JavelinHurlerActionController(Monster monster) : base(monster)
         {
             AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
@@ -55,8 +59,8 @@ public partial class Dokkaebi : Monster
     // Content
     protected override void Awake()
     {
-        if (!laserPrefab)
-            throw new InvalidOperationException("도깨비는 laserPrefab을 가지고 있어야 합니다.");
+        if (!javelinPrefab)
+            throw new InvalidOperationException("창던지개는 javelinPrefab을 가지고 있어야 합니다.");
 
         base.Awake();
     }
@@ -67,10 +71,10 @@ public partial class Dokkaebi : Monster
             ? Direction.Left
             : Direction.Right;
 
-        ActionController = new DynastidActionController(this);
+        ActionController = new JavelinHurlerActionController(this);
         ActionController.Enter();
 
-        Brain = new DokkaebiBrain(this);
+        Brain = new JavelinHurlerBrain(this);
     }
 
     protected override void OnDamaged(int damage)

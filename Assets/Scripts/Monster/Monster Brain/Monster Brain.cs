@@ -2,7 +2,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class MonsterBrain : BTNode<Monster, MonsterBlackboard>
+    internal abstract class MonsterBrain : BTNode<Monster, MonsterBlackboard>
     {
         public MonsterBrain(Monster owner = null, string name = null) : base(owner, name)
         {

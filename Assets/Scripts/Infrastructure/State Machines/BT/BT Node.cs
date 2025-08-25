@@ -40,7 +40,7 @@ namespace UniEngine.StateMachines.BT
         public NodeStatus NodeStatus => DetailedNodeStatus.ToNodeStatus();
         public DetailedNodeStatus DetailedNodeStatus { get; private set; } = DetailedNodeStatus.NeverRun;
 
-        public bool IsSelectable { get; protected set; } = true;
+        public bool IsSelectable { get; set; } = true;
 
         IBTNodeInternal<TOwner, TBlackboard> IBTNodeInternal<TOwner, TBlackboard>.CurrentChild => _hierarchyComponent?.CurrentChild;
         public bool IsDisposed { get; private set; } = false;
@@ -73,7 +73,7 @@ namespace UniEngine.StateMachines.BT
         object IBTNode.GetOwner() => Owner;
         object IBTNode.GetBlackboard() => Blackboard;
 
-        protected virtual bool CheckCondition()
+        public virtual bool CheckCondition()
         {
             try
             {
@@ -91,7 +91,6 @@ namespace UniEngine.StateMachines.BT
                 return false;
             }
         }
-        bool IBTNodeInternal<TOwner, TBlackboard>.CheckCondition() => CheckCondition();
 
 
         public void Tick()

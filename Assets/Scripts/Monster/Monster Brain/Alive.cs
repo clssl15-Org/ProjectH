@@ -11,7 +11,7 @@ namespace MonsterBT
             LoopType = LoopType.Forced;
         }
 
-        protected override bool CheckCondition()
+        public override bool CheckCondition()
         {
             if (Owner.HP <= 0)
             {

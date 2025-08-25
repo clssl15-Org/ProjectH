@@ -188,6 +188,11 @@ namespace UniEngine.StateMachines.FSM
             ThrowIfDisposed();
             hierarchy.SetNext(GetName(typeof(T)), true, args);
         }
+        public void SetNextToNone()
+        {
+            ThrowIfDisposed();
+            hierarchy.SetNextToNone();
+        }
         public void ClearNext()
         {
             ThrowIfDisposed();

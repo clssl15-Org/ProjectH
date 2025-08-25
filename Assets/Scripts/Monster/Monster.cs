@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using UnityEngine;
 using MonsterBT;
+using MonsterActions;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 [RequireComponent(typeof(PlatformDetector), typeof(MonsterHitted))]
@@ -37,10 +38,10 @@ public abstract partial class Monster : MonoBehaviour
     [SerializeField, Min(0)] private int maxHp;
     [SerializeField, Min(0)] private int attackPower;
     [SerializeField, Min(0)] private int moveSpeed;
-    [SerializeField] private bool defaultIsRight;
+    [SerializeField] protected bool defaultIsRight;
 
     [Header("Bindings")]
-    [SerializeField] private PlatformManager platformManager;
+    [SerializeField] protected PlatformManager platformManager;
 
     // Display
     [SerializeField, Header("Display"), TextArea(3, 15)]
@@ -48,13 +49,11 @@ public abstract partial class Monster : MonoBehaviour
     private readonly StringBuilder sb = new();
 
     // Front
-    public bool IsAttacking { get; internal set; } = false;
-    public bool IsTakingDamage { get; internal set; } = false;
-    public bool IsDying { get; internal set; } = false;
+    public bool IsAlive { get; internal set; } = false;
 
     // Internal
     internal Rigidbody2D Rigidbody { get; private set; }
-    private Animator Animator { get; set; }
+    internal Animator Animator { get; private set; }
 
     internal int BelongingPlatform { get; set; } = 1;
     internal PlatformDetector PlatformDetector { get; private set; }
@@ -66,13 +65,8 @@ public abstract partial class Monster : MonoBehaviour
     private MonsterHitted hitDetector;
     private MonsterPlayerDetector playerDetector;
 
-    protected MonsterActionController ActionController { get; private set; }
-    protected MonsterBrain Brain { get; set; }
-
-    // Internal State
-    protected bool Attacking { get; set; } = false;
-    protected bool Damaging { get; set; } = false;
-    protected bool Alive { get; set; } = true;
+    internal MonsterActionController ActionController { get; set; }
+    internal MonsterBrain Brain { get; set; }
 
 
     // Content
@@ -101,7 +95,6 @@ public abstract partial class Monster : MonoBehaviour
         hitDetector.Damaged += OnDamaged;
 
         _hp = maxHp;
-        ActionController = new(this);
     }
 
     protected virtual void Update()
@@ -111,6 +104,11 @@ public abstract partial class Monster : MonoBehaviour
 #if UNITY_EDITOR
         stateDisplay = GetDisplayContent();
 #endif
+    }
+
+    protected void FixedUpdate()
+    {
+        ActionController?.Update();
     }
 
     protected virtual void OnPlayerDetected(GameObject player) { }
@@ -154,16 +152,25 @@ public abstract partial class Monster : MonoBehaviour
             $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드를 수행할 수 없습니다."));
     }
 
-    public void Die()
+    #region Actions
+    internal bool TryDoAction(
+        MonsterAction monsterAction,
+        out ActionResult reason,
+        Action<ActionResult> callback = null,
+        bool stopPreviousAction = true,
+        bool allowRestart = false,
+        float? playTime = null)
+        => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime);
+
+    internal MonsterAction GetCurrentAction() => ActionController.GetCurrentAction();
+    internal void StopCurrentAction() => ActionController.StopCurrentAction();
+
+
+    internal void Die()
     {
         Destroy(gameObject);
     }
-
-
-    internal void DoAction(MonsterAction monsterAction, Action callback = null, float? playTime = null)
-        => ActionController.DoAction(monsterAction, callback, playTime);
-
-    internal MonsterAction GetCurrentAction() => ActionController.GetCurrentAction();
+    #endregion
 
 
     protected virtual void OnDestroy()
@@ -178,7 +185,7 @@ public abstract partial class Monster : MonoBehaviour
     }
 
 
-    protected string Ctx(string message) => $"[Monster '{GetType().Name}'] {message}";
+    internal string Ctx(string message) => $"[Monster '{GetType().Name}'] {message}";
 
     protected virtual string GetDisplayContent()
     {
@@ -186,10 +193,7 @@ public abstract partial class Monster : MonoBehaviour
         sb.AppendLine($"HP: {HP}");
         sb.AppendLine($"Direction: {Direction.ToString()}");
         sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
-        sb.AppendLine("----------------");
-        sb.AppendLine($"Alive: {Alive}");
-        sb.AppendLine($"Attacking: {Attacking}");
-        sb.AppendLine($"GettingDamage: {Damaging}");
+        sb.AppendLine($"Current Action: {GetCurrentAction().ToString()}");
 
         if (Brain != null)
         {

@@ -24,6 +24,8 @@ public class PlatformManager : MonoBehaviour
         }
     }
 
+    public Bounds Bound => tilemap.localBounds;
+
     // Property
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private bool enableDebugger = false;

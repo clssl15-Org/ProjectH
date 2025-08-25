@@ -16,6 +16,7 @@ namespace UniEngine.StateMachines.BT
 
         bool IsDisposed { get; }
 
+        bool CheckCondition();
         /// <summary>
         /// Executes a single update tick.
         /// </summary>
@@ -54,8 +55,6 @@ namespace UniEngine.StateMachines.BT
         /// </summary>
         bool RetickNow { get; set; }
         IBTNodeInternal<TOwner, TBlackboard> CurrentChild { get; }
-
-        bool CheckCondition();
 
         void SetParent(IBTNodeInternal<TOwner, TBlackboard> parent);
         void Halt(DetailedNodeStatus reason);

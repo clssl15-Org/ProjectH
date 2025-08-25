@@ -10,9 +10,12 @@ namespace MonsterBT
         public float UpperRangeTolerance { get; set; } = 0.1f;
         public float LowerRangeTolerance { get; set; } = 0.3f;
 
+        // Private
+        private MonsterAction monsterAction;
+
 
         // Content
-        public Engaged(bool contact)
+        public Engaged(bool contact = false, MonsterAction monsterAction = MonsterAction.Run)
         {
             AbortPolicy = AbortPolicies.Self;
 
@@ -21,11 +24,20 @@ namespace MonsterBT
                 TargetAttackRange = 0f;
                 UpperRangeTolerance = 1f;
             }
+
+            this.monsterAction = monsterAction;
         }
 
         protected override void OnOpen(object[] _)
         {
-            Owner.DoAction(MonsterAction.Run);
+            if (!Owner.TryDoAction(monsterAction, out var reason)
+                 && reason.Result != ActionResult.ResultType.AlreadyDoing)
+            {
+                Debug.LogWarning(Owner.Ctx(
+                    $"{monsterAction} 행동에 실패하였기 때문에 Engaged 상태로 진입할 수 없습니다.\n{reason}"));
+
+                Complete(false);
+            }
         }
 
         protected override void OnTick()

@@ -1,5 +1,6 @@
-using UniEngine.StateMachines.BT;
+using MonsterActions;
 using MonsterBT;
+using UniEngine.StateMachines.BT;
 
 public class Dynastid : Monster
 {
@@ -23,6 +24,20 @@ public class Dynastid : Monster
         }
     }
 
+    private class DynastidActionController : MonsterActionController
+    {
+        public DynastidActionController(Monster monster) : base(monster)
+        {
+            AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Attack.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
+        }
+    }
+
 
     // Content
     protected void Start()
@@ -30,7 +45,10 @@ public class Dynastid : Monster
         Direction = UnityEngine.Random.Range(0, 2) == 0
             ? Direction.Left
             : Direction.Right;
-    
+
+        ActionController = new DynastidActionController(this);
+        ActionController.Enter();
+        
         Brain = new DynastidBrain(this);
     }
 

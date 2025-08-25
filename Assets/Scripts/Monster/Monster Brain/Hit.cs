@@ -8,22 +8,21 @@ namespace MonsterBT
     public class Hit : BTNode<Monster, MonsterBlackboard>
     {
         // Front
-        public float InvincibleTime { get; set; }
+        public float InvincibleTime { get; set; } = 0.5f;
 
         // Internal
         private float remainingTime;
 
 
         // Content
-        public Hit(float invincibleTime = 1)
+        public Hit()
         {
             IsSelectable = false;
             AbortPolicy = AbortPolicies.LowerPriority;
-            HierarchyMode = HierarchyMode.Selector; // Parallel
-            InvincibleTime = invincibleTime;
+            HierarchyMode = HierarchyMode.Selector;
         }
 
-        protected override bool CheckCondition() => !Owner.IsTakingDamage;
+        public override bool CheckCondition() => Owner.GetCurrentAction() != MonsterAction.Hit;
 
         protected override void OnOpen(object[] inputs)
         {
@@ -36,7 +35,13 @@ namespace MonsterBT
             Owner.HP -= damage;
             remainingTime = InvincibleTime;
 
-            Owner.DoAction(MonsterAction.Hit);
+            if (!Owner.TryDoAction(MonsterAction.Hit, out var reason, result => Complete(result), playTime: InvincibleTime))
+            {
+                Debug.LogWarning(Owner.Ctx(
+                    $"Hit 행동에 실패하였기 때문에 Hit 상태로 진입할 수 없습니다.\n{reason}"));
+
+                Complete(false);
+            }
         }
 
         protected override void OnTick()

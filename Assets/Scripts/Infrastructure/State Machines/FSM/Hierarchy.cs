@@ -39,7 +39,7 @@ namespace UniEngine.StateMachines.FSM
 
 
             // Content
-            public HierarchyManager(Work owner) => this.ownerWork = owner;
+            public HierarchyManager(Work owner) => ownerWork = owner;
 
             public void Enter(params object[] args)
             {
@@ -102,6 +102,8 @@ namespace UniEngine.StateMachines.FSM
                 Exit();
                 Enter();
             }
+
+            public void SetNextToNone() => SetNext(null, false);
 
             public void ClearNext()
             {

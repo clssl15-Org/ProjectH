@@ -1,3 +1,4 @@
+using UnityEngine;
 using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
@@ -9,7 +10,7 @@ namespace MonsterBT
             AbortPolicy = AbortPolicies.LowerPriority;
         }
 
-        protected override bool CheckCondition()
+        public override bool CheckCondition()
         {
             if (Blackboard.Committing)
                 return false;
@@ -25,7 +26,14 @@ namespace MonsterBT
 
         protected override void OnOpen(object[] _)
         {
-            Owner.DoAction(MonsterAction.Idle);
+            if (!Owner.TryDoAction(MonsterAction.Idle, out var reason)
+                 && reason.Result != ActionResult.ResultType.AlreadyDoing)
+            {
+                Debug.LogWarning(Owner.Ctx(
+                    $"Idle 행동에 실패하였기 때문에 NotValidPlatform 상태로 진입할 수 없습니다.\n{reason}"));
+
+                Complete(false);
+            }
         }
 
         protected override void OnTick()
