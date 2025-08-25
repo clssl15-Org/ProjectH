@@ -28,6 +28,10 @@ public class Jump : CharacterState
         {
             CharacterStateController.EnqueueTransition<NormalMovement>();
         }
+        if (CharacterActions.attack.Started)
+        {
+            CharacterStateController.EnqueueTransition<Attack1>();
+        }
     }
     public override void EnterBehaviour(float dt)
     {

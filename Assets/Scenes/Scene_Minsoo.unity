@@ -10108,6 +10108,10 @@ MonoBehaviour:
   nextComboTime: 0.9
   comboInputTimeWindow: 0.7
   damageMultiplier: 1
+  attackSize: {x: 2, y: 2}
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1973654083
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class Attack3 : CharacterState
     }
     public override void EnterBehaviour(float dt)
     {
-        CharacterActor.Velocity = new Vector2(0, 0);
+        //CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Attack2 : CharacterState
 {
+    [Header("Attack Timing Settings")]
     // The duration of the attack animation
     [SerializeField]
     private float attackDuration = 1f;
@@ -20,21 +21,50 @@ public class Attack2 : CharacterState
     [SerializeField]
     private float comboInputTimeWindow = 0.7f;
 
+    [Header("Attack Stats")]
     [SerializeField]
     private float damageMultiplier = 1.0f;
+
+    [SerializeField]
+    private Vector2 attackSize = new Vector2(1.0f, 1.0f);
+
+    [Header("Other Settings")]
+    [SerializeField]
+    private LayerMask enemyLayers;
 
     private float attackCursor = 0f;
     private float attackElapsedCursor = 0f;
 
     private bool comboAvailable = false;
-    private bool isDone = false;
+    private bool isDone = true;
     private bool isNextComboReady = false;
 
+    private void Start()
+    {
+        enemyLayers = LayerMask.GetMask("Monster");
+    }
+
+    private void TakeDamageToEnemy()
+    {
+        Vector2 attackPoint = CharacterActor.ColliderCenter;
+        float attackAngle = CharacterActor.Rotation.eulerAngles.z;
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(
+            attackPoint,
+            attackSize,
+            attackAngle,
+            enemyLayers
+        );
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Enemy hitted! (Attack2)");
+        }
+    }
     public override void CheckExitTransition()
     {
         if (isNextComboReady)
         {
-            CharacterStateController.EnqueueTransition<NormalMovement>();
+            CharacterStateController.EnqueueTransition<Attack3>();
             return;
         }
 
@@ -46,10 +76,11 @@ public class Attack2 : CharacterState
     }
     public override void EnterBehaviour(float dt)
     {
-        CharacterActor.Velocity = new Vector2(0, 0);
+        //CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
 
+        TakeDamageToEnemy();
     }
 
     public override void UpdateBehaviour(float dt)
@@ -72,6 +103,7 @@ public class Attack2 : CharacterState
 
         if (attackCursor >= nextComboTime && comboAvailable)
         {
+            isDone = true;
             isNextComboReady = true;
         }
     }
@@ -101,4 +133,26 @@ public class Attack2 : CharacterState
         isDone = false;
         isNextComboReady = false;
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (isDone) return;
+
+        if (CharacterActor == null) return;
+
+        // Set Gizmo color for attack area visualization
+        Gizmos.color = Color.green;
+
+        Gizmos.matrix = Matrix4x4.TRS(
+            CharacterActor.ColliderCenter,
+            CharacterActor.Rotation,
+            Vector3.one
+        );
+
+        Gizmos.DrawWireCube(Vector3.zero, attackSize);
+
+        Gizmos.matrix = Matrix4x4.identity;
+    }
+#endif
 }

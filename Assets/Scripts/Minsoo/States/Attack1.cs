@@ -40,7 +40,7 @@ public class Attack1 : CharacterState
     private float attackElapsedCursor = 0f;
 
     private bool comboAvailable = false;
-    private bool isDone = false;
+    private bool isDone = true;
     private bool isNextComboReady = false;
 
     private void Start()
@@ -63,7 +63,7 @@ public class Attack1 : CharacterState
 
             if (angle <= attackAngle)
             {
-                Debug.Log("Enemy hitted!");
+                Debug.Log("Enemy hitted! (Attack1)");
                 //enemy.GetComponent<EnemyHealth>().TakeDamage(damage);
             }
         }
@@ -73,7 +73,7 @@ public class Attack1 : CharacterState
     {
         if (isNextComboReady)
         {
-            CharacterStateController.EnqueueTransition<NormalMovement>();
+            CharacterStateController.EnqueueTransition<Attack2>();
             return;
         }
 
@@ -85,10 +85,10 @@ public class Attack1 : CharacterState
     }
     public override void EnterBehaviour(float dt)
     {
-        CharacterActor.Velocity = new Vector2(0, 0);
+        //CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
-
+        
         TakeDamageToEnemy();
     }
 
@@ -112,6 +112,7 @@ public class Attack1 : CharacterState
 
         if (attackCursor >= nextComboTime && comboAvailable)
         {
+            isDone = true;
             isNextComboReady = true;
         }
     }
@@ -145,6 +146,8 @@ public class Attack1 : CharacterState
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
+        if (isDone) return;
+
         if (CharacterActor == null) return;
 
         Vector2 attackPoint = CharacterActor.ColliderCenter;

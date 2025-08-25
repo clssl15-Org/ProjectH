@@ -252,23 +252,8 @@ public class CharacterStateController : MonoBehaviour
         if (CharacterBrain != null)
             UpdateMovementData(CharacterBrain.CharacterActions.movement.value);
 
-        bool valiidTransition = CheckForTransitions();
-        
-        transitionQueue.Clear();
 
         float dt = Time.deltaTime;
-        if (valiidTransition)
-        {
-            PreviousState.ExitBehaviour(dt);
-
-            Animator.runtimeAnimatorController = CurrentState.RuntimeAnimatorController;
-
-            CurrentState.EnterBehaviour(dt);
-        }
-
-        CurrentState.PreUpdateBehaviour(dt);
-        CurrentState.UpdateBehaviour(dt);
-        CurrentState.PostUpdateBehaviour(dt);
 
         foreach (var bufferedState in bufferedStateDictionary.Values)
         {
@@ -281,5 +266,26 @@ public class CharacterStateController : MonoBehaviour
         }
 
         bufferedStatesToRemove.Clear();
+
+
+        bool valiidTransition = CheckForTransitions();
+        
+        transitionQueue.Clear();
+
+        
+        if (valiidTransition)
+        {
+            PreviousState.ExitBehaviour(dt);
+
+            Animator.runtimeAnimatorController = CurrentState.RuntimeAnimatorController;
+            Debug.Log(CurrentState);
+            CurrentState.EnterBehaviour(dt);
+        }
+
+        CurrentState.PreUpdateBehaviour(dt);
+        CurrentState.UpdateBehaviour(dt);
+        CurrentState.PostUpdateBehaviour(dt);
+
+        
     }
 }
