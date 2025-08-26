@@ -10069,6 +10069,7 @@ MonoBehaviour:
   damageMultiplier: 1
   attackRange: 1.5
   attackAngle: 90
+  attackPointOffset: {x: 0, y: 0}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -10109,6 +10110,7 @@ MonoBehaviour:
   comboInputTimeWindow: 0.7
   damageMultiplier: 1
   attackSize: {x: 2, y: 2}
+  attackPointOffset: {x: 0, y: 0}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -10127,6 +10129,11 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: fd4a4b3344e5ef64c9b8dc1e03eba9e3, type: 2}
   attackDuration: 0.7
   damageMultiplier: 1
+  attackSize: {x: 2, y: 1}
+  attackPointOffset: {x: 1, y: 0}
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0

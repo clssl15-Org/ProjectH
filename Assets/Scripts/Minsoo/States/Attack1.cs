@@ -25,11 +25,15 @@ public class Attack1 : CharacterState
     [SerializeField]
     private float damageMultiplier = 1.0f;
 
+    [Header("Attack Range")]
     [SerializeField]
     private float attackRange = 1.0f;
 
     [SerializeField]
     private float attackAngle = 90f;
+
+    [SerializeField]
+    private Vector2 attackPointOffset = new Vector2(0f, 0f);
 
     [Header("Other Settings")]
     [SerializeField]
@@ -49,7 +53,7 @@ public class Attack1 : CharacterState
     }
     private void TakeDamageToEnemy()
     {
-        Vector2 attackPoint = CharacterActor.ColliderCenter;
+        Vector2 attackPoint = CharacterActor.ColliderCenter + attackPointOffset;
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
             attackPoint,
             attackRange,
@@ -150,7 +154,7 @@ public class Attack1 : CharacterState
 
         if (CharacterActor == null) return;
 
-        Vector2 attackPoint = CharacterActor.ColliderCenter;
+        Vector2 attackPoint = CharacterActor.ColliderCenter + attackPointOffset;
         float attackRange = this.attackRange;
 
         // Draw attack center point

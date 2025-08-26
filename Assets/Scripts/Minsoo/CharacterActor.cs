@@ -22,7 +22,7 @@ public class CharacterActor : MonoBehaviour
     Rigidbody2D _rigidbody = null;
     CapsuleCollider2D _collider = null;
     public Animator Animator { get; private set; }
-
+    public SpriteRenderer PlayerSpriteRenderer { get; private set; }
     public CapsuleCollider2D Collider
     {
         get => _collider;
@@ -143,6 +143,24 @@ public class CharacterActor : MonoBehaviour
         ) != null;
     }
 
+    public void ChangeFlipX(Vector2 inputValue)
+    {
+        if (inputValue.x == 0f)
+            return;
+
+        if (inputValue.x > 0f)
+        {
+            PlayerSpriteRenderer.flipX = false;
+            FacingDirection = Vector2.right;
+        }
+
+        else
+        {
+            PlayerSpriteRenderer.flipX = true;
+            FacingDirection = Vector2.left;
+        }
+    }
+
 #if UNITY_EDITOR
     // Draws a wire sphere in the editor to visualize the ground check area
     private void OnDrawGizmosSelected()
@@ -168,6 +186,8 @@ public class CharacterActor : MonoBehaviour
         if (!gameObject.TryGetComponent(out CapsuleCollider2D col))
             col = gameObject.AddComponent<CapsuleCollider2D>();
         _collider = col;
+
+        PlayerSpriteRenderer = this.transform.root.GetComponentInChildren<SpriteRenderer>();
     }
     private void FixedUpdate()
     {

@@ -25,8 +25,12 @@ public class Attack2 : CharacterState
     [SerializeField]
     private float damageMultiplier = 1.0f;
 
+    [Header("Attack Range")]
     [SerializeField]
     private Vector2 attackSize = new Vector2(1.0f, 1.0f);
+
+    [SerializeField]
+    private Vector2 attackPointOffset = new Vector2(0f, 0f);
 
     [Header("Other Settings")]
     [SerializeField]
@@ -46,7 +50,7 @@ public class Attack2 : CharacterState
 
     private void TakeDamageToEnemy()
     {
-        Vector2 attackPoint = CharacterActor.ColliderCenter;
+        Vector2 attackPoint = CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Forward);
         float attackAngle = CharacterActor.Rotation.eulerAngles.z;
         Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(
             attackPoint,
@@ -145,7 +149,7 @@ public class Attack2 : CharacterState
         Gizmos.color = Color.green;
 
         Gizmos.matrix = Matrix4x4.TRS(
-            CharacterActor.ColliderCenter,
+            CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Forward),
             CharacterActor.Rotation,
             Vector3.one
         );

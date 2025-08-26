@@ -26,6 +26,8 @@ public class NormalMovement : CharacterState
     public override void UpdateBehaviour(float dt)
     {
         ProcessVelocity(dt);
+
+        CharacterActor.ChangeFlipX(CharacterStateController.InputMovementReference);
     }
 
     private void ProcessVelocity(float dt)

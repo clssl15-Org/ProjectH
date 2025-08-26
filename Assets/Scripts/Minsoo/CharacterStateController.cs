@@ -27,7 +27,6 @@ public class CharacterStateController : MonoBehaviour
     public CharacterState CurrentState { get; private set; }
 
     public CharacterState PreviousState { get; private set; }
-    public SpriteRenderer PlayerSpriteRenderer { get; private set; }
     public Animator Animator => CharacterActor.Animator;
 
     public CharacterState GetState(string stateName)
@@ -201,33 +200,12 @@ public class CharacterStateController : MonoBehaviour
     {
         MovementReferenceRight = Vector2.right;
         InputMovementReference = MovementReferenceRight * movementInput.x;
-
-        ChangeFlipX(InputMovementReference);
-    }
-
-    public void ChangeFlipX(Vector2 inputValue)
-    {
-        if (inputValue.x == 0f)
-            return;
-
-        if (inputValue.x > 0f)
-        {
-            PlayerSpriteRenderer.flipX = false;
-            CharacterActor.FacingDirection = Vector2.right;
-        }
-
-        else
-        {
-            PlayerSpriteRenderer.flipX = true;
-            CharacterActor.FacingDirection = Vector2.left;
-        }
     }
 
     private void Awake()
     {
         CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
         CharacterActor = this.transform.root.GetComponentInChildren<CharacterActor>();
-        PlayerSpriteRenderer = this.transform.root.GetComponentInChildren<SpriteRenderer>();
 
         AddStates();
     }
@@ -278,7 +256,7 @@ public class CharacterStateController : MonoBehaviour
             PreviousState.ExitBehaviour(dt);
 
             Animator.runtimeAnimatorController = CurrentState.RuntimeAnimatorController;
-            Debug.Log(CurrentState);
+            
             CurrentState.EnterBehaviour(dt);
         }
 
