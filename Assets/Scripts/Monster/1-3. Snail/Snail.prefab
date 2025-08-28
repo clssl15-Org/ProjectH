@@ -66,7 +66,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
+  m_Offset: {x: 0, y: 0.1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -77,7 +77,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10, y: 1.5}
+  m_Size: {x: 10, y: 1.17}
   m_EdgeRadius: 0
 --- !u!50 &1216454018491657384
 Rigidbody2D:
@@ -262,8 +262,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.15, y: -0.1}
-  m_Size: {x: 1.8, y: 1.3}
+  m_Offset: {x: 0.15, y: 0}
+  m_Size: {x: 1.8, y: 1.1}
   m_Direction: 1
 --- !u!50 &7391344048938946231
 Rigidbody2D:
@@ -331,9 +331,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d9e5d2b7103a0449a1633b295d1ada5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 10
-  attackPower: 1
-  moveSpeed: 1
+  overrideStats: 1
+  stats:
+  - {fileID: 11400000, guid: 030c464e8a825f14ca0b22cb1e97e45e, type: 2}
+  _maxHP: 5
+  _attackPower: 1
+  _moveSpeed: 1
+  _attackCooltime: 0.5
   defaultIsRight: 0
   platformManager: {fileID: 0}
   stateDisplay: 

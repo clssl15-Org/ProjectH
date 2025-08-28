@@ -3,6 +3,9 @@ using System.Text;
 using MonsterActions;
 using MonsterBT;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 [RequireComponent(typeof(PlatformDetector), typeof(MonsterHitted))]
@@ -12,11 +15,8 @@ public abstract partial class Monster : MonoBehaviour
     public int HP
     {
         get => _hp;
-        internal set => _hp = Mathf.Clamp(value, 0, maxHP);
+        internal set => _hp = Mathf.Clamp(value, 0, MaxHP);
     }
-
-    public int AttackPower => attackPower;
-    public int MoveSpeed => moveSpeed;
 
     public Direction Direction
     {
@@ -34,10 +34,17 @@ public abstract partial class Monster : MonoBehaviour
     }
 
     // Property 
-    [Header("Parameters")]
-    [SerializeField, Min(0)] internal int maxHP;
-    [SerializeField, Min(0)] private int attackPower;
-    [SerializeField, Min(0)] private int moveSpeed;
+    [Header("Stats Overrride")]
+    [SerializeField] private bool overrideStats = true;
+    [SerializeField] protected MonsterStats[] stats;
+
+    [Header("Stats")]
+    [SerializeField, Min(0)] private int _maxHP = 5;
+    [SerializeField, Min(0)] private int _attackPower = 1;
+    [SerializeField, Min(0)] private float _moveSpeed = 1;
+    [SerializeField, Min(0)] private float _attackCooltime = 0.5f;
+
+    [Header("Image Settings")]
     [SerializeField] protected bool defaultIsRight;
 
     [Header("Bindings")]
@@ -50,6 +57,15 @@ public abstract partial class Monster : MonoBehaviour
 
     // Front
     public bool IsAlive { get; internal set; } = true;
+
+    // Control
+    protected bool UseStatsOverride => overrideStats && stats.Length >= 1 && stats[0];
+
+    public virtual int MaxHP => !UseStatsOverride ? _maxHP : stats[0].MaxHP;
+    public virtual int AttackPower => !UseStatsOverride ? _attackPower : stats[0].AttackPower;
+    public virtual float MoveSpeed => !UseStatsOverride ? _moveSpeed : stats[0].MoveSpeed;
+    public virtual float AttackCooltime => !UseStatsOverride? _attackCooltime : stats[0].AttackCooltime;
+
 
     // Internal
     internal Rigidbody2D Rigidbody { get; private set; }
@@ -94,7 +110,7 @@ public abstract partial class Monster : MonoBehaviour
         hitDetector = GetComponent<MonsterHitted>();
         hitDetector.Damaged += OnDamaged;
 
-        _hp = maxHP;
+        _hp = MaxHP;
     }
 
     protected virtual void Update()
@@ -148,9 +164,19 @@ public abstract partial class Monster : MonoBehaviour
             return true;
         }
 
-        throw new InvalidOperationException(Ctx(
-            $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드를 수행할 수 없습니다."));
+
+        Debug.LogWarning(Ctx(
+            $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
+
+        return false;
     }
+
+    internal void StopMoving() => Rigidbody.velocity = new Vector2
+    {
+        x = 0,
+        y = Rigidbody.velocity.y,
+    };
+
 
     #region Actions
     internal bool TryDoAction(
@@ -169,8 +195,9 @@ public abstract partial class Monster : MonoBehaviour
         Action<ActionResult> callback = null,
         bool stopPreviousAction = true,
         bool allowRestart = false,
-        float? playTime = null)
-        => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime);
+        float? playTime = null,
+        float stayTimeAfterFinised = 0f)
+        => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime, stayTimeAfterFinised);
 
     internal MonsterAction GetCurrentAction() => ActionController.GetCurrentAction();
     internal bool TryGetCurrentAction(out string name) => ActionController.TryGetCurrentAction(out name);
@@ -216,4 +243,29 @@ public abstract partial class Monster : MonoBehaviour
 
         return sb.ToString();
     }
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(Monster)), CanEditMultipleObjects]
+    protected class MonsterEditor : Editor
+    {
+        protected string[] defaultHidingFields =
+            new[] { "_maxHP", "_attackPower", "_moveSpeed", "_attackCooltime" };
+
+        public override void OnInspectorGUI()
+        {
+            var target = (Monster)base.target;
+            serializedObject.Update();
+
+            if (target.UseStatsOverride)
+                DrawPropertiesExcluding(serializedObject, GetHidingFields());
+            else
+                DrawDefaultInspector();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual string[] GetHidingFields() => defaultHidingFields;
+    }
+#endif
 }

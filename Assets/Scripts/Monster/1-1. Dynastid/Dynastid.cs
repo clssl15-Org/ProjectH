@@ -1,6 +1,9 @@
 using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Dynastid : Monster
 {
@@ -11,7 +14,6 @@ public class Dynastid : Monster
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
-                .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(true))
@@ -19,7 +21,8 @@ public class Dynastid : Monster
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol()))));
+                        .AddChild(new Patrol())))
+                .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
     }
@@ -28,13 +31,13 @@ public class Dynastid : Monster
     {
         public DynastidActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Attack.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Idle));
+            AddChild(new MonsteActionState(MonsterAction.Alert));
+            AddChild(new MonsteActionState(MonsterAction.Walk));
+            AddChild(new MonsteActionState(MonsterAction.Run));
+            AddChild(new MonsteActionState(MonsterAction.Attack));
+            AddChild(new MonsteActionState(MonsterAction.Hit));
+            AddChild(new MonsteActionState(MonsterAction.Dead));
         }
     }
 
@@ -61,4 +64,10 @@ public class Dynastid : Monster
             new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(Dynastid)), CanEditMultipleObjects]
+    private class DynastidEditor : MonsterEditor { }
+#endif
 }

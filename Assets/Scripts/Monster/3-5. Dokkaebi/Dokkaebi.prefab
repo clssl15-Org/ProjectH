@@ -331,9 +331,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace4d7d3cec069e45992603c2660e36c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 10
-  attackPower: 1
-  moveSpeed: 1
+  overrideStats: 1
+  stats:
+  - {fileID: 11400000, guid: b33d5ce623313bd4ca5737971fd3d53e, type: 2}
+  _maxHP: 5
+  _attackPower: 1
+  _moveSpeed: 1
+  _attackCooltime: 0.5
   defaultIsRight: 0
   platformManager: {fileID: 0}
   stateDisplay: 

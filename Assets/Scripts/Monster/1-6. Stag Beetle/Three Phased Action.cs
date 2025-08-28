@@ -12,6 +12,7 @@ public partial class StagBeetle : Monster
         private string[] Actions;
 
         private Action beforePreAction;
+        private Action beforeMainAction;
         private Func<float, bool> whileMainAction;
         private Action afterMainAction;
 
@@ -25,11 +26,13 @@ public partial class StagBeetle : Monster
             Func<string, string> getPreActionName,
             Func<string, string> getPostActionName,
             Action beforePreAction = null,
+            Action beforeMainAction = null,
             Func<float, bool> whileMainAction = null,
             Action afterMainAction = null) : base(actionName)
         {
             Actions = new string[] { getPreActionName(actionName), actionName, getPostActionName(actionName) };
             this.beforePreAction = beforePreAction;
+            this.beforeMainAction = beforeMainAction;
             this.whileMainAction = whileMainAction;
             this.afterMainAction = afterMainAction;
 
@@ -111,6 +114,8 @@ public partial class StagBeetle : Monster
 
                 playtime = 0;
                 Owner.Animator.Play(clip.name);
+
+                Parent.beforeMainAction?.Invoke();
             }
 
             protected override void OnUpdate()

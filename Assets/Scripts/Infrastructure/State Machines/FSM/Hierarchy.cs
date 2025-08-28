@@ -11,7 +11,7 @@ namespace UniEngine.StateMachines.FSM
             // Front
             public bool Active { get; private set; } = false;
 
-            public Work Parent
+            public Work Parent // TODO: Parent 관리는 Work로
             {
                 get => _parent;
                 private set
@@ -97,7 +97,7 @@ namespace UniEngine.StateMachines.FSM
                 ReservedChild = next;
                 reservedArgs = args;
 
-                if (!Active) return;
+                if (!ownerWork.Active) return;
 
                 Exit();
                 Enter();

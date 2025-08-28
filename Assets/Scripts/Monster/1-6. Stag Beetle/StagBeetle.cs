@@ -2,13 +2,17 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-
+[RequireComponent(typeof(Collider2D))]
 public partial class StagBeetle : Monster
 {
     // Front
     [Header("Stag Beetle")]
-    [SerializeField, Min(0)] private float rollingSpeed;
+    [SerializeField, Min(0)] private float rollingTime = 3f;
+    [SerializeField, Min(0)] private float rollingSpeed = 1f;
 
     // Internal
     public enum AttackMode
@@ -18,13 +22,14 @@ public partial class StagBeetle : Monster
         Roar
     }
 
+    private Collider2D colliderComponent;
+
     private class StagBeetleBrain : MonsterBrain
     {
         public StagBeetleBrain(StagBeetle stagBeetle) : base(stagBeetle)
         {
             AddChild(new Alive()
                 .AddChild(new Hit("HitGround"))
-                .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Walk))
@@ -32,7 +37,8 @@ public partial class StagBeetle : Monster
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol()))));
+                        .AddChild(new Patrol())))
+                .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
     }
@@ -50,15 +56,21 @@ public partial class StagBeetle : Monster
             AddChild(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 beforePreAction: () => goRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
-                playtime =>
+                beforeMainAction: () => stagBeetle.colliderComponent.excludeLayers = LayerMask.GetMask("Player"),
+                whileMainAction: playtime =>
                 {
-                    stagBeetle.Rigidbody.velocity = new Vector2
-                    {
-                        x = (goRight ? 1 : -1)* stagBeetle.rollingSpeed,
-                        y = stagBeetle.Rigidbody.velocity.y,
-                    };
-                    return playtime < 1;
-                })); // TODO: 조건 수정 (플레이어를 지나가고 n초 후 정지)
+                    if (stagBeetle.TryMove())
+                        stagBeetle.Rigidbody.velocity = new Vector2
+                        {
+                            x = (goRight ? 1 : -1) * stagBeetle.rollingSpeed,
+                            y = stagBeetle.Rigidbody.velocity.y,
+                        };
+                    else
+                        stagBeetle.StopMoving();
+
+                    return playtime < stagBeetle.rollingTime;
+                },
+                afterMainAction: () => stagBeetle.colliderComponent.excludeLayers = default));
             AddChild(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 whileMainAction: playtime => playtime < 1)); // TODO: 조건 수정
@@ -72,6 +84,12 @@ public partial class StagBeetle : Monster
 
 
     // Content
+    protected override void Awake()
+    {
+        base.Awake();
+        colliderComponent = GetComponent<Collider2D>();
+    }
+
     protected void Start()
     {
         Direction = Random.Range(0, 2) == 0
@@ -99,4 +117,10 @@ public partial class StagBeetle : Monster
                 new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
             });
     }
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(StagBeetle)), CanEditMultipleObjects]
+    private class StagBeetleEditor : MonsterEditor { }
+#endif
 }

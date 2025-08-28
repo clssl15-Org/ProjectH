@@ -1,8 +1,11 @@
 using System;
-using UnityEngine;
-using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
+using UniEngine.StateMachines.BT;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public partial class SpikeSnail : Monster
 {
@@ -21,18 +24,18 @@ public partial class SpikeSnail : Monster
         {
             AddChild(new Alive()
                 .AddChild(new Hit(MonsterAction.Idle)) // TODO: 깜빡이로 변경
-                .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
                         {
                             TargetAttackRange = 3f
                         })
-                        .AddChild(new Attack()))
-                        // 가시달팽이는 Cooldown을 가지지 않습니다.
+                        .AddChild(new Attack())
+                        .AddChild(new Cooldown(MonsterAction.None)))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol()))));
+                        .AddChild(new Patrol())))
+                .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
     }
@@ -41,13 +44,13 @@ public partial class SpikeSnail : Monster
     {
         public ThornySnailActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Idle));
+            AddChild(new MonsteActionState(MonsterAction.Alert));
+            AddChild(new MonsteActionState(MonsterAction.Walk));
+            AddChild(new MonsteActionState(MonsterAction.Run));
             AddChild(new SpikeSnailAttackAction());
-            AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Hit));
+            AddChild(new MonsteActionState(MonsterAction.Dead));
         }
     }
 
@@ -88,4 +91,9 @@ public partial class SpikeSnail : Monster
             new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(SpikeSnail)), CanEditMultipleObjects]
+    private class SpikeSnailEditor : MonsterEditor { }
+#endif
 }

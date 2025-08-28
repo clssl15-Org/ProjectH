@@ -1,5 +1,6 @@
 using System;
 using UniEngine.StateMachines.FSM;
+using static ActionResult;
 
 namespace MonsterActions
 {
@@ -22,13 +23,23 @@ namespace MonsterActions
             float? playTime = null,
             float stayTimeAfterFinised = 0f)
         {
+            if (monsterAction == MonsterAction.None.ToString())
+            {
+                StopCurrentAction();
+
+                reason = new(ResultType.Success,
+                    $"입력한 행동 상태({monsterAction})가 {MonsterAction.None.ToString()}이기 때문에 행동을 하지 않는 상태로 설정하였습니다.");
+
+                return true;
+            }
+
             if (TryGetCurrentChild<MonsteActionState>(out var current))
             {
                 if (current.Name != monsterAction)
                 {
                     if (!stopPreviousAction)
                     {
-                        reason = new(ActionResult.ResultType.OtherActionExecuting,
+                        reason = new(ResultType.OtherActionExecuting,
                             $"이미 다른 행동({current.Name})이 실행 중이기 때문에 입력한 행동({monsterAction})을 실행할 수 없습니다.");
 
                         return false;
@@ -38,7 +49,7 @@ namespace MonsterActions
                 {
                     if (!allowRestart)
                     {
-                        reason = new(ActionResult.ResultType.AlreadyDoing,
+                        reason = new(ResultType.AlreadyDoing,
                             $"이미 입력한 행동({monsterAction})이 실행 중입니다.");
 
                         return false;
@@ -51,12 +62,12 @@ namespace MonsterActions
             {
                 SetNextWith(monsterAction, callback, playTime, stayTimeAfterFinised);
 
-                reason = new(ActionResult.ResultType.Success);
+                reason = new(ResultType.Success);
                 return true;
             }
             catch (ArgumentException ex)
             {
-                reason = new(ActionResult.ResultType.NotFound,
+                reason = new(ResultType.NotFound,
                     $"입력한 행동 상태({monsterAction})를 찾는 데 실패했습니다.", ex);
 
                 return false;
@@ -100,6 +111,10 @@ namespace MonsterActions
             return false;
         }
 
-        public void StopCurrentAction() => SetNextToNone();
+        public void StopCurrentAction()
+        {
+            SetNextToNone();
+            Owner.Animator.StopPlayback();
+        }
     }
 }

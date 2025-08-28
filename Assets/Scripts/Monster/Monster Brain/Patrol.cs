@@ -10,15 +10,13 @@ namespace MonsterBT
         public float MaxPatrolTime { get; set; } = 2f;
 
         // Internal
-        private MonsterAction monsterAction;
+        private readonly string monsterAction;
         private float remainingTime;
 
 
         // Content
-        public Patrol(MonsterAction monsterAction = MonsterAction.Walk)
-        {
-            this.monsterAction = monsterAction;
-        }
+        public Patrol(MonsterAction monsterAction = MonsterAction.Walk) : this(monsterAction.ToString()) { }
+        public Patrol(string monsterAction) => this.monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)
         {
@@ -44,7 +42,6 @@ namespace MonsterBT
             if (remainingTime <= 0)
                 Complete();
 
-
             if (!Owner.TryMove())
             {
                 Owner.Direction = (Owner.Direction == Direction.Left)
@@ -55,11 +52,7 @@ namespace MonsterBT
 
         protected override void OnHalt(DetailedNodeStatus _)
         {
-            Owner.Rigidbody.velocity = new Vector2
-            {
-                x = 0,
-                y = Owner.Rigidbody.velocity.y,
-            };
+            Owner.StopMoving();
         }
     }
 }

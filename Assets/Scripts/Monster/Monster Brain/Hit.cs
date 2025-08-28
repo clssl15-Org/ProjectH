@@ -11,7 +11,7 @@ namespace MonsterBT
         public float InvincibleTime { get; set; } = 0.5f;
 
         // Internal
-        private string monsterAction;
+        private readonly string monsterAction;
         private float remainingTime;
 
 

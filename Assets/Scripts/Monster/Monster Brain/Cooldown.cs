@@ -5,25 +5,25 @@ namespace MonsterBT
 {
     public class Cooldown : BTNode<Monster, MonsterBlackboard>
     {
-        public float? CooldownTime { get; set; }
+        // Internal
+        private readonly string monsterAction;
         private float? remainingCooldownTime;
 
 
         // Content
-        public Cooldown(float? cooldownTime = 0.5f)
-        {
-            CooldownTime = cooldownTime;
-        }
+        public Cooldown(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
+        public Cooldown(string monsterAction) => this.monsterAction = monsterAction;
+
 
         protected override void OnOpen(object[] _)
         {
-            remainingCooldownTime = CooldownTime;
+            remainingCooldownTime = Owner.AttackCooltime;
 
-            if (!Owner.TryDoAction(MonsterAction.Idle, out var reason)
+            if (!Owner.TryDoAction(monsterAction, out var reason)
                 && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
                 Debug.LogWarning(Owner.Ctx(
-                    $"Idle 행동에 실패하였기 때문에 Cooldown 상태로 진입할 수 없습니다.\n{reason}"));
+                    $"{monsterAction} 행동에 실패하였기 때문에 Cooldown 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }

@@ -1,8 +1,11 @@
 using System;
-using UnityEngine;
-using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
+using UniEngine.StateMachines.BT;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public partial class Dokkaebi : Monster
 {
@@ -19,7 +22,6 @@ public partial class Dokkaebi : Monster
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
-                .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Idle)
@@ -32,7 +34,8 @@ public partial class Dokkaebi : Monster
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(monsterAction: MonsterAction.Idle)))));
+                        .AddChild(new Patrol(monsterAction: MonsterAction.Idle))))
+                .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
     }
@@ -82,4 +85,9 @@ public partial class Dokkaebi : Monster
             new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(Dokkaebi)), CanEditMultipleObjects]
+    private class DokkaebiEditor : MonsterEditor { }
+#endif
 }

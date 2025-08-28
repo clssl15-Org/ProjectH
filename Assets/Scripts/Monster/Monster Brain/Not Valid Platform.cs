@@ -5,28 +5,11 @@ namespace MonsterBT
 {
     public class NotValidPlatform : BTNode<Monster, MonsterBlackboard>
     {
-        private string monsterAction;
+        private readonly string monsterAction;
+
 
         public NotValidPlatform(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
-        public NotValidPlatform(string monsterAction)
-        {
-            AbortPolicy = AbortPolicies.LowerPriority;
-            this.monsterAction = monsterAction;
-        }
-
-        public override bool CheckCondition()
-        {
-            if (Blackboard.Committing)
-                return false;
-
-            if (Owner.PlatformDetector.CheckPlatform(
-                Direction.Center, Owner.BelongingPlatform, out _))
-            {
-                return false;
-            }
-
-            return true;
-        }
+        public NotValidPlatform(string monsterAction) => this.monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)
         {

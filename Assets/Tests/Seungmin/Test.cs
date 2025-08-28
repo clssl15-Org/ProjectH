@@ -7,17 +7,9 @@ namespace Tests.Seungmin
 {
     public class Test : MonoBehaviour
     {
-        [SerializeField] private PlatformManager platformManager;
-        [SerializeField] private Tilemap tilemap;
-        [SerializeField] private Vector3Int coord;
-
-
         private void DoTest()
         {
-            if (!platformManager)
-                return;
-
-            print(platformManager.GetPlatformId(coord));
+            
         }
 
 

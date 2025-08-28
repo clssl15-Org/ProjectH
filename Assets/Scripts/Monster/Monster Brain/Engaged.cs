@@ -11,11 +11,12 @@ namespace MonsterBT
         public float LowerRangeTolerance { get; set; } = 0.3f;
 
         // Internal
-        private MonsterAction monsterAction;
+        private readonly string monsterAction;
 
 
         // Content
-        public Engaged(bool contact = false, MonsterAction monsterAction = MonsterAction.Run)
+        public Engaged(bool contact = false, MonsterAction monsterAction = MonsterAction.Run) : this(contact, monsterAction.ToString()) { }
+        public Engaged(bool contact, string monsterAction)
         {
             AbortPolicy = AbortPolicies.Self;
 

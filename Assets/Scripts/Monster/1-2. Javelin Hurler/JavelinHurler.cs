@@ -1,8 +1,11 @@
 using System;
-using UnityEngine;
-using UniEngine.StateMachines.BT;
 using MonsterActions;
 using MonsterBT;
+using UniEngine.StateMachines.BT;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public partial class JavelinHurler : Monster
 {
@@ -23,7 +26,6 @@ public partial class JavelinHurler : Monster
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
-                .AddChild(new NotValidPlatform())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
@@ -36,7 +38,8 @@ public partial class JavelinHurler : Monster
                         // 창던지개는 Cooldown을 가지지 않습니다.
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol()))));
+                        .AddChild(new Patrol())))
+                .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
     }
@@ -45,13 +48,13 @@ public partial class JavelinHurler : Monster
     {
         public JavelinHurlerActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Idle));
+            AddChild(new MonsteActionState(MonsterAction.Alert));
+            AddChild(new MonsteActionState(MonsterAction.Walk));
+            AddChild(new MonsteActionState(MonsterAction.Run));
             AddChild(new JavelinHurlerAttackAction());
-            AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
+            AddChild(new MonsteActionState(MonsterAction.Hit));
+            AddChild(new MonsteActionState(MonsterAction.Dead));
         }
     }
 
@@ -86,4 +89,10 @@ public partial class JavelinHurler : Monster
             new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(JavelinHurler)), CanEditMultipleObjects]
+    private class JavelinHurlerEditor : MonsterEditor { }
+#endif
 }

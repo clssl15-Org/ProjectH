@@ -10,7 +10,7 @@ public partial class StagBeetle : Monster
 
         protected override void OnOpen(params object[] _)
         {
-            var mode = UnityEngine.Random.Range(0, Owner.HP < Owner.maxHP ? 3 : 2) switch
+            var mode = UnityEngine.Random.Range(0, Owner.HP < Owner.MaxHP ? 3 : 2) switch
             {
                 0 => AttackMode.RollAttack,
                 1 => AttackMode.SpikeAttack,

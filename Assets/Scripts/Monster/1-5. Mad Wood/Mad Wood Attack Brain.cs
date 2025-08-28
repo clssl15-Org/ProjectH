@@ -5,16 +5,13 @@ public partial class MadWood : Monster
 {
     private class MadWoodAttack : BTNode<Monster, MonsterBlackboard>
     {
-        private const string PreviousAttackMode = "PreviousAttackMode";
-
         public MadWoodAttack() : base(name: MonsterAction.Attack.ToString()) { }
 
         protected override void OnOpen(object[] _)
         {
-            if (!Blackboard.Properties.TryGetValue(PreviousAttackMode, out var _currentAttackMode))
-                Blackboard.Properties[PreviousAttackMode] = AttackMode.LandAttack;
+            var owner = (MadWood)Owner;
 
-            var currentAttackMode = Blackboard.Properties[PreviousAttackMode] is AttackMode.DefaultAttack
+            var currentAttackMode = owner.previousAttackMode == AttackMode.DefaultAttack
                 ? AttackMode.LandAttack
                 : AttackMode.DefaultAttack;
 
@@ -26,7 +23,7 @@ public partial class MadWood : Monster
                 Complete(false);
             }
 
-            Blackboard.Properties[PreviousAttackMode] = currentAttackMode;
+            owner.previousAttackMode = currentAttackMode;
             Blackboard.Committing = true;
         }
 
