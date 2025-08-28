@@ -13,6 +13,9 @@ public partial class StagBeetle : Monster
     [Header("Stag Beetle")]
     [SerializeField, Min(0)] private float rollingTime = 3f;
     [SerializeField, Min(0)] private float rollingSpeed = 1f;
+    [Header("Damage")]
+    [SerializeField, Min(0)] private float damageAnimationLength = 0.1f;
+
 
     // Internal
     public enum AttackMode
@@ -22,6 +25,7 @@ public partial class StagBeetle : Monster
         Roar
     }
 
+    private DamageHandler damageHandler;
     private Collider2D colliderComponent;
 
     private class StagBeetleBrain : MonsterBrain
@@ -87,7 +91,9 @@ public partial class StagBeetle : Monster
     protected override void Awake()
     {
         base.Awake();
+
         colliderComponent = GetComponent<Collider2D>();
+        damageHandler = new(this, damageAnimationLength, InvincibleTime); 
     }
 
     protected void Start()
@@ -106,8 +112,8 @@ public partial class StagBeetle : Monster
     {
         if (Brain.Blackboard.Committing)
         {
-            // TODO: 대미지 효과
-            HP -= damage;
+            if (damageHandler.TryTakeDamage(damage, out var damager))
+                StartCoroutine(damager);
         }
         else
             Brain.SelectChild(new SelectionRequest[]

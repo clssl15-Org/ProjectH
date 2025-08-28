@@ -15,6 +15,8 @@ public partial class SpikeSnail : Monster
     [SerializeField, Min(0)] private float launchTime;
     [SerializeField, Min(0)] private float playtimeBeforeWaiting;
     [SerializeField, Min(0)] private float waitingTime;
+    [Header("Damage")]
+    [SerializeField, Min(0)] private float damageAnimationLength = 0.1f;
 
 
     // Internal
@@ -23,7 +25,7 @@ public partial class SpikeSnail : Monster
         public ThornySnailBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
-                .AddChild(new Hit(MonsterAction.Idle)) // TODO: 깜빡이로 변경
+                .AddChild(new Hit(MonsterAction.Idle))
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
@@ -49,11 +51,12 @@ public partial class SpikeSnail : Monster
             AddChild(new MonsteActionState(MonsterAction.Walk));
             AddChild(new MonsteActionState(MonsterAction.Run));
             AddChild(new SpikeSnailAttackAction());
-            AddChild(new MonsteActionState(MonsterAction.Hit));
+            //AddChild(new ManualHit(((SpikeSnail)monster).damageHandler));
             AddChild(new MonsteActionState(MonsterAction.Dead));
         }
     }
 
+    private DamageHandler damageHandler; // TODO: damageHandler Monster 프로퍼티로 빼기
     private KinematicProjectileLauncher spikeLauncher;
 
 
@@ -62,10 +65,11 @@ public partial class SpikeSnail : Monster
     {
         base.Awake();
 
+        damageHandler = new(this, damageAnimationLength, InvincibleTime);
         spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
-        if (!spikeLauncher)
-            throw new InvalidOperationException("가시달팽이는 spikeLauncher 컴포넌트를 가지고 있어야 합니다.");
+        if (!spikeLauncher) throw new InvalidOperationException(
+            "가시달팽이는 spikeLauncher 컴포넌트를 가지고 있어야 합니다.");
 
         spikeLauncher.Initialize(this, platformManager, "Ground");
     }

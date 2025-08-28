@@ -14,7 +14,7 @@ public partial class MadWood : Monster
     [SerializeField, Min(0)] private int _landAttackPower = 1;
 
     // Control
-    private bool UseLandAttackOverride => UseStatsOverride && stats.Length >= 2 && stats[1];
+    private bool UseLandAttackOverride => UseStatsOverride && stats?.Length >= 2 && stats[1];
 
     public override int AttackPower
     {

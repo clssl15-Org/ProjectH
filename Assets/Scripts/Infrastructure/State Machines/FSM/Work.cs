@@ -320,6 +320,20 @@ namespace UniEngine.StateMachines.FSM
             current = _current;
             return true;
         }
+
+        public bool TryGetChild<T>(out T current) where T : Work => TryGetChild(GetName(typeof(T)), out current);
+        public bool TryGetChild<T>(string name, out T current) where T : Work
+        {
+            current = null;
+
+            if (!hierarchy.Children.ContainsKey(name))
+                return false;
+            if (hierarchy.Children[name] is not T _current)
+                return false;
+
+            current = _current;
+            return true;
+        }
         #endregion
 
 

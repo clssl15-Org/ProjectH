@@ -7,9 +7,6 @@ namespace MonsterBT
 {
     public class Hit : BTNode<Monster, MonsterBlackboard>
     {
-        // Front
-        public float InvincibleTime { get; set; } = 0.5f;
-
         // Internal
         private readonly string monsterAction;
         private float remainingTime;
@@ -36,7 +33,7 @@ namespace MonsterBT
                 throw new ArgumentException(CtxHit($"Inputs 인자는 damage(int)를 담고 있는 크기 1의 배열이여야 합니다.\n" +
                     $"입력값: {string.Join(", ", inputs.Select(i => i?.ToString() ?? null))}"), nameof(inputs));
 
-            if (!Owner.TryDoAction(monsterAction, out var reason, result => Complete(result), playTime: InvincibleTime))
+            if (!Owner.TryDoAction(monsterAction, out var reason, result => Complete(result), playTime: Owner.InvincibleTime))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{monsterAction} 행동에 실패하였기 때문에 Hit 상태로 진입할 수 없습니다.\n{reason}"));
@@ -46,7 +43,7 @@ namespace MonsterBT
             }
 
             Owner.HP -= damage;
-            remainingTime = InvincibleTime;
+            remainingTime = Owner.InvincibleTime;
         }
 
         protected override void OnTick()

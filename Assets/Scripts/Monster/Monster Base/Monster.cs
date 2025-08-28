@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D), typeof(Animator))]
 [RequireComponent(typeof(PlatformDetector), typeof(MonsterHitted))]
 public abstract partial class Monster : MonoBehaviour
 {
@@ -43,12 +43,14 @@ public abstract partial class Monster : MonoBehaviour
     [SerializeField, Min(0)] private int _attackPower = 1;
     [SerializeField, Min(0)] private float _moveSpeed = 1;
     [SerializeField, Min(0)] private float _attackCooltime = 0.5f;
+    [SerializeField, Min(0)] private float _invincibleTime = 0.5f;
 
     [Header("Image Settings")]
     [SerializeField] protected bool defaultIsRight;
 
     [Header("Bindings")]
-    [SerializeField] protected PlatformManager platformManager;
+    [SerializeField] internal PlatformManager platformManager;
+    [SerializeField] internal SceneAssetsLibrary sceneAssetsLibrary;
 
     // Display
     [SerializeField, Header("Display"), TextArea(3, 15)]
@@ -59,17 +61,19 @@ public abstract partial class Monster : MonoBehaviour
     public bool IsAlive { get; internal set; } = true;
 
     // Control
-    protected bool UseStatsOverride => overrideStats && stats.Length >= 1 && stats[0];
+    protected bool UseStatsOverride => overrideStats && stats?.Length >= 1 && stats[0];
 
     public virtual int MaxHP => !UseStatsOverride ? _maxHP : stats[0].MaxHP;
     public virtual int AttackPower => !UseStatsOverride ? _attackPower : stats[0].AttackPower;
     public virtual float MoveSpeed => !UseStatsOverride ? _moveSpeed : stats[0].MoveSpeed;
     public virtual float AttackCooltime => !UseStatsOverride? _attackCooltime : stats[0].AttackCooltime;
+    public virtual float InvincibleTime => !UseStatsOverride ? _invincibleTime : stats[0].InvincibleTime;
 
 
     // Internal
     internal Rigidbody2D Rigidbody { get; private set; }
     internal Animator Animator { get; private set; }
+    internal SpriteRenderer SpriteRenderer { get; private set; }
 
     internal int BelongingPlatform { get; set; } = 1;
     internal PlatformDetector PlatformDetector { get; private set; }
@@ -88,6 +92,7 @@ public abstract partial class Monster : MonoBehaviour
     // Content
     protected virtual void Awake()
     {
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         Rigidbody = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
 
@@ -250,7 +255,7 @@ public abstract partial class Monster : MonoBehaviour
     protected class MonsterEditor : Editor
     {
         protected string[] defaultHidingFields =
-            new[] { "_maxHP", "_attackPower", "_moveSpeed", "_attackCooltime" };
+            new[] { "_maxHP", "_attackPower", "_moveSpeed", "_attackCooltime", "_invincibleTime" };
 
         public override void OnInspectorGUI()
         {

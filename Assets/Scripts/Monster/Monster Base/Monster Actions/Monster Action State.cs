@@ -9,13 +9,15 @@ namespace MonsterActions
         // Front
         public Monster Owner => Parent.Owner;
 
-        public float? Playtime { get; private set; } = null;
-        protected float? RemainingTime { get; private set; }
+        public float? Playtime { get; protected set; } = null;
+        protected float? remainingTime;
 
         private Action<ActionResult> callback;
-        private float stayTimeAfterFinished;
-        private bool isCompleted;
+        protected float stayTimeAfterFinished;
+        protected bool isCompleted;
 
+        protected Action PlayActionEnter, PlayActionExit;
+        protected Action AfterActionEnter, AfterActionExit;
 
 
         // Content
@@ -31,18 +33,20 @@ namespace MonsterActions
             if (!Owner.Animator.TryFindClip(Name, out var clip))
                 throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
 
-
-            callback = (Action<ActionResult>)inputs[0];
-            Playtime = (float?)inputs[1];
-            stayTimeAfterFinished = (float)inputs[2];
-
-            RemainingTime = Playtime ?? (!clip.isLooping ? clip.length : null);
+            SetInputs(inputs);
+            remainingTime = Playtime ?? (!clip.isLooping ? clip.length : null);
 
             isCompleted = false;
             Owner.Animator.Play(clip.name);
         }
+        protected void SetInputs(params object[] inputs)
+        {
+            callback = (Action<ActionResult>)inputs[0];
+            Playtime = (float?)inputs[1];
+            stayTimeAfterFinished = (float)inputs[2];
+        }
 
-        private void Complete()
+        protected void Complete()
         {
             isCompleted = true;
             Exit();
@@ -61,17 +65,22 @@ namespace MonsterActions
 
 
         // Substates
-        private class PlayAction : Work<MonsteActionState>
+        internal class PlayAction : Work<MonsteActionState>
         {
+            protected override void OnEnter(params object[] inputs)
+            {
+                Parent.PlayActionEnter?.Invoke();
+            }
+
             protected override void OnUpdate()
             {
-                if (!Parent.RemainingTime.HasValue)
+                if (!Parent.remainingTime.HasValue)
                     return;
 
 
-                Parent.RemainingTime -= Time.deltaTime;
+                Parent.remainingTime -= Time.deltaTime;
 
-                if (Parent.RemainingTime < 0)
+                if (Parent.remainingTime < 0)
                 {
                     if (Parent.stayTimeAfterFinished > 0)
                         Parent.SetNext<AfterAction>();
@@ -79,15 +88,21 @@ namespace MonsterActions
                         Parent.Complete();
                 }
             }
+
+            protected override void OnExit()
+            {
+                Parent.PlayActionExit?.Invoke();
+            }
         }
 
-        private class AfterAction : Work<MonsteActionState>
+        internal class AfterAction : Work<MonsteActionState>
         {
             private float remainingTime;
 
             protected override void OnEnter(params object[] _)
             {
                 remainingTime = Parent.stayTimeAfterFinished;
+                Parent.AfterActionEnter?.Invoke();
             }
 
             protected override void OnUpdate()
@@ -96,6 +111,11 @@ namespace MonsterActions
 
                 if (remainingTime <= 0)
                     Parent.Complete();
+            }
+
+            protected override void OnExit()
+            {
+                Parent.AfterActionExit?.Invoke();
             }
         }
     }

@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 4511418966175716542}
   - component: {fileID: 402914309323965771}
   - component: {fileID: 1903636451838692435}
-  - component: {fileID: 7169321094324264373}
+  - component: {fileID: 6866293179535650541}
   m_Layer: 0
   m_Name: Stag Beetle
   m_TagString: Monster
@@ -319,7 +319,7 @@ MonoBehaviour:
   platformManager: {fileID: 0}
   detectionHeight: 1
   detectionRange: 0.7
---- !u!114 &7169321094324264373
+--- !u!114 &6866293179535650541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,8 +338,11 @@ MonoBehaviour:
   _attackPower: 1
   _moveSpeed: 1
   _attackCooltime: 0.5
+  _invincibleTime: 0.5
   defaultIsRight: 0
   platformManager: {fileID: 0}
+  sceneAssetsLibrary: {fileID: 0}
   stateDisplay: 
   rollingTime: 3
-  rollingSpeed: 2
+  rollingSpeed: 1
+  damageAnimationLength: 0.1

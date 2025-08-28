@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,17 +30,24 @@ namespace UniEngine.StateMachines.FSM
 
             // Control
             public bool CanOpen => Parent?.Active ?? true;
+            public readonly IReadOnlyDictionary<string, Work> Children;
 
             // Internal
             private readonly Work ownerWork;
             private Work _parent;
-            private readonly Dictionary<string, Work> children = new();
+            private readonly Dictionary<string, Work> children;
 
             private bool isDisposed = false;
 
 
             // Content
-            public HierarchyManager(Work owner) => ownerWork = owner;
+            public HierarchyManager(Work owner)
+            {
+                ownerWork = owner;
+
+                children = new();
+                Children = children;
+            }
 
             public void Enter(params object[] args)
             {

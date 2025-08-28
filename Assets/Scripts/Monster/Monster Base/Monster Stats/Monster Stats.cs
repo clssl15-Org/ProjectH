@@ -10,15 +10,18 @@ public class MonsterStats : ScriptableObject
     [SerializeField, Min(1)] private int maxHP = 10;
     [SerializeField, Min(0)] private int attackPower = 1;
     [SerializeField, Min(0)] private float attackCooltime = 0.5f;
+    [SerializeField, Min(0)] private float invincibleTime = 0.5f;
     [Header("ÀÌµ¿")]
     [SerializeField] private bool useCustomSpeed = false;
     [SerializeField] private MoveSpeed moveSpeed = global::MoveSpeed.Normal;
     [SerializeField, Min(0)] private float speed = 0;
 
 
+
     public int MaxHP => maxHP;
     public int AttackPower => attackPower;
     public float AttackCooltime => attackCooltime;
+    public float InvincibleTime => invincibleTime;
     public float MoveSpeed => !useCustomSpeed ? moveSpeed.ToFloat() : speed;
 
 
