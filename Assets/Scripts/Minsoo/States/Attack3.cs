@@ -57,6 +57,11 @@ public class Attack3 : CharacterState
         {
             CharacterStateController.EnqueueTransition<NormalMovement>();
         }
+
+        if (CharacterActions.dash.Started)
+        {
+            CharacterStateController.EnqueueTransition<Dash>();
+        }
     }
     public override void EnterBehaviour(float dt)
     {
@@ -76,6 +81,11 @@ public class Attack3 : CharacterState
         {
             isDone = true;
         }
+    }
+
+    public override void ExitBehaviour(float dt)
+    {
+        isDone = true;
     }
 
     private void ResetAttack()

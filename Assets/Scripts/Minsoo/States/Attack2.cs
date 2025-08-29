@@ -77,6 +77,11 @@ public class Attack2 : CharacterState
             CharacterStateController.EnqueueTransition<NormalMovement>();
             CharacterStateController.AddBufferedState<Attack2>();
         }
+
+        if (CharacterActions.dash.Started)
+        {
+            CharacterStateController.EnqueueTransition<Dash>();
+        }
     }
     public override void EnterBehaviour(float dt)
     {
@@ -129,6 +134,10 @@ public class Attack2 : CharacterState
         }
     }
 
+    public override void ExitBehaviour(float dt)
+    {
+        isDone = true;
+    }
     private void ResetAttack()
     {
         attackCursor = 0f;

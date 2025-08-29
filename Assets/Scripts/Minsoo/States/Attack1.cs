@@ -86,6 +86,11 @@ public class Attack1 : CharacterState
             CharacterStateController.EnqueueTransition<NormalMovement>();
             CharacterStateController.AddBufferedState<Attack1>();
         }
+
+        if (CharacterActions.dash.Started)
+        {
+            CharacterStateController.EnqueueTransition<Dash>();
+        }
     }
     public override void EnterBehaviour(float dt)
     {
@@ -136,6 +141,11 @@ public class Attack1 : CharacterState
             CharacterStateController.EnqueueTransition<Attack2>();
             CharacterStateController.RemoveBufferedState<Attack1>();
         }
+    }
+
+    public override void ExitBehaviour(float dt)
+    {
+        isDone = true;
     }
 
     private void ResetAttack()
