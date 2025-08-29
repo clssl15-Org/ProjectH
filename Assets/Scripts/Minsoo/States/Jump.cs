@@ -32,6 +32,10 @@ public class Jump : CharacterState
         {
             CharacterStateController.EnqueueTransition<Attack1>();
         }
+        if (CharacterActions.dash.Started)
+        {
+            CharacterStateController.EnqueueTransition<Dash>();
+        }
     }
     public override void EnterBehaviour(float dt)
     {

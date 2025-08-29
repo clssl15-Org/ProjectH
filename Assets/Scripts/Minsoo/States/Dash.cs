@@ -1,0 +1,89 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Dash : CharacterState
+{
+    [Header("Movement Settings")]
+    [Min(0f)]
+    [SerializeField]
+    private float initalVelocity = 10f;
+
+    [Min(0f)]
+    [SerializeField]
+    private float duration = 0.5f;
+
+    [SerializeField]
+    private AnimationCurve movementCurve = AnimationCurve.Linear(1, 1, 0, 0);
+
+    [Header("Invincible Settings")]
+    [SerializeField]
+    private float invincibleStartTime = 0f;
+
+    [SerializeField]
+    private float invincibleEndTime = 1f;
+
+    private float dashCursor = 0;
+
+    private Vector2 dashDirection = Vector2.right;
+
+    private bool isDone = true;
+
+    private float currentSpeedMultiplier = 1f;
+
+    public override void CheckExitTransition()
+    {
+        if (isDone)
+        {
+            CharacterStateController.EnqueueTransition<NormalMovement>();
+        }
+    }
+
+    public override void EnterBehaviour(float dt)
+    {
+        Vector2 inputDirection = CharacterStateController.InputMovementReference;
+
+        if (inputDirection != Vector2.zero)
+        {
+            dashDirection = inputDirection;
+            CharacterActor.ChangeFlipX(inputDirection);
+        }
+        else
+        {
+            dashDirection = CharacterActor.Forward;
+        }
+
+        ResetDash();
+    }
+
+    public override void UpdateBehaviour(float dt)
+    {
+        Vector2 dashVelocity = initalVelocity * currentSpeedMultiplier * movementCurve.Evaluate(dashCursor) * dashDirection;
+
+        CharacterActor.Velocity = dashVelocity;
+
+        float animationDt = dt / duration;
+        dashCursor += animationDt;
+
+        if (dashCursor >= invincibleStartTime && dashCursor <= invincibleEndTime)
+        {
+            // set invincible true
+        }
+        else
+        {
+            // set invincible false
+        }
+
+        if (dashCursor >= 1)
+        {
+            isDone = true;
+            dashCursor = 0f;
+        }
+    }
+
+    public void ResetDash()
+    {
+        isDone = false;
+        dashCursor = 0;
+    }
+}

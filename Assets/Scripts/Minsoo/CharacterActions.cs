@@ -5,6 +5,7 @@ public struct CharacterActions
 {
     public BoolAction attack;
     public BoolAction jump;
+    public BoolAction dash;
 
     public Vector2Action movement;
 
@@ -12,6 +13,7 @@ public struct CharacterActions
     {
         attack.Reset();
         jump.Reset();
+        dash.Reset();
 
         movement.Reset();
     }
@@ -24,6 +26,9 @@ public struct CharacterActions
         jump = new BoolAction();
         jump.Initialize();
 
+        dash = new BoolAction();
+        dash.Initialize();
+
         movement = new Vector2Action();
         movement.Reset();
     }
@@ -35,6 +40,7 @@ public struct CharacterActions
 
         attack.value = inputHandler.GetBool("Attack");
         jump.value = inputHandler.GetBool("Jump");
+        dash.value = inputHandler.GetBool("Dash");
         
         movement.value = inputHandler.GetVector2("Movement");
     }
@@ -43,5 +49,6 @@ public struct CharacterActions
     {
         attack.Update(dt);
         jump.Update(dt);
+        dash.Update(dt);
     }
 }
