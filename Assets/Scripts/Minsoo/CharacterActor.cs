@@ -105,17 +105,17 @@ public class CharacterActor : MonoBehaviour
     {
         // Maintain the landing state as true for a short duration after
         // touching the ground to ensure accurate detection and prevent flickering.
-
+        
         float landedDt = dt / landedTimer;
         landedCursor += landedDt;
-        
+
         if (landedCursor >= 1f)
             IsLanded = false;
 
         // Detect landing moment precisely by confirming vertical velocity is zero
         // while grounded, then reset flags and timers to track landing duration.
-
-        if (Velocity.y != 0f)
+        
+        if (Velocity.y != 0f && !IsGrounded)
             isGroundedFlag = true;
 
         if (!isGroundedFlag)

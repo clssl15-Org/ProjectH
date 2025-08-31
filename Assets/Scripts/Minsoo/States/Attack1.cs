@@ -91,6 +91,11 @@ public class Attack1 : CharacterState
         {
             CharacterStateController.EnqueueTransition<Dash>();
         }
+
+        if (CharacterActions.eskill.Started)
+        {
+            CharacterStateController.EnqueueTransition<Eskill>();
+        }
     }
     public override void EnterBehaviour(float dt)
     {

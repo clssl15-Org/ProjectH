@@ -10200,34 +10200,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 487d939e238af994c9a024c58422655c, type: 2}
   initalVelocity: 10
-  duration: 0.2
+  duration: 0.4
   movementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 2
+      inSlope: -2
+      outSlope: -2
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0
+      inSlope: -2
+      outSlope: -2
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   directionMode: 1
+  attackSize: {x: 3, y: 1}
+  attackPointOffset: {x: 1, y: 0}
   invincibleStartTime: 0
   invincibleEndTime: 1
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0
