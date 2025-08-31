@@ -10000,6 +10000,7 @@ GameObject:
   - component: {fileID: 1973654083}
   - component: {fileID: 1973654081}
   - component: {fileID: 1973654084}
+  - component: {fileID: 1973654085}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -10183,6 +10184,48 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  invincibleStartTime: 0
+  invincibleEndTime: 1
+--- !u!114 &1973654085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973654076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50659c5dc7cb9774999d5581a063c492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: 487d939e238af994c9a024c58422655c, type: 2}
+  initalVelocity: 10
+  duration: 0.2
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  directionMode: 1
   invincibleStartTime: 0
   invincibleEndTime: 1
 --- !u!1 &2004967629

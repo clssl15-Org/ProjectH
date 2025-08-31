@@ -27,6 +27,11 @@ public class NormalMovement : CharacterState
         {
             CharacterStateController.EnqueueTransition<Dash>();
         }
+
+        if (CharacterActions.eskill.Started)
+        {
+            CharacterStateController.EnqueueTransition<Eskill>();
+        }
     }
     public override void UpdateBehaviour(float dt)
     {
