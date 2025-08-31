@@ -16,6 +16,9 @@ public class Dash : CharacterState
     [SerializeField]
     private AnimationCurve movementCurve = AnimationCurve.Linear(1, 1, 0, 0);
 
+    [SerializeField]
+    private DirectionMode directionMode = DirectionMode.InputDirection;
+
     [Header("Invincible Settings")]
     [SerializeField]
     private float invincibleStartTime = 0f;
@@ -41,16 +44,24 @@ public class Dash : CharacterState
 
     public override void EnterBehaviour(float dt)
     {
-        Vector2 inputDirection = CharacterStateController.InputMovementReference;
-
-        if (inputDirection != Vector2.zero)
-        {
-            dashDirection = inputDirection;
-            CharacterActor.ChangeFlipX(inputDirection);
-        }
-        else
+        if (directionMode == DirectionMode.FacingDirection)
         {
             dashDirection = CharacterActor.Forward;
+        }
+
+        if (directionMode == DirectionMode.InputDirection)
+        {
+            Vector2 inputDirection = CharacterStateController.InputMovementReference;
+
+            if (inputDirection != Vector2.zero)
+            {
+                dashDirection = inputDirection;
+                CharacterActor.ChangeFlipX(inputDirection);
+            }
+            else
+            {
+                dashDirection = CharacterActor.Forward;
+            }
         }
 
         ResetDash();
