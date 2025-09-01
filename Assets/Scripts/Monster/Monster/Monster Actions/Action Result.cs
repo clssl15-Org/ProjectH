@@ -8,7 +8,8 @@ public readonly struct ActionResult
         AlreadyDoing,
         OtherActionExecuting,
         NotFound,
-        Interrupted
+        Interrupted,
+        InvalidOperation
     }
 
     public ResultType Result { get; }

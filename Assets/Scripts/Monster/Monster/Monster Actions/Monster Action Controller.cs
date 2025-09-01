@@ -1,5 +1,6 @@
 using System;
 using UniEngine.StateMachines.FSM;
+using UnityEngine;
 using static ActionResult;
 
 namespace MonsterActions
@@ -9,9 +10,15 @@ namespace MonsterActions
         public Monster Owner { get; protected set; }
         public float DefaultCallbackToleranceTime { get; set; } = 0f;
 
+        private Sprite originalSprite;
+
+
         public MonsterActionController(Monster monster)
         {
             Owner = monster;
+            originalSprite = Owner.SpriteRenderer.sprite;
+
+            StopAnimator();
         }
 
         public bool TryDoAction(
@@ -60,6 +67,7 @@ namespace MonsterActions
 
             try
             {
+                Owner.Animator.enabled = true;
                 SetNextWith(monsterAction, callback, playTime, stayTimeAfterFinised);
 
                 reason = new(ResultType.Success);
@@ -93,7 +101,7 @@ namespace MonsterActions
                 if (name == MonsterAction.Dead.ToString())
                     return MonsterAction.Dead;
 
-                return MonsterAction.Unknown;
+                return MonsterAction.Undefined;
             }
 
             return MonsterAction.None;
@@ -114,7 +122,13 @@ namespace MonsterActions
         public void StopCurrentAction()
         {
             SetNextToNone();
-            Owner.Animator.StopPlayback();
+            StopAnimator();
+        }
+
+        internal void StopAnimator()
+        {
+            Owner.Animator.enabled = false;
+            Owner.SpriteRenderer.sprite = originalSprite;
         }
     }
 }

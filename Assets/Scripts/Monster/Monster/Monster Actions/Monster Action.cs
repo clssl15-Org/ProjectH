@@ -1,6 +1,6 @@
 public enum MonsterAction
 {
-    Unknown,
+    Undefined,
     None,
     Idle,
     Alert,

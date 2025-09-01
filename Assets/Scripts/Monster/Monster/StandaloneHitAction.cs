@@ -7,66 +7,143 @@ namespace MonsterActions
     internal class StandaloneHitAction : MonoBehaviour
     {
         // Display
-        [SerializeField, Header("Display")]
+        [SerializeField, Header("Display"), TextArea(3, 15)]
         private string stateDisplay = string.Empty;
-
 
         // Internal
         private Monster monster;
 
-        private class StandaloneHitActionController : MonsterActionController
-        {
-            public StandaloneHitActionController(Monster monster) : base(monster)
-            {
-                AddChild(new HitFlash());
-            }
-        }
-        private StandaloneHitActionController controller;
+        private Material originalMaterial;
+        private bool materialRestored;
+
+        private Action<ActionResult> callback;
+        private bool isRunning = false;
+        private bool succeeded = false;
+
+        private float? mainAnimationLength;
+        private float? mainAnimationRemainingTime;
 
 
         // Content
-        public void Initialize(Monster monster)
-        {
-            this.monster = monster;
-
-            controller = new(monster);
-            controller.Enter();
-        }
+        public void Initialize(Monster monster) => this.monster = monster;
 
         public bool TryHit(
             out ActionResult reason,
             Action<ActionResult> callback = null,
-            bool stopPreviousAction = true,
             bool allowRestart = false,
-            float? playtime = null,
-            float stayTimeAfterFinished = 0)
+            float? playtime = null)
         {
-            if (controller == null)
-                throw new InvalidOperationException(monster.Ctx(
-                    $"{GetType().Name} 컴포넌트를 사용하기 전에 Initialize 메서드를 호출하여 컴포넌트를 초기화해야 합니다."));
+            if (!monster)
+            {
+                reason = new(ActionResult.ResultType.InvalidOperation,
+                    Ctx($"Monster 컴포넌트({monster?.name ?? "Null"})가 유효하지 않습니다."));
 
-            return controller.TryDoAction(MonsterAction.Hit.ToString(), out reason, callback, stopPreviousAction, allowRestart, playtime, stayTimeAfterFinished);
+                return false;
+            }
+
+            if (!allowRestart && isRunning)
+            {
+                reason = new(ActionResult.ResultType.AlreadyDoing,
+                    Ctx($"이미 Hit 행동을 실행하고 있기 때문에 행동을 재실행할 수 없습니다."));
+
+                return false;
+            }
+
+            this.callback = callback;
+
+            mainAnimationLength = playtime.HasValue
+                ? (playtime.Value >= 0 ? playtime.Value : null)
+                : monster.InvincibleDuration;
+
+            mainAnimationRemainingTime = mainAnimationLength;
+
+            originalMaterial = monster.SpriteRenderer.material;
+            monster.SpriteRenderer.material = monster.sceneAssetsLibrary.SolidColor;
+            monster.SpriteRenderer.material.color = Color.white;
+
+            isRunning = true;
+            succeeded = false;
+            materialRestored = false;
+
+            reason = new(ActionResult.ResultType.Success);
+            return true;
         }
-
-        public void StopAction() => controller.StopCurrentAction();
 
         private void Update()
         {
-            controller?.Update();
+            DoUpdate();
 
 #if UNITY_EDITOR
             UpdateDisplayConetnt();
 #endif
         }
 
-        private void UpdateDisplayConetnt()
+        private void DoUpdate()
         {
-            if (controller == null)
-                stateDisplay = "Not Initialized";
-            else
-                stateDisplay = controller.TryGetCurrentAction(out var name) ? name : "None";
+            if (!isRunning)
+                return;
+
+            if (!mainAnimationRemainingTime.HasValue)
+                return;
+
+            if (!monster.SpriteRenderer)
+            {
+                isRunning = false;
+                return;
+            }
+
+
+            mainAnimationRemainingTime -= Time.deltaTime;
+
+            if (mainAnimationRemainingTime <= mainAnimationLength - monster.damageFlashDuration)
+                RestoreMaterial();
+
+            if (mainAnimationRemainingTime <= 0)
+            {
+                succeeded = true;
+                StopAction();
+            }
         }
 
-        private void OnDestroy() => controller?.Dispose();
+        public void StopAction()
+        {
+            RestoreMaterial();
+            isRunning = false;
+
+            callback?.Invoke(new(succeeded
+                ? ActionResult.ResultType.Success
+                : ActionResult.ResultType.Interrupted));
+        }
+
+        private void RestoreMaterial()
+        {
+            if (materialRestored)
+                return;
+
+            if (monster && monster.SpriteRenderer)
+            {
+                monster.SpriteRenderer.material = originalMaterial;
+                materialRestored = true;
+            }
+        }
+
+
+        private void UpdateDisplayConetnt()
+        {
+            if (monster == null)
+                stateDisplay = $"Invalid Monster ({monster?.name ?? "Null"})";
+            else
+                stateDisplay = $"Running: {isRunning}\nSucceed: {succeeded}";
+        }
+
+        private string Ctx(string message)
+        {
+            if (monster)
+                return monster.Ctx(_Ctx(message));
+            else
+                return _Ctx(message);
+
+            string _Ctx(string message) => $"StandaloneHitAction: {message}";
+        }
     }
 }

@@ -1,91 +1,42 @@
-using UniEngine.StateMachines.FSM;
-using UnityEngine;
-
 namespace MonsterActions
 {
     internal class HitFlash : MonsteActionState
     {
         private float? mainAnimationLength;
+        private ActionResult result;
 
-        public HitFlash() : base(MonsterAction.Hit.ToString())
+
+        public HitFlash(MonsterAction baseAction = MonsterAction.None) : this(baseAction.ToString()) { }
+        public HitFlash(string baseAction) : base(MonsterAction.Hit.ToString())
         {
-
-        }
-
-        protected override void Initialize()
-        {
-            AddChild(new FlashAction(), true);
-            AddChild(new AfterAction());
+            AnimationName = baseAction.ToString();
         }
 
         protected override void OnEnter(params object[] inputs)
         {
-            SetInputs(inputs);
+            base.OnEnter(inputs);
 
-            mainAnimationLength = Playtime.HasValue
-                ? (Playtime.Value >= 0 ? Playtime.Value : null)
-                : Owner.InvincibleDuration;
+            if (!Owner.StandaloneHitAction.TryHit(out var reason, r => Exit(r)))
+            {
+                Exit(reason);
+                return;
+            }
 
-            MainAnimationRemainingTime = mainAnimationLength;
-            isCompleted = false;
+            result = new(ActionResult.ResultType.Interrupted);
+        }
+
+        private void Exit(ActionResult result)
+        {
+            this.result = result;
+            Exit();
         }
 
         protected override void OnExit()
         {
-            Parent.SetNextToNone();
-            base.OnExit();
-        }
+            var callback = Callback;
+            Callback = null;
 
-
-
-        internal class FlashAction : Work<HitFlash>
-        {
-            private Monster Owner => Parent.Owner;
-
-            private Material originalMaterial;
-            private bool materialRestored;
-
-
-            protected override void OnEnter(params object[] _)
-            {
-                originalMaterial = Owner.SpriteRenderer.material;
-                Owner.SpriteRenderer.material = Owner.sceneAssetsLibrary.SolidColor;
-                Owner.SpriteRenderer.material.color = Color.white;
-
-                materialRestored = false;
-            }
-
-            protected override void OnUpdate()
-            {
-                if (!Parent.MainAnimationRemainingTime.HasValue)
-                    return;
-
-                if (!Owner.SpriteRenderer)
-                    Parent.Exit();
-
-
-                Parent.MainAnimationRemainingTime -= Time.deltaTime;
-
-                if (!materialRestored && Parent.MainAnimationRemainingTime <= Parent.mainAnimationLength - Owner.damageFlashDuration)
-                {
-                    Owner.SpriteRenderer.material = originalMaterial;
-                    materialRestored = true;
-                }
-
-                if (Parent.MainAnimationRemainingTime <= 0)
-                {
-                    if (Parent.StayTimeAfterFinished > 0)
-                        Parent.SetNext<AfterAction>();
-                    else
-                        Parent.Complete();
-                }
-            }
-
-            protected override void OnExit()
-            {
-                if (!materialRestored && Owner.SpriteRenderer)
-                    Owner.SpriteRenderer.material = originalMaterial;
-            }
+            callback?.Invoke(result);
         }
     }
 }

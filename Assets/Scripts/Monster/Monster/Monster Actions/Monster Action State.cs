@@ -8,11 +8,12 @@ namespace MonsterActions
     {
         // Front
         public Monster Owner => Parent.Owner;
+        public string AnimationName { get; protected set; } = MonsterAction.None.ToString();
 
         public float? Playtime { get; private set; } = null;
         protected float? MainAnimationRemainingTime { get; set; }
 
-        private Action<ActionResult> callback;
+        protected Action<ActionResult> Callback { get; set; }
         protected float StayTimeAfterFinished { get; private set; }
         protected bool isCompleted;
 
@@ -22,7 +23,11 @@ namespace MonsterActions
 
         // Content
         public MonsteActionState(MonsterAction monsterAction) : this(monsterAction.ToString()) { }
-        public MonsteActionState(string name) : base(name) => Initialize();
+        public MonsteActionState(string monsterAction) : base(monsterAction)
+        {
+            AnimationName = monsterAction;
+            Initialize();
+        }
         protected virtual void Initialize()
         {
             AddChild(new PlayAction(), true);
@@ -31,17 +36,27 @@ namespace MonsterActions
 
         protected override void OnEnter(params object[] inputs)
         {
-            if (!Owner.Animator.TryFindClip(Name, out var clip))
-                throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
+            if (HasAnimation())
+            {
+                if (!Owner.Animator.TryFindClip(AnimationName, out var clip))
+                    throw new ArgumentException(Owner.Ctx($"애니메이터가 '{AnimationName}'을(를) 가지고 있지 않습니다."));
 
-            SetInputs(inputs);
+                SetInputs(inputs);
 
-            MainAnimationRemainingTime = Playtime.HasValue
-                ? (Playtime.Value >= 0 ? Playtime.Value : null)
-                : (!clip.isLooping ? clip.length : null);
+                MainAnimationRemainingTime = Playtime.HasValue
+                    ? (Playtime.Value >= 0 ? Playtime.Value : null)
+                    : (!clip.isLooping ? clip.length : null);
 
-            isCompleted = false;
-            Owner.Animator.Play(clip.name);
+                isCompleted = false;
+                Owner.Animator.Play(clip.name);
+            }
+            else
+            {
+                Parent.StopAnimator();
+
+                SetInputs(inputs);
+                MainAnimationRemainingTime = (Playtime >= 0) ? Playtime : null;
+            }
         }
         protected void SetInputs(params object[] inputs)
         {
@@ -52,7 +67,7 @@ namespace MonsterActions
                 throw new ArgumentException(Ctx(
                     $"Inputs는 3개 이상의 인자를 가져야 합니다. 현재 Inputs는 '{inputs.Length}'개의 인자를 가지고 있습니다."), nameof(inputs));
 
-            callback = (Action<ActionResult>)inputs[0];
+            Callback = (Action<ActionResult>)inputs[0];
             Playtime = (float?)inputs[1];
             StayTimeAfterFinished = (float)inputs[2];
         }
@@ -65,14 +80,17 @@ namespace MonsterActions
 
         protected override void OnExit()
         {
-            var callback = this.callback;
-            this.callback = null;
+            var callback = Callback;
+            Callback = null;
 
             callback?.Invoke(new(isCompleted
                 ? ActionResult.ResultType.Success
                 : ActionResult.ResultType.Interrupted));
         }
 
+        private bool HasAnimation()
+            => !string.IsNullOrWhiteSpace(AnimationName)
+            && !string.Equals(AnimationName, MonsterAction.None.ToString());
 
 
         // Substates

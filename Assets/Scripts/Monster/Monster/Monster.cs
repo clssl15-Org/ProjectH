@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D), typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer), typeof(Animator), typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlatformDetector), typeof(MonsterHitted))]
 public abstract partial class Monster : MonoBehaviour
 {
