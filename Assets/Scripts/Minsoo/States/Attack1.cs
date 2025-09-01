@@ -143,6 +143,9 @@ public class Attack1 : CharacterState
 
         if (CharacterActions.attack.Started)
         {
+            if (CharacterStateController.CurrentState is not NormalMovement)
+                return;
+
             CharacterStateController.EnqueueTransition<Attack2>();
             CharacterStateController.RemoveBufferedState<Attack1>();
         }
