@@ -18,10 +18,10 @@ public partial class JavelinHurler
             thrown = false;
             base.OnEnter(inputs);
 
-            if (!remainingTime.HasValue)
+            if (!MainAnimationRemainingTime.HasValue)
                 throw new System.InvalidOperationException("창던지개의 Attack 행동은 종료 시간이 존재해야 합니다.");
 
-            playtime = remainingTime.Value;
+            playtime = MainAnimationRemainingTime.Value;
         }
         
         protected override void OnUpdate()
@@ -29,7 +29,7 @@ public partial class JavelinHurler
             base.OnUpdate();
             var owner = (JavelinHurler)Owner;
 
-            if (!thrown && (playtime - remainingTime) >= owner.throwTime)
+            if (!thrown && (playtime - MainAnimationRemainingTime) >= owner.throwTime)
             {
                 thrown = true;
 

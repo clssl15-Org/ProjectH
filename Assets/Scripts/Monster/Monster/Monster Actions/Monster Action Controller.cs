@@ -101,7 +101,7 @@ namespace MonsterActions
 
         public bool TryGetCurrentAction(out string name)
         {
-            if (TryGetCurrentChild<MonsteActionState>(out var child))
+            if (TryGetCurrentChild(out var child))
             {
                 name = child.Name;
                 return true;

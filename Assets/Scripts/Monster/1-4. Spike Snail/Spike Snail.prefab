@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 8298912697572752862}
   - component: {fileID: 7294078046331378177}
   - component: {fileID: 5603135376329470491}
+  - component: {fileID: 3346812145746184880}
   - component: {fileID: 987010599202020812}
   m_Layer: 0
   m_Name: Spike Snail
@@ -1098,6 +1099,18 @@ MonoBehaviour:
   platformManager: {fileID: 0}
   detectionHeight: 1
   detectionRange: 0.7
+--- !u!114 &3346812145746184880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8618085740521409954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7da1470989c118945b9fbaf02ad3f2dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &987010599202020812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,8 +1130,11 @@ MonoBehaviour:
   _attackPower: 1
   _moveSpeed: 1
   _attackCooltime: 0.5
+  _invincibleDuration: 0.5
   defaultIsRight: 0
   platformManager: {fileID: 0}
+  sceneAssetsLibrary: {fileID: 0}
+  damageFlashDuration: 0.1
   stateDisplay: 
   spikeSpeed: 5
   launchTime: 0.21

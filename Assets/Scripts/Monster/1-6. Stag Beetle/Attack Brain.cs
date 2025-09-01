@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using UniEngine.StateMachines.BT;
+using UnityEngine;
 
 public partial class StagBeetle : Monster
 {

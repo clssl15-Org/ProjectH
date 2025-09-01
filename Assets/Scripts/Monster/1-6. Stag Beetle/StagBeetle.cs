@@ -6,15 +6,13 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Collider2D), typeof(StandaloneHitAction))]
 public partial class StagBeetle : Monster
 {
     // Front
     [Header("Stag Beetle")]
     [SerializeField, Min(0)] private float rollingTime = 3f;
     [SerializeField, Min(0)] private float rollingSpeed = 1f;
-    [Header("Damage")]
-    [SerializeField, Min(0)] private float damageAnimationLength = 0.1f;
 
 
     // Internal
@@ -25,7 +23,6 @@ public partial class StagBeetle : Monster
         Roar
     }
 
-    private DamageHandler damageHandler;
     private Collider2D colliderComponent;
 
     private class StagBeetleBrain : MonsterBrain
@@ -93,7 +90,6 @@ public partial class StagBeetle : Monster
         base.Awake();
 
         colliderComponent = GetComponent<Collider2D>();
-        damageHandler = new(this, damageAnimationLength, InvincibleTime); 
     }
 
     protected void Start()
@@ -111,17 +107,17 @@ public partial class StagBeetle : Monster
     protected override void OnDamaged(int damage)
     {
         if (Brain.Blackboard.Committing)
-        {
-            if (damageHandler.TryTakeDamage(damage, out var damager))
-                StartCoroutine(damager);
-        }
+            StandaloneHitBrain.TryTakeDamage(damage);
         else
+        {
+            StandaloneHitBrain.Stop();
             Brain.SelectChild(new SelectionRequest[]
             {
                 new(true),
                 new(true),
                 new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
             });
+        }
     }
 
 

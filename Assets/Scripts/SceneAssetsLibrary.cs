@@ -6,10 +6,4 @@ public class SceneAssetsLibrary : MonoBehaviour
     [SerializeField] private Material solidColor;
 
     public Material SolidColor => Instantiate(solidColor);
-
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 }

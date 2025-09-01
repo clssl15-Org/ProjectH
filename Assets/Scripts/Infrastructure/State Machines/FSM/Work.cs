@@ -305,6 +305,7 @@ namespace UniEngine.StateMachines.FSM
             return this;
         }
 
+        public bool TryGetCurrentChild(out Work current) => TryGetCurrentChild<Work>(out current);
         /// <summary>
         /// Attempts to retrieve the current child of the specified type.
         /// </summary>
