@@ -13,7 +13,7 @@ public partial class StagBeetle : Monster
 
         private Action beforePreAction;
         private Action beforeMainAction;
-        private Func<float, bool> whileMainAction;
+        private Func<float, float, bool> whileMainAction;
         private Action afterMainAction;
 
         private Action<ActionResult> callback;
@@ -27,7 +27,7 @@ public partial class StagBeetle : Monster
             Func<string, string> getPostActionName,
             Action beforePreAction = null,
             Action beforeMainAction = null,
-            Func<float, bool> whileMainAction = null,
+            Func<float, float, bool> whileMainAction = null,
             Action afterMainAction = null) : base(actionName)
         {
             Actions = new string[] { getPreActionName(actionName), actionName, getPostActionName(actionName) };
@@ -104,23 +104,27 @@ public partial class StagBeetle : Monster
             private StagBeetle Owner => Parent.Owner;
             private Animator Animator => Parent.Owner.Animator;
 
-            private float playtime;
+            private float totalPlaytime;
+            private float currentPlaytime;
 
 
             protected override void OnEnter(params object[] _)
             {
                 if (!Owner.Animator.TryFindClip(Parent.Actions[1], out var clip))
-                    throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
+                    throw new ArgumentException(Owner.Ctx($"애니메이터가 애니메이션 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
 
-                playtime = 0;
+                totalPlaytime = clip.length;
+                currentPlaytime = 0;
+
                 Owner.Animator.Play(clip.name);
-
                 Parent.beforeMainAction?.Invoke();
             }
 
             protected override void OnUpdate()
             {
-                if (!Parent?.whileMainAction(playtime += Time.deltaTime) ?? false)
+                currentPlaytime += Time.deltaTime;
+
+                if (Parent?.whileMainAction(currentPlaytime, totalPlaytime) ?? false)
                     Parent.SetNextWith<SubAction>(false);
             }
 

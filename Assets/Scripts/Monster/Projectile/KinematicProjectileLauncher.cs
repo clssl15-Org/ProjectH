@@ -8,7 +8,7 @@ public class KinematicProjectileLauncher : MonoBehaviour
     // Internal
     private Vector3[] projectilesPositions;
 
-    private SpikeSnail owner;
+    private Monster owner;
     private PlatformManager platformManager;
     private string[] collisionTags;
 
@@ -25,14 +25,30 @@ public class KinematicProjectileLauncher : MonoBehaviour
         }
     }
 
-    public virtual void Initialize(SpikeSnail owner, PlatformManager platformManager, params string[] collisionTags)
+    public virtual void Initialize(Monster owner, PlatformManager platformManager, params string[] collisionTags)
     {
         this.owner = owner;
         this.platformManager = platformManager;
         this.collisionTags = collisionTags;
     }
 
-    public void Launch(float speed, params Vector2[] directions)
+
+    public void LaunchWithLocalRotation(float speed, Vector2 directionUnit)
+    {
+        for (int i = 0; i < projectiles.Length; i++)
+        {
+            var projectile = Instantiate(projectiles[i]);
+
+            projectile.transform.position = owner.transform.position + projectilesPositions[i];
+            projectile.SetActive(true);
+
+            projectile.GetComponent<KinematicProjectile>()
+                .Initialize(platformManager, collisionTags)
+                .Launch(projectile.transform.rotation * directionUnit, speed);
+        }
+    }
+
+    public void LaunchWithDirections(float speed, params Vector2[] directions)
     {
         for (int i = 0; i < projectiles.Length; i++)
         {

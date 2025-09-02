@@ -26,7 +26,7 @@ public partial class SpikeSnail : Monster
         protected override void OnEnter(params object[] inputs)
         {
             if (!Owner.Animator.TryFindClip(MonsterAction.Attack.ToString(), out var clip))
-                throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
+                throw new ArgumentException(Owner.Ctx($"애니메이터가 애니메이션 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
 
             callback = (Action<ActionResult>)inputs[0];
 
@@ -48,7 +48,7 @@ public partial class SpikeSnail : Monster
             {
                 launched = true;
 
-                Owner.spikeLauncher.Launch(Owner.spikeSpeed,
+                Owner.spikeLauncher.LaunchWithDirections(Owner.spikeSpeed,
                     new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) });
             }
 

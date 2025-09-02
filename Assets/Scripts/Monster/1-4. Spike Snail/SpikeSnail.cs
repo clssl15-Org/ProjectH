@@ -65,7 +65,7 @@ public partial class SpikeSnail : Monster
         spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
         if (!spikeLauncher) throw new InvalidOperationException(
-            "가시달팽이는 spikeLauncher 컴포넌트를 가지고 있어야 합니다.");
+            Ctx("이 몬스터는 spikeLauncher 컴포넌트를 가지고 있어야 합니다."));
 
         spikeLauncher.Initialize(this, platformManager, "Ground");
     }
