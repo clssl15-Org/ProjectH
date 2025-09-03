@@ -9,6 +9,9 @@ public class Attack3 : CharacterState
     [SerializeField]
     private float attackDuration = 1f;
 
+    [SerializeField]
+    private float damageApplyTime = 0.3f;
+
     [Header("Attack Stats")]
     [SerializeField]
     private float damageMultiplier = 1.0f;
@@ -28,6 +31,7 @@ public class Attack3 : CharacterState
 
     private bool comboAvailable = false;
     private bool isDone = true;
+    private bool isDamageApplied = false;
 
     private void Start()
     {
@@ -73,8 +77,6 @@ public class Attack3 : CharacterState
         //CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
-
-        TakeDamageToEnemy();
     }
 
     public override void UpdateBehaviour(float dt)
@@ -85,6 +87,12 @@ public class Attack3 : CharacterState
         if (attackCursor >= 1f)
         {
             isDone = true;
+        }
+
+        if (attackCursor >= damageApplyTime && !isDamageApplied)
+        {
+            isDamageApplied = true;
+            TakeDamageToEnemy();
         }
     }
 
@@ -98,6 +106,7 @@ public class Attack3 : CharacterState
         attackCursor = 0f;
         comboAvailable = false;
         isDone = false;
+        isDamageApplied = false;
     }
 
     private void OnDrawGizmos()

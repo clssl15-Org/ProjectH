@@ -9,6 +9,9 @@ public class Attack1 : CharacterState
     [SerializeField]
     private float attackDuration = 1f;
 
+    [SerializeField]
+    private float damageApplyTime = 0.3f;
+
     // Time window to allow for combo attacks
     [SerializeField]
     private float comboTimeWindow = 0.3f;
@@ -45,6 +48,7 @@ public class Attack1 : CharacterState
 
     private bool comboAvailable = false;
     private bool isDone = true;
+    private bool isDamageApplied = false;
     private bool isNextComboReady = false;
 
     private void Start()
@@ -102,8 +106,6 @@ public class Attack1 : CharacterState
         //CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
-        
-        TakeDamageToEnemy();
     }
 
     public override void UpdateBehaviour(float dt)
@@ -114,6 +116,12 @@ public class Attack1 : CharacterState
         if (attackCursor >= 1f)
         {
             isDone = true;
+        }
+
+        if (attackCursor >= damageApplyTime && !isDamageApplied)
+        {
+            isDamageApplied = true;
+            TakeDamageToEnemy();
         }
 
         if (!CharacterActions.attack.Started)
@@ -162,6 +170,7 @@ public class Attack1 : CharacterState
         attackElapsedCursor = 0f;
         comboAvailable = false;
         isDone = false;
+        isDamageApplied = false;
         isNextComboReady = false;
     }
 
