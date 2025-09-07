@@ -10001,6 +10001,7 @@ GameObject:
   - component: {fileID: 1973654081}
   - component: {fileID: 1973654084}
   - component: {fileID: 1973654085}
+  - component: {fileID: 1973654086}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -10237,6 +10238,23 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &1973654086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973654076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8548dc7748f5d2343bac2a96e682a945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: 1981c89d8a4bb5d4fb7b09ba2a7a1c7e, type: 2}
+  motionDuration: 1
+  launchDelay: 0.1
+  projectilePrefab: {fileID: 6317047554263875150, guid: a811840dc3e307e4781ac75002df6ec7, type: 3}
+  offset: {x: 0, y: 0}
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,6 +32,11 @@ public class NormalMovement : CharacterState
         {
             CharacterStateController.EnqueueTransition<Eskill>();
         }
+
+        if (CharacterActions.rangedAttack.Started)
+        {
+            CharacterStateController.EnqueueTransition<RangedAttack>();
+        }
     }
     public override void UpdateBehaviour(float dt)
     {
