@@ -40,9 +40,9 @@ public partial class Dokkaebi : Monster
         }
     }
 
-    private class DynastidActionController : MonsterActionController
+    private class DokkaebiActionController : MonsterActionController
     {
-        public DynastidActionController(Monster monster) : base(monster)
+        public DokkaebiActionController(Monster monster) : base(monster)
         {
             AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
@@ -64,13 +64,11 @@ public partial class Dokkaebi : Monster
         base.Awake();
     }
 
-    protected void Start()
+    protected override void Start()
     {
-        Direction = UnityEngine.Random.Range(0, 2) == 0
-            ? Direction.Left
-            : Direction.Right;
+        base.Start();
 
-        ActionController = new DynastidActionController(this);
+        ActionController = new DokkaebiActionController(this);
         ActionController.Enter();
 
         Brain = new DokkaebiBrain(this);

@@ -7,12 +7,12 @@ namespace Tests.Seungmin
 {
     public class Test : MonoBehaviour
     {
-        private void DoTest()
+        public void DoTest()
         {
-            
+
         }
 
-
+        
         [CustomEditor(typeof(Test))]
         private class TestEditor : Editor
         {

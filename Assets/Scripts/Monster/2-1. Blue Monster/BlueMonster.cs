@@ -43,11 +43,9 @@ public class BlueMonster : Monster
 
 
     // Content
-    protected void Start()
+    protected override void Start()
     {
-        Direction = Random.Range(0, 2) == 0
-            ? Direction.Left
-            : Direction.Right;
+        base.Start();
 
         ActionController = new BlueMonsterActionController(this);
         ActionController.Enter();

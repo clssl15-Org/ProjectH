@@ -49,6 +49,7 @@ public abstract partial class Monster : MonoBehaviour
     [SerializeField, Min(0)] private float _invincibleDuration = 0.5f;
 
     [Header("Image Settings")]
+    [SerializeField] protected bool randomizeStartDirection = true;
     [SerializeField] protected bool defaultIsRight;
 
     [Header("Bindings")]
@@ -141,6 +142,16 @@ public abstract partial class Monster : MonoBehaviour
         _hp = MaxHP;
     }
 
+    protected virtual void Start()
+    {
+        if (randomizeStartDirection)
+        {
+            Direction = UnityEngine.Random.Range(0, 2) == 0
+                ? Direction.Left
+                : Direction.Right;
+        }
+    }
+
     protected virtual void Update()
     {
         Brain?.Tick();
@@ -206,9 +217,6 @@ public abstract partial class Monster : MonoBehaviour
     };
 
 
-    #region Damage Motion
-
-    #endregion
 
     #region Actions
     internal bool TryDoAction(

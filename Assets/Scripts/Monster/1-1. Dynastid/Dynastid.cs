@@ -43,11 +43,9 @@ public class Dynastid : Monster
 
 
     // Content
-    protected void Start()
+    protected override void Start()
     {
-        Direction = UnityEngine.Random.Range(0, 2) == 0
-            ? Direction.Left
-            : Direction.Right;
+        base.Start();
 
         ActionController = new DynastidActionController(this);
         ActionController.Enter();

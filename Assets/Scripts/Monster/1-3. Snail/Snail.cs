@@ -43,11 +43,9 @@ public class Snail : Monster
 
 
     // Content
-    protected void Start()
+    protected override void Start()
     {
-        Direction = UnityEngine.Random.Range(0, 2) == 0
-            ? Direction.Left
-            : Direction.Right;
+        base.Start();
 
         ActionController = new SnailActionController(this);
         ActionController.Enter();
