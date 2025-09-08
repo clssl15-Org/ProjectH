@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ProjectileDamage : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Damage Settings")]
+    [SerializeField]
+    private int damage = 10;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
+            return;
+
+        damageableObject.TakeDamage(damage);
     }
 }

@@ -16,6 +16,9 @@ public class RangedAttack : CharacterState
     private GameObject projectilePrefab;
 
     [SerializeField]
+    private bool isSizeSynced = true;
+
+    [SerializeField]
     private Vector2 offset;
 
     private float skillCursor = 0f;
@@ -54,6 +57,9 @@ public class RangedAttack : CharacterState
 
             GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
             newProjectile.GetComponent<ProjectileMovement>().ResetProjectile(dt, direction);
+            newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
+            if (isSizeSynced)
+                newProjectile.transform.localScale = CharacterActor.transform.localScale;
 
             isProjectileLaunched = true;
         }

@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 46505909}
+  monsterBase: {fileID: 0}
 --- !u!114 &46505911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1099,7 +1099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21dffcb23d985d4593a7bc55648b6a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
+  damage: 1
 --- !u!114 &264604787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1492,7 +1492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 323997552}
+  monsterBase: {fileID: 0}
 --- !u!114 &323997554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2343,7 +2343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21dffcb23d985d4593a7bc55648b6a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 3
+  damage: 1
 --- !u!114 &580586334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2982,7 +2982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21dffcb23d985d4593a7bc55648b6a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1.5
+  damage: 1
 --- !u!114 &760134109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7769,7 +7769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21dffcb23d985d4593a7bc55648b6a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 1
 --- !u!114 &1344018701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7911,7 +7911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21dffcb23d985d4593a7bc55648b6a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 1
 --- !u!61 &1370831915
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8403,7 +8403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1534607026}
+  monsterBase: {fileID: 0}
 --- !u!114 &1534607028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8649,7 +8649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1574838456}
+  monsterBase: {fileID: 0}
 --- !u!114 &1574838458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9579,7 +9579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1728821808}
+  monsterBase: {fileID: 0}
 --- !u!114 &1728821810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10251,9 +10251,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 1981c89d8a4bb5d4fb7b09ba2a7a1c7e, type: 2}
-  motionDuration: 1
-  launchDelay: 0.1
+  motionDuration: 0.6
+  launchDelay: 0.5
   projectilePrefab: {fileID: 6317047554263875150, guid: a811840dc3e307e4781ac75002df6ec7, type: 3}
+  isSizeSynced: 1
   offset: {x: 0, y: 0}
 --- !u!1 &2004967629
 GameObject:
@@ -10730,7 +10731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 2142189257}
+  monsterBase: {fileID: 0}
 --- !u!114 &2142189259
 MonoBehaviour:
   m_ObjectHideFlags: 0

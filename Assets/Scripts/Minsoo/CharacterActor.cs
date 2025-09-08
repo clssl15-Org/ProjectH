@@ -29,7 +29,7 @@ public class CharacterActor : MonoBehaviour
     }
     public Vector2 ColliderCenter
     {
-        get => (Vector2)transform.position + _collider.offset;
+        get => (Vector2)transform.position + Vector2.Scale(_collider.offset, transform.localScale);
     }
     public Vector2 Velocity
     {
