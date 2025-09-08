@@ -35,10 +35,6 @@ public class Attack2 : CharacterState
     [SerializeField]
     private Vector2 attackPointOffset = new Vector2(0f, 0f);
 
-    [Header("Other Settings")]
-    [SerializeField]
-    private LayerMask enemyLayers;
-
     private float attackCursor = 0f;
     private float attackElapsedCursor = 0f;
 
@@ -47,25 +43,23 @@ public class Attack2 : CharacterState
     private bool isDamageApplied = false;
     private bool isNextComboReady = false;
 
-    private void Start()
-    {
-        enemyLayers = LayerMask.GetMask("Monster");
-    }
-
     private void TakeDamageToEnemy()
     {
         Vector2 attackPoint = CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Forward);
         float attackAngle = CharacterActor.Rotation.eulerAngles.z;
-        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(
+        Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
             attackPoint,
             attackSize,
-            attackAngle,
-            enemyLayers
+            attackAngle
         );
 
-        foreach (Collider2D enemy in hitEnemies)
+        foreach (Collider2D hitCollider in hitColliders)
         {
+            if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
+                return;
+
             Debug.Log("Enemy hitted! (Attack2)");
+            // damageableObject.TakeDamage();
         }
     }
     public override void CheckExitTransition()

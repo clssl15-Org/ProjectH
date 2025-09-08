@@ -39,10 +39,6 @@ public class Eskill : CharacterState
     [SerializeField]
     private float invincibleEndTime = 1f;
 
-    [Header("Other Settings")]
-    [SerializeField]
-    private LayerMask enemyLayers;
-
     private float skillCursor = 0;
 
     private Vector2 moveDirection = Vector2.right;
@@ -51,24 +47,23 @@ public class Eskill : CharacterState
 
     private float currentSpeedMultiplier = 1f;
 
-    private void Start()
-    {
-        enemyLayers = LayerMask.GetMask("Monster");
-    }
     private void TakeDamageToEnemy()
     {
         Vector2 attackPoint = CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Forward);
         float attackAngle = CharacterActor.Rotation.eulerAngles.z;
-        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(
+        Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
             attackPoint,
             attackSize,
-            attackAngle,
-            enemyLayers
+            attackAngle
         );
 
-        foreach (Collider2D enemy in hitEnemies)
+        foreach (Collider2D hitCollider in hitColliders)
         {
+            if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
+                return;
+
             Debug.Log("Enemy hitted! (Eskill)");
+            // damageableObject.TakeDamage();
         }
     }
     public override void CheckExitTransition()
