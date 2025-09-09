@@ -63,7 +63,7 @@ public partial class JavelinHurler : Monster
     protected override void Awake()
     {
         if (!javelinPrefab)
-            throw new InvalidOperationException("창던지개는 javelinPrefab을 가지고 있어야 합니다.");
+            throw new InvalidOperationException($"창던지개는 {nameof(javelinPrefab)}을(를) 가지고 있어야 합니다.");
 
         base.Awake();
     }

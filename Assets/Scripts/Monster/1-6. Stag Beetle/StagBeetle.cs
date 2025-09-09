@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent(typeof(Collider2D), typeof(StandaloneHitAction))]
+[RequireComponent(typeof(StandaloneHitAction))]
 public partial class StagBeetle : Monster
 {
     // Front
@@ -32,7 +32,6 @@ public partial class StagBeetle : Monster
         Roar
     }
 
-    private Collider2D colliderComponent;
     private KinematicProjectileLauncher spikeLauncher;
 
     private class StagBeetleBrain : MonsterBrain
@@ -71,7 +70,7 @@ public partial class StagBeetle : Monster
             AddChild(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 beforePreAction: () => rollRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
-                beforeMainAction: () => stagBeetle.colliderComponent.excludeLayers = LayerMask.GetMask("Player"),
+                beforeMainAction: () => stagBeetle.Collider.excludeLayers = LayerMask.GetMask("Player"),
                 whileMainAction: (playtime, _) =>
                 {
                     if (stagBeetle.TryMove())
@@ -85,7 +84,7 @@ public partial class StagBeetle : Monster
 
                     return playtime > stagBeetle.rollingTime;
                 },
-                afterMainAction: () => stagBeetle.colliderComponent.excludeLayers = default));
+                afterMainAction: () => stagBeetle.Collider.excludeLayers = default));
             AddChild(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 beforeMainAction: () =>
@@ -125,11 +124,10 @@ public partial class StagBeetle : Monster
     {
         base.Awake();
 
-        colliderComponent = GetComponent<Collider2D>();
         spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
         if (!spikeLauncher) throw new InvalidOperationException(
-            Ctx("이 몬스터는 spikeLauncher 컴포넌트를 가지고 있어야 합니다."));
+            Ctx("이 몬스터는 SpikeLauncher 컴포넌트를 가지고 있어야 합니다."));
 
         spikeLauncher.Initialize(this, platformManager, "Ground");
     }

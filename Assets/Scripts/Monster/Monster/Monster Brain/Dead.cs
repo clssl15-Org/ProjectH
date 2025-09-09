@@ -5,6 +5,9 @@ namespace MonsterBT
 {
     public class Dead : BTNode<Monster, MonsterBlackboard>
     {
+        // Front
+        public float StayTimeAfterFinised { get; set; } = 0f;
+
         // Internal
         private readonly string monsterAction;
 
@@ -18,11 +21,12 @@ namespace MonsterBT
         protected override void OnOpen(object[] _)
         {
             Owner.IsAlive = false;
+            Owner.Collider.excludeLayers = LayerMask.GetMask("Player");
 
             if (!Owner.TryDoAction(monsterAction, out var reason,
                 result => Complete(),
                 allowRestart: true,
-                stayTimeAfterFinised: 1f))
+                stayTimeAfterFinised: StayTimeAfterFinised))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{monsterAction} 행동에 실패하였기 때문에 Dead 상태로 진입할 수 없습니다.\n{reason}"));
@@ -31,9 +35,9 @@ namespace MonsterBT
             }
         }
 
-        protected override void OnHalt(DetailedNodeStatus _)
+        protected override void OnHalt(DetailedNodeStatus reason)
         {
-            Owner.Die();
+            Owner.Die(reason.IsSuccess());
         }
     }
 }

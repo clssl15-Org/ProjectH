@@ -48,12 +48,11 @@ public class TestPlayer : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Monster"))
-        {
-            collision.gameObject
-                .GetComponent<MonsterHitted>()
-                .TakeDamage(attackPower);
-        }
+        var detector = collision.gameObject
+            .GetComponentInChildren<MonsterHitted>();
+
+        if (detector)
+            detector.TakeDamage(attackPower);
     }
 
 

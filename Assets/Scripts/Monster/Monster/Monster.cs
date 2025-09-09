@@ -7,8 +7,9 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Animator), typeof(Rigidbody2D))]
-[RequireComponent(typeof(PlatformDetector), typeof(MonsterHitted))]
+[RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlatformDetector))]
 public abstract partial class Monster : MonoBehaviour
 {
     // Front
@@ -34,6 +35,7 @@ public abstract partial class Monster : MonoBehaviour
     }
 
     public bool IsAlive { get; internal set; } = true;
+    public event Action<bool> Died;
 
 
     // Property 
@@ -77,9 +79,10 @@ public abstract partial class Monster : MonoBehaviour
 
 
     // Component
-    internal Rigidbody2D Rigidbody { get; private set; }
-    internal Animator Animator { get; private set; }
     internal SpriteRenderer SpriteRenderer { get; private set; }
+    internal Animator Animator { get; private set; }
+    internal Collider2D Collider { get; private set; }
+    internal Rigidbody2D Rigidbody { get; private set; }
 
     internal int BelongingPlatform { get; set; } = 1;
     internal PlatformDetector PlatformDetector { get; private set; }
@@ -88,36 +91,32 @@ public abstract partial class Monster : MonoBehaviour
     private MonsterHitted hitDetector;
     private MonsterPlayerDetector playerDetector;
 
-    //internal 
+    // Internal 
     internal StandaloneHitAction StandaloneHitAction { get; private set; }
     internal StandaloneHitBrain StandaloneHitBrain { get; private set; }
     internal MonsterActionController ActionController { get; set; }
     internal MonsterBrain Brain { get; set; }
 
-
-    // Internal
     private int _hp;
     private Direction _direction = Direction.Center;
 
 
     // Content
+    /// <summary>
+    /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
+    /// </summary>
+    public void Initialize(PlatformManager platformManager, SceneAssetsLibrary sceneAssetsLibrary)
+    {
+        this.platformManager = platformManager;
+        this.sceneAssetsLibrary = sceneAssetsLibrary;
+    }
+
     protected virtual void Awake()
     {
-        SpriteRenderer = GetComponent<SpriteRenderer>();
+        Collider = GetComponent<Collider2D>();
         Rigidbody = GetComponent<Rigidbody2D>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
-
-        if (!platformManager)
-            throw new InvalidOperationException(Ctx(
-                $"PlatformManager가 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
-
-        if (!sceneAssetsLibrary)
-            Debug.LogWarning(Ctx(
-                $"이 몬스터는 SceneAssetsLibrary를 가지고 있지 않습니다. " +
-                "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
-
-        PlatformDetector = GetComponent<PlatformDetector>();
-        PlatformDetector.SetPlatformManager(platformManager);
 
         playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
 
@@ -125,10 +124,14 @@ public abstract partial class Monster : MonoBehaviour
             playerDetector.PlayerDetected += OnPlayerDetected;
         else
             Debug.LogWarning(Ctx(
-                $"이 몬스터는 {nameof(MonsterPlayerDetector)}를 가지고 있지 않습니다. " +
+                $"이 몬스터는 {nameof(MonsterPlayerDetector)}을(를) 가지고 있지 않습니다. " +
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
-        hitDetector = GetComponent<MonsterHitted>();
+
+        hitDetector = GetComponentInChildren<MonsterHitted>(true);
+        if (!hitDetector) throw new InvalidOperationException(Ctx(
+            $"{nameof(hitDetector)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
+
         hitDetector.Damaged += OnDamaged;
 
         if (TryGetComponent<StandaloneHitAction>(out var standaloneHitAction))
@@ -144,6 +147,21 @@ public abstract partial class Monster : MonoBehaviour
 
     protected virtual void Start()
     {
+        #region 필수 컴포넌트 설정
+        if (!platformManager)
+            throw new InvalidOperationException(Ctx(
+                $"{nameof(platformManager)}이(가) 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
+
+        if (!sceneAssetsLibrary)
+            Debug.LogWarning(Ctx(
+                $"이 몬스터는 {nameof(sceneAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
+                "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
+
+        PlatformDetector = GetComponent<PlatformDetector>();
+        PlatformDetector.SetPlatformManager(platformManager);
+        #endregion
+
+
         if (randomizeStartDirection)
         {
             Direction = UnityEngine.Random.Range(0, 2) == 0
@@ -205,7 +223,7 @@ public abstract partial class Monster : MonoBehaviour
 
 
         Debug.LogWarning(Ctx(
-            $"현재 Direction 상태({Direction}')가 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
+            $"현재 Direction 상태({Direction})가 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
 
         return false;
     }
@@ -245,8 +263,9 @@ public abstract partial class Monster : MonoBehaviour
     internal void StopCurrentAction() => ActionController.StopCurrentAction();
 
 
-    internal void Die()
+    internal void Die(bool succeed)
     {
+        Died?.Invoke(succeed);
         Destroy(gameObject);
     }
     #endregion
@@ -264,7 +283,7 @@ public abstract partial class Monster : MonoBehaviour
     }
 
 
-    internal string Ctx(string message) => $"[Monster '{name}'] {message}";
+    internal string Ctx(string message) => $"[{name}] {message}";
 
     protected virtual string GetDisplayContent()
     {

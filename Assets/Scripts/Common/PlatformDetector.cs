@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -30,7 +29,7 @@ public class PlatformDetector : MonoBehaviour
     public Vector3 Bottom => new Vector3
     {
         x = transform.position.x,
-        y = selfCollider.bounds.min.y,
+        y = SelfCollider.bounds.min.y,
         z = transform.position.z
     };
 
@@ -39,7 +38,7 @@ public class PlatformDetector : MonoBehaviour
     [SerializeField, Min(0)] private float detectionRange = 1f;
 
     // Internal
-    private Collider2D selfCollider => _selfCollider ??= GetComponent<Collider2D>();
+    private Collider2D SelfCollider => _selfCollider ??= GetComponent<Collider2D>();
     private Collider2D _selfCollider;
 
 

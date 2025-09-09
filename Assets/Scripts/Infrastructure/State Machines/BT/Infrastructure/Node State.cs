@@ -26,7 +26,7 @@ namespace UniEngine.StateMachines.BT
 
     public static class Tools
     {
-        public static NodeStatus ToNodeStatus(this DetailedNodeStatus s) => s switch
+        public static NodeStatus ToNodeStatus(this DetailedNodeStatus status) => status switch
         {
             DetailedNodeStatus.NeverRun => NodeStatus.NeverRun,
             DetailedNodeStatus.Running => NodeStatus.Running,
@@ -34,5 +34,8 @@ namespace UniEngine.StateMachines.BT
             DetailedNodeStatus.Failure or DetailedNodeStatus.ChildFailed => NodeStatus.Failure,
             _ => NodeStatus.Aborted
         };
+
+        public static bool IsSuccess(this DetailedNodeStatus status) => IsSuccess(status.ToNodeStatus());
+        public static bool IsSuccess(this NodeStatus status) => status == NodeStatus.Success;
     }
 }

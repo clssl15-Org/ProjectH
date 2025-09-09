@@ -14,11 +14,15 @@ internal class StandaloneHitBrain
 
     public bool TryTakeDamage(int damage)
     {
-        if (IsDamaging)
-            return false;
-
+        if (IsDamaging) return false;
+        if (!Owner.IsAlive) return false;
         if (damage < 0)
-            throw new ArgumentOutOfRangeException(nameof(damage), $"Damage는 0 이상이어야 하지만 '{damage}'이(가) 입력되었습니다.");
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(damage),
+                $"Damage는 0 이상이어야 하지만 '{damage}'이(가) 입력되었습니다.");
+        }
+
 
         if (!Owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playtime: Owner.InvincibleDuration))
         {
