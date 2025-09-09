@@ -1,20 +1,20 @@
 using UnityEngine;
 
-public class KinematicProjectile : Projectile<KinematicProjectile>
+public class KinematicProjectile : Projectile
 {
-    private Vector3 direction;
-    private float speed;
+    protected Vector3 Direction { get; set; }
+    protected float Speed { get; set; }
 
 
     public void Launch(Vector2 direction, float speed)
     {
-        this.direction = direction.normalized;
-        this.speed = speed;
+        Direction = direction.normalized;
+        Speed = speed;
     }
 
     protected override void Update()
     {
-        transform.position += Time.deltaTime * speed * direction;
+        transform.position += Time.deltaTime * Speed * Direction;
         base.Update();
     }
 }

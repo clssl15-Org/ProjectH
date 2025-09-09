@@ -2,18 +2,16 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Projectile<TProjectile> : MonoBehaviour where TProjectile : Projectile<TProjectile>
+public class Projectile : MonoBehaviour
 {
     private PlatformManager platformManager;
     private string[] collisionTags;
 
 
-    public virtual TProjectile Initialize(PlatformManager platformManager, params string[] collisionTags) 
+    public virtual void Initialize(PlatformManager platformManager, params string[] collisionTags) 
     {
         this.platformManager = platformManager;
         this.collisionTags = collisionTags;
-
-        return (TProjectile)this;
     }
 
     protected virtual void Update()
@@ -21,12 +19,12 @@ public class Projectile<TProjectile> : MonoBehaviour where TProjectile : Project
         if (!platformManager)
         {
             Debug.LogError($"PlatformManager가 없기 때문에 Projectile({name})을 사용할 수 없습니다.");
-            Destroy();
+            Destroy(gameObject);
             return;
         }
 
         if (!platformManager.Bound.Contains(transform.position))
-            Destroy();
+            Destroy(gameObject);
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
@@ -35,10 +33,10 @@ public class Projectile<TProjectile> : MonoBehaviour where TProjectile : Project
             return;
 
         if (collisionTags.Any(t => collision.gameObject.CompareTag(t)))
-            Destroy();
+            OnArrived();
     }
 
-    public virtual void Destroy()
+    public virtual void OnArrived()
     {
         Destroy(gameObject);
     }

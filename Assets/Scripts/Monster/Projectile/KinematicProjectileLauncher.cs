@@ -33,6 +33,30 @@ public class KinematicProjectileLauncher : MonoBehaviour
     }
 
 
+    public void LaunchWithRotation(float speed, Vector2 direction)
+    {
+        for (int i = 0; i < projectiles.Length; i++)
+        {
+            var projectile = Instantiate(projectiles[i]);
+
+            projectile.transform.position = owner.transform.position + projectilesPositions[i];
+            projectile.SetActive(true);
+
+            var component = projectile.GetComponent<KinematicProjectile>();
+            component.Initialize(platformManager, collisionTags);
+            component.transform.rotation = RotationFromDirection(direction);
+
+            component.Launch(component.transform.right, speed);
+        }
+
+        Quaternion RotationFromDirection(Vector2 dir)
+        {
+            if (dir.sqrMagnitude <= Mathf.Epsilon) return Quaternion.identity;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            return Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+    }
+
     public void LaunchWithLocalRotation(float speed, Vector2 directionUnit)
     {
         for (int i = 0; i < projectiles.Length; i++)
@@ -42,9 +66,9 @@ public class KinematicProjectileLauncher : MonoBehaviour
             projectile.transform.position = owner.transform.position + projectilesPositions[i];
             projectile.SetActive(true);
 
-            projectile.GetComponent<KinematicProjectile>()
-                .Initialize(platformManager, collisionTags)
-                .Launch(projectile.transform.rotation * directionUnit, speed);
+            var component = projectile.GetComponent<KinematicProjectile>();
+            component.Initialize(platformManager, collisionTags);
+            component.Launch(projectile.transform.rotation * directionUnit, speed);
         }
     }
 
@@ -57,9 +81,9 @@ public class KinematicProjectileLauncher : MonoBehaviour
             projectile.transform.position = owner.transform.position + projectilesPositions[i];
             projectile.SetActive(true);
 
-            projectile.GetComponent<KinematicProjectile>()
-                .Initialize(platformManager, collisionTags)
-                .Launch(directions[i], speed);
+            var component = projectile.GetComponent<KinematicProjectile>();
+            component.Initialize(platformManager, collisionTags);
+            component.Launch(directions[i], speed);
         }
     }
 }

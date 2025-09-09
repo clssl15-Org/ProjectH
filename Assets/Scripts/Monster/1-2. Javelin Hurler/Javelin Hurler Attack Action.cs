@@ -6,7 +6,7 @@ public partial class JavelinHurler
     private class JavelinHurlerAttackAction : MonsteActionState
     {
         // Internal
-        private float playtime;
+        private float totalPlaytime;
         private bool thrown;
 
 
@@ -21,7 +21,7 @@ public partial class JavelinHurler
             if (!MainAnimationRemainingTime.HasValue)
                 throw new System.InvalidOperationException("창던지개의 Attack 행동은 종료 시간이 존재해야 합니다.");
 
-            playtime = MainAnimationRemainingTime.Value;
+            totalPlaytime = MainAnimationRemainingTime.Value;
         }
         
         protected override void OnUpdate()
@@ -29,7 +29,7 @@ public partial class JavelinHurler
             base.OnUpdate();
             var owner = (JavelinHurler)Owner;
 
-            if (!thrown && (playtime - MainAnimationRemainingTime) >= owner.throwTime)
+            if (!thrown && (totalPlaytime - MainAnimationRemainingTime) >= owner.throwTime)
             {
                 thrown = true;
 
@@ -45,7 +45,6 @@ public partial class JavelinHurler
                 javelin.Throw(
                     Quaternion.Euler(0, 0, flipped ? owner.throwAngle : 180 - owner.throwAngle),
                     owner.throwPower);
-
             }
         }
     }

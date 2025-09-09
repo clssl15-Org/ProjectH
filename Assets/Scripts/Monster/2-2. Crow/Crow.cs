@@ -1,4 +1,3 @@
-using System;
 using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
@@ -7,18 +6,19 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
+[RequireComponent(typeof(KinematicProjectileLauncher))]
 public partial class Crow : Monster
 {
     // Property
     [Header("Crow")]
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField, Min(0)] private float projectileScale = 1;
     [SerializeField] private Vector2 projectilePosition;
-    [SerializeField, Min(0)] private float launchTime = 1;
+    [SerializeField, Min(0)] private float launchTime;
     [SerializeField, Min(0)] private float projectileSpeed;
 
 
     // Internal
+    private KinematicProjectileLauncher projectileLauncher;
+
     private class CrowBrain : MonsterBrain
     {
         public CrowBrain(Monster owner) : base(owner)
@@ -49,24 +49,19 @@ public partial class Crow : Monster
             AddChild(new MonsteActionState(MonsterAction.Idle));
             AddChild(new MonsteActionState("Fly"));
             AddChild(new MonsteActionState(MonsterAction.Hit));
-            AddChild(new MonsteActionState(MonsterAction.Attack));
+            AddChild(new CrowAttackAction());
             AddChild(new MonsteActionState(MonsterAction.Dead));
         }
     }
 
 
     // Content
-    protected override void Awake()
-    {
-        //if (!projectilePrefab)
-        //    throw new InvalidOperationException($"까마귀는 {nameof(projectilePrefab)}을(를) 가지고 있어야 합니다.");
-
-        base.Awake();
-    }
-
     protected override void Start()
     {
         base.Start();
+
+        projectileLauncher = GetComponent<KinematicProjectileLauncher>();
+        projectileLauncher.Initialize(this, platformManager, "Player", "Ground");
 
         ActionController = new CrowActionController(this);
         ActionController.Enter();
