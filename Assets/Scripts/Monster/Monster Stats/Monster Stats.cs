@@ -6,6 +6,8 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "Monster Stats", menuName = "Project H/Monster Stats")]
 public class MonsterStats : ScriptableObject
 {
+    // TODO: 몬스터별 능력치 상속으로 구현
+
     [Header("기본 능력치")]
     [SerializeField, Min(1)] private int maxHP = 10;
     [SerializeField, Min(0)] private int attackPower = 1;

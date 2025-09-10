@@ -7,9 +7,11 @@ namespace Tests.Seungmin
 {
     public class Test : MonoBehaviour
     {
+        public Tilemap tilemap;
+
         public void DoTest()
         {
-
+            print(tilemap.cellBounds);
         }
 
         
@@ -20,7 +22,6 @@ namespace Tests.Seungmin
             {
                 base.OnInspectorGUI();
                 var target = (Test)base.target;
-
 
                 if (GUILayout.Button("Test"))
                 {

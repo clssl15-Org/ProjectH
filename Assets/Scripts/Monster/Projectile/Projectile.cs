@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
     private PlatformManager platformManager;
@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
     {
         if (!platformManager)
         {
-            Debug.LogError($"PlatformManager가 없기 때문에 Projectile({name})을 사용할 수 없습니다.");
+            Debug.LogError($"[Projectile] PlatformManager가 없기 때문에 투사체 {name}을(를) 사용할 수 없습니다.");
             Destroy(gameObject);
             return;
         }

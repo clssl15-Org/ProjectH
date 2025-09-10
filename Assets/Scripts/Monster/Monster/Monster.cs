@@ -40,11 +40,11 @@ public abstract partial class Monster : MonoBehaviour
 
     // Property 
     [Header("Stats Overrride")]
-    [SerializeField] private bool overrideStats = true;
+    [SerializeField] private bool overrideStats = false;
     [SerializeField] protected MonsterStats[] stats;
 
     [Header("Stats")]
-    [SerializeField, Min(0)] private int _maxHP = 5;
+    [SerializeField, Min(0)] private int _maxHP = 3;
     [SerializeField, Min(0)] private int _attackPower = 1;
     [SerializeField, Min(0)] private float _moveSpeed = 1;
     [SerializeField, Min(0)] private float _attackCooltime = 0.5f;

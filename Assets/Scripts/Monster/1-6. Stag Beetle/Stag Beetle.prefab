@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3229680908470006862}
   - component: {fileID: 1516652006512922421}
   - component: {fileID: 6734163311676315518}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Stag Beetle
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -236,6 +236,7 @@ MonoBehaviour:
   _moveSpeed: 1
   _attackCooltime: 0.5
   _invincibleDuration: 0.5
+  randomizeStartDirection: 1
   defaultIsRight: 0
   platformManager: {fileID: 0}
   sceneAssetsLibrary: {fileID: 0}
@@ -260,6 +261,7 @@ GameObject:
   - component: {fileID: 7976626872206270940}
   - component: {fileID: 427056187782391969}
   - component: {fileID: 7525704738564496901}
+  - component: {fileID: 8834881567983858828}
   m_Layer: 8
   m_Name: Spike 2
   m_TagString: Untagged
@@ -391,6 +393,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &8834881567983858828
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693476020304026822}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2254681915396335180
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,6 +432,7 @@ GameObject:
   - component: {fileID: 3999617673293512687}
   - component: {fileID: 6954064342606319861}
   - component: {fileID: 6487192269572737431}
+  - component: {fileID: 1644352735149407358}
   m_Layer: 8
   m_Name: Spike 5
   m_TagString: Untagged
@@ -534,6 +564,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &1644352735149407358
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2254681915396335180}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2828274307593912325
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,6 +721,7 @@ GameObject:
   - component: {fileID: 7102982324247106554}
   - component: {fileID: 2265459709689151779}
   - component: {fileID: 1512001637561584476}
+  - component: {fileID: 1115510781779793043}
   m_Layer: 8
   m_Name: Spike 6
   m_TagString: Untagged
@@ -795,6 +853,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &1115510781779793043
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5692925576452944267}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &5705562823806547955
 GameObject:
   m_ObjectHideFlags: 0
@@ -807,6 +892,7 @@ GameObject:
   - component: {fileID: 150298218194833072}
   - component: {fileID: 7161012120531201811}
   - component: {fileID: 1262205721055119588}
+  - component: {fileID: 8618666549283189268}
   m_Layer: 8
   m_Name: Spike 4
   m_TagString: Untagged
@@ -938,6 +1024,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &8618666549283189268
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5705562823806547955}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &6212596444557265419
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,6 +1063,7 @@ GameObject:
   - component: {fileID: 3259627349475910387}
   - component: {fileID: 600723081105267103}
   - component: {fileID: 7562584507053926941}
+  - component: {fileID: 231337274477924101}
   m_Layer: 8
   m_Name: Spike 3
   m_TagString: Untagged
@@ -1081,6 +1195,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &231337274477924101
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6212596444557265419}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7004008056328289682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,6 +1293,7 @@ GameObject:
   - component: {fileID: 3565852822148572129}
   - component: {fileID: 3573314040579109255}
   - component: {fileID: 6425899172769391599}
+  - component: {fileID: 3775027209450493168}
   m_Layer: 8
   m_Name: Spike 7
   m_TagString: Untagged
@@ -1283,6 +1425,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &3775027209450493168
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7061045827379492993}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &9107778797450523507
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,6 +1464,7 @@ GameObject:
   - component: {fileID: 5149435788485976039}
   - component: {fileID: 2079712539017126459}
   - component: {fileID: 7443573031191479762}
+  - component: {fileID: 5036722268766077830}
   m_Layer: 8
   m_Name: Spike 1
   m_TagString: Untagged
@@ -1426,3 +1596,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &5036722268766077830
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9107778797450523507}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

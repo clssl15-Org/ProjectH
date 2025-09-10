@@ -11,7 +11,6 @@ public partial class Crow : Monster
 {
     // Property
     [Header("Crow")]
-    [SerializeField] private Vector2 projectilePosition;
     [SerializeField, Min(0)] private float launchTime;
     [SerializeField, Min(0)] private float projectileSpeed;
 
@@ -44,12 +43,15 @@ public partial class Crow : Monster
 
     private class CrowActionController : MonsterActionController
     {
-        public CrowActionController(Monster monster) : base(monster)
+        public CrowActionController(Crow monster) : base(monster)
         {
             AddChild(new MonsteActionState(MonsterAction.Idle));
             AddChild(new MonsteActionState("Fly"));
             AddChild(new MonsteActionState(MonsterAction.Hit));
-            AddChild(new CrowAttackAction());
+            AddChild(new AttackWithKinematicProjectile(
+                monster.projectileLauncher,
+                () => new(monster.launchTime, monster.projectileSpeed),
+                () => monster.DetectedPlayer.transform.position - monster.transform.position));
             AddChild(new MonsteActionState(MonsterAction.Dead));
         }
     }
