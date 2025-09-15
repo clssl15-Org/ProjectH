@@ -45,7 +45,7 @@ public class Attack2 : CharacterState
 
     private void TakeDamageToEnemy()
     {
-        Vector2 attackPoint = CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Forward);
+        Vector2 attackPoint = CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * CharacterActor.Forward.x, attackPointOffset.y);
         float attackAngle = CharacterActor.Rotation.eulerAngles.z;
         Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
             attackPoint,
@@ -169,7 +169,7 @@ public class Attack2 : CharacterState
         Gizmos.color = Color.green;
 
         Gizmos.matrix = Matrix4x4.TRS(
-            CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Forward),
+            CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * CharacterActor.Forward.x, attackPointOffset.y),
             CharacterActor.Rotation,
             Vector3.one
         );
