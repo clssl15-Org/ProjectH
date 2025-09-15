@@ -10002,6 +10002,7 @@ GameObject:
   - component: {fileID: 1973654084}
   - component: {fileID: 1973654085}
   - component: {fileID: 1973654086}
+  - component: {fileID: 1973654087}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -10074,9 +10075,6 @@ MonoBehaviour:
   attackRange: 1.5
   attackAngle: 90
   attackPointOffset: {x: 0, y: 0}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1973654081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10116,9 +10114,6 @@ MonoBehaviour:
   damageMultiplier: 1
   attackSize: {x: 2, y: 2}
   attackPointOffset: {x: 0, y: 0}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1973654083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10137,9 +10132,6 @@ MonoBehaviour:
   damageMultiplier: 1
   attackSize: {x: 2, y: 1}
   attackPointOffset: {x: 1, y: 0}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1973654084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10235,9 +10227,6 @@ MonoBehaviour:
   attackPointOffset: {x: 1, y: 0}
   invincibleStartTime: 0
   invincibleEndTime: 1
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &1973654086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10256,6 +10245,26 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6317047554263875150, guid: a811840dc3e307e4781ac75002df6ec7, type: 3}
   isSizeSynced: 1
   offset: {x: 0, y: 0}
+--- !u!114 &1973654087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973654076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da871b8370680f54a902a5778400b732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: fb08260279ac47f4687be8dac416b54e, type: 2}
+  skillDuration: 0.77
+  damageApplyTime: 0.4
+  directionMode: 1
+  attackSize: {x: 1, y: 1}
+  attackPointOffset: {x: 0, y: 0}
+  invincibleStartTime: 0
+  invincibleEndTime: 1
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0

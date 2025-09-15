@@ -8,6 +8,7 @@ public struct CharacterActions
     public BoolAction dash;
     public BoolAction eskill;
     public BoolAction rangedAttack;
+    public BoolAction ultimate;
 
     public Vector2Action movement;
 
@@ -18,6 +19,7 @@ public struct CharacterActions
         dash.Reset();
         eskill.Reset();
         rangedAttack.Reset();
+        ultimate.Reset();
 
         movement.Reset();
     }
@@ -39,6 +41,9 @@ public struct CharacterActions
         rangedAttack = new BoolAction();
         rangedAttack.Initialize();
 
+        ultimate = new BoolAction();
+        ultimate.Initialize();
+
         movement = new Vector2Action();
         movement.Reset();
     }
@@ -53,6 +58,7 @@ public struct CharacterActions
         dash.value = inputHandler.GetBool("Dash");
         eskill.value = inputHandler.GetBool("Eskill");
         rangedAttack.value = inputHandler.GetBool("RangedAttack");
+        ultimate.value = inputHandler.GetBool("Ultimate");
 
         movement.value = inputHandler.GetVector2("Movement");
     }
@@ -64,5 +70,6 @@ public struct CharacterActions
         dash.Update(dt);
         eskill.Update(dt);
         rangedAttack.Update(dt);
+        ultimate.Update(dt);
     }
 }

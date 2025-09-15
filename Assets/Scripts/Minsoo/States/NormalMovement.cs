@@ -37,6 +37,11 @@ public class NormalMovement : CharacterState
         {
             CharacterStateController.EnqueueTransition<RangedAttack>();
         }
+
+        if (CharacterActions.ultimate.Started)
+        {
+            CharacterStateController.EnqueueTransition<Ultimate>();
+        }
     }
     public override void UpdateBehaviour(float dt)
     {
