@@ -38,6 +38,10 @@ public class Attack1 : CharacterState
     [SerializeField]
     private Vector2 attackPointOffset = new Vector2(0f, 0f);
 
+    [Header("Attack Properties")]
+    private Vector2 attackPoint = Vector2.zero;
+    private float scaledSize = 1.0f;
+
     private float attackCursor = 0f;
     private float attackElapsedCursor = 0f;
 
@@ -49,10 +53,9 @@ public class Attack1 : CharacterState
 
     private void TakeDamageToEnemy()
     {
-        Vector2 attackPoint = CharacterActor.ColliderCenter + attackPointOffset;
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
             attackPoint,
-            attackRange
+            scaledSize
         );
         
         foreach(Collider2D hitCollider in hitColliders)
@@ -69,6 +72,11 @@ public class Attack1 : CharacterState
                 // damageableObject.TakeDamage();
             }
         }
+    }
+    private void UpdateAttackParameters()
+    {
+        attackPoint = CharacterActor.ColliderCenter + (attackPointOffset * CharacterActor.Size);
+        scaledSize = attackRange * CharacterActor.Size;
     }
 
     public override void CheckExitTransition()
@@ -100,6 +108,7 @@ public class Attack1 : CharacterState
         //CharacterActor.Velocity = new Vector2(0, 0);
 
         ResetAttack();
+        UpdateAttackParameters();
     }
 
     public override void UpdateBehaviour(float dt)
@@ -175,9 +184,6 @@ public class Attack1 : CharacterState
 
         if (CharacterActor == null) return;
 
-        Vector2 attackPoint = CharacterActor.ColliderCenter + attackPointOffset;
-        float attackRange = this.attackRange;
-
         // Draw attack center point
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(attackPoint, 0.1f);
@@ -201,8 +207,8 @@ public class Attack1 : CharacterState
             Vector2 dirA = RotateVector(forward, angleA);
             Vector2 dirB = RotateVector(forward, angleB);
 
-            Vector2 pointA = attackPoint + dirA * attackRange;
-            Vector2 pointB = attackPoint + dirB * attackRange;
+            Vector2 pointA = attackPoint + dirA * scaledSize;
+            Vector2 pointB = attackPoint + dirB * scaledSize;
 
             Gizmos.DrawLine(attackPoint, pointA);
             Gizmos.DrawLine(pointA, pointB);

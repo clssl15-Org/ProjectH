@@ -27,6 +27,11 @@ public class CharacterActor : MonoBehaviour
     {
         get => _collider;
     }
+    public float Size
+    {
+        get => ( transform.localScale.x + transform.localScale.y ) * 0.5f;
+        set => transform.localScale = new Vector3(value, value, value);
+    }
     public Vector2 ColliderCenter
     {
         get => (Vector2)transform.position + Vector2.Scale(_collider.offset, transform.localScale);

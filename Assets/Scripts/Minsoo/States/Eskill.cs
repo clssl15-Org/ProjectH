@@ -39,21 +39,26 @@ public class Eskill : CharacterState
     [SerializeField]
     private float invincibleEndTime = 1f;
 
+    [Header("Attack Properties")]
+    private Vector2 attackPoint = Vector2.zero;
+    private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
+    private float attackAngle = 0f;
+
     private float skillCursor = 0;
 
-    private Vector2 moveDirection = Vector2.right;
+    private Vector2 direction = Vector2.right;
 
     private bool isDone = true;
 
     private float currentSpeedMultiplier = 1f;
 
+    private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
+
     private void TakeDamageToEnemy()
     {
-        Vector2 attackPoint = CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * CharacterActor.Forward.x, attackPointOffset.y);
-        float attackAngle = CharacterActor.Rotation.eulerAngles.z;
         Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
             attackPoint,
-            attackSize,
+            scaledSize,
             attackAngle
         );
 
@@ -62,9 +67,19 @@ public class Eskill : CharacterState
             if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                 return;
 
+            if (hitEnemies.Contains(damageableObject))
+                return;
+
+            hitEnemies.Add(damageableObject);
             Debug.Log("Enemy hitted! (Eskill)");
             // damageableObject.TakeDamage();
         }
+    }
+    private void UpdateAttackParameters()
+    {
+        attackPoint = CharacterActor.ColliderCenter + (new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y)) * CharacterActor.Size;
+        scaledSize = attackSize * CharacterActor.Size;
+        attackAngle = CharacterActor.Rotation.eulerAngles.z;
     }
     public override void CheckExitTransition()
     {
@@ -77,7 +92,7 @@ public class Eskill : CharacterState
     {
         if (directionMode == DirectionMode.FacingDirection)
         {
-            moveDirection = CharacterActor.Forward;
+            direction = CharacterActor.Forward;
         }
 
         if (directionMode == DirectionMode.InputDirection)
@@ -86,24 +101,25 @@ public class Eskill : CharacterState
 
             if (inputDirection != Vector2.zero)
             {
-                moveDirection = inputDirection;
+                direction = inputDirection;
                 CharacterActor.ChangeFlipX(inputDirection);
             }
             else
             {
-                moveDirection = CharacterActor.Forward;
+                direction = CharacterActor.Forward;
             }
         }
         
         ResetSkill();
-
-        TakeDamageToEnemy();
     }
     public override void UpdateBehaviour(float dt)
     {
-        Vector2 dashVelocity = initalVelocity * currentSpeedMultiplier * movementCurve.Evaluate(skillCursor) * moveDirection;
+        Vector2 dashVelocity = initalVelocity * currentSpeedMultiplier * movementCurve.Evaluate(skillCursor) * direction;
 
         CharacterActor.Velocity = dashVelocity;
+
+        UpdateAttackParameters();
+        TakeDamageToEnemy();
 
         float animationDt = dt / duration;
         skillCursor += animationDt;
@@ -141,12 +157,12 @@ public class Eskill : CharacterState
         Gizmos.color = Color.green;
 
         Gizmos.matrix = Matrix4x4.TRS(
-            CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * CharacterActor.Forward.x, attackPointOffset.y),
+            attackPoint,
             CharacterActor.Rotation,
             Vector3.one
         );
 
-        Gizmos.DrawWireCube(Vector3.zero, attackSize);
+        Gizmos.DrawWireCube(Vector3.zero, scaledSize);
 
         Gizmos.matrix = Matrix4x4.identity;
     }

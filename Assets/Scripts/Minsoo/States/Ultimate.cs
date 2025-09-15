@@ -28,6 +28,11 @@ public class Ultimate : CharacterState
     [SerializeField]
     private float invincibleEndTime = 1f;
 
+    [Header("Attack Properties")]
+    private Vector2 attackPoint = Vector2.zero;
+    private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
+    private float attackAngle = 0f;
+
     [Header("Gizmos")]
     private bool isHitBoxEnabled = false;
 
@@ -40,14 +45,12 @@ public class Ultimate : CharacterState
 
     private void TakeDamageToEnemy()
     {
-        Vector2 attackPoint = CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y);
-        float attackAngle = CharacterActor.Rotation.eulerAngles.z;
         Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
             attackPoint,
-            attackSize,
+            scaledSize,
             attackAngle
         );
-
+        
         foreach (Collider2D hitCollider in hitColliders)
         {
             if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
@@ -56,6 +59,12 @@ public class Ultimate : CharacterState
             Debug.Log("Enemy hitted! (Ultimate)");
             // damageableObject.TakeDamage();
         }
+    }
+    private void UpdateAttackParameters()
+    {
+        attackPoint = CharacterActor.ColliderCenter + (new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y)) * CharacterActor.Size;
+        scaledSize = attackSize * CharacterActor.Size;
+        attackAngle = CharacterActor.Rotation.eulerAngles.z;
     }
     public override void CheckExitTransition()
     {
@@ -88,6 +97,7 @@ public class Ultimate : CharacterState
         }
 
         ResetSkill();
+        UpdateAttackParameters();
     }
 
     public override void UpdateBehaviour(float dt)
@@ -140,12 +150,12 @@ public class Ultimate : CharacterState
         Gizmos.color = Color.green;
 
         Gizmos.matrix = Matrix4x4.TRS(
-            CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y),
+            attackPoint,
             CharacterActor.Rotation,
             Vector3.one
         );
 
-        Gizmos.DrawWireCube(Vector3.zero, attackSize);
+        Gizmos.DrawWireCube(Vector3.zero, scaledSize);
 
         Gizmos.matrix = Matrix4x4.identity;
     }
