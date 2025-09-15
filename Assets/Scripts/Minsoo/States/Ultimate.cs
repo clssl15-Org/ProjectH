@@ -28,6 +28,9 @@ public class Ultimate : CharacterState
     [SerializeField]
     private float invincibleEndTime = 1f;
 
+    [Header("Gizmos")]
+    private bool isHitBoxEnabled = false;
+
     private float skillCursor = 0f;
 
     private Vector2 direction = Vector2.right;
@@ -37,7 +40,22 @@ public class Ultimate : CharacterState
 
     private void TakeDamageToEnemy()
     {
+        Vector2 attackPoint = CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y);
+        float attackAngle = CharacterActor.Rotation.eulerAngles.z;
+        Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
+            attackPoint,
+            attackSize,
+            attackAngle
+        );
 
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
+                return;
+
+            Debug.Log("Enemy hitted! (Ultimate)");
+            // damageableObject.TakeDamage();
+        }
     }
     public override void CheckExitTransition()
     {
@@ -89,12 +107,14 @@ public class Ultimate : CharacterState
         if (skillCursor >= damageApplyTime && !isDamageApplied)
         {
             isDamageApplied = true;
+            isHitBoxEnabled = true;
             TakeDamageToEnemy();
         }
 
         if (skillCursor >= 1)
         {
             isDone = true;
+            isHitBoxEnabled = false;
             skillCursor = 0f;
         }
     }
@@ -102,6 +122,32 @@ public class Ultimate : CharacterState
     private void ResetSkill()
     {
         isDone = false;
+        isDamageApplied = false;
+        isHitBoxEnabled = false;
         skillCursor = 0;
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (isDone) return;
+
+        if (!isHitBoxEnabled) return;
+
+        if (CharacterActor == null) return;
+
+        // Set Gizmo color for attack area visualization
+        Gizmos.color = Color.green;
+
+        Gizmos.matrix = Matrix4x4.TRS(
+            CharacterActor.ColliderCenter + new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y),
+            CharacterActor.Rotation,
+            Vector3.one
+        );
+
+        Gizmos.DrawWireCube(Vector3.zero, attackSize);
+
+        Gizmos.matrix = Matrix4x4.identity;
+    }
+#endif
 }

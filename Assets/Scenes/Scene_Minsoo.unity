@@ -10259,10 +10259,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: fb08260279ac47f4687be8dac416b54e, type: 2}
   skillDuration: 0.77
-  damageApplyTime: 0.4
+  damageApplyTime: 0.5
   directionMode: 1
-  attackSize: {x: 1, y: 1}
-  attackPointOffset: {x: 0, y: 0}
+  attackSize: {x: 3, y: 3}
+  attackPointOffset: {x: 1, y: 0.5}
   invincibleStartTime: 0
   invincibleEndTime: 1
 --- !u!1 &2004967629
