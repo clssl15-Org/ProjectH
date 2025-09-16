@@ -28,10 +28,8 @@ namespace UniEngine.StateMachines.BT
                     return true;
                 }
 
-                public bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child, out bool reevaluate)
+                public bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child)
                 {
-                    reevaluate = false;
-
                     if (child.IsRunning)
                     {
                         parent.GetPolicy(child, out var self, out _);

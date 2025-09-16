@@ -8,5 +8,10 @@ namespace MonsterBT
         {
             LoopType = LoopType.UntilSuccess;
         }
+
+        //protected override void OnTick()
+        //{
+        //    object _ = null;
+        //}
     }
 }

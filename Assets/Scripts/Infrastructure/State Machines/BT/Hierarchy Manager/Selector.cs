@@ -28,7 +28,7 @@ namespace UniEngine.StateMachines.BT
                     return true;
                 }
 
-                public bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child, out bool reevaluate)
+                public bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child)
                 {
                     if (child.IsRunning)
                     {
@@ -37,10 +37,7 @@ namespace UniEngine.StateMachines.BT
                         if (self && !child.CheckCondition())
                             child.Halt(DetailedNodeStatus.AbortedSelf);
                         else
-                        {
-                            reevaluate = false;
                             return false;
-                        }
                     }
 
                     hirearchy.CurrentChild = null;
@@ -48,12 +45,10 @@ namespace UniEngine.StateMachines.BT
                     if (child.DetailedNodeStatus.IsSuccess())
                     {
                         hirearchy.OwnerNode.Halt(DetailedNodeStatus.ChildCompleted);
-                        reevaluate = false;
+                        return false;
                     }
-                    else
-                        reevaluate = false;
 
-                    return false;
+                    return true;
                 }
 
                 public bool ReadLower(IBTNodeInternal<TOwner, TBlackboard> child)
