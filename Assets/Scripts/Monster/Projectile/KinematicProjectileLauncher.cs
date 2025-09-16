@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class KinematicProjectileLauncher : MonoBehaviour
 {
+    // Front
+    public enum LaunchType
+    {
+        Rotation,
+        LocalRotation,
+        Directions
+    }
+
     // Property
     [SerializeField] private GameObject[] projectiles;
 

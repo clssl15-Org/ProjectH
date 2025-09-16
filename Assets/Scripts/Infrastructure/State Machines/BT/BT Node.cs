@@ -61,7 +61,7 @@ namespace UniEngine.StateMachines.BT
         private TBlackboard _blackboard;
         private bool isDisposing = false;
 
-
+        
         // Content
         public BTNode(TOwner owner = null, string name = null)
         {

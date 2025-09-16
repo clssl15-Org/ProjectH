@@ -46,7 +46,7 @@ public partial class MadWood : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(true))
+                        .AddChild(new Adjusting(true))
                         .AddChild(new MadWoodAttack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()

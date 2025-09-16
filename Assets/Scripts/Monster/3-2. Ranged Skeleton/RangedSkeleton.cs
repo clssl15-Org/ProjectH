@@ -26,7 +26,7 @@ public class RangedSkeleton : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
+                        .AddChild(new Adjusting(monsterAction: MonsterAction.Walk)
                         {
                             TargetAttackRange = 3f
                         })
@@ -49,7 +49,8 @@ public class RangedSkeleton : Monster
             AddChild(new AttackWithKinematicProjectile(
                 monster.projectileLauncher,
                 () => new(monster.launchTime, monster.projectileSpeed),
-                () => monster.Direction.ToVector2(),
+                KinematicProjectileLauncher.LaunchType.Directions,
+                () => new[] { monster.Direction.ToVector2() },
                 "throw"));
             AddChild(new HitFlash());
             AddChild(new MonsteActionState(MonsterAction.Dead));

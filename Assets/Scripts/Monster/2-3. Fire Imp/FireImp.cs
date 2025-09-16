@@ -2,6 +2,8 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
+using System;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,7 +13,6 @@ public class FireImp : Monster
     // Property
     [Header("Fire Imp")]
     [SerializeField] private GameObject firePrefab;
-    [SerializeField] private Vector2 firePosition;
     [SerializeField] private float fireStartTime;
 
 
@@ -24,7 +25,7 @@ public class FireImp : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(true))
+                        .AddChild(new Adjusting(true))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
@@ -41,7 +42,7 @@ public class FireImp : Monster
         {
             AddChild(new MonsteActionState(MonsterAction.Idle));
             AddChild(new MonsteActionState(MonsterAction.Run));
-            AddChild(new AttackWithWeapon(monster.firePrefab, monster.firePosition, monster.fireStartTime));
+            AddChild(new AttackWithWeapon(monster.firePrefab, monster.fireStartTime));
             AddChild(new MonsteActionState(MonsterAction.Hit));
             AddChild(new MonsteActionState(MonsterAction.Dead));
         }
@@ -49,6 +50,16 @@ public class FireImp : Monster
 
 
     // Content
+    protected override void Awake()
+    {
+        if (!firePrefab)
+            throw new InvalidOperationException(
+                $"{GetType().Name}은(는) {nameof(firePrefab)}을(를) 가지고 있어야 합니다.");
+
+        firePrefab.SetActive(false);
+        base.Awake();
+    }
+
     protected override void Start()
     {
         base.Start();

@@ -42,7 +42,7 @@ public partial class StagBeetle : Monster
                 .AddChild(new Hit("HitGround"))
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(monsterAction: MonsterAction.Walk))
+                        .AddChild(new Adjusting(monsterAction: MonsterAction.Walk))
                         .AddChild(new StagBeetleAttack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()

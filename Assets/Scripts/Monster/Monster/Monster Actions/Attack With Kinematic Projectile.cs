@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static KinematicProjectileLauncher;
 
 namespace MonsterActions
 {
@@ -21,7 +22,8 @@ namespace MonsterActions
         // Internal
         private KinematicProjectileLauncher launcher;
         private Func<LaunchInfo> getLaunchInfo;
-        private Func<Vector2> getDirection;
+        private LaunchType launchType;
+        private Func<Vector2[]> getDirections;
 
         private LaunchInfo currentLaunchInfo;
         private float currentPlaytime;
@@ -32,20 +34,23 @@ namespace MonsterActions
         public AttackWithKinematicProjectile(
             KinematicProjectileLauncher launcher,
             Func<LaunchInfo> getLaunchInfo,
-            Func<Vector2> getDirection,
+            LaunchType launchType,
+            Func<Vector2[]> getDirections,
             MonsterAction baseAction = MonsterAction.Attack)
-            : this(launcher, getLaunchInfo, getDirection, baseAction.ToString()) { }
+            : this(launcher, getLaunchInfo, launchType, getDirections, baseAction.ToString()) { }
 
         public AttackWithKinematicProjectile(
             KinematicProjectileLauncher launcher,
             Func<LaunchInfo> getLaunchInfo,
-            Func<Vector2> getDirection,
+            LaunchType launchType,
+            Func<Vector2[]> getDirections,
             string baseAction)
             : base(baseAction)
         {
             this.launcher = launcher;
             this.getLaunchInfo = getLaunchInfo;
-            this.getDirection = getDirection;
+            this.launchType = launchType;
+            this.getDirections = getDirections;
         }
 
         protected override void OnEnter(params object[] inputs)
@@ -64,7 +69,25 @@ namespace MonsterActions
             if (!launched && currentPlaytime >= currentLaunchInfo.launchTime)
             {
                 launched = true;
-                launcher.LaunchWithRotation(currentLaunchInfo.speed, getDirection());
+
+                switch (launchType)
+                {
+                    case LaunchType.Rotation:
+                        launcher.LaunchWithRotation(currentLaunchInfo.speed, getDirections()[0]);
+                        break;
+
+                    case LaunchType.LocalRotation:
+                        launcher.LaunchWithLocalRotation(currentLaunchInfo.speed, getDirections()[0]);
+                        break;
+
+                    case LaunchType.Directions:
+                        launcher.LaunchWithDirections(currentLaunchInfo.speed, getDirections());
+                        break;
+
+                    default:
+                        throw new InvalidOperationException(Owner.Ctx(
+                            $"({GetType().Name}) 알 수 없는 {nameof(launchType)} '{launchType}'에 대한 발사를 수행할 수 없습니다."));
+                }
             }
         }
     }

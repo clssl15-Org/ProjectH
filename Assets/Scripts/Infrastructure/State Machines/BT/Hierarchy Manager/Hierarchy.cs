@@ -52,7 +52,7 @@ namespace UniEngine.StateMachines.BT
             private interface IHierarchyComponent
             {
                 bool ReadUpper(IBTNodeInternal<TOwner, TBlackboard> child);
-                bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child);
+                bool ReadCurrent(IBTNodeInternal<TOwner, TBlackboard> child, out bool reevaluate);
                 bool ReadLower(IBTNodeInternal<TOwner, TBlackboard> child);
             }
 
@@ -102,8 +102,13 @@ namespace UniEngine.StateMachines.BT
                         }
                         else if (i == currentIndex)
                         {
-                            if (!hierarchyComponent.ReadCurrent(child))
-                                break;
+                            if (!hierarchyComponent.ReadCurrent(child, out var reevaluate))
+                            {
+                                if (reevaluate)
+                                    hierarchyComponent.ReadLower(child);
+                                else
+                                    break;
+                            }
                         }
                         else
                         {

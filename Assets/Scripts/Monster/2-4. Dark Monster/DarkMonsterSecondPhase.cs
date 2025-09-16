@@ -17,7 +17,7 @@ public class DarkMonsterSecondPhase : Monster
                 //.AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(true, MonsterAction.Idle)
+                        .AddChild(new Adjusting(true, MonsterAction.Idle)
                         {
                             UpperRangeTolerance = 4f
                         })

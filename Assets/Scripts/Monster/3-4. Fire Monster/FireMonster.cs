@@ -7,29 +7,27 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public partial class Dokkaebi : Monster
+public partial class FireMonster : Monster
 {
     // Property
-    [Header("Dokkaebi")]
-    [SerializeField] private GameObject laserPrefab;
-    [SerializeField] private float laserAppearTime;
+    [Header("Fire Monster")]
+    [SerializeField] private GameObject firePrefab;
+    [SerializeField] private float fireAppearTime;
 
 
     // Internal
-    private class DokkaebiBrain : MonsterBrain
+    private class FireMonsterBrain : MonsterBrain
     {
-        public DokkaebiBrain(Monster owner) : base(owner)
+        public FireMonsterBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged()
-                            .AddChild(new Adjusting(monsterAction: MonsterAction.Idle)
-                            {
-                                TargetAttackRange = 3f,
-                            })
-                            .AddChild(new DeadEnd()))
+                        .AddChild(new Adjusting(true, monsterAction: MonsterAction.Idle)
+                        {
+                            UpperRangeTolerance = 2f
+                        })
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
@@ -40,15 +38,12 @@ public partial class Dokkaebi : Monster
         }
     }
 
-    private class DokkaebiActionController : MonsterActionController
+    private class FireMonsterActionController : MonsterActionController
     {
-        public DokkaebiActionController(Dokkaebi monster) : base(monster)
+        public FireMonsterActionController(FireMonster monster) : base(monster)
         {
             AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
-            AddChild(new AttackWithWeapon(monster.laserPrefab, monster.laserAppearTime));
+            AddChild(new AttackWithWeapon(monster.firePrefab, monster.fireAppearTime));
             AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
             AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
         }
@@ -58,11 +53,11 @@ public partial class Dokkaebi : Monster
     // Content
     protected override void Awake()
     {
-        if (!laserPrefab)
+        if (!firePrefab)
             throw new InvalidOperationException(
-                $"{GetType().Name}은(는) {nameof(laserPrefab)}을(를) 가지고 있어야 합니다.");
+                $"{GetType().Name}은(는) {nameof(firePrefab)}을(를) 가지고 있어야 합니다.");
 
-        laserPrefab.SetActive(false);
+        firePrefab.SetActive(false);
         base.Awake();
     }
 
@@ -70,10 +65,10 @@ public partial class Dokkaebi : Monster
     {
         base.Start();
 
-        ActionController = new DokkaebiActionController(this);
+        ActionController = new FireMonsterActionController(this);
         ActionController.Enter();
 
-        Brain = new DokkaebiBrain(this);
+        Brain = new FireMonsterBrain(this);
     }
 
     protected override void OnDamaged(int damage)
@@ -87,7 +82,7 @@ public partial class Dokkaebi : Monster
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(Dokkaebi)), CanEditMultipleObjects]
-    private class DokkaebiEditor : MonsterEditor { }
+    [CustomEditor(typeof(FireMonster)), CanEditMultipleObjects]
+    private class FireMonsterEditor : MonsterEditor { }
 #endif
 }

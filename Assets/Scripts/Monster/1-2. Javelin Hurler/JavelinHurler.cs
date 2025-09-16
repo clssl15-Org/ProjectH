@@ -28,7 +28,7 @@ public partial class JavelinHurler : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(monsterAction: MonsterAction.Walk)
+                        .AddChild(new Adjusting(monsterAction: MonsterAction.Walk)
                         {
                             TargetAttackRange = 5f,
                             UpperRangeTolerance = 0.1f,

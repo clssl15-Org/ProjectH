@@ -6,7 +6,6 @@ namespace MonsterActions
     {
         // Internal
         private GameObject weaponPrefab;
-        private Vector3 weaponPosition;
         private float startTime;
 
         private GameObject weapon;
@@ -15,11 +14,10 @@ namespace MonsterActions
 
 
         // Content
-        public AttackWithWeapon(GameObject weaponPrefab, Vector2 weaponPosition, float startTime = 0, MonsterAction monsterAction = MonsterAction.Attack) : this(weaponPrefab, weaponPosition, startTime, monsterAction.ToString()) { }
-        public AttackWithWeapon(GameObject weaponPrefab, Vector2 weaponPosition, float startTime, string monsterAction) : base(monsterAction)
+        public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, MonsterAction monsterAction = MonsterAction.Attack) : this(weaponPrefab, startTime, monsterAction.ToString()) { }
+        public AttackWithWeapon(GameObject weaponPrefab, float startTime, string monsterAction) : base(monsterAction)
         {
             this.weaponPrefab = weaponPrefab;
-            this.weaponPosition = weaponPosition;
             this.startTime = startTime;
         }
 
@@ -52,8 +50,9 @@ namespace MonsterActions
             weapon = Object.Instantiate(weaponPrefab);
             weapon.transform.SetParent(Owner.transform);
 
-            weapon.transform.localPosition = weaponPosition;
-            weapon.transform.localScale = Vector3.one;
+            weapon.transform.SetPositionAndRotation(weaponPrefab.transform.position, weapon.transform.rotation);
+            weapon.transform.localScale = weaponPrefab.transform.localScale;
+
             weapon.SetActive(true);
         }
 

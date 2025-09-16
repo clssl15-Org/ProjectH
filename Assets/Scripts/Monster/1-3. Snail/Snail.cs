@@ -16,7 +16,7 @@ public class Snail : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(true, MonsterAction.Walk))
+                        .AddChild(new Adjusting(true, MonsterAction.Walk))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
