@@ -16,6 +16,9 @@ public class ProjectileMovement : MonoBehaviour
 
     private void Update()
     {
+        // TODO: 여기 임시로 고침 - dt
+        float dt = Time.deltaTime;
+
         float animationDt = dt / duration;
         projectileCursor += animationDt;
 
