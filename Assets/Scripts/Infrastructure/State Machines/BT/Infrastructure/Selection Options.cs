@@ -3,12 +3,11 @@ using System;
 namespace UniEngine.StateMachines.BT
 {
     [Flags]
-    public enum AbortPolicies
+    public enum SelectionOptions
     {
         None = 0,
         Self = 1 << 0,
         LowerPriority = 1 << 1,
-
-        Both = LowerPriority | Self
+        StopOnFailure = 1 << 2,
     }
 }

@@ -6,12 +6,7 @@ namespace MonsterBT
     {
         public Engaged()
         {
-            LoopType = LoopType.UntilSuccess;
-        }
 
-        //protected override void OnTick()
-        //{
-        //    object _ = null;
-        //}
+        }
     }
 }

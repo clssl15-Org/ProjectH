@@ -20,8 +20,6 @@ namespace UniEngine.StateMachines.BT
         /// </remarks>
         Conditional,
 
-        UntilSuccess,
-
         /// <summary>
         /// Always restart evaluation from the first child,
         /// regardless of the children's results.

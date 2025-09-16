@@ -16,7 +16,7 @@ namespace MonsterBT
         public Hit(string monsterAction)
         {
             IsSelectable = false;
-            AbortPolicy = AbortPolicies.LowerPriority;
+            SelectionOption = SelectionOptions.LowerPriority;
             HierarchyMode = HierarchyMode.Selector;
 
             this.monsterAction = monsterAction;

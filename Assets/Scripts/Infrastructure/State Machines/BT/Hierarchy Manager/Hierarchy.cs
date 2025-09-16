@@ -133,8 +133,8 @@ namespace UniEngine.StateMachines.BT
                 lowerPriority = ((int)node.AbortPolicy).HasAll((int)AbortPolicies.LowerPriority);
                 self = ((int)node.AbortPolicy).HasAll((int)AbortPolicies.Self);
 #else
-                lowerPriority = node.AbortPolicy.HasFlag(AbortPolicies.LowerPriority);
-                self = node.AbortPolicy.HasFlag(AbortPolicies.Self);
+                lowerPriority = node.SelectionOption.HasFlag(SelectionOptions.LowerPriority);
+                self = node.SelectionOption.HasFlag(SelectionOptions.Self);
 #endif
             }
 

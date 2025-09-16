@@ -16,7 +16,7 @@ namespace UniEngine.StateMachines.BT
         public TOwner Owner => ParentNode?.Owner ?? _owner;
         public TBlackboard Blackboard => ParentNode?.Blackboard ?? (_blackboard ??= CreateBlackboard());
 
-        public AbortPolicies AbortPolicy { get; set; } = AbortPolicies.None;
+        public SelectionOptions SelectionOption { get; set; } = SelectionOptions.None;
 
         /// <summary>
         /// Gets or sets how the children are evaluated:

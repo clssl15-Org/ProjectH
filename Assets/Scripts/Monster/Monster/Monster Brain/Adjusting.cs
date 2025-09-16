@@ -18,13 +18,14 @@ namespace MonsterBT
         public Adjusting(bool contact = false, MonsterAction monsterAction = MonsterAction.Run) : this(contact, monsterAction.ToString()) { }
         public Adjusting(bool contact, string monsterAction)
         {
+            SelectionOption = SelectionOptions.StopOnFailure;
+            this.monsterAction = monsterAction;
+
             if (contact)
             {
                 TargetAttackRange = 0f;
                 UpperRangeTolerance = 1f;
             }
-
-            this.monsterAction = monsterAction;
         }
 
         protected override void OnOpen(object[] _)

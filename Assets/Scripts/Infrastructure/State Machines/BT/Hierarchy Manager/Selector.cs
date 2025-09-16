@@ -48,7 +48,10 @@ namespace UniEngine.StateMachines.BT
                         return false;
                     }
 
-                    return true;
+                    if (child.SelectionOption.HasFlag(SelectionOptions.StopOnFailure))
+                        return true;
+
+                    return false;
                 }
 
                 public bool ReadLower(IBTNodeInternal<TOwner, TBlackboard> child)

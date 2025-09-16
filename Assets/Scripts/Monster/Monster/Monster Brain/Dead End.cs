@@ -19,6 +19,7 @@ namespace MonsterBT
         public DeadEnd(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
         public DeadEnd(string monsterAction)
         {
+            SelectionOption = SelectionOptions.StopOnFailure;
             this.monsterAction = monsterAction;
         }
 

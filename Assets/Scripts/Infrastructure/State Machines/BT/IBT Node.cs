@@ -7,7 +7,7 @@ namespace UniEngine.StateMachines.BT
     {
         string Name { get; }
 
-        AbortPolicies AbortPolicy { get; }
+        SelectionOptions SelectionOption { get; }
         LoopType LoopType { get; set; }
 
         bool IsRunning { get; }
