@@ -29,7 +29,7 @@ public partial class StagBeetle : Monster
             if (!Owner.TryDoAction(mode.ToString(), out var reason, result => Complete(result)))
             {
                 Debug.LogWarning(Owner.Ctx(
-                    $"{mode.ToString()} 행동에 실패하였기 때문에 Attack 상태로 진입할 수 없습니다.\n{reason}"));
+                    $"{mode.ToString()} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }

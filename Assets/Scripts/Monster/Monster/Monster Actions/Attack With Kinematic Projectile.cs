@@ -4,7 +4,7 @@ using static KinematicProjectileLauncher;
 
 namespace MonsterActions
 {
-    internal class AttackWithKinematicProjectile : MonsteActionState
+    internal class AttackWithKinematicProjectile : MonsterActionState
     {
         // Front
         public struct LaunchInfo

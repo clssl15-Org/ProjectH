@@ -25,10 +25,7 @@ public partial class Dokkaebi : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged()
-                            .AddChild(new Adjusting(monsterAction: MonsterAction.Idle)
-                            {
-                                TargetAttackRange = 3f,
-                            })
+                            .AddChild(new Adjusting(MonsterAction.Idle))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
@@ -44,13 +41,13 @@ public partial class Dokkaebi : Monster
     {
         public DokkaebiActionController(Dokkaebi monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Alert.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Walk.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Run.ToString()));
+            AddChild(new MonsterActionState(MonsterAction.Idle.ToString()));
+            AddChild(new MonsterActionState(MonsterAction.Alert.ToString()));
+            AddChild(new MonsterActionState(MonsterAction.Walk.ToString()));
+            AddChild(new MonsterActionState(MonsterAction.Run.ToString()));
             AddChild(new AttackWithWeapon(monster.laserPrefab, monster.laserAppearTime));
-            AddChild(new MonsteActionState(MonsterAction.Hit.ToString()));
-            AddChild(new MonsteActionState(MonsterAction.Dead.ToString()));
+            AddChild(new MonsterActionState(MonsterAction.Hit.ToString()));
+            AddChild(new MonsterActionState(MonsterAction.Dead.ToString()));
         }
     }
 

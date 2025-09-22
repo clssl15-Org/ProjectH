@@ -3,7 +3,7 @@ using MonsterActions;
 
 public partial class JavelinHurler
 {
-    private class JavelinHurlerAttackAction : MonsteActionState
+    private class JavelinHurlerAttackAction : MonsterActionState
     {
         // Internal
         private float totalPlaytime;

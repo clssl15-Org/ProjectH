@@ -26,12 +26,9 @@ public partial class Crow : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Adjusting(false, "Fly")
-                        {
-                            TargetAttackRange = 3f,
-                            UpperRangeTolerance = 0.1f,
-                            LowerRangeTolerance = 0.3f
-                        })
+                        .AddChild(new Engaged()
+                            .AddChild(new Adjusting("Fly"))
+                            .AddChild(new DeadEnd()))
                         .AddChild(new Attack()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
@@ -45,15 +42,15 @@ public partial class Crow : Monster
     {
         public CrowActionController(Crow monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle));
-            AddChild(new MonsteActionState("Fly"));
-            AddChild(new MonsteActionState(MonsterAction.Hit));
+            AddChild(new MonsterActionState(MonsterAction.Idle));
+            AddChild(new MonsterActionState("Fly"));
+            AddChild(new MonsterActionState(MonsterAction.Hit));
             AddChild(new AttackWithKinematicProjectile(
                 monster.projectileLauncher,
                 () => new(monster.launchTime, monster.projectileSpeed),
                 KinematicProjectileLauncher.LaunchType.Rotation,
                 () => new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position }));
-            AddChild(new MonsteActionState(MonsterAction.Dead));
+            AddChild(new MonsterActionState(MonsterAction.Dead));
         }
     }
 

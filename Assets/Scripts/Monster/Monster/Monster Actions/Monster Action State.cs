@@ -4,10 +4,27 @@ using UnityEngine;
 
 namespace MonsterActions
 {
-    internal class MonsteActionState : Work<MonsterActionController>
+    internal class MonsterActionState : Work
     {
         // Front
-        public Monster Owner => Parent.Owner;
+        public Monster Owner
+        {
+            get
+            {
+                var current = Parent;
+
+                do
+                {
+                    if (current is MonsterActionController currentParent)
+                        return currentParent.Owner;
+
+                    current = current.Parent;
+                } while (current != null);
+
+                throw new InvalidOperationException(
+                    Ctx($"{nameof(Owner)}을(를) 가지고 있는 Parent를 찾지 못하였습니다."));
+            }
+        }
         public string AnimationName { get; protected set; } = MonsterAction.None.ToString();
 
         public float? Playtime { get; private set; } = null;
@@ -20,12 +37,21 @@ namespace MonsterActions
         protected Action PlayActionEnter, PlayActionExit;
         protected Action AfterActionEnter, AfterActionExit;
 
+        // Internal
+        private string trigger;
+        private float? start;
+        private float? end;
+
 
         // Content
-        public MonsteActionState(MonsterAction monsterAction) : this(monsterAction.ToString()) { }
-        public MonsteActionState(string monsterAction) : base(monsterAction)
+        public MonsterActionState(MonsterAction monsterAction, string trigger = null, float? start = null, float? end = null) : this(monsterAction.ToString(), trigger, start, end) { }
+        public MonsterActionState(string monsterAction, string trigger = null, float? start = null, float? end = null) : base(monsterAction)
         {
             AnimationName = monsterAction;
+            this.trigger = trigger;
+            this.start = start;
+            this.end = end;
+
             Initialize();
         }
         protected virtual void Initialize()
@@ -36,36 +62,59 @@ namespace MonsterActions
 
         protected override void OnEnter(params object[] inputs)
         {
-            if (HasAnimation())
+            SetInputs(inputs);
+
+            if (!HasAnimation())
             {
-                if (!Owner.Animator.TryFindClip(AnimationName, out var clip))
-                    throw new ArgumentException(Owner.Ctx($"애니메이터가 '{AnimationName}'을(를) 가지고 있지 않습니다."));
-
-                SetInputs(inputs);
-
-                MainAnimationRemainingTime = Playtime.HasValue
-                    ? (Playtime.Value >= 0 ? Playtime.Value : null)
-                    : (!clip.isLooping ? clip.length : null);
-
-                isCompleted = false;
-                Owner.Animator.Play(clip.name);
+                Owner.ActionController.StopAnimator();
+                MainAnimationRemainingTime = (Playtime.HasValue && Playtime.Value >= 0) ? Playtime : null;
+                return;
             }
+
+            if (!Owner.Animator.TryFindClip(AnimationName, out var clip))
+            {
+                throw new ArgumentException(Owner.Ctx($"애니메이터에 '{AnimationName}' 클립이 없습니다."));
+            }
+
+            isCompleted = false;
+
+
+            float? duration = null;
+
+            if (Playtime.HasValue && Playtime.Value >= 0)
+                duration = Playtime.Value;
+            else if (!clip.isLooping)
+                duration = clip.length;
+
+            if (duration.HasValue)
+            {
+                duration -= start.GetValueOrDefault(0f);
+                duration -= end.GetValueOrDefault(0f);
+            }
+
+            MainAnimationRemainingTime = duration;
+
+
+            if (string.IsNullOrEmpty(trigger))
+                Owner.Animator.Play(clip.name, -1, start.GetValueOrDefault(0f) / clip.length);
             else
             {
-                Parent.StopAnimator();
+                if (start.HasValue || end.HasValue)
+                    throw new InvalidOperationException(
+                        Owner.Ctx($"현재 Trigger 방식 재생에서는 {nameof(start)}/{nameof(end)} 속성을 사용할 수 없습니다."));
 
-                SetInputs(inputs);
-                MainAnimationRemainingTime = (Playtime >= 0) ? Playtime : null;
+                Owner.Animator.SetTrigger(trigger);
             }
         }
         protected void SetInputs(params object[] inputs)
         {
             if (inputs == null)
-                throw new ArgumentNullException(nameof(inputs), Ctx("Inputs는 null일 수 없습니다."));
+                throw new ArgumentNullException(nameof(inputs), Ctx(
+                    $"{nameof(inputs)}은(는) null일 수 없습니다."));
 
             if (inputs.Length < 3)
                 throw new ArgumentException(Ctx(
-                    $"Inputs는 3개 이상의 인자를 가져야 합니다. 현재 Inputs는 '{inputs.Length}'개의 인자를 가지고 있습니다."), nameof(inputs));
+                    $"{nameof(inputs)}은(는) 3 이상의 길이를 가져야 하지만 길이 '{inputs.Length}'을 가진 인자가 입력되었습니다."), nameof(inputs));
 
             Callback = (Action<ActionResult>)inputs[0];
             Playtime = (float?)inputs[1];
@@ -94,7 +143,7 @@ namespace MonsterActions
 
 
         // Substates
-        internal class PlayAction : Work<MonsteActionState>
+        internal class PlayAction : Work<MonsterActionState>
         {
             protected override void OnEnter(params object[] _)
             {
@@ -124,7 +173,7 @@ namespace MonsterActions
             }
         }
 
-        internal class AfterAction : Work<MonsteActionState>
+        internal class AfterAction : Work<MonsterActionState>
         {
             private float remainingTime;
 

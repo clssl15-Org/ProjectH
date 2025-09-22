@@ -39,6 +39,12 @@ namespace MonsterBT
 
         protected override void OnTick()
         {
+            if (Blackboard.Moved)
+            {
+                Complete(false);
+                return;
+            }
+
             remainingTime -= Time.deltaTime;
 
             if (remainingTime <= 0f)

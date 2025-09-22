@@ -19,6 +19,13 @@ namespace UniEngine.StateMachines.FSM
             }
         }
 
+        public Work Parent => hierarchy.Parent;
+
+        public event Action Entered;
+        public event Action<object[]> EnteredWith;
+        public event Action Updated;
+        public event Action Exited;
+
         public bool IsDisposed { get; private set; } = false;
         private bool isDisposing = false;
 
@@ -29,11 +36,6 @@ namespace UniEngine.StateMachines.FSM
 #endif
 
         // Internal
-        protected Action onEnter;
-        protected Action<object[]> onEnterWith;
-        protected Action onUpdate;
-        protected Action onExit;
-
         private bool _active = false;
         private object currentToken = null;
 
@@ -65,12 +67,12 @@ namespace UniEngine.StateMachines.FSM
             OnEnter(args);
             if (!CheckToken(token)) return;
 
-            foreach (Action action in onEnter?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in Entered?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
             }
-            foreach (Action<object[]> action in onEnterWith?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action<object[]> action in EnteredWith?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke(args);
                 if (!CheckToken(token)) return;
@@ -100,7 +102,7 @@ namespace UniEngine.StateMachines.FSM
             OnUpdate();
             if (!CheckToken(token)) return;
 
-            foreach (Action action in onUpdate?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in Updated?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -125,7 +127,7 @@ namespace UniEngine.StateMachines.FSM
             hierarchy.Exit();
             if (!CheckToken(token)) return;
 
-            foreach (Action action in onExit?.GetInvocationList() ?? Array.Empty<Delegate>())
+            foreach (Action action in Exited?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 action.Invoke();
                 if (!CheckToken(token)) return;
@@ -199,26 +201,27 @@ namespace UniEngine.StateMachines.FSM
             hierarchy.ClearNext();
         }
 
-        public Work SetStartAction(Action action)
+        public Work SetEnteredAction(Action action)
         {
-            onEnter = action;
+            Entered += action;
             return this;
         }
-        public Work SetStartAction(Action<object[]> action)
+        public Work SetEnteredAction(Action<object[]> action)
         {
-            onEnterWith = action;
+            EnteredWith += action;
             return this;
         }
-        public Work SetUpdateAction(Action action)
+        public Work AddUpdatedAction(Action action)
         {
-            onUpdate = action;
+            Updated += action;
             return this;
         }
-        public Work SetStopAction(Action action)
+        public Work SetExitedAction(Action action)
         {
-            onExit = action;
+            Exited += action;
             return this;
         }
+
         public Work SetActive(bool active)
         {
             Active = active;
@@ -250,7 +253,20 @@ namespace UniEngine.StateMachines.FSM
         public T AddChild<T>(T work, bool primary = false) where T : Work
         {
             ThrowIfDisposed();
-            return hierarchy.AddChild(work, primary);
+            return hierarchy.AddChild(work.Name, work, primary);
+        }
+
+        /// <summary>
+        /// Attaches an existing <see cref="Work"/> object to this instance,
+        /// and returns the attached child.
+        /// </summary>
+        /// <param name="work">The existing child instance to attach.</param>
+        /// <param name="primary">Indicates whether this child is considered primary.</param>
+        /// <returns>The attached child of type <typeparamref name="T"/>.</returns>
+        public T AddChild<T>(string name, T work, bool primary = false) where T : Work
+        {
+            ThrowIfDisposed();
+            return hierarchy.AddChild(name, work, primary);
         }
 
         /// <summary>
@@ -263,7 +279,7 @@ namespace UniEngine.StateMachines.FSM
         public Work Append<T>(T work, bool primary = false) where T : Work
         {
             ThrowIfDisposed();
-            hierarchy.AddChild(work, primary);
+            hierarchy.AddChild(work.Name, work, primary);
             return this;
         }
 

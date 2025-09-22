@@ -12,7 +12,7 @@ namespace UniEngine.StateMachines.FSM
             // Front
             public bool Active { get; private set; } = false;
 
-            public Work Parent // TODO: Parent 관리는 Work로
+            public Work Parent
             {
                 get => _parent;
                 private set
@@ -121,22 +121,22 @@ namespace UniEngine.StateMachines.FSM
 
 
             #region Child Management
-            public Work AddChild(string name, bool primary = false) => AddChild(new Work(name), primary);
-            public T AddChild<T>(T work, bool primary = false) where T : Work
+            public Work AddChild(string name, bool primary = false) => AddChild(name, new Work(name), primary);
+            public T AddChild<T>(string name, T work, bool primary = false) where T : Work
             {
                 ThrowIfActive();
 
-                if (children.ContainsKey(work.Name))
-                    throw new ArgumentException(Ctx($"A child named '{work.Name}' already exists."), nameof(work));
+                if (children.ContainsKey(name))
+                    throw new ArgumentException(Ctx($"A child with name '{name}' already exists."), nameof(work));
                 if (ownerWork == work)
                     throw new ArgumentException(Ctx("A work cannot be its own child."), nameof(work));
                 if (work.hierarchy.Parent != null)
-                    throw new InvalidOperationException(Ctx($"Child '{work.Name}' already has a parent ({work.hierarchy.Parent.Name})."));
+                    throw new InvalidOperationException(Ctx($"Child '{name}' already has a parent ({work.hierarchy.Parent.Name})."));
 
                 work.hierarchy.Parent = ownerWork;
-                children.Add(work.Name, work);
+                children.Add(name, work);
 
-                if (primary) SetPrimary(work.Name);
+                if (primary) SetPrimary(name);
                 return work;
             }
 

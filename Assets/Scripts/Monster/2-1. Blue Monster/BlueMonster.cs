@@ -18,7 +18,9 @@ public class BlueMonster : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Adjusting(true))
+                        .AddChild(new Engaged(Engaged.RangeType.Contact)
+                            .AddChild(new Adjusting())
+                            .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
@@ -33,11 +35,11 @@ public class BlueMonster : Monster
     {
         public BlueMonsterActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle));
-            AddChild(new MonsteActionState(MonsterAction.Run));
-            AddChild(new MonsteActionState(MonsterAction.Attack));
+            AddChild(new MonsterActionState(MonsterAction.Idle));
+            AddChild(new MonsterActionState(MonsterAction.Run));
+            AddChild(new MonsterActionState(MonsterAction.Attack));
             AddChild(new HitFlash());
-            AddChild(new MonsteActionState(MonsterAction.Dead));
+            AddChild(new MonsterActionState(MonsterAction.Dead));
         }
     }
 

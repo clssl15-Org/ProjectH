@@ -1,6 +1,6 @@
 namespace MonsterActions
 {
-    internal class HitFlash : MonsteActionState
+    internal class HitFlash : MonsterActionState
     {
         private float? mainAnimationLength;
         private ActionResult result;

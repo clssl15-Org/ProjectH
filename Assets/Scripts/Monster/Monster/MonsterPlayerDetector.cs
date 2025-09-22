@@ -80,7 +80,7 @@ public class MonsterPlayerDetector : MonoBehaviour
 
                 if (!parentTransform)
                     throw new InvalidOperationException(
-                        target.Ctx("몬스터가 유효하지 않은 상태이기 때문에 행동을 수행할 수 없습니다."));
+                        target.Ctx($"{nameof(MonsterPlayerDetectorEditor)}의 부모가 유효하지 않은 상태입니다."));
 
                 if (!parentTransform.TryGetComponent<Collider2D>(out var parentCollider))
                     throw new InvalidOperationException(

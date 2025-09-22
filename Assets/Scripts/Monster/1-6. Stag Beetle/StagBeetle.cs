@@ -22,8 +22,6 @@ public partial class StagBeetle : Monster
     [SerializeField, Min(0)] private float staytimeBeforeContinue;
     [SerializeField, Min(0)] private float waitingTime;
 
-
-    // Internal
     public enum AttackMode
     {
         Any,
@@ -32,6 +30,8 @@ public partial class StagBeetle : Monster
         Roar
     }
 
+
+    // Internal
     private KinematicProjectileLauncher spikeLauncher;
 
     private class StagBeetleBrain : MonsterBrain
@@ -42,7 +42,9 @@ public partial class StagBeetle : Monster
                 .AddChild(new Hit("HitGround"))
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Adjusting(monsterAction: MonsterAction.Walk))
+                        .AddChild(new Engaged()
+                            .AddChild(new Adjusting(MonsterAction.Walk))
+                            .AddChild(new DeadEnd()))
                         .AddChild(new StagBeetleAttack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
@@ -63,10 +65,10 @@ public partial class StagBeetle : Monster
             bool restarted = false;
 
 
-            AddChild(new MonsteActionState(MonsterAction.Idle));
-            AddChild(new MonsteActionState(MonsterAction.Alert));
-            AddChild(new MonsteActionState(MonsterAction.Walk));
-            AddChild(new MonsteActionState(MonsterAction.Run));
+            AddChild(new MonsterActionState(MonsterAction.Idle));
+            AddChild(new MonsterActionState(MonsterAction.Alert));
+            AddChild(new MonsterActionState(MonsterAction.Walk));
+            AddChild(new MonsterActionState(MonsterAction.Run));
             AddChild(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 beforePreAction: () => rollRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
@@ -113,8 +115,8 @@ public partial class StagBeetle : Monster
             AddChild(new ThreePhasedAction(AttackMode.Roar.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 whileMainAction: (playtime, length) => playtime > length));
-            AddChild(new MonsteActionState("HitGround"));
-            AddChild(new MonsteActionState(MonsterAction.Dead));
+            AddChild(new MonsterActionState("HitGround"));
+            AddChild(new MonsterActionState(MonsterAction.Dead));
         }
     }
 

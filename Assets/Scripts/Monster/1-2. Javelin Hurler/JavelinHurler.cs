@@ -28,12 +28,9 @@ public partial class JavelinHurler : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Adjusting(monsterAction: MonsterAction.Walk)
-                        {
-                            TargetAttackRange = 5f,
-                            UpperRangeTolerance = 0.1f,
-                            LowerRangeTolerance = 0.3f
-                        })
+                        .AddChild(new Engaged(range: 5f)
+                            .AddChild(new Adjusting(MonsterAction.Walk))
+                            .AddChild(new DeadEnd()))
                         .AddChild(new Attack()))
                         // 창던지개는 Cooldown을 가지지 않습니다.
                     .AddChild(new PlayerNotDetected()
@@ -48,13 +45,13 @@ public partial class JavelinHurler : Monster
     {
         public JavelinHurlerActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle));
-            AddChild(new MonsteActionState(MonsterAction.Alert));
-            AddChild(new MonsteActionState(MonsterAction.Walk));
-            AddChild(new MonsteActionState(MonsterAction.Run));
+            AddChild(new MonsterActionState(MonsterAction.Idle));
+            AddChild(new MonsterActionState(MonsterAction.Alert));
+            AddChild(new MonsterActionState(MonsterAction.Walk));
+            AddChild(new MonsterActionState(MonsterAction.Run));
             AddChild(new JavelinHurlerAttackAction());
-            AddChild(new MonsteActionState(MonsterAction.Hit));
-            AddChild(new MonsteActionState(MonsterAction.Dead));
+            AddChild(new MonsterActionState(MonsterAction.Hit));
+            AddChild(new MonsterActionState(MonsterAction.Dead));
         }
     }
 

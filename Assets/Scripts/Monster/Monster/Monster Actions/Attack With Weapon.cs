@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MonsterActions
 {
-    internal class AttackWithWeapon : MonsteActionState
+    internal class AttackWithWeapon : MonsterActionState
     {
         // Internal
         private GameObject weaponPrefab;

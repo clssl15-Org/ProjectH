@@ -26,10 +26,9 @@ public class RangedSkeleton : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Adjusting(monsterAction: MonsterAction.Walk)
-                        {
-                            TargetAttackRange = 3f
-                        })
+                        .AddChild(new Engaged()
+                            .AddChild(new Adjusting(MonsterAction.Walk))
+                            .AddChild(new DeadEnd()))
                         .AddChild(new Attack("throw"))
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
@@ -44,8 +43,8 @@ public class RangedSkeleton : Monster
     {
         public RangedkeletonActionController(RangedSkeleton monster) : base(monster)
         {
-            AddChild(new MonsteActionState(MonsterAction.Idle));
-            AddChild(new MonsteActionState(MonsterAction.Walk));
+            AddChild(new MonsterActionState(MonsterAction.Idle));
+            AddChild(new MonsterActionState(MonsterAction.Walk));
             AddChild(new AttackWithKinematicProjectile(
                 monster.projectileLauncher,
                 () => new(monster.launchTime, monster.projectileSpeed),
@@ -53,7 +52,7 @@ public class RangedSkeleton : Monster
                 () => new[] { monster.Direction.ToVector2() },
                 "throw"));
             AddChild(new HitFlash());
-            AddChild(new MonsteActionState(MonsterAction.Dead));
+            AddChild(new MonsterActionState(MonsterAction.Dead));
         }
     }
 

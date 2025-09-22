@@ -5,27 +5,16 @@ namespace MonsterBT
 {
     public class Adjusting : BTNode<Monster, MonsterBlackboard>
     {
-        // Front
-        public float TargetAttackRange { get; set; } = 3f;
-        public float UpperRangeTolerance { get; set; } = 0.1f;
-        public float LowerRangeTolerance { get; set; } = 0.3f;
-
         // Internal
         private readonly string monsterAction;
 
 
         // Content
-        public Adjusting(bool contact = false, MonsterAction monsterAction = MonsterAction.Run) : this(contact, monsterAction.ToString()) { }
-        public Adjusting(bool contact, string monsterAction)
+        public Adjusting(MonsterAction monsterAction = MonsterAction.Run) : this(monsterAction.ToString()) { }
+        public Adjusting(string monsterAction)
         {
             SelectionOption = SelectionOptions.StopOnFailure;
             this.monsterAction = monsterAction;
-
-            if (contact)
-            {
-                TargetAttackRange = 0f;
-                UpperRangeTolerance = 1f;
-            }
         }
 
         protected override void OnOpen(object[] _)
@@ -42,27 +31,8 @@ namespace MonsterBT
 
         protected override void OnTick()
         {
-            var posDelta = Owner.transform.position.x - Owner.DetectedPlayer.transform.position.x;
-            Owner.Direction = posDelta > 0 ? Direction.Left : Direction.Right;
-
-            var rangeDelta = Mathf.Abs(posDelta) - TargetAttackRange;
-
-            if (rangeDelta < -LowerRangeTolerance)
-            {
-                if (!Owner.TryMove(posDelta > 0 ? Direction.Right : Direction.Left))
-                    Complete(false);
-
-                return;
-            }
-            if (rangeDelta > UpperRangeTolerance)
-            {
-                if (!Owner.TryMove())
-                    Complete(false);
-
-                return;
-            }
-
-            Complete();
+            if (!Blackboard.Moved)
+                Complete(false);
         }
     }
 }
