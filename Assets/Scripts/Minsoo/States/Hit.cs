@@ -7,6 +7,9 @@ public class Hit : CharacterState
     [SerializeField]
     private float hitDuration = 0.5f;
 
+    [SerializeField]
+    private float knockbackPower = 10f;
+
     private float hitCursor = 0f;
     private bool isDone = true;
     public override void CheckExitTransition()
@@ -19,6 +22,14 @@ public class Hit : CharacterState
     public override void EnterBehaviour(float dt)
     {
         ResetHit();
+        TakeKnockback();
+    }
+    private void TakeKnockback()
+    {
+        Vector2 knockbackDirection = CharacterActor.Backward;
+        CharacterActor.Velocity = Vector2.zero;
+
+        CharacterActor.Rigidbody.AddForce(knockbackDirection * knockbackPower, ForceMode2D.Impulse);
     }
     public override void UpdateBehaviour(float dt)
     {

@@ -23,6 +23,10 @@ public class CharacterActor : MonoBehaviour
     CapsuleCollider2D _collider = null;
     public Animator Animator { get; private set; }
     public SpriteRenderer PlayerSpriteRenderer { get; private set; }
+    public Rigidbody2D Rigidbody
+    {
+        get => _rigidbody;
+    }
     public CapsuleCollider2D Collider
     {
         get => _collider;
@@ -68,6 +72,10 @@ public class CharacterActor : MonoBehaviour
     public Vector2 Forward
     {
         get => Rotation * Vector2.right * facingDirection;
+    }
+    public Vector2 Backward
+    {
+        get => Rotation * Vector2.left * facingDirection;
     }
 
     public bool IsGrounded { get; private set; }
