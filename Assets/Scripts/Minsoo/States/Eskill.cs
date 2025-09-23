@@ -126,11 +126,11 @@ public class Eskill : CharacterState
 
         if (skillCursor >= invincibleStartTime && skillCursor <= invincibleEndTime)
         {
-            // set invincible true
+            Player.Invincible = true;
         }
         else
         {
-            // set invincible false
+            Player.Invincible = false;
         }
 
         if (skillCursor >= 1)
@@ -139,7 +139,12 @@ public class Eskill : CharacterState
             skillCursor = 0f;
         }
     }
-    
+
+    public override void ExitBehaviour(float dt)
+    {
+        Player.Invincible = false;
+    }
+
     private void ResetSkill()
     {
         isDone = false;

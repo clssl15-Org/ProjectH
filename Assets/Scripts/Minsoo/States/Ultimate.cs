@@ -107,11 +107,11 @@ public class Ultimate : CharacterState
 
         if (skillCursor >= invincibleStartTime && skillCursor <= invincibleEndTime)
         {
-            // set invincible true
+            Player.Invincible = true;
         }
         else
         {
-            // set invincible false
+            Player.Invincible = false;
         }
 
         if (skillCursor >= damageApplyTime && !isDamageApplied)
@@ -127,6 +127,11 @@ public class Ultimate : CharacterState
             isHitBoxEnabled = false;
             skillCursor = 0f;
         }
+    }
+
+    public override void ExitBehaviour(float dt)
+    {
+        Player.Invincible = false;
     }
 
     private void ResetSkill()

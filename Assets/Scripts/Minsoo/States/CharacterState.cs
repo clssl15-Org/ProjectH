@@ -12,6 +12,7 @@ public abstract class CharacterState : MonoBehaviour
 
     public CharacterActions CharacterActions => CharacterBrain.CharacterActions;
     public CharacterStateController CharacterStateController { get; private set; }
+    public Player Player { get; private set; }
     protected virtual void Awake()
     {
         // find the CharacterBrain component in the root of the hierarchy.
@@ -19,6 +20,7 @@ public abstract class CharacterState : MonoBehaviour
         CharacterActor = this.transform.root.GetComponentInChildren<CharacterActor>();
         CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
         CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
+        Player = this.transform.root.GetComponentInChildren<Player>();
     }
 
     // This method runs once when the state has entered the state machine.

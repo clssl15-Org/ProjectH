@@ -78,11 +78,11 @@ public class Dash : CharacterState
 
         if (dashCursor >= invincibleStartTime && dashCursor <= invincibleEndTime)
         {
-            // set invincible true
+            Player.Invincible = true;
         }
         else
         {
-            // set invincible false
+            Player.Invincible = false;
         }
 
         if (dashCursor >= 1)
@@ -90,6 +90,11 @@ public class Dash : CharacterState
             isDone = true;
             dashCursor = 0f;
         }
+    }
+
+    public override void ExitBehaviour(float dt)
+    {
+        Player.Invincible = false;
     }
 
     public void ResetDash()

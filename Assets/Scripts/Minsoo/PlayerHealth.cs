@@ -21,6 +21,9 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (Player.Invincible)
+            return;
+
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
         Debug.Log("Player Health: " + currentHealth + "/" + MaxHealth);
