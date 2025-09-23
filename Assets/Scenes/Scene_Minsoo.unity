@@ -9763,6 +9763,9 @@ GameObject:
   - component: {fileID: 1828150557}
   - component: {fileID: 1828150556}
   - component: {fileID: 1828150555}
+  - component: {fileID: 1828150561}
+  - component: {fileID: 1828150560}
+  - component: {fileID: 1828150559}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -9868,6 +9871,45 @@ Transform:
   - {fileID: 116627191}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1828150559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828150554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f23f5f3c2b7df3240a112409f9644eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 1828150560}
+  damageAmount: 10
+--- !u!114 &1828150560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828150554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e72ea11c3785f5478951b00e4ea9e45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1828150561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828150554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 027efc0da2840cc4481466b3f6862580, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: 067b2a6e5c394bb46b587f772c37c729, type: 2}
 --- !u!1 &1942487419
 GameObject:
   m_ObjectHideFlags: 0
@@ -10003,6 +10045,7 @@ GameObject:
   - component: {fileID: 1973654085}
   - component: {fileID: 1973654086}
   - component: {fileID: 1973654087}
+  - component: {fileID: 1973654088}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -10265,6 +10308,20 @@ MonoBehaviour:
   attackPointOffset: {x: 0.8, y: 0.5}
   invincibleStartTime: 0
   invincibleEndTime: 1
+--- !u!114 &1973654088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973654076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d406a50d86fa04c9fd12278e6363e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: dd29d89d23ac32842b9a72d2ba713487, type: 2}
+  hitDuration: 0.4
 --- !u!1 &2004967629
 GameObject:
   m_ObjectHideFlags: 0
