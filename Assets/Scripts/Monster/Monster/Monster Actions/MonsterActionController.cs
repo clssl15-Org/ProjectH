@@ -10,13 +10,13 @@ namespace MonsterActions
         public Monster Owner { get; protected set; }
         public float DefaultCallbackToleranceTime { get; set; } = 0f;
 
-        private Sprite originalSprite;
+        private Sprite _originalSprite;
 
 
         public MonsterActionController(Monster monster)
         {
             Owner = monster;
-            originalSprite = Owner.SpriteRenderer.sprite;
+            _originalSprite = Owner.SpriteRenderer.sprite;
 
             StopAnimator();
         }
@@ -128,7 +128,7 @@ namespace MonsterActions
         internal void StopAnimator()
         {
             Owner.Animator.enabled = false;
-            Owner.SpriteRenderer.sprite = originalSprite;
+            Owner.SpriteRenderer.sprite = _originalSprite;
         }
     }
 }

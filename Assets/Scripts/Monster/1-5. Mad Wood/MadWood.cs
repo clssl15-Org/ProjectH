@@ -14,7 +14,7 @@ public partial class MadWood : Monster
     [SerializeField, Min(0)] private int _landAttackPower = 1;
 
     // Control
-    private bool UseLandAttackOverride => UseStatsOverride && stats?.Length >= 2 && stats[1];
+    private bool UseLandAttackOverride => UseStatsOverride && Stats?.Length >= 2 && Stats[1];
 
     public override int AttackPower
     {
@@ -23,7 +23,7 @@ public partial class MadWood : Monster
             if (previousAttackMode == AttackMode.DefaultAttack)
                 return base.AttackPower;
 
-            return !UseLandAttackOverride ? _landAttackPower : stats[1].AttackPower;
+            return !UseLandAttackOverride ? _landAttackPower : Stats[1].AttackPower;
         }
     }
 
@@ -89,13 +89,13 @@ public partial class MadWood : Monster
         Brain.Tick();
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

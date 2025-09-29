@@ -13,14 +13,14 @@ public partial class StagBeetle : Monster
     // Front
     [Header("Stag Beetle")]
     [SerializeField] private AttackMode _attackMode = AttackMode.Any;
-    [Space()]
-    [SerializeField, Min(0)] private float rollingTime = 3f;
-    [SerializeField, Min(0)] private float rollingSpeed = 1f;
-    [Space()]
-    [SerializeField, Min(0)] internal float spikeSpeed;
-    [SerializeField, Min(0)] private float launchTime;
-    [SerializeField, Min(0)] private float staytimeBeforeContinue;
-    [SerializeField, Min(0)] private float waitingTime;
+    [Space]
+    [SerializeField, Min(0)] private float _rollingTime = 3f;
+    [SerializeField, Min(0)] private float _rollingSpeed = 1f;
+    [Space]
+    [SerializeField, Min(0)] internal float SpikeSpeed;
+    [SerializeField, Min(0)] private float _launchTime;
+    [SerializeField, Min(0)] private float _staytimeBeforeContinue;
+    [SerializeField, Min(0)] private float _waitingTime;
 
     public enum AttackMode
     {
@@ -32,14 +32,14 @@ public partial class StagBeetle : Monster
 
 
     // Internal
-    private KinematicProjectileLauncher spikeLauncher;
+    private KinematicProjectileLauncher _spikeLauncher;
 
     private class StagBeetleBrain : MonsterBrain
     {
         public StagBeetleBrain(StagBeetle stagBeetle) : base(stagBeetle)
         {
             AddChild(new Alive()
-                .AddChild(new Hit("HitGround"))
+                .AddChild(new Hit("HitGround", doKnockback: false))
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged()
@@ -78,13 +78,13 @@ public partial class StagBeetle : Monster
                     if (stagBeetle.TryMove())
                         stagBeetle.Rigidbody.velocity = new Vector2
                         {
-                            x = (rollRight ? 1 : -1) * stagBeetle.rollingSpeed,
+                            x = (rollRight ? 1 : -1) * stagBeetle._rollingSpeed,
                             y = stagBeetle.Rigidbody.velocity.y,
                         };
                     else
                         stagBeetle.StopMoving();
 
-                    return playtime > stagBeetle.rollingTime;
+                    return playtime > stagBeetle._rollingTime;
                 },
                 afterMainAction: () => stagBeetle.Collider.excludeLayers = default));
             AddChild(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
@@ -96,21 +96,21 @@ public partial class StagBeetle : Monster
                 },
                 whileMainAction: (playtime, lentgh) =>
                 {
-                    if (!spikeLaunched && playtime >= stagBeetle.launchTime)
+                    if (!spikeLaunched && playtime >= stagBeetle._launchTime)
                     {
                         spikeLaunched = true;
 
-                        stagBeetle.spikeLauncher.LaunchWithLocalRotation(stagBeetle.spikeSpeed, Vector2.left);
+                        stagBeetle._spikeLauncher.LaunchWithLocalRotation(stagBeetle.SpikeSpeed, Vector2.left);
                         stagBeetle.Animator.speed = 0f;
                     }
 
-                    if (!restarted && playtime >= stagBeetle.launchTime + stagBeetle.staytimeBeforeContinue)
+                    if (!restarted && playtime >= stagBeetle._launchTime + stagBeetle._staytimeBeforeContinue)
                     {
                         restarted = true;
                         stagBeetle.Animator.speed = 1f;
                     }
 
-                    return playtime > lentgh + stagBeetle.waitingTime + stagBeetle.staytimeBeforeContinue;
+                    return playtime > lentgh + stagBeetle._waitingTime + stagBeetle._staytimeBeforeContinue;
                 }));
             AddChild(new ThreePhasedAction(AttackMode.Roar.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
@@ -126,12 +126,12 @@ public partial class StagBeetle : Monster
     {
         base.Awake();
 
-        spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
+        _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
-        if (!spikeLauncher) throw new InvalidOperationException(
-            Ctx("이 몬스터는 SpikeLauncher 컴포넌트를 가지고 있어야 합니다."));
+        if (!_spikeLauncher) throw new InvalidOperationException(
+            Ctx($"이 몬스터는 {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
-        spikeLauncher.Initialize(this, platformManager, "Ground");
+        _spikeLauncher.Initialize(this, PlatformManager, "Ground");
     }
 
     protected override void Start()
@@ -142,12 +142,13 @@ public partial class StagBeetle : Monster
         ActionController.Enter();
         
         Brain = new StagBeetleBrain(this);
+        StandaloneHitBrain.DoKnockback = false;
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         if (Brain.Blackboard.Committing)
-            StandaloneHitBrain.TryTakeDamage(damage);
+            StandaloneHitBrain.TryTakeDamage(damageInfo);
         else
         {
             StandaloneHitBrain.Stop();
@@ -155,7 +156,7 @@ public partial class StagBeetle : Monster
             {
                 new(true),
                 new(true),
-                new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+                new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
             });
         }
     }

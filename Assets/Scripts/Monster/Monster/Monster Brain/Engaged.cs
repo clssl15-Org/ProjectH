@@ -7,7 +7,7 @@ namespace MonsterBT
     {
         // Front
         public float TargetAttackRange { get; set; } = 3f;
-        public float UpperRangeTolerance { get; set; } = 0.1f;
+        public float UpperRangeTolerance { get; set; } = 0.3f;
         public float LowerRangeTolerance { get; set; } = 0.3f;
 
         public enum RangeType
@@ -47,7 +47,7 @@ namespace MonsterBT
         {
             if (range.HasValue && range.Value < 0)
                 throw new System.ArgumentOutOfRangeException(
-                    $"{nameof(range)}는 0 이상의 값을 가져야 하지만 {range.Value}이(가) 입력되었습니다.");
+                    $"{nameof(range)}는 0 이상의 값을 가져야 하지만 '{range.Value}'이(가) 입력되었습니다.");
 
             if (rangeType == RangeType.Contact)
             {

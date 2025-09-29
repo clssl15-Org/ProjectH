@@ -16,7 +16,7 @@ public class Dynastid : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(rangeType: Engaged.RangeType.Contact)
+                        .AddChild(new Engaged(Engaged.RangeType.Contact, 1)
                             .AddChild(new Adjusting())
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
@@ -55,13 +55,13 @@ public class Dynastid : Monster
         Brain = new DynastidBrain(this);
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

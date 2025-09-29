@@ -8,7 +8,7 @@ namespace MonsterActions
     {
         // Display
         [SerializeField, Header("Display"), TextArea(3, 15)]
-        private string stateDisplay = string.Empty;
+        private string _stateDisplay = string.Empty;
 
         // Internal
         private Monster monster;
@@ -36,7 +36,7 @@ namespace MonsterActions
             if (!monster)
             {
                 reason = new(ActionResult.ResultType.InvalidOperation,
-                    Ctx($"Monster 컴포넌트({monster?.name ?? "Null"})가 유효하지 않습니다."));
+                    Ctx($"{nameof(monster)} 컴포넌트({monster?.name ?? "Null"})가 유효하지 않습니다."));
 
                 return false;
             }
@@ -58,7 +58,7 @@ namespace MonsterActions
             mainAnimationRemainingTime = mainAnimationLength;
 
             originalMaterial = monster.SpriteRenderer.material;
-            monster.SpriteRenderer.material = monster.sceneAssetsLibrary.SolidColor;
+            monster.SpriteRenderer.material = monster.SceneAssetsLibrary.SolidColor;
             monster.SpriteRenderer.material.color = Color.white;
 
             isRunning = true;
@@ -95,7 +95,7 @@ namespace MonsterActions
 
             mainAnimationRemainingTime -= Time.deltaTime;
 
-            if (mainAnimationRemainingTime <= mainAnimationLength - monster.damageFlashDuration)
+            if (mainAnimationRemainingTime <= mainAnimationLength - monster.DamageFlashDuration)
                 RestoreMaterial();
 
             if (mainAnimationRemainingTime <= 0)
@@ -131,9 +131,9 @@ namespace MonsterActions
         private void UpdateDisplayConetnt()
         {
             if (monster == null)
-                stateDisplay = $"Invalid Monster ({monster?.name ?? "Null"})";
+                _stateDisplay = $"Invalid {nameof(monster)} ({monster?.name ?? "Null"})";
             else
-                stateDisplay = $"Running: {isRunning}\nSucceed: {succeeded}";
+                _stateDisplay = $"Running: {isRunning}\nSucceed: {succeeded}";
         }
 
         private string Ctx(string message)
@@ -143,7 +143,7 @@ namespace MonsterActions
             else
                 return _Ctx(message);
 
-            string _Ctx(string message) => $"StandaloneHitAction: {message}";
+            string _Ctx(string message) => $"{GetType().Name}: {message}";
         }
     }
 }

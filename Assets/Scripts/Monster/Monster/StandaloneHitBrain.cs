@@ -1,50 +1,50 @@
-using System;
 using UnityEngine;
 
 internal class StandaloneHitBrain
 {
+    public bool DoKnockback { get; set; }
     public bool IsDamaging { get; private set; } = false;
-    private readonly Monster Owner;
+
+    private readonly Monster _owner;
 
 
-    public StandaloneHitBrain(Monster owner)
+    public StandaloneHitBrain(Monster owner, bool doKnockback = true)
     {
-        Owner = owner;
+        _owner = owner;
+        DoKnockback = doKnockback;
     }
 
-    public bool TryTakeDamage(int damage)
+    public bool TryTakeDamage(DamageInfo damageInfo)
     {
         if (IsDamaging) return false;
-        if (!Owner.IsAlive) return false;
-        if (damage < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(damage),
-                $"Damage는 0 이상이어야 하지만 '{damage}'이(가) 입력되었습니다.");
-        }
+        if (!_owner.IsAlive) return false;
 
 
-        if (!Owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playtime: Owner.InvincibleDuration))
+        if (!_owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playtime: _owner.InvincibleDuration))
         {
             if (reason.Result != ActionResult.ResultType.AlreadyDoing)
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(_owner.Ctx(
                     $"Hit(Standalone) 행동에 실패하였기 때문에 Hit(Standalone) 상태로 진입할 수 없습니다.\n{reason}"));
             
             return false;
         }
 
-        Owner.HP -= damage;
-        IsDamaging = true;
+        _owner.HP -= damageInfo.Damage;
 
+        if (DoKnockback && damageInfo.HasKnockback)
+            _owner.Knockback(damageInfo.Direction, damageInfo.KnockbackForce);
+
+
+        IsDamaging = true;
         return true;
     }
 
-    public void Stop() => Owner.StandaloneHitAction.StopAction();
+    public void Stop() => _owner.StandaloneHitAction.StopAction();
 
     private void Complete()
     {
         IsDamaging = false;
     }
 
-    private string CtxHit(string message) => Owner.Ctx($"StandaloneHit: {message}");
+    private string CtxHit(string message) => _owner.Ctx($"StandaloneHit: {message}");
 }

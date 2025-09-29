@@ -11,12 +11,12 @@ public partial class Crow : Monster
 {
     // Property
     [Header("Crow")]
-    [SerializeField, Min(0)] private float launchTime;
-    [SerializeField, Min(0)] private float projectileSpeed;
+    [SerializeField, Min(0)] private float _launchTime;
+    [SerializeField, Min(0)] private float _projectileSpeed;
 
 
     // Internal
-    private KinematicProjectileLauncher projectileLauncher;
+    private KinematicProjectileLauncher _projectileLauncher;
 
     private class CrowBrain : MonsterBrain
     {
@@ -46,10 +46,11 @@ public partial class Crow : Monster
             AddChild(new MonsterActionState("Fly"));
             AddChild(new MonsterActionState(MonsterAction.Hit));
             AddChild(new AttackWithKinematicProjectile(
-                monster.projectileLauncher,
-                () => new(monster.launchTime, monster.projectileSpeed),
+                monster._projectileLauncher,
+                () => new(monster._launchTime, monster._projectileSpeed),
                 KinematicProjectileLauncher.LaunchType.Rotation,
-                () => new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position }));
+                () => new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position }
+            ));
             AddChild(new MonsterActionState(MonsterAction.Dead));
         }
     }
@@ -60,8 +61,8 @@ public partial class Crow : Monster
     {
         base.Start();
 
-        projectileLauncher = GetComponent<KinematicProjectileLauncher>();
-        projectileLauncher.Initialize(this, platformManager, "Player", "Ground");
+        _projectileLauncher = GetComponent<KinematicProjectileLauncher>();
+        _projectileLauncher.Initialize(this, PlatformManager, "Player", "Ground");
 
         ActionController = new CrowActionController(this);
         ActionController.Enter();
@@ -69,13 +70,13 @@ public partial class Crow : Monster
         Brain = new CrowBrain(this);
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

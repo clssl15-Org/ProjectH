@@ -32,25 +32,25 @@ namespace MonsterActions
 
         protected Action<ActionResult> Callback { get; set; }
         protected float StayTimeAfterFinished { get; private set; }
-        protected bool isCompleted;
+        protected bool IsCompleted { get; set; }
 
         protected Action PlayActionEnter, PlayActionExit;
         protected Action AfterActionEnter, AfterActionExit;
 
         // Internal
-        private string trigger;
-        private float? start;
-        private float? end;
+        private string _trigger;
+        private float? _start;
+        private float? _end;
 
 
         // Content
         public MonsterActionState(MonsterAction monsterAction, string trigger = null, float? start = null, float? end = null) : this(monsterAction.ToString(), trigger, start, end) { }
-        public MonsterActionState(string monsterAction, string trigger = null, float? start = null, float? end = null) : base(monsterAction)
+        public MonsterActionState(string animationName, string trigger = null, float? start = null, float? end = null) : base(animationName)
         {
-            AnimationName = monsterAction;
-            this.trigger = trigger;
-            this.start = start;
-            this.end = end;
+            AnimationName = animationName;
+            _trigger = trigger;
+            _start = start;
+            _end = end;
 
             Initialize();
         }
@@ -73,10 +73,11 @@ namespace MonsterActions
 
             if (!Owner.Animator.TryFindClip(AnimationName, out var clip))
             {
-                throw new ArgumentException(Owner.Ctx($"애니메이터에 '{AnimationName}' 클립이 없습니다."));
+                throw new InvalidOperationException(
+                    Owner.Ctx($"애니메이터에 '{AnimationName}' 클립이 없습니다."));
             }
 
-            isCompleted = false;
+            IsCompleted = false;
 
 
             float? duration = null;
@@ -88,22 +89,26 @@ namespace MonsterActions
 
             if (duration.HasValue)
             {
-                duration -= start.GetValueOrDefault(0f);
-                duration -= end.GetValueOrDefault(0f);
+                duration -= _start.GetValueOrDefault(0f);
+                duration -= _end.GetValueOrDefault(0f);
             }
 
             MainAnimationRemainingTime = duration;
 
 
-            if (string.IsNullOrEmpty(trigger))
-                Owner.Animator.Play(clip.name, -1, start.GetValueOrDefault(0f) / clip.length);
+            if (string.IsNullOrEmpty(_trigger))
+                Owner.Animator.Play(clip.name, -1, _start.GetValueOrDefault(0f) / clip.length);
             else
             {
-                if (start.HasValue || end.HasValue)
+                if (!Owner.Animator.HasParameter(_trigger))
                     throw new InvalidOperationException(
-                        Owner.Ctx($"현재 Trigger 방식 재생에서는 {nameof(start)}/{nameof(end)} 속성을 사용할 수 없습니다."));
+                        Owner.Ctx($"애니메이터에 '{_trigger}' 파라미터가 존재하지 않습니다."));
 
-                Owner.Animator.SetTrigger(trigger);
+                if (_start.HasValue || _end.HasValue)
+                    throw new InvalidOperationException(
+                        Owner.Ctx($"현재 Trigger 방식 재생에서는 {nameof(_start)}/{nameof(_end)} 속성을 사용할 수 없습니다."));
+
+                Owner.Animator.SetTrigger(_trigger);
             }
         }
         protected void SetInputs(params object[] inputs)
@@ -123,7 +128,7 @@ namespace MonsterActions
 
         protected void Complete()
         {
-            isCompleted = true;
+            IsCompleted = true;
             Exit();
         }
 
@@ -132,13 +137,13 @@ namespace MonsterActions
             var callback = Callback;
             Callback = null;
 
-            callback?.Invoke(new(isCompleted
+            callback?.Invoke(new(IsCompleted
                 ? ActionResult.ResultType.Success
                 : ActionResult.ResultType.Interrupted));
         }
 
-        private bool HasAnimation()
-            => !string.IsNullOrWhiteSpace(AnimationName)
+        private bool HasAnimation() =>
+            !string.IsNullOrWhiteSpace(AnimationName)
             && !string.Equals(AnimationName, MonsterAction.None.ToString());
 
 
@@ -175,19 +180,19 @@ namespace MonsterActions
 
         internal class AfterAction : Work<MonsterActionState>
         {
-            private float remainingTime;
+            private float _remainingTime;
 
             protected override void OnEnter(params object[] _)
             {
-                remainingTime = Parent.StayTimeAfterFinished;
+                _remainingTime = Parent.StayTimeAfterFinished;
                 Parent.AfterActionEnter?.Invoke();
             }
 
             protected override void OnUpdate()
             {
-                remainingTime -= Time.deltaTime;
+                _remainingTime -= Time.deltaTime;
 
-                if (remainingTime <= 0)
+                if (_remainingTime <= 0)
                     Parent.Complete();
             }
 

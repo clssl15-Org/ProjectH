@@ -582,9 +582,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4472788505238115658, guid: 8e6c28b3cc761d543ae26c5b0b3ce321, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 4472788505238115658, guid: 8e6c28b3cc761d543ae26c5b0b3ce321, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 4472788505238115658, guid: 8e6c28b3cc761d543ae26c5b0b3ce321, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 4472788505238115658, guid: 8e6c28b3cc761d543ae26c5b0b3ce321, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -1126,6 +1134,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1226,6 +1235,26 @@ MonoBehaviour:
   cameraMaxX: 41
   cameraMinY: -10
   cameraMaxY: 15
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AssetsPPU: 100
+  m_RefResolutionX: 320
+  m_RefResolutionY: 180
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1 &560624624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,7 +1799,7 @@ Transform:
   m_GameObject: {fileID: 691421789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.89, y: 3.01, z: 0}
+  m_LocalPosition: {x: -6.14, y: 3.36, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1890,9 +1919,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fef1263786e32e7479290f0826f3a728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPower: 1
-  platformManager: {fileID: 1374360485}
-  stateDisplay: 
+  _platformManager: {fileID: 1374360485}
+  AttackPower: 1
+  UseKnockback: 1
+  UseDefaultKnockbackForce: 1
+  KnockbackForce: 0
+  _stateDisplay: 
 --- !u!50 &691421796
 Rigidbody2D:
   serializedVersion: 4
@@ -7680,9 +7712,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3722376205427639889, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 3722376205427639889, guid: 173cd69897951fa48b561f30f265989e, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 3722376205427639889, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 3722376205427639889, guid: 173cd69897951fa48b561f30f265989e, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -7725,20 +7765,36 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3605964068721697230, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
+      propertyPath: _launchTime
+      value: 0.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605964068721697230, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 3605964068721697230, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 3605964068721697230, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
+      propertyPath: _projectileSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605964068721697230, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 3605964068721697230, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
       objectReference: {fileID: 658219645}
     - target: {fileID: 4587511124870369039, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.54
+      value: -3.65
       objectReference: {fileID: 0}
     - target: {fileID: 4587511124870369039, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.34
+      value: 3.27
       objectReference: {fileID: 0}
     - target: {fileID: 4587511124870369039, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7786,7 +7842,7 @@ Transform:
   m_GameObject: {fileID: 2724516078973515945}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.4, y: 3.08, z: 0}
+  m_LocalPosition: {x: 4.67, y: 3.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7847,9 +7903,17 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -7868,11 +7932,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9061239059274336577, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.23
+      value: -5.94
       objectReference: {fileID: 0}
     - target: {fileID: 9061239059274336577, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.34
+      value: 2.43
       objectReference: {fileID: 0}
     - target: {fileID: 9061239059274336577, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7983,11 +8047,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2088539230560744281, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.49
+      value: -6.38
       objectReference: {fileID: 0}
     - target: {fileID: 2088539230560744281, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.64
+      value: 2.85
       objectReference: {fileID: 0}
     - target: {fileID: 2088539230560744281, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8042,9 +8106,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8111,9 +8183,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 828006787}
     m_Modifications:
     - target: {fileID: 985371827314687221, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 985371827314687221, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 985371827314687221, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 985371827314687221, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8193,7 +8273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &3241535373628438028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8211,6 +8291,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4227149967690483739, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 4227149967690483739, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
@@ -8218,6 +8302,10 @@ PrefabInstance:
       propertyPath: secondPhasePrefab
       value: 
       objectReference: {fileID: 6144783967248736273, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
+    - target: {fileID: 4227149967690483739, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 4227149967690483739, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8292,9 +8380,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4907472375751884795, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 4907472375751884795, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 4907472375751884795, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 4907472375751884795, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8363,7 +8459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 132211442958729508, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7438079383171909824, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8406,9 +8502,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8628466432062390065, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 8628466432062390065, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 8628466432062390065, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 8628466432062390065, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8475,6 +8579,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 798990402297213930, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 798990402297213930, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
@@ -8482,6 +8590,10 @@ PrefabInstance:
       propertyPath: stats.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 798990402297213930, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 798990402297213930, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8529,6 +8641,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2040891973972188694, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4092487191358170573, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.63
@@ -8570,9 +8686,33 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: SpikeSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: _attackMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: _launchTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: _rollingSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8702,9 +8842,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8296953828954830175, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 8296953828954830175, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 8296953828954830175, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 8296953828954830175, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8794,9 +8942,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1958973966598934199, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
+      propertyPath: DefaultIsRight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1958973966598934199, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
       propertyPath: defaultIsRight
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1958973966598934199, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
     - target: {fileID: 1958973966598934199, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
       propertyPath: platformManager
       value: 
@@ -8805,6 +8961,10 @@ PrefabInstance:
       propertyPath: stats.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1958973966598934199, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 1958973966598934199, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -9011,9 +9171,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4369661454580605859, guid: 228de37e450778a43bbd581943d40677, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 4369661454580605859, guid: 228de37e450778a43bbd581943d40677, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 4369661454580605859, guid: 228de37e450778a43bbd581943d40677, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 4369661454580605859, guid: 228de37e450778a43bbd581943d40677, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -9066,19 +9234,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93dbe8fd4681ea2408ad3eeec4a14308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideStats: 0
-  stats: []
+  _overrideStats: 0
+  Stats: []
   _maxHP: 3
   _attackPower: 1
   _moveSpeed: 1
   _attackCooltime: 0.5
   _invincibleDuration: 0.5
-  randomizeStartDirection: 1
-  defaultIsRight: 0
-  platformManager: {fileID: 1374360485}
-  sceneAssetsLibrary: {fileID: 658219645}
-  damageFlashDuration: 0.1
-  stateDisplay: 
+  RandomizeStartDirection: 1
+  DefaultIsRight: 0
+  PlatformManager: {fileID: 1374360485}
+  SceneAssetsLibrary: {fileID: 658219645}
+  DamageFlashDuration: 0.1
+  _stateDisplay: 
   _attackMode: 0
   projectilePrefab: {fileID: 0}
   launchStartTime: 0
@@ -9141,9 +9309,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6394094662674465370, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+      propertyPath: PlatformManager
+      value: 
+      objectReference: {fileID: 1374360485}
+    - target: {fileID: 6394094662674465370, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
       propertyPath: platformManager
       value: 
       objectReference: {fileID: 1374360485}
+    - target: {fileID: 6394094662674465370, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+      propertyPath: SceneAssetsLibrary
+      value: 
+      objectReference: {fileID: 658219645}
     - target: {fileID: 6394094662674465370, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 

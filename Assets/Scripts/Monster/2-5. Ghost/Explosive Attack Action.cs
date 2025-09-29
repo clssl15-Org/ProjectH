@@ -14,10 +14,7 @@ public partial class Ghost
 
 
         // Content
-        public GhostExplosiveAttackAction() : base("Attack_2")
-        {
-            
-        }
+        public GhostExplosiveAttackAction() : base("Attack_2") { }
 
         protected override void Initialize()
         {
@@ -40,7 +37,7 @@ public partial class Ghost
         protected override void OnEnter(params object[] inputs)
         {
             SetInputs(inputs);
-            isCompleted = false;
+            IsCompleted = false;
 
             var chain = new[]
             {
@@ -58,7 +55,7 @@ public partial class Ghost
                 if (!result)
                 {
                     if (result.Result != ActionResult.ResultType.Interrupted)
-                        UnityEngine.Debug.LogWarning(
+                        Debug.LogWarning(
                             Owner.Ctx($"애니메이션 재생에 실패했습니다.\n{result.ToString()}"));
 
                     Exit();

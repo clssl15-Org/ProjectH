@@ -6,7 +6,7 @@ namespace MonsterBT
     {
         public PlayerDetected()
         {
-            SelectionOption = SelectionOptions.LowerPriority | SelectionOptions.Self;
+            AbortPolicy = AbortPolicies.LowerPriority | AbortPolicies.Self;
             HierarchyMode = HierarchyMode.Sequence;
             LoopType = LoopType.Forced;
         }

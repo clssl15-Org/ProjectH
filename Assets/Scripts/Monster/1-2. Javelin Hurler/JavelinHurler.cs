@@ -75,13 +75,13 @@ public partial class JavelinHurler : Monster
         Brain = new JavelinHurlerBrain(this);
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

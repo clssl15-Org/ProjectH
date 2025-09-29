@@ -63,7 +63,7 @@ public class RangedSkeleton : Monster
         base.Start();
 
         projectileLauncher = GetComponent<KinematicProjectileLauncher>();
-        projectileLauncher.Initialize(this, platformManager, "Player", "Ground");
+        projectileLauncher.Initialize(this, PlatformManager, "Player", "Ground");
 
         ActionController = new RangedkeletonActionController(this);
         ActionController.Enter();
@@ -71,13 +71,13 @@ public class RangedSkeleton : Monster
         Brain = new RangedkeletonBrain(this);
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

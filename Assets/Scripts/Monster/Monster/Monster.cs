@@ -28,9 +28,9 @@ public abstract partial class Monster : MonoBehaviour
             _direction = value;
 
             if (_direction == Direction.Left)
-                transform.localScale = new Vector3(defaultIsRight ? -1f : 1f, 1f, 1f);
+                transform.localScale = new Vector3(DefaultIsRight ? -1f : 1f, 1f, 1f);
             else if (_direction == Direction.Right)
-                transform.localScale = new Vector3(defaultIsRight ? 1f : -1f, 1f, 1f);
+                transform.localScale = new Vector3(DefaultIsRight ? 1f : -1f, 1f, 1f);
         }
     }
 
@@ -40,8 +40,8 @@ public abstract partial class Monster : MonoBehaviour
 
     // Property 
     [Header("Stats Overrride")]
-    [SerializeField] private bool overrideStats = false;
-    [SerializeField] protected MonsterStats[] stats;
+    [SerializeField] private bool _overrideStats = false;
+    [SerializeField] protected MonsterStats[] Stats;
 
     [Header("Stats")]
     [SerializeField, Min(0)] private int _maxHP = 3;
@@ -51,31 +51,31 @@ public abstract partial class Monster : MonoBehaviour
     [SerializeField, Min(0)] private float _invincibleDuration = 0.5f;
 
     [Header("Image Settings")]
-    [SerializeField] protected bool randomizeStartDirection = true;
-    [SerializeField] protected bool defaultIsRight;
+    [SerializeField] protected bool RandomizeStartDirection = true;
+    [SerializeField] protected bool DefaultIsRight;
 
     [Header("Bindings")]
-    [SerializeField] internal PlatformManager platformManager;
-    [SerializeField] internal SceneAssetsLibrary sceneAssetsLibrary;
+    [SerializeField] internal PlatformManager PlatformManager;
+    [SerializeField] internal SceneAssetsLibrary SceneAssetsLibrary;
 
     [Header("Animations")]
-    [SerializeField, Min(0)] internal float damageFlashDuration = 0.1f;
+    [SerializeField, Min(0)] internal float DamageFlashDuration = 0.1f;
 
 
     // Display
     [SerializeField, Header("Display"), TextArea(3, 15)]
-    private string stateDisplay = string.Empty;
-    private readonly StringBuilder sb = new();
+    private string _stateDisplay = string.Empty;
+    private readonly StringBuilder _sb = new();
 
 
     // Control
-    protected bool UseStatsOverride => overrideStats && stats?.Length >= 1 && stats[0];
+    protected bool UseStatsOverride => _overrideStats && Stats?.Length >= 1 && Stats[0];
 
-    public virtual int MaxHP => !UseStatsOverride ? _maxHP : stats[0].MaxHP;
-    public virtual int AttackPower => !UseStatsOverride ? _attackPower : stats[0].AttackPower;
-    public virtual float MoveSpeed => !UseStatsOverride ? _moveSpeed : stats[0].MoveSpeed;
-    public virtual float AttackCooltime => !UseStatsOverride? _attackCooltime : stats[0].AttackCooltime;
-    public virtual float InvincibleDuration => !UseStatsOverride ? _invincibleDuration : stats[0].InvincibleDuration;
+    public virtual int MaxHP => !UseStatsOverride ? _maxHP : Stats[0].MaxHP;
+    public virtual int AttackPower => !UseStatsOverride ? _attackPower : Stats[0].AttackPower;
+    public virtual float MoveSpeed => !UseStatsOverride ? _moveSpeed : Stats[0].MoveSpeed;
+    public virtual float AttackCooltime => !UseStatsOverride? _attackCooltime : Stats[0].AttackCooltime;
+    public virtual float InvincibleDuration => !UseStatsOverride ? _invincibleDuration : Stats[0].InvincibleDuration;
 
 
     // Component
@@ -86,10 +86,11 @@ public abstract partial class Monster : MonoBehaviour
 
     internal int BelongingPlatform { get; set; } = 1;
     internal PlatformDetector PlatformDetector { get; private set; }
-    internal GameObject DetectedPlayer => playerDetector.CurrentPlayer;
+    internal GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
-    private MonsterHitted hitDetector;
-    private MonsterPlayerDetector playerDetector;
+    private MonsterPlayerDetector _playerDetector;
+    private MonsterHitted _hitDetector;
+    private KnockbackHandler _knockbackHandler;
 
     // Internal 
     internal StandaloneHitAction StandaloneHitAction { get; private set; }
@@ -98,7 +99,7 @@ public abstract partial class Monster : MonoBehaviour
     internal MonsterBrain Brain { get; set; }
 
     private int _hp;
-    private Direction _direction = Direction.Center;
+    private Direction _direction;
 
 
     // Content
@@ -107,8 +108,8 @@ public abstract partial class Monster : MonoBehaviour
     /// </summary>
     public void Initialize(PlatformManager platformManager, SceneAssetsLibrary sceneAssetsLibrary)
     {
-        this.platformManager = platformManager;
-        this.sceneAssetsLibrary = sceneAssetsLibrary;
+        PlatformManager = platformManager;
+        SceneAssetsLibrary = sceneAssetsLibrary;
     }
 
     protected virtual void Awake()
@@ -118,21 +119,21 @@ public abstract partial class Monster : MonoBehaviour
         SpriteRenderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
 
-        playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
+        _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
 
-        if (playerDetector)
-            playerDetector.PlayerDetected += OnPlayerDetected;
+        if (_playerDetector)
+            _playerDetector.PlayerDetected += OnPlayerDetected;
         else
             Debug.LogWarning(Ctx(
                 $"이 몬스터는 {nameof(MonsterPlayerDetector)}을(를) 가지고 있지 않습니다. " +
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
 
-        hitDetector = GetComponentInChildren<MonsterHitted>(true);
-        if (!hitDetector) throw new InvalidOperationException(Ctx(
-            $"{nameof(hitDetector)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
+        _hitDetector = GetComponentInChildren<MonsterHitted>(true);
+        if (!_hitDetector) throw new InvalidOperationException(Ctx(
+            $"{nameof(_hitDetector)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
-        hitDetector.Damaged += OnDamaged;
+        _hitDetector.Damaged += OnDamaged;
 
         if (TryGetComponent<StandaloneHitAction>(out var standaloneHitAction))
         {
@@ -142,27 +143,30 @@ public abstract partial class Monster : MonoBehaviour
             StandaloneHitBrain = new StandaloneHitBrain(this);
         }
 
+        _knockbackHandler = new KnockbackHandler(Rigidbody);
+
+        _direction = DefaultIsRight ? Direction.Right : Direction.Left;
         _hp = MaxHP;
     }
 
     protected virtual void Start()
     {
         #region 필수 컴포넌트 설정
-        if (!platformManager)
+        if (!PlatformManager)
             throw new InvalidOperationException(Ctx(
-                $"{nameof(platformManager)}이(가) 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
+                $"{nameof(PlatformManager)}이(가) 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
-        if (!sceneAssetsLibrary)
+        if (!SceneAssetsLibrary)
             Debug.LogWarning(Ctx(
-                $"이 몬스터는 {nameof(sceneAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
+                $"이 몬스터는 {nameof(SceneAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
                 "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
         PlatformDetector = GetComponent<PlatformDetector>();
-        PlatformDetector.SetPlatformManager(platformManager);
+        PlatformDetector.SetPlatformManager(PlatformManager);
         #endregion
 
 
-        if (randomizeStartDirection)
+        if (RandomizeStartDirection)
         {
             Direction = UnityEngine.Random.Range(0, 2) == 0
                 ? Direction.Left
@@ -175,7 +179,7 @@ public abstract partial class Monster : MonoBehaviour
         Brain?.Tick();
 
 #if UNITY_EDITOR
-        stateDisplay = GetDisplayContent();
+        _stateDisplay = GetDisplayContent();
 #endif
     }
 
@@ -185,7 +189,7 @@ public abstract partial class Monster : MonoBehaviour
     }
 
     protected virtual void OnPlayerDetected(GameObject player) { }
-    protected virtual void OnDamaged(int damage) => HP -= damage;
+    protected virtual void OnDamaged(DamageInfo damageInfo) => HP -= damageInfo.Damage;
 
     internal bool TryMove() => TryMove(Direction);
     internal bool TryMove(Direction direction)
@@ -223,7 +227,7 @@ public abstract partial class Monster : MonoBehaviour
 
 
         Debug.LogWarning(Ctx(
-            $"현재 Direction 상태({Direction})가 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
+            $"현재 입력된 {nameof(direction)}({Direction})이(가) 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
 
         return false;
     }
@@ -233,6 +237,9 @@ public abstract partial class Monster : MonoBehaviour
         x = 0,
         y = Rigidbody.velocity.y,
     };
+
+    internal void Knockback(Direction direction, float? knockbackForce = null) =>
+        _knockbackHandler.Knockback(direction, knockbackForce);
 
 
 
@@ -275,11 +282,11 @@ public abstract partial class Monster : MonoBehaviour
     {
         Brain?.Dispose();
 
-        if (hitDetector)
-            hitDetector.Damaged -= OnDamaged;
+        if (_hitDetector)
+            _hitDetector.Damaged -= OnDamaged;
 
-        if (playerDetector)
-            playerDetector.PlayerDetected -= OnPlayerDetected;
+        if (_playerDetector)
+            _playerDetector.PlayerDetected -= OnPlayerDetected;
     }
 
 
@@ -287,23 +294,23 @@ public abstract partial class Monster : MonoBehaviour
 
     protected virtual string GetDisplayContent()
     {
-        sb.Clear();
-        sb.AppendLine($"HP: {HP}");
-        sb.AppendLine($"Direction: {Direction.ToString()}");
-        sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
-        sb.AppendLine("----------------");
-        sb.AppendLine($"Is Alive: {IsAlive}");
-        if (StandaloneHitBrain != null) sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");
-        sb.AppendLine($"Is Committing: {Brain.Blackboard.Committing}");
-        sb.AppendLine($"Current Action: {(TryGetCurrentAction(out var action) ? action : "None")}");
+        _sb.Clear();
+        _sb.AppendLine($"HP: {HP}");
+        _sb.AppendLine($"Direction: {Direction.ToString()}");
+        _sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
+        _sb.AppendLine("----------------");
+        _sb.AppendLine($"Is Alive: {IsAlive}");
+        if (StandaloneHitBrain != null) _sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");
+        _sb.AppendLine($"Is Committing: {Brain.Blackboard.Committing}");
+        _sb.AppendLine($"Current Action: {(TryGetCurrentAction(out var action) ? action : "None")}");
 
         if (Brain != null)
         {
-            sb.AppendLine("----------------");
-            sb.AppendLine(Brain.GetFullState());
+            _sb.AppendLine("----------------");
+            _sb.AppendLine(Brain.GetFullState());
         }
 
-        return sb.ToString();
+        return _sb.ToString();
     }
 
 
@@ -311,7 +318,7 @@ public abstract partial class Monster : MonoBehaviour
     [CustomEditor(typeof(Monster)), CanEditMultipleObjects]
     protected class MonsterEditor : Editor
     {
-        protected string[] defaultHidingFields =
+        private string[] _defaultHidingFields =
             new[] { "_maxHP", "_attackPower", "_moveSpeed", "_attackCooltime", "_invincibleDuration" };
 
         public override void OnInspectorGUI()
@@ -327,7 +334,7 @@ public abstract partial class Monster : MonoBehaviour
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual string[] GetHidingFields() => defaultHidingFields;
+        protected virtual string[] GetHidingFields() => _defaultHidingFields;
     }
 #endif
 }

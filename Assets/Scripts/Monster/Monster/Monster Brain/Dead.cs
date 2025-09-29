@@ -9,12 +9,12 @@ namespace MonsterBT
         public float StayTimeAfterFinised { get; set; } = 0f;
 
         // Internal
-        private readonly string monsterAction;
+        private readonly string _monsterAction;
 
 
         // Content
         public Dead(MonsterAction monsterAction = MonsterAction.Dead) : this(monsterAction.ToString()) { }
-        public Dead(string monsterAction) => this.monsterAction = monsterAction;
+        public Dead(string monsterAction) => _monsterAction = monsterAction;
 
         public override bool CheckCondition() => Owner.IsAlive;
 
@@ -23,13 +23,13 @@ namespace MonsterBT
             Owner.IsAlive = false;
             Owner.Collider.excludeLayers = LayerMask.GetMask("Player");
 
-            if (!Owner.TryDoAction(monsterAction, out var reason,
+            if (!Owner.TryDoAction(_monsterAction, out var reason,
                 result => Complete(),
                 allowRestart: true,
                 stayTimeAfterFinised: StayTimeAfterFinised))
             {
                 Debug.LogWarning(Owner.Ctx(
-                    $"{monsterAction} 행동에 실패하였기 때문에 Dead 상태로 진입할 수 없습니다.\n{reason}"));
+                    $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }

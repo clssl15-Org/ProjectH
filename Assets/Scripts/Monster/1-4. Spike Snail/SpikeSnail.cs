@@ -70,7 +70,7 @@ public partial class SpikeSnail : Monster
         if (!spikeLauncher) throw new InvalidOperationException(
             Ctx("이 몬스터는 spikeLauncher 컴포넌트를 가지고 있어야 합니다."));
 
-        spikeLauncher.Initialize(this, platformManager, "Ground");
+        spikeLauncher.Initialize(this, PlatformManager, "Ground");
     }
 
     protected override void Start()
@@ -83,13 +83,13 @@ public partial class SpikeSnail : Monster
         Brain = new ThornySnailBrain(this);
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damage }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

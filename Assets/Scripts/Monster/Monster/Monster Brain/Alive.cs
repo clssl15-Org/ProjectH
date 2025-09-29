@@ -6,7 +6,7 @@ namespace MonsterBT
     {
         public Alive()
         {
-            SelectionOption = SelectionOptions.Self;
+            AbortPolicy = AbortPolicies.Self;
             HierarchyMode = HierarchyMode.Selector;
             LoopType = LoopType.Forced;
         }

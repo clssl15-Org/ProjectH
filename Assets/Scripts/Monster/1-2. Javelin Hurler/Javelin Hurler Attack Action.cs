@@ -34,7 +34,7 @@ public partial class JavelinHurler
                 thrown = true;
 
                 var javelin = Instantiate(owner.javelinPrefab).GetComponent<Javelin>();
-                javelin.Initialize(owner.platformManager, "Ground");
+                javelin.Initialize(owner.PlatformManager, "Ground");
 
                 javelin.transform.SetParent(owner.transform);
                 javelin.transform.localPosition = owner.javelinPosition;

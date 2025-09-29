@@ -3,7 +3,7 @@ using System;
 namespace UniEngine.StateMachines.BT
 {
     [Flags]
-    public enum SelectionOptions
+    public enum AbortPolicies
     {
         None = 0,
         Self = 1 << 0,

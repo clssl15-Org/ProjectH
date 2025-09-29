@@ -2,8 +2,8 @@ namespace MonsterActions
 {
     internal class HitFlash : MonsterActionState
     {
-        private float? mainAnimationLength;
-        private ActionResult result;
+        private float? _mainAnimationLength;
+        private ActionResult _result;
 
 
         public HitFlash(MonsterAction baseAction = MonsterAction.None) : this(baseAction.ToString()) { }
@@ -22,12 +22,12 @@ namespace MonsterActions
                 return;
             }
 
-            result = new(ActionResult.ResultType.Interrupted);
+            _result = new(ActionResult.ResultType.Interrupted);
         }
 
         private void Exit(ActionResult result)
         {
-            this.result = result;
+            _result = result;
             Exit();
         }
 
@@ -36,7 +36,7 @@ namespace MonsterActions
             var callback = Callback;
             Callback = null;
 
-            callback?.Invoke(result);
+            callback?.Invoke(_result);
         }
     }
 }

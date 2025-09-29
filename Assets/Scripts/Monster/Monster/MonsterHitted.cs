@@ -3,16 +3,11 @@ using UnityEngine;
 
 public class MonsterHitted : MonoBehaviour
 {
-    public event Action<int> Damaged;
+    public event Action<DamageInfo> Damaged;
 
-    public void TakeDamage(int damage)
-    {
-        if (damage < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(damage), $"damage 값은 0 이상이어야 합니다. 입력된 값: {damage}");
-        }
+    public void TakeDamage(int damage) =>
+        Damaged?.Invoke(new(damage));
 
-        Damaged?.Invoke(damage);
-    }
+    public void TakeDamage(int damage, Direction direction, float? knockbackForce = null) =>
+        Damaged?.Invoke(new(damage, direction, knockbackForce));
 }

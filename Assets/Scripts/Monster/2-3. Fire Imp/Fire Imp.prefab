@@ -214,22 +214,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15be342fc17797b4b8d040d33019364b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideStats: 1
-  stats:
-  - {fileID: 11400000, guid: fcce32bf413b07f48b28ffc5faeddd4e, type: 2}
+  _overrideStats: 0
+  Stats: []
   _maxHP: 5
   _attackPower: 1
   _moveSpeed: 1
   _attackCooltime: 0.5
   _invincibleDuration: 0.5
-  randomizeStartDirection: 1
-  defaultIsRight: 1
-  platformManager: {fileID: 0}
-  sceneAssetsLibrary: {fileID: 0}
-  damageFlashDuration: 0.1
-  stateDisplay: 
+  RandomizeStartDirection: 1
+  DefaultIsRight: 1
+  PlatformManager: {fileID: 0}
+  SceneAssetsLibrary: {fileID: 0}
+  DamageFlashDuration: 0.1
+  _stateDisplay: 
   firePrefab: {fileID: 4654580258030285868}
-  firePosition: {x: 1.8, y: 0.55}
   fireStartTime: 0.2
 --- !u!1 &2874773785109029871
 GameObject:

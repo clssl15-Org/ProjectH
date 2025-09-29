@@ -43,11 +43,7 @@ namespace MonsterBT
                 Complete();
 
             if (!Owner.TryMove())
-            {
-                Owner.Direction = (Owner.Direction == Direction.Left)
-                    ? Direction.Right
-                    : Direction.Left;
-            }
+                Owner.Direction = Owner.Direction.Flip();
         }
 
         protected override void OnHalt(DetailedNodeStatus _)

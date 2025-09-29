@@ -53,9 +53,9 @@ public class DarkMonsterSecondPhase : Monster
         Brain = new DarkMonsterSecondPhaseBrain(this);
     }
 
-    protected override void OnDamaged(int damage)
+    protected override void OnDamaged(DamageInfo damageInfo)
     {
-        StandaloneHitBrain.TryTakeDamage(damage);
+        StandaloneHitBrain.TryTakeDamage(damageInfo);
     }
 
 

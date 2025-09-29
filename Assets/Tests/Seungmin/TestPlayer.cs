@@ -9,34 +9,38 @@ public class TestPlayer : MonoBehaviour
     public int CurrentPlatform { get; private set; }
 
     // Property
-    [SerializeField, Min(0)] private int attackPower;
-    [SerializeField] private PlatformManager platformManager;
+    [SerializeField] private PlatformManager _platformManager;
 
     // Inspector
+    [Header("Attack")]
+    [Min(0)] public int AttackPower;
+    [Header("Knockback")]
+    public bool UseKnockback = true;
+    public bool UseDefaultKnockbackForce = true;
+    public float KnockbackForce = 0;
+    [Header("State Disply")]
     [SerializeField, TextArea(3, 10)]
-    private string stateDisplay = string.Empty;
-    private readonly StringBuilder sb = new();
+    private string _stateDisplay = string.Empty;
+    private readonly StringBuilder _sb = new();
 
     // Internal
-    private PlatformDetector platformDetector;
+    private PlatformDetector _platformDetector;
 
 
     // Content
     private void Awake()
     {
-        if (!platformManager)
-        {
+        if (!_platformManager)
             throw new InvalidOperationException(
-                "TestPlayer 객체를 사용하려면 platformManager가 할당되어 있어야 합니다.");
-        }
+                $"{typeof(TestPlayer).Name} 객체를 사용하려면 {nameof(_platformManager)} 컴포넌트가 할당되어 있어야 합니다.");
 
-        platformDetector = GetComponent<PlatformDetector>();
-        platformDetector.SetPlatformManager(platformManager);
+        _platformDetector = GetComponent<PlatformDetector>();
+        _platformDetector.SetPlatformManager(_platformManager);
     }
 
     private void Update()
     {
-        if (platformDetector.TryGetCurrentPlatformId(out var platformId))
+        if (_platformDetector.TryGetCurrentPlatformId(out var platformId))
             CurrentPlatform = platformId;
         else
             CurrentPlatform = -1;
@@ -51,16 +55,26 @@ public class TestPlayer : MonoBehaviour
         var detector = collision.gameObject
             .GetComponentInChildren<MonsterHitted>();
 
-        if (detector)
-            detector.TakeDamage(attackPower);
+        if (!detector)
+            return;
+
+        if (UseKnockback)
+        {
+            var dir = (detector.transform.position - transform.position).ToDirection();
+            detector.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
+        }
+        else
+        {
+            detector.TakeDamage(AttackPower);
+        }
     }
 
 
     private void UpdateStateDisplay()
     {
-        sb.Clear();
-        sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
+        _sb.Clear();
+        _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
 
-        stateDisplay = sb.ToString();
+        _stateDisplay = _sb.ToString();
     }
 }
