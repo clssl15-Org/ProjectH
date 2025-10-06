@@ -33,6 +33,12 @@ public class Ultimate : CharacterState
     private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
     private float attackAngle = 0f;
 
+    [Header("Cooldown Settings")]
+    [SerializeField]
+    private float cooldownRecoveryAmount = 0.02f;
+
+    private float cooldownGauge = 1f;
+
     [Header("Gizmos")]
     private bool isHitBoxEnabled = false;
 
@@ -43,6 +49,22 @@ public class Ultimate : CharacterState
     private bool isDone = true;
     private bool isDamageApplied = false;
 
+    private void OnEnable()
+    {
+        Attack1.onAttack1 += RecoverCooldown;
+        Attack2.onAttack2 += RecoverCooldown;
+        Attack3.onAttack3 += RecoverCooldown;
+        Eskill.onEskill += RecoverCooldown;
+        ProjectileDamage.onRangedAttack += RecoverCooldown;
+    }
+    private void OnDisable()
+    {
+        Attack1.onAttack1 -= RecoverCooldown;
+        Attack2.onAttack2 -= RecoverCooldown;
+        Attack3.onAttack3 -= RecoverCooldown;
+        Eskill.onEskill -= RecoverCooldown;
+        ProjectileDamage.onRangedAttack -= RecoverCooldown;
+    }
     private void TakeDamageToEnemy()
     {
         Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
@@ -65,6 +87,18 @@ public class Ultimate : CharacterState
         attackPoint = CharacterActor.ColliderCenter + (new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y)) * CharacterActor.Size;
         scaledSize = attackSize * CharacterActor.Size;
         attackAngle = CharacterActor.Rotation.eulerAngles.z;
+    }
+
+    public override bool CheckEnterTransition(CharacterState fromState)
+    {
+        if (cooldownGauge < 1f)
+        {
+            Debug.Log(cooldownGauge);
+            return false;
+        }
+
+        cooldownGauge = 0f;
+        return true;
     }
     public override void CheckExitTransition()
     {
@@ -140,6 +174,12 @@ public class Ultimate : CharacterState
         isDamageApplied = false;
         isHitBoxEnabled = false;
         skillCursor = 0;
+    }
+
+    private void RecoverCooldown()
+    {
+        cooldownGauge += cooldownRecoveryAmount;
+        cooldownGauge = Mathf.Clamp(cooldownGauge, 0f, 1f);
     }
 
 #if UNITY_EDITOR

@@ -26,6 +26,10 @@ public class Dash : CharacterState
     [SerializeField]
     private float invincibleEndTime = 1f;
 
+    [Header("Cooldown Settings")]
+    [SerializeField]
+    private float cooldownDuration = 1f;
+
     private float dashCursor = 0;
 
     private Vector2 dashDirection = Vector2.right;
@@ -33,6 +37,13 @@ public class Dash : CharacterState
     private bool isDone = true;
 
     private float currentSpeedMultiplier = 1f;
+
+    private CooldownTiemr cooldownTimer;
+
+    public override bool CheckEnterTransition(CharacterState fromState)
+    {
+        return !cooldownTimer || !cooldownTimer.IsOnCooldown;
+    }
 
     public override void CheckExitTransition()
     {
@@ -65,6 +76,8 @@ public class Dash : CharacterState
         }
 
         ResetDash();
+        cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+        cooldownTimer.StartCooldown(cooldownDuration, dt);
     }
 
     public override void UpdateBehaviour(float dt)

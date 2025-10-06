@@ -21,11 +21,21 @@ public class RangedAttack : CharacterState
     [SerializeField]
     private Vector2 offset;
 
+    [Header("Cooldown Settings")]
+    [SerializeField]
+    private float cooldownDuration = 5f;
+    
     private float skillCursor = 0f;
 
     private bool isDone = true;
     private bool isProjectileLaunched = true;
 
+    private CooldownTiemr cooldownTimer;
+
+    public override bool CheckEnterTransition(CharacterState fromState)
+    {
+        return !cooldownTimer || !cooldownTimer.IsOnCooldown;
+    }
     public override void CheckExitTransition()
     {
         if (isDone)
@@ -37,6 +47,8 @@ public class RangedAttack : CharacterState
     public override void EnterBehaviour(float dt)
     {
         ResetSkill();
+        cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+        cooldownTimer.StartCooldown(cooldownDuration, dt);
     }
 
     public override void UpdateBehaviour(float dt)

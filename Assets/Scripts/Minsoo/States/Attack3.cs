@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,8 @@ public class Attack3 : CharacterState
     private bool isDone = true;
     private bool isDamageApplied = false;
 
+    public static Action onAttack3;
+
     private void TakeDamageToEnemy()
     {
         Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
@@ -49,6 +52,7 @@ public class Attack3 : CharacterState
 
             Debug.Log("Enemy hitted! (Attack3)");
             // damageableObject.TakeDamage();
+            onAttack3?.Invoke();
         }
     }
     private void UpdateAttackParameters()

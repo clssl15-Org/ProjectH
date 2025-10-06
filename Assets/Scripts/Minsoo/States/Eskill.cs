@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,10 @@ public class Eskill : CharacterState
     [SerializeField]
     private float invincibleEndTime = 1f;
 
+    [Header("Cooldown Settings")]
+    [SerializeField]
+    private float cooldownDuration = 7f;
+
     [Header("Attack Properties")]
     private Vector2 attackPoint = Vector2.zero;
     private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
@@ -53,6 +58,9 @@ public class Eskill : CharacterState
     private float currentSpeedMultiplier = 1f;
 
     private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
+    private CooldownTiemr cooldownTimer;
+
+    public static Action onEskill;
 
     private void TakeDamageToEnemy()
     {
@@ -73,6 +81,7 @@ public class Eskill : CharacterState
             hitEnemies.Add(damageableObject);
             Debug.Log("Enemy hitted! (Eskill)");
             // damageableObject.TakeDamage();
+            onEskill?.Invoke();
         }
     }
     private void UpdateAttackParameters()
@@ -80,6 +89,10 @@ public class Eskill : CharacterState
         attackPoint = CharacterActor.ColliderCenter + (new Vector2(attackPointOffset.x * direction.x, attackPointOffset.y)) * CharacterActor.Size;
         scaledSize = attackSize * CharacterActor.Size;
         attackAngle = CharacterActor.Rotation.eulerAngles.z;
+    }
+    public override bool CheckEnterTransition(CharacterState fromState)
+    {
+        return !cooldownTimer || !cooldownTimer.IsOnCooldown;
     }
     public override void CheckExitTransition()
     {
@@ -109,8 +122,10 @@ public class Eskill : CharacterState
                 direction = CharacterActor.Forward;
             }
         }
-        
+
         ResetSkill();
+        cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+        cooldownTimer.StartCooldown(cooldownDuration, dt);
     }
     public override void UpdateBehaviour(float dt)
     {

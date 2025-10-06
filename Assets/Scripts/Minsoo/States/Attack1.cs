@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,6 +51,7 @@ public class Attack1 : CharacterState
     private bool isDamageApplied = false;
     private bool isNextComboReady = false;
 
+    public static Action onAttack1;
 
     private void TakeDamageToEnemy()
     {
@@ -70,6 +72,7 @@ public class Attack1 : CharacterState
             {
                 Debug.Log("Enemy hitted! (Attack1)");
                 // damageableObject.TakeDamage();
+                onAttack1?.Invoke();
             }
         }
     }
