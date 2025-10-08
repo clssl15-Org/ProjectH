@@ -25,13 +25,13 @@ public partial class FireMonster : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(Engaged.RangeType.Contact, 2f)
-                            .AddChild(new Adjusting(MonsterAction.Idle))
+                            .AddChild(new Adjusting(MonsterActionType.Idle))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(monsterAction: MonsterAction.Idle))))
+                        .AddChild(new Patrol(monsterAction: MonsterActionType.Idle))))
                 .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
@@ -41,10 +41,10 @@ public partial class FireMonster : Monster
     {
         public FireMonsterActionController(FireMonster monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Idle.ToString()));
             AddChild(new AttackWithWeapon(monster.firePrefab, monster.fireAppearTime));
-            AddChild(new MonsterActionState(MonsterAction.Hit.ToString()));
-            AddChild(new MonsterActionState(MonsterAction.Dead.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Hit.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Dead.ToString()));
         }
     }
 

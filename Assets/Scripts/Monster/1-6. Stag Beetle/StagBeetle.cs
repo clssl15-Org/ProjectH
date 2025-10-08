@@ -43,7 +43,7 @@ public partial class StagBeetle : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged()
-                            .AddChild(new Adjusting(MonsterAction.Walk))
+                            .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
                         .AddChild(new StagBeetleAttack())
                         .AddChild(new Cooldown()))
@@ -65,10 +65,10 @@ public partial class StagBeetle : Monster
             bool restarted = false;
 
 
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState(MonsterAction.Alert));
-            AddChild(new MonsterActionState(MonsterAction.Walk));
-            AddChild(new MonsterActionState(MonsterAction.Run));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction(MonsterActionType.Alert));
+            AddChild(new MonsterAction(MonsterActionType.Walk));
+            AddChild(new MonsterAction(MonsterActionType.Run));
             AddChild(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 beforePreAction: () => rollRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
@@ -115,8 +115,8 @@ public partial class StagBeetle : Monster
             AddChild(new ThreePhasedAction(AttackMode.Roar.ToString(),
                 n => n + "Anticipation", n => n + "Recoil",
                 whileMainAction: (playtime, length) => playtime > length));
-            AddChild(new MonsterActionState("HitGround"));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction("HitGround"));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

@@ -7,12 +7,12 @@ namespace Infrastructure
     public class ColliderSizeHandler : MonoBehaviour
     {
         [SerializeField, Tooltip("이 항목을 활성화하면 게임 시작 시에 콜라이더 크기를 스프라이트 크기에 맞춥니다.")]
-        private bool setColliderSizeOnStart = false;
+        private bool _setColliderSizeOnStart = false;
 
 
         private void Awake()
         {
-            if (setColliderSizeOnStart)
+            if (_setColliderSizeOnStart)
                 SetColliderSize();
         }
 

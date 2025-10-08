@@ -78,9 +78,8 @@ public abstract partial class Monster : MonoBehaviour
     public virtual float InvincibleDuration => !UseStatsOverride ? _invincibleDuration : Stats[0].InvincibleDuration;
 
 
-    // Component
+    // Components
     internal SpriteRenderer SpriteRenderer { get; private set; }
-    internal Animator Animator { get; private set; }
     internal Collider2D Collider { get; private set; }
     internal Rigidbody2D Rigidbody { get; private set; }
 
@@ -90,14 +89,18 @@ public abstract partial class Monster : MonoBehaviour
 
     private MonsterPlayerDetector _playerDetector;
     private MonsterHitted _hitDetector;
-    private KnockbackHandler _knockbackHandler;
 
-    // Internal 
+    // Low-level Behavior Handlers
+    private KnockbackHandler _knockbackHandler;
+    internal MonsterAnimationPlayer MonsterAnimationPlayer { get; private set; }
     internal StandaloneHitAction StandaloneHitAction { get; private set; }
     internal StandaloneHitBrain StandaloneHitBrain { get; private set; }
+
+    // High-level Behavior Handlers
     internal MonsterActionController ActionController { get; set; }
     internal MonsterBrain Brain { get; set; }
 
+    // Internal 
     private int _hp;
     private Direction _direction;
 
@@ -117,7 +120,6 @@ public abstract partial class Monster : MonoBehaviour
         Collider = GetComponent<Collider2D>();
         Rigidbody = GetComponent<Rigidbody2D>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
-        Animator = GetComponent<Animator>();
 
         _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
 
@@ -144,6 +146,7 @@ public abstract partial class Monster : MonoBehaviour
         }
 
         _knockbackHandler = new KnockbackHandler(Rigidbody);
+        MonsterAnimationPlayer = new MonsterAnimationPlayer(GetComponent<Animator>());
 
         _direction = DefaultIsRight ? Direction.Right : Direction.Left;
         _hp = MaxHP;
@@ -191,6 +194,7 @@ public abstract partial class Monster : MonoBehaviour
     protected virtual void OnPlayerDetected(GameObject player) { }
     protected virtual void OnDamaged(DamageInfo damageInfo) => HP -= damageInfo.Damage;
 
+    #region Low-level Actions
     internal bool TryMove() => TryMove(Direction);
     internal bool TryMove(Direction direction)
     {
@@ -241,11 +245,17 @@ public abstract partial class Monster : MonoBehaviour
     internal void Knockback(Direction direction, float? knockbackForce = null) =>
         _knockbackHandler.Knockback(direction, knockbackForce);
 
+    internal void Die(bool succeed)
+    {
+        Died?.Invoke(succeed);
+        Destroy(gameObject);
+    }
+    #endregion
 
 
-    #region Actions
+    #region High-level Actions
     internal bool TryDoAction(
-        MonsterAction monsterAction,
+        MonsterActionType monsterAction,
         out ActionResult reason,
         Action<ActionResult> callback = null,
         bool stopPreviousAction = true,
@@ -264,17 +274,10 @@ public abstract partial class Monster : MonoBehaviour
         float stayTimeAfterFinised = 0f)
         => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime, stayTimeAfterFinised);
 
-    internal MonsterAction GetCurrentAction() => ActionController.GetCurrentAction();
+    internal MonsterActionType GetCurrentAction() => ActionController.GetCurrentAction();
     internal bool TryGetCurrentAction(out string name) => ActionController.TryGetCurrentAction(out name);
 
     internal void StopCurrentAction() => ActionController.StopCurrentAction();
-
-
-    internal void Die(bool succeed)
-    {
-        Died?.Invoke(succeed);
-        Destroy(gameObject);
-    }
     #endregion
 
 

@@ -6,7 +6,7 @@ public partial class Ghost
 {
     private class GhostAttack : BTNode<Monster, MonsterBlackboard>
     {
-        public GhostAttack() : base(name: MonsterAction.Attack.ToString()) { }
+        public GhostAttack() : base(name: MonsterActionType.Attack.ToString()) { }
 
         protected override void OnOpen(params object[] _)
         {

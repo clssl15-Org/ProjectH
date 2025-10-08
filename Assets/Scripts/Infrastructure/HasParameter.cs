@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static partial class Tools
+public static partial class AnimatorExtensions
 {
     public static bool HasParameter(this Animator animator, string paramName)
     {

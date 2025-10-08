@@ -122,6 +122,9 @@ namespace MonsterActions
 
             if (monster && monster.SpriteRenderer)
             {
+                if (monster.SpriteRenderer.material)
+                    Destroy(monster.SpriteRenderer.material);
+
                 monster.SpriteRenderer.material = originalMaterial;
                 materialRestored = true;
             }

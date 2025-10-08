@@ -28,10 +28,10 @@ public partial class SpikeSnail : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(range: 3f)
-                            .AddChild(new Adjusting(MonsterAction.Walk))
+                            .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
-                        .AddChild(new Cooldown(MonsterAction.None)))
+                        .AddChild(new Cooldown(MonsterActionType.None)))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
                         .AddChild(new Patrol())))
@@ -44,17 +44,17 @@ public partial class SpikeSnail : Monster
     {
         public ThornySnailActionController(SpikeSnail monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle, start: 0.33f, end: 2.08f));
-            AddChild(new MonsterActionState(MonsterAction.Alert));
-            AddChild(new MonsterActionState(MonsterAction.Walk));
-            AddChild(new MonsterActionState(MonsterAction.Run));
+            AddChild(new MonsterActionState(MonsterActionType.Idle, start: 0.33f, end: 2.08f));
+            AddChild(new MonsterAction(MonsterActionType.Alert));
+            AddChild(new MonsterAction(MonsterActionType.Walk));
+            AddChild(new MonsterAction(MonsterActionType.Run));
             AddChild(new AttackWithKinematicProjectile(
                 monster.spikeLauncher,
                 () => new(monster.launchTime, monster.spikeSpeed),
                 KinematicProjectileLauncher.LaunchType.Directions,
                 () => new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }));
             AddChild(new HitFlash());
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

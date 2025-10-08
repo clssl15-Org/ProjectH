@@ -15,7 +15,7 @@ namespace MonsterBT
 
 
         // Content
-        public Rest(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
+        public Rest(MonsterActionType monsterAction = MonsterActionType.Idle) : this(monsterAction.ToString()) { }
         public Rest(string monsterAction) => this.monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)

@@ -1,6 +1,6 @@
 using System;
 
-public readonly struct ActionResult
+public record ActionResult(ActionResult.ResultType Result, string Reason = null, Exception Exception = null)
 {
     public enum ResultType
     {
@@ -10,18 +10,6 @@ public readonly struct ActionResult
         NotFound,
         Interrupted,
         InvalidOperation
-    }
-
-    public ResultType Result { get; }
-    public string Reason { get; }
-    public Exception Exception { get; }
-
-
-    public ActionResult(ResultType result, string reason = null, Exception exception = null)
-    {
-        Result = result;
-        Reason = reason ?? string.Empty;
-        Exception = exception;
     }
 
     public override string ToString()
@@ -39,4 +27,3 @@ public readonly struct ActionResult
 
     public static implicit operator bool(ActionResult result) => result.Result == ResultType.Success;
 }
-

@@ -13,7 +13,7 @@ namespace MonsterBT
 
 
         // Content
-        public Dead(MonsterAction monsterAction = MonsterAction.Dead) : this(monsterAction.ToString()) { }
+        public Dead(MonsterActionType monsterAction = MonsterActionType.Dead) : this(monsterAction.ToString()) { }
         public Dead(string monsterAction) => _monsterAction = monsterAction;
 
         public override bool CheckCondition() => Owner.IsAlive;

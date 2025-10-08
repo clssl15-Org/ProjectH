@@ -1,13 +1,13 @@
 namespace MonsterActions
 {
-    internal class HitFlash : MonsterActionState
+    internal class HitFlash : MonsterAction
     {
         private float? _mainAnimationLength;
         private ActionResult _result;
 
 
-        public HitFlash(MonsterAction baseAction = MonsterAction.None) : this(baseAction.ToString()) { }
-        public HitFlash(string baseAction) : base(MonsterAction.Hit.ToString())
+        public HitFlash(MonsterActionType baseAction = MonsterActionType.None) : this(baseAction.ToString()) { }
+        public HitFlash(string baseAction) : base(MonsterActionType.Hit.ToString())
         {
             AnimationName = baseAction.ToString();
         }
@@ -33,8 +33,8 @@ namespace MonsterActions
 
         protected override void OnExit()
         {
-            var callback = Callback;
-            Callback = null;
+            var callback = _callback;
+            _callback = null;
 
             callback?.Invoke(_result);
         }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MonsterActions
 {
-    internal class AttackWithWeapon : MonsterActionState
+    internal class AttackWithWeapon : MonsterAction
     {
         // Internal
         private GameObject weaponPrefab;
@@ -14,7 +14,7 @@ namespace MonsterActions
 
 
         // Content
-        public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, MonsterAction monsterAction = MonsterAction.Attack) : this(weaponPrefab, startTime, monsterAction.ToString()) { }
+        public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, MonsterActionType monsterAction = MonsterActionType.Attack) : this(weaponPrefab, startTime, monsterAction.ToString()) { }
         public AttackWithWeapon(GameObject weaponPrefab, float startTime, string monsterAction) : base(monsterAction)
         {
             this.weaponPrefab = weaponPrefab;

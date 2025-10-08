@@ -53,7 +53,7 @@ public partial class MadWood : Monster
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(MonsterAction.Run))))
+                        .AddChild(new Patrol(MonsterActionType.Run))))
                 .AddChild(new NotValidPlatform("Fall")));
             AddChild(new Dead());
         }
@@ -63,13 +63,13 @@ public partial class MadWood : Monster
     {
         public MadWoodActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState("Fall"));
-            AddChild(new MonsterActionState(MonsterAction.Run));
-            AddChild(new MonsterActionState(AttackMode.DefaultAttack.ToString()));
-            AddChild(new MonsterActionState(AttackMode.LandAttack.ToString()));
-            AddChild(new MonsterActionState(MonsterAction.Hit));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction("Fall"));
+            AddChild(new MonsterAction(MonsterActionType.Run));
+            AddChild(new MonsterAction(AttackMode.DefaultAttack.ToString()));
+            AddChild(new MonsterAction(AttackMode.LandAttack.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Hit));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

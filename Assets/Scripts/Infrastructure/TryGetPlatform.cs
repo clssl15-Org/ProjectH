@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 namespace Infrastructure
 {
-    public static partial class Tools
+    public static partial class TilemapExtensions
     {
         /// <summary>
         /// 입력 Tilemap에서 start 좌표를 기준으로, predicate를 만족하며 수평으로 연결된 타일들을 반환합니다.

@@ -6742,7 +6742,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15105934d06eda34f82c22d83b5dccfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 0}
 --- !u!114 &1374360485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8459,7 +8458,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 132211442958729508, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7438079383171909824, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: m_LocalPosition.x

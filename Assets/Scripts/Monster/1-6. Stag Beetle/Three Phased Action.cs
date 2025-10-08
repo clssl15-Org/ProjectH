@@ -78,7 +78,7 @@ public partial class StagBeetle : Monster
                 isPreAction = inputs == null || inputs.Length == 0 || (bool)inputs[0];
 
                 if (!Owner.Animator.TryFindClip(Parent.Actions[isPreAction ? 0 : 2], out var clip))
-                    throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
+                    throw new ArgumentException(Owner.Ctx($"애니메이터가 동작 {MonsterActionType.Attack.ToString()}을(를) 가지고 있지 않습니다."));
 
                 remainingTime = clip.length;
                 Owner.Animator.Play(clip.name);
@@ -111,7 +111,7 @@ public partial class StagBeetle : Monster
             protected override void OnEnter(params object[] _)
             {
                 if (!Owner.Animator.TryFindClip(Parent.Actions[1], out var clip))
-                    throw new ArgumentException(Owner.Ctx($"애니메이터가 애니메이션 {MonsterAction.Attack.ToString()}을(를) 가지고 있지 않습니다."));
+                    throw new ArgumentException(Owner.Ctx($"애니메이터가 애니메이션 {MonsterActionType.Attack.ToString()}을(를) 가지고 있지 않습니다."));
 
                 totalPlaytime = clip.length;
                 currentPlaytime = 0;

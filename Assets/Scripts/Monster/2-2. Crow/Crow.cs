@@ -42,16 +42,16 @@ public partial class Crow : Monster
     {
         public CrowActionController(Crow monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState("Fly"));
-            AddChild(new MonsterActionState(MonsterAction.Hit));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction("Fly"));
+            AddChild(new MonsterAction(MonsterActionType.Hit));
             AddChild(new AttackWithKinematicProjectile(
                 monster._projectileLauncher,
                 () => new(monster._launchTime, monster._projectileSpeed),
                 KinematicProjectileLauncher.LaunchType.Rotation,
                 () => new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position }
             ));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

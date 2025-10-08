@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static partial class Tools
+public static partial class AnimatorExtensions
 {
     public static bool TryFindClip(this Animator animator, string clipName, out AnimationClip clip)
     {

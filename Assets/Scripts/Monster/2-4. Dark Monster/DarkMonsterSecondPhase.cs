@@ -18,13 +18,13 @@ public class DarkMonsterSecondPhase : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(Engaged.RangeType.Contact, 4f)
-                            .AddChild(new Adjusting(MonsterAction.Idle))
+                            .AddChild(new Adjusting(MonsterActionType.Idle))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(MonsterAction.Idle))))
+                        .AddChild(new Patrol(MonsterActionType.Idle))))
                 .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
@@ -34,10 +34,10 @@ public class DarkMonsterSecondPhase : Monster
     {
         public DarkMonsterSecondPhaseController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState(MonsterAction.Attack));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction(MonsterActionType.Attack));
             //AddChild(new MonsteActionState(MonsterAction.Hit));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

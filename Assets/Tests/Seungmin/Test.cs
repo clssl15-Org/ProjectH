@@ -1,17 +1,24 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using Infrastructure;
 
 namespace Tests.Seungmin
 {
     public class Test : MonoBehaviour
     {
-        public Tilemap tilemap;
+
+        private void Start()
+        {
+
+        }
+
+        private void Update()
+        {
+
+        }
 
         public void DoTest()
         {
-            print(tilemap.cellBounds);
+            
         }
 
         

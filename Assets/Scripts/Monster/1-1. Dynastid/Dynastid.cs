@@ -33,13 +33,13 @@ public class Dynastid : Monster
     {
         public DynastidActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState(MonsterAction.Alert));
-            AddChild(new MonsterActionState(MonsterAction.Walk));
-            AddChild(new MonsterActionState(MonsterAction.Run));
-            AddChild(new MonsterActionState(MonsterAction.Attack));
-            AddChild(new MonsterActionState(MonsterAction.Hit));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction(MonsterActionType.Alert));
+            AddChild(new MonsterAction(MonsterActionType.Walk));
+            AddChild(new MonsterAction(MonsterActionType.Run));
+            AddChild(new MonsterAction(MonsterActionType.Attack));
+            AddChild(new MonsterAction(MonsterActionType.Hit));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

@@ -7,9 +7,7 @@ namespace MonsterActions
 {
     internal abstract class MonsterActionController : Work
     {
-        public Monster Owner { get; protected set; }
-        public float DefaultCallbackToleranceTime { get; set; } = 0f;
-
+        public Monster Owner { get; }
         private Sprite _originalSprite;
 
 
@@ -30,17 +28,17 @@ namespace MonsterActions
             float? playTime = null,
             float stayTimeAfterFinised = 0f)
         {
-            if (monsterAction == MonsterAction.None.ToString())
+            if (monsterAction == MonsterActionType.None.ToString())
             {
                 StopCurrentAction();
 
                 reason = new(ResultType.Success,
-                    $"입력한 행동 상태 '{monsterAction}'이(가) {MonsterAction.None.ToString()}이기 때문에 행동을 하지 않는 상태로 설정하였습니다.");
+                    $"입력한 행동 상태 '{monsterAction}'이(가) {MonsterActionType.None.ToString()}이기 때문에 행동을 하지 않는 상태로 설정하였습니다.");
 
                 return true;
             }
 
-            if (TryGetCurrentChild<MonsterActionState>(out var current))
+            if (TryGetCurrentChild<MonsterAction>(out var current))
             {
                 if (current.Name != monsterAction)
                 {
@@ -67,7 +65,6 @@ namespace MonsterActions
 
             try
             {
-                Owner.Animator.enabled = true;
                 SetNextWith(monsterAction, callback, playTime, stayTimeAfterFinised);
 
                 reason = new(ResultType.Success);
@@ -82,29 +79,29 @@ namespace MonsterActions
             }
         }
 
-        public MonsterAction GetCurrentAction()
+        public MonsterActionType GetCurrentAction()
         {
             if (TryGetCurrentAction(out var name))
             {
-                if (name == MonsterAction.Idle.ToString())
-                    return MonsterAction.Idle;
-                if (name == MonsterAction.Alert.ToString())
-                    return MonsterAction.Alert;
-                if (name == MonsterAction.Walk.ToString())
-                    return MonsterAction.Walk;
-                if (name == MonsterAction.Run.ToString())
-                    return MonsterAction.Run;
-                if (name == MonsterAction.Attack.ToString())
-                    return MonsterAction.Attack;
-                if (name == MonsterAction.Hit.ToString())
-                    return MonsterAction.Hit;
-                if (name == MonsterAction.Dead.ToString())
-                    return MonsterAction.Dead;
+                if (name == MonsterActionType.Idle.ToString())
+                    return MonsterActionType.Idle;
+                if (name == MonsterActionType.Alert.ToString())
+                    return MonsterActionType.Alert;
+                if (name == MonsterActionType.Walk.ToString())
+                    return MonsterActionType.Walk;
+                if (name == MonsterActionType.Run.ToString())
+                    return MonsterActionType.Run;
+                if (name == MonsterActionType.Attack.ToString())
+                    return MonsterActionType.Attack;
+                if (name == MonsterActionType.Hit.ToString())
+                    return MonsterActionType.Hit;
+                if (name == MonsterActionType.Dead.ToString())
+                    return MonsterActionType.Dead;
 
-                return MonsterAction.Undefined;
+                return MonsterActionType.Undefined;
             }
 
-            return MonsterAction.None;
+            return MonsterActionType.None;
         }
 
         public bool TryGetCurrentAction(out string name)
@@ -127,7 +124,7 @@ namespace MonsterActions
 
         internal void StopAnimator()
         {
-            Owner.Animator.enabled = false;
+            Owner.MonsterAnimationPlayer.Stop();
             Owner.SpriteRenderer.sprite = _originalSprite;
         }
     }

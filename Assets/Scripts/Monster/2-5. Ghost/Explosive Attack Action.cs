@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class Ghost
 {
-    internal class GhostExplosiveAttackAction : MonsterActionState
+    internal class GhostExplosiveAttackAction : MonsterAction
     {
         // Front
         public float TeleportDistance { get; set; } = 1.5f;
@@ -18,8 +18,8 @@ public partial class Ghost
 
         protected override void Initialize()
         {
-            AddChild("Approaching", new MonsterActionState("Teleportation", "Teleportation_In"), true);
-            AddChild("Approached", new MonsterActionState("Teleportation", "Teleportation_Out")
+            AddChild("Approaching", new MonsterAction("Teleportation", "Teleportation_In"), true);
+            AddChild("Approached", new MonsterAction("Teleportation", "Teleportation_Out")
                 .SetEnteredAction(() =>
                 {
                     originalPosition = Owner.transform.position;
@@ -27,10 +27,10 @@ public partial class Ghost
                         (Owner.Direction == Direction.Left ? Vector3.right : Vector3.left);
                 }));
 
-            AddChild("Attack", new MonsterActionState("Attack_2"));
+            AddChild("Attack", new MonsterAction("Attack_2"));
 
-            AddChild("Retreating", new MonsterActionState("Teleportation", "Teleportation_In"));
-            AddChild("Retreated", new MonsterActionState("Teleportation", "Teleportation_Out")
+            AddChild("Retreating", new MonsterAction("Teleportation", "Teleportation_In"));
+            AddChild("Retreated", new MonsterAction("Teleportation", "Teleportation_Out")
                 .SetEnteredAction(() => Owner.transform.position = originalPosition));
         }
         

@@ -11,7 +11,7 @@ namespace MonsterBT
 
 
         // Content
-        public Cooldown(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
+        public Cooldown(MonsterActionType monsterAction = MonsterActionType.Idle) : this(monsterAction.ToString()) { }
         public Cooldown(string monsterAction) => this.monsterAction = monsterAction;
 
 

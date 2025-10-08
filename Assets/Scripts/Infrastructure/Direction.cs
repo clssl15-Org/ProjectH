@@ -2,9 +2,9 @@ using UnityEngine;
 
 public enum Direction
 {
-    Left, 
     Center,
-    Right
+    Left, 
+    Right,
 }
 
 public static class DirectionTools

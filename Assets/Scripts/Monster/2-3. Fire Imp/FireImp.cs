@@ -32,7 +32,7 @@ public class FireImp : Monster
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(MonsterAction.Run))))
+                        .AddChild(new Patrol(MonsterActionType.Run))))
                 .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
@@ -42,11 +42,11 @@ public class FireImp : Monster
     {
         public FireImpController(FireImp monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState(MonsterAction.Run));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction(MonsterActionType.Run));
             AddChild(new AttackWithWeapon(monster.firePrefab, monster.fireStartTime));
-            AddChild(new MonsterActionState(MonsterAction.Hit));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Hit));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

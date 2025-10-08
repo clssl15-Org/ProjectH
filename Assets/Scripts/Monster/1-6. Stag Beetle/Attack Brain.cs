@@ -6,7 +6,7 @@ public partial class StagBeetle : Monster
 {
     private class StagBeetleAttack : BTNode<Monster, MonsterBlackboard>
     {
-        public StagBeetleAttack() : base(name: MonsterAction.Attack.ToString()) { }
+        public StagBeetleAttack() : base(name: MonsterActionType.Attack.ToString()) { }
 
         protected override void OnOpen(params object[] _)
         {

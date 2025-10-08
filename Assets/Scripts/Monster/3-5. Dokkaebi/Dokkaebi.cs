@@ -25,13 +25,13 @@ public partial class Dokkaebi : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged()
-                            .AddChild(new Adjusting(MonsterAction.Idle))
+                            .AddChild(new Adjusting(MonsterActionType.Idle))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(monsterAction: MonsterAction.Idle))))
+                        .AddChild(new Patrol(monsterAction: MonsterActionType.Idle))))
                 .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
@@ -41,13 +41,13 @@ public partial class Dokkaebi : Monster
     {
         public DokkaebiActionController(Dokkaebi monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle.ToString()));
-            AddChild(new MonsterActionState(MonsterAction.Alert.ToString()));
-            AddChild(new MonsterActionState(MonsterAction.Walk.ToString()));
-            AddChild(new MonsterActionState(MonsterAction.Run.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Idle.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Alert.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Walk.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Run.ToString()));
             AddChild(new AttackWithWeapon(monster.laserPrefab, monster.laserAppearTime));
-            AddChild(new MonsterActionState(MonsterAction.Hit.ToString()));
-            AddChild(new MonsterActionState(MonsterAction.Dead.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Hit.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Dead.ToString()));
         }
     }
 

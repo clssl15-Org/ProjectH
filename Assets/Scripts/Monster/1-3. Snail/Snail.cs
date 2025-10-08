@@ -17,7 +17,7 @@ public class Snail : Monster
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
                         .AddChild(new Engaged(Engaged.RangeType.Contact)
-                            .AddChild(new Adjusting(MonsterAction.Walk))
+                            .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
                         .AddChild(new Cooldown()))
@@ -33,13 +33,13 @@ public class Snail : Monster
     {
         public SnailActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState(MonsterAction.Alert));
-            AddChild(new MonsterActionState(MonsterAction.Walk));
-            AddChild(new MonsterActionState(MonsterAction.Run));
-            AddChild(new MonsterActionState(MonsterAction.Attack));
-            AddChild(new MonsterActionState(MonsterAction.Hit));
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction(MonsterActionType.Alert));
+            AddChild(new MonsterAction(MonsterActionType.Walk));
+            AddChild(new MonsterAction(MonsterActionType.Run));
+            AddChild(new MonsterAction(MonsterActionType.Attack));
+            AddChild(new MonsterAction(MonsterActionType.Hit));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

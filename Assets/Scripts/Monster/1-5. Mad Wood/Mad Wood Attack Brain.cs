@@ -5,7 +5,7 @@ public partial class MadWood : Monster
 {
     private class MadWoodAttack : BTNode<Monster, MonsterBlackboard>
     {
-        public MadWoodAttack() : base(name: MonsterAction.Attack.ToString()) { }
+        public MadWoodAttack() : base(name: MonsterActionType.Attack.ToString()) { }
 
         protected override void OnOpen(object[] _)
         {

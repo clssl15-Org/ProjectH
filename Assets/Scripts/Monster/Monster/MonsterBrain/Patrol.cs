@@ -15,7 +15,7 @@ namespace MonsterBT
 
 
         // Content
-        public Patrol(MonsterAction monsterAction = MonsterAction.Walk) : this(monsterAction.ToString()) { }
+        public Patrol(MonsterActionType monsterAction = MonsterActionType.Walk) : this(monsterAction.ToString()) { }
         public Patrol(string monsterAction) => this.monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)

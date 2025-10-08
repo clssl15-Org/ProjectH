@@ -25,7 +25,7 @@ public class BlueMonster : Monster
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
-                        .AddChild(new Patrol(MonsterAction.Run))))
+                        .AddChild(new Patrol(MonsterActionType.Run))))
                 .AddChild(new NotValidPlatform()));
             AddChild(new Dead());
         }
@@ -35,11 +35,11 @@ public class BlueMonster : Monster
     {
         public BlueMonsterActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterAction.Idle));
-            AddChild(new MonsterActionState(MonsterAction.Run));
-            AddChild(new MonsterActionState(MonsterAction.Attack));
+            AddChild(new MonsterAction(MonsterActionType.Idle));
+            AddChild(new MonsterAction(MonsterActionType.Run));
+            AddChild(new MonsterAction(MonsterActionType.Attack));
             AddChild(new HitFlash());
-            AddChild(new MonsterActionState(MonsterAction.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Dead));
         }
     }
 

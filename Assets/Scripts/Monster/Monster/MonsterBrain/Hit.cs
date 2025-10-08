@@ -13,7 +13,7 @@ namespace MonsterBT
 
 
         // Content
-        public Hit(MonsterAction monsterAction = MonsterAction.Hit, bool doKnockback = true) : this(monsterAction.ToString(), doKnockback) { }
+        public Hit(MonsterActionType monsterAction = MonsterActionType.Hit, bool doKnockback = true) : this(monsterAction.ToString(), doKnockback) { }
         public Hit(string monsterAction, bool doKnockback = true)
         {
             IsSelectable = false;

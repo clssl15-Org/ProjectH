@@ -8,7 +8,7 @@ namespace MonsterBT
         private readonly string monsterAction;
 
 
-        public NotValidPlatform(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
+        public NotValidPlatform(MonsterActionType monsterAction = MonsterActionType.Idle) : this(monsterAction.ToString()) { }
         public NotValidPlatform(string monsterAction) => this.monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)

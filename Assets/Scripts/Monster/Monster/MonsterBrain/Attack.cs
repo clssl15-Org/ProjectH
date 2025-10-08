@@ -10,7 +10,7 @@ namespace MonsterBT
 
 
         // Content
-        public Attack(MonsterAction monsterAction = MonsterAction.Attack) : this(monsterAction.ToString()) { }
+        public Attack(MonsterActionType monsterAction = MonsterActionType.Attack) : this(monsterAction.ToString()) { }
         public Attack(string monsterAction) => _monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)

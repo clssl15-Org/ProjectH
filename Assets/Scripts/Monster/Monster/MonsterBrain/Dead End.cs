@@ -16,7 +16,7 @@ namespace MonsterBT
 
 
         // Content
-        public DeadEnd(MonsterAction monsterAction = MonsterAction.Idle) : this(monsterAction.ToString()) { }
+        public DeadEnd(MonsterActionType monsterAction = MonsterActionType.Idle) : this(monsterAction.ToString()) { }
         public DeadEnd(string monsterAction)
         {
             AbortPolicy = AbortPolicies.StopOnFailure;

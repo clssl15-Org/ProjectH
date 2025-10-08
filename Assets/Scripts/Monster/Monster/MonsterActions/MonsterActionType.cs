@@ -1,4 +1,4 @@
-public enum MonsterAction
+public enum MonsterActionType
 {
     Undefined,
     None,
