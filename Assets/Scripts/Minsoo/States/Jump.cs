@@ -7,6 +7,8 @@ public class Jump : CharacterState
     [SerializeField]
     private float jumpForce = 10f;
     [SerializeField]
+    private float subsequentJumpMultiplier = 0.7f;
+    [SerializeField]
     private float baseSpeed = 5f;
     [SerializeField]
     private float acceleration = 50f;
@@ -21,6 +23,7 @@ public class Jump : CharacterState
 
     private bool isDone = false;
     private float jumpCursor;
+    private float subsequentJumpForce;
 
     public override void CheckExitTransition()
     {
@@ -44,8 +47,10 @@ public class Jump : CharacterState
     public override void EnterBehaviour(float dt)
     {
         ResetJump();
+        //CharacterActor.Rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
         extraJumpCount--;
+        subsequentJumpForce = jumpForce * subsequentJumpMultiplier;
     }
     public override void UpdateBehaviour(float dt)
     {
@@ -56,9 +61,12 @@ public class Jump : CharacterState
         
         if (CharacterActions.jump.Started && extraJumpCount > 0 && (jumpCursor >= 1f))
         {
-            CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
+            CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, subsequentJumpForce);
             extraJumpCount--;
+            subsequentJumpForce *= subsequentJumpMultiplier;
             jumpCursor = 0f;
+
+            CharacterActor.Animator.Rebind();
         }
 
         if (CharacterActor.IsLanded)
@@ -70,9 +78,6 @@ public class Jump : CharacterState
     {
         Vector3 targetVelocity = CharacterStateController.InputMovementReference * baseSpeed;
         CharacterActor.Velocity = Vector2.MoveTowards(CharacterActor.Velocity, targetVelocity, acceleration * dt);
-    }
-    public override void PostUpdateBehaviour(float dt)
-    {
     }
 
     public void ResetJump()

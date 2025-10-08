@@ -53,9 +53,12 @@ public class NormalMovement : CharacterState
     private void ProcessVelocity(float dt)
     {
         Vector3 targetVelocity = CharacterStateController.InputMovementReference * baseSpeed;
-        //Debug.Log("1 : " + CharacterActor.Velocity + ", " + targetVelocity);
-        CharacterActor.Velocity = Vector2.MoveTowards(CharacterActor.Velocity, targetVelocity, acceleration * dt);
-        //Debug.Log("2 : " + CharacterActor.Velocity);
+        float targetSpeedX = targetVelocity.x;
+
+        Vector2 currentVelocity = CharacterActor.Velocity;
+        float newSpeedX = Mathf.MoveTowards(currentVelocity.x, targetSpeedX, acceleration * dt);
+
+        CharacterActor.Velocity = new Vector2(newSpeedX, currentVelocity.y);
     }
 
     public override void PostUpdateBehaviour(float dt)
