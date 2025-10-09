@@ -11,12 +11,12 @@ public class RangedSkeleton : Monster
 {
     // Property
     [Header("Ranged Skeleton")]
-    [SerializeField, Min(0)] private float launchTime;
-    [SerializeField, Min(0)] private float projectileSpeed;
+    [SerializeField, Min(0)] private float _launchTime;
+    [SerializeField, Min(0)] private float _projectileSpeed;
 
 
     // Internal
-    private KinematicProjectileLauncher projectileLauncher;
+    private KinematicProjectileLauncher _projectileLauncher;
 
     private class RangedkeletonBrain : MonsterBrain
     {
@@ -43,19 +43,21 @@ public class RangedSkeleton : Monster
     {
         public RangedkeletonActionController(RangedSkeleton monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Walk)
+            AddChild(new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
+            AddChild(new MonsterAction(MonsterActionType.Attack)
                 .AddAnimationComponent(new PlayInfo("throw"))
                 .AddComponent(new AttackWithKinematicProjectile(
-                    launcher: monster.projectileLauncher,
-                    getLaunchInfo: () => new(monster.launchTime, monster.projectileSpeed),
+                    launcher: monster._projectileLauncher,
+                    getLaunchInfo: () => new(monster._launchTime, monster._projectileSpeed),
                     launchType: KinematicProjectileLauncher.LaunchType.Directions,
                     getDirections: () => (new[] { monster.Direction.ToVector2() }))));
-            AddChild(new HitFlash());
-            AddChild((object)new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddComponent(new HitFlash()));
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
@@ -65,8 +67,8 @@ public class RangedSkeleton : Monster
     {
         base.Start();
 
-        projectileLauncher = GetComponent<KinematicProjectileLauncher>();
-        projectileLauncher.Initialize(this, PlatformManager, "Player", "Ground");
+        _projectileLauncher = GetComponent<KinematicProjectileLauncher>();
+        _projectileLauncher.Initialize(this, PlatformManager, "Player", "Ground");
 
         ActionController = new RangedkeletonActionController(this);
         ActionController.Enter();
@@ -80,7 +82,7 @@ public class RangedSkeleton : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

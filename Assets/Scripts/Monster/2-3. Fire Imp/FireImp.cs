@@ -1,9 +1,8 @@
+using System;
 using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-using System;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,7 +24,7 @@ public class FireImp : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(Engaged.RangeType.Contact)
+                        .AddChild(new Engaged(Engaged.RangeType.Contact, 2f)
                             .AddChild(new Adjusting())
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
@@ -42,15 +41,16 @@ public class FireImp : Monster
     {
         public FireImpController(FireImp monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Run)
+            AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent(interruptAllComponentOnDeactivate: true)
                 .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireStartTime)));
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }
@@ -83,7 +83,7 @@ public class FireImp : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

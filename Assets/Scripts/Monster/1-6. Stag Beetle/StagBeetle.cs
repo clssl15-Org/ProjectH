@@ -1,6 +1,7 @@
 using System;
 using MonsterActions;
 using MonsterBT;
+using UniEngine;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -17,10 +18,8 @@ public partial class StagBeetle : Monster
     [SerializeField, Min(0)] private float _rollingTime = 3f;
     [SerializeField, Min(0)] private float _rollingSpeed = 1f;
     [Space]
-    [SerializeField, Min(0)] internal float SpikeSpeed;
-    [SerializeField, Min(0)] private float _launchTime;
-    [SerializeField, Min(0)] private float _staytimeBeforeContinue;
-    [SerializeField, Min(0)] private float _waitingTime;
+    [SerializeField, Min(0)] private float _spikeSpeed;
+    [SerializeField, Min(0)] private float _waitingTimeAfterLaunch;
 
     public enum AttackMode
     {
@@ -61,19 +60,16 @@ public partial class StagBeetle : Monster
         {
             bool rollRight = default;
 
-            bool spikeLaunched = false;
-            bool restarted = false;
 
-
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Alert)
+            AddChild(new MonsterAction(MonsterActionType.Alert)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Walk)
+            AddChild(new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Run)
+            AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(AttackMode.RollAttack.ToString())
+            AddChild(new MonsterAction(AttackMode.RollAttack.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
                     beforePreAction: () => rollRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
@@ -91,40 +87,27 @@ public partial class StagBeetle : Monster
 
                         return playtime <= stagBeetle._rollingTime;
                     },
-                    afterMainAction: () => stagBeetle.Collider.excludeLayers = default)));
-            AddChild((object)new MonsterAction(AttackMode.SpikeAttack.ToString())
+                    beforePostAction: () => stagBeetle.Collider.excludeLayers = default)));
+            AddChild(new MonsterAction(AttackMode.SpikeAttack.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
-                    beforeMainAction: () =>
+                    beforePostAction: () =>
                     {
-                        spikeLaunched = false;
-                        restarted = false;
-                    },
-                    whileMainAction: (playtime, lentgh) =>
-                    {
-                        if (!spikeLaunched && playtime >= stagBeetle._launchTime)
+                        stagBeetle._spikeLauncher.LaunchWithLocalRotation(stagBeetle._spikeSpeed, Vector2.left);
+                        stagBeetle.AnimationPlayer.Pause();
+                        new Timer(stagBeetle._waitingTimeAfterLaunch, succeed =>
                         {
-                            spikeLaunched = true;
-
-                            stagBeetle._spikeLauncher.LaunchWithLocalRotation(stagBeetle.SpikeSpeed, Vector2.left);
-                            stagBeetle.AnimationPlayer.Pause();
-                        }
-
-                        if (!restarted && playtime >= stagBeetle._launchTime + stagBeetle._staytimeBeforeContinue)
-                        {
-                            restarted = true;
+                            if (!succeed) throw new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
                             stagBeetle.AnimationPlayer.Resume();
-                        }
-
-                        return playtime <= lentgh + stagBeetle._waitingTime + stagBeetle._staytimeBeforeContinue;
+                        });
                     })));
-            AddChild((object)new MonsterAction(AttackMode.Roar.ToString())
+            AddChild(new MonsterAction(AttackMode.Roar.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.Roar.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
                     whileMainAction: (playtime, length) => playtime > length)));
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent(new PlayInfo("HitGround")));
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }
@@ -165,7 +148,7 @@ public partial class StagBeetle : Monster
             {
                 new(true),
                 new(true),
-                new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+                new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
             });
         }
     }

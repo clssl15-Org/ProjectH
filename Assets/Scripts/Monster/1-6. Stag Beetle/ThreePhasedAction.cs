@@ -17,7 +17,10 @@ public partial class StagBeetle
         private Action _beforePreAction;
         private Action _beforeMainAction;
         private Func<float, float, bool> _whileMainAction;
-        private Action _afterMainAction;
+        private Action _beforePostAction;
+
+        private readonly Exception AnimationFailure
+            = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
 
 
         // Content
@@ -28,7 +31,7 @@ public partial class StagBeetle
             Action beforePreAction = null,
             Action beforeMainAction = null,
             Func<float, float, bool> whileMainAction = null,
-            Action afterMainAction = null)
+            Action beforePostAction = null)
         {
             _animations = new string[]
             {
@@ -40,10 +43,10 @@ public partial class StagBeetle
             _beforePreAction = beforePreAction;
             _beforeMainAction = beforeMainAction;
             _whileMainAction = whileMainAction;
-            _afterMainAction = afterMainAction;
+            _beforePostAction = beforePostAction;
 
             _work = new Work()
-                    .SetExitedAction(AnimationPlayer.Stop)
+                .SetExitedAction(() => AnimationPlayer.Stop())
                 .AddChild(new Work("PreAction")
                     .SetEnteredAction(() =>
                     {
@@ -52,22 +55,26 @@ public partial class StagBeetle
                         AnimationPlayer.Play(
                             new PlayInfo(_animations[0], Callback: succeed =>
                             {
-                                if (!succeed) throw new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
+                                if (!succeed) throw AnimationFailure;
                                 _work.SetNext("MainAction");
                             }));
-                    })
+                    }), true)
                 .AddChild(new Work("MainAction")
                     .SetEnteredAction(() =>
                     {
                         _beforeMainAction?.Invoke();
                         _mainActionEnteredTime = _elapsedTime;
 
+                        Action<bool> callback = _whileMainAction == null
+                        ? (bool succeed) =>
+                        {
+                            if (!succeed) throw AnimationFailure;
+                            _work.SetNext("PostAction");
+                        }
+                        : null;
+
                         AnimationPlayer.Play(
-                            new PlayInfo(_animations[0], Callback: succeed =>
-                            {
-                                if (!succeed) throw new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
-                                _work.SetNext("MainAction");
-                            }));
+                            new PlayInfo(_animations[1], Callback: callback));
                     })
                     .AddUpdatedAction(() =>
                     {
@@ -80,15 +87,19 @@ public partial class StagBeetle
 
                         if (!play)
                             _work.SetNext("PostAction");
-                    })
-                    .SetExitedAction(() => _afterMainAction?.Invoke()))
+                    }))
                 .AddChild(new Work("PostAction")
-                    .SetEnteredAction(() => AnimationPlayer.Play(
-                        new PlayInfo(_animations[0], Callback: succeed =>
-                        {
-                            if (!succeed) throw new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
-                            _work.Exit();
-                        })))));
+                    .SetEnteredAction(() =>
+                    {
+                        AnimationPlayer.Play(
+                            new PlayInfo(_animations[2], Callback: succeed =>
+                            {
+                                if (!succeed) throw AnimationFailure;
+                                Interrupt(InterruptType.Completed);
+                            }));
+
+                        _beforePostAction?.Invoke();
+                    }));
         }
 
         public override void Enter(object input = null)

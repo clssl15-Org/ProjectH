@@ -121,7 +121,6 @@ namespace UniEngine.StateMachines.FSM
 
 
             #region Child Management
-            public Work AddChild(string name, bool primary = false) => AddChild(name, new Work(name), primary);
             public T AddChild<T>(string name, T work, bool primary = false) where T : Work
             {
                 ThrowIfActive();

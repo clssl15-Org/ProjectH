@@ -35,15 +35,15 @@ public class MeleeSkeleton : Monster
     {
         public MeleeSkeletonActionController(Monster monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Walk)
+            AddChild(new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
+            AddChild(new MonsterAction(MonsterActionType.Attack)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddComponent(new HitFlash()));
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }
@@ -66,7 +66,7 @@ public class MeleeSkeleton : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

@@ -89,7 +89,7 @@ public partial class JavelinHurler : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

@@ -8,6 +8,7 @@ namespace UniEngine
         // Front
         public float RemainingTime => _remainingTime;
         public bool IsRunning => !_isDisposed;
+        public float Factor { get; set; } = 1f;
 
         // Internal
         float _remainingTime;
@@ -31,14 +32,12 @@ namespace UniEngine
 
         private void Update()
         {
-            _remainingTime -= Time.deltaTime;
+            _remainingTime -= Time.deltaTime * Factor;
             if (_remainingTime > 0f) return;
 
             _remainingTime = 0f;
 
-            _callback?.Invoke(true);
-            _callback = null;
-
+            CallbackAndClear(true);
             Dispose();
         }
 
@@ -47,11 +46,21 @@ namespace UniEngine
             if (_isDisposed) return;
             _isDisposed = true;
 
-            _callback?.Invoke(false);
-            _callback = null;
+            CallbackAndClear(false);
 
             _handle?.Dispose();
             _handle = null;
+        }
+
+        private void CallbackAndClear(bool succeed)
+        {
+            if (_callback == null)
+                return;
+
+            var callback = _callback;
+            _callback = null;
+
+            callback.Invoke(succeed);
         }
     }
 }

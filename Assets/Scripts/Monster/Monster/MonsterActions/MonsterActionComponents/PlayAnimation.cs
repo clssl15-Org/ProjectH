@@ -32,7 +32,7 @@ namespace MonsterActions
             PlayInfo = playInfo;
 
             _work = new Work()
-                    .SetExitedAction(() => AnimationPlayer.Stop())
+                .SetExitedAction(() => AnimationPlayer.Stop())
                 .AddChild(new Work("BeforePlay")
                     .AddUpdatedAction(() =>
                     {
@@ -54,7 +54,7 @@ namespace MonsterActions
                     .AddUpdatedAction(() =>
                     {
                         if (_elapsedTime >= _playingFinishedTime + _currentAnimationPlayInfo.DelayAfterPlay)
-                            _work.Exit();
+                            Interrupt(InterruptType.Completed);
                     }));
         }
 

@@ -27,7 +27,7 @@ public partial class SpikeSnail : Monster
                 .AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(range: 3f)
+                        .AddChild(new Engaged()
                             .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
@@ -44,24 +44,24 @@ public partial class SpikeSnail : Monster
     {
         public SpikeSnailActionController(SpikeSnail monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent(new PlayInfo(MonsterActionType.Idle, start: 0.33f, end: 2.08f)));
-            AddChild((object)new MonsterAction(MonsterActionType.Alert)
+            AddChild(new MonsterAction(MonsterActionType.Alert)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Walk)
+            AddChild(new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Run)
+            AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
+            AddChild(new MonsterAction(MonsterActionType.Attack)
                 .AddAnimationComponent()
                 .AddComponent(new AttackWithKinematicProjectile(
                     launcher: monster._spikeLauncher,
                     getLaunchInfo: () => new(monster.launchTime, monster.spikeSpeed),
                     launchType: KinematicProjectileLauncher.LaunchType.Directions,
                     getDirections: () => (new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }))));
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddComponent(new HitFlash()));
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }
@@ -97,7 +97,7 @@ public partial class SpikeSnail : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

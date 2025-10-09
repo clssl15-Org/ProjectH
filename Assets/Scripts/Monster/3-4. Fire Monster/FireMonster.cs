@@ -41,14 +41,14 @@ public partial class FireMonster : Monster
     {
         public FireMonsterActionController(FireMonster monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
-                .AddAnimationComponent()
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent(interruptAllComponentOnDeactivate: true)
                 .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireAppearTime)));
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }
@@ -59,7 +59,7 @@ public partial class FireMonster : Monster
     {
         if (!_firePrefab)
             throw new InvalidOperationException(
-                $"{GetType().Name}은(는) {nameof(_firePrefab)}을(를) 가지고 있어야 합니다.");
+                $"{nameof(FireMonster)}은(는) {nameof(_firePrefab)}을(를) 가지고 있어야 합니다.");
 
         _firePrefab.SetActive(false);
         base.Awake();
@@ -81,7 +81,7 @@ public partial class FireMonster : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

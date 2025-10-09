@@ -4,7 +4,11 @@ namespace MonsterActions
     {
         public override void Enter(object input)
         {
-            if (!Owner.StandaloneHitAction.TryHit(out var reason, r => Interrupt(r.Result.ToInterruptType())))
+            Owner.ActionController.StopAnimator();
+
+            if (!Owner.StandaloneHitAction.TryHit(
+                reason: out var reason,
+                callback: result => Interrupt(result.Result.ToInterruptType())))
             {
                 Interrupt(reason.Result.ToInterruptType());
                 return;

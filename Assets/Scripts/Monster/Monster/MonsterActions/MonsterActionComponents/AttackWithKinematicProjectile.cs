@@ -64,6 +64,8 @@ namespace MonsterActions
                         throw new InvalidOperationException(Owner.Ctx(
                             $"({GetType().Name}) 알 수 없는 {nameof(_launchType)} '{_launchType}'에 대한 발사를 수행할 수 없습니다."));
                 }
+
+                Interrupt(InterruptType.Completed);
             }
         }
     }

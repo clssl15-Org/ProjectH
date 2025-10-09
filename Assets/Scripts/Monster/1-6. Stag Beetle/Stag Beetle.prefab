@@ -244,10 +244,8 @@ MonoBehaviour:
   _attackMode: 0
   _rollingTime: 3
   _rollingSpeed: 1
-  SpikeSpeed: 3
-  _launchTime: 0.25
-  _staytimeBeforeContinue: 1
-  _waitingTime: 1
+  _spikeSpeed: 5
+  _waitingTimeAfterLaunch: 0.1
 --- !u!1 &1693476020304026822
 GameObject:
   m_ObjectHideFlags: 0

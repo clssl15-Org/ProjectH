@@ -122,7 +122,7 @@ namespace MonsterActions
             StopAnimator();
         }
 
-        internal void StopAnimator()
+        public void StopAnimator()
         {
             Owner.AnimationPlayer.Stop();
             Owner.SpriteRenderer.sprite = _originalSprite;

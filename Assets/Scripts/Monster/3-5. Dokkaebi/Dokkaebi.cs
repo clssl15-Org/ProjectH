@@ -41,20 +41,20 @@ public partial class Dokkaebi : Monster
     {
         public DokkaebiActionController(Dokkaebi monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Alert)
+            AddChild(new MonsterAction(MonsterActionType.Alert)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Walk)
+            AddChild(new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Run)
+            AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
-                .AddAnimationComponent()
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent(interruptAllComponentOnDeactivate: true)
                 .AddComponent(new AttackWithWeapon(monster._laserPrefab, monster._laserAppearTime)));
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }
@@ -87,7 +87,7 @@ public partial class Dokkaebi : Monster
         {
             new(true),
             new(true),
-            new("Hit", new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
 

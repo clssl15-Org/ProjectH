@@ -33,7 +33,7 @@ public partial class Ghost
         public GhostExplosiveAttackAction()
         {
             _work = new Work()
-                    .SetExitedAction(AnimationPlayer.Stop)
+                .SetExitedAction(AnimationPlayer.Stop)
                 .AddChild(new Work(phases[0])
                     .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>

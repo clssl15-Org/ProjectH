@@ -8,7 +8,8 @@ namespace MonsterActions
     {
         // Front
         public bool Active { get; private set; } = false;
-
+        public bool InterruptAllComponentOnDeactivate { get; set; } = false;
+        
         // Internal
         protected MonsterAction MonsterAction { get; private set; }
         protected Monster Owner => MonsterAction.Owner;
@@ -22,11 +23,11 @@ namespace MonsterActions
 
         public enum InterruptType
         {
-            None,        // -> Interrupted
-            Timeover,    // -> Success
-            Error,       // -> InvalidOperation
-            Completed,   // -> Success
-            Interrupted, // -> Interrupted
+            None,
+            Timeover,
+            Error,
+            Completed,
+            Interrupted,
         }
         public virtual void Interrupt(InterruptType reason) => Active = false;
     }

@@ -35,16 +35,16 @@ namespace MonsterActions
         {
             if (!_monster)
             {
-                reason = new(ActionResult.ResultType.InvalidOperation,
-                    Ctx($"{nameof(_monster)} 컴포넌트 '{_monster?.name ?? "null"}'이(가) 유효하지 않습니다."));
+                reason = new(ActionResult.ResultType.InvalidOperation,Ctx(
+                    $"{nameof(_monster)} 컴포넌트 '{_monster?.name ?? "null"}'이(가) 유효하지 않습니다."));
 
                 return false;
             }
 
             if (!allowRestart && _isRunning)
             {
-                reason = new(ActionResult.ResultType.AlreadyDoing,
-                    Ctx($"이미 Hit 행동을 실행하고 있기 때문에 행동을 재실행할 수 없습니다."));
+                reason = new(ActionResult.ResultType.AlreadyDoing, Ctx(
+                    $"이미 Hit 행동을 실행하고 있기 때문에 행동을 재실행할 수 없습니다."));
 
                 return false;
             }

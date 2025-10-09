@@ -6,18 +6,17 @@ namespace MonsterBT
     public class Engaged : BTNode<Monster, MonsterBlackboard>
     {
         // Front
-        public float TargetAttackRange { get; set; } = 3f;
-        public float UpperRangeTolerance { get; set; } = 0.3f;
-        public float LowerRangeTolerance { get; set; } = 0.3f;
+        public float TargetAttackRange { get; set; } = 2f;
+        public float UpperRangeTolerance { get; set; } = 0.5f;
+        public float LowerRangeTolerance { get; set; } = 0.5f;
 
+
+        // Content
         public enum RangeType
         {
             Contact,
             Ranged
         }
-
-
-        // Content
         /// <summary>
         /// 몬스터가 목표 거리 대역을 유지하도록 조정합니다.
         /// </summary>
@@ -63,13 +62,16 @@ namespace MonsterBT
             }
         }
 
-
         protected override void OnTick()
         {
             if (!Owner.DetectedPlayer)
                 throw new System.InvalidOperationException($"{nameof(Owner.DetectedPlayer)}이(가) 유효하지 않습니다.");
 
-            var posDelta = Owner.transform.position.x - Owner.DetectedPlayer.transform.position.x;
+            var posDelta = (Owner.Direction == Direction.Right
+                ? Owner.Collider.bounds.max.x
+                : Owner.Collider.bounds.min.x)
+                - Owner.DetectedPlayer.transform.position.x;
+
             Owner.Direction = posDelta > 0 ? Direction.Left : Direction.Right;
 
             var rangeDelta = Mathf.Abs(posDelta) - TargetAttackRange;

@@ -17,7 +17,7 @@ public class DarkMonsterSecondPhase : Monster
                 //.AddChild(new Hit())
                 .AddChild(new ValidPlatform()
                     .AddChild(new PlayerDetected()
-                        .AddChild(new Engaged(Engaged.RangeType.Contact, 4f)
+                        .AddChild(new Engaged(Engaged.RangeType.Contact, 1f)
                             .AddChild(new Adjusting(MonsterActionType.Idle))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack())
@@ -34,13 +34,13 @@ public class DarkMonsterSecondPhase : Monster
     {
         public DarkMonsterSecondPhaseController(Monster monster) : base(monster)
         {
-            AddChild((object)new MonsterAction(MonsterActionType.Idle)
+            AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Attack)
+            AddChild(new MonsterAction(MonsterActionType.Attack)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Hit)
+            AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
-            AddChild((object)new MonsterAction(MonsterActionType.Dead)
+            AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }

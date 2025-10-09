@@ -51,6 +51,7 @@ namespace MonsterActions
         public MonsterAction AddAnimationComponent(
             PlayInfo playInfo = null,
             string trigger = null,
+            bool interruptAllComponentOnDeactivate = false,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f)
         {
@@ -58,6 +59,7 @@ namespace MonsterActions
                 ? playInfo with { TriggerName = trigger ?? playInfo.TriggerName }
                 : new PlayInfo(Name, trigger))
                 {
+                    InterruptAllComponentOnDeactivate = interruptAllComponentOnDeactivate,
                     DelayBeforePlay = delayBeforePlay,
                     DelayAfterPlay = delayAfterPlay
                 });
@@ -132,6 +134,12 @@ namespace MonsterActions
 
             try
             {
+                if (_components.Any(c => !c.Active && c.InterruptAllComponentOnDeactivate))
+                {
+                    ExitWith(InterruptType.Completed);
+                    return;
+                }
+
                 var components = _components.Where(c => c.Active);
 
                 if (!_playInfo.PlayTime.HasValue && !components.Any())

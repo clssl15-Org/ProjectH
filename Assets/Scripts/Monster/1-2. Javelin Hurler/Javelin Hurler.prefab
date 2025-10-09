@@ -331,19 +331,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f239662d43700ab42b1772de90eaf65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideStats: 1
-  stats:
-  - {fileID: 11400000, guid: 40f0130134d6e84429a4915bd694fdf1, type: 2}
+  _overrideStats: 0
+  Stats: []
   _maxHP: 5
   _attackPower: 1
   _moveSpeed: 1
   _attackCooltime: 0.5
   _invincibleDuration: 0.5
-  defaultIsRight: 0
-  platformManager: {fileID: 0}
-  sceneAssetsLibrary: {fileID: 0}
-  damageFlashDuration: 0.1
-  stateDisplay: 
+  RandomizeStartDirection: 1
+  DefaultIsRight: 0
+  PlatformManager: {fileID: 0}
+  SceneAssetsLibrary: {fileID: 0}
+  DamageFlashDuration: 0.1
+  _stateDisplay: 
   javelinPrefab: {fileID: 8805659128304783242, guid: 0fd521a4460b95546befe5175c5b5cc6, type: 3}
   javelinScale: 0.4
   javelinPosition: {x: -1, y: 0.85}

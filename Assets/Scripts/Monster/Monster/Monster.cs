@@ -54,7 +54,7 @@ public abstract partial class Monster : MonoBehaviour
 
     [Header("Image Settings")]
     [SerializeField] protected bool RandomizeStartDirection = true;
-    [SerializeField] protected bool DefaultIsRight;
+    [SerializeField] internal bool DefaultIsRight;
 
     [Header("Bindings")]
     [SerializeField] internal PlatformManager PlatformManager;

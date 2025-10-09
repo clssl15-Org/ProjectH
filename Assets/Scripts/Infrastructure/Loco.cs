@@ -100,6 +100,15 @@ namespace UniEngine
             return new Handle(() => Updates -= action);
         }
 
-        private static void LocoUpdate() => Updates?.Invoke();
+        private static void LocoUpdate()
+        {
+            if (!Application.isPlaying)
+            {
+                Updates = null;
+                return;
+            }
+
+            Updates?.Invoke();
+        }
     }
 }

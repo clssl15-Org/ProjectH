@@ -6,8 +6,8 @@ public partial class JavelinHurler
     private class HurlJavelin : MonsterActionComponent
     {
         // Internal
-        private bool _isJavelinThrown;
         private JavelinHurler JavelinHurler => (JavelinHurler)MonsterAction.Owner;
+        private bool _isJavelinThrown;
 
 
         // Content
@@ -35,6 +35,8 @@ public partial class JavelinHurler
                 javelin.Throw(
                     Quaternion.Euler(0, 0, flipped ? JavelinHurler.throwAngle : 180 - JavelinHurler.throwAngle),
                     JavelinHurler.throwPower);
+
+                Interrupt(InterruptType.Completed);
             }
         }
     }

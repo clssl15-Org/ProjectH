@@ -96,8 +96,20 @@ namespace MonsterActions
             }
         }
 
-        public void Pause() => Animator.speed = 0f;
-        public void Resume() => Animator.speed = 1f;
+        public void Pause()
+        {
+            if (_timer != null)
+                _timer.Factor = 0f;
+
+            Animator.speed = 0f;
+        }
+        public void Resume()
+        {
+            if (_timer != null)
+                _timer.Factor = 1f;
+
+            Animator.speed = 1f;
+        }
 
         public void Stop()
         {

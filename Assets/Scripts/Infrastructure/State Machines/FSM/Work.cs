@@ -231,19 +231,6 @@ namespace UniEngine.StateMachines.FSM
 
         #region Child Management
         /// <summary>
-        /// Creates and adds a new child <see cref="Work"/> with the specified name,
-        /// and returns the newly created child.
-        /// </summary>
-        /// <param name="name">The name of the new child to create.</param>
-        /// <param name="primary">Indicates whether this new child is considered primary.</param>
-        /// <returns>The newly created child <see cref="Work"/>.</returns>
-        public Work AddChild(object name, bool primary = false)
-        {
-            ThrowIfDisposed();
-            return hierarchy.AddChild(GetName(name), primary);
-        }
-
-        /// <summary>
         /// Attaches an existing <see cref="Work"/> object to this instance,
         /// and returns the attached child.
         /// </summary>
