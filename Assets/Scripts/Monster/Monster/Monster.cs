@@ -3,6 +3,8 @@ using System.Text;
 using MonsterActions;
 using MonsterBT;
 using UnityEngine;
+using static MonsterActions.MonsterAction;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -255,24 +257,11 @@ public abstract partial class Monster : MonoBehaviour
 
     #region High-level Actions
     internal bool TryDoAction(
-        MonsterActionType monsterAction,
+        MonsterActionPlayInfo playInfo,
         out ActionResult reason,
-        Action<ActionResult> callback = null,
         bool stopPreviousAction = true,
-        bool allowRestart = false,
-        float? playTime = null,
-        float stayTimeAfterFinised = 0f)
-        => ActionController.TryDoAction(monsterAction.ToString(), out reason, callback, stopPreviousAction, allowRestart, playTime, stayTimeAfterFinised);
-
-    internal bool TryDoAction(
-        string monsterAction,
-        out ActionResult reason,
-        Action<ActionResult> callback = null,
-        bool stopPreviousAction = true,
-        bool allowRestart = false,
-        float? playTime = null,
-        float stayTimeAfterFinised = 0f)
-        => ActionController.TryDoAction(monsterAction, out reason, callback, stopPreviousAction, allowRestart, playTime, stayTimeAfterFinised);
+        bool allowRestart = false)
+        => ActionController.TryDoAction(playInfo, out reason, stopPreviousAction, allowRestart);
 
     internal MonsterActionType GetCurrentAction() => ActionController.GetCurrentAction();
     internal bool TryGetCurrentAction(out string name) => ActionController.TryGetCurrentAction(out name);

@@ -2,6 +2,7 @@ using System;
 using UniEngine.StateMachines.FSM;
 using UnityEngine;
 using static ActionResult;
+using static MonsterActions.MonsterAction;
 
 namespace MonsterActions
 {
@@ -20,32 +21,31 @@ namespace MonsterActions
         }
 
         public bool TryDoAction(
-            string monsterAction,
+            MonsterActionPlayInfo playInfo,
             out ActionResult reason,
-            Action<ActionResult> callback = null,
             bool stopPreviousAction = true,
-            bool allowRestart = false,
-            float? playTime = null,
-            float stayTimeAfterFinised = 0f)
+            bool allowRestart = false)
         {
-            if (monsterAction == MonsterActionType.None.ToString())
+            if (playInfo.Name == MonsterActionType.None.ToString())
             {
                 StopCurrentAction();
 
                 reason = new(ResultType.Success,
-                    $"입력한 행동 상태 '{monsterAction}'이(가) {MonsterActionType.None.ToString()}이기 때문에 행동을 하지 않는 상태로 설정하였습니다.");
+                    $"입력한 행동 상태 '{playInfo.Name}'이(가) {MonsterActionType.None.ToString()}이기 때문에 " +
+                    $"행동을 하지 않는 상태로 설정하였습니다.");
 
                 return true;
             }
 
             if (TryGetCurrentChild<MonsterAction>(out var current))
             {
-                if (current.Name != monsterAction)
+                if (current.Name != playInfo.Name)
                 {
                     if (!stopPreviousAction)
                     {
                         reason = new(ResultType.OtherActionDoing,
-                            $"이미 다른 행동 '{current.Name}'이(가) 실행 중이기 때문에 입력한 행동 '{monsterAction}'을(를) 실행할 수 없습니다.");
+                            $"이미 다른 행동 '{current.Name}'이(가) 실행 중이기 때문에" +
+                            $"입력한 행동 '{playInfo.Name}'을(를) 실행할 수 없습니다.");
 
                         return false;
                     }
@@ -55,7 +55,7 @@ namespace MonsterActions
                     if (!allowRestart)
                     {
                         reason = new(ResultType.AlreadyDoing,
-                            $"이미 입력한 행동 '{monsterAction}'이(가) 실행 중입니다.");
+                            $"이미 입력한 행동 '{playInfo.Name}'이(가) 실행 중입니다.");
 
                         return false;
                     }
@@ -65,7 +65,7 @@ namespace MonsterActions
 
             try
             {
-                SetNextWith(monsterAction, callback, playTime, stayTimeAfterFinised);
+                SetNextWith(playInfo.Name, playInfo);
 
                 reason = new(ResultType.Success);
                 return true;
@@ -73,7 +73,7 @@ namespace MonsterActions
             catch (ArgumentException ex)
             {
                 reason = new(ResultType.NotFound,
-                    $"입력한 행동 상태 '{monsterAction}'을(를) 찾는 데 실패했습니다.", ex);
+                    $"입력한 행동 상태 '{playInfo.Name}'을(를) 시작하는 데 실패했습니다.", ex);
 
                 return false;
             }

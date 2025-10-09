@@ -66,12 +66,19 @@ namespace MonsterActions
         }
 
 
-        public record MonsterActionPlayInfo
-        (
-            Action<ActionResult> Callback,
+        public record MonsterActionPlayInfo(
+            string Name,
+            Action<ActionResult> Callback = null,
             float? PlayTime = null,
-            object[] Inputs = null
-        );
+            object[] Inputs = null)
+        {
+            public MonsterActionPlayInfo(
+                MonsterActionType actionType,
+                Action<ActionResult> callback = null,
+                float? playTime = null,
+                object[] inputs = null)
+                : this(actionType.ToString(), callback, playTime, inputs) { }
+        }
 
         protected override void OnEnter(params object[] inputs)
         {

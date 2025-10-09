@@ -36,7 +36,11 @@ namespace MonsterBT
                     $"입력값: {string.Join(", ", inputs.Select(i => i?.ToString() ?? null))}"), nameof(inputs));
 
 
-            if (!Owner.TryDoAction(_monsterAction, out var reason, result => Complete(result), playTime: Owner.InvincibleDuration))
+            if (!Owner.TryDoAction(new(
+                Name: _monsterAction,
+                Callback: result => Complete(result),
+                PlayTime: Owner.InvincibleDuration),
+                out var reason))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));

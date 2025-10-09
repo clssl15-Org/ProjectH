@@ -28,7 +28,7 @@ namespace MonsterBT
                 y = Owner.Rigidbody.velocity.y,
             };
 
-            if (!Owner.TryDoAction(monsterAction, out var reason)
+            if (!Owner.TryDoAction(new(monsterAction), out var reason)
                 && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
                 Debug.LogWarning(Owner.Ctx(

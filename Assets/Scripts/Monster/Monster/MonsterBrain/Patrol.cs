@@ -10,26 +10,26 @@ namespace MonsterBT
         public float MaxPatrolTime { get; set; } = 2f;
 
         // Internal
-        private readonly string monsterAction;
-        private float remainingTime;
+        private readonly string _monsterAction;
+        private float _remainingTime;
 
 
         // Content
         public Patrol(MonsterActionType monsterAction = MonsterActionType.Walk) : this(monsterAction.ToString()) { }
-        public Patrol(string monsterAction) => this.monsterAction = monsterAction;
+        public Patrol(string monsterAction) => _monsterAction = monsterAction;
 
         protected override void OnOpen(object[] _)
         {
-            remainingTime = Random.Range(MinPatrolTime, MaxPatrolTime);
+            _remainingTime = Random.Range(MinPatrolTime, MaxPatrolTime);
 
             if (Owner.Direction != Direction.Left && Owner.Direction != Direction.Right)
                 Owner.Direction = Random.Range(0, 2) == 0 ? Direction.Left : Direction.Right;
 
-            if (!Owner.TryDoAction(monsterAction, out var reason)
+            if (!Owner.TryDoAction(new(_monsterAction), out var reason)
                  && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
                 Debug.LogWarning(Owner.Ctx(
-                    $"{monsterAction} 행동에 실패하였기 때문에 Patrol 상태로 진입할 수 없습니다.\n{reason}"));
+                    $"{_monsterAction} 행동에 실패하였기 때문에 Patrol 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }
@@ -37,9 +37,9 @@ namespace MonsterBT
 
         protected override void OnTick()
         {
-            remainingTime -= Time.deltaTime;
+            _remainingTime -= Time.deltaTime;
 
-            if (remainingTime <= 0)
+            if (_remainingTime <= 0)
                 Complete();
 
             if (!Owner.TryMove())

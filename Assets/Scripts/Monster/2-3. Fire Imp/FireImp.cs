@@ -42,15 +42,15 @@ public class FireImp : Monster
     {
         public FireImpController(FireImp monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle)
+            AddChild((object)new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Run)
+            AddChild((object)new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Attack)
+            AddChild((object)new MonsterAction(MonsterActionType.Attack)
                 .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireStartTime)));
-            AddChild(new MonsterAction(MonsterActionType.Hit)
+            AddChild((object)new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Dead)
+            AddChild((object)new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }

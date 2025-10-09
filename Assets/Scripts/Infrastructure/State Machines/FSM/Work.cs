@@ -201,12 +201,12 @@ namespace UniEngine.StateMachines.FSM
             hierarchy.ClearNext();
         }
 
-        public Work AddEnteredAction(Action action)
+        public Work SetEnteredAction(Action action)
         {
             Entered += action;
             return this;
         }
-        public Work AddEnteredAction(Action<object[]> action)
+        public Work SetEnteredAction(Action<object[]> action)
         {
             EnteredWith += action;
             return this;
@@ -216,7 +216,7 @@ namespace UniEngine.StateMachines.FSM
             Updated += action;
             return this;
         }
-        public Work AddExitedAction(Action action)
+        public Work SetExitedAction(Action action)
         {
             Exited += action;
             return this;
@@ -250,33 +250,7 @@ namespace UniEngine.StateMachines.FSM
         /// <param name="work">The existing child instance to attach.</param>
         /// <param name="primary">Indicates whether this child is considered primary.</param>
         /// <returns>The attached child of type <typeparamref name="T"/>.</returns>
-        public T AddChild<T>(T work, bool primary = false) where T : Work
-        {
-            ThrowIfDisposed();
-            return hierarchy.AddChild(work.Name, work, primary);
-        }
-
-        /// <summary>
-        /// Attaches an existing <see cref="Work"/> object to this instance,
-        /// and returns the attached child.
-        /// </summary>
-        /// <param name="work">The existing child instance to attach.</param>
-        /// <param name="primary">Indicates whether this child is considered primary.</param>
-        /// <returns>The attached child of type <typeparamref name="T"/>.</returns>
-        public T AddChild<T>(string name, T work, bool primary = false) where T : Work
-        {
-            ThrowIfDisposed();
-            return hierarchy.AddChild(name, work, primary);
-        }
-
-        /// <summary>
-        /// Attaches an existing <see cref="Work"/> object to this instance,
-        /// and returns the parent (this object) for method chaining.
-        /// </summary>
-        /// <param name="work">The existing child instance to attach.</param>
-        /// <param name="primary">Indicates whether this child is considered primary.</param>
-        /// <returns>This <see cref="Work"/> instance (the parent), enabling chained calls.</returns>
-        public Work Append<T>(T work, bool primary = false) where T : Work
+        public Work AddChild<T>(T work, bool primary = false) where T : Work
         {
             ThrowIfDisposed();
             hierarchy.AddChild(work.Name, work, primary);

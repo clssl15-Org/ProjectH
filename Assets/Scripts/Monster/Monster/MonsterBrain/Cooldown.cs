@@ -6,24 +6,24 @@ namespace MonsterBT
     public class Cooldown : BTNode<Monster, MonsterBlackboard>
     {
         // Internal
-        private readonly string monsterAction;
-        private float? remainingCooldownTime;
+        private readonly string _monsterAction;
+        private float? _remainingCooldownTime;
 
 
         // Content
         public Cooldown(MonsterActionType monsterAction = MonsterActionType.Idle) : this(monsterAction.ToString()) { }
-        public Cooldown(string monsterAction) => this.monsterAction = monsterAction;
+        public Cooldown(string monsterAction) => _monsterAction = monsterAction;
 
 
         protected override void OnOpen(object[] _)
         {
-            remainingCooldownTime = Owner.AttackCooltime;
+            _remainingCooldownTime = Owner.AttackCooltime;
 
-            if (!Owner.TryDoAction(monsterAction, out var reason)
+            if (!Owner.TryDoAction(new(_monsterAction), out var reason)
                 && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
                 Debug.LogWarning(Owner.Ctx(
-                    $"{monsterAction} 행동에 실패하였기 때문에 Cooldown 상태로 진입할 수 없습니다.\n{reason}"));
+                    $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Cooldown)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }
@@ -31,12 +31,12 @@ namespace MonsterBT
 
         protected override void OnTick()
         {
-            if (!remainingCooldownTime.HasValue)
+            if (!_remainingCooldownTime.HasValue)
                 return;
 
-            remainingCooldownTime -= Time.deltaTime;
+            _remainingCooldownTime -= Time.deltaTime;
 
-            if (remainingCooldownTime <= 0)
+            if (_remainingCooldownTime <= 0)
                 Complete();
         }
     }

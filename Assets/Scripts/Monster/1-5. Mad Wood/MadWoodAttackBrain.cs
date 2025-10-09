@@ -1,5 +1,6 @@
 using UniEngine.StateMachines.BT;
 using UnityEngine;
+using static MonsterActions.MonsterAction;
 
 public partial class MadWood : Monster
 {
@@ -15,7 +16,10 @@ public partial class MadWood : Monster
                 ? AttackMode.LandAttack
                 : AttackMode.DefaultAttack;
 
-            if (!Owner.TryDoAction(currentAttackMode.ToString(), out var reason, result => Complete(result)))
+            if (!Owner.TryDoAction(new MonsterActionPlayInfo(
+                Name: currentAttackMode.ToString(),
+                Callback: result => Complete(result)),
+                out var reason))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{currentAttackMode.ToString()} 행동에 실패하였기 때문에 Attack 상태로 진입할 수 없습니다.\n{reason}"));

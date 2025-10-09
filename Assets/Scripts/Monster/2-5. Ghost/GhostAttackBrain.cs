@@ -34,7 +34,7 @@ public partial class Ghost
             };
 
 
-            if (!Owner.TryDoAction(action, out var reason, result => Complete(result)))
+            if (!Owner.TryDoAction(new(action, result => Complete(result)), out var reason))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{action} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));

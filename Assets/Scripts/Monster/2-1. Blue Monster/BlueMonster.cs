@@ -35,15 +35,15 @@ public class BlueMonster : Monster
     {
         public BlueMonsterActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle)
+            AddChild((object)new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Run)
+            AddChild((object)new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Attack)
+            AddChild((object)new MonsterAction(MonsterActionType.Attack)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Hit)
+            AddChild((object)new MonsterAction(MonsterActionType.Hit)
                 .AddComponent(new HitFlash()));
-            AddChild(new MonsterAction(MonsterActionType.Dead)
+            AddChild((object)new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }

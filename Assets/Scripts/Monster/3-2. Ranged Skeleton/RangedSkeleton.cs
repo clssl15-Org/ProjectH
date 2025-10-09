@@ -43,19 +43,19 @@ public class RangedSkeleton : Monster
     {
         public RangedkeletonActionController(RangedSkeleton monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle)
+            AddChild((object)new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Walk)
+            AddChild((object)new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Attack)
+            AddChild((object)new MonsterAction(MonsterActionType.Attack)
                 .AddAnimationComponent(new PlayInfo("throw"))
                 .AddComponent(new AttackWithKinematicProjectile(
                     launcher: monster.projectileLauncher,
                     getLaunchInfo: () => new(monster.launchTime, monster.projectileSpeed),
                     launchType: KinematicProjectileLauncher.LaunchType.Directions,
-                    getDirections: () => new[] { monster.Direction.ToVector2() })));
+                    getDirections: () => (new[] { monster.Direction.ToVector2() }))));
             AddChild(new HitFlash());
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild((object)new MonsterAction(MonsterActionType.Dead));
         }
     }
 

@@ -49,17 +49,17 @@ public partial class Ghost : Monster
     {
         public GhostController(Ghost monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle)
+            AddChild((object)new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Run)
+            AddChild((object)new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction("Attack_1")
+            AddChild((object)new MonsterAction("Attack_1")
                 .AddAnimationComponent());
-            AddChild(new MonsterAction("Attack_2")
+            AddChild((object)new MonsterAction("Attack_2")
                 .AddComponent(new GhostExplosiveAttackAction()));
-            AddChild(new MonsterAction(MonsterActionType.Hit)
+            AddChild((object)new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Dead)
+            AddChild((object)new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }

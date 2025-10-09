@@ -43,9 +43,9 @@ public partial class StagBeetle
             _afterMainAction = afterMainAction;
 
             _work = new Work()
-                    .AddExitedAction(AnimationPlayer.Stop)
+                    .SetExitedAction(AnimationPlayer.Stop)
                 .AddChild(new Work("PreAction")
-                    .AddEnteredAction(() =>
+                    .SetEnteredAction(() =>
                     {
                         _beforePreAction?.Invoke();
 
@@ -57,7 +57,7 @@ public partial class StagBeetle
                             }));
                     })
                 .AddChild(new Work("MainAction")
-                    .AddEnteredAction(() =>
+                    .SetEnteredAction(() =>
                     {
                         _beforeMainAction?.Invoke();
                         _mainActionEnteredTime = _elapsedTime;
@@ -81,9 +81,9 @@ public partial class StagBeetle
                         if (!play)
                             _work.SetNext("PostAction");
                     })
-                    .AddExitedAction(() => _afterMainAction?.Invoke()))
+                    .SetExitedAction(() => _afterMainAction?.Invoke()))
                 .AddChild(new Work("PostAction")
-                    .AddEnteredAction(() => AnimationPlayer.Play(
+                    .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo(_animations[0], Callback: succeed =>
                         {
                             if (!succeed) throw new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");

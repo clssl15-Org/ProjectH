@@ -65,15 +65,15 @@ public partial class StagBeetle : Monster
             bool restarted = false;
 
 
-            AddChild(new MonsterAction(MonsterActionType.Idle)
+            AddChild((object)new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Alert)
+            AddChild((object)new MonsterAction(MonsterActionType.Alert)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Walk)
+            AddChild((object)new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(MonsterActionType.Run)
+            AddChild((object)new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
-            AddChild(new MonsterAction(AttackMode.RollAttack.ToString())
+            AddChild((object)new MonsterAction(AttackMode.RollAttack.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
                     beforePreAction: () => rollRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
@@ -92,7 +92,7 @@ public partial class StagBeetle : Monster
                         return playtime <= stagBeetle._rollingTime;
                     },
                     afterMainAction: () => stagBeetle.Collider.excludeLayers = default)));
-            AddChild(new MonsterAction(AttackMode.SpikeAttack.ToString())
+            AddChild((object)new MonsterAction(AttackMode.SpikeAttack.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
                     beforeMainAction: () =>
@@ -118,13 +118,13 @@ public partial class StagBeetle : Monster
 
                         return playtime <= lentgh + stagBeetle._waitingTime + stagBeetle._staytimeBeforeContinue;
                     })));
-            AddChild(new MonsterAction(AttackMode.Roar.ToString())
+            AddChild((object)new MonsterAction(AttackMode.Roar.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.Roar.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
                     whileMainAction: (playtime, length) => playtime > length)));
-            AddChild(new MonsterAction(MonsterActionType.Hit)
+            AddChild((object)new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent(new PlayInfo("HitGround")));
-            AddChild(new MonsterAction(MonsterActionType.Dead)
+            AddChild((object)new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }
     }

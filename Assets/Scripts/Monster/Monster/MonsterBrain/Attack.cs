@@ -15,10 +15,14 @@ namespace MonsterBT
 
         protected override void OnOpen(object[] _)
         {
-            if (!Owner.TryDoAction(_monsterAction, out var reason, result => Complete(result), allowRestart: true))
+            if (!Owner.TryDoAction(new(
+                Name: _monsterAction,
+                Callback: result => Complete(result)),
+                out var reason,
+                allowRestart: true))
             {
                 Debug.LogWarning(Owner.Ctx(
-                    $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
+                    $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Attack)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }

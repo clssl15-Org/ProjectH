@@ -26,7 +26,7 @@ public partial class StagBeetle : Monster
                 mode = ower._attackMode;
 
 
-            if (!Owner.TryDoAction(mode.ToString(), out var reason, result => Complete(result)))
+            if (!Owner.TryDoAction(new(mode.ToString(), result => Complete(result)), out var reason))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{mode.ToString()} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));

@@ -23,10 +23,15 @@ namespace MonsterBT
             Owner.IsAlive = false;
             Owner.Collider.excludeLayers = LayerMask.GetMask("Player");
 
-            if (!Owner.TryDoAction(_monsterAction, out var reason,
-                result => Complete(),
-                allowRestart: true,
-                stayTimeAfterFinised: StayTimeAfterFinised))
+            if (!Owner.TryDoAction(new(
+                Name: _monsterAction,
+                Callback: result => Complete(),
+                Inputs: new[]
+                {
+                    new MonsterActions.PlayAnimation.AnimationPlayInfo(DelayAfterPlay: StayTimeAfterFinised)
+                }),
+                out var reason,
+                allowRestart: true))
             {
                 Debug.LogWarning(Owner.Ctx(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));

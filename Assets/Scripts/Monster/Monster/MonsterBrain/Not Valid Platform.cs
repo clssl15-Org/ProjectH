@@ -13,7 +13,7 @@ namespace MonsterBT
 
         protected override void OnOpen(object[] _)
         {
-            if (!Owner.TryDoAction(monsterAction, out var reason)
+            if (!Owner.TryDoAction(new(monsterAction), out var reason)
                  && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
                 Debug.LogWarning(Owner.Ctx(

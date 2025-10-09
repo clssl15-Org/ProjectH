@@ -33,37 +33,37 @@ public partial class Ghost
         public GhostExplosiveAttackAction()
         {
             _work = new Work()
-                    .AddExitedAction(AnimationPlayer.Stop)
+                    .SetExitedAction(AnimationPlayer.Stop)
                 .AddChild(new Work(phases[0])
-                    .AddEnteredAction(() => AnimationPlayer.Play(
+                    .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[1]);
                         }))))
                 .AddChild(new Work(phases[1])
-                    .AddEnteredAction(() => AnimationPlayer.Play(
+                    .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);
                         }))))
                 .AddChild(new Work(phases[1])
-                    .AddEnteredAction(() => AnimationPlayer.Play(
+                    .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo("Attack_2", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);
                         }))))
                 .AddChild(new Work(phases[1])
-                    .AddEnteredAction(() => AnimationPlayer.Play(
+                    .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);
                         }))))
                 .AddChild(new Work(phases[1])
-                    .AddEnteredAction(() => AnimationPlayer.Play(
+                    .SetEnteredAction(() => AnimationPlayer.Play(
                         new PlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
