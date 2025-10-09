@@ -44,7 +44,7 @@ namespace MonsterActions
                 {
                     if (!stopPreviousAction)
                     {
-                        reason = new(ResultType.OtherActionExecuting,
+                        reason = new(ResultType.OtherActionDoing,
                             $"이미 다른 행동 '{current.Name}'이(가) 실행 중이기 때문에 입력한 행동 '{monsterAction}'을(를) 실행할 수 없습니다.");
 
                         return false;
@@ -124,7 +124,7 @@ namespace MonsterActions
 
         internal void StopAnimator()
         {
-            Owner.MonsterAnimationPlayer.Stop();
+            Owner.AnimationPlayer.Stop();
             Owner.SpriteRenderer.sprite = _originalSprite;
         }
     }

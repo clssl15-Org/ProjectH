@@ -11,21 +11,21 @@ namespace MonsterActions
         private string _stateDisplay = string.Empty;
 
         // Internal
-        private Monster monster;
+        private Monster _monster;
 
-        private Material originalMaterial;
-        private bool materialRestored;
+        private Material _originalMaterial;
+        private bool _materialRestored;
 
-        private Action<ActionResult> callback;
-        private bool isRunning = false;
-        private bool succeeded = false;
+        private Action<ActionResult> _callback;
+        private bool _isRunning = false;
+        private bool _succeeded = false;
 
-        private float? mainAnimationLength;
-        private float? mainAnimationRemainingTime;
+        private float? _mainAnimationLength;
+        private float? _mainAnimationRemainingTime;
 
 
         // Content
-        public void Initialize(Monster monster) => this.monster = monster;
+        public void Initialize(Monster monster) => _monster = monster;
 
         public bool TryHit(
             out ActionResult reason,
@@ -33,15 +33,15 @@ namespace MonsterActions
             bool allowRestart = false,
             float? playtime = null)
         {
-            if (!monster)
+            if (!_monster)
             {
                 reason = new(ActionResult.ResultType.InvalidOperation,
-                    Ctx($"{nameof(monster)} 컴포넌트({monster?.name ?? "Null"})가 유효하지 않습니다."));
+                    Ctx($"{nameof(_monster)} 컴포넌트 '{_monster?.name ?? "null"}'이(가) 유효하지 않습니다."));
 
                 return false;
             }
 
-            if (!allowRestart && isRunning)
+            if (!allowRestart && _isRunning)
             {
                 reason = new(ActionResult.ResultType.AlreadyDoing,
                     Ctx($"이미 Hit 행동을 실행하고 있기 때문에 행동을 재실행할 수 없습니다."));
@@ -49,21 +49,21 @@ namespace MonsterActions
                 return false;
             }
 
-            this.callback = callback;
+            _callback = callback;
 
-            mainAnimationLength = playtime.HasValue
+            _mainAnimationLength = playtime.HasValue
                 ? (playtime.Value >= 0 ? playtime.Value : null)
-                : monster.InvincibleDuration;
+                : _monster.InvincibleDuration;
 
-            mainAnimationRemainingTime = mainAnimationLength;
+            _mainAnimationRemainingTime = _mainAnimationLength;
 
-            originalMaterial = monster.SpriteRenderer.material;
-            monster.SpriteRenderer.material = monster.SceneAssetsLibrary.SolidColor;
-            monster.SpriteRenderer.material.color = Color.white;
+            _originalMaterial = _monster.SpriteRenderer.material;
+            _monster.SpriteRenderer.material = _monster.SceneAssetsLibrary.SolidColor;
+            _monster.SpriteRenderer.material.color = Color.white;
 
-            isRunning = true;
-            succeeded = false;
-            materialRestored = false;
+            _isRunning = true;
+            _succeeded = false;
+            _materialRestored = false;
 
             reason = new(ActionResult.ResultType.Success);
             return true;
@@ -80,27 +80,27 @@ namespace MonsterActions
 
         private void DoUpdate()
         {
-            if (!isRunning)
+            if (!_isRunning)
                 return;
 
-            if (!mainAnimationRemainingTime.HasValue)
+            if (!_mainAnimationRemainingTime.HasValue)
                 return;
 
-            if (!monster.SpriteRenderer)
+            if (!_monster.SpriteRenderer)
             {
-                isRunning = false;
+                _isRunning = false;
                 return;
             }
 
 
-            mainAnimationRemainingTime -= Time.deltaTime;
+            _mainAnimationRemainingTime -= Time.deltaTime;
 
-            if (mainAnimationRemainingTime <= mainAnimationLength - monster.DamageFlashDuration)
+            if (_mainAnimationRemainingTime <= _mainAnimationLength - _monster.DamageFlashDuration)
                 RestoreMaterial();
 
-            if (mainAnimationRemainingTime <= 0)
+            if (_mainAnimationRemainingTime <= 0)
             {
-                succeeded = true;
+                _succeeded = true;
                 StopAction();
             }
         }
@@ -108,41 +108,41 @@ namespace MonsterActions
         public void StopAction()
         {
             RestoreMaterial();
-            isRunning = false;
+            _isRunning = false;
 
-            callback?.Invoke(new(succeeded
+            _callback?.Invoke(new(_succeeded
                 ? ActionResult.ResultType.Success
                 : ActionResult.ResultType.Interrupted));
         }
 
         private void RestoreMaterial()
         {
-            if (materialRestored)
+            if (_materialRestored)
                 return;
 
-            if (monster && monster.SpriteRenderer)
+            if (_monster && _monster.SpriteRenderer)
             {
-                if (monster.SpriteRenderer.material)
-                    Destroy(monster.SpriteRenderer.material);
+                if (_monster.SpriteRenderer.material)
+                    Destroy(_monster.SpriteRenderer.material);
 
-                monster.SpriteRenderer.material = originalMaterial;
-                materialRestored = true;
+                _monster.SpriteRenderer.material = _originalMaterial;
+                _materialRestored = true;
             }
         }
 
 
         private void UpdateDisplayConetnt()
         {
-            if (monster == null)
-                _stateDisplay = $"Invalid {nameof(monster)} ({monster?.name ?? "Null"})";
+            if (_monster == null)
+                _stateDisplay = $"Invalid {nameof(_monster)} ({_monster?.name ?? "Null"})";
             else
-                _stateDisplay = $"Running: {isRunning}\nSucceed: {succeeded}";
+                _stateDisplay = $"Running: {_isRunning}\nSucceed: {_succeeded}";
         }
 
         private string Ctx(string message)
         {
-            if (monster)
-                return monster.Ctx(_Ctx(message));
+            if (_monster)
+                return _monster.Ctx(_Ctx(message));
             else
                 return _Ctx(message);
 

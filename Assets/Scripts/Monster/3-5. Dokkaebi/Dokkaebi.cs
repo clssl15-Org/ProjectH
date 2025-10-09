@@ -11,8 +11,8 @@ public partial class Dokkaebi : Monster
 {
     // Property
     [Header("Dokkaebi")]
-    [SerializeField] private GameObject laserPrefab;
-    [SerializeField] private float laserAppearTime;
+    [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private float _laserAppearTime;
 
 
     // Internal
@@ -41,13 +41,21 @@ public partial class Dokkaebi : Monster
     {
         public DokkaebiActionController(Dokkaebi monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle.ToString()));
-            AddChild(new MonsterAction(MonsterActionType.Alert.ToString()));
-            AddChild(new MonsterAction(MonsterActionType.Walk.ToString()));
-            AddChild(new MonsterAction(MonsterActionType.Run.ToString()));
-            AddChild(new AttackWithWeapon(monster.laserPrefab, monster.laserAppearTime));
-            AddChild(new MonsterAction(MonsterActionType.Hit.ToString()));
-            AddChild(new MonsterAction(MonsterActionType.Dead.ToString()));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Alert)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Walk)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent()
+                .AddComponent(new AttackWithWeapon(monster._laserPrefab, monster._laserAppearTime)));
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
@@ -55,11 +63,11 @@ public partial class Dokkaebi : Monster
     // Content
     protected override void Awake()
     {
-        if (!laserPrefab)
+        if (!_laserPrefab)
             throw new InvalidOperationException(
-                $"{GetType().Name}은(는) {nameof(laserPrefab)}을(를) 가지고 있어야 합니다.");
+                $"{nameof(Dokkaebi)}은(는) {nameof(_laserPrefab)}을(를) 가지고 있어야 합니다.");
 
-        laserPrefab.SetActive(false);
+        _laserPrefab.SetActive(false);
         base.Awake();
     }
 

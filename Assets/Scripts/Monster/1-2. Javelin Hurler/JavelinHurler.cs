@@ -45,13 +45,21 @@ public partial class JavelinHurler : Monster
     {
         public JavelinHurlerActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Alert));
-            AddChild(new MonsterAction(MonsterActionType.Walk));
-            AddChild(new MonsterAction(MonsterActionType.Run));
-            AddChild(new JavelinHurlerAttackAction());
-            AddChild(new MonsterAction(MonsterActionType.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Alert)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Walk)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent()
+                .AddComponent(new HurlJavelin()));
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
@@ -60,7 +68,7 @@ public partial class JavelinHurler : Monster
     protected override void Awake()
     {
         if (!javelinPrefab)
-            throw new InvalidOperationException($"창던지개는 {nameof(javelinPrefab)}을(를) 가지고 있어야 합니다.");
+            throw new InvalidOperationException($"{nameof(JavelinHurler)}은(는) {nameof(javelinPrefab)}을(를) 가지고 있어야 합니다.");
 
         base.Awake();
     }

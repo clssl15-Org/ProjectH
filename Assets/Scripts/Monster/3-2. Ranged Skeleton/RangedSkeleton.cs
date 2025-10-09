@@ -29,7 +29,7 @@ public class RangedSkeleton : Monster
                         .AddChild(new Engaged()
                             .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
-                        .AddChild(new Attack("throw"))
+                        .AddChild(new Attack())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
@@ -43,14 +43,17 @@ public class RangedSkeleton : Monster
     {
         public RangedkeletonActionController(RangedSkeleton monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Walk));
-            AddChild(new AttackWithKinematicProjectile(
-                monster.projectileLauncher,
-                () => new(monster.launchTime, monster.projectileSpeed),
-                KinematicProjectileLauncher.LaunchType.Directions,
-                () => new[] { monster.Direction.ToVector2() },
-                "throw"));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Walk)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent(new PlayInfo("throw"))
+                .AddComponent(new AttackWithKinematicProjectile(
+                    launcher: monster.projectileLauncher,
+                    getLaunchInfo: () => new(monster.launchTime, monster.projectileSpeed),
+                    launchType: KinematicProjectileLauncher.LaunchType.Directions,
+                    getDirections: () => new[] { monster.Direction.ToVector2() })));
             AddChild(new HitFlash());
             AddChild(new MonsterAction(MonsterActionType.Dead));
         }

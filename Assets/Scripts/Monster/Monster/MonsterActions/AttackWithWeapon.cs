@@ -2,69 +2,64 @@ using UnityEngine;
 
 namespace MonsterActions
 {
-    internal class AttackWithWeapon : MonsterAction
+    internal class AttackWithWeapon : MonsterActionComponent
     {
         // Internal
-        private GameObject weaponPrefab;
-        private float startTime;
+        private GameObject _weaponPrefab;
+        private float _startTime;
 
-        private GameObject weapon;
-        private float playtime;
-        private bool weaponSetted;
+        private GameObject _weapon;
+        private bool _isWeaponSetted;
 
 
         // Content
-        public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, MonsterActionType monsterAction = MonsterActionType.Attack) : this(weaponPrefab, startTime, monsterAction.ToString()) { }
-        public AttackWithWeapon(GameObject weaponPrefab, float startTime, string monsterAction) : base(monsterAction)
+        public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0)
         {
-            this.weaponPrefab = weaponPrefab;
-            this.startTime = startTime;
+            _weaponPrefab = weaponPrefab;
+            _startTime = startTime;
         }
 
-        protected override void OnEnter(params object[] inputs)
+        public override void Enter(object input)
         {
-            playtime = 0;
-            weaponSetted = false;
+            _isWeaponSetted = false;
 
-            if (startTime <= 0)
+            if (_startTime <= 0)
                 SetWeapon();
 
-            base.OnEnter(inputs);
+            base.Enter(input);
         }
 
-        protected override void OnUpdate()
+        public override void Update(float elapsedTime)
         {
-            if (weaponSetted)
+            if (_isWeaponSetted)
                 return;
 
-            playtime += Time.deltaTime;
-
-            if (playtime >= startTime)
+            if (elapsedTime >= _startTime)
                 SetWeapon();
         }
 
         private void SetWeapon()
         {
-            weaponSetted = true;
+            _isWeaponSetted = true;
 
-            weapon = Object.Instantiate(weaponPrefab);
-            weapon.transform.SetParent(Owner.transform);
+            _weapon = Object.Instantiate(_weaponPrefab);
+            _weapon.transform.SetParent(Owner.transform);
 
-            weapon.transform.SetPositionAndRotation(weaponPrefab.transform.position, weapon.transform.rotation);
-            weapon.transform.localScale = weaponPrefab.transform.localScale;
+            _weapon.transform.SetPositionAndRotation(_weaponPrefab.transform.position, _weapon.transform.rotation);
+            _weapon.transform.localScale = _weaponPrefab.transform.localScale;
 
-            weapon.SetActive(true);
+            _weapon.SetActive(true);
         }
 
-        protected override void OnExit()
+        public override void Interrupt(InterruptType reason)
         {
-            if (weapon)
+            if (_weapon)
             {
-                Object.Destroy(weapon);
-                weapon = null;
+                Object.Destroy(_weapon);
+                _weapon = null;
             }
 
-            base.OnExit();
+            base.Interrupt(reason);
         }
     }
 }

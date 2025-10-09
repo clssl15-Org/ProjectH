@@ -7,7 +7,7 @@ namespace UniEngine.StateMachines.FSM
     public partial class Work : IDisposable
     {
         // Front
-        public string Name { get; }
+        public string Name { get; init; }
 
         public bool Active
         {
@@ -201,12 +201,12 @@ namespace UniEngine.StateMachines.FSM
             hierarchy.ClearNext();
         }
 
-        public Work SetEnteredAction(Action action)
+        public Work AddEnteredAction(Action action)
         {
             Entered += action;
             return this;
         }
-        public Work SetEnteredAction(Action<object[]> action)
+        public Work AddEnteredAction(Action<object[]> action)
         {
             EnteredWith += action;
             return this;
@@ -216,7 +216,7 @@ namespace UniEngine.StateMachines.FSM
             Updated += action;
             return this;
         }
-        public Work SetExitedAction(Action action)
+        public Work AddExitedAction(Action action)
         {
             Exited += action;
             return this;

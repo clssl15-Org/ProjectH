@@ -10,7 +10,7 @@ public class DarkMonsterFirstPhase : Monster
 {
     // Property
     [Header("Dark Monster First Phase")]
-    [SerializeField] private GameObject secondPhasePrefab;
+    [SerializeField] private GameObject _secondPhasePrefab;
 
 
     // Internal
@@ -39,11 +39,16 @@ public class DarkMonsterFirstPhase : Monster
     {
         public DarkMonsterFirstPhaseController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Walk));
-            AddChild(new MonsterAction(MonsterActionType.Attack));
-            AddChild(new MonsterAction(MonsterActionType.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Walk)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
@@ -51,9 +56,9 @@ public class DarkMonsterFirstPhase : Monster
     // Content
     protected override void Awake()
     {
-        if (!secondPhasePrefab)
-            Debug.LogWarning(
-                Ctx($"{nameof(secondPhasePrefab)}이(가) 유효하지 않기 때문에 사망 후 두 번째 페이즈의 몬스터가 생성되지 않습니다."));
+        if (!_secondPhasePrefab)
+            Debug.LogWarning(Ctx(
+                $"{nameof(_secondPhasePrefab)}이(가) 유효하지 않기 때문에 사망 후 두 번째 페이즈의 몬스터가 생성되지 않습니다."));
 
         base.Awake();
     }
@@ -69,9 +74,9 @@ public class DarkMonsterFirstPhase : Monster
 
         Died += succeeded =>
         {
-            if (succeeded && secondPhasePrefab)
+            if (succeeded && _secondPhasePrefab)
             {
-                var second = Instantiate(secondPhasePrefab);
+                var second = Instantiate(_secondPhasePrefab);
                 second.GetComponent<DarkMonsterSecondPhase>().Initialize(PlatformManager, SceneAssetsLibrary);
 
                 second.transform.position = transform.position;

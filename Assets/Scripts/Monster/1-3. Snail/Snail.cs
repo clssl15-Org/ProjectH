@@ -33,13 +33,20 @@ public class Snail : Monster
     {
         public SnailActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Alert));
-            AddChild(new MonsterAction(MonsterActionType.Walk));
-            AddChild(new MonsterAction(MonsterActionType.Run));
-            AddChild(new MonsterAction(MonsterActionType.Attack));
-            AddChild(new MonsterAction(MonsterActionType.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Alert).
+                AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Walk)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 

@@ -34,10 +34,14 @@ public class DarkMonsterSecondPhase : Monster
     {
         public DarkMonsterSecondPhaseController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Attack));
-            //AddChild(new MonsteActionState(MonsterAction.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 

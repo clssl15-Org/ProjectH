@@ -1,4 +1,3 @@
-using System;
 using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
@@ -50,13 +49,18 @@ public partial class Ghost : Monster
     {
         public GhostController(Ghost monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Run));
-            AddChild(new MonsterAction("Attack_1"));
-            //AddChild(new AttackWithWeapon(monster.projectilePrefab, monster.launchStartTime));
-            AddChild(new GhostExplosiveAttackAction());
-            AddChild(new MonsterAction(MonsterActionType.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction("Attack_1")
+                .AddAnimationComponent());
+            AddChild(new MonsterAction("Attack_2")
+                .AddComponent(new GhostExplosiveAttackAction()));
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
@@ -64,12 +68,6 @@ public partial class Ghost : Monster
     // Content
     protected override void Awake()
     {
-        // TODO: 투사체 발사 추가
-        //if (!projectilePrefab)
-        //    throw new InvalidOperationException(
-        //        $"{GetType().Name}은(는) {nameof(projectilePrefab)}을(를) 가지고 있어야 합니다.");
-
-        //projectilePrefab.SetActive(false);
         base.Awake();
     }
 

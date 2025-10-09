@@ -1,42 +1,16 @@
 namespace MonsterActions
 {
-    internal class HitFlash : MonsterAction
+    internal class HitFlash : MonsterActionComponent
     {
-        private float? _mainAnimationLength;
-        private ActionResult _result;
-
-
-        public HitFlash(MonsterActionType baseAction = MonsterActionType.None) : this(baseAction.ToString()) { }
-        public HitFlash(string baseAction) : base(MonsterActionType.Hit.ToString())
+        public override void Enter(object input)
         {
-            AnimationName = baseAction.ToString();
-        }
-
-        protected override void OnEnter(params object[] inputs)
-        {
-            base.OnEnter(inputs);
-
-            if (!Owner.StandaloneHitAction.TryHit(out var reason, r => Exit(r)))
+            if (!Owner.StandaloneHitAction.TryHit(out var reason, r => Interrupt(r.Result.ToInterruptType())))
             {
-                Exit(reason);
+                Interrupt(reason.Result.ToInterruptType());
                 return;
             }
 
-            _result = new(ActionResult.ResultType.Interrupted);
-        }
-
-        private void Exit(ActionResult result)
-        {
-            _result = result;
-            Exit();
-        }
-
-        protected override void OnExit()
-        {
-            var callback = _callback;
-            _callback = null;
-
-            callback?.Invoke(_result);
+            base.Enter(input);
         }
     }
 }

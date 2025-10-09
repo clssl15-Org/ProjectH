@@ -19,7 +19,7 @@ public partial class Ghost
                     var i when 0f <= i && i < 0.75f => AttackMode.RangedAttack,
                     var i when i <= 1f => AttackMode.ExplosiveAttack,
                     var i => throw new InvalidOperationException(
-                        Owner.Ctx($"공격 패턴의 범위는 [0..1]이여야 하지만 '{i}'이(가) 입력되었습니다."))
+                        Owner.Ctx($"공격 패턴의 범위는 0 이상 1 이하여야 하지만 '{i}'이(가) 입력되었습니다."))
                 };
             else
                 mode = ower._attackMode;

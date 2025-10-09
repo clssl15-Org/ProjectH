@@ -92,7 +92,7 @@ public abstract partial class Monster : MonoBehaviour
 
     // Low-level Behavior Handlers
     private KnockbackHandler _knockbackHandler;
-    internal MonsterAnimationPlayer MonsterAnimationPlayer { get; private set; }
+    internal MonsterAnimationPlayer AnimationPlayer { get; private set; }
     internal StandaloneHitAction StandaloneHitAction { get; private set; }
     internal StandaloneHitBrain StandaloneHitBrain { get; private set; }
 
@@ -146,7 +146,7 @@ public abstract partial class Monster : MonoBehaviour
         }
 
         _knockbackHandler = new KnockbackHandler(Rigidbody);
-        MonsterAnimationPlayer = new MonsterAnimationPlayer(GetComponent<Animator>());
+        AnimationPlayer = new MonsterAnimationPlayer(GetComponent<Animator>());
 
         _direction = DefaultIsRight ? Direction.Right : Direction.Left;
         _hp = MaxHP;

@@ -19,9 +19,9 @@ public partial class SpikeSnail : Monster
 
 
     // Internal
-    private class ThornySnailBrain : MonsterBrain
+    private class SpikeSnailBrain : MonsterBrain
     {
-        public ThornySnailBrain(Monster owner) : base(owner)
+        public SpikeSnailBrain(Monster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -40,47 +40,55 @@ public partial class SpikeSnail : Monster
         }
     }
 
-    private class ThornySnailActionController : MonsterActionController
+    private class SpikeSnailActionController : MonsterActionController
     {
-        public ThornySnailActionController(SpikeSnail monster) : base(monster)
+        public SpikeSnailActionController(SpikeSnail monster) : base(monster)
         {
-            AddChild(new MonsterActionState(MonsterActionType.Idle, start: 0.33f, end: 2.08f));
-            AddChild(new MonsterAction(MonsterActionType.Alert));
-            AddChild(new MonsterAction(MonsterActionType.Walk));
-            AddChild(new MonsterAction(MonsterActionType.Run));
-            AddChild(new AttackWithKinematicProjectile(
-                monster.spikeLauncher,
-                () => new(monster.launchTime, monster.spikeSpeed),
-                KinematicProjectileLauncher.LaunchType.Directions,
-                () => new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }));
-            AddChild(new HitFlash());
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent(new PlayInfo(MonsterActionType.Idle, start: 0.33f, end: 2.08f)));
+            AddChild(new MonsterAction(MonsterActionType.Alert)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Walk)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddAnimationComponent()
+                .AddComponent(new AttackWithKinematicProjectile(
+                    launcher: monster._spikeLauncher,
+                    getLaunchInfo: () => new(monster.launchTime, monster.spikeSpeed),
+                    launchType: KinematicProjectileLauncher.LaunchType.Directions,
+                    getDirections: () => new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) })));
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddComponent(new HitFlash()));
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
-    private KinematicProjectileLauncher spikeLauncher;
+    private KinematicProjectileLauncher _spikeLauncher;
 
 
     // Content
     protected override void Awake()
     {
         base.Awake();
-        spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
+        _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
-        if (!spikeLauncher) throw new InvalidOperationException(
-            Ctx("이 몬스터는 spikeLauncher 컴포넌트를 가지고 있어야 합니다."));
+        if (!_spikeLauncher) throw new InvalidOperationException(Ctx(
+            $"{nameof(SpikeSnail)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
-        spikeLauncher.Initialize(this, PlatformManager, "Ground");
+        _spikeLauncher.Initialize(this, PlatformManager, "Ground");
     }
 
     protected override void Start()
     {
         base.Start();
 
-        ActionController = new ThornySnailActionController(this);
+        ActionController = new SpikeSnailActionController(this);
         ActionController.Enter();
 
-        Brain = new ThornySnailBrain(this);
+        Brain = new SpikeSnailBrain(this);
     }
 
     protected override void OnDamaged(DamageInfo damageInfo)

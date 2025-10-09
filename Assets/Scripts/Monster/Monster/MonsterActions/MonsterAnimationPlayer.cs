@@ -24,6 +24,7 @@ namespace MonsterActions
     {
         // Front
         public Animator Animator { get; }
+        public float? CurrentAnimationTime { get; private set; }
 
         // Internal
         private Timer _timer;
@@ -75,9 +76,18 @@ namespace MonsterActions
 
 
                 // 타이머 설정
-                _timer = new Timer(
-                    playInfo.EndTime.GetValueOrDefault(clip.length) - playInfo.StartTime.GetValueOrDefault(0f),
-                    playInfo.Callback);
+                if (!clip.isLooping)
+                {
+                    CurrentAnimationTime = clip.length;
+
+                    _timer = new Timer(
+                        playInfo.EndTime.GetValueOrDefault(clip.length) - playInfo.StartTime.GetValueOrDefault(0f),
+                        playInfo.Callback);
+                }
+                else
+                    CurrentAnimationTime = null;
+
+                Resume();
             }
             catch
             {
@@ -86,6 +96,8 @@ namespace MonsterActions
             }
         }
 
+        public void Pause() => Animator.speed = 0f;
+        public void Resume() => Animator.speed = 1f;
 
         public void Stop()
         {

@@ -6,7 +6,7 @@ public record ActionResult(ActionResult.ResultType Result, string Reason = null,
     {
         Success,
         AlreadyDoing,
-        OtherActionExecuting,
+        OtherActionDoing,
         NotFound,
         Interrupted,
         InvalidOperation

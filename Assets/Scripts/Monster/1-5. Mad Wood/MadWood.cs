@@ -63,13 +63,20 @@ public partial class MadWood : Monster
     {
         public MadWoodActionController(Monster monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction("Fall"));
-            AddChild(new MonsterAction(MonsterActionType.Run));
-            AddChild(new MonsterAction(AttackMode.DefaultAttack.ToString()));
-            AddChild(new MonsterAction(AttackMode.LandAttack.ToString()));
-            AddChild(new MonsterAction(MonsterActionType.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction("Fall")
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(AttackMode.DefaultAttack.ToString())
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(AttackMode.LandAttack.ToString())
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 

@@ -12,8 +12,8 @@ public class FireImp : Monster
 {
     // Property
     [Header("Fire Imp")]
-    [SerializeField] private GameObject firePrefab;
-    [SerializeField] private float fireStartTime;
+    [SerializeField] private GameObject _firePrefab;
+    [SerializeField] private float _fireStartTime;
 
 
     // Internal
@@ -42,11 +42,16 @@ public class FireImp : Monster
     {
         public FireImpController(FireImp monster) : base(monster)
         {
-            AddChild(new MonsterAction(MonsterActionType.Idle));
-            AddChild(new MonsterAction(MonsterActionType.Run));
-            AddChild(new AttackWithWeapon(monster.firePrefab, monster.fireStartTime));
-            AddChild(new MonsterAction(MonsterActionType.Hit));
-            AddChild(new MonsterAction(MonsterActionType.Dead));
+            AddChild(new MonsterAction(MonsterActionType.Idle)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Run)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Attack)
+                .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireStartTime)));
+            AddChild(new MonsterAction(MonsterActionType.Hit)
+                .AddAnimationComponent());
+            AddChild(new MonsterAction(MonsterActionType.Dead)
+                .AddAnimationComponent());
         }
     }
 
@@ -54,11 +59,11 @@ public class FireImp : Monster
     // Content
     protected override void Awake()
     {
-        if (!firePrefab)
+        if (!_firePrefab)
             throw new InvalidOperationException(
-                $"{GetType().Name}은(는) {nameof(firePrefab)}을(를) 가지고 있어야 합니다.");
+                $"{GetType().Name}은(는) {nameof(_firePrefab)}을(를) 가지고 있어야 합니다.");
 
-        firePrefab.SetActive(false);
+        _firePrefab.SetActive(false);
         base.Awake();
     }
 
