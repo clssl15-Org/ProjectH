@@ -102,25 +102,20 @@ public partial class StagBeetle
                     }));
         }
 
-        public override void Enter(object input = null)
+        protected override void OnEnter(object input = null)
         {
-            base.Enter(input);
             _work.Enter();
         }
 
-        public override void Update(float elapsedTime)
+        protected override void OnUpdate(float elapsedTime)
         {
             _elapsedTime = elapsedTime;
             _work.Update();
         }
 
-        public override void Interrupt(InterruptType reason)
+        protected override void OnInterrupt(InterruptType reason)
         {
-            if (!Active)
-                return;
-
             _work.Exit();
-            base.Interrupt(reason);
         }
     }
 }

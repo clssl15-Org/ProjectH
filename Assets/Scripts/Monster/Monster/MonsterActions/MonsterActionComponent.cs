@@ -8,7 +8,7 @@ namespace MonsterActions
     {
         // Front
         public bool Active { get; private set; } = false;
-        public bool InterruptAllComponentOnDeactivate { get; set; } = false;
+        public bool InterruptAllOnDeactivate { get; set; } = false;
         
         // Internal
         protected MonsterAction MonsterAction { get; private set; }
@@ -18,8 +18,18 @@ namespace MonsterActions
         // Content
         public virtual void SetParent(MonsterAction monsterAction) => MonsterAction = monsterAction;
 
-        public virtual void Enter(object input = null) => Active = true;
-        public virtual void Update(float elapsedTime) { }
+        public void Enter(object input = null)
+        {
+            if (Active)
+                return;
+
+            Active = true;
+            OnEnter(input);
+        }
+        protected virtual void OnEnter(object input) { }
+
+        public void Update(float elapsedTime) => OnUpdate(elapsedTime);
+        protected virtual void OnUpdate(float elapsedTime) { }
 
         public enum InterruptType
         {
@@ -29,7 +39,16 @@ namespace MonsterActions
             Completed,
             Interrupted,
         }
-        public virtual void Interrupt(InterruptType reason) => Active = false;
+
+        public void Interrupt(InterruptType reason)
+        {
+            if (!Active)
+                return;
+
+            Active = false;
+            OnInterrupt(reason);
+        }
+        protected virtual void OnInterrupt(InterruptType reason) { }
     }
 
     public static class InterruptTypeExtensions

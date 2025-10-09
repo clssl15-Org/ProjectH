@@ -44,7 +44,7 @@ public partial class FireMonster : Monster
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
             AddChild(new MonsterAction(MonsterActionType.Attack)
-                .AddAnimationComponent(interruptAllComponentOnDeactivate: true)
+                .AddAnimationComponent(interruptAllOnDeactivate: true)
                 .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireAppearTime)));
             AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());

@@ -19,17 +19,15 @@ namespace MonsterActions
             _startTime = startTime;
         }
 
-        public override void Enter(object input)
+        protected override void OnEnter(object input)
         {
             _isWeaponSetted = false;
 
             if (_startTime <= 0)
                 SetWeapon();
-
-            base.Enter(input);
         }
 
-        public override void Update(float elapsedTime)
+        protected override void OnUpdate(float elapsedTime)
         {
             if (_isWeaponSetted)
                 return;
@@ -51,15 +49,13 @@ namespace MonsterActions
             _weapon.SetActive(true);
         }
 
-        public override void Interrupt(InterruptType reason)
+        protected override void OnInterrupt(InterruptType reason)
         {
             if (_weapon)
             {
                 Object.Destroy(_weapon);
                 _weapon = null;
             }
-
-            base.Interrupt(reason);
         }
     }
 }

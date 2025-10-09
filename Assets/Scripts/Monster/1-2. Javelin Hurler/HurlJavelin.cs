@@ -11,13 +11,12 @@ public partial class JavelinHurler
 
 
         // Content
-        public override void Enter(object input)
+        protected override void OnEnter(object input)
         {
-            base.Enter(input);
             _isJavelinThrown = false;
         }
         
-        public override void Update(float elapsedTime)
+        protected override void OnUpdate(float elapsedTime)
         {
             if (!_isJavelinThrown && elapsedTime >= JavelinHurler.throwTime)
             {

@@ -32,15 +32,13 @@ namespace MonsterActions
             _getDirections = getDirections;
         }
 
-        public override void Enter(object input)
+        protected override void OnEnter(object input)
         {
             _currentLaunchInfo = _getLaunchInfo();
             _launched = false;
-
-            base.Enter(input);
         }
 
-        public override void Update(float elapsedTime)
+        protected override void OnUpdate(float elapsedTime)
         {
             if (!_launched && elapsedTime >= _currentLaunchInfo.LaunchTime)
             {

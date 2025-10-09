@@ -50,7 +50,7 @@ public partial class Dokkaebi : Monster
             AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
             AddChild(new MonsterAction(MonsterActionType.Attack)
-                .AddAnimationComponent(interruptAllComponentOnDeactivate: true)
+                .AddAnimationComponent(interruptAllOnDeactivate: true)
                 .AddComponent(new AttackWithWeapon(monster._laserPrefab, monster._laserAppearTime)));
             AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());

@@ -46,7 +46,7 @@ public class FireImp : Monster
             AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
             AddChild(new MonsterAction(MonsterActionType.Attack)
-                .AddAnimationComponent(interruptAllComponentOnDeactivate: true)
+                .AddAnimationComponent(interruptAllOnDeactivate: true)
                 .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireStartTime)));
             AddChild(new MonsterAction(MonsterActionType.Hit)
                 .AddAnimationComponent());
