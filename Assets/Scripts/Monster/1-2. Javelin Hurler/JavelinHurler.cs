@@ -11,12 +11,10 @@ public partial class JavelinHurler : Monster
 {
     // Property
     [Header("Javelin Hurler")]
-    [SerializeField] private GameObject javelinPrefab;
-    [SerializeField, Min(0)] private float javelinScale = 1;
-    [SerializeField] private Vector2 javelinPosition;
-    [SerializeField, Min(0)] private float throwTime = 1;
-    [SerializeField, Range(0, 90)] private float throwAngle;
-    [SerializeField, Min(0)] private float throwPower;
+    [SerializeField] private GameObject _javelinPrefab;
+    [SerializeField, Min(0)] private float _throwTime = 1;
+    [SerializeField, Range(0, 90)] private float _throwAngle;
+    [SerializeField, Min(0)] private float _throwPower;
 
 
     // Internal
@@ -67,8 +65,8 @@ public partial class JavelinHurler : Monster
     // Content
     protected override void Awake()
     {
-        if (!javelinPrefab)
-            throw new InvalidOperationException($"{nameof(JavelinHurler)}은(는) {nameof(javelinPrefab)}을(를) 가지고 있어야 합니다.");
+        if (!_javelinPrefab)
+            throw new InvalidOperationException($"{nameof(JavelinHurler)}은(는) {nameof(_javelinPrefab)}을(를) 가지고 있어야 합니다.");
 
         base.Awake();
     }

@@ -32,7 +32,7 @@ namespace MonsterActions
             _getDirections = getDirections;
         }
 
-        protected override void OnEnter(object input)
+        protected override void OnEnter(object _)
         {
             _currentLaunchInfo = _getLaunchInfo();
             _launched = false;

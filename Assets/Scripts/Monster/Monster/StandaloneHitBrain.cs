@@ -20,7 +20,7 @@ internal class StandaloneHitBrain
         if (!_owner.IsAlive) return false;
 
 
-        if (!_owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playtime: _owner.InvincibleDuration))
+        if (!_owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playTime: _owner.InvincibleDuration))
         {
             if (reason.Result != ActionResult.ResultType.AlreadyDoing)
                 Debug.LogWarning(_owner.Ctx(

@@ -7,5 +7,6 @@ public class Javelin : Projectile
     public void Throw(Vector2 direction, float power)
     {
         GetComponent<Rigidbody2D>().velocity = power * direction.normalized;
+        transform.SetParent(null);
     }
 }

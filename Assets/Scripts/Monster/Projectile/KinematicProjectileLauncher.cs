@@ -8,37 +8,37 @@ public class KinematicProjectileLauncher : MonoBehaviour
     {
         Rotation,
         LocalRotation,
-        Directions
+        Directions,
     }
 
     // Property
-    [SerializeField] private GameObject[] projectiles;
+    [SerializeField] private GameObject[] _projectiles;
 
     // Internal
-    private Vector3[] projectilesPositions;
+    private Vector3[] _projectilesPositions;
 
-    private Monster owner;
-    private PlatformManager platformManager;
-    private string[] collisionTags;
+    private Monster _owner;
+    private PlatformManager _platformManager;
+    private string[] _collisionTags;
 
 
     // Content
     private void Start()
     {
-        projectilesPositions = new Vector3[projectiles.Length];
+        _projectilesPositions = new Vector3[_projectiles.Length];
 
-        for (int i = 0; i < projectiles.Length; i++)
+        for (int i = 0; i < _projectiles.Length; i++)
         {
-            projectilesPositions[i] = projectiles[i].transform.localPosition;
-            projectiles[i].SetActive(false);
+            _projectilesPositions[i] = _projectiles[i].transform.localPosition;
+            _projectiles[i].SetActive(false);
         }
     }
 
-    public virtual void Initialize(Monster owner, PlatformManager platformManager, params string[] collisionTags)
+    public void Initialize(Monster owner, PlatformManager platformManager, params string[] collisionTags)
     {
-        this.owner = owner;
-        this.platformManager = platformManager;
-        this.collisionTags = collisionTags;
+        _owner = owner;
+        _platformManager = platformManager;
+        _collisionTags = collisionTags;
     }
 
 
@@ -46,21 +46,21 @@ public class KinematicProjectileLauncher : MonoBehaviour
     {
         ThrowIfNotValidState();
 
-        for (int i = 0; i < projectiles.Length; i++)
+        for (int i = 0; i < _projectiles.Length; i++)
         {
-            if (!projectiles[i])
+            if (!_projectiles[i])
                 throw new InvalidOperationException(Ctx($"인덱스 {i}에 있는 투사체 프리팹이 존재하지 않거나 유효하지 않습니다."));
 
-            var projectile = Instantiate(projectiles[i]);
+            var projectile = Instantiate(_projectiles[i]);
 
-            projectile.transform.position = owner.transform.position + projectilesPositions[i];
+            projectile.transform.position = _owner.transform.position + _projectilesPositions[i];
             projectile.SetActive(true);
 
             if (!projectile.TryGetComponent<KinematicProjectile>(out var component))
                 throw new InvalidOperationException(
                     Ctx($"투사체 {projectile.name}이(가) {nameof(KinematicProjectile)} 컴포넌트를 가지고 있지 않습니다."));
 
-            component.Initialize(platformManager, collisionTags);
+            component.Initialize(_platformManager, _collisionTags);
             component.transform.rotation = RotationFromDirection(direction);
 
             component.Launch(component.transform.right, speed);
@@ -78,15 +78,15 @@ public class KinematicProjectileLauncher : MonoBehaviour
     {
         ThrowIfNotValidState();
 
-        for (int i = 0; i < projectiles.Length; i++)
+        for (int i = 0; i < _projectiles.Length; i++)
         {
-            var projectile = Instantiate(projectiles[i]);
+            var projectile = Instantiate(_projectiles[i]);
 
-            projectile.transform.position = owner.transform.position + projectilesPositions[i];
+            projectile.transform.position = _owner.transform.position + _projectilesPositions[i];
             projectile.SetActive(true);
 
             var component = projectile.GetComponent<KinematicProjectile>();
-            component.Initialize(platformManager, collisionTags);
+            component.Initialize(_platformManager, _collisionTags);
             component.Launch(projectile.transform.rotation * directionUnit, speed);
         }
     }
@@ -95,15 +95,15 @@ public class KinematicProjectileLauncher : MonoBehaviour
     {
         ThrowIfNotValidState();
 
-        for (int i = 0; i < projectiles.Length; i++)
+        for (int i = 0; i < _projectiles.Length; i++)
         {
-            var projectile = Instantiate(projectiles[i]);
+            var projectile = Instantiate(_projectiles[i]);
 
-            projectile.transform.position = owner.transform.position + projectilesPositions[i];
+            projectile.transform.position = _owner.transform.position + _projectilesPositions[i];
             projectile.SetActive(true);
 
             var component = projectile.GetComponent<KinematicProjectile>();
-            component.Initialize(platformManager, collisionTags);
+            component.Initialize(_platformManager, _collisionTags);
             component.Launch(directions[i], speed);
         }
     }
@@ -111,11 +111,11 @@ public class KinematicProjectileLauncher : MonoBehaviour
     
     private void ThrowIfNotValidState()
     {
-        if (!owner || !platformManager)
+        if (!_owner || !_platformManager)
             throw new InvalidOperationException(Ctx(
                 $"{name} 객체의 KinematicProjectileLauncher 컴포넌트가 유효하지 않은 상태입니다. " +
                 "컴포넌트를 사용하기 전에 Initialize()를 호출하였는지 확인하세요."));
     }
 
-    private string Ctx(string message) => $"[KinematicProjectileLauncher] {message}";
+    private string Ctx(string message) => $"[KinematicProjectileLauncher of ({name})] {message}";
 }

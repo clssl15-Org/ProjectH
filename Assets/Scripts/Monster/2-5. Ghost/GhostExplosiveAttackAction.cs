@@ -36,35 +36,35 @@ public partial class Ghost
                 .SetExitedAction(AnimationPlayer.Stop)
                 .AddChild(new Work(phases[0])
                     .SetEnteredAction(() => AnimationPlayer.Play(
-                        new PlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
+                        new MonsterAnimationPlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[1]);
                         }))))
                 .AddChild(new Work(phases[1])
                     .SetEnteredAction(() => AnimationPlayer.Play(
-                        new PlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
+                        new MonsterAnimationPlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);
                         }))))
                 .AddChild(new Work(phases[1])
                     .SetEnteredAction(() => AnimationPlayer.Play(
-                        new PlayInfo("Attack_2", Callback: succeed =>
+                        new MonsterAnimationPlayInfo("Attack_2", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);
                         }))))
                 .AddChild(new Work(phases[1])
                     .SetEnteredAction(() => AnimationPlayer.Play(
-                        new PlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
+                        new MonsterAnimationPlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);
                         }))))
                 .AddChild(new Work(phases[1])
                     .SetEnteredAction(() => AnimationPlayer.Play(
-                        new PlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
+                        new MonsterAnimationPlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
                         {
                             if (!succeed) throw AnimationFailure;
                             _work.SetNext(phases[2]);

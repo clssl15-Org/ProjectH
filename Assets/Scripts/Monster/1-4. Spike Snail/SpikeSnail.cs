@@ -45,7 +45,7 @@ public partial class SpikeSnail : Monster
         public SpikeSnailActionController(SpikeSnail monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
-                .AddAnimationComponent(new PlayInfo(MonsterActionType.Idle, start: 0.33f, end: 2.08f)));
+                .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, startTime: 0.33f, endTime: 2.08f)));
             AddChild(new MonsterAction(MonsterActionType.Alert)
                 .AddAnimationComponent());
             AddChild(new MonsterAction(MonsterActionType.Walk)

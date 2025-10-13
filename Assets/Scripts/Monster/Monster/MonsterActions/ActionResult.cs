@@ -1,6 +1,9 @@
 using System;
 
-public record ActionResult(ActionResult.ResultType Result, string Reason = null, Exception Exception = null)
+public record ActionResult(
+    ActionResult.ResultType Result,
+    string Reason = null,
+    Exception Exception = null)
 {
     public enum ResultType
     {
@@ -9,7 +12,7 @@ public record ActionResult(ActionResult.ResultType Result, string Reason = null,
         OtherActionDoing,
         NotFound,
         Interrupted,
-        InvalidOperation
+        InvalidOperation,
     }
 
     public override string ToString()

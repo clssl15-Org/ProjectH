@@ -14,7 +14,7 @@ namespace MonsterActions
 
         public float DelayBeforePlay { get; set; } = 0f;
         public float DelayAfterPlay { get; set; } = 0f;
-        public PlayInfo PlayInfo { get; set; }
+        public MonsterAnimationPlayInfo PlayInfo { get; set; }
 
         // Internal
         private MonsterAnimationPlayer AnimationPlayer => MonsterAction.Owner.AnimationPlayer;
@@ -27,7 +27,7 @@ namespace MonsterActions
 
 
         // Content
-        public PlayAnimation(PlayInfo playInfo)
+        public PlayAnimation(MonsterAnimationPlayInfo playInfo)
         {
             PlayInfo = playInfo;
 

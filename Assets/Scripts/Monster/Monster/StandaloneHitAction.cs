@@ -31,7 +31,7 @@ namespace MonsterActions
             out ActionResult reason,
             Action<ActionResult> callback = null,
             bool allowRestart = false,
-            float? playtime = null)
+            float? playTime = null)
         {
             if (!_monster)
             {
@@ -51,8 +51,8 @@ namespace MonsterActions
 
             _callback = callback;
 
-            _mainAnimationLength = playtime.HasValue
-                ? (playtime.Value >= 0 ? playtime.Value : null)
+            _mainAnimationLength = playTime.HasValue
+                ? (playTime.Value >= 0 ? playTime.Value : null)
                 : _monster.InvincibleDuration;
 
             _mainAnimationRemainingTime = _mainAnimationLength;

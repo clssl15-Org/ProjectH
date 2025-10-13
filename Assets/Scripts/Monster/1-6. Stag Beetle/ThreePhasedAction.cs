@@ -53,7 +53,7 @@ public partial class StagBeetle
                         _beforePreAction?.Invoke();
 
                         AnimationPlayer.Play(
-                            new PlayInfo(_animations[0], Callback: succeed =>
+                            new MonsterAnimationPlayInfo(_animations[0], Callback: succeed =>
                             {
                                 if (!succeed) throw AnimationFailure;
                                 _work.SetNext("MainAction");
@@ -74,7 +74,7 @@ public partial class StagBeetle
                         : null;
 
                         AnimationPlayer.Play(
-                            new PlayInfo(_animations[1], Callback: callback));
+                            new MonsterAnimationPlayInfo(_animations[1], Callback: callback));
                     })
                     .AddUpdatedAction(() =>
                     {
@@ -92,7 +92,7 @@ public partial class StagBeetle
                     .SetEnteredAction(() =>
                     {
                         AnimationPlayer.Play(
-                            new PlayInfo(_animations[2], Callback: succeed =>
+                            new MonsterAnimationPlayInfo(_animations[2], Callback: succeed =>
                             {
                                 if (!succeed) throw AnimationFailure;
                                 Interrupt(InterruptType.Completed);

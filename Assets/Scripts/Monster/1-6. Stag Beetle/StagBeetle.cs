@@ -106,7 +106,7 @@ public partial class StagBeetle : Monster
                     n => n + "Anticipation", n => n + "Recoil",
                     whileMainAction: (playtime, length) => playtime > length)));
             AddChild(new MonsterAction(MonsterActionType.Hit)
-                .AddAnimationComponent(new PlayInfo("HitGround")));
+                .AddAnimationComponent(new MonsterAnimationPlayInfo("HitGround")));
             AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }

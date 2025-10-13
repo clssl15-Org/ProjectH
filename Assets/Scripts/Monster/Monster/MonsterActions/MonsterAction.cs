@@ -23,13 +23,14 @@ namespace MonsterActions
             }
         }
 
+        public float ElapsedTime { get; private set; }
+
 
         // Internal
         private List<MonsterActionComponent> _components = new();
         private MonsterActionPlayInfo _playInfo;
 
         private InterruptType _reason;
-        public float ElapsedTime { get; private set; }
 
 
         // Content
@@ -49,15 +50,15 @@ namespace MonsterActions
         }
 
         public MonsterAction AddAnimationComponent(
-            PlayInfo playInfo = null,
+            MonsterAnimationPlayInfo animPlayInfo = null,
             string trigger = null,
             bool interruptAllOnDeactivate = false,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f)
         {
-            AddComponent(new PlayAnimation(playInfo != null
-                ? playInfo with { TriggerName = trigger ?? playInfo.TriggerName }
-                : new PlayInfo(Name, trigger))
+            AddComponent(new PlayAnimation(animPlayInfo != null
+                ? animPlayInfo with { TriggerName = trigger ?? animPlayInfo.TriggerName }
+                : new MonsterAnimationPlayInfo(Name, trigger))
                 {
                     InterruptAllOnDeactivate = interruptAllOnDeactivate,
                     DelayBeforePlay = delayBeforePlay,

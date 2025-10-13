@@ -2,7 +2,7 @@ namespace MonsterActions
 {
     internal class HitFlash : MonsterActionComponent
     {
-        protected override void OnEnter(object input)
+        protected override void OnEnter(object _)
         {
             Owner.ActionController.StopAnimator();
 

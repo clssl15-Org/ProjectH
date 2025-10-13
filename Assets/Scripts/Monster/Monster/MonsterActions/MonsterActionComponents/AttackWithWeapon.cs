@@ -19,7 +19,7 @@ namespace MonsterActions
             _startTime = startTime;
         }
 
-        protected override void OnEnter(object input)
+        protected override void OnEnter(object _)
         {
             _isWeaponSetted = false;
 

@@ -48,7 +48,7 @@ public class RangedSkeleton : Monster
             AddChild(new MonsterAction(MonsterActionType.Walk)
                 .AddAnimationComponent());
             AddChild(new MonsterAction(MonsterActionType.Attack)
-                .AddAnimationComponent(new PlayInfo("throw"))
+                .AddAnimationComponent(new MonsterAnimationPlayInfo("throw"))
                 .AddComponent(new AttackWithKinematicProjectile(
                     launcher: monster._projectileLauncher,
                     getLaunchInfo: () => new(monster._launchTime, monster._projectileSpeed),

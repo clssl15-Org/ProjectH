@@ -4,20 +4,20 @@ using UnityEngine;
 
 namespace MonsterActions
 {
-    public record PlayInfo(
+    public record MonsterAnimationPlayInfo(
         string AnimationName,
         string TriggerName = null,
         float? StartTime = null,
         float? EndTime = null,
         Action<bool> Callback = null)
     {
-        public PlayInfo(
+        public MonsterAnimationPlayInfo(
             MonsterActionType actionType,
             string trigger = null,
-            float? start = null,
-            float? end = null,
+            float? startTime = null,
+            float? endTime = null,
             Action<bool> callback = null)
-            : this(actionType.ToString(), trigger, start, end, callback) { }
+            : this(actionType.ToString(), trigger, startTime, endTime, callback) { }
     }
 
     public class MonsterAnimationPlayer : IDisposable
@@ -39,7 +39,7 @@ namespace MonsterActions
             Animator = animator;
         }
 
-        public void Play(PlayInfo playInfo)
+        public void Play(MonsterAnimationPlayInfo playInfo)
         {
             try
             {
