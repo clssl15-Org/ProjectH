@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class MonsterHitted : MonoBehaviour
+public class MonsterDamageReceiver : MonoBehaviour, IDamageable
 {
     public event Action<DamageInfo> Damaged;
 

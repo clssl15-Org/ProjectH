@@ -69,7 +69,7 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     internal GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
     private MonsterPlayerDetector _playerDetector;
-    private MonsterHitted _hitDetector;
+    private MonsterDamageReceiver _hitDetector;
 
     // Low-level Behavior Handlers
     private KnockbackHandler _knockbackHandler;
@@ -128,7 +128,7 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
 
-        _hitDetector = GetComponentInChildren<MonsterHitted>(true);
+        _hitDetector = GetComponentInChildren<MonsterDamageReceiver>(true);
         if (!_hitDetector) throw new InvalidOperationException(FormatLogMessage(
             $"{nameof(_hitDetector)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 

@@ -53,7 +53,7 @@ public class TestPlayer : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         var detector = collision.gameObject
-            .GetComponentInChildren<MonsterHitted>();
+            .GetComponentInChildren<MonsterDamageReceiver>();
 
         if (!detector)
             return;

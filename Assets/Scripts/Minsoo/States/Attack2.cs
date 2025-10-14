@@ -61,11 +61,13 @@ public class Attack2 : CharacterState
 
         foreach (Collider2D hitCollider in hitColliders)
         {
+            print($"2, {hitCollider.name}");
+
             if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                 return;
 
             Debug.Log("Enemy hitted! (Attack2)");
-            // damageableObject.TakeDamage();
+            damageableObject.TakeDamage(1);
             onAttack2?.Invoke();
         }
     }

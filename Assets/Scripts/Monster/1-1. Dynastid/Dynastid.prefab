@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3480468872192534036}
   - component: {fileID: 6139965901554747025}
   - component: {fileID: 532810587432848662}
-  - component: {fileID: 9016138113930414820}
+  - component: {fileID: 8005353908560965261}
   - component: {fileID: 8541476870282129423}
   - component: {fileID: 8463299552888927162}
   m_Layer: 0
@@ -174,7 +174,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &9016138113930414820
+--- !u!114 &8005353908560965261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5163356707057488334}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8541476870282129423
@@ -220,7 +220,6 @@ MonoBehaviour:
   DefaultIsRight: 0
   PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
-  DamageFlashDuration: 0.1
   _stateDisplay: 
 --- !u!1 &7512475014576965878
 GameObject:

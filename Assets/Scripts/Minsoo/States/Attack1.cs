@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Attack1 : CharacterState
@@ -59,9 +60,18 @@ public class Attack1 : CharacterState
             attackPoint,
             scaledSize
         );
-        
-        foreach(Collider2D hitCollider in hitColliders)
+
+        //Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
+        //    attackPoint,
+        //    scaledSize * Vector2.one,
+        //    0
+        //);
+
+
+        foreach (Collider2D hitCollider in hitColliders)
         {
+            print($"1, {hitCollider.name}");
+
             if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                 return;
 
@@ -71,7 +81,7 @@ public class Attack1 : CharacterState
             if (angle <= attackAngle)
             {
                 Debug.Log("Enemy hitted! (Attack1)");
-                // damageableObject.TakeDamage();
+                damageableObject.TakeDamage(1);
                 onAttack1?.Invoke();
             }
         }

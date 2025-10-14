@@ -3,35 +3,38 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class PlayerDebug : MonoBehaviour
+namespace PlayerSystem
 {
-    [SerializeField]
-    private PlayerHealth playerHealth;
-    [SerializeField]
-    int damageAmount = 10;
-
-    private void Awake()
+    public class PlayerDebug : MonoBehaviour
     {
-        if (!playerHealth)
-            playerHealth = this.transform.root.GetComponentInChildren<PlayerHealth>();
-    }
-    public void DamageToPlayer()
-    {
-        playerHealth.TakeDamage(damageAmount);
-    }
-}
+        [SerializeField]
+        private PlayerHealth playerHealth;
+        [SerializeField]
+        int damageAmount = 10;
 
-[CustomEditor(typeof(PlayerDebug))]
-public class DebugButton : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        PlayerDebug script = (PlayerDebug)target;
-        if (GUILayout.Button("Damage to Player"))
+        private void Awake()
         {
-            script.DamageToPlayer();
+            if (!playerHealth)
+                playerHealth = this.transform.root.GetComponentInChildren<PlayerHealth>();
+        }
+        public void DamageToPlayer()
+        {
+            playerHealth.TakeDamage(damageAmount);
+        }
+    }
+
+    [CustomEditor(typeof(PlayerDebug))]
+    public class DebugButton : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            PlayerDebug script = (PlayerDebug)target;
+            if (GUILayout.Button("Damage to Player"))
+            {
+                script.DamageToPlayer();
+            }
         }
     }
 }

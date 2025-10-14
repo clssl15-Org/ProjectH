@@ -79,7 +79,7 @@ public class Ultimate : CharacterState
                 return;
 
             Debug.Log("Enemy hitted! (Ultimate)");
-            // damageableObject.TakeDamage();
+            damageableObject.TakeDamage(1);
         }
     }
     private void UpdateAttackParameters()

@@ -44,14 +44,16 @@ public class Attack3 : CharacterState
             scaledSize,
             attackAngle
         );
-        
+
         foreach (Collider2D hitCollider in hitColliders)
         {
+            print($"3, {hitCollider.name}");
+
             if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                 return;
 
             Debug.Log("Enemy hitted! (Attack3)");
-            // damageableObject.TakeDamage();
+            damageableObject.TakeDamage(1);
             onAttack3?.Invoke();
         }
     }

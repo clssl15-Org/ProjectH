@@ -80,7 +80,7 @@ public class Eskill : CharacterState
 
             hitEnemies.Add(damageableObject);
             Debug.Log("Enemy hitted! (Eskill)");
-            // damageableObject.TakeDamage();
+            damageableObject.TakeDamage(1);
             onEskill?.Invoke();
         }
     }
