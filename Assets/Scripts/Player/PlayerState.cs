@@ -101,6 +101,10 @@ public class PlayerState : MonoBehaviour
     {
         if (currentState == State.Jumping || currentState == State.Falling || currentState == State.Idle || currentState == State.Running)
         {
+            if(playerRigidbody == null)
+            {
+                return;
+            }
             if (playerRigidbody.velocity.y > 0.1f && !isGrounded)   //  점프 상태태
             {
                 ChangeState(State.Jumping);
