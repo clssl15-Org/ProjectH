@@ -1728,7 +1728,7 @@ Transform:
   m_GameObject: {fileID: 691421789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.65, y: 2.57, z: 0}
+  m_LocalPosition: {x: 4.55, y: 2.42, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7779,7 +7779,7 @@ PrefabInstance:
     - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: _statsInfo
       value: 
-      objectReference: {fileID: 11400000, guid: 2f5c4ac7edfc02a45bfdc4654c97b427, type: 2}
+      objectReference: {fileID: 11400000, guid: 6acab6441b248aa42a701483d82a80d4, type: 2}
     - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: PlatformManager
       value: 
@@ -7792,6 +7792,10 @@ PrefabInstance:
       propertyPath: SceneAssetsLibrary
       value: 
       objectReference: {fileID: 658219645}
+    - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
+      propertyPath: _useDebugStatsInfo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 987010599202020812, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
@@ -8212,7 +8216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4907472375751884795, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
       propertyPath: _laserPrefab
@@ -8471,7 +8475,7 @@ PrefabInstance:
     - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: _statsInfo
       value: 
-      objectReference: {fileID: 11400000, guid: 067829fd3d290174eb04ce12bc369128, type: 2}
+      objectReference: {fileID: 11400000, guid: f5c672d8f38fe534b848fb9e5bbd1832, type: 2}
     - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: _attackMode
       value: 0
@@ -8565,6 +8569,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fire Monster
       objectReference: {fileID: 0}
+    - target: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6533744710052237920, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: PlatformManager
       value: 
@@ -8589,6 +8597,10 @@ PrefabInstance:
     - target: {fileID: 3781090381581797617, guid: bdc87e93f96baf644aa85559ad5d19e2, type: 3}
       propertyPath: m_Name
       value: Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781090381581797617, guid: bdc87e93f96baf644aa85559ad5d19e2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7900265110349230801, guid: bdc87e93f96baf644aa85559ad5d19e2, type: 3}
       propertyPath: m_LocalPosition.x

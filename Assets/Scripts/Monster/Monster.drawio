@@ -1,39 +1,39 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
   <diagram name="페이지-1" id="8upeaDAv0m2pSRYjm0oK">
-    <mxGraphModel dx="1358" dy="801" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3000" pageHeight="3500" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1733" dy="1183" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3000" pageHeight="3500" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-69" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="331" y="2490" as="targetPoint" />
+            <mxPoint x="331" y="2500" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="331" y="2480" />
-              <mxPoint x="331" y="2480" />
+              <mxPoint x="331" y="2490" />
+              <mxPoint x="331" y="2490" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="5tsxF7s1Y4Vlyb8A0S-W-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=open;endFill=0;endSize=12;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-69" target="5tsxF7s1Y4Vlyb8A0S-W-3" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="331" y="2460" />
-              <mxPoint x="1660" y="2460" />
+              <mxPoint x="331" y="2470" />
+              <mxPoint x="1660" y="2470" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-69" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=none;" parent="1" vertex="1">
-          <mxGeometry x="316" y="2400" width="30" height="30" as="geometry" />
+          <mxGeometry x="316" y="2410" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-107" value="[LP]&lt;div&gt;&lt;b&gt;Hit&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="262" y="2630" width="138" height="40" as="geometry" />
+          <mxGeometry x="280" y="2640" width="102" height="40" as="geometry" />
         </mxCell>
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-123" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-110" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="530.5" y="2750" as="targetPoint" />
+            <mxPoint x="530.5" y="2760" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-110" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;[Self, +committing]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Valid Platform&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="466" y="2630" width="129" height="40" as="geometry" />
+          <mxGeometry x="466" y="2640" width="129" height="40" as="geometry" />
         </mxCell>
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-152" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;endSize=12;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-150" target="3-4qDtySwMyyUYbY4HTZ-107" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -41,31 +41,31 @@
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-153" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-150" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="331" y="2580" />
-              <mxPoint x="530" y="2580" />
+              <mxPoint x="331" y="2590" />
+              <mxPoint x="530" y="2590" />
             </Array>
-            <mxPoint x="530" y="2630" as="targetPoint" />
+            <mxPoint x="530" y="2640" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-150" target="iMWUfy5cCBe9Wpr9qkI6-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="331" y="2580" />
-              <mxPoint x="1480" y="2580" />
+              <mxPoint x="331" y="2590" />
+              <mxPoint x="1480" y="2590" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="3-4qDtySwMyyUYbY4HTZ-150" value="[Self]&lt;div&gt;&lt;b&gt;Alive&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="281" y="2490" width="100" height="40" as="geometry" />
+          <mxGeometry x="281" y="2500" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="5tsxF7s1Y4Vlyb8A0S-W-3" value="&lt;div&gt;&lt;font&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Dead&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1610" y="2490" width="100" height="40" as="geometry" />
+          <mxGeometry x="1610" y="2500" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="5tsxF7s1Y4Vlyb8A0S-W-4" value="&lt;b&gt;Die&amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1610" y="2530" width="100" height="40" as="geometry" />
+          <mxGeometry x="1610" y="2540" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="5tsxF7s1Y4Vlyb8A0S-W-5" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="1670" y="2537.5" width="25" height="25" as="geometry" />
+          <mxGeometry x="1670" y="2547.5" width="25" height="25" as="geometry" />
         </mxCell>
         <mxCell id="5tsxF7s1Y4Vlyb8A0S-W-6" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="5tsxF7s1Y4Vlyb8A0S-W-5" vertex="1">
           <mxGeometry width="25" height="25" as="geometry" />
@@ -75,45 +75,45 @@
         </mxCell>
         <UserObject label="&lt;div style=&quot;&quot;&gt;selector&lt;/div&gt;" placeholders="1" name="Variable" id="5tsxF7s1Y4Vlyb8A0S-W-8">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="335" y="2440" width="65" height="20" as="geometry" />
+            <mxGeometry x="335" y="2450" width="65" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="&lt;div style=&quot;&quot;&gt;selector, forced loop&lt;/div&gt;" placeholders="1" name="Variable" id="5tsxF7s1Y4Vlyb8A0S-W-11">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="335" y="2550" width="116" height="20" as="geometry" />
+            <mxGeometry x="335" y="2560" width="116" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <UserObject label="&lt;div style=&quot;&quot;&gt;selector&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;, forced loop&lt;/span&gt;&lt;/div&gt;" placeholders="1" name="Variable" id="5tsxF7s1Y4Vlyb8A0S-W-12">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="535" y="2680" width="120" height="20" as="geometry" />
+            <mxGeometry x="535" y="2690" width="120" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="yNcjONoOQ5SsKgrisiPU-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;endSize=12;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="3-4qDtySwMyyUYbY4HTZ-110" target="iMWUfy5cCBe9Wpr9qkI6-5" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="990" y="2740" as="targetPoint" />
+            <mxPoint x="990" y="2750" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="531" y="2710" />
-              <mxPoint x="1220" y="2710" />
-              <mxPoint x="1220" y="2750" />
+              <mxPoint x="531" y="2720" />
+              <mxPoint x="1220" y="2720" />
+              <mxPoint x="1220" y="2760" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="I8LfqySJC2vwBVqaZ4RQ-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=12;" parent="1" edge="1">
+        <mxCell id="I8LfqySJC2vwBVqaZ4RQ-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endSize=12;endArrow=block;endFill=1;" parent="1" edge="1" target="3-4qDtySwMyyUYbY4HTZ-107">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="211" y="2650" as="sourcePoint" />
-            <mxPoint x="262" y="2649.9999999999995" as="targetPoint" />
+            <mxPoint x="230" y="2660" as="sourcePoint" />
+            <mxPoint x="281" y="2659.9999999999995" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <UserObject label="&lt;div style=&quot;&quot;&gt;On Damaged&lt;/div&gt;" placeholders="1" name="Variable" id="I8LfqySJC2vwBVqaZ4RQ-5">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="121" y="2640" width="96" height="20" as="geometry" />
+            <mxGeometry x="140" y="2650" width="96" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-1" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Not Valid Platform&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1410" y="2630" width="140" height="40" as="geometry" />
+          <mxGeometry x="1410" y="2640" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-2" value="&lt;b&gt;Set Platform&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1410" y="2670" width="140" height="40" as="geometry" />
+          <mxGeometry x="1410" y="2680" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-3" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="iMWUfy5cCBe9Wpr9qkI6-5" target="iMWUfy5cCBe9Wpr9qkI6-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -121,97 +121,97 @@
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-4" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="iMWUfy5cCBe9Wpr9qkI6-5" target="iMWUfy5cCBe9Wpr9qkI6-7" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1220" y="2830" />
-              <mxPoint x="1350" y="2830" />
+              <mxPoint x="1220" y="2840" />
+              <mxPoint x="1350" y="2840" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-5" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Player Not Detected&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1150" y="2750" width="139" height="40" as="geometry" />
+          <mxGeometry x="1150" y="2760" width="139" height="40" as="geometry" />
         </mxCell>
         <UserObject label="&lt;div style=&quot;&quot;&gt;sequence, forced loop&lt;/div&gt;" placeholders="1" name="Variable" id="iMWUfy5cCBe9Wpr9qkI6-6">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="1224" y="2800" width="146" height="20" as="geometry" />
+            <mxGeometry x="1224" y="2810" width="146" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-7" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Patrol&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1300" y="2870" width="100" height="40" as="geometry" />
+          <mxGeometry x="1300" y="2880" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-8" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Rest&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1169" y="2870" width="101" height="40" as="geometry" />
+          <mxGeometry x="1169" y="2880" width="101" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-9" value="&lt;b&gt;Adjust&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="460" y="3020" width="140" height="40" as="geometry" />
+          <mxGeometry x="460" y="3030" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-10" value="&lt;div&gt;&lt;b&gt;Adjusting&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="460" y="2980" width="140" height="40" as="geometry" />
+          <mxGeometry x="460" y="2990" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-11" value="&lt;b&gt;Do Attack&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="830" y="2910" width="120" height="40" as="geometry" />
+          <mxGeometry x="830" y="2920" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-12" value="&lt;b&gt;Attack&lt;/b&gt;&lt;div&gt;&amp;lt;committing [IO]&amp;gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="830" y="2870" width="120" height="40" as="geometry" />
+          <mxGeometry x="830" y="2880" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-13" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="iMWUfy5cCBe9Wpr9qkI6-16" target="V_Yp5UUm4SsJldjiWxdG-2" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="530" y="2860" as="targetPoint" />
+            <mxPoint x="530" y="2870" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-14" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="iMWUfy5cCBe9Wpr9qkI6-16" target="iMWUfy5cCBe9Wpr9qkI6-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="530" y="2830" />
-              <mxPoint x="890" y="2830" />
+              <mxPoint x="530" y="2840" />
+              <mxPoint x="890" y="2840" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-15" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="iMWUfy5cCBe9Wpr9qkI6-16" target="iMWUfy5cCBe9Wpr9qkI6-19" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="530" y="2830" />
-              <mxPoint x="1050" y="2830" />
+              <mxPoint x="530" y="2840" />
+              <mxPoint x="1050" y="2840" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-16" value="&lt;div&gt;[LP, Self,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+committing&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Player Detected&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="460" y="2750" width="140" height="40" as="geometry" />
+          <mxGeometry x="460" y="2760" width="140" height="40" as="geometry" />
         </mxCell>
         <UserObject label="&lt;div style=&quot;&quot;&gt;sequence, forced loop&lt;/div&gt;" placeholders="1" name="Variable" id="iMWUfy5cCBe9Wpr9qkI6-17">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="534" y="2801.5" width="136" height="20" as="geometry" />
+            <mxGeometry x="534" y="2811.5" width="136" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-18" value="&lt;b&gt;Do&amp;nbsp;&lt;/b&gt;&lt;b&gt;Cooldown&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="990" y="2910" width="120" height="40" as="geometry" />
+          <mxGeometry x="990" y="2920" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="iMWUfy5cCBe9Wpr9qkI6-19" value="&lt;b&gt;Cooldown&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="990" y="2870" width="120" height="40" as="geometry" />
+          <mxGeometry x="990" y="2880" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="V_Yp5UUm4SsJldjiWxdG-4" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="V_Yp5UUm4SsJldjiWxdG-2" target="iMWUfy5cCBe9Wpr9qkI6-10" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="V_Yp5UUm4SsJldjiWxdG-2" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Engaged&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="460" y="2870" width="140" height="40" as="geometry" />
+          <mxGeometry x="460" y="2880" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_NUBua-zD_B7VyCZgyFb-1" value="&lt;b&gt;At Dead End&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="640" y="3020" width="140" height="40" as="geometry" />
+          <mxGeometry x="640" y="3030" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_NUBua-zD_B7VyCZgyFb-2" value="&lt;div&gt;&lt;b&gt;Dead End&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="640" y="2980" width="140" height="40" as="geometry" />
+          <mxGeometry x="640" y="2990" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_NUBua-zD_B7VyCZgyFb-4" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="V_Yp5UUm4SsJldjiWxdG-2" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="530" y="2950" />
-              <mxPoint x="710" y="2950" />
-              <mxPoint x="710" y="2980" />
+              <mxPoint x="530" y="2960" />
+              <mxPoint x="710" y="2960" />
+              <mxPoint x="710" y="2990" />
             </Array>
-            <mxPoint x="710" y="2980" as="targetPoint" />
+            <mxPoint x="710" y="2990" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <UserObject label="&lt;div style=&quot;&quot;&gt;selector, continue on failure&lt;/div&gt;" placeholders="1" name="Variable" id="_NUBua-zD_B7VyCZgyFb-5">
           <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;" parent="1" vertex="1">
-            <mxGeometry x="540" y="2920" width="230" height="20" as="geometry" />
+            <mxGeometry x="540" y="2930" width="230" height="20" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="lbTndD7W5pzbM0V3uqPp-138" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=open;startFill=0;startSize=12;endArrow=none;endFill=0;endSize=12;" parent="1" source="tp-KkwbWxKLqZyGphW4l-3" target="lbTndD7W5pzbM0V3uqPp-133" edge="1">
@@ -360,17 +360,17 @@
         <mxCell id="lbTndD7W5pzbM0V3uqPp-22" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;startArrow=diamond;startFill=1;startSize=12;" parent="1" source="lbTndD7W5pzbM0V3uqPp-13" target="lbTndD7W5pzbM0V3uqPp-5" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="lbTndD7W5pzbM0V3uqPp-13" value="MonsterActionController" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="840" y="720" width="400" height="280" as="geometry" />
+        <mxCell id="lbTndD7W5pzbM0V3uqPp-13" value="&lt;div&gt;&lt;div&gt;&lt;i style=&quot;font-size: 10px; font-weight: 400;&quot;&gt;&amp;lt;&amp;lt;abstract&amp;gt;&amp;gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;MonsterActionController&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="840" y="720" width="400" height="294" as="geometry" />
         </mxCell>
         <mxCell id="lbTndD7W5pzbM0V3uqPp-14" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ Owner: IMonster {get}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;-&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;OriginalSprite: Sprite&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="lbTndD7W5pzbM0V3uqPp-13" vertex="1">
-          <mxGeometry y="26" width="400" height="44" as="geometry" />
+          <mxGeometry y="40" width="400" height="44" as="geometry" />
         </mxCell>
         <mxCell id="lbTndD7W5pzbM0V3uqPp-15" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="lbTndD7W5pzbM0V3uqPp-13" vertex="1">
-          <mxGeometry y="70" width="400" height="8" as="geometry" />
+          <mxGeometry y="84" width="400" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="lbTndD7W5pzbM0V3uqPp-16" value="&lt;div&gt;+ TryDoAction(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; playInfo:&amp;nbsp;MonsterActionPlayInfo,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;재생 정보&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; out reason: ActionResult,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;← 즉시 실패 시 이유 반환&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; stopPreviousAction: bool = true,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;true라면 실행중인 이전 행동 종료&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; allowRestart: bool = false)&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;true라면 행동 재시작&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; : void&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ GetCurrentAction():&amp;nbsp;MonsterActionType&lt;/div&gt;&lt;div&gt;+ TryGetCurrentAction(out name: string): bool&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+&amp;nbsp;StopCurrentAction(): void&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;현재 행동 종료&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ StopAnimation(): void&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;애니메이터 종료 후 기본 스프라이트로 교체&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="lbTndD7W5pzbM0V3uqPp-13" vertex="1">
-          <mxGeometry y="78" width="400" height="202" as="geometry" />
+        <mxCell id="lbTndD7W5pzbM0V3uqPp-16" value="&lt;div&gt;+ TryDoAction(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; playInfo:&amp;nbsp;MonsterActionPlayInfo,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;재생 정보&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; out reason: ActionResult,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;← 즉시 실패 시 이유 반환&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; stopPreviousAction: bool = true,&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;true라면 실행중인 이전 행동 종료&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; allowRestart: bool = false)&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;true라면 행동 재시작&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; : bool&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ GetCurrentAction():&amp;nbsp;MonsterActionType&lt;/div&gt;&lt;div&gt;+ TryGetCurrentAction(out name: string): bool&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+&amp;nbsp;StopCurrentAction(): void&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;현재 행동 종료&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ StopAnimation(): void&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;애니메이터 종료 후 기본 스프라이트로 교체&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="lbTndD7W5pzbM0V3uqPp-13" vertex="1">
+          <mxGeometry y="92" width="400" height="202" as="geometry" />
         </mxCell>
         <mxCell id="lbTndD7W5pzbM0V3uqPp-26" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=open;endFill=0;endSize=12;" parent="1" source="lbTndD7W5pzbM0V3uqPp-5" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -659,19 +659,19 @@
             <mxPoint x="1840" y="2320" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Dq4tyF78pXodXOVorUOO-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=open;startFill=0;startSize=12;endArrow=none;endFill=0;endSize=12;dashed=1;" edge="1" parent="1" source="Dq4tyF78pXodXOVorUOO-5" target="tp-KkwbWxKLqZyGphW4l-3">
+        <mxCell id="Dq4tyF78pXodXOVorUOO-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=open;startFill=0;startSize=12;endArrow=none;endFill=0;endSize=12;dashed=1;" parent="1" source="Dq4tyF78pXodXOVorUOO-5" target="tp-KkwbWxKLqZyGphW4l-3" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Dq4tyF78pXodXOVorUOO-5" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;IMonster&lt;/span&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="Dq4tyF78pXodXOVorUOO-5" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;IMonster&lt;/span&gt;&lt;/div&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1760" y="160" width="520" height="500" as="geometry" />
         </mxCell>
-        <mxCell id="Dq4tyF78pXodXOVorUOO-6" value="&lt;div&gt;[ 프로퍼티 ]&lt;/div&gt;&lt;div&gt;~ HP: int&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{get, set}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;Direction:&amp;nbsp;Direction {get, set}&amp;nbsp;&lt;font style=&quot;background-color: transparent; color: rgb(0, 0, 0);&quot; face=&quot;Arial, sans-serif&quot;&gt;←&lt;/font&gt;&lt;font style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot; face=&quot;Arial, sans-serif&quot;&gt;&amp;nbsp;몬스터가 현재 바라보는 방향&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;IsAlive: bool&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;{get, set}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;StatsInfo: MonsterStats {get}&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;[ 행동 처리기 ]&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;AnimationPlayer:&amp;nbsp;MonsterAnimationPlayer&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;StandaloneHitAction:&amp;nbsp;StandaloneHitAction&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;{get, -set}&amp;nbsp;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 몬스터 피격 반짝임 효과&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;ActionController:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;MonsterActionController {get, set}&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;몬스터 Action 관리&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="Dq4tyF78pXodXOVorUOO-5">
+        <mxCell id="Dq4tyF78pXodXOVorUOO-6" value="&lt;div&gt;[ 프로퍼티 ]&lt;/div&gt;&lt;div&gt;~ HP: int&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;{get, set}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;Direction:&amp;nbsp;Direction {get, set}&amp;nbsp;&lt;font style=&quot;background-color: transparent; color: rgb(0, 0, 0);&quot; face=&quot;Arial, sans-serif&quot;&gt;←&lt;/font&gt;&lt;font style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot; face=&quot;Arial, sans-serif&quot;&gt;&amp;nbsp;몬스터가 현재 바라보는 방향&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;IsAlive: bool&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;{get, set}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;StatsInfo: MonsterStats {get}&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;[ 행동 처리기 ]&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;AnimationPlayer:&amp;nbsp;MonsterAnimationPlayer&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;StandaloneHitAction:&amp;nbsp;StandaloneHitAction&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;{get, -set}&amp;nbsp;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 몬스터 피격 반짝임 효과&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~&lt;/span&gt;&amp;nbsp;ActionController:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;MonsterActionController {get, set}&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;←&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;&amp;nbsp;몬스터 Action 관리&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="Dq4tyF78pXodXOVorUOO-5" vertex="1">
           <mxGeometry y="30" width="520" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="Dq4tyF78pXodXOVorUOO-7" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="Dq4tyF78pXodXOVorUOO-5">
+        <mxCell id="Dq4tyF78pXodXOVorUOO-7" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="Dq4tyF78pXodXOVorUOO-5" vertex="1">
           <mxGeometry y="200" width="520" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="Dq4tyF78pXodXOVorUOO-8" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;[ 저수준 행동 ]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;~ TryMove(): bool&amp;nbsp;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 현재 방향으로 이동 시도&lt;/span&gt;&lt;/div&gt;&lt;div&gt;~ TryMove(direction: Direction): bool&amp;nbsp;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;←입력 방향으로 이동 시도&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~ StopMoving(): void&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← Rigidbody 정지&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~ Knockback(direction: Direction, knockbackForce: float? = null): void&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;← 수동 넉백&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;~ Die(succeed: bool): void&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 사망,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;succeed: 정상 사망인지&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;[ 고수준 행동 ]&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;~ TryDoAction(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; playInfo:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;MonsterActionPlayInfo&lt;font color=&quot;rgba(0, 0, 0, 0)&quot;&gt;,&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 행동 명령 DTO&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; out reason:&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ActionResult&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 호출 틱 실행 결과&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; stopPreviousAction:&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;= true,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← true이면 이전 행동 종료 후 행동 수행&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; allowRestart:&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;= false)&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← true이면 이전 행동이 입력 행동과 같을 경우 행동 재실행&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; : bool&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 호출 틱 실행 결과&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, sans-serif&quot;&gt;~ GetCurrnetAction(): MonsterAction&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 현재 행동 반환&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, sans-serif&quot;&gt;~ TryGetCurrnetAction(out name: string): bool&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;← 현재 행동 반환&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;~ StopCurrentAction(): void&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 현재 행동 정지&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="Dq4tyF78pXodXOVorUOO-5">
+        <mxCell id="Dq4tyF78pXodXOVorUOO-8" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;[ 저수준 행동 ]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;~ TryMove(): bool&amp;nbsp;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 현재 방향으로 이동 시도&lt;/span&gt;&lt;/div&gt;&lt;div&gt;~ TryMove(direction: Direction): bool&amp;nbsp;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;←입력 방향으로 이동 시도&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~ StopMoving(): void&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← Rigidbody 정지&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;~ Knockback(direction: Direction, knockbackForce: float? = null): void&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;← 수동 넉백&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;~ Die(succeed: bool): void&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 사망,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;succeed: 정상 사망인지&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;[ 고수준 행동 ]&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Arial, sans-serif;&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;~ TryDoAction(&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; playInfo:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;MonsterActionPlayInfo&lt;font color=&quot;rgba(0, 0, 0, 0)&quot;&gt;,&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 행동 명령 DTO&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; out reason:&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ActionResult&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 호출 틱 실행 결과&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; stopPreviousAction:&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;= true,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← true이면 이전 행동 종료 후 행동 수행&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; allowRestart:&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;= false)&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← true이면 이전 행동이 입력 행동과 같을 경우 행동 재실행&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; : bool&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 호출 틱 실행 결과&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, sans-serif&quot;&gt;~ GetCurrnetAction(): MonsterAction&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 현재 행동 반환&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, sans-serif&quot;&gt;~ TryGetCurrnetAction(out name: string): bool&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;← 현재 행동 반환&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; font-family: Arial, sans-serif;&quot;&gt;~ StopCurrentAction(): void&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Arial, sans-serif; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;← 현재 행동 정지&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="Dq4tyF78pXodXOVorUOO-5" vertex="1">
           <mxGeometry y="208" width="520" height="292" as="geometry" />
         </mxCell>
       </root>
