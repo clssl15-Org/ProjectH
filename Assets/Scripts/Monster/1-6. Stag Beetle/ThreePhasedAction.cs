@@ -4,7 +4,7 @@ using UniEngine.StateMachines.FSM;
 
 public partial class StagBeetle
 {
-    public class ThreePhasedAction : MonsterActionComponent
+    private class ThreePhasedAction : MonsterActionComponent
     {
         // Internal
         private MonsterAnimationPlayer AnimationPlayer => MonsterAction.Owner.AnimationPlayer;

@@ -3,7 +3,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class Engaged : BTNode<Monster, MonsterBlackboard>
+    internal class Engaged : BTNode<IMonster, MonsterBlackboard>
     {
         // Front
         public float TargetAttackRange { get; set; } = 2f;

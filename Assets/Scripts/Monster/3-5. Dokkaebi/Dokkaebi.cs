@@ -3,11 +3,8 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public partial class Dokkaebi : Monster
+public class Dokkaebi : Monster<MonsterStats>
 {
     // Property
     [Header("Dokkaebi")]
@@ -18,7 +15,7 @@ public partial class Dokkaebi : Monster
     // Internal
     private class DokkaebiBrain : MonsterBrain
     {
-        public DokkaebiBrain(Monster owner) : base(owner)
+        public DokkaebiBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -90,9 +87,4 @@ public partial class Dokkaebi : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(Dokkaebi)), CanEditMultipleObjects]
-    private class DokkaebiEditor : MonsterEditor { }
-#endif
 }

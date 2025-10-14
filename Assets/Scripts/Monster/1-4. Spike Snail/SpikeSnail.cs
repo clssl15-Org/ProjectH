@@ -3,12 +3,9 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction))]
-public partial class SpikeSnail : Monster
+public partial class SpikeSnail : Monster<MonsterStats>
 {
     // Property
     [Header("Spike Snail")]
@@ -21,7 +18,7 @@ public partial class SpikeSnail : Monster
     // Internal
     private class SpikeSnailBrain : MonsterBrain
     {
-        public SpikeSnailBrain(Monster owner) : base(owner)
+        public SpikeSnailBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -75,7 +72,7 @@ public partial class SpikeSnail : Monster
         base.Awake();
         _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
-        if (!_spikeLauncher) throw new InvalidOperationException(Ctx(
+        if (!_spikeLauncher) throw new InvalidOperationException(FormatLogMessage(
             $"{nameof(SpikeSnail)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
         _spikeLauncher.Initialize(this, PlatformManager, "Ground");
@@ -100,9 +97,4 @@ public partial class SpikeSnail : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(SpikeSnail)), CanEditMultipleObjects]
-    private class SpikeSnailEditor : MonsterEditor { }
-#endif
 }

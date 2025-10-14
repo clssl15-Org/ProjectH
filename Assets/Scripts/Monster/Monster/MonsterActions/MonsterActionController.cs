@@ -8,11 +8,11 @@ namespace MonsterActions
 {
     internal abstract class MonsterActionController : Work
     {
-        public Monster Owner { get; }
+        public IMonster Owner { get; }
         private Sprite _originalSprite;
 
 
-        public MonsterActionController(Monster monster)
+        public MonsterActionController(IMonster monster)
         {
             Owner = monster;
             _originalSprite = Owner.SpriteRenderer.sprite;

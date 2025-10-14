@@ -331,18 +331,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed73e6ade983bf648b0de3baaacab98e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideStats: 1
-  stats:
-  - {fileID: 11400000, guid: be982e12816ada146ba4785b7518d7bd, type: 2}
-  - {fileID: 11400000, guid: 7659321580f36f743acaba9d7d858696, type: 2}
-  _maxHP: 5
-  _attackPower: 1
-  _moveSpeed: 1
-  _attackCooltime: 0.5
-  _invincibleDuration: 0.5
-  defaultIsRight: 0
-  platformManager: {fileID: 0}
-  sceneAssetsLibrary: {fileID: 0}
-  damageFlashDuration: 0.1
-  stateDisplay: 
+  _useDebugStatsInfo: 0
+  _statsInfo: {fileID: 11400000, guid: 2e1b7626f4ddfda4580778fbd5223046, type: 2}
+  _debugStatsInfo: {fileID: 11400000, guid: 8576af38fe67d1d4e980503c4038251e, type: 2}
+  RandomizeStartDirection: 1
+  DefaultIsRight: 0
+  PlatformManager: {fileID: 0}
+  SceneAssetsLibrary: {fileID: 0}
+  DamageFlashDuration: 0.1
+  _stateDisplay: 
   _landAttackPower: 1

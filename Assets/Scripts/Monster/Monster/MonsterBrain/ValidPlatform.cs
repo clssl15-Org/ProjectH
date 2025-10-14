@@ -2,7 +2,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class ValidPlatform : BTNode<Monster, MonsterBlackboard>
+    internal class ValidPlatform : BTNode<IMonster, MonsterBlackboard>
     {
         public ValidPlatform()
         {

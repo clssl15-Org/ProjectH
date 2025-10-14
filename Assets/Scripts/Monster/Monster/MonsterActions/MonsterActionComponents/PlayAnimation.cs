@@ -3,7 +3,7 @@ using UniEngine.StateMachines.FSM;
 
 namespace MonsterActions
 {
-    public class PlayAnimation : MonsterActionComponent
+    internal class PlayAnimation : MonsterActionComponent
     {
         // Front
         public record AnimationPlayInfo
@@ -61,7 +61,7 @@ namespace MonsterActions
         protected override void OnEnter(object input = null)
         {
             if (input != null && input is not AnimationPlayInfo animationPlayInfo)
-                throw new ArgumentException(MonsterAction.Owner.Ctx(
+                throw new ArgumentException(MonsterAction.Owner.FormatLogMessage(
                     $"{nameof(input)}은(는) null이거나 {nameof(AnimationPlayInfo)} 형식이어야 하지만 " +
                     $"'{input.GetType().Name}' 형식이 입력되었습니다."),
                     nameof(input));

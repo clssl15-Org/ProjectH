@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a67d4adf15808448d8547a089ad83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectiles:
+  _projectiles:
   - {fileID: 1494748829261589236}
   - {fileID: 5581453143816760349}
   - {fileID: 1778174568955841781}
@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: 7351736382725989878}
   - component: {fileID: 1277366767335968839}
   - component: {fileID: 5498114516186278767}
+  - component: {fileID: 5280310548027947653}
   - component: {fileID: 7942828814907591697}
   m_Layer: 0
   m_Name: Spike R
@@ -186,6 +187,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.27, y: 0.13}
   m_EdgeRadius: 0
+--- !u!50 &5280310548027947653
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494748829261589236}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &7942828814907591697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +237,7 @@ GameObject:
   - component: {fileID: 5924249295303207795}
   - component: {fileID: 7312163913417746088}
   - component: {fileID: 2100784980592631915}
+  - component: {fileID: 4894549636255863018}
   - component: {fileID: 58221605896321578}
   m_Layer: 0
   m_Name: Spike T
@@ -329,6 +358,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.1182847, y: 0.24069357}
   m_EdgeRadius: 0
+--- !u!50 &4894549636255863018
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778174568955841781}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &58221605896321578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -470,6 +526,7 @@ GameObject:
   - component: {fileID: 5038081031157169641}
   - component: {fileID: 2640101865381480869}
   - component: {fileID: 3742776536262102543}
+  - component: {fileID: 7334794678061435186}
   - component: {fileID: 4989849655983267120}
   m_Layer: 0
   m_Name: Spike RT
@@ -594,6 +651,33 @@ PolygonCollider2D:
       - {x: 0.01732798, y: -0.11257151}
       - {x: 0.11084364, y: -0.04729682}
   m_UseDelaunayMesh: 0
+--- !u!50 &7334794678061435186
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5581453143816760349}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &4989849655983267120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,6 +701,7 @@ GameObject:
   - component: {fileID: 410322667971091068}
   - component: {fileID: 2132819760624995803}
   - component: {fileID: 2473788174413406704}
+  - component: {fileID: 6392386226837238195}
   - component: {fileID: 4491676516627407802}
   m_Layer: 0
   m_Name: Spike LT
@@ -741,6 +826,33 @@ PolygonCollider2D:
       - {x: 0.01732798, y: -0.11257151}
       - {x: 0.11084364, y: -0.04729682}
   m_UseDelaunayMesh: 0
+--- !u!50 &6392386226837238195
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6905180240545899326}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &4491676516627407802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,6 +876,7 @@ GameObject:
   - component: {fileID: 5125082395420708770}
   - component: {fileID: 1297114897353967637}
   - component: {fileID: 5267998643388920708}
+  - component: {fileID: 1360143053882754324}
   - component: {fileID: 8666844256727796179}
   m_Layer: 0
   m_Name: Spike L
@@ -884,6 +997,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.27, y: 0.13}
   m_EdgeRadius: 0
+--- !u!50 &1360143053882754324
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399276794674864253}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &8666844256727796179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1111,6 +1251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7da1470989c118945b9fbaf02ad3f2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stateDisplay: 
 --- !u!114 &987010599202020812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,19 +1264,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26185970ee2a8c4da1852179012bdc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideStats: 1
-  stats:
-  - {fileID: 11400000, guid: 2f5c4ac7edfc02a45bfdc4654c97b427, type: 2}
-  _maxHP: 5
-  _attackPower: 1
-  _moveSpeed: 1
-  _attackCooltime: 0.5
-  _invincibleDuration: 0.5
-  defaultIsRight: 0
-  platformManager: {fileID: 0}
-  sceneAssetsLibrary: {fileID: 0}
-  damageFlashDuration: 0.1
-  stateDisplay: 
+  _useDebugStatsInfo: 0
+  _statsInfo: {fileID: 11400000, guid: 6acab6441b248aa42a701483d82a80d4, type: 2}
+  _debugStatsInfo: {fileID: 11400000, guid: 2f5c4ac7edfc02a45bfdc4654c97b427, type: 2}
+  RandomizeStartDirection: 1
+  DefaultIsRight: 0
+  PlatformManager: {fileID: 0}
+  SceneAssetsLibrary: {fileID: 0}
+  DamageFlashDuration: 0.1
+  _stateDisplay: 
   spikeSpeed: 5
   launchTime: 0.21
   playtimeBeforeWaiting: 0.1

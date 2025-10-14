@@ -2,12 +2,9 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction), typeof(KinematicProjectileLauncher))]
-public class RangedSkeleton : Monster
+public class RangedSkeleton : Monster<MonsterStats>
 {
     // Property
     [Header("Ranged Skeleton")]
@@ -20,7 +17,7 @@ public class RangedSkeleton : Monster
 
     private class RangedkeletonBrain : MonsterBrain
     {
-        public RangedkeletonBrain(Monster owner) : base(owner)
+        public RangedkeletonBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -85,10 +82,4 @@ public class RangedSkeleton : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(MeleeSkeleton)), CanEditMultipleObjects]
-    private class MeleeSkeletonEditor : MonsterEditor { }
-#endif
 }

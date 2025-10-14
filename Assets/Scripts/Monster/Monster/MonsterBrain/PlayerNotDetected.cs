@@ -2,7 +2,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class PlayerNotDetected : BTNode<Monster, MonsterBlackboard>
+    internal class PlayerNotDetected : BTNode<IMonster, MonsterBlackboard>
     {
         public PlayerNotDetected()
         {

@@ -3,11 +3,8 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public class FireImp : Monster
+public class FireImp : Monster<MonsterStats>
 {
     // Property
     [Header("Fire Imp")]
@@ -18,7 +15,7 @@ public class FireImp : Monster
     // Internal
     private class FireImpBrain : MonsterBrain
     {
-        public FireImpBrain(Monster owner) : base(owner)
+        public FireImpBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -86,10 +83,4 @@ public class FireImp : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(FireImp)), CanEditMultipleObjects]
-    private class FireImpEditor : MonsterEditor { }
-#endif
 }

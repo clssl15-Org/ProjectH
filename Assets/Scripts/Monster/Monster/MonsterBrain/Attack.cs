@@ -3,7 +3,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class Attack : BTNode<Monster, MonsterBlackboard>
+    internal class Attack : BTNode<IMonster, MonsterBlackboard>
     {
         // Internal
         private readonly string _monsterAction;
@@ -21,7 +21,7 @@ namespace MonsterBT
                 out var reason,
                 allowRestart: true))
             {
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(Owner.FormatLogMessage(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Attack)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);

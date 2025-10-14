@@ -5,10 +5,10 @@ internal class StandaloneHitBrain
     public bool DoKnockback { get; set; }
     public bool IsDamaging { get; private set; } = false;
 
-    private readonly Monster _owner;
+    private readonly IMonster _owner;
 
 
-    public StandaloneHitBrain(Monster owner, bool doKnockback = true)
+    public StandaloneHitBrain(IMonster owner, bool doKnockback = true)
     {
         _owner = owner;
         DoKnockback = doKnockback;
@@ -19,11 +19,10 @@ internal class StandaloneHitBrain
         if (IsDamaging) return false;
         if (!_owner.IsAlive) return false;
 
-
-        if (!_owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playTime: _owner.InvincibleDuration))
+        if (!_owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playTime: _owner.StatsInfo.InvincibleDuration))
         {
             if (reason.Result != ActionResult.ResultType.AlreadyDoing)
-                Debug.LogWarning(_owner.Ctx(
+                Debug.LogWarning(_owner.FormatLogMessage(
                     $"Hit(Standalone) 행동에 실패하였기 때문에 Hit(Standalone) 상태로 진입할 수 없습니다.\n{reason}"));
             
             return false;
@@ -46,5 +45,5 @@ internal class StandaloneHitBrain
         IsDamaging = false;
     }
 
-    private string CtxHit(string message) => _owner.Ctx($"StandaloneHit: {message}");
+    private string CtxHit(string message) => _owner.FormatLogMessage($"StandaloneHit: {message}");
 }

@@ -3,11 +3,8 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public partial class JavelinHurler : Monster
+public partial class JavelinHurler : Monster<MonsterStats>
 {
     // Property
     [Header("Javelin Hurler")]
@@ -20,7 +17,7 @@ public partial class JavelinHurler : Monster
     // Internal
     private class JavelinHurlerBrain : MonsterBrain
     {
-        public JavelinHurlerBrain(Monster owner) : base(owner)
+        public JavelinHurlerBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -30,7 +27,7 @@ public partial class JavelinHurler : Monster
                             .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
                         .AddChild(new Attack()))
-                        // 창던지개는 Cooldown을 가지지 않습니다.
+                        //.AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
                         .AddChild(new Patrol())))
@@ -41,7 +38,7 @@ public partial class JavelinHurler : Monster
 
     private class JavelinHurlerActionController : MonsterActionController
     {
-        public JavelinHurlerActionController(Monster monster) : base(monster)
+        public JavelinHurlerActionController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -90,10 +87,4 @@ public partial class JavelinHurler : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(JavelinHurler)), CanEditMultipleObjects]
-    private class JavelinHurlerEditor : MonsterEditor { }
-#endif
 }

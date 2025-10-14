@@ -2,17 +2,14 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction))]
-public class BlueMonster : Monster
+public class BlueMonster : Monster<MonsterStats>
 {
     // Internal
     private class BlueMonsterBrain : MonsterBrain
     {
-        public BlueMonsterBrain(Monster owner) : base(owner)
+        public BlueMonsterBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -33,7 +30,7 @@ public class BlueMonster : Monster
 
     private class BlueMonsterActionController : MonsterActionController
     {
-        public BlueMonsterActionController(Monster monster) : base(monster)
+        public BlueMonsterActionController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -69,10 +66,4 @@ public class BlueMonster : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(BlueMonster)), CanEditMultipleObjects]
-    private class BlueMonsterEditor : MonsterEditor { }
-#endif
 }

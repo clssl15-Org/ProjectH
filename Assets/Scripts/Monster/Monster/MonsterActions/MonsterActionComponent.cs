@@ -4,7 +4,7 @@ using static MonsterActions.MonsterActionComponent;
 
 namespace MonsterActions
 {
-    public abstract class MonsterActionComponent
+    internal abstract class MonsterActionComponent
     {
         // Front
         public bool Active { get; private set; } = false;
@@ -12,7 +12,7 @@ namespace MonsterActions
         
         // Internal
         protected MonsterAction MonsterAction { get; private set; }
-        protected Monster Owner => MonsterAction.Owner;
+        protected IMonster Owner => MonsterAction.Owner;
 
 
         // Content
@@ -51,7 +51,7 @@ namespace MonsterActions
         protected virtual void OnInterrupt(InterruptType reason) { }
     }
 
-    public static class InterruptTypeExtensions
+    internal static class InterruptTypeExtensions
     {
         public static InterruptType ToInterruptType(this ResultType resultType) => resultType switch
         {

@@ -4,12 +4,9 @@ using MonsterBT;
 using UniEngine;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction))]
-public partial class StagBeetle : Monster
+public partial class StagBeetle : Monster<StagBeetleStats>
 {
     // Front
     [Header("Stag Beetle")]
@@ -121,7 +118,7 @@ public partial class StagBeetle : Monster
         _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
         if (!_spikeLauncher) throw new InvalidOperationException(
-            Ctx($"{nameof(StagBeetle)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
+            FormatLogMessage($"{nameof(StagBeetle)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
         _spikeLauncher.Initialize(this, PlatformManager, "Ground");
     }
@@ -152,10 +149,4 @@ public partial class StagBeetle : Monster
             });
         }
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(StagBeetle)), CanEditMultipleObjects]
-    private class StagBeetleEditor : MonsterEditor { }
-#endif
 }

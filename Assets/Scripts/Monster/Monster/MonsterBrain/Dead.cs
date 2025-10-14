@@ -3,7 +3,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class Dead : BTNode<Monster, MonsterBlackboard>
+    internal class Dead : BTNode<IMonster, MonsterBlackboard>
     {
         // Front
         public float StayTimeAfterFinised { get; set; } = 0f;
@@ -33,7 +33,7 @@ namespace MonsterBT
                 out var reason,
                 allowRestart: true))
             {
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(Owner.FormatLogMessage(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);

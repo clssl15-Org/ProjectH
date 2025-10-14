@@ -4,9 +4,9 @@ using UnityEngine;
 
 public partial class Ghost
 {
-    private class GhostAttack : BTNode<Monster, MonsterBlackboard>
+    private class GhostAttackBrain : BTNode<IMonster, MonsterBlackboard>
     {
-        public GhostAttack() : base(name: MonsterActionType.Attack.ToString()) { }
+        public GhostAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
         protected override void OnOpen(params object[] _)
         {
@@ -18,8 +18,8 @@ public partial class Ghost
                 {
                     var i when 0f <= i && i < 0.75f => AttackMode.RangedAttack,
                     var i when i <= 1f => AttackMode.ExplosiveAttack,
-                    var i => throw new InvalidOperationException(
-                        Owner.Ctx($"공격 패턴의 범위는 0 이상 1 이하여야 하지만 '{i}'이(가) 입력되었습니다."))
+                    var i => throw new ArgumentOutOfRangeException(
+                        nameof(i), i, Owner.FormatLogMessage($"공격 패턴의 범위는 0 이상 1 이하여야 합니다."))
                 };
             else
                 mode = ower._attackMode;
@@ -29,14 +29,14 @@ public partial class Ghost
             {
                 AttackMode.RangedAttack => "Attack_1",
                 AttackMode.ExplosiveAttack => "Attack_2",
-                _ => throw new InvalidOperationException(
-                    Ctx($"알 수 없는 공격 패턴 '{mode}'이(가) 입력되었습니다."))
+                _ => throw new ArgumentOutOfRangeException(
+                    nameof(mode), mode, Owner.FormatLogMessage($"알 수 없는 공격 패턴이 입력되었습니다."))
             };
 
 
             if (!Owner.TryDoAction(new(action, result => Complete(result)), out var reason))
             {
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(Owner.FormatLogMessage(
                     $"{action} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);

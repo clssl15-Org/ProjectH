@@ -2,31 +2,9 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-using System.Linq;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public partial class MadWood : Monster
+public partial class MadWood : Monster<MadWoodStats>
 {
-    // Property
-    [Header("Mad Wood")]
-    [SerializeField, Min(0)] private int _landAttackPower = 1;
-
-    // Control
-    private bool UseLandAttackOverride => UseStatsOverride && Stats?.Length >= 2 && Stats[1];
-
-    public override int AttackPower
-    {
-        get
-        {
-            if (previousAttackMode == AttackMode.DefaultAttack)
-                return base.AttackPower;
-
-            return !UseLandAttackOverride ? _landAttackPower : Stats[1].AttackPower;
-        }
-    }
-
     // Internal
     public enum AttackMode
     {
@@ -35,12 +13,12 @@ public partial class MadWood : Monster
     }
 
     // 이 필드는 MadWoodAttack에서 관리합니다.
-    private AttackMode previousAttackMode = AttackMode.LandAttack;
+    private AttackMode _previousAttackMode = AttackMode.LandAttack;
 
 
     private class MadWoodBrain : MonsterBrain
     {
-        public MadWoodBrain(Monster owner) : base(owner)
+        public MadWoodBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -49,7 +27,7 @@ public partial class MadWood : Monster
                         .AddChild(new Engaged(Engaged.RangeType.Contact)
                             .AddChild(new Adjusting())
                             .AddChild(new DeadEnd()))
-                        .AddChild(new MadWoodAttack())
+                        .AddChild(new MadWoodAttackBrain())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
@@ -61,7 +39,7 @@ public partial class MadWood : Monster
 
     private class MadWoodActionController : MonsterActionController
     {
-        public MadWoodActionController(Monster monster) : base(monster)
+        public MadWoodActionController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -105,19 +83,4 @@ public partial class MadWood : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(MadWood)), CanEditMultipleObjects]
-    private class MadWoodEditor : MonsterEditor
-    {
-        protected override string[] GetHidingFields()
-        {
-            if (!((MadWood)target).UseLandAttackOverride)
-                return base.GetHidingFields();
-            else
-                return base.GetHidingFields().Append("_landAttackPower").ToArray();
-        }
-    }
-#endif
 }

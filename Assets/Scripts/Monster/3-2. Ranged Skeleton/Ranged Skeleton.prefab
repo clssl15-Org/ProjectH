@@ -347,8 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a67d4adf15808448d8547a089ad83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectiles:
-  - {fileID: 2335328312926215818}
+  _projectiles: []
 --- !u!114 &6394094662674465370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,13 +360,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75d27de955803641a86ea86a7f8b105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _overrideStats: 0
-  Stats: []
-  _maxHP: 3
-  _attackPower: 1
-  _moveSpeed: 1
-  _attackCooltime: 0.5
-  _invincibleDuration: 0.5
+  _useDebugStatsInfo: 0
+  _statsInfo: {fileID: 11400000, guid: b22874e1ece53b7408e0a99cbc43019f, type: 2}
+  _debugStatsInfo: {fileID: 11400000, guid: a798be111fbabfd4eacf29ffe2046dd2, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
   PlatformManager: {fileID: 0}
@@ -437,11 +432,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3aa953e66b82b89438bdad62c8ce7fdf, type: 3}
---- !u!1 &2335328312926215818 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2892904556187916271, guid: 3aa953e66b82b89438bdad62c8ce7fdf, type: 3}
-  m_PrefabInstance: {fileID: 598250770215831909}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7996829521937683950 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7401415243854929035, guid: 3aa953e66b82b89438bdad62c8ce7fdf, type: 3}

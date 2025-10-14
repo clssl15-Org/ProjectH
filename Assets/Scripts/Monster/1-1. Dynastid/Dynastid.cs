@@ -1,16 +1,13 @@
 using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public class Dynastid : Monster
+public class Dynastid : Monster<MonsterStats>
 {
     // Internal
     private class DynastidBrain : MonsterBrain
     {
-        public DynastidBrain(Monster owner) : base(owner)
+        public DynastidBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -31,7 +28,7 @@ public class Dynastid : Monster
 
     private class DynastidActionController : MonsterActionController
     {
-        public DynastidActionController(Monster monster) : base(monster)
+        public DynastidActionController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -71,10 +68,4 @@ public class Dynastid : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(Dynastid)), CanEditMultipleObjects]
-    private class DynastidEditor : MonsterEditor { }
-#endif
 }

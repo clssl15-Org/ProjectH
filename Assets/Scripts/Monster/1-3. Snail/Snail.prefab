@@ -345,13 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d9e5d2b7103a0449a1633b295d1ada5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _overrideStats: 0
-  Stats: []
-  _maxHP: 5
-  _attackPower: 1
-  _moveSpeed: 1
-  _attackCooltime: 0.5
-  _invincibleDuration: 0.5
+  _useDebugStatsInfo: 0
+  _statsInfo: {fileID: 11400000, guid: 030c464e8a825f14ca0b22cb1e97e45e, type: 2}
+  _debugStatsInfo: {fileID: 11400000, guid: 4eca89fe6b507b24083c6af2961c6922, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
   PlatformManager: {fileID: 0}

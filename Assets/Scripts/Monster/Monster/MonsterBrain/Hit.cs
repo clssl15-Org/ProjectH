@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MonsterBT
 {
-    public class Hit : BTNode<Monster, MonsterBlackboard>
+    internal class Hit : BTNode<IMonster, MonsterBlackboard>
     {
         // Internal
         private readonly string _monsterAction;
@@ -39,10 +39,10 @@ namespace MonsterBT
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
                 Callback: result => Complete(result),
-                PlayTime: Owner.InvincibleDuration),
+                PlayTime: Owner.StatsInfo.InvincibleDuration),
                 out var reason))
             {
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(Owner.FormatLogMessage(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
@@ -56,6 +56,6 @@ namespace MonsterBT
                 Owner.Knockback(damageInfo.Direction, damageInfo.KnockbackForce);
         }
 
-        private string CtxHit(string message) => Owner.Ctx($"BTNode.Hit: {message}");
+        private string CtxHit(string message) => Owner.FormatLogMessage($"BTNode.Hit: {message}");
     }
 }

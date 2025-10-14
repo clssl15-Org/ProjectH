@@ -3,7 +3,7 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    public class Adjusting : BTNode<Monster, MonsterBlackboard>
+    internal class Adjusting : BTNode<IMonster, MonsterBlackboard>
     {
         // Internal
         private readonly string _monsterAction;
@@ -22,7 +22,7 @@ namespace MonsterBT
             if (!Owner.TryDoAction(new(_monsterAction), out var reason)
                  && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(Owner.FormatLogMessage(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Adjusting)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);

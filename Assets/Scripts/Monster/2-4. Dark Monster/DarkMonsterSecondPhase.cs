@@ -1,17 +1,14 @@
 using MonsterActions;
 using MonsterBT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction))]
-public class DarkMonsterSecondPhase : Monster
+public class DarkMonsterSecondPhase : Monster<MonsterStats>
 {
     // Internal
     private class DarkMonsterSecondPhaseBrain : MonsterBrain
     {
-        public DarkMonsterSecondPhaseBrain(Monster owner) : base(owner)
+        public DarkMonsterSecondPhaseBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 //.AddChild(new Hit())
@@ -32,7 +29,7 @@ public class DarkMonsterSecondPhase : Monster
 
     private class DarkMonsterSecondPhaseController : MonsterActionController
     {
-        public DarkMonsterSecondPhaseController(Monster monster) : base(monster)
+        public DarkMonsterSecondPhaseController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -61,10 +58,4 @@ public class DarkMonsterSecondPhase : Monster
     {
         StandaloneHitBrain.TryTakeDamage(damageInfo);
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(DarkMonsterSecondPhase)), CanEditMultipleObjects]
-    private class DarkMonsterSecondPhaseEditor : MonsterEditor { }
-#endif
 }

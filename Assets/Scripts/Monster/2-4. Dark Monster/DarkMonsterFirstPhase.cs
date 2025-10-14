@@ -2,11 +2,8 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public class DarkMonsterFirstPhase : Monster
+public class DarkMonsterFirstPhase : Monster<MonsterStats>
 {
     // Property
     [Header("Dark Monster First Phase")]
@@ -17,7 +14,7 @@ public class DarkMonsterFirstPhase : Monster
     // Internal
     private class DarkMonsterFirstPhaseBrain : MonsterBrain
     {
-        public DarkMonsterFirstPhaseBrain(Monster owner) : base(owner)
+        public DarkMonsterFirstPhaseBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -38,7 +35,7 @@ public class DarkMonsterFirstPhase : Monster
 
     private class DarkMonsterFirstPhaseController : MonsterActionController
     {
-        public DarkMonsterFirstPhaseController(Monster monster) : base(monster)
+        public DarkMonsterFirstPhaseController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -58,7 +55,7 @@ public class DarkMonsterFirstPhase : Monster
     protected override void Awake()
     {
         if (_revive && !_secondPhasePrefab)
-            Debug.LogWarning(Ctx(
+            Debug.LogWarning(FormatLogMessage(
                 $"{nameof(_secondPhasePrefab)}이(가) 유효하지 않기 때문에 사망 후 두 번째 페이즈의 몬스터가 생성되지 않습니다."));
 
         base.Awake();
@@ -94,10 +91,4 @@ public class DarkMonsterFirstPhase : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(DarkMonsterFirstPhase)), CanEditMultipleObjects]
-    private class DarkMonsterFirstPhaseEditor : MonsterEditor { }
-#endif
 }

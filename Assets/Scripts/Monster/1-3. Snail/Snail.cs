@@ -2,17 +2,14 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction))]
-public class Snail : Monster
+public class Snail : Monster<MonsterStats>
 {
     // Internal
     private class SnailBrain : MonsterBrain
     {
-        public SnailBrain(Monster owner) : base(owner)
+        public SnailBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -33,7 +30,7 @@ public class Snail : Monster
 
     private class SnailActionController : MonsterActionController
     {
-        public SnailActionController(Monster monster) : base(monster)
+        public SnailActionController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -73,9 +70,4 @@ public class Snail : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(Snail)), CanEditMultipleObjects]
-    private class SnailEditor : MonsterEditor { }
-#endif
 }

@@ -7,10 +7,10 @@ using static MonsterActions.MonsterActionComponent;
 
 namespace MonsterActions
 {
-    public sealed class MonsterAction : Work
+    internal sealed class MonsterAction : Work
     {
         // Front
-        public Monster Owner
+        public IMonster Owner
         {
             get
             {

@@ -2,17 +2,17 @@ using UniEngine.StateMachines.BT;
 using UnityEngine;
 using static MonsterActions.MonsterAction;
 
-public partial class MadWood : Monster
+public partial class MadWood
 {
-    private class MadWoodAttack : BTNode<Monster, MonsterBlackboard>
+    private class MadWoodAttackBrain : BTNode<IMonster, MonsterBlackboard>
     {
-        public MadWoodAttack() : base(name: MonsterActionType.Attack.ToString()) { }
+        public MadWoodAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
         protected override void OnOpen(object[] _)
         {
             var owner = (MadWood)Owner;
 
-            var currentAttackMode = owner.previousAttackMode == AttackMode.DefaultAttack
+            var currentAttackMode = owner._previousAttackMode == AttackMode.DefaultAttack
                 ? AttackMode.LandAttack
                 : AttackMode.DefaultAttack;
 
@@ -21,13 +21,13 @@ public partial class MadWood : Monster
                 Callback: result => Complete(result)),
                 out var reason))
             {
-                Debug.LogWarning(Owner.Ctx(
-                    $"{currentAttackMode.ToString()} 행동에 실패하였기 때문에 Attack 상태로 진입할 수 없습니다.\n{reason}"));
+                Debug.LogWarning(Owner.FormatLogMessage(
+                    $"({nameof(MadWoodAttackBrain)}) {currentAttackMode.ToString()} 행동에 실패하였기 때문에 Attack 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
             }
 
-            owner.previousAttackMode = currentAttackMode;
+            owner._previousAttackMode = currentAttackMode;
             Blackboard.Committing = true;
         }
 

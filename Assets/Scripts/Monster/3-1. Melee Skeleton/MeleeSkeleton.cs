@@ -2,17 +2,14 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(StandaloneHitAction))]
-public class MeleeSkeleton : Monster
+public class MeleeSkeleton : Monster<MonsterStats>
 {
     // Internal
     private class MeleeSkeletonBrain : MonsterBrain
     {
-        public MeleeSkeletonBrain(Monster owner) : base(owner)
+        public MeleeSkeletonBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -33,7 +30,7 @@ public class MeleeSkeleton : Monster
 
     private class MeleeSkeletonActionController : MonsterActionController
     {
-        public MeleeSkeletonActionController(Monster monster) : base(monster)
+        public MeleeSkeletonActionController(IMonster monster) : base(monster)
         {
             AddChild(new MonsterAction(MonsterActionType.Idle)
                 .AddAnimationComponent());
@@ -69,10 +66,4 @@ public class MeleeSkeleton : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(MeleeSkeleton)), CanEditMultipleObjects]
-    private class MeleeSkeletonEditor : MonsterEditor { }
-#endif
 }

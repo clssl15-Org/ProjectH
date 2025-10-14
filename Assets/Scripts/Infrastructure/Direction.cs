@@ -24,6 +24,12 @@ public static class DirectionTools
         Direction.Right => Vector2.right,
         _ => Vector2.zero
     };
+    public static Vector3 ToVector3(this Direction direction) => direction switch
+    {
+        Direction.Left => Vector3.left,
+        Direction.Right => Vector3.right,
+        _ => Vector3.zero
+    };
 
     public static Direction Flip(this Direction direction) => direction switch
     {

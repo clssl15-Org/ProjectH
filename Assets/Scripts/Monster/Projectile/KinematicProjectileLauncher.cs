@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class KinematicProjectileLauncher : MonoBehaviour
+internal class KinematicProjectileLauncher : MonoBehaviour
 {
     // Front
     public enum LaunchType
@@ -17,7 +17,7 @@ public class KinematicProjectileLauncher : MonoBehaviour
     // Internal
     private Vector3[] _projectilesPositions;
 
-    private Monster _owner;
+    private IMonster _owner;
     private PlatformManager _platformManager;
     private string[] _collisionTags;
 
@@ -34,7 +34,7 @@ public class KinematicProjectileLauncher : MonoBehaviour
         }
     }
 
-    public void Initialize(Monster owner, PlatformManager platformManager, params string[] collisionTags)
+    public void Initialize(IMonster owner, PlatformManager platformManager, params string[] collisionTags)
     {
         _owner = owner;
         _platformManager = platformManager;
@@ -111,7 +111,7 @@ public class KinematicProjectileLauncher : MonoBehaviour
     
     private void ThrowIfNotValidState()
     {
-        if (!_owner || !_platformManager)
+        if (!_owner.IsValid() || !_platformManager)
             throw new InvalidOperationException(Ctx(
                 $"{name} 객체의 KinematicProjectileLauncher 컴포넌트가 유효하지 않은 상태입니다. " +
                 "컴포넌트를 사용하기 전에 Initialize()를 호출하였는지 확인하세요."));

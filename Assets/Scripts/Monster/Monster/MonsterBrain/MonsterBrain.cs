@@ -2,9 +2,9 @@ using UniEngine.StateMachines.BT;
 
 namespace MonsterBT
 {
-    internal abstract class MonsterBrain : BTNode<Monster, MonsterBlackboard>
+    internal abstract class MonsterBrain : BTNode<IMonster, MonsterBlackboard>
     {
-        public MonsterBrain(Monster owner = null, string name = null) : base(owner, name)
+        public MonsterBrain(IMonster owner = null, string name = null) : base(owner, name)
         {
             HierarchyMode = HierarchyMode.Selector;
         }

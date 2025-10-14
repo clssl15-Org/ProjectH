@@ -4,20 +4,17 @@ using MonsterActions;
 using MonsterBT;
 using UnityEngine;
 using static MonsterActions.MonsterAction;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlatformDetector))]
-public abstract partial class Monster : MonoBehaviour
+public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TStats : MonsterStats
 {
     // Front
     public int HP
     {
         get => _hp;
-        internal set => _hp = Mathf.Clamp(value, 0, MaxHP);
+        internal set => _hp = Mathf.Clamp(value, 0, StatsInfo.MaxHP);
     }
 
     public Direction Direction
@@ -40,16 +37,11 @@ public abstract partial class Monster : MonoBehaviour
 
 
     // Property 
-    [Header("Stats Overrride")]
-    [SerializeField] private bool _overrideStats = false;
-    [SerializeField] protected MonsterStats[] Stats;
-
     [Header("Stats")]
-    [SerializeField, Min(0)] private int _maxHP = 3;
-    [SerializeField, Min(0)] private int _attackPower = 1;
-    [SerializeField, Min(0)] private float _moveSpeed = 1;
-    [SerializeField, Min(0)] private float _attackCooltime = 0.5f;
-    [SerializeField, Min(0)] private float _invincibleDuration = 0.5f;
+    [SerializeField] private bool _useDebugStatsInfo = false;
+    [SerializeField] private TStats _statsInfo;
+    [SerializeField] private TStats _debugStatsInfo;
+    public TStats StatsInfo => _useDebugStatsInfo ? _debugStatsInfo : _statsInfo;
 
     [Header("Image Settings")]
     [SerializeField] protected bool RandomizeStartDirection = true;
@@ -58,25 +50,13 @@ public abstract partial class Monster : MonoBehaviour
     [Header("Bindings")]
     [SerializeField] internal PlatformManager PlatformManager;
     [SerializeField] internal SceneAssetsLibrary SceneAssetsLibrary;
-
-    [Header("Animations")]
-    [SerializeField, Min(0)] internal float DamageFlashDuration = 0.1f;
+    SceneAssetsLibrary IMonster.SceneAssetsLibrary => SceneAssetsLibrary;
 
 
     // Display
     [SerializeField, Header("Display"), TextArea(3, 15)]
     private string _stateDisplay = string.Empty;
     private readonly StringBuilder _sb = new();
-
-
-    // Control
-    protected bool UseStatsOverride => _overrideStats && Stats?.Length >= 1 && Stats[0];
-
-    public virtual int MaxHP => !UseStatsOverride ? _maxHP : Stats[0].MaxHP;
-    public virtual int AttackPower => !UseStatsOverride ? _attackPower : Stats[0].AttackPower;
-    public virtual float MoveSpeed => !UseStatsOverride ? _moveSpeed : Stats[0].MoveSpeed;
-    public virtual float AttackCooltime => !UseStatsOverride? _attackCooltime : Stats[0].AttackCooltime;
-    public virtual float InvincibleDuration => !UseStatsOverride ? _invincibleDuration : Stats[0].InvincibleDuration;
 
 
     // Components
@@ -100,6 +80,22 @@ public abstract partial class Monster : MonoBehaviour
     // High-level Behavior Handlers
     internal MonsterActionController ActionController { get; set; }
     internal MonsterBrain Brain { get; set; }
+
+    #region Interfaces
+    int IMonster.HP { get => HP; set => HP = value; }
+    Direction IMonster.Direction { get => Direction; set => Direction = value; }
+    bool IMonster.IsAlive { get => IsAlive; set => IsAlive = value; }
+    MonsterStats IMonster.StatsInfo => StatsInfo;
+    SpriteRenderer IMonster.SpriteRenderer => SpriteRenderer;
+    Collider2D IMonster.Collider => Collider;
+    Rigidbody2D IMonster.Rigidbody => Rigidbody;
+    int IMonster.BelongingPlatform { get => BelongingPlatform; set => BelongingPlatform = value; }
+    PlatformDetector IMonster.PlatformDetector => PlatformDetector;
+    GameObject IMonster.DetectedPlayer => DetectedPlayer;
+    MonsterAnimationPlayer IMonster.AnimationPlayer => AnimationPlayer;
+    StandaloneHitAction IMonster.StandaloneHitAction => StandaloneHitAction;
+    MonsterActionController IMonster.ActionController => ActionController;
+    #endregion
 
     // Internal 
     private int _hp;
@@ -127,13 +123,13 @@ public abstract partial class Monster : MonoBehaviour
         if (_playerDetector)
             _playerDetector.PlayerDetected += OnPlayerDetected;
         else
-            Debug.LogWarning(Ctx(
+            Debug.LogWarning(FormatLogMessage(
                 $"이 몬스터는 {nameof(MonsterPlayerDetector)}을(를) 가지고 있지 않습니다. " +
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
 
         _hitDetector = GetComponentInChildren<MonsterHitted>(true);
-        if (!_hitDetector) throw new InvalidOperationException(Ctx(
+        if (!_hitDetector) throw new InvalidOperationException(FormatLogMessage(
             $"{nameof(_hitDetector)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
         _hitDetector.Damaged += OnDamaged;
@@ -150,18 +146,22 @@ public abstract partial class Monster : MonoBehaviour
         AnimationPlayer = new MonsterAnimationPlayer(GetComponent<Animator>());
 
         _direction = DefaultIsRight ? Direction.Right : Direction.Left;
-        _hp = MaxHP;
+        _hp = StatsInfo.MaxHP;
+
+#if !UNITY_EDITOR
+        _useDebugStatsInfo = false;
+#endif
     }
 
     protected virtual void Start()
     {
         #region 필수 컴포넌트 설정
         if (!PlatformManager)
-            throw new InvalidOperationException(Ctx(
+            throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(PlatformManager)}이(가) 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
         if (!SceneAssetsLibrary)
-            Debug.LogWarning(Ctx(
+            Debug.LogWarning(FormatLogMessage(
                 $"이 몬스터는 {nameof(SceneAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
                 "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
@@ -209,7 +209,7 @@ public abstract partial class Monster : MonoBehaviour
 
             Rigidbody.velocity = new Vector2
             {
-                x = -MoveSpeed,
+                x = -StatsInfo.MoveSpeed,
                 y = Rigidbody.velocity.y,
             };
 
@@ -223,7 +223,7 @@ public abstract partial class Monster : MonoBehaviour
 
             Rigidbody.velocity = new Vector2
             {
-                x = MoveSpeed,
+                x = StatsInfo.MoveSpeed,
                 y = Rigidbody.velocity.y,
             };
 
@@ -231,7 +231,7 @@ public abstract partial class Monster : MonoBehaviour
         }
 
 
-        Debug.LogWarning(Ctx(
+        Debug.LogWarning(FormatLogMessage(
             $"현재 입력된 {nameof(direction)}({Direction})이(가) 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
 
         return false;
@@ -251,6 +251,11 @@ public abstract partial class Monster : MonoBehaviour
         Died?.Invoke(succeed);
         Destroy(gameObject);
     }
+
+    #region Interfaces
+    void IMonster.Knockback(Direction direction, float? knockbackForce) => Knockback(direction, knockbackForce);
+    void IMonster.Die(bool succeed) => Die(succeed);
+    #endregion
     #endregion
 
 
@@ -266,6 +271,17 @@ public abstract partial class Monster : MonoBehaviour
     internal bool TryGetCurrentAction(out string name) => ActionController.TryGetCurrentAction(out name);
 
     internal void StopCurrentAction() => ActionController.StopCurrentAction();
+
+    #region Interfaces
+    bool IMonster.TryDoAction(MonsterActionPlayInfo playInfo, out ActionResult reason, bool stopPreviousAction, bool allowRestart) =>
+    TryDoAction(playInfo, out reason, stopPreviousAction, allowRestart);
+    bool IMonster.TryMove() => TryMove();
+    bool IMonster.TryMove(Direction direction) => TryMove(direction);
+    void IMonster.StopMoving() => StopMoving();
+    MonsterActionType IMonster.GetCurrentAction() => GetCurrentAction();
+    bool IMonster.TryGetCurrentAction(out string name) => TryGetCurrentAction(out name);
+    void IMonster.StopCurrentAction() => StopCurrentAction();
+    #endregion
     #endregion
 
 
@@ -281,7 +297,7 @@ public abstract partial class Monster : MonoBehaviour
     }
 
 
-    internal string Ctx(string message) => $"[{name}] {message}";
+    public string FormatLogMessage(string message) => $"[{name}] {message}";
 
     protected virtual string GetDisplayContent()
     {
@@ -303,29 +319,4 @@ public abstract partial class Monster : MonoBehaviour
 
         return _sb.ToString();
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(Monster)), CanEditMultipleObjects]
-    protected class MonsterEditor : Editor
-    {
-        private string[] _defaultHidingFields =
-            new[] { "_maxHP", "_attackPower", "_moveSpeed", "_attackCooltime", "_invincibleDuration" };
-
-        public override void OnInspectorGUI()
-        {
-            var target = (Monster)base.target;
-            serializedObject.Update();
-
-            if (target.UseStatsOverride)
-                DrawPropertiesExcluding(serializedObject, GetHidingFields());
-            else
-                DrawDefaultInspector();
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        protected virtual string[] GetHidingFields() => _defaultHidingFields;
-    }
-#endif
 }

@@ -2,12 +2,9 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [RequireComponent(typeof(KinematicProjectileLauncher))]
-public partial class Crow : Monster
+public partial class Crow : Monster<MonsterStats>
 {
     // Property
     [Header("Crow")]
@@ -20,7 +17,7 @@ public partial class Crow : Monster
 
     private class CrowBrain : MonsterBrain
     {
-        public CrowBrain(Monster owner) : base(owner)
+        public CrowBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -84,10 +81,4 @@ public partial class Crow : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(Crow)), CanEditMultipleObjects]
-    private class CrowEditor : MonsterEditor { }
-#endif
 }

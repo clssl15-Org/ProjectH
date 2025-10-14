@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MonsterBT
 {
-    public class Cooldown : BTNode<Monster, MonsterBlackboard>
+    internal class Cooldown : BTNode<IMonster, MonsterBlackboard>
     {
         // Internal
         private readonly string _monsterAction;
@@ -17,12 +17,12 @@ namespace MonsterBT
 
         protected override void OnOpen(object[] _)
         {
-            _remainingCooldownTime = Owner.AttackCooltime;
+            _remainingCooldownTime = Owner.StatsInfo.AttackCooltime;
 
             if (!Owner.TryDoAction(new(_monsterAction), out var reason)
                 && reason.Result != ActionResult.ResultType.AlreadyDoing)
             {
-                Debug.LogWarning(Owner.Ctx(
+                Debug.LogWarning(Owner.FormatLogMessage(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Cooldown)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);

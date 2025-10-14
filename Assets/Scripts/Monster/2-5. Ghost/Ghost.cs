@@ -2,11 +2,8 @@ using MonsterActions;
 using MonsterBT;
 using UniEngine.StateMachines.BT;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public partial class Ghost : Monster
+public partial class Ghost : Monster<GhostStats>
 {
     // Property
     [Header("Ghost")]
@@ -26,7 +23,7 @@ public partial class Ghost : Monster
     // Internal
     private class GhostBrain : MonsterBrain
     {
-        public GhostBrain(Monster owner) : base(owner)
+        public GhostBrain(IMonster owner) : base(owner)
         {
             AddChild(new Alive()
                 .AddChild(new Hit())
@@ -35,7 +32,7 @@ public partial class Ghost : Monster
                         .AddChild(new Engaged()
                             .AddChild(new Adjusting(MonsterActionType.Idle))
                             .AddChild(new DeadEnd(MonsterActionType.Idle)))
-                        .AddChild(new GhostAttack())
+                        .AddChild(new GhostAttackBrain())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
@@ -90,10 +87,4 @@ public partial class Ghost : Monster
             new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
         });
     }
-
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(FireImp)), CanEditMultipleObjects]
-    private class FireImpEditor : MonsterEditor { }
-#endif
 }

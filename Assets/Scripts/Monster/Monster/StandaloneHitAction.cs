@@ -11,7 +11,8 @@ namespace MonsterActions
         private string _stateDisplay = string.Empty;
 
         // Internal
-        private Monster _monster;
+        private const float DamageFlashDuration = 0.1f;
+        private IMonster _monster;
 
         private Material _originalMaterial;
         private bool _materialRestored;
@@ -25,7 +26,7 @@ namespace MonsterActions
 
 
         // Content
-        public void Initialize(Monster monster) => _monster = monster;
+        public void Initialize(IMonster monster) => _monster = monster;
 
         public bool TryHit(
             out ActionResult reason,
@@ -33,7 +34,7 @@ namespace MonsterActions
             bool allowRestart = false,
             float? playTime = null)
         {
-            if (!_monster)
+            if (!_monster.IsValid())
             {
                 reason = new(ActionResult.ResultType.InvalidOperation,Ctx(
                     $"{nameof(_monster)} 컴포넌트 '{_monster?.name ?? "null"}'이(가) 유효하지 않습니다."));
@@ -53,7 +54,7 @@ namespace MonsterActions
 
             _mainAnimationLength = playTime.HasValue
                 ? (playTime.Value >= 0 ? playTime.Value : null)
-                : _monster.InvincibleDuration;
+                : _monster.StatsInfo.InvincibleDuration;
 
             _mainAnimationRemainingTime = _mainAnimationLength;
 
@@ -95,7 +96,7 @@ namespace MonsterActions
 
             _mainAnimationRemainingTime -= Time.deltaTime;
 
-            if (_mainAnimationRemainingTime <= _mainAnimationLength - _monster.DamageFlashDuration)
+            if (_mainAnimationRemainingTime <= _mainAnimationLength - DamageFlashDuration)
                 RestoreMaterial();
 
             if (_mainAnimationRemainingTime <= 0)
@@ -120,7 +121,7 @@ namespace MonsterActions
             if (_materialRestored)
                 return;
 
-            if (_monster && _monster.SpriteRenderer)
+            if (_monster.IsValid() && _monster.SpriteRenderer)
             {
                 if (_monster.SpriteRenderer.material)
                     Destroy(_monster.SpriteRenderer.material);
@@ -141,8 +142,8 @@ namespace MonsterActions
 
         private string Ctx(string message)
         {
-            if (_monster)
-                return _monster.Ctx(_Ctx(message));
+            if (_monster.IsValid())
+                return _monster.FormatLogMessage(_Ctx(message));
             else
                 return _Ctx(message);
 
