@@ -8,6 +8,8 @@ public class NormalMovement : CharacterState
     private float baseSpeed = 5f;
     [SerializeField]
     private float acceleration = 50f;
+    [SerializeField]
+    private float monsterOverlapSpeedMultiplier = 0.7f;
 
     protected string planarSpeedParameter = "PlanarSpeed";
 
@@ -54,6 +56,17 @@ public class NormalMovement : CharacterState
     {
         Vector3 targetVelocity = CharacterStateController.InputMovementReference * baseSpeed;
         float targetSpeedX = targetVelocity.x;
+
+        // Reduce speed when overlapping with monsters
+        bool overlappingMonster = false;
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, transform.localScale * 0.5f, 0f, LayerMask.GetMask("Monster"));
+        if (hits.Length > 0)
+        {
+            print(hits);
+            overlappingMonster = true;
+        }
+        targetSpeedX = overlappingMonster ? targetSpeedX * monsterOverlapSpeedMultiplier : targetSpeedX;
 
         Vector2 currentVelocity = CharacterActor.Velocity;
         float newSpeedX = Mathf.MoveTowards(currentVelocity.x, targetSpeedX, acceleration * dt);
