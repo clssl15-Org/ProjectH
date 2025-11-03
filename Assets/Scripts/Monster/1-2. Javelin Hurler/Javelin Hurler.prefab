@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6736433078308300048}
   - component: {fileID: 2872327915392956830}
   - component: {fileID: 7663975189879749098}
-  - component: {fileID: 3123096045708134451}
   - component: {fileID: 3959805178124750281}
+  - component: {fileID: 9106161264923016643}
   - component: {fileID: 5556646152207689852}
   m_Layer: 0
   m_Name: Javelin Hurler
@@ -175,18 +175,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &3123096045708134451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3727985593155022163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3959805178124750281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +190,18 @@ MonoBehaviour:
   platformManager: {fileID: 0}
   detectionHeight: 1
   detectionRange: 0.7
+--- !u!114 &9106161264923016643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3727985593155022163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5556646152207689852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +221,6 @@ MonoBehaviour:
   DefaultIsRight: 0
   PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
-  DamageFlashDuration: 0.1
   _stateDisplay: 
   _javelinPrefab: {fileID: 5364063434892235939}
   _throwTime: 1

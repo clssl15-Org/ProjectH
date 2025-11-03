@@ -17,7 +17,6 @@ namespace MonsterBT
         public Hit(string monsterAction, bool doKnockback = true)
         {
             IsSelectable = false;
-            AbortPolicy = AbortPolicies.LowerPriority;
             HierarchyMode = HierarchyMode.Selector;
 
             _monsterAction = monsterAction;

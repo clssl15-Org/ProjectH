@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3234249214263922590
 Transform:
   m_ObjectHideFlags: 0
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4076845378080737680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4883234770006279277
@@ -339,7 +339,6 @@ MonoBehaviour:
   DefaultIsRight: 0
   PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
-  DamageFlashDuration: 0.1
   _stateDisplay: 
   _firePrefab: {fileID: 8739377308858695228}
   _fireAppearTime: 0.42

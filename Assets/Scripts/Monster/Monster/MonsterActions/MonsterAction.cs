@@ -50,6 +50,14 @@ namespace MonsterActions
         }
 
         public MonsterAction AddAnimationComponent(
+            string animName,
+            string trigger = null,
+            bool interruptAllOnDeactivate = false,
+            float delayBeforePlay = 0f,
+            float delayAfterPlay = 0f) =>
+            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay);
+
+        public MonsterAction AddAnimationComponent(
             MonsterAnimationPlayInfo animPlayInfo = null,
             string trigger = null,
             bool interruptAllOnDeactivate = false,

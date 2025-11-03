@@ -48,8 +48,8 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     [SerializeField] internal bool DefaultIsRight;
 
     [Header("Bindings")]
-    [SerializeField] internal PlatformManager PlatformManager;
     [SerializeField] internal SceneAssetsLibrary SceneAssetsLibrary;
+    [SerializeField] internal PlatformManager PlatformManager;
     SceneAssetsLibrary IMonster.SceneAssetsLibrary => SceneAssetsLibrary;
 
 
@@ -69,7 +69,7 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     internal GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
     private MonsterPlayerDetector _playerDetector;
-    private MonsterDamageReceiver _hitDetector;
+    private MonsterDamageReceiver _monsterDamageReceiver;
 
     // Low-level Behavior Handlers
     private KnockbackHandler _knockbackHandler;
@@ -128,11 +128,11 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
 
-        _hitDetector = GetComponentInChildren<MonsterDamageReceiver>(true);
-        if (!_hitDetector) throw new InvalidOperationException(FormatLogMessage(
-            $"{nameof(_hitDetector)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
+        _monsterDamageReceiver = GetComponentInChildren<MonsterDamageReceiver>(true);
+        if (!_monsterDamageReceiver) throw new InvalidOperationException(FormatLogMessage(
+            $"{nameof(_monsterDamageReceiver)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
-        _hitDetector.Damaged += OnDamaged;
+        _monsterDamageReceiver.Damaged += OnDamaged;
 
         if (TryGetComponent<StandaloneHitAction>(out var standaloneHitAction))
         {
@@ -289,8 +289,8 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     {
         Brain?.Dispose();
 
-        if (_hitDetector)
-            _hitDetector.Damaged -= OnDamaged;
+        if (_monsterDamageReceiver)
+            _monsterDamageReceiver.Damaged -= OnDamaged;
 
         if (_playerDetector)
             _playerDetector.PlayerDetected -= OnPlayerDetected;
