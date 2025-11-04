@@ -13,7 +13,7 @@ namespace MonsterBT
         public Adjusting(MonsterActionType monsterAction = MonsterActionType.Run) : this(monsterAction.ToString()) { }
         public Adjusting(string monsterAction)
         {
-            AbortPolicy = AbortPolicies.StopOnFailure;
+            AbortPolicies = AbortPolicies.StopOnFailure;
             _monsterAction = monsterAction;
         }
 

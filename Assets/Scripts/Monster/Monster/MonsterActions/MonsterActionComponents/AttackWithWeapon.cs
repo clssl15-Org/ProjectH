@@ -49,7 +49,7 @@ namespace MonsterActions
             _weapon.SetActive(true);
         }
 
-        protected override void OnInterrupt(InterruptType reason)
+        protected override void OnInterrupt(InterruptType _)
         {
             if (_weapon)
             {

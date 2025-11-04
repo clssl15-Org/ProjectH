@@ -7,6 +7,7 @@ internal interface IMonster
     int HP { get; set; }
     Direction Direction { get; set; }
     bool IsAlive { get; set; }
+    bool IgnorePlayerInteraction { get; set; }
 
     MonsterStats StatsInfo { get; }
     SceneAssetsLibrary SceneAssetsLibrary { get; }
@@ -20,6 +21,8 @@ internal interface IMonster
     MonsterAnimationPlayer AnimationPlayer { get; }
     StandaloneHitAction StandaloneHitAction { get; }
     MonsterActionController ActionController { get; }
+
+    void ReviseSpriteSize();
 
     #region Low-level Actions
     bool TryMove();

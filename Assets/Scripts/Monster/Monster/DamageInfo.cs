@@ -2,11 +2,11 @@ using System;
 
 public readonly struct DamageInfo
 {
-    public int Damage { get; }
+    public int Damage { get; init; }
 
-    public bool HasKnockback { get; }
-    public Direction Direction { get; }
-    public float? KnockbackForce { get; }
+    public bool HasKnockback { get; init; }
+    public Direction Direction { get; init; }
+    public float? KnockbackForce { get; init; }
 
 
     public DamageInfo(int damage)

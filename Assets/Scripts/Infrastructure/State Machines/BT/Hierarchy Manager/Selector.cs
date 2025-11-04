@@ -48,7 +48,7 @@ namespace UniEngine.StateMachines.BT
                         return false;
                     }
 
-                    if (child.AbortPolicy.HasFlag(AbortPolicies.StopOnFailure))
+                    if (child.AbortPolicies.HasFlag(AbortPolicies.StopOnFailure))
                         return true;
 
                     return false;

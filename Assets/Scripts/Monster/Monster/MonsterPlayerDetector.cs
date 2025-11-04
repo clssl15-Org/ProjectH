@@ -13,13 +13,13 @@ public class MonsterPlayerDetector : MonoBehaviour
 
     // Internal
     private const string TargetTag = "Player";
-    private BoxCollider2D colliderComponent;
+    private BoxCollider2D _colliderComponent;
 
 
     // Content
     private void Awake()
     {
-        colliderComponent = GetComponent<BoxCollider2D>();
+        _colliderComponent = GetComponent<BoxCollider2D>();
     }
 
     /// <summary>
@@ -28,21 +28,21 @@ public class MonsterPlayerDetector : MonoBehaviour
     internal void SetSize(float offset, float height)
     {
         if (!Application.isPlaying)
-            colliderComponent = GetComponent<BoxCollider2D>();
+            _colliderComponent = GetComponent<BoxCollider2D>();
 
-        if (!colliderComponent)
+        if (!_colliderComponent)
             throw new InvalidOperationException(Ctx("자신이 유효한 콜라이더를 가지고 있지 않습니다."));
 
 
-        colliderComponent.offset = new Vector2
+        _colliderComponent.offset = new Vector2
         {
             x = 0,
             y = offset
         };
 
-        colliderComponent.size = new Vector2
+        _colliderComponent.size = new Vector2
         {
-            x = colliderComponent.size.x,
+            x = _colliderComponent.size.x,
             y = height
         };
     }

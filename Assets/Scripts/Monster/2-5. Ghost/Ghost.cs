@@ -5,12 +5,26 @@ using UnityEngine;
 
 public partial class Ghost : Monster<GhostStats>
 {
+    // Front
+    public override bool IgnorePlayerInteraction
+    {
+        get => base.IgnorePlayerInteraction;
+        set
+        {
+            base.IgnorePlayerInteraction = value;
+
+            DamageReceiver.GetComponent<Collider2D>().excludeLayers = value
+                ? LayerMask.GetMask("Player")
+                : default;
+        }
+    }
+
     // Property
     [Header("Ghost")]
     [SerializeField] private AttackMode _attackMode = AttackMode.Any;
     [Space()]
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private float launchStartTime;
+    [SerializeField] private GameObject _swordPrefab;
+    [SerializeField] private float _launchStartTime;
 
     public enum AttackMode
     {
@@ -51,7 +65,8 @@ public partial class Ghost : Monster<GhostStats>
             AddChild(new MonsterAction(MonsterActionType.Run)
                 .AddAnimationComponent());
             AddChild(new MonsterAction("Attack_1")
-                .AddAnimationComponent());
+                .AddAnimationComponent(interruptAllOnDeactivate: true)
+                .AddComponent(new AttackWithWeapon(monster._swordPrefab)));
             AddChild(new MonsterAction("Attack_2")
                 .AddComponent(new GhostExplosiveAttackAction()));
             AddChild(new MonsterAction(MonsterActionType.Hit)
@@ -76,6 +91,12 @@ public partial class Ghost : Monster<GhostStats>
         ActionController.Enter();
         
         Brain = new GhostBrain(this);
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        ReviseSpriteSize();
     }
 
     protected override void OnDamaged(DamageInfo damageInfo)

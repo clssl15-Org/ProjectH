@@ -63,7 +63,7 @@ namespace UniEngine.StateMachines.BT
             internal IBTNodeInternal<TOwner, TBlackboard> CurrentChild { get; private set; }
 
             private LoopType _loopType = LoopType.None;
-            private bool isDisposing = false;
+            private bool _isDisposing = false;
 
 
             // Content
@@ -133,8 +133,8 @@ namespace UniEngine.StateMachines.BT
                 lowerPriority = ((int)node.AbortPolicy).HasAll((int)AbortPolicies.LowerPriority);
                 self = ((int)node.AbortPolicy).HasAll((int)AbortPolicies.Self);
 #else
-                lowerPriority = node.AbortPolicy.HasFlag(AbortPolicies.LowerPriority);
-                self = node.AbortPolicy.HasFlag(AbortPolicies.Self);
+                lowerPriority = node.AbortPolicies.HasFlag(AbortPolicies.LowerPriority);
+                self = node.AbortPolicies.HasFlag(AbortPolicies.Self);
 #endif
             }
 
@@ -254,8 +254,8 @@ namespace UniEngine.StateMachines.BT
 
             public void Dispose()
             {
-                if (isDisposing) return;
-                isDisposing = true;
+                if (_isDisposing) return;
+                _isDisposing = true;
 
                 CurrentChild = null;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Infrastructure;
 using MonsterActions;
 using MonsterBT;
 using UnityEngine;
@@ -32,6 +33,22 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
         }
     }
 
+    public virtual bool IgnorePlayerInteraction
+    {
+        get => _ignorePlayerInternaction;
+        set
+        {
+            _ignorePlayerInternaction = value;
+
+            var layer = value
+                ? LayerMask.GetMask("Player")
+                : default;
+
+            Collider.excludeLayers = layer;
+            Rigidbody.excludeLayers = layer;
+        }
+    }
+
     public bool IsAlive { get; internal set; } = true;
     public event Action<bool> Died;
 
@@ -61,6 +78,7 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
 
     // Components
     internal SpriteRenderer SpriteRenderer { get; private set; }
+    private SpriteSizeHandler _spriteSizeHandler;
     internal Collider2D Collider { get; private set; }
     internal Rigidbody2D Rigidbody { get; private set; }
 
@@ -69,7 +87,7 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     internal GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
     private MonsterPlayerDetector _playerDetector;
-    private MonsterDamageReceiver _monsterDamageReceiver;
+    protected MonsterDamageReceiver DamageReceiver { get; private set; }
 
     // Low-level Behavior Handlers
     private KnockbackHandler _knockbackHandler;
@@ -95,11 +113,13 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     MonsterAnimationPlayer IMonster.AnimationPlayer => AnimationPlayer;
     StandaloneHitAction IMonster.StandaloneHitAction => StandaloneHitAction;
     MonsterActionController IMonster.ActionController => ActionController;
+    void IMonster.ReviseSpriteSize() => ReviseSpriteSize();
     #endregion
 
     // Internal 
     private int _hp;
     private Direction _direction;
+    bool _ignorePlayerInternaction = false;
 
 
     // Content
@@ -117,6 +137,7 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
         Collider = GetComponent<Collider2D>();
         Rigidbody = GetComponent<Rigidbody2D>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
+        TryGetComponent(out _spriteSizeHandler);
 
         _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
 
@@ -128,11 +149,11 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
                 "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
 
-        _monsterDamageReceiver = GetComponentInChildren<MonsterDamageReceiver>(true);
-        if (!_monsterDamageReceiver) throw new InvalidOperationException(FormatLogMessage(
-            $"{nameof(_monsterDamageReceiver)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
+        DamageReceiver = GetComponentInChildren<MonsterDamageReceiver>(true);
+        if (!DamageReceiver) throw new InvalidOperationException(FormatLogMessage(
+            $"{nameof(DamageReceiver)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
-        _monsterDamageReceiver.Damaged += OnDamaged;
+        DamageReceiver.Damaged += OnDamaged;
 
         if (TryGetComponent<StandaloneHitAction>(out var standaloneHitAction))
         {
@@ -187,13 +208,15 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
 #endif
     }
 
-    protected void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         ActionController?.Update();
     }
 
+    internal void ReviseSpriteSize() => _spriteSizeHandler?.ApplyRatio();
     protected virtual void OnPlayerDetected(GameObject player) { }
     protected virtual void OnDamaged(DamageInfo damageInfo) => HP -= damageInfo.Damage;
+
 
     #region Low-level Actions
     internal bool TryMove() => TryMove(Direction);
@@ -289,8 +312,8 @@ public abstract partial class Monster<TStats> : MonoBehaviour, IMonster where TS
     {
         Brain?.Dispose();
 
-        if (_monsterDamageReceiver)
-            _monsterDamageReceiver.Damaged -= OnDamaged;
+        if (DamageReceiver)
+            DamageReceiver.Damaged -= OnDamaged;
 
         if (_playerDetector)
             _playerDetector.PlayerDetected -= OnPlayerDetected;

@@ -41,7 +41,7 @@ public partial class StagBeetle : Monster<StagBeetleStats>
                         .AddChild(new Engaged()
                             .AddChild(new Adjusting(MonsterActionType.Walk))
                             .AddChild(new DeadEnd()))
-                        .AddChild(new StagBeetleAttack())
+                        .AddChild(new StagBeetleAttackBrain())
                         .AddChild(new Cooldown()))
                     .AddChild(new PlayerNotDetected()
                         .AddChild(new Rest())
@@ -70,7 +70,7 @@ public partial class StagBeetle : Monster<StagBeetleStats>
                 .AddComponent(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
                     beforePreAction: () => rollRight = stagBeetle.DetectedPlayer.transform.position.x > stagBeetle.transform.position.x,
-                    beforeMainAction: () => stagBeetle.Collider.excludeLayers = LayerMask.GetMask("Player"),
+                    beforeMainAction: () => stagBeetle.IgnorePlayerInteraction = true,
                     whileMainAction: (playtime, _) =>
                     {
                         if (stagBeetle.TryMove())
@@ -84,7 +84,7 @@ public partial class StagBeetle : Monster<StagBeetleStats>
 
                         return playtime <= stagBeetle._rollingTime;
                     },
-                    beforePostAction: () => stagBeetle.Collider.excludeLayers = default)));
+                    beforePostAction: () => stagBeetle.IgnorePlayerInteraction = false)));
             AddChild(new MonsterAction(AttackMode.SpikeAttack.ToString())
                 .AddComponent(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
                     n => n + "Anticipation", n => n + "Recoil",
@@ -103,7 +103,7 @@ public partial class StagBeetle : Monster<StagBeetleStats>
                     n => n + "Anticipation", n => n + "Recoil",
                     whileMainAction: (playtime, length) => playtime > length)));
             AddChild(new MonsterAction(MonsterActionType.Hit)
-                .AddAnimationComponent(new MonsterAnimationPlayInfo("HitGround")));
+                .AddAnimationComponent("HitGround"));
             AddChild(new MonsterAction(MonsterActionType.Dead)
                 .AddAnimationComponent());
         }

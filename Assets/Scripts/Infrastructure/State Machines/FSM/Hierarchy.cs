@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -102,13 +101,12 @@ namespace UniEngine.StateMachines.FSM
                 if (Active && next == CurrentChild?.Name && !restartIfPossible)
                     return;
 
-                ReservedChild = next;
-                reservedArgs = args;
-
                 if (!ownerWork.Active) return;
 
-                Exit();
-                Enter();
+                CurrentChild?.Exit();
+
+                CurrentChild = children[next];
+                CurrentChild.Enter(args);
             }
 
             public void SetNextToNone() => SetNext(null, false);

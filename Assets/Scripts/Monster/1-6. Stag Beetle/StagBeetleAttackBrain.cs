@@ -4,9 +4,9 @@ using UnityEngine;
 
 public partial class StagBeetle
 {
-    private class StagBeetleAttack : BTNode<IMonster, MonsterBlackboard>
+    private class StagBeetleAttackBrain : BTNode<IMonster, MonsterBlackboard>
     {
-        public StagBeetleAttack() : base(name: MonsterActionType.Attack.ToString()) { }
+        public StagBeetleAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
         protected override void OnOpen(params object[] _)
         {
@@ -20,7 +20,7 @@ public partial class StagBeetle
                     1 => AttackMode.SpikeAttack,
                     2 => AttackMode.Roar,
                     var i => throw new ArgumentOutOfRangeException(
-                        nameof(mode), i,  Owner.FormatLogMessage($"공격 패턴의 범위는 0 이상 2 이하여야 합니다."))
+                        nameof(mode), i, Owner.FormatLogMessage($"공격 패턴의 범위는 0 이상 2 이하여야 합니다."))
                 };
             else
                 mode = owner._attackMode;

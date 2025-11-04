@@ -24,6 +24,10 @@ public partial class Ghost
             else
                 mode = ower._attackMode;
 
+            // 폭발 공격 중에는 플레이어 상호작용 없음
+            if (mode == AttackMode.ExplosiveAttack)
+                Owner.IgnorePlayerInteraction = true;
+
 
             var action = mode switch
             {
@@ -32,7 +36,6 @@ public partial class Ghost
                 _ => throw new ArgumentOutOfRangeException(
                     nameof(mode), mode, Owner.FormatLogMessage($"알 수 없는 공격 패턴이 입력되었습니다."))
             };
-
 
             if (!Owner.TryDoAction(new(action, result => Complete(result)), out var reason))
             {
@@ -47,6 +50,7 @@ public partial class Ghost
 
         protected override void OnHalt(DetailedNodeStatus _)
         {
+            Owner.IgnorePlayerInteraction = false;
             Blackboard.Committing = false;
         }
     }

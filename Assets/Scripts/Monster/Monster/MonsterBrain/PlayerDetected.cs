@@ -1,4 +1,5 @@
 using UniEngine.StateMachines.BT;
+using UnityEngine;
 
 namespace MonsterBT
 {
@@ -6,7 +7,7 @@ namespace MonsterBT
     {
         public PlayerDetected()
         {
-            AbortPolicy = AbortPolicies.LowerPriority | AbortPolicies.Self;
+            AbortPolicies = AbortPolicies.LowerPriority | AbortPolicies.Self;
             HierarchyMode = HierarchyMode.Sequence;
             LoopType = LoopType.Forced;
         }

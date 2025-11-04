@@ -6,7 +6,7 @@ namespace MonsterBT
     {
         public ValidPlatform()
         {
-            AbortPolicy = AbortPolicies.Self;
+            AbortPolicies = AbortPolicies.Self;
             HierarchyMode = HierarchyMode.Selector;
             LoopType = LoopType.Forced;
         }
