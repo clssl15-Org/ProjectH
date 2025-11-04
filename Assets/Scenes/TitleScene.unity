@@ -992,7 +992,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sfxLibrary: {fileID: 953643662}
-  sfx2DSource: {fileID: 1545550854}
+  bgmSource: {fileID: 0}
+  sfxSources: []
+  uiSFXSource: {fileID: 1545550854}
+  bgmClips: []
+  sfxClips: []
+  bgmVolume: 0.5
+  sfxVolume: 0.5
 --- !u!114 &953643662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1338,7 +1344,7 @@ GameObject:
   - component: {fileID: 1545550853}
   - component: {fileID: 1545550854}
   m_Layer: 0
-  m_Name: SFX2DSource
+  m_Name: UISFXSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
