@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,16 +8,17 @@ namespace Infrastructure
     public class SpriteSizeHandler : MonoBehaviour
     {
         [SerializeField, Min(0)] private float _ratio = 1f;
-        [SerializeField] bool _applyOnStart = true;
+        [SerializeField] UpdateTypes _updateTypes = UpdateTypes.Never;
+
+        [Flags]
+        private enum UpdateTypes
+        {
+            Never = 0,
+            Start = 1 << 0,
+            EveryFrame = 1 << 1,
+        }
 
         private SpriteRenderer _sr;
-
-
-        private void Start()
-        {
-            if (_applyOnStart)
-                ApplyRatio();
-        }
 
         public void ApplyRatio(float? ratio = null)
         {
@@ -34,6 +36,17 @@ namespace Infrastructure
                 _ratio * _sr.sprite.rect.size.y);
         }
 
+        private void Start()
+        {
+            if (_updateTypes.HasFlag(UpdateTypes.Start))
+                ApplyRatio();
+        }
+
+        private void LateUpdate()
+        {
+            if (_updateTypes.HasFlag(UpdateTypes.EveryFrame))
+                ApplyRatio();
+        }
 
         [CustomEditor(typeof(SpriteSizeHandler))]
         private class SpriteSizeHandlerEditor : Editor

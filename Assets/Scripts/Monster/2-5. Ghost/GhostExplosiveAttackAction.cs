@@ -9,7 +9,7 @@ public partial class Ghost
     {
         // Front
         public float TeleportDistance { get; set; } = 1.5f;
-
+        
         // Internal
         private MonsterAnimationPlayer AnimationPlayer => MonsterAction.Owner.AnimationPlayer;
 

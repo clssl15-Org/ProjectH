@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UniEngine.StateMachines.BT;
 
@@ -45,7 +46,7 @@ namespace MonsterBT
         public Engaged(RangeType rangeType = RangeType.Ranged, float? range = null)
         {
             if (range.HasValue && range.Value < 0)
-                throw new System.ArgumentOutOfRangeException(
+                throw new ArgumentOutOfRangeException(
                     $"{nameof(range)}는 0 이상의 값을 가져야 하지만 '{range.Value}'이(가) 입력되었습니다.");
 
             if (rangeType == RangeType.Contact)
@@ -65,14 +66,27 @@ namespace MonsterBT
         protected override void OnTick()
         {
             if (!Owner.DetectedPlayer)
-                throw new System.InvalidOperationException($"{nameof(Owner.DetectedPlayer)}이(가) 유효하지 않습니다.");
+                throw new InvalidOperationException(Owner.FormatLogMessage(
+                    $"{nameof(Owner.DetectedPlayer)}이(가) 유효하지 않습니다."));
 
-            var posDelta = (Owner.Direction == Direction.Right
-                ? Owner.Collider.bounds.max.x
-                : Owner.Collider.bounds.min.x)
-                - Owner.DetectedPlayer.transform.position.x;
+            var selfIsRightOfPlayer = Owner.transform.position.x > Owner.DetectedPlayer.transform.position.x;
 
-            Owner.Direction = posDelta > 0 ? Direction.Left : Direction.Right;
+            var selfBorder = selfIsRightOfPlayer
+                ? Owner.Collider.bounds.min.x
+                : Owner.Collider.bounds.max.x;
+
+            // TODO: Player에게 GetBorder API 추가해서 가져오기
+            if (!Owner.DetectedPlayer.TryGetComponent<Collider2D>(out var playerCollider))
+                throw new InvalidOperationException(Owner.FormatLogMessage(
+                    $"{nameof(Owner.DetectedPlayer)}에서 '{nameof(Collider2D)}' 컴포넌트를 가져오는 데 실패했습니다."));
+
+            var playerBorder = selfIsRightOfPlayer
+                ? playerCollider.bounds.max.x
+                : playerCollider.bounds.min.x;
+
+            var posDelta = selfBorder - playerBorder;
+
+            Owner.Direction = selfIsRightOfPlayer ? Direction.Left : Direction.Right;
 
             var rangeDelta = Mathf.Abs(posDelta) - TargetAttackRange;
 

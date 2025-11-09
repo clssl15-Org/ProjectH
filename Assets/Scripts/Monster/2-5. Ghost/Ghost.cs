@@ -93,12 +93,6 @@ public partial class Ghost : Monster<GhostStats>
         Brain = new GhostBrain(this);
     }
 
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        ReviseSpriteSize();
-    }
-
     protected override void OnDamaged(DamageInfo damageInfo)
     {
         Brain.SelectChild(new SelectionRequest[]

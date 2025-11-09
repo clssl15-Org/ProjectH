@@ -75,7 +75,7 @@ public partial class SkeletonPig : Monster<SkeletonPigStats>
         }
     }
 
-
+      
     // Content
     protected override void Start()
     {

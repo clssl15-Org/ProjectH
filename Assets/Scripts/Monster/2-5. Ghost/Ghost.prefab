@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ratio: 0.04
-  _applyOnStart: 1
+  _updateTypes: 2
 --- !u!95 &3542576192542134012
 Animator:
   serializedVersion: 5
@@ -445,7 +445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ratio: 0.05
-  _applyOnStart: 0
+  _updateTypes: 0
 --- !u!95 &5313208027442429084
 Animator:
   serializedVersion: 5
