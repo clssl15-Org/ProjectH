@@ -13,8 +13,8 @@ namespace Infrastructure
         {
             platformCells = Array.Empty<Vector3Int>();
 
-            if (tilemap == null)
-                throw new ArgumentNullException(nameof(tilemap), "입력 Tilemap이 null입니다.");
+            if (!tilemap)
+                throw new ArgumentException(nameof(tilemap), "입력 Tilemap이 유효하지 않습니다.");
 
             var bounds = tilemap.cellBounds;
 

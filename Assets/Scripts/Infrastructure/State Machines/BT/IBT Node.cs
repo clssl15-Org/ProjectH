@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace UniEngine.StateMachines.BT
+namespace Infrastructure.StateMachines.BT
 {
     public interface IBTNode : IDisposable
     {

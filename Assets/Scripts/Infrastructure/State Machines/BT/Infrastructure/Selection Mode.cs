@@ -1,4 +1,4 @@
-namespace UniEngine.StateMachines.BT
+namespace Infrastructure.StateMachines.BT
 {
     public enum EntryPolicy
     {

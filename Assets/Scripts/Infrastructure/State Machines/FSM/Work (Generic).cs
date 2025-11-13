@@ -1,4 +1,4 @@
-namespace UniEngine.StateMachines.FSM
+namespace Infrastructure.StateMachines.FSM
 {
     public class Work<TParent> : Work where TParent : Work
     {

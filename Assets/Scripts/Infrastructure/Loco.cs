@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.LowLevel;
 
-namespace UniEngine
+namespace Infrastructure
 {
     /// <summary>
     /// 매 틱마다 실행되는 이벤트를 구독할 수 있는 클래스입니다.

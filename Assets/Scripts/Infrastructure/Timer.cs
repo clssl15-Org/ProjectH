@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace UniEngine
+namespace Infrastructure
 {
     public class Timer : IDisposable
     {

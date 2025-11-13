@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static UniEngine.StateMachines.Tools;
+using static Infrastructure.StateMachines.Tools;
 
-namespace UniEngine.StateMachines.BT
+namespace Infrastructure.StateMachines.BT
 {
     public partial class BTNode<TOwner, TBlackboard> : IBTNodeInternal<TOwner, TBlackboard> where TOwner : class where TBlackboard : class, new()
     {

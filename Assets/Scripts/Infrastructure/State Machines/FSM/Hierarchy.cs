@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UniEngine.StateMachines.FSM
+namespace Infrastructure.StateMachines.FSM
 {
     public partial class Work
     {

@@ -1,4 +1,4 @@
-namespace UniEngine.StateMachines.BT
+namespace Infrastructure.StateMachines.BT
 {
     /// <summary>
     /// Defines how a parent node should handle evaluation

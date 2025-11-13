@@ -1,3 +1,5 @@
+using Infrastructure;
+
 public interface IDamageable
 {
     void TakeDamage(int damage);

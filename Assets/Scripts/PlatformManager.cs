@@ -20,30 +20,30 @@ public class PlatformManager : MonoBehaviour
         get
         {
             ThrowIfNotInitialized();
-            return tilemap.cellSize;
+            return _tilemap.cellSize;
         }
     }
 
-    public Bounds Bound => tilemap.localBounds;
+    public Bounds Bound => _tilemap.localBounds;
 
     // Property
-    [SerializeField] private Tilemap tilemap;
-    [SerializeField] private bool enableDebugger = false;
+    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private bool _enableDebugger = false;
 
     // Internal
-    private Dictionary<Vector3Int, int> platforms;
-    private bool initialized = false;
+    private Dictionary<Vector3Int, int> _platforms;
+    private bool _initialized = false;
 
-    private readonly Dictionary<int, Color> debuggerColormap = new();
+    private readonly Dictionary<int, Color> _debuggerColormap = new();
     
 
     // Content
     private void Awake()
     {
-        platforms = new();
-        Platforms = new ReadOnlyDictionary<Vector3Int, int>(platforms);
+        _platforms = new();
+        Platforms = new ReadOnlyDictionary<Vector3Int, int>(_platforms);
 
-        initialized = true;
+        _initialized = true;
         SetPlatforms();
     }
 
@@ -53,31 +53,34 @@ public class PlatformManager : MonoBehaviour
     public void SetPlatforms()
     {
         ThrowIfNotInitialized();
-        if (!tilemap) throw new InvalidOperationException("Tilemap이 할당되지 않았기 때문에 SetPlatforms 메서드를 실행할 수 없습니다.");
 
-        platforms.Clear();
-        debuggerColormap.Clear();
+        if (!_tilemap)
+            throw new InvalidOperationException(
+                $"{nameof(_tilemap)}이(가) 할당되지 않았기 때문에 {nameof(SetPlatforms)} 메서드를 실행할 수 없습니다.");
 
-        tilemap.CompressBounds();
+        _platforms.Clear();
+        _debuggerColormap.Clear();
+
+        _tilemap.CompressBounds();
 
 
         int id = 1;
 
-        foreach (var cell in tilemap.cellBounds.allPositionsWithin)
+        foreach (var cell in _tilemap.cellBounds.allPositionsWithin)
         {
-            if (!tilemap.HasTile(cell))
+            if (!_tilemap.HasTile(cell))
                 continue;
-            if (platforms.ContainsKey(cell))
+            if (_platforms.ContainsKey(cell))
                 continue;
 
             var predicate = GetPredicate(cell);
 
-            if (!tilemap.TryGetPlatform(cell, predicate, out var platformCells))
+            if (!_tilemap.TryGetPlatform(cell, predicate, out var platformCells))
                 continue;
 
 
             foreach (var platformCell in platformCells)
-                platforms.Add(platformCell, id);
+                _platforms.Add(platformCell, id);
 
             id++;
         }
@@ -97,7 +100,7 @@ public class PlatformManager : MonoBehaviour
     public int GetPlatformId(Vector2 position)
     {
         ThrowIfNotInitialized();
-        return GetPlatformId(tilemap.WorldToCell(position));
+        return GetPlatformId(_tilemap.WorldToCell(position));
     }
     /// <summary>
     /// 타일 좌표를 입력하면 해당 좌표에 존재하는 플랫폼의 id를 반환합니다.
@@ -120,7 +123,7 @@ public class PlatformManager : MonoBehaviour
     public bool TryGetPlatformId(Vector2 position, out int id)
     {
         ThrowIfNotInitialized();
-        return TryGetPlatformId(tilemap.WorldToCell(position), out id);
+        return TryGetPlatformId(_tilemap.WorldToCell(position), out id);
     }
     /// <summary>
     /// 입력한 타일 좌표에 플랫폼이 존재한다면 해당 플랫폼의 id를 반환합니다.
@@ -130,21 +133,21 @@ public class PlatformManager : MonoBehaviour
     public bool TryGetPlatformId(Vector3Int cell, out int id)
     {
         ThrowIfNotInitialized();
-        return platforms.TryGetValue(cell, out id);
+        return _platforms.TryGetValue(cell, out id);
     }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (!enableDebugger || !initialized || !tilemap)
+        if (!_enableDebugger || !_initialized || !_tilemap)
             return;
 
-        foreach (var (cell, id) in platforms)
+        foreach (var (cell, id) in _platforms)
         {
-            var center = tilemap.GetCellCenterWorld(cell);
-            var size = tilemap.cellSize;
+            var center = _tilemap.GetCellCenterWorld(cell);
+            var size = _tilemap.cellSize;
 
-            if (!debuggerColormap.TryGetValue(id, out var color))
+            if (!_debuggerColormap.TryGetValue(id, out var color))
             {
                 color = UnityEngine.Random.ColorHSV(
                     0f, 1f,    // Hue 범위 (0~1)
@@ -153,7 +156,7 @@ public class PlatformManager : MonoBehaviour
                     1f, 1f     // Alpha 범위
                     );
 
-                debuggerColormap[id] = color;
+                _debuggerColormap[id] = color;
             }
 
             Gizmos.color = color;
@@ -164,7 +167,8 @@ public class PlatformManager : MonoBehaviour
 
     private void ThrowIfNotInitialized()
     {
-        if (!initialized)
-            throw new InvalidOperationException("Platform Manager가 초기화되지 않았기 때문에 작업을 수행할 수 없습니다.");
+        if (!_initialized)
+            throw new InvalidOperationException(
+                $"{nameof(PlatformManager)}이(가) 초기화되지 않았기 때문에 작업을 수행할 수 없습니다.");
     }
 }

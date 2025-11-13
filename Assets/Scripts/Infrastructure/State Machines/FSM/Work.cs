@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using static UniEngine.StateMachines.Tools;
+using static Infrastructure.StateMachines.Tools;
 
-namespace UniEngine.StateMachines.FSM
+namespace Infrastructure.StateMachines.FSM
 {
     public partial class Work : IDisposable
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace UniEngine.StateMachines.BT
+namespace Infrastructure.StateMachines.BT
 {
     [Flags]
     public enum AbortPolicies

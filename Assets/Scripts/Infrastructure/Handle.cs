@@ -1,6 +1,6 @@
 using System;
 
-namespace UniEngine
+namespace Infrastructure
 {
     public class Handle : IDisposable
     {

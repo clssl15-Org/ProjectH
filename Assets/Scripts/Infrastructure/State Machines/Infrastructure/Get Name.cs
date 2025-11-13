@@ -1,6 +1,6 @@
 using System;
 
-namespace UniEngine.StateMachines
+namespace Infrastructure.StateMachines
 {
     public static partial class Tools
     {

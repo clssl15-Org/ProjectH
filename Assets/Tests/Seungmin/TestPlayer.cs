@@ -1,5 +1,7 @@
 using System;
 using System.Text;
+using Actors.Monsters;
+using Infrastructure;
 using UnityEngine;
 
 [RequireComponent(typeof(PlatformDetector))]
@@ -52,20 +54,20 @@ public class TestPlayer : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        var detector = collision.gameObject
+        var receiver = collision.gameObject
             .GetComponentInChildren<MonsterDamageReceiver>();
 
-        if (!detector)
+        if (!receiver)
             return;
 
         if (UseKnockback)
         {
-            var dir = (detector.transform.position - transform.position).ToDirection();
-            detector.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
+            var dir = (receiver.transform.position - transform.position).ToDirection();
+            receiver.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
         }
         else
         {
-            detector.TakeDamage(AttackPower);
+            receiver.TakeDamage(AttackPower);
         }
     }
 
