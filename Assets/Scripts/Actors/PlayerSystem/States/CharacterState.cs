@@ -1,0 +1,68 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Actor.PlayerSystem
+{
+    public abstract class CharacterState : MonoBehaviour
+    {
+        [SerializeField]
+        RuntimeAnimatorController runtimeAnimatorController = null;
+        public RuntimeAnimatorController RuntimeAnimatorController => runtimeAnimatorController;
+        public CharacterActor CharacterActor { get; private set; }
+        CharacterBrain CharacterBrain = null;
+
+        public CharacterActions CharacterActions => CharacterBrain.CharacterActions;
+        public CharacterStateController CharacterStateController { get; private set; }
+        public Player Player { get; private set; }
+        protected virtual void Awake()
+        {
+            // find the CharacterBrain component in the root of the hierarchy.
+            // If there are multiple target components under the root, it may not work correctly.
+            CharacterActor = this.transform.root.GetComponentInChildren<CharacterActor>();
+            CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
+            CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
+            Player = this.transform.root.GetComponentInChildren<Player>();
+        }
+
+        // This method runs once when the state has entered the state machine.
+        public virtual void EnterBehaviour(float dt)
+        {
+        }
+
+        // This methods runs before the main Update method.
+        public virtual void PreUpdateBehaviour(float dt)
+        {
+        }
+        // This method runs frame by frame, and should be implemented by the derived state class.
+
+        public abstract void UpdateBehaviour(float dt);
+
+        // This methods runs after the main Update method.
+        public virtual void PostUpdateBehaviour(float dt)
+        {
+        }
+
+        // This method runs once when the state has exited the state machine.
+        public virtual void ExitBehaviour(float dt)
+        {
+        }
+
+        // Checks if the required conditions to exit this state are true. If so it returns the desired state (null otherwise). After this the state machine will
+        // proceed to evaluate the "enter transition" condition on the target state.
+        public virtual void CheckExitTransition()
+        {
+        }
+
+        // Checks if the required conditions to enter this state are true. If so the state machine will automatically change the current state to the desired one.
+        public virtual bool CheckEnterTransition(CharacterState fromState)
+        {
+            return true;
+        }
+
+        // 
+        public virtual void UpdateBufferedActions(float dt)
+        {
+        }
+    }
+}

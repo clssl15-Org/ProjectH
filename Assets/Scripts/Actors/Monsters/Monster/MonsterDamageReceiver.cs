@@ -1,6 +1,7 @@
 using System;
 using Infrastructure;
 using UnityEngine;
+using Rules;
 
 namespace Actors.Monsters
 {
