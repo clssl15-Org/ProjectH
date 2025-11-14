@@ -153,7 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &29620367
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -364,16 +363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b94625cb544ed44b8b8d2ee49a2786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 828281067}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &46505910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,16 +1401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508609f921a4f24e8eec4f921821a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 1071429538}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &323997553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1907,8 +1886,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 323997552}
-  beforeState: 0
 --- !u!95 &539040962
 Animator:
   serializedVersion: 5
@@ -2426,7 +2403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &666367745
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2586,8 +2562,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1534607026}
-  beforeState: 0
 --- !u!95 &699387366
 Animator:
   serializedVersion: 5
@@ -3102,7 +3076,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &828281069
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3262,8 +3235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 46505909}
-  beforeState: 0
 --- !u!95 &903522955
 Animator:
   serializedVersion: 5
@@ -3383,8 +3354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 2142189257}
-  beforeState: 0
 --- !u!95 &916565521
 Animator:
   serializedVersion: 5
@@ -3964,7 +3933,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &1071429540
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8376,16 +8344,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508609f921a4f24e8eec4f921821a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 29620365}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1534607027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8621,16 +8579,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b94625cb544ed44b8b8d2ee49a2786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 666367743}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1574838457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8935,8 +8883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1728821808}
-  beforeState: 0
 --- !u!95 &1611988794
 Animator:
   serializedVersion: 5
@@ -9041,7 +8987,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &1639366126
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9200,8 +9145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1574838456}
-  beforeState: 0
 --- !u!95 &1655438220
 Animator:
   serializedVersion: 5
@@ -9466,16 +9409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b94625cb544ed44b8b8d2ee49a2786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 2022505924}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1728821809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9898,7 +9831,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &2022505926
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10285,16 +10217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508609f921a4f24e8eec4f921821a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 1639366124}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &2142189258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10526,9 +10448,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5453062479147292064, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 5944037012842129890, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6712473959475199702, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
