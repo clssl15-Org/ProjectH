@@ -17,5 +17,7 @@ namespace Actors
         MonsterCondition Condition { get; }
         object Payload { get; }
         event Action Callback;
+
+        bool Is(params MonsterCondition[] conditions);
     }
 }

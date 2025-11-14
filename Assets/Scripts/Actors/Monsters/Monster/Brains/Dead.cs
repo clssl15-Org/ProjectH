@@ -1,7 +1,7 @@
 using Actors.Monsters.Actions;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
-
+    
 namespace Actors.Monsters.Brains
 {
     internal class Dead : BTNode<IMonsterInternal, MonsterBlackboard>

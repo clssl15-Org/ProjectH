@@ -50,9 +50,11 @@ namespace Actors.Monsters
             }
         }
 
+        public int MaxHP => StatsInfo.MaxHP;
         public bool IsAlive { get; internal set; } = true;
-        public EventHub<IMonster, IMonsterConditionData> EventHub { get; private set; }
 
+        public event Action<IMonsterConditionData> ConditionChanged;
+        public event Action Destroyed;
 
         // Property 
         [Header("Stats")]
@@ -135,8 +137,6 @@ namespace Actors.Monsters
 
         protected virtual void Awake()
         {
-            EventHub = new(this);
-
             Collider = GetComponent<Collider2D>();
             Rigidbody = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -223,7 +223,7 @@ namespace Actors.Monsters
             HP -= damageInfo.Damage;
 
             var notification = new MonsterConditionData(MonsterCondition.Damage);
-            EventHub.Update(notification);
+            ConditionChanged?.Invoke(notification);
             notification.Complete();
         }
 
@@ -281,15 +281,21 @@ namespace Actors.Monsters
 
         internal virtual void Died()
         {
-            EventHub.Update(new MonsterConditionData(MonsterCondition.Die));
-            EventHub.Dispose();
+            var notification = new MonsterConditionData(MonsterCondition.Die);
+            ConditionChanged?.Invoke(notification);
+            notification.Complete();
+
+            Destroyed?.Invoke();
+
+            ConditionChanged = null;
+            Destroyed = null;
 
             Destroy(gameObject);
         }
 
         #region Interfaces
         void IMonsterInternal.Knockback(Direction direction, float? knockbackForce) => Knockback(direction, knockbackForce);
-        void IMonsterInternal.NotifyCondition(IMonsterConditionData data) => EventHub.Update(data);
+        void IMonsterInternal.NotifyCondition(IMonsterConditionData data) => ConditionChanged?.Invoke(data);
         #endregion
         #endregion
 
@@ -320,10 +326,14 @@ namespace Actors.Monsters
         #endregion
 
 
+        public void Destroy() => Destroy(gameObject);
         protected virtual void OnDestroy()
         {
-            EventHub?.Dispose();
+            Destroyed?.Invoke();
             Brain?.Dispose();
+
+            ConditionChanged = null;
+            Destroyed = null;
         }
 
 

@@ -1,15 +1,22 @@
 using UnityEngine;
 using Infrastructure;
+using System;
 
 namespace Actors
 {
-    public interface IMonster : IEventSubject<IMonster, IMonsterConditionData> 
+    public interface IMonster
     {
         int HP { get; }
         Direction Direction { get; }
         bool IsAlive { get; }
 
+        event Action<IMonsterConditionData> ConditionChanged;
+        event Action Destroyed;
+
+        int MaxHP { get; }
         int BelongingPlatform { get; }
+
+        void Destroy();
 
 #pragma warning disable IDE1006
         string name { get; }

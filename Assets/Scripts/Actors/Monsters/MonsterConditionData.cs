@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Actors.Monsters
 {
@@ -20,6 +21,9 @@ namespace Actors.Monsters
             Condition = condition;
             Payload = payload;
         }
+
+        public bool Is(params MonsterCondition[] conditions) =>
+            conditions.Contains(Condition);
 
         internal void Complete()
         {

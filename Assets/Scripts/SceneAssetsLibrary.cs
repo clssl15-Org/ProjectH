@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class SceneAssetsLibrary : MonoBehaviour
+namespace Infrastructure
 {
-    [Header("Materials")]
-    [SerializeField] private Material solidColor;
+    public class SceneAssetsLibrary : MonoBehaviour
+    {
+        [Header("Materials")]
+        [SerializeField] private Material _solidColor;
 
-    public Material SolidColor => Instantiate(solidColor);
+        public Material SolidColor => Instantiate(_solidColor);
+    }
 }

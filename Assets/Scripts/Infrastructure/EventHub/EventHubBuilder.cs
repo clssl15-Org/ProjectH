@@ -6,7 +6,6 @@ namespace Infrastructure
     public interface IEventHubConnectionBuilder<TEventArgs>
     {
         public IEventHubConnectionBuilder<TEventArgs> OnUpdate(Action<TEventArgs> updated);
-        public IEventHubConnectionBuilder<TEventArgs> OnUpdate(TEventArgs when, Action<TEventArgs> updated);
         public IEventHubConnectionBuilder<TEventArgs> OnUpdate(Func<TEventArgs, bool> selector, Action<TEventArgs> updated);
 
         public IEventHubConnectionBuilder<TEventArgs> OnDisposing(Action disposing);
