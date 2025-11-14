@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,14 @@ namespace Actor.PlayerSystem
         {
             get => Player.playerStats.maxHealth;
         }
+        public int CurrentHealth
+        {
+            get => currentHealth;
+        }
         private int currentHealth;
+        public bool IsAlive { get; private set; } = true;
+
+        public event Action Damaged;
 
         private void Awake()
         {
@@ -31,6 +39,8 @@ namespace Actor.PlayerSystem
 
             currentHealth -= damage;
             currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+
+            Damaged?.Invoke();
             Debug.Log("Player Health: " + currentHealth + "/" + MaxHealth);
             CharacterStateController.EnqueueTransition<Hit>();
             if (currentHealth <= 0)
@@ -47,6 +57,7 @@ namespace Actor.PlayerSystem
 
         private void Die()
         {
+            IsAlive = false;
             Debug.Log("Player Died");
         }
     }
