@@ -65,7 +65,6 @@ namespace Actor.PlayerSystem
             Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, transform.localScale * 0.5f, 0f, LayerMask.GetMask("Monster"));
             if (hits.Length > 0)
             {
-                print(hits);
                 overlappingMonster = true;
             }
             targetSpeedX = overlappingMonster ? targetSpeedX * monsterOverlapSpeedMultiplier : targetSpeedX;

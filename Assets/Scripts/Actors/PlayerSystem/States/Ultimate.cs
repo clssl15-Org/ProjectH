@@ -79,7 +79,7 @@ namespace Actor.PlayerSystem
             foreach (Collider2D hitCollider in hitColliders)
             {
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
-                    return;
+                    continue;
 
                 Debug.Log("Enemy hitted! (Ultimate)");
                 damageableObject.TakeDamage(1);

@@ -67,7 +67,7 @@ namespace Actor.PlayerSystem
                 print($"2, {hitCollider.name}");
 
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
-                    return;
+                    continue;
 
                 Debug.Log("Enemy hitted! (Attack2)");
                 damageableObject.TakeDamage(1);

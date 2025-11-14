@@ -70,13 +70,12 @@ namespace Actor.PlayerSystem
             //    0
             //);
 
-
             foreach (Collider2D hitCollider in hitColliders)
             {
                 print($"1, {hitCollider.name}");
 
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
-                    return;
+                    continue;
 
                 Vector2 directionToEnemy = ((Vector2)hitCollider.transform.position - attackPoint).normalized;
                 float angle = Vector2.Angle(CharacterActor.Forward, directionToEnemy);

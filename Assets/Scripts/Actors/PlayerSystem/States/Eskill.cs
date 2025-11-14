@@ -60,7 +60,7 @@ namespace Actor.PlayerSystem
 
         private float currentSpeedMultiplier = 1f;
 
-        private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
+        //private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
         private CooldownTiemr cooldownTimer;
 
         public static Action onEskill;
@@ -76,13 +76,12 @@ namespace Actor.PlayerSystem
             foreach (Collider2D hitCollider in hitColliders)
             {
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
-                    return;
+                    continue;
 
-                if (hitEnemies.Contains(damageableObject))
-                    return;
+                //if (hitEnemies.Contains(damageableObject))
+                //    continue;
 
-                hitEnemies.Add(damageableObject);
-                Debug.Log("Enemy hitted! (Eskill)");
+                //hitEnemies.Add(damageableObject);
                 damageableObject.TakeDamage(1);
                 onEskill?.Invoke();
             }
