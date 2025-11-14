@@ -37,6 +37,8 @@ namespace Actor
 
         int MaxHP { get; }
 
+        int CurrentPlatform { get; }
+
 #pragma warning disable IDE1006
         string name { get; }
         Transform transform { get; }

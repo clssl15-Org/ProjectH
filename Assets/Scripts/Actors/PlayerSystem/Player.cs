@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Infrastructure;
 
 namespace Actor.PlayerSystem
 {
@@ -21,22 +22,35 @@ namespace Actor.PlayerSystem
 
         public int MaxHP => playerHealth.MaxHealth;
 
-        private bool invincible = false;
+        public int CurrentPlatform { get; private set; } = -1;
 
-        private PlayerHealth playerHealth;
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
+
+        private bool invincible = false;
+        private PlatformDetector platformDetector;
+        private PlayerHealth playerHealth;
 
         private void Awake()
         {
             playerHealth = GetComponent<PlayerHealth>();
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
+
+            platformDetector = GetComponent<PlatformDetector>();
         }
 
         public void Start()
         {
             ConditionChanged += cond => print($"Player: {cond}");
+        }
+
+        void Update()
+        {
+            if (platformDetector.TryGetCurrentPlatformId(out var currentPlatformID))
+                CurrentPlatform = currentPlatformID;
+            else
+                CurrentPlatform = -1;
         }
     }
 }

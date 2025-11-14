@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 6647484784621746892}
   - component: {fileID: 8290243547340287660}
   - component: {fileID: 8379120966633090368}
+  - component: {fileID: 5175911527829833112}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -265,6 +266,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: {fileID: 8290243547340287660}
   damageAmount: 10
+--- !u!114 &5175911527829833112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944037012842129890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformManager: {fileID: 0}
+  detectionHeight: 1
+  detectionRange: 1
 --- !u!1 &6801821047128880367
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,6 +408,7 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: 36c21c6f536c8ec4b84bc22005f2d3b7, type: 2}
   baseSpeed: 9
   acceleration: 130
+  monsterOverlapSpeedMultiplier: 0.7
 --- !u!114 &303451325805896508
 MonoBehaviour:
   m_ObjectHideFlags: 0
