@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rules;
+using Infrastructure;
 
 namespace Actor.PlayerSystem
 {
-    public class PlayerHealth : MonoBehaviour
+    public class PlayerHealth : MonoBehaviour, IDamageable
     {
         public Player Player { get; private set; }
         public CharacterStateController CharacterStateController { get; private set; }
@@ -21,7 +23,8 @@ namespace Actor.PlayerSystem
             currentHealth = MaxHealth;
         }
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
+        public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
         {
             if (Player.Invincible)
                 return;
