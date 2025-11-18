@@ -20,7 +20,7 @@ namespace Actors.Monsters.Brains
             if (!player) return false;
 
             var playerPlatform = player.GetComponent<TestPlayer>().CurrentPlatform;
-            return playerPlatform >= 0 && playerPlatform == Owner.BelongingPlatform;
+            return playerPlatform >= 0 && playerPlatform == Owner.CurrentPlatform;
         }
     }
 }

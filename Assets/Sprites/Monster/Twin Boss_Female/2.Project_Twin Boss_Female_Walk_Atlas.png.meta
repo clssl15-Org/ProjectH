@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,154 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 46
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5848770efa1944f4abd98708cf1608cc
+      internalID: -1585440192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_1
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 46
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b32fe31aafa36304c95d372ab3ef4f3c
+      internalID: 2099086466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_2
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 46
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c712e459a20d7c408a0247f7d6f8c76
+      internalID: -100076333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_3
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 46
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffa00f9fcfed46f4186beb5938213494
+      internalID: -2065321255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d1d69182c06c364380320d0982640d6
+      internalID: -1271708236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_5
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 0
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85324f61c5a61b845916047da03a503e
+      internalID: 1146792647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2.Project_Twin Boss_Female_Walk_Atlas_6
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 0
+        width: 53
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a29d6a7915638534bb5066f161d381b4
+      internalID: 985896426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +253,14 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      2.Project_Twin Boss_Female_Walk_Atlas_0: -1585440192
+      2.Project_Twin Boss_Female_Walk_Atlas_1: 2099086466
+      2.Project_Twin Boss_Female_Walk_Atlas_2: -100076333
+      2.Project_Twin Boss_Female_Walk_Atlas_3: -2065321255
+      2.Project_Twin Boss_Female_Walk_Atlas_4: -1271708236
+      2.Project_Twin Boss_Female_Walk_Atlas_5: 1146792647
+      2.Project_Twin Boss_Female_Walk_Atlas_6: 985896426
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

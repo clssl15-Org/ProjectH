@@ -24,7 +24,7 @@ namespace Actors.Monsters
         // Property
         [Header("Ghost")]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
-        [Space()]
+        [Space]
         [SerializeField] private GameObject _swordPrefab;
         [SerializeField] private float _launchStartTime;
 

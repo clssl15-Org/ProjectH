@@ -12,16 +12,16 @@ namespace Infrastructure
         /// </summary>
         public float DetectionHeight
         {
-            get => detectionHeight;
-            set => detectionHeight = value;
+            get => _detectionHeight;
+            set => _detectionHeight = value;
         }
         /// <summary>
         /// 객체의 기준 위치에서 해당 범위에 해당하는 부분의 플랫폼을 탐지합니다.
         /// </summary>
         public float DetectionRange
         {
-            get => detectionRange;
-            set => detectionRange = value;
+            get => _detectionRange;
+            set => _detectionRange = value;
         }
 
         // Property
@@ -35,9 +35,9 @@ namespace Infrastructure
             z = transform.position.z
         };
 
-        [SerializeField] private PlatformManager platformManager;
-        [SerializeField, Min(0)] private float detectionHeight = 1f;
-        [SerializeField, Min(0)] private float detectionRange = 1f;
+        [SerializeField] private PlatformManager _platformManager;
+        [SerializeField, Min(0)] private float _detectionHeight = 1f;
+        [SerializeField, Min(0)] private float _detectionRange = 1f;
 
         // Internal
         private Collider2D SelfCollider => _selfCollider ??= GetComponent<Collider2D>();
@@ -45,26 +45,26 @@ namespace Infrastructure
 
 
         // Content
-        public void SetPlatformManager(PlatformManager platformManager) => this.platformManager = platformManager;
+        public void SetPlatformManager(PlatformManager platformManager) => _platformManager = platformManager;
 
         public bool TryGetCurrentPlatformId(out int platformId) => TryGetPlatformId(Bottom, out platformId);
         public bool TryGetPlatformId(Vector3 position, out int platformId)
         {
             platformId = -1;
 
-            if (!platformManager)
+            if (!_platformManager)
             {
                 throw new InvalidOperationException(
-                    $"{GetType().Name} 객체를 사용하려면 {nameof(platformManager)}이(가) 할당되어 있어야 합니다.");
+                    $"{GetType().Name} 객체를 사용하려면 {nameof(_platformManager)}이(가) 할당되어 있어야 합니다.");
             }
 
-            var cellHeight = platformManager.CellSize.y;
-            var steps = Mathf.FloorToInt((detectionHeight + Mathf.Epsilon) / cellHeight);
+            var cellHeight = _platformManager.CellSize.y;
+            var steps = Mathf.FloorToInt((_detectionHeight + Mathf.Epsilon) / cellHeight);
 
             var p = position - new Vector3(0, cellHeight / 2f, 0);
             for (int i = 0; i < steps; i++)
             {
-                if (platformManager.TryGetPlatformId(p, out platformId))
+                if (_platformManager.TryGetPlatformId(p, out platformId))
                     return true;
 
                 p.y -= cellHeight;
@@ -87,8 +87,8 @@ namespace Infrastructure
 
             var offsetX = direction switch
             {
-                Direction.Left => -detectionRange,
-                Direction.Right => detectionRange,
+                Direction.Left => -_detectionRange,
+                Direction.Right => _detectionRange,
                 _ => 0f
             };
 

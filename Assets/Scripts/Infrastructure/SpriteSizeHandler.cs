@@ -1,6 +1,8 @@
 using System;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Infrastructure
 {
@@ -31,6 +33,7 @@ namespace Infrastructure
             if (!_sr || !_sr.sprite)
                 return;
 
+            _sr.drawMode = SpriteDrawMode.Sliced;
             _sr.size = new Vector2(
                 _ratio * _sr.sprite.rect.size.x,
                 _ratio * _sr.sprite.rect.size.y);
@@ -48,6 +51,7 @@ namespace Infrastructure
                 ApplyRatio();
         }
 
+#if UNITY_EDITOR
         [CustomEditor(typeof(SpriteSizeHandler))]
         private class SpriteSizeHandlerEditor : Editor
         {
@@ -59,5 +63,6 @@ namespace Infrastructure
                     ((SpriteSizeHandler)target).ApplyRatio();
             }
         }
+#endif
     }
 }

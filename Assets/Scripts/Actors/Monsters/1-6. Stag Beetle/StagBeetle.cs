@@ -145,9 +145,9 @@ namespace Actors.Monsters
                 StandaloneHitBrain.Stop();
                 Brain.SelectChild(new SelectionRequest[]
                 {
-                new(true),
-                new(true),
-                new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+                    new(true),
+                    new(true),
+                    new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
                 });
             }
         }
