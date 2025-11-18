@@ -8,9 +8,12 @@ namespace Actor.PlayerSystem
 {
     public class ProjectileDamage : MonoBehaviour
     {
-        [Header("Damage Settings")]
-        [SerializeField]
-        private int damage = 10;
+        public int Damage
+        {
+            get => damage;
+            set => damage = value;
+        }
+        private int damage;
 
         public static Action onRangedAttack;
 

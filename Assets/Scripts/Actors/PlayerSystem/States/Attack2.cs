@@ -44,6 +44,8 @@ namespace Actor.PlayerSystem
         private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
         private float attackAngle = 0f;
 
+        private float attackPower => Player.playerStats.attackPower;
+
         private float attackCursor = 0f;
         private float attackElapsedCursor = 0f;
 
@@ -69,8 +71,9 @@ namespace Actor.PlayerSystem
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                     continue;
 
-                Debug.Log("Enemy hitted! (Attack2)");
-                damageableObject.TakeDamage(1);
+                int amount = (int)(attackPower * damageMultiplier);
+                damageableObject.TakeDamage(amount);
+
                 onAttack2?.Invoke();
             }
         }

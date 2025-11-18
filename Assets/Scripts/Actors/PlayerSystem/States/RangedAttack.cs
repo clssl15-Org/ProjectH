@@ -23,9 +23,15 @@ namespace Actor.PlayerSystem
         [SerializeField]
         private Vector2 offset;
 
+        [Header("Attack Stats")]
+        [SerializeField]
+        private float damageMultiplier = 3f;
+
         [Header("Cooldown Settings")]
         [SerializeField]
         private float cooldownDuration = 5f;
+
+        private float attackPower => Player.playerStats.attackPower;
 
         private float skillCursor = 0f;
 
@@ -71,6 +77,7 @@ namespace Actor.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<ProjectileMovement>().ResetProjectile(dt, direction);
+                newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier);
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

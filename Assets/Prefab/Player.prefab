@@ -467,7 +467,7 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: fd4a4b3344e5ef64c9b8dc1e03eba9e3, type: 2}
   attackDuration: 0.7
   damageApplyTime: 0.3
-  damageMultiplier: 1
+  damageMultiplier: 1.5
   attackSize: {x: 2, y: 1}
   attackPointOffset: {x: 1, y: 0}
 --- !u!114 &1992306446285886652
@@ -581,6 +581,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   directionMode: 1
+  damageMultiplier: 5
   attackSize: {x: 3, y: 1}
   attackPointOffset: {x: 1, y: 0}
   invincibleStartTime: 0
@@ -604,6 +605,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6317047554263875150, guid: a811840dc3e307e4781ac75002df6ec7, type: 3}
   isSizeSynced: 1
   offset: {x: 0, y: 0}
+  damageMultiplier: 3
   cooldownDuration: 5
 --- !u!114 &2303108416702557745
 MonoBehaviour:
@@ -621,6 +623,7 @@ MonoBehaviour:
   skillDuration: 0.77
   damageApplyTime: 0.5
   directionMode: 1
+  damageMultiplier: 20
   attackSize: {x: 3.8, y: 3}
   attackPointOffset: {x: 0.8, y: 0.5}
   invincibleStartTime: 0

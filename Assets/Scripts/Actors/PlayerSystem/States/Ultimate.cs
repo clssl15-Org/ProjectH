@@ -17,6 +17,10 @@ namespace Actor.PlayerSystem
         [SerializeField]
         private DirectionMode directionMode = DirectionMode.InputDirection;
 
+        [Header("Attack Stats")]
+        [SerializeField]
+        private float damageMultiplier = 1.0f;
+
         [Header("Attack Range")]
         [SerializeField]
         private Vector2 attackSize = new Vector2(1.0f, 1.0f);
@@ -44,6 +48,8 @@ namespace Actor.PlayerSystem
 
         [Header("Gizmos")]
         private bool isHitBoxEnabled = false;
+
+        private float attackPower => Player.playerStats.attackPower;
 
         private float skillCursor = 0f;
 
@@ -81,8 +87,8 @@ namespace Actor.PlayerSystem
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                     continue;
 
-                Debug.Log("Enemy hitted! (Ultimate)");
-                damageableObject.TakeDamage(1);
+                int amount = (int)(attackPower * damageMultiplier);
+                damageableObject.TakeDamage(amount);
             }
         }
         private void UpdateAttackParameters()

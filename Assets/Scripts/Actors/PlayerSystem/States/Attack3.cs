@@ -32,9 +32,11 @@ namespace Actor.PlayerSystem
         private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
         private float attackAngle = 0f;
 
+        private float attackPower => Player.playerStats.attackPower;
+
         private float attackCursor = 0f;
 
-        private bool comboAvailable = false;
+        //private bool comboAvailable = false;
         private bool isDone = true;
         private bool isDamageApplied = false;
 
@@ -55,8 +57,8 @@ namespace Actor.PlayerSystem
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                     continue;
 
-                Debug.Log("Enemy hitted! (Attack3)");
-                damageableObject.TakeDamage(1);
+                int amount = (int)(attackPower * damageMultiplier);
+                damageableObject.TakeDamage(amount);
                 onAttack3?.Invoke();
             }
         }
@@ -114,7 +116,7 @@ namespace Actor.PlayerSystem
         private void ResetAttack()
         {
             attackCursor = 0f;
-            comboAvailable = false;
+            //comboAvailable = false;
             isDone = false;
             isDamageApplied = false;
         }

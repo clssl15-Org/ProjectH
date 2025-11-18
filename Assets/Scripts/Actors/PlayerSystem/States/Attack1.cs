@@ -47,6 +47,8 @@ namespace Actor.PlayerSystem
         private Vector2 attackPoint = Vector2.zero;
         private float scaledSize = 1.0f;
 
+        private float attackPower => Player.playerStats.attackPower;
+
         private float attackCursor = 0f;
         private float attackElapsedCursor = 0f;
 
@@ -82,8 +84,9 @@ namespace Actor.PlayerSystem
 
                 if (angle <= attackAngle)
                 {
-                    Debug.Log("Enemy hitted! (Attack1)");
-                    damageableObject.TakeDamage(1);
+                    int amount = (int)(attackPower * damageMultiplier);
+                    damageableObject.TakeDamage(amount);
+                    
                     onAttack1?.Invoke();
                 }
             }

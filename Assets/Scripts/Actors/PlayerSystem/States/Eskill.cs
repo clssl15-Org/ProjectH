@@ -29,6 +29,10 @@ namespace Actor.PlayerSystem
         [SerializeField]
         private DirectionMode directionMode = DirectionMode.InputDirection;
 
+        [Header("Attack Stats")]
+        [SerializeField]
+        private float damageMultiplier = 5.0f;
+
         [Header("Attack Range")]
         [SerializeField]
         private Vector2 attackSize = new Vector2(1.0f, 1.0f);
@@ -51,6 +55,8 @@ namespace Actor.PlayerSystem
         private Vector2 attackPoint = Vector2.zero;
         private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
         private float attackAngle = 0f;
+
+        private float attackPower => Player.playerStats.attackPower;
 
         private float skillCursor = 0;
 
@@ -82,7 +88,9 @@ namespace Actor.PlayerSystem
                 //    continue;
 
                 //hitEnemies.Add(damageableObject);
-                damageableObject.TakeDamage(1);
+                int amount = (int)(attackPower * damageMultiplier);
+                damageableObject.TakeDamage(amount);
+
                 onEskill?.Invoke();
             }
         }
