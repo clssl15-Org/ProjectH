@@ -1770,7 +1770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f610d60051ccee145b79a46a5ae2d6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Scene: Stage2
 --- !u!4 &516786507
 Transform:
   m_ObjectHideFlags: 0
@@ -1798,8 +1797,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c6dc9e87fe11f4891f76949a58ad96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monstersParent: {fileID: 828006786}
-  objectToActivate: {fileID: 152599999}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -4183,11 +4180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6617d83b37ce2b4ea8b5f7efbd4530d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 754780852}
-  healthBarFill: {fileID: 128669669}
-  qGauge: {fileID: 1672617603}
-  qGaugeFill: {fileID: 574150830}
-  playerManager: {fileID: 0}
 --- !u!1 &1161983678
 GameObject:
   m_ObjectHideFlags: 0
@@ -10629,6 +10621,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5175911527829833112, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
       propertyPath: platformManager
+      value: 
+      objectReference: {fileID: 30036953}
+    - target: {fileID: 5175911527829833112, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
+      propertyPath: _platformManager
       value: 
       objectReference: {fileID: 30036953}
     - target: {fileID: 5453062479147292064, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}

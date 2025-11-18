@@ -9,6 +9,9 @@ public class MonsterSpawner : MonoBehaviour
     [Header("페이즈 설정")]
     public List<SpawnPhase> phases;
 
+    public Infrastructure.SceneAssetsLibrary sceneAssetsLibrary;
+    public PlatformManager platformManager;
+
     private int currentPhaseIndex = -1; // 현재 진행 중인 페이즈의 인덱스
     private bool isSpawning = false; // 스포너가 현재 작동 중인지 여부
 
@@ -138,21 +141,33 @@ public class MonsterSpawner : MonoBehaviour
     {
         // 스포너의 위치와 회전값으로 몬스터를 스폰합니다. 
         GameObject monsterInstance = Instantiate(prefab, this.transform.position, this.transform.rotation);
+        if (!monsterInstance.TryGetComponent(out Actors.IMonster monsterScript))
+        {
+            var exception = new System.ArgumentException(
+                $"Prefab에 IMonster 스크립트가 없습니다",
+                nameof(prefab)
+                );
+
+            Debug.LogException(exception);
+            return;
+
+            //Debug.LogError($"스폰된 몬스터 '{prefab.name}'에 스크립트가 없습니다.", monsterInstance);
+            //return;
+        }
+
+        monsterScript.Initialize(sceneAssetsLibrary, platformManager);
 
         // 1. 활성 몬스터 리스트에 추가하여 추적 시작 
         activeMonsters.Add(monsterInstance);
 
         // 2. 스폰된 몬스터의 Monster 스크립트에서 사망 이벤트를 가져옴
-        Dead monsterDeadScript = monsterInstance.GetComponent<Dead>();
-        if (monsterDeadScript != null)
+        monsterScript.ConditionChanged += cond =>
         {
-            // 3. 몬스터가 죽었을 때 OnMonsterDied 메서드가 호출되도록 '구독(Subscribe)' 
-            //monsterDeadScript.OnMonsterDied.AddListener(this.OnMonsterDied);
-        }
-        else
-        {
-            Debug.LogError($"스폰된 몬스터 '{prefab.name}'에 스크립트가 없습니다.", monsterInstance);
-        }
+            if (cond.Condition == Actors.MonsterCondition.Die)
+            {
+                // 죽었을 때 처리
+            }
+        };
     }
 
     /// <summary>

@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 5175911527829833112}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -278,9 +278,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 1
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!1 &6801821047128880367
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +406,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 36c21c6f536c8ec4b84bc22005f2d3b7, type: 2}
-  baseSpeed: 9
   acceleration: 130
   monsterOverlapSpeedMultiplier: 0.7
 --- !u!114 &303451325805896508
