@@ -6,8 +6,7 @@ namespace Actor.PlayerSystem
 {
     public class NormalMovement : CharacterState
     {
-        [SerializeField]
-        private float baseSpeed = 5f;
+        private float moveSpeed => Player.playerStats.moveSpeed;
         [SerializeField]
         private float acceleration = 50f;
         [SerializeField]
@@ -56,7 +55,7 @@ namespace Actor.PlayerSystem
 
         private void ProcessVelocity(float dt)
         {
-            Vector3 targetVelocity = CharacterStateController.InputMovementReference * baseSpeed;
+            Vector3 targetVelocity = CharacterStateController.InputMovementReference * moveSpeed;
             float targetSpeedX = targetVelocity.x;
 
             // Reduce speed when overlapping with monsters
