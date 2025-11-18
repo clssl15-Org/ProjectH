@@ -1,6 +1,6 @@
-using UnityEngine;
-using Infrastructure;
 using System;
+using Infrastructure;
+using UnityEngine;
 
 namespace Actors
 {
@@ -14,8 +14,9 @@ namespace Actors
         event Action Destroyed;
 
         int MaxHP { get; }
-        int BelongingPlatform { get; }
+        int CurrentPlatform { get; }
 
+        void Initialize(SceneAssetsLibrary sceneAssetsLibrary, PlatformManager platformManager);
         void Destroy();
 
 #pragma warning disable IDE1006

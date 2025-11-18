@@ -85,9 +85,9 @@ namespace Actors.Monsters
         internal Collider2D Collider { get; private set; }
         internal Rigidbody2D Rigidbody { get; private set; }
 
-        public int BelongingPlatform { get; set; } = 1;
+        public int CurrentPlatform { get; set; } = 1;
         internal PlatformDetector PlatformDetector { get; private set; }
-        internal GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
+        internal virtual GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
         private MonsterPlayerDetector _playerDetector;
         protected MonsterDamageReceiver DamageReceiver { get; private set; }
@@ -110,7 +110,7 @@ namespace Actors.Monsters
         SpriteRenderer IMonsterInternal.SpriteRenderer => SpriteRenderer;
         Collider2D IMonsterInternal.Collider => Collider;
         Rigidbody2D IMonsterInternal.Rigidbody => Rigidbody;
-        int IMonsterInternal.BelongingPlatform { get => BelongingPlatform; set => BelongingPlatform = value; }
+        int IMonsterInternal.CurrentPlatform { get => CurrentPlatform; set => CurrentPlatform = value; }
         PlatformDetector IMonsterInternal.PlatformDetector => PlatformDetector;
         GameObject IMonsterInternal.DetectedPlayer => DetectedPlayer;
         MonsterAnimationPlayer IMonsterInternal.AnimationPlayer => AnimationPlayer;
@@ -129,10 +129,10 @@ namespace Actors.Monsters
         /// <summary>
         /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
         /// </summary>
-        public void Initialize(PlatformManager platformManager, SceneAssetsLibrary sceneAssetsLibrary)
+        public void Initialize(SceneAssetsLibrary sceneAssetsLibrary, PlatformManager platformManager)
         {
-            PlatformManager = platformManager;
             SceneAssetsLibrary = sceneAssetsLibrary;
+            PlatformManager = platformManager;
         }
 
         protected virtual void Awake()
@@ -143,13 +143,7 @@ namespace Actors.Monsters
             TryGetComponent(out _spriteSizeHandler);
 
             _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
-
-            if (_playerDetector)
-                _playerDetector.PlayerDetected += OnPlayerDetected;
-            else
-                Debug.LogWarning(FormatLogMessage(
-                    $"이 몬스터는 {nameof(MonsterPlayerDetector)}을(를) 가지고 있지 않습니다. " +
-                    "플레이어 감지 기능이 정상적으로 작동하지 않을 수 있습니다."));
+            if (_playerDetector) _playerDetector.PlayerDetected += OnPlayerDetected;
 
 
             DamageReceiver = GetComponentInChildren<MonsterDamageReceiver>(true);
@@ -237,7 +231,7 @@ namespace Actors.Monsters
 
             if (direction == Direction.Left)
             {
-                if (!PlatformDetector.CheckPlatform(Direction.Left, BelongingPlatform, out _))
+                if (!PlatformDetector.CheckPlatform(Direction.Left, CurrentPlatform, out _))
                     return false;
 
                 Rigidbody.velocity = new Vector2
@@ -251,7 +245,7 @@ namespace Actors.Monsters
 
             if (direction == Direction.Right)
             {
-                if (!PlatformDetector.CheckPlatform(Direction.Right, BelongingPlatform, out _))
+                if (!PlatformDetector.CheckPlatform(Direction.Right, CurrentPlatform, out _))
                     return false;
 
                 Rigidbody.velocity = new Vector2
@@ -344,7 +338,7 @@ namespace Actors.Monsters
             _sb.Clear();
             _sb.AppendLine($"HP: {HP}");
             _sb.AppendLine($"Direction: {Direction.ToString()}");
-            _sb.AppendLine($"Current Platform: {(BelongingPlatform >= 0 ? BelongingPlatform : "null")}");
+            _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
             _sb.AppendLine("----------------");
             _sb.AppendLine($"Is Alive: {IsAlive}");
             if (StandaloneHitBrain != null) _sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");

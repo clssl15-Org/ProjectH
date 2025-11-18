@@ -10,7 +10,7 @@ namespace Actors.Monsters
         Direction Direction { get; set; }
         bool IsAlive { get; set; }
 
-        int BelongingPlatform { get; set; }
+        int CurrentPlatform { get; set; }
         bool IgnorePlayerInteraction { get; set; }
 
         MonsterStats StatsInfo { get; }

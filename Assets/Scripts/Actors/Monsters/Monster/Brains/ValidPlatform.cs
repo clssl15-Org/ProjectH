@@ -19,7 +19,7 @@ namespace Actors.Monsters.Brains
                 return true;
 
             return Owner.PlatformDetector.CheckPlatform(
-                Direction.Center, Owner.BelongingPlatform, out _);
+                Direction.Center, Owner.CurrentPlatform, out _);
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Actors.Monsters.Actions
         public record AnimationPlayInfo
         (
             float DelayBeforePlay = 0f,
+
+            //종료 시간 미설정 시 -1
             float DelayAfterPlay = 0f
         );
 
@@ -46,7 +48,11 @@ namespace Actors.Monsters.Actions
                             if (!Active) return;
                             PlayInfo.Callback?.Invoke(succeed);
 
-                            if (!succeed) return;
+                            if (!succeed)
+                                return;
+                            if (_currentAnimationPlayInfo.DelayAfterPlay < 0)
+                                _work.Exit();
+
                             _work.SetNext("AfterPlay");
                         }}))
                     .SetExitedAction(() => _playingFinishedTime = _elapsedTime))

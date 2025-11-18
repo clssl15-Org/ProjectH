@@ -28,7 +28,7 @@ namespace Actors.Monsters.Brains
         {
             if (Owner.PlatformDetector.TryGetCurrentPlatformId(out var platformId))
             {
-                Owner.BelongingPlatform = platformId;
+                Owner.CurrentPlatform = platformId;
                 RetickNow = true;
 
                 Complete();
