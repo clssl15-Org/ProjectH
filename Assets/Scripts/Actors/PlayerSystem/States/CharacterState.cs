@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public abstract class CharacterState : MonoBehaviour
     {

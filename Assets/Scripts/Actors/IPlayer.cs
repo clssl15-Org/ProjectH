@@ -2,7 +2,7 @@ using UnityEngine;
 using Infrastructure;
 using System;
 
-namespace Actor
+namespace Actors
 {
     public enum PlayerCondition
     {
@@ -41,6 +41,7 @@ namespace Actor
 
 #pragma warning disable IDE1006
         string name { get; }
+        GameObject gameObject { get; }
         Transform transform { get; }
 #pragma warning restore
 

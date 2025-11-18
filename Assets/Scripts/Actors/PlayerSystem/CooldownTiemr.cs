@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.iOS;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class CooldownTiemr : MonoBehaviour
     {

@@ -35,7 +35,9 @@ namespace Actors.Monsters
             public override void OnInspectorGUI()
             {
                 serializedObject.Update();
+
                 var excludings = new List<string>();
+                SetSpeedProperty((MonsterStats)target, excludings);
 
                 DrawPropertiesExcluding(serializedObject, excludings.ToArray());
                 serializedObject.ApplyModifiedProperties();

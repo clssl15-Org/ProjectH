@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class InputHandler : MonoBehaviour
     {

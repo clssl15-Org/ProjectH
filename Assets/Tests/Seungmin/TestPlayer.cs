@@ -1,14 +1,19 @@
 using System;
 using System.Text;
+using Actors;
 using Actors.Monsters;
 using Infrastructure;
 using UnityEngine;
 
 [RequireComponent(typeof(PlatformDetector))]
-public class TestPlayer : MonoBehaviour
+public class TestPlayer : MonoBehaviour, IPlayer
 {
     // Front
     public int CurrentPlatform { get; private set; }
+
+    public int HP => 100;
+    public int MaxHP => 100;
+    public bool IsAlive => true;
 
     // Property
     [SerializeField] private PlatformManager _platformManager;
@@ -27,6 +32,9 @@ public class TestPlayer : MonoBehaviour
 
     // Internal
     private PlatformDetector _platformDetector;
+
+    public event Action<PlayerCondition> ConditionChanged;
+    public event Action Destroyed;
 
 
     // Content

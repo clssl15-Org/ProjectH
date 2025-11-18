@@ -2,15 +2,17 @@ using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
-using static Actors.Monsters.Brains.Engaged;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Actors.Monsters.Stage3Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
-    public class Belia : Monster<BeliaStats>, ITwinBoss
+    public partial class Belia : Monster<BeliaStats>, ITwinBoss
     {
         // Front
-        public enum AttackType
+        public enum AttackMode
         {
             Any,
             Slash,
@@ -18,11 +20,21 @@ namespace Actors.Monsters.Stage3Bosses
             Dash
         }
 
-        [Header("Temp")]
-        [SerializeField] private GameObject _player;
-        [SerializeField] private bool _isAwaken = false;
+        [Header("Belia")]
+        [SerializeField] private GameObject _curveEffectPrefab;
+        [SerializeField] private Vector2 _curveEffectWorldPosition;
+        [Space]
+        [SerializeField] private AttackMode _attackMode = AttackMode.Any;
+        [SerializeField] private float _dashStartTime = 0f;
+        [SerializeField] private float _dashForce = 100f;
 
-        internal override GameObject DetectedPlayer => _player;
+        [Header("Debug")]
+        [SerializeField] private bool _useTargetPlayer = false;
+        [SerializeField] private GameObject _targetPlayer;
+        [Space]
+        [SerializeField] private bool _autoAwake = false;
+
+        internal override GameObject DetectedPlayer => _player?.gameObject;
 
 
         // Internal
@@ -36,11 +48,11 @@ namespace Actors.Monsters.Stage3Bosses
                     .AddChild(new Idle())
                     .AddChild(new Awaken()
                         .AddChild(new ValidPlatform() { HierarchyMode = HierarchyMode.Sequence }
-                            .AddChild(new Engaged(RangeType.Contact)
+                            .AddChild(new Engaged(Engaged.RangeType.Contact)
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new Attack())
+                            .AddChild(new BeliaAttackBrain())
                         )
                         .AddChild(new NotValidPlatform())
                     )
@@ -52,23 +64,38 @@ namespace Actors.Monsters.Stage3Bosses
 
         private class BeliaActionController : MonsterActionController
         {
-            public BeliaActionController(IMonsterInternal monster) : base(monster)
+            public BeliaActionController(Belia belia) : base(belia)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Walk)
                     .AddAnimationComponent());
-                AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent("SlashAttack"));
+                AddChild(new MonsterAction(AttackMode.Slash.ToString() + "Attack")
+                    .AddAnimationComponent());
+                AddChild(new MonsterAction(AttackMode.CurvedArea.ToString() + "Attack")
+                    .AddComponent(new BeliaCurvedAreaAttackAction(belia._curveEffectPrefab, belia._curveEffectWorldPosition)));
+                AddChild(new MonsterAction(AttackMode.Dash.ToString() + "Attack")
+                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddComponent(new BeliaDashAttackAction(belia._dashStartTime, belia._dashForce)));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddComponent(new HitFlash()));
+                AddChild(new MonsterAction("Exhausted")
+                    .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
             }
         }
 
+        private IPlayer _player;
+        private bool _isAwaken = false;
+
 
         // Content
+        public void Initialize(IPlayer player)
+        {
+            _player = player;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -77,12 +104,28 @@ namespace Actors.Monsters.Stage3Bosses
             ActionController.Enter();
 
             Brain = new BeliaBrain(this);
+
+
+            // ------- Debug -------
+            if (_useTargetPlayer
+                && _targetPlayer
+                && _targetPlayer.TryGetComponent<IPlayer>(out var player))
+                Initialize(player);
+
+            if (_autoAwake)
+                DoAwake();
         }
 
         protected override void Update()
         {
             Brain.Blackboard.Properties[ITwinBoss.IsAwaken] = _isAwaken;
             base.Update();  
+        }
+
+        public void DoAwake()
+        {
+            _isAwaken = true;
+            Brain.Blackboard.Committing = true;
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)
@@ -98,5 +141,31 @@ namespace Actors.Monsters.Stage3Bosses
                 new(nameof(Dead), null, EntryPolicy.Unconditional, RerunPolicy.EnsureRunningAndInjectInputs)
             });
         }
+
+        protected override string GetDisplayContent()
+        {
+            var message = base.GetDisplayContent();
+
+            message += "----------------";
+            message += $"\nAwaken: {_isAwaken}";
+
+            return message;
+        }
+
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(Belia))]
+        private class BeliaEditor : Editor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+                var target = (Belia)base.target;
+
+                if (!target._autoAwake && GUILayout.Button("Awake"))
+                    target.DoAwake();
+            }
+        }
+#endif
     }
 }

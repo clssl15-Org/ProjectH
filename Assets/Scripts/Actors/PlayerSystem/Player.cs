@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Infrastructure;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     [RequireComponent(typeof(PlayerHealth))]
     public class Player : MonoBehaviour, IPlayer

@@ -6,8 +6,6 @@ using UnityEngine;
 
 namespace Actors.Monsters.Actions
 {
-    using static MonsterActionComponent;
-
     public record MonsterActionPlayInfo(
         string Name,
         Action<ActionResult> Callback = null,

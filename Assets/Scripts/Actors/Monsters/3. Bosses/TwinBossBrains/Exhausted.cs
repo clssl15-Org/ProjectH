@@ -20,6 +20,8 @@ namespace Actors.Monsters.Stage3Bosses
 
         protected override void OnOpen(object[] _)
         {
+            Owner.IgnorePlayerInteraction = true;
+
             _notification = new MonsterConditionData(MonsterCondition.General, nameof(Exhausted));
             Owner.NotifyCondition(_notification);
 
@@ -42,6 +44,8 @@ namespace Actors.Monsters.Stage3Bosses
 
         protected override void OnHalt(DetailedNodeStatus _)
         {
+            Owner.IgnorePlayerInteraction = false;
+
             _notification?.Complete();
             _notification = null;
         }

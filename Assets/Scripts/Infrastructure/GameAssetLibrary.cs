@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Infrastructure
 {
-    public class SceneAssetsLibrary : MonoBehaviour
+    public class GameAssetLibrary : MonoBehaviour
     {
         [Header("Materials")]
         [SerializeField] private Material _solidColor;

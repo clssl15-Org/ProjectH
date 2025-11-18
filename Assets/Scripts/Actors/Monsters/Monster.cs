@@ -68,9 +68,9 @@ namespace Actors.Monsters
         [SerializeField] internal bool DefaultIsRight;
 
         [Header("Bindings")]
-        [SerializeField] internal SceneAssetsLibrary SceneAssetsLibrary;
+        [SerializeField] internal GameAssetLibrary SceneAssetsLibrary;
         [SerializeField] internal PlatformManager PlatformManager;
-        SceneAssetsLibrary IMonsterInternal.SceneAssetsLibrary => SceneAssetsLibrary;
+        GameAssetLibrary IMonsterInternal.SceneAssetsLibrary => SceneAssetsLibrary;
 
 
         // Display
@@ -116,7 +116,6 @@ namespace Actors.Monsters
         MonsterAnimationPlayer IMonsterInternal.AnimationPlayer => AnimationPlayer;
         StandaloneHitAction IMonsterInternal.StandaloneHitAction => StandaloneHitAction;
         MonsterActionController IMonsterInternal.ActionController => ActionController;
-        void IMonsterInternal.ReviseSpriteSize() => ReviseSpriteSize();
         #endregion
 
         // Internal 
@@ -129,7 +128,7 @@ namespace Actors.Monsters
         /// <summary>
         /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
         /// </summary>
-        public void Initialize(SceneAssetsLibrary sceneAssetsLibrary, PlatformManager platformManager)
+        public void Initialize(GameAssetLibrary sceneAssetsLibrary, PlatformManager platformManager)
         {
             SceneAssetsLibrary = sceneAssetsLibrary;
             PlatformManager = platformManager;
@@ -161,7 +160,9 @@ namespace Actors.Monsters
             }
 
             _knockbackHandler = new KnockbackHandler(Rigidbody);
-            AnimationPlayer = new MonsterAnimationPlayer(GetComponent<Animator>());
+            AnimationPlayer = new MonsterAnimationPlayer(
+                GetComponent<Animator>(),
+                () => _spriteSizeHandler?.RequestApplyScaleFactor());
 
             _direction = DefaultIsRight ? Direction.Right : Direction.Left;
             _hp = StatsInfo.MaxHP;
@@ -210,7 +211,6 @@ namespace Actors.Monsters
             ActionController?.Update();
         }
 
-        internal void ReviseSpriteSize() => _spriteSizeHandler?.ApplyRatio();
         protected virtual void OnPlayerDetected(GameObject player) { }
         protected virtual void OnDamaged(DamageInfo damageInfo)
         {

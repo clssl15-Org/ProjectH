@@ -27,16 +27,18 @@ namespace Actors.Monsters.Actions
         public float? CurrentAnimationTime { get; private set; }
 
         // Internal
+        private Action _played;
         private Timer _timer;
 
 
         // Content
-        public MonsterAnimationPlayer(Animator animator)
+        public MonsterAnimationPlayer(Animator animator, Action played)
         {
             if (!animator)
                 throw new ArgumentException(nameof(animator), $"{nameof(animator)}이(가) 유효하지 않습니다.");
 
             Animator = animator;
+            _played = played;
         }
 
         public void Play(MonsterAnimationPlayInfo playInfo)
@@ -109,6 +111,7 @@ namespace Actors.Monsters.Actions
                 _timer.Factor = 1f;
 
             Animator.speed = 1f;
+            _played?.Invoke();
         }
 
         public void Stop()

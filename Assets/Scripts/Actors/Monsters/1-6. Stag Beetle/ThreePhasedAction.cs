@@ -37,9 +37,9 @@ namespace Actors.Monsters
             {
                 _animations = new string[]
                 {
-                getPreActionName(animationName),
-                animationName,
-                getPostActionName(animationName)
+                    getPreActionName(animationName),
+                    animationName,
+                    getPostActionName(animationName)
                 };
 
                 _beforePreAction = beforePreAction;

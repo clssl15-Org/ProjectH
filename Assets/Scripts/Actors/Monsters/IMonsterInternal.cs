@@ -14,7 +14,7 @@ namespace Actors.Monsters
         bool IgnorePlayerInteraction { get; set; }
 
         MonsterStats StatsInfo { get; }
-        SceneAssetsLibrary SceneAssetsLibrary { get; }
+        GameAssetLibrary SceneAssetsLibrary { get; }
         SpriteRenderer SpriteRenderer { get; }
         Rigidbody2D Rigidbody { get; }
         Collider2D Collider { get; }
@@ -25,8 +25,6 @@ namespace Actors.Monsters
         MonsterAnimationPlayer AnimationPlayer { get; }
         StandaloneHitAction StandaloneHitAction { get; }
         MonsterActionController ActionController { get; }
-
-        void ReviseSpriteSize();
 
         #region Low-level Actions
         bool TryMove();
