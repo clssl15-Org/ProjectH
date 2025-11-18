@@ -49,8 +49,8 @@ namespace Actor.PlayerSystem
         public override void EnterBehaviour(float dt)
         {
             ResetJump();
-            //CharacterActor.Rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
+            CharacterActor.Rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            //CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
             extraJumpCount--;
             subsequentJumpForce = jumpForce * subsequentJumpMultiplier;
         }
