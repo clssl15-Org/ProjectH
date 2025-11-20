@@ -13,7 +13,7 @@ namespace Actors.Monsters
 
 
             // Content
-            protected override void OnEnter(object input)
+            protected override void OnEnter(float _, object __)
             {
                 _isJavelinThrown = false;
             }

@@ -66,13 +66,13 @@ namespace Actors.Monsters
 
                 component.Launch(component.transform.right, speed);
             }
+        }
 
-            Quaternion RotationFromDirection(Vector2 dir)
-            {
-                if (dir.sqrMagnitude <= Mathf.Epsilon) return Quaternion.identity;
-                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                return Quaternion.AngleAxis(angle, Vector3.forward);
-            }
+        public static Quaternion RotationFromDirection(Vector2 dir)
+        {
+            if (dir.sqrMagnitude <= Mathf.Epsilon) return Quaternion.identity;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            return Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
         public void LaunchWithLocalRotation(float speed, Vector2 directionUnit)

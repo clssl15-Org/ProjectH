@@ -6,30 +6,24 @@ using UnityEngine;
 
 namespace Actors.Monsters.Actions
 {
-    public record MonsterActionPlayInfo(
-        string Name,
-        Action<ActionResult> Callback = null,
-        float? PlayTime = null,
-        object[] Inputs = null)
-    {
-        public MonsterActionPlayInfo(
-            MonsterActionType actionType,
-            Action<ActionResult> callback = null,
-            float? playTime = null,
-            object[] inputs = null)
-            : this(actionType.ToString(), callback, playTime, inputs) { }
-    }
-
     internal sealed class MonsterAction : Work
     {
         // Front
+        public record PlayOrder(params MonsterActionComponent[] Afters)
+        {
+            public bool HasNoDependency => Afters == null || Afters.Length == 0;
+
+            public bool CanPlay(IList<MonsterActionComponent> completes) =>
+                HasNoDependency || Afters.All(after => completes.Any(c => c == after));
+        }
+
         public IMonsterInternal Owner
         {
             get
             {
                 if (Parent is not MonsterActionController parent)
                     throw new InvalidOperationException(
-                        Ctx($"{nameof(Parent)}은(는) {nameof(MonsterActionController)} 형식이어야 하지만 '{Parent?.GetType().Name ?? "null"}'이(가) 감지되었습니다. " +
+                        FormatLogMessage($"{nameof(Parent)}은(는) {nameof(MonsterActionController)} 형식이어야 하지만 '{Parent?.GetType().Name ?? "null"}'이(가) 감지되었습니다. " +
                         $"Owner을 반환할 수 없습니다."));
 
                 return parent.Owner;
@@ -40,8 +34,15 @@ namespace Actors.Monsters.Actions
 
 
         // Internal
-        private List<MonsterActionComponent> _components = new();
-        private MonsterActionPlayInfo _playInfo;
+        private readonly Dictionary<MonsterActionComponent, (PlayOrder order, object input)> _components = new();
+        private readonly List<MonsterActionComponent> _orderedComponents = new();
+        private readonly List<MonsterActionComponent> _readyBuffer = new();
+
+        private Action<ActionResult> _callback;
+
+        private readonly List<MonsterActionComponent> _pendings = new();
+        private readonly List<MonsterActionComponent> _runnings = new();
+        private readonly List<MonsterActionComponent> _completes = new();
 
         private InterruptType _reason;
 
@@ -50,113 +51,170 @@ namespace Actors.Monsters.Actions
         public MonsterAction(MonsterActionType monsterAction) : this(monsterAction.ToString()) { }
         public MonsterAction(string name) : base(name) { }
 
-        public MonsterAction AddComponent(MonsterActionComponent component)
+        public MonsterAction AddComponent(MonsterActionComponent component, PlayOrder after = null) => AddComponent(component, out _, after);
+        public MonsterAction AddComponent(MonsterActionComponent component, out MonsterActionComponent self, PlayOrder after = null)
         {
             if (component == null)
                 throw new ArgumentNullException(nameof(component),
-                    Ctx($"{nameof(component)}은(는) null일 수 없습니다."));
+                    FormatLogMessage($"{nameof(component)}은(는) null일 수 없습니다."));
 
-            _components.Add(component);
+            _components.Add(component, (after ?? new(), null));
+            _orderedComponents.Add(component);
             component.SetParent(this);
 
+            self = component;
             return this;
         }
+
+        #region Tools
+        public MonsterAction AddDelayComponent(float delayDuration = 0f, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
+            AddComponent(new Delay(delayDuration, interruptAllOnDeactivate), after);
+        public MonsterAction AddDelayComponent(float delayDuration, out MonsterActionComponent self, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
+            AddComponent(new Delay(delayDuration, interruptAllOnDeactivate), out self, after);
+
 
         public MonsterAction AddAnimationComponent(
             string animName,
             string trigger = null,
             bool interruptAllOnDeactivate = false,
             float delayBeforePlay = 0f,
-            float delayAfterPlay = 0f) =>
-            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay);
+            float delayAfterPlay = 0f,
+            PlayOrder after = null) =>
+            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), out _, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+
+        public MonsterAction AddAnimationComponent(
+            string animName,
+            out MonsterActionComponent self,
+            string trigger = null,
+            bool interruptAllOnDeactivate = false,
+            float delayBeforePlay = 0f,
+            float delayAfterPlay = 0f,
+            PlayOrder after = null) =>
+            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), out self, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
 
         public MonsterAction AddAnimationComponent(
             MonsterAnimationPlayInfo animPlayInfo = null,
             string trigger = null,
             bool interruptAllOnDeactivate = false,
             float delayBeforePlay = 0f,
-            float delayAfterPlay = 0f)
+            float delayAfterPlay = 0f,
+            PlayOrder after = null) =>
+            AddAnimationComponent(animPlayInfo, out _, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+
+        public MonsterAction AddAnimationComponent(
+            MonsterAnimationPlayInfo animPlayInfo,
+            out MonsterActionComponent after,
+            string trigger = null,
+            bool interruptAllOnDeactivate = false,
+            float delayBeforePlay = 0f,
+            float delayAfterPlay = 0f,
+            PlayOrder order = null)
         {
             AddComponent(new PlayAnimation(animPlayInfo != null
                 ? animPlayInfo with { TriggerName = trigger ?? animPlayInfo.TriggerName }
                 : new MonsterAnimationPlayInfo(Name, trigger))
-                {
-                    InterruptAllOnDeactivate = interruptAllOnDeactivate,
-                    DelayBeforePlay = delayBeforePlay,
-                    DelayAfterPlay = delayAfterPlay
-                });
+            {
+                InterruptAllOnDeactivate = interruptAllOnDeactivate,
+                DelayBeforePlay = delayBeforePlay,
+                DelayAfterPlay = delayAfterPlay
+            }, out after, order);
 
             return this;
         }
+        #endregion
 
         protected override void OnEnter(params object[] inputs)
         {
             if (inputs == null)
                 throw new ArgumentNullException(nameof(inputs),
-                    Ctx($"{nameof(inputs)}은(는) null일 수 없습니다."));
+                    FormatLogMessage($"{nameof(inputs)}은(는) null일 수 없습니다."));
 
             if (inputs.Length != 1)
                 throw new ArgumentException(
-                    Ctx($"{nameof(inputs)}은(는) 1의 길이를 가져야 하지만 길이 '{inputs.Length}'을 가진 인자가 입력되었습니다."), nameof(inputs));
+                    FormatLogMessage($"{nameof(inputs)}은(는) 1의 길이를 가져야 하지만 길이 '{inputs.Length}'을 가진 인자가 입력되었습니다."), nameof(inputs));
 
             if (inputs[0] is not MonsterActionPlayInfo playInfo)
                 throw new ArgumentException(
-                    Ctx($"{nameof(inputs)}은(는) {nameof(MonsterActionPlayInfo)} 형식이어야 하지만 '{inputs[0]?.GetType().Name ?? "null"}' 형식이 입력되었습니다."));
+                    FormatLogMessage($"{nameof(inputs)}은(는) {nameof(MonsterActionPlayInfo)} 형식이어야 하지만 '{inputs[0]?.GetType().Name ?? "null"}' 형식이 입력되었습니다."));
 
-
-            _playInfo = playInfo;
-            _reason = InterruptType.None;
-            ElapsedTime = 0f;
 
             try
             {
-                for (int i = 0; i < _components.Count; i++)
+                var absInputs = playInfo.Inputs ?? Array.Empty<object>();
+
+                for (int i = 0; i < _orderedComponents.Count; i++)
                 {
-                    if (playInfo.Inputs != null && i < playInfo.Inputs.Length)
-                        _components[i].Enter(playInfo.Inputs[i]);
-                    else
-                        _components[i].Enter();
+                    var component = _orderedComponents[i];
+
+                    var input = i < absInputs.Length ? absInputs[i] : null;
+                    _components[component] = (_components[component].order, input);
                 }
+
             }
             catch
             {
                 ExitWith(InterruptType.Error);
                 throw;
             }
+
+            _callback = playInfo.Callback;
+            _reason = InterruptType.None;
+
+            ElapsedTime = 0f;
+            _pendings.Clear();
+            _pendings.AddRange(_orderedComponents);
+
+            _readyBuffer.Clear();
         }
 
         protected override void OnUpdate()
         {
-            ElapsedTime += Time.deltaTime;
-
-            if (_playInfo.PlayTime.HasValue)
+            for (int i = _runnings.Count - 1; i >= 0; i--)
             {
-                if (ElapsedTime >= _playInfo.PlayTime)
+                var component = _runnings[i];
+                if (!component.Active)
                 {
-                    ElapsedTime = _playInfo.PlayTime.Value;
-                    ExitWith(InterruptType.Timeover);
-                    return;
+                    if (component.InterruptAllOnDeactivate)
+                    {
+                        ExitWith(InterruptType.Completed);
+                        return;
+                    }
+
+                    _runnings.RemoveAt(i);
+                    _completes.Add(component);
                 }
             }
 
+            if (_completes.Count >= _components.Count)
+            {
+                ExitWith(InterruptType.Completed);
+                return;
+            }
+
+            ElapsedTime += Time.deltaTime;
+
             try
             {
-                if (_components.Any(c => !c.Active && c.InterruptAllOnDeactivate))
+                _readyBuffer.Clear();
+                for (int i = 0; i < _pendings.Count; i++)
                 {
-                    ExitWith(InterruptType.Completed);
-                    return;
+                    var component = _pendings[i];
+
+                    if (_components[component].order.CanPlay(_completes))
+                        _readyBuffer.Add(component);
                 }
 
-                var components = _components.Where(c => c.Active);
-
-                if (!_playInfo.PlayTime.HasValue && !components.Any())
+                for (int i = 0; i < _readyBuffer.Count; i++)
                 {
-                    ExitWith(InterruptType.Completed);
-                    return;
+                    var component = _readyBuffer[i];
+
+                    _pendings.Remove(component);
+                    component.Enter(ElapsedTime, _components[component].input);
+                    _runnings.Add(component);
                 }
 
-                foreach (var component in components)
-                    component.Update(ElapsedTime);
+                for (int i = 0; i < _runnings.Count; i++)
+                    _runnings[i].Update(ElapsedTime);
             }
             catch
             {
@@ -167,29 +225,41 @@ namespace Actors.Monsters.Actions
 
         protected override void OnExit()
         {
-            if (_reason == InterruptType.None)
+            try
             {
-                StopComponents(InterruptType.Interrupted);
-                _playInfo.Callback?.Invoke(new ActionResult(ResultType.Interrupted));
-                return;
+                if (_reason == InterruptType.None)
+                {
+                    StopAllComponents(InterruptType.Interrupted);
+                    _callback?.Invoke(new ActionResult(ResultType.Interrupted));
+                }
+                else
+                {
+                    _callback?.Invoke(new ActionResult(_reason.ToResultType()));
+                }
             }
-
-            _playInfo.Callback?.Invoke(new ActionResult(_reason.ToResultType()));
-            _playInfo = null;
+            finally
+            {
+                _callback = null;
+            }
         }
 
         private void ExitWith(InterruptType reason)
         {
             _reason = reason;
-            StopComponents(reason);
+            StopAllComponents(reason);
 
             Exit();
         }
 
-        private void StopComponents(InterruptType interruptType)
+        private void StopAllComponents(InterruptType interruptType)
         {
-            foreach (var component in _components)
+            foreach (var (component, _) in _components)
                 component.Interrupt(interruptType);
+
+            _pendings.Clear();
+            _runnings.Clear();
+            _completes.Clear();
+            _readyBuffer.Clear();
         }
     }
 }

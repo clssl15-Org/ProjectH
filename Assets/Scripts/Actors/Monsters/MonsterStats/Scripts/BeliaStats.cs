@@ -25,7 +25,7 @@ namespace Actors.Monsters
         private T InvalidProperty<T>(T property, string propertyName)
         {
             throw new InvalidOperationException(
-                $"'{propertyName}' property of {nameof(BeliaStats)} is not supported. Use specific attack power properties instead.");
+                $"'{propertyName}' property of {nameof(BeliaStats)} is not supported. Use specific properties instead.");
         }
 
         

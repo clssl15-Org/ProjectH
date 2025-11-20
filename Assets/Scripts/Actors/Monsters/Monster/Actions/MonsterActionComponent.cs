@@ -5,7 +5,6 @@ namespace Actors.Monsters.Actions
     public enum InterruptType
     {
         None,
-        Timeover,
         Error,
         Completed,
         Interrupted,
@@ -25,15 +24,15 @@ namespace Actors.Monsters.Actions
         // Content
         public virtual void SetParent(MonsterAction monsterAction) => MonsterAction = monsterAction;
 
-        public void Enter(object input = null)
+        public void Enter(float currentTime, object input = null)
         {
             if (Active)
                 return;
 
             Active = true;
-            OnEnter(input);
+            OnEnter(currentTime, input);
         }
-        protected virtual void OnEnter(object input) { }
+        protected virtual void OnEnter(float currentTime, object input) { }
 
         public void Update(float elapsedTime) => OnUpdate(elapsedTime);
         protected virtual void OnUpdate(float elapsedTime) { }
@@ -62,7 +61,6 @@ namespace Actors.Monsters.Actions
         public static ResultType ToResultType(this InterruptType interruptType) => interruptType switch
         {
             InterruptType.None => ResultType.Interrupted,
-            InterruptType.Timeover => ResultType.Success,
             InterruptType.Error => ResultType.InvalidOperation,
             InterruptType.Completed => ResultType.Success,
             InterruptType.Interrupted => ResultType.Interrupted,

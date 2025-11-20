@@ -46,6 +46,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelayComponent()
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
@@ -81,7 +82,7 @@ namespace Actors.Monsters
 
                 second
                     .GetComponent<DarkMonsterSecondPhase>()
-                    .Initialize(SceneAssetsLibrary, PlatformManager);
+                    .Initialize(GameAssetsLibrary, PlatformManager);
 
                 second.transform.position = transform.position;
             }

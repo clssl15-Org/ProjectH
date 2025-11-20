@@ -193,7 +193,7 @@ namespace Infrastructure.StateMachines.FSM
             }
 
 
-            private string Ctx(string message) => ownerWork.Ctx(message);
+            private string Ctx(string message) => ownerWork.FormatLogMessage(message);
         }
     }
 }

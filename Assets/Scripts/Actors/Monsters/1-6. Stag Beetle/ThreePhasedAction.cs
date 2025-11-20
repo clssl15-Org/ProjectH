@@ -104,7 +104,7 @@ namespace Actors.Monsters
                         }));
             }
 
-            protected override void OnEnter(object input = null)
+            protected override void OnEnter(float _, object __)
             {
                 _work.Enter();
             }

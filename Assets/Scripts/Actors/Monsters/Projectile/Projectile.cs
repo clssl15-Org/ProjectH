@@ -25,8 +25,14 @@ namespace Actors.Monsters
                 return;
             }
 
-            if (!_platformManager.Bound.Contains(transform.position))
+            var min = _platformManager.Bound.min;
+            var max = _platformManager.Bound.max;
+
+            if (transform.position.x < min.x || transform.position.x > max.x
+                || transform.position.y < min.y || transform.position.y > max.y)
+            {
                 Destroy(gameObject);
+            }
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)

@@ -1,3 +1,4 @@
+using System;
 using Actors.Monsters.Actions;
 using Infrastructure;
 using UnityEngine;
@@ -10,11 +11,14 @@ namespace Actors.Monsters
         Direction Direction { get; set; }
         bool IsAlive { get; set; }
 
+        event Action<IMonsterConditionData> ConditionChanged;
+        event Action Destroyed;
+
         int CurrentPlatform { get; set; }
         bool IgnorePlayerInteraction { get; set; }
 
         MonsterStats StatsInfo { get; }
-        GameAssetLibrary SceneAssetsLibrary { get; }
+        GameAssetLibrary GameAssetsLibrary { get; }
         SpriteRenderer SpriteRenderer { get; }
         Rigidbody2D Rigidbody { get; }
         Collider2D Collider { get; }

@@ -44,7 +44,7 @@ namespace Actors.Monsters
                 if (!animator.TryFindClip(impactAnimName, out var clip))
                 {
                     Debug.LogWarning(
-                        Ctx($"[CrowProjectile] {nameof(_impactPrefab)}의 애니메이터가 {impactAnimName} 애니메이션을 가지고 있지 않기 때문에 Impact 애니메이션을 재생하지 않습니다."));
+                        Ctx($"{nameof(_impactPrefab)}의 애니메이터가 {impactAnimName} 애니메이션을 가지고 있지 않기 때문에 Impact 애니메이션을 재생하지 않습니다."));
 
                     impactTime = 0;
                     return false;

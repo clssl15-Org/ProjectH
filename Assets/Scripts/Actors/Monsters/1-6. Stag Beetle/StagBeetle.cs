@@ -105,6 +105,7 @@ namespace Actors.Monsters
                         n => n + "Anticipation", n => n + "Recoil",
                         whileMainAction: (playtime, length) => playtime > length)));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelayComponent()
                     .AddAnimationComponent("HitGround"));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());

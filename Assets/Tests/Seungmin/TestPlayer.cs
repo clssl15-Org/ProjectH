@@ -33,8 +33,10 @@ public class TestPlayer : MonoBehaviour, IPlayer
     // Internal
     private PlatformDetector _platformDetector;
 
+#pragma warning disable CS0067
     public event Action<PlayerCondition> ConditionChanged;
     public event Action Destroyed;
+#pragma warning restore
 
 
     // Content

@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ae91e4764855747a5e6ddbc9682653, type: 3}
   m_Name: 3. Belia Stats (Debug)
   m_EditorClassIdentifier: 
+  _maxHP: 3
   _useCustomSpeed: 0
   _moveSpeed: 3
   _speed: 0
-  _maxHP: 5
+  _attackPower: 1
+  _attackCooltime: 0.5
+  _invincibleDuration: 0.5
   _slashAttackPower: 1
   _curvedAreaAttackPower: 1
   _dashAttackPower: 1

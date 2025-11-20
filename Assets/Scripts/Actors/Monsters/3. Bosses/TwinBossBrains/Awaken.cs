@@ -9,7 +9,7 @@ namespace Actors.Monsters.Stage3Bosses
         public Awaken()
         {
             AbortPolicies = AbortPolicies.Self;
-            HierarchyMode = HierarchyMode.Selector;
+            HierarchyMode = HierarchyMode.Sequence;
             LoopType = LoopType.Forced;
         }
 

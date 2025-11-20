@@ -31,7 +31,7 @@ namespace Actors.Monsters.Actions
             _getDirections = getDirections;
         }
 
-        protected override void OnEnter(object _)
+        protected override void OnEnter(float _, object __)
         {
             _currentLaunchInfo = _getLaunchInfo();
             _launched = false;

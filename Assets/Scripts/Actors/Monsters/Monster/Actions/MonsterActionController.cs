@@ -4,6 +4,18 @@ using UnityEngine;
 
 namespace Actors.Monsters.Actions
 {
+    public record MonsterActionPlayInfo(
+    string Name,
+    Action<ActionResult> Callback = null,
+    object[] Inputs = null)
+    {
+        public MonsterActionPlayInfo(
+            MonsterActionType ActionType,
+            Action<ActionResult> Callback = null,
+            object[] Inputs = null)
+            : this(ActionType.ToString(), Callback, Inputs) { }
+    }
+
     internal abstract class MonsterActionController : Work
     {
         public IMonsterInternal Owner { get; }

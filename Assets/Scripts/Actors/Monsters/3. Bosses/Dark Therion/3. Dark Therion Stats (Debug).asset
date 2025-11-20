@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c02144d3c00a6c428655611f2ead9c9, type: 3}
+  m_Name: 3. Dark Therion Stats (Debug)
+  m_EditorClassIdentifier: 
+  _maxHP: 3
+  _useCustomSpeed: 1
+  _moveSpeed: 3
+  _speed: 30
+  _attackPower: 1
+  _attackCooltime: 0.5
+  _invincibleDuration: 0.5
+  _delayBeforeAttack: 0.5
+  _projectileAttackPower: 1
+  _projectileCount: 3
+  _projectileSpeed: 5
+  _projectileFireGap: 0.8
+  _bulletAttackPower: 1
+  _bulletCircleCount: 3
+  _bulletCircleStartRadius: 1
+  _bulletCircleRadiusStep: 0.5
+  _bulletCircleSpacing: 0.5
+  _bulletCircleRadiusSpeedBase: 3
+  _bulletCircleRadiusSpeedStep: 1
+  _bulletAngularSpeed: 90
+  _spikeAttackPower: 1

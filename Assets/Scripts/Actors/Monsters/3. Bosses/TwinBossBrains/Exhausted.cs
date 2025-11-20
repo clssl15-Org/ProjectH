@@ -10,7 +10,7 @@ namespace Actors.Monsters.Stage3Bosses
         // Internal
         private readonly string _monsterAction;
         private MonsterConditionData _notification;
-
+        private float _originalGravityScale;    
 
         // Content
         public Exhausted() : this(nameof(Exhausted)) { }
@@ -21,6 +21,10 @@ namespace Actors.Monsters.Stage3Bosses
         protected override void OnOpen(object[] _)
         {
             Owner.IgnorePlayerInteraction = true;
+            ((ITwinBoss)Owner).IsExhausted = true;
+
+            _originalGravityScale = Owner.Rigidbody.gravityScale;
+            Owner.Rigidbody.gravityScale = 1f;
 
             _notification = new MonsterConditionData(MonsterCondition.General, nameof(Exhausted));
             Owner.NotifyCondition(_notification);
@@ -45,6 +49,9 @@ namespace Actors.Monsters.Stage3Bosses
         protected override void OnHalt(DetailedNodeStatus _)
         {
             Owner.IgnorePlayerInteraction = false;
+            ((ITwinBoss)Owner).IsExhausted = false;
+
+            Owner.Rigidbody.gravityScale = _originalGravityScale;
 
             _notification?.Complete();
             _notification = null;

@@ -68,9 +68,9 @@ namespace Actors.Monsters
         [SerializeField] internal bool DefaultIsRight;
 
         [Header("Bindings")]
-        [SerializeField] internal GameAssetLibrary SceneAssetsLibrary;
+        [SerializeField] internal GameAssetLibrary GameAssetsLibrary;
         [SerializeField] internal PlatformManager PlatformManager;
-        GameAssetLibrary IMonsterInternal.SceneAssetsLibrary => SceneAssetsLibrary;
+        GameAssetLibrary IMonsterInternal.GameAssetsLibrary => GameAssetsLibrary;
 
 
         // Display
@@ -130,7 +130,7 @@ namespace Actors.Monsters
         /// </summary>
         public void Initialize(GameAssetLibrary sceneAssetsLibrary, PlatformManager platformManager)
         {
-            SceneAssetsLibrary = sceneAssetsLibrary;
+            GameAssetsLibrary = sceneAssetsLibrary;
             PlatformManager = platformManager;
         }
 
@@ -179,9 +179,9 @@ namespace Actors.Monsters
                 throw new InvalidOperationException(FormatLogMessage(
                     $"{nameof(PlatformManager)}이(가) 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
-            if (!SceneAssetsLibrary)
+            if (!GameAssetsLibrary)
                 Debug.LogWarning(FormatLogMessage(
-                    $"이 몬스터는 {nameof(SceneAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
+                    $"이 몬스터는 {nameof(GameAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
                     "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
             PlatformDetector = GetComponent<PlatformDetector>();

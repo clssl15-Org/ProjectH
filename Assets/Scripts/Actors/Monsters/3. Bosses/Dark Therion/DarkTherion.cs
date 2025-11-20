@@ -2,6 +2,7 @@ using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
+using Infrastructure;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -9,24 +10,31 @@ using UnityEditor;
 namespace Actors.Monsters.Stage3Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
-    public partial class Belia : Monster<BeliaStats>, ITwinBoss
+    public partial class DarkTherion : Monster<DarkTherionStats>, ITwinBoss
     {
         // Front
         public enum AttackMode
         {
             Any,
-            Slash,
-            CurvedArea,
-            Dash
+            Projectile,
+            Bullet,
+            Spike
         }
 
-        [Header("Belia")]
-        [SerializeField] private GameObject _curveEffectPrefab;
-        [SerializeField] private Vector2 _curveEffectWorldPosition;
+        [Header("Dark Therion")]
+        [SerializeField] private Configuration _configuration;
+        [SerializeField] private KinematicProjectile _projectilePrefab;
+        [SerializeField] private KinematicProjectile _spikePrefab;
+        [Space]
+        [SerializeField, Min(0)] private float _bulletDestroyTime = 10f;
+        [SerializeField] private Transform[] _spikeSpawnPoints;
+        [Space]
+        [SerializeField] private Transform[] _movePoints;
+        [SerializeField] private float _acceleration = 20f;
+        [SerializeField] private float _deceleration = 30f;
+        [SerializeField] private float _arriveDistanceTolerance = 0.1f;
         [Space]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
-        [SerializeField] private float _dashStartTime = 0f;
-        [SerializeField] private float _dashForce = 100f;
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -34,27 +42,23 @@ namespace Actors.Monsters.Stage3Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
+        public bool IsExhausted { get; set; } = false;
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
 
         // Internal
-        private class BeliaBrain : MonsterBrain
+        private class DarkTherionBrain : MonsterBrain
         {
-            public BeliaBrain(IMonsterInternal owner) : base(owner)
+            public DarkTherionBrain(DarkTherion darkTherion) : base(darkTherion)
             {
                 Blackboard.Properties[ITwinBoss.IsAwaken] = false;
 
                 AddChild(new Alive()
                     .AddChild(new Idle())
                     .AddChild(new Awaken()
-                        .AddChild(new ValidPlatform() { HierarchyMode = HierarchyMode.Sequence }
-                            .AddChild(new Engaged(Engaged.RangeType.Contact)
-                                .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd())
-                            )
-                            .AddChild(new BeliaAttackBrain())
-                        )
-                        .AddChild(new NotValidPlatform())
+                        .AddChild(new DarkTherionMoveBrain())
+                        .AddChild(new Await(darkTherion.StatsInfo.DelayBeforeAttack))
+                        .AddChild(new DarkTherionAttackBrain())
                     )
                 );
                 AddChild(new Exhausted());
@@ -62,22 +66,26 @@ namespace Actors.Monsters.Stage3Bosses
             }
         }
 
-        private class BeliaActionController : MonsterActionController
+        private class DarkTherionActionController : MonsterActionController
         {
-            public BeliaActionController(Belia belia) : base(belia)
+            public DarkTherionActionController(DarkTherion darkTherion) : base(darkTherion)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Walk)
                     .AddAnimationComponent());
-                AddChild(new MonsterAction(AttackMode.Slash.ToString() + "Attack")
-                    .AddAnimationComponent());
-                AddChild(new MonsterAction(AttackMode.CurvedArea.ToString() + "Attack")
-                    .AddComponent(new BeliaCurvedAreaAttackAction(belia._curveEffectPrefab, belia._curveEffectWorldPosition)));
-                AddChild(new MonsterAction(AttackMode.Dash.ToString() + "Attack")
+                AddChild(new MonsterAction("ProjectileAttack")
+                    .AddAnimationComponent()
+                    .AddComponent(new DarkTherionProjectileAttackAction()));
+                AddChild(new MonsterAction("BulletAttack")
                     .AddAnimationComponent(interruptAllOnDeactivate: true)
-                    .AddComponent(new BeliaDashAttackAction(belia._dashStartTime, belia._dashForce)));
+                    .AddComponent(new DarkTherionBulletAttackAction()));
+                AddChild(new MonsterAction("SpikeAttack")
+                    .AddAnimationComponent()
+                    .AddComponent(new DarkTherionSpikeAttackAction())
+                    .AddDelayComponent(5f, true));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelayComponent()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction("Exhausted")
                     .AddAnimationComponent());
@@ -100,10 +108,10 @@ namespace Actors.Monsters.Stage3Bosses
         {
             base.Start();
 
-            ActionController = new BeliaActionController(this);
+            ActionController = new DarkTherionActionController(this);
             ActionController.Enter();
 
-            Brain = new BeliaBrain(this);
+            Brain = new DarkTherionBrain(this);
 
 
             // ------- Debug -------
@@ -133,6 +141,11 @@ namespace Actors.Monsters.Stage3Bosses
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
 
+        public void Revive(float hpRate)
+        {
+            HP = Mathf.CeilToInt(hpRate * StatsInfo.MaxHP);
+        }
+
         public void Die()
         {
             Brain.SelectChild(new SelectionRequest[]
@@ -154,13 +167,13 @@ namespace Actors.Monsters.Stage3Bosses
 
 
 #if UNITY_EDITOR
-        [CustomEditor(typeof(Belia))]
-        private class BeliaEditor : Editor
+        [CustomEditor(typeof(DarkTherion))]
+        private class DarkTherionEditor : Editor
         {
             public override void OnInspectorGUI()
             {
                 base.OnInspectorGUI();
-                var target = (Belia)base.target;
+                var target = (DarkTherion)base.target;
 
                 if (!target._autoAwake && GUILayout.Button("Awake"))
                     target.DoAwake();

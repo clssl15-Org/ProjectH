@@ -59,7 +59,7 @@ namespace Actors.Monsters.Actions
             _mainAnimationRemainingTime = _mainAnimationLength;
 
             _originalMaterial = _monster.SpriteRenderer.material;
-            _monster.SpriteRenderer.material = _monster.SceneAssetsLibrary.SolidColor;
+            _monster.SpriteRenderer.material = _monster.GameAssetsLibrary.SolidColor;
             _monster.SpriteRenderer.material.color = Color.white;
 
             _isRunning = true;

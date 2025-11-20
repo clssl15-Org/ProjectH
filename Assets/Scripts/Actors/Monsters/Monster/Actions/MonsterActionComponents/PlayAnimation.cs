@@ -64,7 +64,7 @@ namespace Actors.Monsters.Actions
                     }));
         }
 
-        protected override void OnEnter(object input = null)
+        protected override void OnEnter(float _, object input = null)
         {
             if (input != null && input is not AnimationPlayInfo animationPlayInfo)
                 throw new ArgumentException(MonsterAction.Owner.FormatLogMessage(

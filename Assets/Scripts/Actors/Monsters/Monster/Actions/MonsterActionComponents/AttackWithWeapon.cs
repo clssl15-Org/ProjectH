@@ -19,7 +19,7 @@ namespace Actors.Monsters.Actions
             _startTime = startTime;
         }
 
-        protected override void OnEnter(object _)
+        protected override void OnEnter(float _, object __)
         {
             _isWeaponSetted = false;
 

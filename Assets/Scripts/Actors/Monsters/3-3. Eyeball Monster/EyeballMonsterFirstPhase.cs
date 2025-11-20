@@ -47,6 +47,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelayComponent()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
@@ -82,7 +83,7 @@ namespace Actors.Monsters
                     var second = Instantiate(secondPrefab);
                     second
                         .GetComponent<EyeballMonsterSecondPhase>()
-                        .Initialize(SceneAssetsLibrary, PlatformManager);
+                        .Initialize(GameAssetsLibrary, PlatformManager);
 
                     second.transform.position = transform.position;
                     second.SetActive(true);

@@ -24,7 +24,6 @@ namespace Actors.Monsters
 
         protected override void Update()
         {
-            print(transform.position);
             transform.position += Time.deltaTime * Speed * Direction;
             base.Update();
         }

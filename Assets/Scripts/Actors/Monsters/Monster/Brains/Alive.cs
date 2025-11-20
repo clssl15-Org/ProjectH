@@ -6,7 +6,7 @@ namespace Actors.Monsters.Brains
     {
         public Alive()
         {
-            AbortPolicies = AbortPolicies.Self;
+            AbortPolicies = AbortPolicies.Self | AbortPolicies.LowerPriority;
             HierarchyMode = HierarchyMode.Selector;
             LoopType = LoopType.Forced;
         }

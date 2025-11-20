@@ -46,6 +46,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction("Fly")
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelayComponent()
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent()

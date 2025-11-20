@@ -56,7 +56,7 @@ namespace Infrastructure.StateMachines.FSM
             ThrowIfDisposed();
 
             if (!hierarchy.CanOpen)
-                throw new InvalidOperationException(Ctx("Cannot enter because the parent is not active."));
+                throw new InvalidOperationException(FormatLogMessage("Cannot enter because the parent is not active."));
 
             if (_active) return;
             _active = true;
@@ -331,7 +331,7 @@ namespace Infrastructure.StateMachines.FSM
         private void ThrowIfDisposed()
         {
             if (IsDisposed)
-                throw new ObjectDisposedException(GetType().Name, Ctx("The work has been disposed."));
+                throw new ObjectDisposedException(GetType().Name, FormatLogMessage("The work has been disposed."));
         }
 
         public void Dispose()
@@ -351,7 +351,7 @@ namespace Infrastructure.StateMachines.FSM
         public virtual void OnDispose() { }
 
 
-        protected string Ctx(string message) => $"[Work '{Name}'] {message}";
+        protected string FormatLogMessage(string message) => $"[Work '{Name}'] {message}";
 
         public override string ToString()
         {
