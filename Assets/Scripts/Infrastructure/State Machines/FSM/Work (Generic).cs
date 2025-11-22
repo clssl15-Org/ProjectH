@@ -1,4 +1,4 @@
-namespace Infrastructure.StateMachines.FSM
+namespace Infrastructure.StateMachines.Fsm
 {
     public class Work<TParent> : Work where TParent : Work
     {

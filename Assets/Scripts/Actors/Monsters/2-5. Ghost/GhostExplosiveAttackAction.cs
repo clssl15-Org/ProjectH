@@ -1,6 +1,6 @@
 using Actors.Monsters.Actions;
 using Infrastructure;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
 
 namespace Actors.Monsters

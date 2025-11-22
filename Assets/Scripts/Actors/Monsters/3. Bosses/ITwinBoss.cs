@@ -5,7 +5,7 @@ namespace Actors.Monsters.Stage3Bosses
         const string IsAwaken = "IsAwaken";
         bool IsExhausted { get; set; }
 
-        void Initialize(IPlayer player);
+        void InitializePlayer(IPlayer player);
         void DoAwake();
         void Revive(float hpRate);
         void Die();

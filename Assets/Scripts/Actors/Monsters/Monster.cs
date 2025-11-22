@@ -69,8 +69,8 @@ namespace Actors.Monsters
 
         [Header("Bindings")]
         [SerializeField] internal GameAssetLibrary GameAssetsLibrary;
+        [SerializeField] internal Configuration Configuration;
         [SerializeField] internal PlatformManager PlatformManager;
-        GameAssetLibrary IMonsterInternal.GameAssetsLibrary => GameAssetsLibrary;
 
 
         // Display
@@ -86,7 +86,7 @@ namespace Actors.Monsters
         internal Rigidbody2D Rigidbody { get; private set; }
 
         public int CurrentPlatform { get; set; } = 1;
-        internal PlatformDetector PlatformDetector { get; private set; }
+        internal virtual PlatformDetector PlatformDetector { get; private set; }
         internal virtual GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
         private MonsterPlayerDetector _playerDetector;
@@ -111,6 +111,9 @@ namespace Actors.Monsters
         Collider2D IMonsterInternal.Collider => Collider;
         Rigidbody2D IMonsterInternal.Rigidbody => Rigidbody;
         int IMonsterInternal.CurrentPlatform { get => CurrentPlatform; set => CurrentPlatform = value; }
+        GameAssetLibrary IMonsterInternal.GameAssetsLibrary => GameAssetsLibrary;
+        Configuration IMonsterInternal.Configuration => Configuration;
+        PlatformManager IMonsterInternal.PlatformManager => PlatformManager;
         PlatformDetector IMonsterInternal.PlatformDetector => PlatformDetector;
         GameObject IMonsterInternal.DetectedPlayer => DetectedPlayer;
         MonsterAnimationPlayer IMonsterInternal.AnimationPlayer => AnimationPlayer;
@@ -128,9 +131,13 @@ namespace Actors.Monsters
         /// <summary>
         /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
         /// </summary>
-        public void Initialize(GameAssetLibrary sceneAssetsLibrary, PlatformManager platformManager)
+        public void Initialize(
+            GameAssetLibrary sceneAssetsLibrary,
+            Configuration configuration,
+            PlatformManager platformManager)
         {
             GameAssetsLibrary = sceneAssetsLibrary;
+            Configuration = configuration;
             PlatformManager = platformManager;
         }
 
@@ -184,8 +191,9 @@ namespace Actors.Monsters
                     $"이 몬스터는 {nameof(GameAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
                     "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
-            PlatformDetector = GetComponent<PlatformDetector>();
-            PlatformDetector.SetPlatformManager(PlatformManager);
+            var _platformDetector = GetComponent<PlatformDetector>();
+            PlatformDetector = _platformDetector;
+            _platformDetector.SetPlatformManager(PlatformManager);
             #endregion
 
 

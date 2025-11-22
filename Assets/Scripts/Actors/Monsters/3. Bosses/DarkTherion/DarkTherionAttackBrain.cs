@@ -32,7 +32,7 @@ namespace Actors.Monsters.Stage3Bosses
                 if (!Owner.TryDoAction(new(
                     mode.ToString() + "Attack",
                     result => Complete(result),
-                    Inputs: new object[] { null, owner._targetPlayer.transform }),
+                    Inputs: new object[] { null, (Func<Vector2>)(() => owner._targetPlayer.transform.position) }),
                     out var reason,
                     allowRestart: true))
                 {

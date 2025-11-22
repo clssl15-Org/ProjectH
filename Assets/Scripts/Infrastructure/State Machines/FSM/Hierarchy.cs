@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Infrastructure.StateMachines.FSM
+namespace Infrastructure.StateMachines.Fsm
 {
     public partial class Work
     {
         protected class HierarchyManager : IDisposable
         {
             // Front
-            public bool Active { get; private set; } = false;
-
             public Work Parent
             {
                 get => _parent;
@@ -20,7 +18,7 @@ namespace Infrastructure.StateMachines.FSM
                     _parent = value;
                 }
             }
-            public Work CurrentChild { get; private set; }
+            public IChildWork CurrentChild { get; private set; }
 
             public string ReservedChild { get; private set; } = string.Empty;
             private object[] reservedArgs = null;
@@ -29,12 +27,12 @@ namespace Infrastructure.StateMachines.FSM
 
             // Control
             public bool CanOpen => Parent?.Active ?? true;
-            public readonly IReadOnlyDictionary<string, Work> Children;
+            public readonly IReadOnlyDictionary<string, IChildWork> Children;
 
             // Internal
             private readonly Work ownerWork;
             private Work _parent;
-            private readonly Dictionary<string, Work> children;
+            private readonly Dictionary<string, IChildWork> children;
 
             private bool isDisposed = false;
 
@@ -50,9 +48,6 @@ namespace Infrastructure.StateMachines.FSM
 
             public void Enter(params object[] args)
             {
-                if (Active) return;
-                Active = true;
-
                 if (!string.IsNullOrWhiteSpace(ReservedChild))
                 {
                     CurrentChild = children[ReservedChild];
@@ -69,15 +64,11 @@ namespace Infrastructure.StateMachines.FSM
 
             public void Update()
             {
-                if (!Active) return;
                 CurrentChild?.Update();
             }
 
             public void Exit()
             {
-                if (!Active) return;
-                Active = false;
-
                 var currentChild = CurrentChild;
                 CurrentChild = null;
 
@@ -98,7 +89,7 @@ namespace Infrastructure.StateMachines.FSM
                 if (!children.ContainsKey(next))
                     throw new ArgumentException(Ctx($"No child named '{next}' exists."), nameof(next));
 
-                if (Active && next == CurrentChild?.Name && !restartIfPossible)
+                if (next == CurrentChild?.Name && !restartIfPossible)
                     return;
 
                 if (!ownerWork.Active) return;
@@ -119,25 +110,28 @@ namespace Infrastructure.StateMachines.FSM
 
 
             #region Child Management
-            public T AddChild<T>(string name, T work, bool primary = false) where T : Work
+            public T AddChild<T>(string name, T child, bool primary = false) where T : class, IChildWork
             {
                 ThrowIfActive();
+                var childWork = child as Work;
 
                 if (children.ContainsKey(name))
-                    throw new ArgumentException(Ctx($"A child with name '{name}' already exists."), nameof(work));
-                if (ownerWork == work)
-                    throw new ArgumentException(Ctx("A work cannot be its own child."), nameof(work));
-                if (work.hierarchy.Parent != null)
-                    throw new InvalidOperationException(Ctx($"Child '{name}' already has a parent ({work.hierarchy.Parent.Name})."));
+                    throw new ArgumentException(Ctx($"A child with name '{name}' already exists."), nameof(child));
+                if (ownerWork == child)
+                    throw new ArgumentException(Ctx("A work cannot be its own child."), nameof(child));
+                if (childWork != null && childWork.hierarchy.Parent != null)
+                    throw new InvalidOperationException(Ctx($"Child '{name}' already has a parent ({childWork.hierarchy.Parent.Name})."));
 
-                work.hierarchy.Parent = ownerWork;
-                children.Add(name, work);
+                if (childWork != null)
+                    childWork.hierarchy.Parent = ownerWork;
+
+                children.Add(name, child);
 
                 if (primary) SetPrimary(name);
-                return work;
+                return child;
             }
 
-            public Work RemoveChild(string name)
+            public IChildWork RemoveChild(string name)
             {
                 ThrowIfActive();
 
@@ -146,17 +140,20 @@ namespace Infrastructure.StateMachines.FSM
                 if (!children.ContainsKey(name))
                     throw new ArgumentException(Ctx($"This work does not contain a child named '{name}'."), nameof(name));
 
-                var work = children[name];
-                work.Exit();
+                var child = children[name];
+                var childWork = child as Work;
+                child.Exit();
 
-                if (CurrentChild == work) CurrentChild = null;
+                if (CurrentChild == child) CurrentChild = null;
                 if (ReservedChild == name) ReservedChild = string.Empty;
                 if (PrimaryChild == name) PrimaryChild = string.Empty;
 
-                work.hierarchy.Parent = null;
+                if (childWork != null)
+                    childWork.hierarchy.Parent = null;
+
                 children.Remove(name);
 
-                return work;
+                return child;
             }
 
             public void SetPrimary(string name)
@@ -191,7 +188,6 @@ namespace Infrastructure.StateMachines.FSM
                 foreach (var child in children.Values.ToList())
                     child.Dispose();
             }
-
 
             private string Ctx(string message) => ownerWork.FormatLogMessage(message);
         }

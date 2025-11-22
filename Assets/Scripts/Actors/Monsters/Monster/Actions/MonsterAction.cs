@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
 
 namespace Actors.Monsters.Actions
@@ -11,10 +11,10 @@ namespace Actors.Monsters.Actions
         // Front
         public record PlayOrder(params MonsterActionComponent[] Afters)
         {
-            public bool HasNoDependency => Afters == null || Afters.Length == 0;
+            public bool HasDependency => Afters != null && Afters.Length > 0;
 
             public bool CanPlay(IList<MonsterActionComponent> completes) =>
-                HasNoDependency || Afters.All(after => completes.Any(c => c == after));
+                !HasDependency || Afters.All(after => completes.Any(c => c == after));
         }
 
         public IMonsterInternal Owner
@@ -102,8 +102,18 @@ namespace Actors.Monsters.Actions
             AddAnimationComponent(animPlayInfo, out _, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
 
         public MonsterAction AddAnimationComponent(
+            out MonsterActionComponent self,
+            string trigger = null,
+            bool interruptAllOnDeactivate = false,
+            float delayBeforePlay = 0f,
+            float delayAfterPlay = 0f,
+            PlayOrder after = null) =>
+            AddAnimationComponent((MonsterAnimationPlayInfo)null, out self, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+
+
+        public MonsterAction AddAnimationComponent(
             MonsterAnimationPlayInfo animPlayInfo,
-            out MonsterActionComponent after,
+            out MonsterActionComponent self,
             string trigger = null,
             bool interruptAllOnDeactivate = false,
             float delayBeforePlay = 0f,
@@ -117,7 +127,7 @@ namespace Actors.Monsters.Actions
                 InterruptAllOnDeactivate = interruptAllOnDeactivate,
                 DelayBeforePlay = delayBeforePlay,
                 DelayAfterPlay = delayAfterPlay
-            }, out after, order);
+            }, out self, order);
 
             return this;
         }

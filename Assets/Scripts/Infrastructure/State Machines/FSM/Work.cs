@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using static Infrastructure.StateMachines.Tools;
 
-namespace Infrastructure.StateMachines.FSM
+namespace Infrastructure.StateMachines.Fsm
 {
-    public partial class Work : IDisposable
+    public partial class Work : IChildWork
     {
         // Front
         public string Name { get; init; }
@@ -250,7 +250,7 @@ namespace Infrastructure.StateMachines.FSM
         /// </summary>
         /// <param name="name">The name of the child to remove.</param>
         /// <returns>The removed child <see cref="Work"/>.</returns>
-        public Work RemoveChild(object name)
+        public IChildWork RemoveChild(object name)
         {
             ThrowIfDisposed();
             return hierarchy.RemoveChild(GetName(name));
@@ -282,13 +282,13 @@ namespace Infrastructure.StateMachines.FSM
             return this;
         }
 
-        public bool TryGetCurrentChild(out Work current) => TryGetCurrentChild<Work>(out current);
+        public bool TryGetCurrentChild(out IChildWork current) => TryGetCurrentChild<IChildWork>(out current);
         /// <summary>
         /// Attempts to retrieve the current child of the specified type.
         /// </summary>
-        public bool TryGetCurrentChild<T>(out T current) where T : Work
+        public bool TryGetCurrentChild<T>(out T current) where T : IChildWork
         {
-            current = null;
+            current = default;
 
             if (hierarchy.CurrentChild is null)
                 return false;
@@ -299,10 +299,10 @@ namespace Infrastructure.StateMachines.FSM
             return true;
         }
 
-        public bool TryGetChild<T>(out T current) where T : Work => TryGetChild(GetName(typeof(T)), out current);
-        public bool TryGetChild<T>(string name, out T current) where T : Work
+        public bool TryGetChild<T>(out T current) where T : IChildWork => TryGetChild(GetName(typeof(T)), out current);
+        public bool TryGetChild<T>(string name, out T current) where T : IChildWork
         {
-            current = null;
+            current = default;
 
             if (!hierarchy.Children.ContainsKey(name))
                 return false;
@@ -317,13 +317,17 @@ namespace Infrastructure.StateMachines.FSM
 
         public string GetFullState()
         {
-            var logs = new List<string>();
+            var logs = new List<string> { Name };
             var current = this;
 
-            do
+            while (current.TryGetCurrentChild(out IChildWork child))
             {
                 logs.Add(current.Name);
-            } while (current.TryGetCurrentChild(out current));
+                current = child as Work;
+
+                if (current == null)
+                    break;
+            }
 
             return string.Join(" - ", logs);
         }

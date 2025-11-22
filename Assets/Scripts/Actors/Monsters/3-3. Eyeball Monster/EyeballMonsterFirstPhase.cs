@@ -83,7 +83,7 @@ namespace Actors.Monsters
                     var second = Instantiate(secondPrefab);
                     second
                         .GetComponent<EyeballMonsterSecondPhase>()
-                        .Initialize(GameAssetsLibrary, PlatformManager);
+                        .Initialize(GameAssetsLibrary, Configuration, PlatformManager);
 
                     second.transform.position = transform.position;
                     second.SetActive(true);

@@ -19,10 +19,10 @@ namespace Actors.Monsters
         public int CurvedAreaAttackPower => _curvedAreaAttackPower;
         public int DashAttackPower => _dashAttackPower;
 
-        public override int AttackPower => InvalidProperty(AttackPower, nameof(AttackPower));
-        public override float AttackCooltime => InvalidProperty(AttackCooltime, nameof(AttackCooltime));
+        public override int AttackPower => InvalidProperty<int>(nameof(AttackPower));
+        public override float AttackCooltime => InvalidProperty<float>(nameof(AttackCooltime));
 
-        private T InvalidProperty<T>(T property, string propertyName)
+        private T InvalidProperty<T>(string propertyName)
         {
             throw new InvalidOperationException(
                 $"'{propertyName}' property of {nameof(BeliaStats)} is not supported. Use specific properties instead.");

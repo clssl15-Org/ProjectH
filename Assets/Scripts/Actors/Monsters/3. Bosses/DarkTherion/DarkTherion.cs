@@ -1,8 +1,9 @@
+using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
-using Infrastructure;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -24,7 +25,7 @@ namespace Actors.Monsters.Stage3Bosses
         [Header("Dark Therion")]
         [SerializeField] private Configuration _configuration;
         [SerializeField] private KinematicProjectile _projectilePrefab;
-        [SerializeField] private KinematicProjectile _spikePrefab;
+        [SerializeField] private Projectile _spikePrefab;
         [Space]
         [SerializeField, Min(0)] private float _bulletDestroyTime = 10f;
         [SerializeField] private Transform[] _spikeSpawnPoints;
@@ -82,7 +83,11 @@ namespace Actors.Monsters.Stage3Bosses
                     .AddComponent(new DarkTherionBulletAttackAction()));
                 AddChild(new MonsterAction("SpikeAttack")
                     .AddAnimationComponent()
-                    .AddComponent(new DarkTherionSpikeAttackAction())
+                    .AddComponent(new SpikeAttackAction(
+                        darkTherion._spikePrefab,
+                        darkTherion._spikeSpawnPoints.Select(p => (Vector2)p.transform.localPosition),
+                        darkTherion.StatsInfo.ProjectileSpeed,
+                        darkTherion.StatsInfo.ProjectileFireGap))
                     .AddDelayComponent(5f, true));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelayComponent()
@@ -99,7 +104,7 @@ namespace Actors.Monsters.Stage3Bosses
 
 
         // Content
-        public void Initialize(IPlayer player)
+        public void InitializePlayer(IPlayer player)
         {
             _player = player;
         }
@@ -118,7 +123,7 @@ namespace Actors.Monsters.Stage3Bosses
             if (_useTargetPlayer
                 && _targetPlayer
                 && _targetPlayer.TryGetComponent<IPlayer>(out var player))
-                Initialize(player);
+                InitializePlayer(player);
 
             if (_autoAwake)
                 DoAwake();

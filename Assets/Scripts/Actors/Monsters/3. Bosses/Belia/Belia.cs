@@ -109,7 +109,7 @@ namespace Actors.Monsters.Stage3Bosses
 
 
         // Content
-        public void Initialize(IPlayer player)
+        public void InitializePlayer(IPlayer player)
         {
             _player = player;
         }
@@ -128,7 +128,7 @@ namespace Actors.Monsters.Stage3Bosses
             if (_useTargetPlayer
                 && _targetPlayer
                 && _targetPlayer.TryGetComponent<IPlayer>(out var player))
-                Initialize(player);
+                InitializePlayer(player);
 
             if (_autoAwake)
                 DoAwake();

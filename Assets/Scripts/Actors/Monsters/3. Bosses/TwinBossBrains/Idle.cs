@@ -1,3 +1,4 @@
+using System;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
@@ -9,13 +10,18 @@ namespace Actors.Monsters.Stage3Bosses
     {
         // Internal
         private readonly string _monsterAction;
+        private bool _haltOnActionEnd;
+        private Action _opened;
 
         // Content
-        public Idle() : this(nameof(Idle)) { }
-        public Idle(string monsterAction)
+        public Idle(MonsterActionType actionType = MonsterActionType.Idle, bool haltOnActionEnd = true, Action opened = null)
+            : this(actionType.ToString(), haltOnActionEnd, opened) { }
+        public Idle(string monsterAction, bool haltOnActionEnd = true, Action opened = null)
         {
             AbortPolicies = AbortPolicies.Self;
             _monsterAction = monsterAction;
+            _haltOnActionEnd = haltOnActionEnd;
+            _opened = opened;
         }
 
         public override bool CheckCondition() =>
@@ -25,7 +31,11 @@ namespace Actors.Monsters.Stage3Bosses
         {
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
-                Callback: result => Complete(),
+                Callback: result =>
+                {
+                    if(_haltOnActionEnd)
+                        Complete();
+                },
                 Inputs: new[]
                 {
                     new PlayAnimation.AnimationPlayInfo()
@@ -38,6 +48,8 @@ namespace Actors.Monsters.Stage3Bosses
 
                 Complete(false);
             }
+
+            _opened?.Invoke();
         }
     }
 }

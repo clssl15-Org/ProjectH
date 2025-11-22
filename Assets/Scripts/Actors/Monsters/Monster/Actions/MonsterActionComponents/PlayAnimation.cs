@@ -1,5 +1,5 @@
 using System;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 
 namespace Actors.Monsters.Actions
 {

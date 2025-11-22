@@ -59,7 +59,6 @@ namespace Actors.Monsters
             {
                 bool rollRight = default;
 
-
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Alert)
@@ -139,18 +138,20 @@ namespace Actors.Monsters
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
-            if (Brain.Blackboard.Committing)
-                StandaloneHitBrain.TryTakeDamage(damageInfo);
-            else
-            {
-                StandaloneHitBrain.Stop();
-                Brain.SelectChild(new SelectionRequest[]
-                {
-                    new(true),
-                    new(true),
-                    new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
-                });
-            }
+            StandaloneHitBrain.TryTakeDamage(damageInfo);
+
+            //if (Brain.Blackboard.Committing)
+            //    StandaloneHitBrain.TryTakeDamage(damageInfo);
+            //else
+            //{
+            //    StandaloneHitBrain.Stop();
+            //    Brain.SelectChild(new SelectionRequest[]
+            //    {
+            //        new(true),
+            //        new(true),
+            //        new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+            //    });
+            //}
         }
     }
 }

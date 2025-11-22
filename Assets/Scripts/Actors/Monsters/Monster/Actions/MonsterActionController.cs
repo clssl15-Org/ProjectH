@@ -1,5 +1,5 @@
 using System;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
 
 namespace Actors.Monsters.Actions

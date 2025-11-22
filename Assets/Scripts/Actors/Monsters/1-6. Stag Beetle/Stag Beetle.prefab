@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 3843950773268970679}
   - component: {fileID: 7157046569414087548}
   - component: {fileID: 2040891973972188694}
-  - component: {fileID: 1826062175386077370}
   - component: {fileID: 3229680908470006862}
+  - component: {fileID: 1826062175386077370}
   - component: {fileID: 1516652006512922421}
   - component: {fileID: 6734163311676315518}
   m_Layer: 8
@@ -176,18 +176,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1826062175386077370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 58172870204027201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3229680908470006862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,9 +188,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
+--- !u!114 &1826062175386077370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 58172870204027201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1516652006512922421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,8 +233,9 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: b7dc360f313c7744ca8918291a3966fa, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
+  GameAssetsLibrary: {fileID: 0}
+  Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
-  SceneAssetsLibrary: {fileID: 0}
   _stateDisplay: 
   _attackMode: 0
   _rollingTime: 3

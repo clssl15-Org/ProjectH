@@ -24,7 +24,7 @@ namespace Actors.Monsters.Stage3Bosses
                 if (DarkTherion._movePoints.Length == 0)
                 {
                     Debug.LogWarning(DarkTherion.FormatLogMessage(
-                        $"{nameof(_movePoints)}은(는) 하나 이상의 이동 지점을 포함해야 합니다."));
+                        $"{nameof(_movePoints)}은(는) 하나 이상의 지점을 포함해야 합니다."));
                     return false;
                 }
 

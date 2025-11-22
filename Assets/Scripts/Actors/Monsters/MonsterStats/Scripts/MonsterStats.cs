@@ -13,7 +13,7 @@ namespace Actors.Monsters
         [SerializeField, Min(1)] private int _maxHP = 10;
         [SerializeField] private bool _useCustomSpeed = false;
         [SerializeField] private MoveSpeed _moveSpeed = Monsters.MoveSpeed.Normal;
-        [SerializeField, Min(0)] private float _speed = 0;
+        [SerializeField, Min(0)] private float _speed = 1;
 
 
         [Header("АјАн")]

@@ -19,10 +19,12 @@ namespace Actors.Monsters
 
         MonsterStats StatsInfo { get; }
         GameAssetLibrary GameAssetsLibrary { get; }
+        Configuration Configuration { get; }
         SpriteRenderer SpriteRenderer { get; }
         Rigidbody2D Rigidbody { get; }
         Collider2D Collider { get; }
 
+        PlatformManager PlatformManager { get; }
         PlatformDetector PlatformDetector { get; }
         GameObject DetectedPlayer { get; }
 
@@ -51,6 +53,8 @@ namespace Actors.Monsters
 
         void StopCurrentAction();
         #endregion
+
+        void Destroy();
 
 #pragma warning disable IDE1006
         string name { get; }

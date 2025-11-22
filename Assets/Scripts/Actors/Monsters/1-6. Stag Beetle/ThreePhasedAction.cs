@@ -1,6 +1,6 @@
 using System;
 using Actors.Monsters.Actions;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 
 namespace Actors.Monsters
 {
@@ -21,8 +21,8 @@ namespace Actors.Monsters
             private Func<float, float, bool> _whileMainAction;
             private Action _beforePostAction;
 
-            private readonly Exception AnimationFailure
-                = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
+            //private readonly Exception AnimationFailure
+            //    = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
 
 
             // Content
@@ -57,7 +57,7 @@ namespace Actors.Monsters
                             AnimationPlayer.Play(
                                 new MonsterAnimationPlayInfo(_animations[0], Callback: succeed =>
                                 {
-                                    if (!succeed) throw AnimationFailure;
+                                    //if (!succeed) throw AnimationFailure;
                                     _work.SetNext("MainAction");
                                 }));
                         }), true)
@@ -70,7 +70,7 @@ namespace Actors.Monsters
                             Action<bool> callback = _whileMainAction == null
                             ? (bool succeed) =>
                             {
-                                if (!succeed) throw AnimationFailure;
+                                //if (!succeed) throw AnimationFailure;
                                 _work.SetNext("PostAction");
                             }
                             : null;
@@ -96,7 +96,7 @@ namespace Actors.Monsters
                             AnimationPlayer.Play(
                                 new MonsterAnimationPlayInfo(_animations[2], Callback: succeed =>
                                 {
-                                    if (!succeed) throw AnimationFailure;
+                                    //if (!succeed) throw AnimationFailure;
                                     Interrupt(InterruptType.Completed);
                                 }));
 

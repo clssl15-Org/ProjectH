@@ -16,7 +16,11 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
-        void Initialize(GameAssetLibrary sceneAssetsLibrary, PlatformManager platformManager);
+        void Initialize(
+            GameAssetLibrary sceneAssetsLibrary,
+            Configuration configuration,
+            PlatformManager platformManager);
+
         void Destroy();
 
 #pragma warning disable IDE1006

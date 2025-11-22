@@ -82,7 +82,7 @@ namespace Actors.Monsters
 
                 second
                     .GetComponent<DarkMonsterSecondPhase>()
-                    .Initialize(GameAssetsLibrary, PlatformManager);
+                    .Initialize(GameAssetsLibrary, Configuration, PlatformManager);
 
                 second.transform.position = transform.position;
             }
