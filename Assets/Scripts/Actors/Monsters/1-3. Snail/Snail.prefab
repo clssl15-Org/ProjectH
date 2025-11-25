@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4402378424758891098}
   - component: {fileID: 4686785592887335133}
   - component: {fileID: 798990402297213930}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Snail
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -305,9 +305,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &4402378424758891098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,6 +350,6 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: 4eca89fe6b507b24083c6af2961c6922, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
-  PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
+  PlatformManager: {fileID: 0}
   _stateDisplay: 

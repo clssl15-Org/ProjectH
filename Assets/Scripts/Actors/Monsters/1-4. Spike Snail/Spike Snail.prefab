@@ -1053,7 +1053,7 @@ GameObject:
   - component: {fileID: 5573082591171285592}
   - component: {fileID: 3346812145746184880}
   - component: {fileID: 987010599202020812}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Spike Snail
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -1224,9 +1224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &5573082591171285592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1269,8 +1269,8 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: 2f5c4ac7edfc02a45bfdc4654c97b427, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
-  PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
+  PlatformManager: {fileID: 0}
   _stateDisplay: 
   spikeSpeed: 5
   launchTime: 0.21

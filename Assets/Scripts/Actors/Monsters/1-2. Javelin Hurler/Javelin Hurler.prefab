@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3959805178124750281}
   - component: {fileID: 9106161264923016643}
   - component: {fileID: 5556646152207689852}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Javelin Hurler
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -187,9 +187,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &9106161264923016643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,8 +219,8 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: cc19eaeb8108fc94ea87d2bce3a5b03b, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
-  PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
+  PlatformManager: {fileID: 0}
   _stateDisplay: 
   _javelinPrefab: {fileID: 5364063434892235939}
   _throwTime: 1

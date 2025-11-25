@@ -2,12 +2,13 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /* 
- * ÀÌ ÆÄÀÏÀº MonsterSpawner¿¡¼­ »ç¿ëÇÒ µ¥ÀÌÅÍ ±¸Á¶(Data Structures)¸¸ Á¤ÀÇÇÕ´Ï´Ù.
+ * ì´ íŒŒì¼ì€ MonsterSpawnerì—ì„œ ì‚¬ìš©í•  ë°ì´í„° êµ¬ì¡°(Data Structures)ë§Œ ì •ì˜í•©ë‹ˆë‹¤.
  */
 
 /// <summary>
-/// ¸ó½ºÅÍ ½ºÆùÀÇ ´ÜÀÏ 'ÆäÀÌÁî(Phase)'¸¦ Á¤ÀÇÇÏ´Â µ¥ÀÌÅÍ Å¬·¡½ºÀÔ´Ï´Ù.
+/// ëª¬ìŠ¤í„° ìŠ¤í°ì˜ ë‹¨ì¼ 'í˜ì´ì¦ˆ(Phase)'ë¥¼ ì •ì˜í•˜ëŠ” ë°ì´í„° í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
 /// </summary>
+[System.Serializable]
 public class SpawnPhase
 {
     public int phaseNumber;
@@ -18,8 +19,9 @@ public class SpawnPhase
 }
 
 /// <summary>
-/// '·£´ı ½ºÆù ¹æ½Ä'ÀÇ ¼¼ºÎ ±ÔÄ¢À» Á¤ÀÇÇÏ´Â µ¥ÀÌÅÍ Å¬·¡½ºÀÔ´Ï´Ù.
+/// 'ëœë¤ ìŠ¤í° ë°©ì‹'ì˜ ì„¸ë¶€ ê·œì¹™ì„ ì •ì˜í•˜ëŠ” ë°ì´í„° í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
 /// </summary>
+[System.Serializable]
 public class RandomPoolSettings
 {
     public int spawnCount;

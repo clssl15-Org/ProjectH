@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8005353908560965261}
   - component: {fileID: 8541476870282129423}
   - component: {fileID: 8463299552888927162}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dynastid
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -198,9 +198,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &8463299552888927162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,8 +218,8 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: bcafa9a35936b5c4a93b9c7ea206e20f, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
-  PlatformManager: {fileID: 0}
   SceneAssetsLibrary: {fileID: 0}
+  PlatformManager: {fileID: 0}
   _stateDisplay: 
 --- !u!1 &7512475014576965878
 GameObject:

@@ -6,47 +6,64 @@ using Actors.Monsters.Brains;
 
 public class MonsterSpawner : MonoBehaviour
 {
-    [Header("ÆäÀÌÁî ¼³Á¤")]
-    public List<SpawnPhase> phases;
+    [Header("í˜ì´ì¦ˆ ì„¤ì •")]
+    [SerializeField]
+    private List<SpawnPhase> phases = new List<SpawnPhase>();
 
     public Infrastructure.SceneAssetsLibrary sceneAssetsLibrary;
     public PlatformManager platformManager;
 
-    private int currentPhaseIndex = -1; // ÇöÀç ÁøÇà ÁßÀÎ ÆäÀÌÁîÀÇ ÀÎµ¦½º
-    private bool isSpawning = false; // ½ºÆ÷³Ê°¡ ÇöÀç ÀÛµ¿ ÁßÀÎÁö ¿©ºÎ
+    private int currentPhaseIndex = -1; // í˜„ì¬ ì§„í–‰ ì¤‘ì¸ í˜ì´ì¦ˆì˜ ì¸ë±ìŠ¤
+    private bool isSpawning = false; // ìŠ¤í¬ë„ˆê°€ í˜„ì¬ ì‘ë™ ì¤‘ì¸ì§€ ì—¬ë¶€
 
     private List<GameObject> activeMonsters = new List<GameObject>();
 
+    private void Start()
+    {
+        RegisterToSpawnManager();
+        StartSpawner();
+    }
+
     /// <summary>
-    /// ½ºÆ÷³Ê ½Ã½ºÅÛ ½ÃÀÛ
+    /// ìŠ¤í¬ë„ˆ ë§¤ë‹ˆì €ì— ìì‹ ì„ ë“±ë¡í•©ë‹ˆë‹¤.
+    /// </summary>
+    public void RegisterToSpawnManager()
+    {
+        if(SpawnManaer.Instance != null)
+        {
+            SpawnManaer.Instance.AddSpawner(this.gameObject);
+        }
+    }
+    /// <summary>
+    /// ìŠ¤í¬ë„ˆ ì‹œìŠ¤í…œ ì‹œì‘
     /// </summary>
     public void StartSpawner()
     {
         if (isSpawning)
         {
-            Debug.LogWarning($"[{gameObject.name}] ½ºÆ÷³Ê°¡ ÀÌ¹Ì ÀÛµ¿ ÁßÀÔ´Ï´Ù.", this);
+            Debug.LogWarning($"[{gameObject.name}] ìŠ¤í¬ë„ˆê°€ ì´ë¯¸ ì‘ë™ ì¤‘ì…ë‹ˆë‹¤.", this);
             return;
         }
 
         if (phases == null || phases.Count == 0)
         {
-            Debug.LogError($"[{gameObject.name}] ½ºÆù ÆäÀÌÁî°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.", this);
+            Debug.LogError($"[{gameObject.name}] ìŠ¤í° í˜ì´ì¦ˆê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.", this);
             return;
         }
 
         isSpawning = true;
-        currentPhaseIndex = -1; // StartNextPhase¿¡¼­ 0À¸·Î Áõ°¡ÇÏ¿© ½ÃÀÛ
+        currentPhaseIndex = -1; // StartNextPhaseì—ì„œ 0ìœ¼ë¡œ ì¦ê°€í•˜ì—¬ ì‹œì‘
         StartNextPhase();
     }
 
     /// <summary>
-    /// ´ÙÀ½ ÆäÀÌÁî ½ÃÀÛ
+    /// ë‹¤ìŒ í˜ì´ì¦ˆ ì‹œì‘
     /// </summary>
     private void StartNextPhase()
     {
         currentPhaseIndex++;
 
-        // ¸ğµç ÆäÀÌÁî°¡ ¿Ï·áµÇ¾ú´ÂÁö È®ÀÎ
+        // ëª¨ë“  í˜ì´ì¦ˆê°€ ì™„ë£Œë˜ì—ˆëŠ”ì§€ í™•ì¸
         if (currentPhaseIndex >= phases.Count)
         {
             OnAllPhasesComplete();
@@ -57,25 +74,25 @@ public class MonsterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ÁöÁ¤µÈ ÆäÀÌÁî µ¥ÀÌÅÍ¸¦ ±â¹İÀ¸·Î ¸ó½ºÅÍ ½ºÆùÀ» ½ÃÀÛÇÕ´Ï´Ù.
+    /// ì§€ì •ëœ í˜ì´ì¦ˆ ë°ì´í„°ë¥¼ ê¸°ë°˜ìœ¼ë¡œ ëª¬ìŠ¤í„° ìŠ¤í°ì„ ì‹œì‘í•©ë‹ˆë‹¤.
     /// </summary>
     private void StartPhase(SpawnPhase phase)
     {
-        // ´ÙÀ½ ÆäÀÌÁî ½ÃÀÛ Àü, ÃßÀû ¸®½ºÆ® ÃÊ±âÈ­
+        // ë‹¤ìŒ í˜ì´ì¦ˆ ì‹œì‘ ì „, ì¶”ì  ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
         activeMonsters.Clear();
 
-        // 1. °íÁ¤ ½ºÆù Ç® Ã³¸®
+        // 1. ê³ ì • ìŠ¤í° í’€ ì²˜ë¦¬
         ProcessFixedPool(phase.fixedMonsterPool);
 
-        // 2. ·£´ı ½ºÆù Ç® Ã³¸®
+        // 2. ëœë¤ ìŠ¤í° í’€ ì²˜ë¦¬
         ProcessRandomPool(phase.randomMonsterPool);
 
-        // 3. [¿§Áö ÄÉÀÌ½º Ã³¸®]
-        // ¸¸¾à ÆäÀÌÁî¿¡ ½ºÆùÇÒ ¸ó½ºÅÍ°¡ 0¸¶¸®¶ó¸é, Áï½Ã ´ÙÀ½ ÆäÀÌÁî·Î ³Ñ¾î°©´Ï´Ù.
+        // 3. [ì—£ì§€ ì¼€ì´ìŠ¤ ì²˜ë¦¬]
+        // ë§Œì•½ í˜ì´ì¦ˆì— ìŠ¤í°í•  ëª¬ìŠ¤í„°ê°€ 0ë§ˆë¦¬ë¼ë©´, ì¦‰ì‹œ ë‹¤ìŒ í˜ì´ì¦ˆë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.
         if (activeMonsters.Count == 0)
         {
-            Debug.LogWarning($"[{gameObject.name}] ÆäÀÌÁî {currentPhaseIndex + 1}: ½ºÆùµÈ ¸ó½ºÅÍ°¡ ¾ø¾î Áï½Ã ´ÙÀ½ ÆäÀÌÁî·Î ³Ñ¾î°©´Ï´Ù.");
-            // ÇÑ ÇÁ·¹ÀÓ ´ë±â ÈÄ ´ÙÀ½ ÆäÀÌÁî È£Ãâ (¹«ÇÑ Àç±Í ¹æÁö)
+            Debug.LogWarning($"[{gameObject.name}] í˜ì´ì¦ˆ {currentPhaseIndex + 1}: ìŠ¤í°ëœ ëª¬ìŠ¤í„°ê°€ ì—†ì–´ ì¦‰ì‹œ ë‹¤ìŒ í˜ì´ì¦ˆë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.");
+            // í•œ í”„ë ˆì„ ëŒ€ê¸° í›„ ë‹¤ìŒ í˜ì´ì¦ˆ í˜¸ì¶œ (ë¬´í•œ ì¬ê·€ ë°©ì§€)
             StartCoroutine(WaitAndStartNextPhase());
         }
     }
@@ -87,16 +104,16 @@ public class MonsterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸ğµç ÆäÀÌÁî°¡ ¼º°øÀûÀ¸·Î ¿Ï·áµÇ¾úÀ» ¶§ È£ÃâµË´Ï´Ù.
+    /// ëª¨ë“  í˜ì´ì¦ˆê°€ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆì„ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤.
     /// </summary>
     private void OnAllPhasesComplete()
     {
-        Debug.Log($"*** [{gameObject.name}] ¸ğµç ½ºÆù ÆäÀÌÁî¸¦ ¿Ï·áÇß½À´Ï´Ù. ***");
+        Debug.Log($"*** [{gameObject.name}] ëª¨ë“  ìŠ¤í° í˜ì´ì¦ˆë¥¼ ì™„ë£Œí–ˆìŠµë‹ˆë‹¤. ***");
         isSpawning = false;
     }
 
     /// <summary>
-    /// °íÁ¤ ½ºÆù Ç®ÀÇ ¸ğµç ¸ó½ºÅÍ¸¦ ½ºÆùÇÕ´Ï´Ù. 
+    /// ê³ ì • ìŠ¤í° í’€ì˜ ëª¨ë“  ëª¬ìŠ¤í„°ë¥¼ ìŠ¤í°í•©ë‹ˆë‹¤. 
     /// </summary>
     private void ProcessFixedPool(List<GameObject> pool)
     {
@@ -112,7 +129,7 @@ public class MonsterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ·£´ı ½ºÆù Ç®ÀÇ ±ÔÄ¢¿¡ µû¶ó ¸ó½ºÅÍ¸¦ ½ºÆùÇÕ´Ï´Ù. [7, 12]
+    /// ëœë¤ ìŠ¤í° í’€ì˜ ê·œì¹™ì— ë”°ë¼ ëª¬ìŠ¤í„°ë¥¼ ìŠ¤í°í•©ë‹ˆë‹¤. [7, 12]
     /// </summary>
     private void ProcessRandomPool(RandomPoolSettings pool)
     {
@@ -123,7 +140,7 @@ public class MonsterSpawner : MonoBehaviour
 
         for (int i = 0; i < pool.spawnCount; i++)
         {
-            // ÈÄº¸ ¸®½ºÆ®¿¡¼­ ·£´ı ÀÎµ¦½º ¼±ÅÃ 
+            // í›„ë³´ ë¦¬ìŠ¤íŠ¸ì—ì„œ ëœë¤ ì¸ë±ìŠ¤ ì„ íƒ 
             int randomIndex = Random.Range(0, pool.monsterPrefabs.Count);
             GameObject monsterPrefab = pool.monsterPrefabs[randomIndex];
 
@@ -135,57 +152,58 @@ public class MonsterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸ó½ºÅÍ ÇÁ¸®ÆÕÀ» ÀÎ½ºÅÏ½ºÈ­ÇÏ°í, ÃßÀû ¸®½ºÆ®¿¡ Ãß°¡ÇÏ¸ç, »ç¸Á ÀÌº¥Æ®¸¦ ±¸µ¶ÇÕ´Ï´Ù.
+    /// ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹ì„ ì¸ìŠ¤í„´ìŠ¤í™”í•˜ê³ , ì¶”ì  ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€í•˜ë©°, ì‚¬ë§ ì´ë²¤íŠ¸ë¥¼ êµ¬ë…í•©ë‹ˆë‹¤.
     /// </summary>
     private void SpawnMonster(GameObject prefab)
     {
-        // ½ºÆ÷³ÊÀÇ À§Ä¡¿Í È¸Àü°ªÀ¸·Î ¸ó½ºÅÍ¸¦ ½ºÆùÇÕ´Ï´Ù. 
+        // ìŠ¤í¬ë„ˆì˜ ìœ„ì¹˜ì™€ íšŒì „ê°’ìœ¼ë¡œ ëª¬ìŠ¤í„°ë¥¼ ìŠ¤í°í•©ë‹ˆë‹¤. 
         GameObject monsterInstance = Instantiate(prefab, this.transform.position, this.transform.rotation);
         if (!monsterInstance.TryGetComponent(out Actors.IMonster monsterScript))
         {
             var exception = new System.ArgumentException(
-                $"Prefab¿¡ IMonster ½ºÅ©¸³Æ®°¡ ¾ø½À´Ï´Ù",
+                $"Prefabì— IMonster ìŠ¤í¬ë¦½íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤",
                 nameof(prefab)
                 );
 
             Debug.LogException(exception);
             return;
 
-            //Debug.LogError($"½ºÆùµÈ ¸ó½ºÅÍ '{prefab.name}'¿¡ ½ºÅ©¸³Æ®°¡ ¾ø½À´Ï´Ù.", monsterInstance);
+            //Debug.LogError($"ìŠ¤í°ëœ ëª¬ìŠ¤í„° '{prefab.name}'ì— ìŠ¤í¬ë¦½íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.", monsterInstance);
             //return;
         }
 
         monsterScript.Initialize(sceneAssetsLibrary, platformManager);
 
-        // 1. È°¼º ¸ó½ºÅÍ ¸®½ºÆ®¿¡ Ãß°¡ÇÏ¿© ÃßÀû ½ÃÀÛ 
+        // 1. í™œì„± ëª¬ìŠ¤í„° ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€í•˜ì—¬ ì¶”ì  ì‹œì‘ 
         activeMonsters.Add(monsterInstance);
 
-        // 2. ½ºÆùµÈ ¸ó½ºÅÍÀÇ Monster ½ºÅ©¸³Æ®¿¡¼­ »ç¸Á ÀÌº¥Æ®¸¦ °¡Á®¿È
+        // 2. ìŠ¤í°ëœ ëª¬ìŠ¤í„°ì˜ Monster ìŠ¤í¬ë¦½íŠ¸ì—ì„œ ì‚¬ë§ ì´ë²¤íŠ¸ë¥¼ ê°€ì ¸ì˜´
         monsterScript.ConditionChanged += cond =>
         {
             if (cond.Condition == Actors.MonsterCondition.Die)
             {
-                // Á×¾úÀ» ¶§ Ã³¸®
+                // ì£½ì—ˆì„ ë•Œ ì²˜ë¦¬
+                OnMonsterDied(monsterInstance);
             }
         };
     }
 
     /// <summary>
-    /// ½ºÆùµÈ ¸ó½ºÅÍ·ÎºÎÅÍ »ç¸Á ÀÌº¥Æ®¸¦ ¼ö½ÅÇßÀ» ¶§ È£ÃâµÇ´Â Äİ¹é ¸Ş¼­µåÀÔ´Ï´Ù. 
+    /// ìŠ¤í°ëœ ëª¬ìŠ¤í„°ë¡œë¶€í„° ì‚¬ë§ ì´ë²¤íŠ¸ë¥¼ ìˆ˜ì‹ í–ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ì½œë°± ë©”ì„œë“œì…ë‹ˆë‹¤. 
     /// </summary>
-    /// <param name="deadMonster">»ç¸ÁÀ» ¾Ë¸° ¸ó½ºÅÍÀÇ GameObject</param>
+    /// <param name="deadMonster">ì‚¬ë§ì„ ì•Œë¦° ëª¬ìŠ¤í„°ì˜ GameObject</param>
     private void OnMonsterDied(GameObject deadMonster)
     {
-        // ÀÌ ½ºÆ÷³Ê°¡ °ü¸®ÇÏ´ø ¸ó½ºÅÍ°¡ ¸Â´ÂÁö ÀçÈ®ÀÎ
+        // ì´ ìŠ¤í¬ë„ˆê°€ ê´€ë¦¬í•˜ë˜ ëª¬ìŠ¤í„°ê°€ ë§ëŠ”ì§€ ì¬í™•ì¸
         if (activeMonsters.Contains(deadMonster))
         {
-            // 1. ÃßÀû ¸®½ºÆ®¿¡¼­ »ç¸ÁÇÑ ¸ó½ºÅÍ¸¦ Á¦°Å 
+            // 1. ì¶”ì  ë¦¬ìŠ¤íŠ¸ì—ì„œ ì‚¬ë§í•œ ëª¬ìŠ¤í„°ë¥¼ ì œê±° 
             activeMonsters.Remove(deadMonster);
 
-            // 2. È°¼º ¸ó½ºÅÍ°¡ 0¸¶¸®°¡ µÇ¾ú´ÂÁö È®ÀÎ 
+            // 2. í™œì„± ëª¬ìŠ¤í„°ê°€ 0ë§ˆë¦¬ê°€ ë˜ì—ˆëŠ”ì§€ í™•ì¸ 
             if (isSpawning && activeMonsters.Count == 0)
             {
-                // 3. ÇöÀç ÆäÀÌÁîÀÇ ¸ğµç ¸ó½ºÅÍ°¡ »ç¸ÁÇßÀ¸¹Ç·Î, ´ÙÀ½ ÆäÀÌÁî ½ÃÀÛ 
+                // 3. í˜„ì¬ í˜ì´ì¦ˆì˜ ëª¨ë“  ëª¬ìŠ¤í„°ê°€ ì‚¬ë§í–ˆìœ¼ë¯€ë¡œ, ë‹¤ìŒ í˜ì´ì¦ˆ ì‹œì‘ 
                 StartNextPhase();
             }
         }
