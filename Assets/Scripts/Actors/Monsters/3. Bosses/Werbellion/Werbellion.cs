@@ -25,8 +25,12 @@ namespace Actors.Monsters.Stage3Bosses
             Stun,
         }
 
+        private const string IsAwake = nameof(IsAwake);
+
+
         [Header("Werbellion")]
         [SerializeField] private Transform[] _movePoints;
+        [SerializeField] private Transform[] _airPoints;
         [SerializeField] private AttackMode _attackMode;
         [Space]
         [SerializeField] private GameObject _straightAreaAttackPrefab;
@@ -51,19 +55,17 @@ namespace Actors.Monsters.Stage3Bosses
         {
             public WerbellionBrain(IMonsterInternal owner) : base(owner)
             {
-                Blackboard.Properties[ITwinBoss.IsAwaken] = false;
+                Blackboard.Properties[IsAwake] = false;
 
                 AddChild(new Alive(opened: () => owner.Rigidbody.gravityScale = 0f)
                     .AddChild(new Idle("Spawn", haltOnActionEnd: false))
                     .AddChild(new Awaken()
                         .AddChild(new WerbellionTeleportBrain())
+                        .AddChild(new WerbellionAttackBrain())
                         .AddChild(new Await(
                             MonsterActionType.Idle,
                             owner.StatsInfo.AttackCooltime)
                         )
-                        .AddChild(new WerbellionAttackBrain(0))
-                        .AddChild(new WerbellionAttackBrain(1))
-                        .AddChild(new WerbellionAttackBrain(2))
                     )
                 );
                 AddChild(new Dead(
@@ -79,31 +81,36 @@ namespace Actors.Monsters.Stage3Bosses
             {
                 AddChild(new MonsterAction("Spawn")
                     .AddAnimationComponent(out var spawn)
-                    .AddAnimationComponent("Idle", after: new(spawn)));
+                    .AddAnimationComponent("Idle", after: new(spawn))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("Teleport")
                     .AddAnimationComponent("TeleportIn", out var teleportIn)
                     .AddComponent(new WerbellionTeleportComponent(), after: new(teleportIn))
-                    .AddAnimationComponent("TeleportOut", after: new(teleportIn)));
+                    .AddAnimationComponent("TeleportOut", after: new(teleportIn))
+                );
                 AddChild(new MonsterAction("PunchAttack")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("StraightAreaAttack")
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithWeapon(
                         werbellion._straightAreaAttackPrefab,
                         werbellion._straightAreaAttackTiming))
-                    .AddDelayComponent(1f, interruptAllOnDeactivate: true));
+                    .AddDelayComponent(1f, interruptAllOnDeactivate: true)
+                );
                 AddChild(new MonsterAction("SpikeAttack")
-                    .AddAnimationComponent(
-                        "SpikeAttackIn",
-                        out var spikeAttackIn
-                    )
+                    .AddAnimationComponent("TeleportIn", out var spike_teleportIn_a)
+                    .AddComponent(new WerbellionTeleportComponent(), after: new(spike_teleportIn_a))
+                    .AddAnimationComponent("TeleportOut", out var spike_teleportOut_a, after: new(spike_teleportIn_a))
+                    .AddAnimationComponent("SpikeAttackIn", out var spikeAttackIn, after: new(spike_teleportOut_a))
                     .AddComponent(new SpikeAttackAction(
-                            werbellion._spikePrefab,
-                            werbellion._spikeSpawnPoints.Select(point => (Vector2)point.transform.localPosition),
-                            werbellion.StatsInfo.SpikeSpeed,
-                            werbellion.StatsInfo.SpikeFireGap),
+                        werbellion._spikePrefab,
+                        werbellion._spikeSpawnPoints.Select(point => (Vector2)point.transform.localPosition),
+                        werbellion.StatsInfo.SpikeSpeed,
+                        werbellion.StatsInfo.SpikeFireGap),
                         after: new(spikeAttackIn)
                     )
                     .AddAnimationComponent(
@@ -117,11 +124,17 @@ namespace Actors.Monsters.Stage3Bosses
                     )
                     .AddAnimationComponent(
                         "SpikeAttackOut",
+                        out var spikeAttackOut,
                         interruptAllOnDeactivate: true,
-                        after: new(spikeAttackAction))
-                    );
+                        after: new(spikeAttackAction)
+                    )
+                    .AddAnimationComponent("TeleportIn", out var spike_teleportIn_b, after: new(spikeAttackOut))
+                    .AddComponent(new WerbellionTeleportComponent(), after: new(spike_teleportIn_b))
+                    .AddAnimationComponent("TeleportOut", after: new(spike_teleportIn_b))
+                );
                 AddChild(new MonsterAction("PortalAttack")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("StunAttack")
                     .AddAnimationComponent(
                         "StunAttackIn",
@@ -135,12 +148,15 @@ namespace Actors.Monsters.Stage3Bosses
                     .AddAnimationComponent(
                         "StunAttackOut",
                         after: new(stunAttack)
-                    ));
-               AddChild(new MonsterAction(MonsterActionType.Hit)
+                    )
+                );
+                AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelayComponent()
-                    .AddComponent(new HitFlash()));
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -181,7 +197,7 @@ namespace Actors.Monsters.Stage3Bosses
 
         public void DoAwake()
         {
-            Brain.Blackboard.Properties[ITwinBoss.IsAwaken] = true;
+            Brain.Blackboard.Properties[ITwinBoss.IsAwake] = true;
             Brain.Blackboard.Committing = true;
         }
 
@@ -204,7 +220,7 @@ namespace Actors.Monsters.Stage3Bosses
             var message = base.GetDisplayContent();
 
             message += "----------------";
-            message += $"\nAwaken: {(bool)Brain.Blackboard.Properties[ITwinBoss.IsAwaken]}";
+            message += $"\nAwaken: {(bool)Brain.Blackboard.Properties[ITwinBoss.IsAwake]}";
 
             return message;
         }

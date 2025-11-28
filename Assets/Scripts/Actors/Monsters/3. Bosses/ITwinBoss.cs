@@ -2,7 +2,7 @@ namespace Actors.Monsters.Stage3Bosses
 {
     internal interface ITwinBoss : IMonsterInternal
     { 
-        const string IsAwaken = "IsAwaken";
+        const string IsAwake = nameof(IsAwake);
         bool IsExhausted { get; set; }
 
         void InitializePlayer(IPlayer player);

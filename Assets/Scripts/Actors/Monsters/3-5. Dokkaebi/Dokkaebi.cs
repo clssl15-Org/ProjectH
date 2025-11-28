@@ -25,13 +25,17 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged()
                                 .AddChild(new Adjusting(MonsterActionType.Idle))
-                                .AddChild(new DeadEnd()))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol(monsterAction: MonsterActionType.Idle))))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol(monsterAction: MonsterActionType.Idle)))
+                        )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }

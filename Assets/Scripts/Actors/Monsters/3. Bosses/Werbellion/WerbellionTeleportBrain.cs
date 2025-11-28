@@ -1,3 +1,4 @@
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -31,17 +32,10 @@ namespace Actors.Monsters.Stage3Bosses
 
             protected override void OnOpen(params object[] _)
             {
-                int next = 0;
-                if (Werbellion._movePoints.Length > 1)
-                {
-                    do
-                    {
-                        next = Random.Range(0, Werbellion._movePoints.Length);
-                    } while (next == _before);
-                }
-
-                var teleportPosition = (Vector2)Werbellion._movePoints[next].position;
-                _before = next;
+                var teleportPosition = (Vector2)Werbellion
+                    ._movePoints
+                    .GetRandomItem(ref _before)
+                    .position;
 
 
                 if (!Owner.TryDoAction(new(

@@ -14,6 +14,6 @@ namespace Actors.Monsters.Stage3Bosses
         }
 
         public override bool CheckCondition() =>
-            (bool)Blackboard.Properties[ITwinBoss.IsAwaken];
+            (bool)Blackboard.Properties[ITwinBoss.IsAwake];
     }
 }

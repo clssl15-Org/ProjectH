@@ -52,7 +52,7 @@ namespace Actors.Monsters.Stage3Bosses
         {
             public DarkTherionBrain(DarkTherion darkTherion) : base(darkTherion)
             {
-                Blackboard.Properties[ITwinBoss.IsAwaken] = false;
+                Blackboard.Properties[ITwinBoss.IsAwake] = false;
 
                 AddChild(new Alive()
                     .AddChild(new Idle())
@@ -131,7 +131,7 @@ namespace Actors.Monsters.Stage3Bosses
 
         protected override void Update()
         {
-            Brain.Blackboard.Properties[ITwinBoss.IsAwaken] = _isAwaken;
+            Brain.Blackboard.Properties[ITwinBoss.IsAwake] = _isAwaken;
             base.Update();  
         }
 
