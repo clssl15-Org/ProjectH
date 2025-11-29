@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7947287456373590500}
   - component: {fileID: 8752929718907934197}
+  - component: {fileID: 736750078738793592}
   - component: {fileID: 8250153652663277387}
   - component: {fileID: 945640838068990783}
   - component: {fileID: 9201784050942744037}
@@ -92,6 +93,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &736750078738793592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668400060880012410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useManualScaleFactor: 0
+  _scaleFactor: 1
+  _configuration: {fileID: 0}
 --- !u!95 &8250153652663277387
 Animator:
   serializedVersion: 5
@@ -199,9 +215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &4907472375751884795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,8 +235,9 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: 06bd2ab898f41cf41ba36247005357b4, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
+  GameAssetsLibrary: {fileID: 0}
+  Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
-  SceneAssetsLibrary: {fileID: 0}
   _stateDisplay: 
   _laserPrefab: {fileID: 8684761657309231096}
   _laserAppearTime: 0.66

@@ -7,10 +7,11 @@ using UnityEngine;
 
 namespace Actors.Monsters
 {
-    [RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
+    [RequireComponent(typeof(SpriteRenderer), typeof(SpriteSizeHandler), typeof(Animator))]
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlatformDetector))]
-    public abstract partial class Monster<TStats> : MonoBehaviour, IMonsterInternal, IMonster where TStats : MonsterStats
+    public abstract partial class Monster<TStats>
+        : MonoBehaviour, IMonsterInternal, IMonster where TStats : MonsterStats
     {
         // Front
         public int HP
@@ -128,25 +129,36 @@ namespace Actors.Monsters
 
 
         // Content
+        #region Injections
         /// <summary>
         /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
         /// </summary>
         public void Initialize(
-            GameAssetLibrary sceneAssetsLibrary,
+            GameAssetLibrary gameAssetsLibrary,
             Configuration configuration,
             PlatformManager platformManager)
         {
-            GameAssetsLibrary = sceneAssetsLibrary;
+            GameAssetsLibrary = gameAssetsLibrary;
             Configuration = configuration;
             PlatformManager = platformManager;
         }
+
+        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetsLibrary) =>
+            GameAssetsLibrary = gameAssetsLibrary;
+
+        void IInjectable<Configuration>.Inject(Configuration configuration) =>
+            Configuration = configuration;
+
+        void IInjectable<PlatformManager>.Inject(PlatformManager platformManager) =>
+            PlatformManager = platformManager;
+        #endregion
 
         protected virtual void Awake()
         {
             Collider = GetComponent<Collider2D>();
             Rigidbody = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
-            TryGetComponent(out _spriteSizeHandler);
+            _spriteSizeHandler = GetComponent<SpriteSizeHandler>();
 
             _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
             if (_playerDetector) _playerDetector.PlayerDetected += OnPlayerDetected;
@@ -196,6 +208,7 @@ namespace Actors.Monsters
             _platformDetector.SetPlatformManager(PlatformManager);
             #endregion
 
+            _spriteSizeHandler.RequestApplyScaleFactor();
 
             if (RandomizeStartDirection)
             {

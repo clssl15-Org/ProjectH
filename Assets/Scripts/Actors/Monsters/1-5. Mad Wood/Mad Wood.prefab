@@ -128,6 +128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6882974410336189890}
   - component: {fileID: 9033166222339840664}
+  - component: {fileID: 6172143242742311935}
   - component: {fileID: 3569891626009110875}
   - component: {fileID: 1274442412351007080}
   - component: {fileID: 5611114959219058498}
@@ -209,6 +210,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6172143242742311935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4561756133556997342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useManualScaleFactor: 0
+  _scaleFactor: 1
+  _configuration: {fileID: 0}
 --- !u!95 &3569891626009110875
 Animator:
   serializedVersion: 5
@@ -316,9 +332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &1958973966598934199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +352,7 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: 8576af38fe67d1d4e980503c4038251e, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
+  GameAssetsLibrary: {fileID: 0}
+  Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
-  SceneAssetsLibrary: {fileID: 0}
   _stateDisplay: 

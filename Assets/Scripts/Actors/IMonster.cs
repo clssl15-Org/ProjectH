@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace Actors
 {
-    public interface IMonster
+    public interface IMonster :
+        IInjectable<GameAssetLibrary>,
+        IInjectable<Configuration>,
+        IInjectable<PlatformManager>
     {
         int HP { get; }
         Direction Direction { get; }
@@ -17,7 +20,7 @@ namespace Actors
         int CurrentPlatform { get; }
 
         void Initialize(
-            GameAssetLibrary sceneAssetsLibrary,
+            GameAssetLibrary gameAssetsLibrary,
             Configuration configuration,
             PlatformManager platformManager);
 
