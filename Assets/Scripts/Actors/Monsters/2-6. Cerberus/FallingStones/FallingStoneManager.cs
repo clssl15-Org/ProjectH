@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Actors.Monsters
+namespace Actors.Monsters.Bosses
 {
     public class FallingStoneManager : MonoBehaviour
     {
@@ -43,7 +43,7 @@ namespace Actors.Monsters
         private int _counter;
         private float _timer;
         private float _beforeX;
-        private bool _succeed;
+        private bool _succeeded;
 
 
         public void Initialize(Configuration configuration, PlatformManager platformManager)
@@ -57,12 +57,13 @@ namespace Actors.Monsters
             if (IsFalling) throw new InvalidOperationException(
                 $"[{nameof(FallingStoneManager)}] 이미 동작이 진행 중이기 때문에 새 동작을 실행할 수 없습니다.");
 
+            IsFalling = true;
+
             _callback = callback;
             _counter = 0;
             _timer = 0;
 
-            IsFalling = true;
-            _succeed = false;
+            _succeeded = false;
             _beforeX = float.MaxValue;
 
             gameObject.SetActive(true);
@@ -79,7 +80,7 @@ namespace Actors.Monsters
             // 마지막 Fall 이후 한 단계만큼 기다린 후 종료
             if (_counter >= _stoneCount)
             {
-                _succeed = true;
+                _succeeded = true;
                 Done();
                 return;
             }
@@ -160,7 +161,7 @@ namespace Actors.Monsters
 
             var callback = _callback;
             _callback = null;
-            callback?.Invoke(_succeed);
+            callback?.Invoke(_succeeded);
         }
 
 

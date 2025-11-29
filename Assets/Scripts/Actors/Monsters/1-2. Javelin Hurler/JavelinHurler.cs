@@ -54,7 +54,7 @@ namespace Actors.Monsters
                     .AddAnimationComponent()
                     .AddComponent(new HurlJavelin()));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());

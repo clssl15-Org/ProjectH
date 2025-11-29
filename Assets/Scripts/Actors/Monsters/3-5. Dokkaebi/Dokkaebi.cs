@@ -56,7 +56,7 @@ namespace Actors.Monsters
                     .AddAnimationComponent(interruptAllOnDeactivate: true)
                     .AddComponent(new AttackWithWeapon(monster._laserPrefab, monster._laserAppearTime)));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());

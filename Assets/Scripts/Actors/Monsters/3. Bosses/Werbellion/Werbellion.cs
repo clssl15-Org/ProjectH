@@ -98,7 +98,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new AttackWithWeapon(
                         werbellion._straightAreaAttackPrefab,
                         werbellion._straightAreaAttackTiming))
-                    .AddDelayComponent(1f, interruptAllOnDeactivate: true)
+                    .AddDelay(1f, interruptAllOnDeactivate: true)
                 );
                 AddChild(new MonsterAction("SpikeAttack")
                     .AddAnimationComponent("TeleportIn", out var spike_teleportIn_a)
@@ -116,7 +116,7 @@ namespace Actors.Monsters.Bosses
                         MonsterActionType.Idle.ToString(),
                         after: new(spikeAttackIn)
                     )
-                    .AddDelayComponent(
+                    .AddDelay(
                         1f,
                         out var spikeAttackAction,
                         after: new(spikeAttackIn)
@@ -138,7 +138,7 @@ namespace Actors.Monsters.Bosses
                         "StunAttackIn",
                         out var stunAttackIn
                     )
-                    .AddDelayComponent(
+                    .AddDelay(
                         werbellion.StatsInfo.StunAttackTime,
                         out var stunAttack,
                         after: new(stunAttackIn)
@@ -149,7 +149,7 @@ namespace Actors.Monsters.Bosses
                     )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddComponent(new HitFlash())
                 );
                 AddChild(new MonsterAction("DeadAir")

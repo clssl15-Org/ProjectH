@@ -53,7 +53,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(AttackMode.LandAttack.ToString())
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());

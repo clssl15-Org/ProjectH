@@ -72,7 +72,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction("Attack_2")
                     .AddComponent(new GhostExplosiveAttackAction()));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());

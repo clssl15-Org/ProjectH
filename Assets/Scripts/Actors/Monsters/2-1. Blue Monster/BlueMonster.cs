@@ -41,7 +41,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());

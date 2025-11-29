@@ -67,9 +67,9 @@ namespace Actors.Monsters.Actions
         }
 
         #region Tools
-        public MonsterAction AddDelayComponent(float delayDuration = 0f, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
+        public MonsterAction AddDelay(float delayDuration = 0f, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
             AddComponent(new Delay(delayDuration, interruptAllOnDeactivate), after);
-        public MonsterAction AddDelayComponent(float delayDuration, out MonsterActionComponent self, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
+        public MonsterAction AddDelay(float delayDuration, out MonsterActionComponent self, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
             AddComponent(new Delay(delayDuration, interruptAllOnDeactivate), out self, after);
 
 

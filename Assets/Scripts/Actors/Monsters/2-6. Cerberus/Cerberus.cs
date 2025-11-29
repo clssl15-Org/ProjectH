@@ -1,5 +1,6 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -23,6 +24,8 @@ namespace Actors.Monsters.Bosses
         [Header("Cerberus")]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
         [SerializeField] private FallingStoneManager _fallingStoneManager;
+        [SerializeField] private AmbushAttackManager _ambushAttackManager;
+        [SerializeField] private GameObject _roarEffect;
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -48,7 +51,7 @@ namespace Actors.Monsters.Bosses
                             HierarchyMode = HierarchyMode.Sequence,
                             LoopType = LoopType.None,
                         }
-                        .AddChild(new Attack("DropAttack"))
+                        .AddChild(new Attack("BiteAttack"))
                         .AddChild(new CerberusAttackPhaseBrain()
                             .AddChild(new CerberusAttackBrain())
                             .AddChild(new Await(
@@ -69,10 +72,25 @@ namespace Actors.Monsters.Bosses
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction("BiteAttack")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                    .AddDelay(0.5f, out var bite_delay)
+                    .AddComponent(new Do(true, () =>
+                    {
+                        var effect = Instantiate(cerberus._roarEffect);
+                        effect.transform.position = cerberus._roarEffect.transform.position;
+                        effect.SetActive(true);
+                        
+                        new Timer(5, _ =>
+                        {
+                            if (effect)
+                                Destroy(effect);
+                        });
+                    }), after: new(bite_delay))
+                    .AddDelay(0.5f, after: new(bite_delay))
+                );
                 AddChild(new MonsterAction("DropAttack")
                     .AddAnimationComponent("Roar")
-                    .AddDelayComponent(1f, out var roar_delay)
+                    .AddDelay(1f, out var roar_delay)
                     .AddComponent(new Do(false)
                         .AssignTo(out var roar_doFall)
                         .OnOpening(() => cerberus._fallingStoneManager.DoFall(succeed =>
@@ -80,10 +98,26 @@ namespace Actors.Monsters.Bosses
                         ),
                         after: new(roar_delay)
                     )
-                    .AddDelayComponent(0.5f, after: new(roar_doFall))
+                    .AddDelay(0.5f, after: new(roar_doFall))
                 );
                 AddChild(new MonsterAction("AmbushAttack")
-                    .AddAnimationComponent());
+                    .AddComponent(new Do(true, () => cerberus._ambushAttackManager.ShowIndicator()))
+                    .AddDelay(
+                        2f,
+                        out var ambush_showIndicator
+                    )
+                    .AddAnimationComponent(after: new(ambush_showIndicator))
+                    .AddDelay(
+                        0.4f,
+                        out var ambush_attack, 
+                        after: new(ambush_showIndicator)
+                    )
+                    .AddComponent(
+                        new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
+                        after: new(ambush_attack)
+                    )
+                    .AddDelay(3f, after: new(ambush_attack))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
@@ -104,7 +138,15 @@ namespace Actors.Monsters.Bosses
         {
             if (!_fallingStoneManager)
                 throw new System.InvalidOperationException(
-                    $"{nameof(Cerberus)}은(는) '{nameof(_fallingStoneManager)}' 컴포넌트를 가지고 있어야 합니다.");
+                    $"{nameof(Cerberus)}은(는) '{nameof(_fallingStoneManager)}'을(를) 가지고 있어야 합니다.");
+
+            if (!_ambushAttackManager)
+                throw new System.InvalidOperationException(
+                    $"{nameof(Cerberus)}은(는) '{nameof(_ambushAttackManager)}'을(를) 가지고 있어야 합니다.");
+
+            if (!_roarEffect)
+                throw new System.InvalidOperationException(
+                    $"{nameof(Cerberus)}은(는) '{nameof(_roarEffect)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
         }

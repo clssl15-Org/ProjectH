@@ -88,9 +88,9 @@ namespace Actors.Monsters.Bosses
                         darkTherion._spikeSpawnPoints.Select(p => (Vector2)p.transform.localPosition),
                         darkTherion.StatsInfo.ProjectileSpeed,
                         darkTherion.StatsInfo.ProjectileFireGap))
-                    .AddDelayComponent(5f, true));
+                    .AddDelay(5f, true));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction("Exhausted")
                     .AddAnimationComponent());

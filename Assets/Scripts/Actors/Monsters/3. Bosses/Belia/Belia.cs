@@ -92,10 +92,10 @@ namespace Actors.Monsters.Bosses
                     );
                 AddChild(new MonsterAction("DashAttack")
                     .AddAnimationComponent(interruptAllOnDeactivate: true)
-                    .AddDelayComponent(belia._dashStartTime, out var delay)
+                    .AddDelay(belia._dashStartTime, out var delay)
                     .AddComponent(new BeliaDashAttackAction(belia._dashForce), after: new(delay)));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction("Exhausted")
                     .AddAnimationComponent());

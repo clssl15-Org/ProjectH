@@ -55,7 +55,7 @@ namespace Actors.Monsters
                         launchType: KinematicProjectileLaunchType.Directions,
                         getDirections: () => (new[] { monster.Direction.ToVector2() }))));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddDelayComponent()
+                    .AddDelay()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
