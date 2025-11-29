@@ -1,0 +1,34 @@
+using System;
+
+namespace Actors.Monsters.Actions
+{
+    internal class Do : MonsterActionComponent
+    {
+        public bool ImmediateInterrupt { get; set; }
+        private Action _opening;
+
+        public Do(bool immediateInterrupt) => ImmediateInterrupt = immediateInterrupt;
+        public Do(bool immediateInterrupt, Action opening) : this(immediateInterrupt) =>
+            OnOpening(opening);
+
+        public Do OnOpening(Action opening)
+        {
+            _opening += opening;
+            return this;
+        }
+
+        public Do AssignTo(out Do self)
+        {
+            self = this;
+            return this;
+        }
+
+        protected override void OnEnter(float _, object __)
+        {
+            _opening?.Invoke();
+
+            if (ImmediateInterrupt)
+                Interrupt(InterruptType.Completed);
+        }
+    }
+}

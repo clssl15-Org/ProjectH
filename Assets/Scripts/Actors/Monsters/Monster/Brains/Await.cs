@@ -23,11 +23,7 @@ namespace Actors.Monsters.Brains
             {
                 if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
-                Callback: result => Complete(),
-                Inputs: new[]
-                {
-                    new PlayAnimation.AnimationPlayInfo()
-                }),
+                Callback: result => Complete()),
                 out var reason,
                 allowRestart: true))
                 {

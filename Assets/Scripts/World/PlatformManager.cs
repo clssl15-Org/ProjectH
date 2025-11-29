@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Infrastructure;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Infrastructure;
 
 public class PlatformManager : MonoBehaviour
 {

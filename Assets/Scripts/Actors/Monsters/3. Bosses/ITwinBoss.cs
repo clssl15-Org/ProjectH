@@ -1,4 +1,4 @@
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     internal interface ITwinBoss : IMonsterInternal
     { 
@@ -11,4 +11,3 @@ namespace Actors.Monsters.Stage3Bosses
         void Die();
     }
 }
-

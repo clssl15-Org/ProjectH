@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1758655682569303859}
   - component: {fileID: 8708658426037089991}
-  - component: {fileID: 8996525972800388448}
   m_Layer: 0
   m_Name: Game Asset Library
   m_TagString: Untagged
@@ -46,17 +45,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _solidColor: {fileID: 2100000, guid: 30c8b6c8e43f77146899a414722a5b03, type: 2}
---- !u!114 &8996525972800388448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7341590220971424175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2bf0ad81e6532e418f0f697db2ad2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _item: {fileID: 8708658426037089991}
-  _injectAtAwake: 0

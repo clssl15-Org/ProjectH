@@ -4,7 +4,7 @@ using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     public partial class Werbellion
     {
@@ -14,6 +14,7 @@ namespace Actors.Monsters.Stage3Bosses
             private int _phase = -1;
             private int _beforeAirPos = -1;
             private Action _callback;
+
 
             public WerbellionAttackBrain()
                 : base(name: MonsterActionType.Attack.ToString()) { }
@@ -61,12 +62,12 @@ namespace Actors.Monsters.Stage3Bosses
                 else
                     mode = Werbellion._attackMode;
 
-                var name = mode.ToString() + "Attack";
+                var attackName = mode.ToString() + "Attack";
 
                 if (mode == AttackMode.Spike)
-                    doNextAction = () => AirAttack(name);
+                    doNextAction = () => AirAttack(attackName);
                 else
-                    doNextAction = () => GroundAttack(name);
+                    doNextAction = () => GroundAttack(attackName);
 
                 return true;
             }
@@ -120,6 +121,8 @@ namespace Actors.Monsters.Stage3Bosses
                     },
                     Callback: result =>
                     {
+                        Blackboard.Properties[IsOnAir] = false;
+
                         if (!result)
                         {
                             Complete(false);
@@ -136,7 +139,10 @@ namespace Actors.Monsters.Stage3Bosses
                         $"{name} 행동에 실패하였기 때문에 {Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                     Complete(false);
+                    return;
                 }
+
+                Blackboard.Properties[IsOnAir] = true;
             }
         }
     }

@@ -2,7 +2,7 @@ using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     public partial class Werbellion
     {
@@ -20,10 +20,10 @@ namespace Actors.Monsters.Stage3Bosses
 
             public override bool CheckCondition()
             {
-                if (Werbellion._movePoints.Length == 0)
+                if (Werbellion._groundPoints.Length == 0)
                 {
                     Debug.LogWarning(Werbellion.FormatLogMessage(
-                        $"{nameof(_movePoints)}은(는) 하나 이상의 지점을 포함해야 합니다."));
+                        $"{nameof(_groundPoints)}은(는) 하나 이상의 지점을 포함해야 합니다."));
                     return false;
                 }
 
@@ -33,7 +33,7 @@ namespace Actors.Monsters.Stage3Bosses
             protected override void OnOpen(params object[] _)
             {
                 var teleportPosition = (Vector2)Werbellion
-                    ._movePoints
+                    ._groundPoints
                     .GetRandomItem(ref _before)
                     .position;
 

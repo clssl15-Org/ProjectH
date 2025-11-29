@@ -2,7 +2,7 @@ using Actors.Monsters.Actions;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     public partial class DarkTherion
     {

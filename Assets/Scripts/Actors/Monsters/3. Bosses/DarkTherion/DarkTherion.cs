@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
     public partial class DarkTherion : Monster<DarkTherionStats>, ITwinBoss
@@ -55,14 +55,14 @@ namespace Actors.Monsters.Stage3Bosses
                 Blackboard.Properties[ITwinBoss.IsAwake] = false;
 
                 AddChild(new Alive()
-                    .AddChild(new Idle())
-                    .AddChild(new Awaken()
+                    .AddChild(new Idle(ITwinBoss.IsAwake))
+                    .AddChild(new Awaken(ITwinBoss.IsAwake)
                         .AddChild(new DarkTherionMoveBrain())
                         .AddChild(new Await(darkTherion.StatsInfo.DelayBeforeAttack))
                         .AddChild(new DarkTherionAttackBrain())
                     )
                 );
-                AddChild(new Exhausted());
+                AddChild(new TwinBossExhaustedBrain());
                 AddChild(new Dead() { IsSelectable = false });
             }
         }
@@ -100,7 +100,6 @@ namespace Actors.Monsters.Stage3Bosses
         }
 
         private IPlayer _player;
-        private bool _isAwaken = false;
 
 
         // Content
@@ -129,15 +128,9 @@ namespace Actors.Monsters.Stage3Bosses
                 DoAwake();
         }
 
-        protected override void Update()
-        {
-            Brain.Blackboard.Properties[ITwinBoss.IsAwake] = _isAwaken;
-            base.Update();  
-        }
-
         public void DoAwake()
         {
-            _isAwaken = true;
+            Brain.Blackboard.Properties[ITwinBoss.IsAwake] = true;
             Brain.Blackboard.Committing = true;
         }
 
@@ -165,7 +158,7 @@ namespace Actors.Monsters.Stage3Bosses
             var message = base.GetDisplayContent();
 
             message += "----------------";
-            message += $"\nAwaken: {_isAwaken}";
+            message += $"\nAwaken: {Brain.Blackboard.Properties[ITwinBoss.IsAwake]}";
 
             return message;
         }

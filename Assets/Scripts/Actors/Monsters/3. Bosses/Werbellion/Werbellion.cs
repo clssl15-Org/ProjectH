@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
     public partial class Werbellion : Monster<WerbellionStats>
@@ -26,10 +26,11 @@ namespace Actors.Monsters.Stage3Bosses
         }
 
         private const string IsAwake = nameof(IsAwake);
+        private const string IsOnAir = nameof(IsOnAir);
 
 
         [Header("Werbellion")]
-        [SerializeField] private Transform[] _movePoints;
+        [SerializeField] private Transform[] _groundPoints;
         [SerializeField] private Transform[] _airPoints;
         [SerializeField] private AttackMode _attackMode;
         [Space]
@@ -47,7 +48,7 @@ namespace Actors.Monsters.Stage3Bosses
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
         internal override PlatformDetector PlatformDetector => throw new InvalidOperationException(
-            $"{nameof(Werbellion)}은(는) {nameof(PlatformDetector)} 프로퍼티를 사용하지 않습니다.");
+            $"{nameof(Werbellion)}은(는) '{nameof(PlatformDetector)}' 프로퍼티를 사용하지 않습니다.");
 
 
         // Internal
@@ -56,10 +57,11 @@ namespace Actors.Monsters.Stage3Bosses
             public WerbellionBrain(IMonsterInternal owner) : base(owner)
             {
                 Blackboard.Properties[IsAwake] = false;
+                Blackboard.Properties[IsOnAir] = false;
 
                 AddChild(new Alive(opened: () => owner.Rigidbody.gravityScale = 0f)
-                    .AddChild(new Idle("Spawn", haltOnActionEnd: false))
-                    .AddChild(new Awaken()
+                    .AddChild(new Idle("Spawn", IsAwake, haltOnActionEnd: false))
+                    .AddChild(new Awaken(IsAwake)
                         .AddChild(new WerbellionTeleportBrain())
                         .AddChild(new WerbellionAttackBrain())
                         .AddChild(new Await(
@@ -68,10 +70,7 @@ namespace Actors.Monsters.Stage3Bosses
                         )
                     )
                 );
-                AddChild(new Dead(
-                    opening: () => owner.Rigidbody.gravityScale = 1f)
-                    { DestroyOwnerOnCompleted = false }
-                );
+                AddChild(new WerbellionDeadBrain());
             }
         }
 
@@ -118,19 +117,18 @@ namespace Actors.Monsters.Stage3Bosses
                         after: new(spikeAttackIn)
                     )
                     .AddDelayComponent(
-                        5f,
+                        1f,
                         out var spikeAttackAction,
                         after: new(spikeAttackIn)
                     )
                     .AddAnimationComponent(
                         "SpikeAttackOut",
                         out var spikeAttackOut,
-                        interruptAllOnDeactivate: true,
                         after: new(spikeAttackAction)
                     )
                     .AddAnimationComponent("TeleportIn", out var spike_teleportIn_b, after: new(spikeAttackOut))
                     .AddComponent(new WerbellionTeleportComponent(), after: new(spike_teleportIn_b))
-                    .AddAnimationComponent("TeleportOut", after: new(spike_teleportIn_b))
+                    .AddAnimationComponent("TeleportOut", after: new(spike_teleportIn_b), interruptAllOnDeactivate: true)
                 );
                 AddChild(new MonsterAction("PortalAttack")
                     .AddAnimationComponent()
@@ -154,8 +152,16 @@ namespace Actors.Monsters.Stage3Bosses
                     .AddDelayComponent()
                     .AddComponent(new HitFlash())
                 );
-                AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent()
+                AddChild(new MonsterAction("DeadAir")
+                    .AddAnimationComponent("TeleportIn", out var dead_teleportIn)
+                    .AddComponent(new WerbellionTeleportComponent(), after: new(dead_teleportIn))
+                    .AddAnimationComponent("TeleportOut", out var dead_teleportOut, after: new(dead_teleportIn))
+                    .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f), after: new(dead_teleportOut))
+                    .AddAnimationComponent("Dead", after: new(dead_teleportOut), interruptAllOnDeactivate: true)
+                );
+                AddChild(new MonsterAction("DeadGround")
+                    .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f))
+                    .AddAnimationComponent("Dead")
                 );
             }
         }
@@ -190,14 +196,9 @@ namespace Actors.Monsters.Stage3Bosses
                 DoAwake();
         }
 
-        protected override void Update()
-        {
-            base.Update();  
-        }
-
         public void DoAwake()
         {
-            Brain.Blackboard.Properties[ITwinBoss.IsAwake] = true;
+            Brain.Blackboard.Properties[IsAwake] = true;
             Brain.Blackboard.Committing = true;
         }
 
@@ -220,7 +221,7 @@ namespace Actors.Monsters.Stage3Bosses
             var message = base.GetDisplayContent();
 
             message += "----------------";
-            message += $"\nAwaken: {(bool)Brain.Blackboard.Properties[ITwinBoss.IsAwake]}";
+            message += $"\nAwaken: {(bool)Brain.Blackboard.Properties[IsAwake]}";
 
             return message;
         }

@@ -6,6 +6,14 @@ namespace Actors.Monsters
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
     public class Projectile : MonoBehaviour
     {
+        public float Tolerance
+        {
+            get => _tolerance;
+            set => _tolerance = Mathf.Max(0, value);
+        }
+
+        [SerializeField, Min(0)] private float _tolerance = 1f;
+
         private PlatformManager _platformManager;
         private string[] _collisionTags;
 
@@ -28,8 +36,10 @@ namespace Actors.Monsters
             var min = _platformManager.Bound.min;
             var max = _platformManager.Bound.max;
 
-            if (transform.position.x < min.x || transform.position.x > max.x
-                || transform.position.y < min.y || transform.position.y > max.y)
+            if (transform.position.x < min.x - _tolerance
+                || transform.position.x > max.x + _tolerance
+                || transform.position.y < min.y - _tolerance
+                || transform.position.y > max.y + _tolerance)
             {
                 Destroy(gameObject);
             }
