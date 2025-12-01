@@ -57,6 +57,9 @@ namespace Actor.PlayerSystem
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                     continue;
 
+                if (hitCollider.CompareTag("Player"))
+                    continue;
+
                 int amount = (int)(attackPower * damageMultiplier);
                 damageableObject.TakeDamage(amount);
                 onAttack3?.Invoke();

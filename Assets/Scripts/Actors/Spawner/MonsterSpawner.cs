@@ -6,6 +6,10 @@ using Actors.Monsters.Brains;
 
 public class MonsterSpawner : MonoBehaviour
 {
+    [Header("스폰 위치 설정")]
+    [SerializeField]
+    private List<Transform> spawnPoint;
+
     [Header("페이즈 설정")]
     [SerializeField]
     private List<SpawnPhase> phases = new List<SpawnPhase>();
@@ -17,6 +21,7 @@ public class MonsterSpawner : MonoBehaviour
     private bool isSpawning = false; // 스포너가 현재 작동 중인지 여부
 
     private List<GameObject> activeMonsters = new List<GameObject>();
+    private List<Transform> tmpSpawnPoint = new List<Transform>();
 
     private void Start()
     {
@@ -81,6 +86,9 @@ public class MonsterSpawner : MonoBehaviour
         // 다음 페이즈 시작 전, 추적 리스트 초기화
         activeMonsters.Clear();
 
+        // 임시 스폰 위치 리스트 초기화
+        tmpSpawnPoint = new List<Transform>(spawnPoint);
+
         // 1. 고정 스폰 풀 처리
         ProcessFixedPool(phase.fixedMonsterPool);
 
@@ -99,7 +107,7 @@ public class MonsterSpawner : MonoBehaviour
 
     private IEnumerator WaitAndStartNextPhase()
     {
-        yield return null;
+        yield return new WaitForSeconds(1);
         StartNextPhase();
     }
 
@@ -138,15 +146,28 @@ public class MonsterSpawner : MonoBehaviour
             return;
         }
 
+        List<GameObject> candidates = new List<GameObject>(pool.monsterPrefabs);
+
         for (int i = 0; i < pool.spawnCount; i++)
         {
             // 후보 리스트에서 랜덤 인덱스 선택 
-            int randomIndex = Random.Range(0, pool.monsterPrefabs.Count);
-            GameObject monsterPrefab = pool.monsterPrefabs[randomIndex];
+            int randomIndex = Random.Range(0, candidates.Count);
+            GameObject monsterPrefab = candidates[randomIndex];
 
             if (monsterPrefab != null)
             {
                 SpawnMonster(monsterPrefab);
+                
+                if(!pool.canDuplicate)
+                {
+                    // 중복 불가 시, 선택된 몬스터를 후보 리스트에서 제거 
+                    candidates.RemoveAt(randomIndex);
+                    // 후보가 더 이상 없으면 종료 
+                    if (candidates.Count <= 0)
+                    {
+                        break;
+                    }
+                }
             }
         }
     }
@@ -156,8 +177,12 @@ public class MonsterSpawner : MonoBehaviour
     /// </summary>
     private void SpawnMonster(GameObject prefab)
     {
+        // 스폰 위치 무작위 선택 및 제거
+        Transform spawnTransform = tmpSpawnPoint[Random.Range(0, tmpSpawnPoint.Count)];
+        tmpSpawnPoint.Remove(spawnTransform);
+
         // 스포너의 위치와 회전값으로 몬스터를 스폰합니다. 
-        GameObject monsterInstance = Instantiate(prefab, this.transform.position, this.transform.rotation);
+        GameObject monsterInstance = Instantiate(prefab, spawnTransform.position, this.transform.rotation);
         if (!monsterInstance.TryGetComponent(out Actors.IMonster monsterScript))
         {
             var exception = new System.ArgumentException(
@@ -203,8 +228,9 @@ public class MonsterSpawner : MonoBehaviour
             // 2. 활성 몬스터가 0마리가 되었는지 확인 
             if (isSpawning && activeMonsters.Count == 0)
             {
+                print("test: all monsters dead");
                 // 3. 현재 페이즈의 모든 몬스터가 사망했으므로, 다음 페이즈 시작 
-                StartNextPhase();
+                StartCoroutine(WaitAndStartNextPhase());
             }
         }
     }

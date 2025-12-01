@@ -22,6 +22,9 @@ namespace Actor.PlayerSystem
             if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                 return;
 
+            if(collision.gameObject.CompareTag("Player"))
+                return;
+
             damageableObject.TakeDamage(damage);
             onRangedAttack?.Invoke();
         }

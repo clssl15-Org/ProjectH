@@ -84,6 +84,9 @@ namespace Actor.PlayerSystem
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                     continue;
 
+                if (hitCollider.CompareTag("Player"))
+                    continue;
+
                 //if (hitEnemies.Contains(damageableObject))
                 //    continue;
 

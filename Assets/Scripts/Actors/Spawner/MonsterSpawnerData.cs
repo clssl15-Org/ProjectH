@@ -26,5 +26,7 @@ public class RandomPoolSettings
 {
     public int spawnCount;
 
+    public bool canDuplicate;
+
     public List<GameObject> monsterPrefabs;
 }
