@@ -4,6 +4,7 @@ using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure;
 using UnityEngine;
+using World;
 
 namespace Actors.Monsters
 {
@@ -138,19 +139,32 @@ namespace Actors.Monsters
             Configuration configuration,
             PlatformManager platformManager)
         {
-            GameAssetsLibrary = gameAssetsLibrary;
-            Configuration = configuration;
-            PlatformManager = platformManager;
+            Inject(gameAssetsLibrary);
+            Inject(configuration);
+            Inject(platformManager);
         }
 
-        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetsLibrary) =>
-            GameAssetsLibrary = gameAssetsLibrary;
+        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetsLibrary) => Inject(gameAssetsLibrary);
+        void IInjectable<Configuration>.Inject(Configuration configuration) => Inject(configuration);
+        void IInjectable<PlatformManager>.Inject(PlatformManager platformManager) => Inject(platformManager);
 
-        void IInjectable<Configuration>.Inject(Configuration configuration) =>
+        private void Inject(GameAssetLibrary gameAssetsLibrary)
+        {
+            GameAssetsLibrary = gameAssetsLibrary;
+        }
+
+        private void Inject(Configuration configuration)
+        {
             Configuration = configuration;
 
-        void IInjectable<PlatformManager>.Inject(PlatformManager platformManager) =>
+            if (TryGetComponent<SpriteSizeHandler>(out var sizeHandler))
+                sizeHandler.Initialize(configuration, true);
+        }
+
+        private void Inject(PlatformManager platformManager)
+        {
             PlatformManager = platformManager;
+        }
         #endregion
 
         protected virtual void Awake()

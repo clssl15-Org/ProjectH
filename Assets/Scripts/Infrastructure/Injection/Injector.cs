@@ -8,7 +8,7 @@ namespace Infrastructure
     public class Injector : MonoBehaviour
     {
         [SerializeField] private MonoBehaviour[] _injections;
-        [SerializeField] private bool _injectAtAwake = false;
+        [SerializeField] private bool _injectAtAwake = true;
 
         private void Awake()
         {

@@ -1,11 +1,14 @@
 using System.Linq;
 using UnityEngine;
+using World;
 
 namespace Actors.Monsters
 {
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
     public class Projectile : MonoBehaviour
     {
+        public Rigidbody2D Rigidbody { get; private set; }
+
         public float Tolerance
         {
             get => _tolerance;
@@ -17,6 +20,11 @@ namespace Actors.Monsters
         private PlatformManager _platformManager;
         private string[] _collisionTags;
 
+
+        private void Awake()
+        {
+            Rigidbody = GetComponent<Rigidbody2D>();
+        }
 
         public virtual void Initialize(PlatformManager platformManager, params string[] collisionTags)
         {
@@ -33,8 +41,8 @@ namespace Actors.Monsters
                 return;
             }
 
-            var min = _platformManager.Bound.min;
-            var max = _platformManager.Bound.max;
+            var min = _platformManager.Bounds.min;
+            var max = _platformManager.Bounds.max;
 
             if (transform.position.x < min.x - _tolerance
                 || transform.position.x > max.x + _tolerance

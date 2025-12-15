@@ -1,5 +1,6 @@
 using Infrastructure;
 using UnityEngine;
+using World;
 
 namespace Actors.Monsters.Bosses
 {

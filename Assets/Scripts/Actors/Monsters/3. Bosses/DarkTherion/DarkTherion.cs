@@ -25,7 +25,7 @@ namespace Actors.Monsters.Bosses
         [Header("Dark Therion")]
         [SerializeField] private Configuration _configuration;
         [SerializeField] private KinematicProjectile _projectilePrefab;
-        [SerializeField] private Projectile _spikePrefab;
+        [SerializeField] private KinematicProjectile _spikePrefab;
         [Space]
         [SerializeField, Min(0)] private float _bulletDestroyTime = 10f;
         [SerializeField] private Transform[] _spikeSpawnPoints;
@@ -86,6 +86,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new SpikeAttackAction(
                         darkTherion._spikePrefab,
                         darkTherion._spikeSpawnPoints.Select(p => (Vector2)p.transform.localPosition),
+                        SpikeAttackAction.SpawnPointType.Local,
                         darkTherion.StatsInfo.ProjectileSpeed,
                         darkTherion.StatsInfo.ProjectileFireGap))
                     .AddDelay(5f, true));

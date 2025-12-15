@@ -1,6 +1,7 @@
-using UnityEngine;
-using Infrastructure;
 using System;
+using Infrastructure;
+using UnityEngine;
+using World;
 
 namespace Actors
 {
@@ -27,7 +28,7 @@ namespace Actors
     }
 
 
-    public interface IPlayer
+    public interface IPlayer : IInjectable<PlatformManager>
     {
         int HP { get; }
         bool IsAlive { get; }
@@ -36,7 +37,6 @@ namespace Actors
         event Action Destroyed;
 
         int MaxHP { get; }
-
         int CurrentPlatform { get; }
 
 #pragma warning disable IDE1006
@@ -46,18 +46,4 @@ namespace Actors
 #pragma warning restore
 
     }
-
-    class Foo
-    {
-        public void Update(PlayerCondition cond)
-        {
-            if (cond.IsAttack())
-            {
-                // ╬Нец ui ╤Г©Л╠Б
-            }
-
-
-        }
-    }
-
 }

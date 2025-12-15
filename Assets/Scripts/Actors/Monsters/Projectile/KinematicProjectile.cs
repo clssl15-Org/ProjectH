@@ -10,10 +10,8 @@ namespace Actors.Monsters
 
         private void Start()
         {
-            var rb = GetComponent<Rigidbody2D>();
-
-            rb.isKinematic = true;
-            rb.useFullKinematicContacts = true;
+            Rigidbody.isKinematic = true;
+            Rigidbody.useFullKinematicContacts = true;
         }
 
         public void Launch(Vector2 direction, float speed)

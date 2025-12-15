@@ -16,9 +16,13 @@ namespace Infrastructure
         private int _applyScaleFactorCount = 0;
 
 
-        public SpriteSizeHandler Initialize(Configuration configuration)
+        public SpriteSizeHandler Initialize(Configuration configuration, bool apply = false)
         {
             _configuration = configuration;
+
+            if (apply)
+                ApplyScaleFactor();
+
             return this;
         }
 

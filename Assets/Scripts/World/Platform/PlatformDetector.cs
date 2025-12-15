@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using Infrastructure;
 
-namespace Infrastructure
+namespace World
 {
     [RequireComponent(typeof(Collider2D))]
     public class PlatformDetector : MonoBehaviour
@@ -53,10 +54,8 @@ namespace Infrastructure
             platformId = -1;
 
             if (!_platformManager)
-            {
                 throw new InvalidOperationException(
                     $"{GetType().Name} 객체를 사용하려면 {nameof(_platformManager)}이(가) 할당되어 있어야 합니다.");
-            }
 
             var cellHeight = _platformManager.CellSize.y;
             var steps = Mathf.FloorToInt((_detectionHeight + Mathf.Epsilon) / cellHeight);

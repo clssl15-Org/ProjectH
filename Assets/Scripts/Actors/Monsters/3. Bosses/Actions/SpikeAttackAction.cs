@@ -2,81 +2,84 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.Monsters.Actions;
-using Infrastructure;
+using Infrastructure.StateMachines.Scp;
 using UnityEngine;
+using Scp = Infrastructure.StateMachines.Scp;
 
 namespace Actors.Monsters.Bosses
 {
     internal class SpikeAttackAction : MonsterActionComponent
     {
         // Internal
-        private sealed class SpikeProjectile
-        {
-            public Rigidbody2D Body;
-            public Vector2 Direction
-            {
-                get
-                {
-                    var (origin, dir) = _getLaunchInfo();
-                    if (dir.sqrMagnitude < 0.0001f)
-                        dir = Vector2.down;
-                    dir.Normalize();
+        private Func<Vector2> _getTargetPoint;
 
-                    return dir;
-                }
-            }
-            public float StartAngle;
-            public float TargetAngle
-            {
-                get
-                {
-                    var (origin, dir) = _getLaunchInfo();
-                    if (dir.sqrMagnitude < 0.0001f)
-                        dir = Vector2.down;
-                    dir.Normalize();
+        private Sequence _sequence;
+        private float _elapsedTime;
 
-                    return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
-                }
-            }
-            public bool Fired;
-
-            private Func<(Vector2 origin, Vector2 dir)> _getLaunchInfo;
-
-            public SpikeProjectile(Func<(Vector2 origin, Vector2 dir)> getLaunchInfo) =>
-                _getLaunchInfo = getLaunchInfo;
-        }
-
-        private readonly List<SpikeProjectile> _projectiles = new();
-
-        private GameObject _spikePrefab;
-        private Vector2[] _spikeSpawnPoints;
-        private float _projectileSpeed;
-        private float _projectileFireGap;
-
-        private int _currentIndex;
-        private float _phaseTimer;
 
         // Content
+        public enum SpawnPointType { World, Local }
+
         public SpikeAttackAction(
-            Projectile spikePrefab,
+            KinematicProjectile spikePrefab,
             IEnumerable<Vector2> spikeSpawnPoints,
+            SpawnPointType spawnPointType,
             float projectileSpeed,
             float projectileFireGap)
         {
-            _spikePrefab = spikePrefab.gameObject;
-            _projectileSpeed = projectileSpeed;
-            _spikeSpawnPoints = spikeSpawnPoints.ToArray();
-            _projectileFireGap = projectileFireGap;
+            var points = spikeSpawnPoints.ToArray();
+            var clips = new IClip[points.Length];
 
-            InterruptAllOnDeactivate = true;
+            _sequence = new Sequence();
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                var index = i;
+                var clip = new Clip($"SpikeLauncher {i}")
+                    .AssignTo(out var self)
+                    .OnStarted((_, _) =>
+                    {
+                        var spike =
+                            UnityEngine.Object.Instantiate(spikePrefab.gameObject)
+                            .GetComponent<KinematicProjectile>();
+                        spike.Initialize(Owner.PlatformManager, "Player", "Ground");
+
+                        spike.transform.position = spawnPointType switch
+                        {
+                            SpawnPointType.World => points[index],
+                            SpawnPointType.Local => Owner.transform.TransformPoint(points[index]),
+                            _ => throw new ArgumentOutOfRangeException(
+                                nameof(spawnPointType), spawnPointType, $"알 수 없는 위치 정보 타입 '{spawnPointType}'이(가) 입력되었습니다."),
+                        };
+
+                        new SpikeLauncher(
+                            spike,
+                            _getTargetPoint,
+                            projectileSpeed)
+                        .Fire();
+
+                        self.Stop();
+                    });
+
+                clips[i] = clip;
+
+                if (i == 0)
+                    _sequence.Add(clip);
+                else
+                {
+                    _sequence.AddAfter(
+                        clips[i - 1],
+                        new Scp.Delay($"Delay {i}", projectileFireGap)
+                            .AssignTo(out var delay)
+                    );
+
+                    _sequence.AddAfter(delay, clip);
+                }
+            }
         }
 
-        protected override void OnEnter(float _, object input)
+        protected override void OnEnter(float elapsedTime, object input)
         {
-            _projectiles.Clear();
-            _currentIndex = 0;
-            _phaseTimer = 0f;
-
             if (input == null)
                 throw new ArgumentNullException(
                     $"{nameof(SpikeAttackAction)}의 입력값은 null일 수 없습니다.");
@@ -85,89 +88,27 @@ namespace Actors.Monsters.Bosses
                 throw new ArgumentException(
                     $"{nameof(SpikeAttackAction)}의 입력값은 Func<Vector2> 타입이어야 합니다.");
 
-            if (_spikeSpawnPoints == null || _spikeSpawnPoints.Length == 0)
-                return;
-
-            foreach (var spawnPoint in _spikeSpawnPoints)
-            {
-                var currentPoint = spawnPoint + (Vector2)Owner.transform.position;
-
-                var projectileObject = UnityEngine.Object.Instantiate(
-                    _spikePrefab,
-                    currentPoint,
-                    Quaternion.identity);
-
-                projectileObject
-                    .GetComponent<SpriteSizeHandler>()
-                    .Initialize(Owner.Configuration)
-                    .RequestApplyScaleFactor();
-
-                projectileObject
-                    .GetComponent<Projectile>()
-                    .Initialize(Owner.PlatformManager, "Player", "Ground");
-
-                if (!projectileObject.TryGetComponent<Rigidbody2D>(out var body))
-                    continue;
-
-                body.velocity = Vector2.zero;
-                body.angularVelocity = 0f;
-                var startAngle = body.rotation;
-
-                _projectiles.Add(new SpikeProjectile(() => (currentPoint, getTargetPoint() - currentPoint))
-                {
-                    Body = body,
-                    StartAngle = startAngle,
-                    Fired = false
-                });
-            }
+            _getTargetPoint = getTargetPoint;
+            _elapsedTime = elapsedTime;
+            _sequence.Start();
         }
 
-        protected override void OnUpdate(float _)
+        protected override void OnUpdate(float elapsedTime)
         {
-            if (_projectiles.Count == 0 || _currentIndex >= _projectiles.Count)
-                return;
+            var deltaTime = elapsedTime - _elapsedTime;
+            _elapsedTime = elapsedTime;
 
-            var current = _projectiles[_currentIndex];
-            if (!current.Body)
+            if (!_sequence.Update(deltaTime, out var succeeded))
             {
-                // 이미 파괴된 경우 건너뛰기
-                _currentIndex++;
-                _phaseTimer = 0f;
-                return;
-            }
-
-            _phaseTimer += Time.deltaTime;
-
-            // 에임 단계: 시작 각도를 타겟 각도로 보간
-            var t = Mathf.Clamp01(_phaseTimer / _projectileFireGap);
-            var angle = Mathf.LerpAngle(current.StartAngle, current.TargetAngle, t * 5f);
-            current.Body.MoveRotation(angle);
-
-            // 에임 완료 시 발사
-            if (t >= 1f && !current.Fired)
-            {
-                current.Body.velocity = current.Direction * _projectileSpeed;
-                current.Fired = true;
-
-                _projectiles[_currentIndex] = current;
-                _currentIndex++;
-                _phaseTimer = 0f;
-            }
-            else
-            {
-                _projectiles[_currentIndex] = current;
+                Interrupt(succeeded
+                    ? InterruptType.Completed
+                    : InterruptType.Interrupted);
             }
         }
 
         protected override void OnInterrupt(InterruptType _)
         {
-            for (int i = 0; i < _projectiles.Count; i++)
-            {
-                if (_projectiles[i].Body != null)
-                    UnityEngine.Object.Destroy(_projectiles[i].Body.gameObject);
-            }
-
-            _projectiles.Clear();
+            _sequence.Stop();
         }
     }
 }

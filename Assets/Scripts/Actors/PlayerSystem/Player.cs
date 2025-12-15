@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Infrastructure;
+using UnityEngine;
+using World;
 
 namespace Actors.PlayerSystem
 {
@@ -38,6 +37,13 @@ namespace Actors.PlayerSystem
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
 
             platformDetector = GetComponent<PlatformDetector>();
+        }
+
+
+        void IInjectable<PlatformManager>.Inject(PlatformManager platformManager)
+        {
+            if (TryGetComponent<PlatformDetector>(out var platformDetector))
+                platformDetector.SetPlatformManager(platformManager);
         }
 
         public void Start()

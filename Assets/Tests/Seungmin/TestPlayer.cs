@@ -4,6 +4,7 @@ using Actors;
 using Actors.Monsters;
 using Infrastructure;
 using UnityEngine;
+using World;
 
 [RequireComponent(typeof(PlatformDetector))]
 public class TestPlayer : MonoBehaviour, IPlayer
@@ -50,6 +51,12 @@ public class TestPlayer : MonoBehaviour, IPlayer
         _platformDetector.SetPlatformManager(_platformManager);
     }
 
+    void IInjectable<PlatformManager>.Inject(PlatformManager platformManager)
+    {
+        _platformManager = platformManager;
+        _platformDetector?.SetPlatformManager(platformManager);
+    }
+
     private void Update()
     {
         if (_platformDetector.TryGetCurrentPlatformId(out var platformId))
@@ -57,9 +64,7 @@ public class TestPlayer : MonoBehaviour, IPlayer
         else
             CurrentPlatform = -1;
 
-#if UNITY_EDITOR
         UpdateStateDisplay();
-#endif
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

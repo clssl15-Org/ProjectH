@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
-using Infrastructure;
+using World;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -37,7 +37,7 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private GameObject _straightAreaAttackPrefab;
         [SerializeField] float _straightAreaAttackTiming;
         [Space]
-        [SerializeField] private Projectile _spikePrefab;
+        [SerializeField] private KinematicProjectile _spikePrefab;
         [SerializeField] private Transform[] _spikeSpawnPoints;
 
         [Header("Debug")]
@@ -90,9 +90,12 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new WerbellionTeleportComponent(), after: new(teleportIn))
                     .AddAnimationComponent("TeleportOut", after: new(teleportIn))
                 );
+
+                #region Attacks
                 AddChild(new MonsterAction("PunchAttack")
                     .AddAnimationComponent()
                 );
+
                 AddChild(new MonsterAction("StraightAreaAttack")
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithWeapon(
@@ -100,39 +103,33 @@ namespace Actors.Monsters.Bosses
                         werbellion._straightAreaAttackTiming))
                     .AddDelay(1f, interruptAllOnDeactivate: true)
                 );
+
                 AddChild(new MonsterAction("SpikeAttack")
-                    .AddAnimationComponent("TeleportIn", out var spike_teleportIn_a)
-                    .AddComponent(new WerbellionTeleportComponent(), after: new(spike_teleportIn_a))
-                    .AddAnimationComponent("TeleportOut", out var spike_teleportOut_a, after: new(spike_teleportIn_a))
-                    .AddAnimationComponent("SpikeAttackIn", out var spikeAttackIn, after: new(spike_teleportOut_a))
+                    .AddAnimationComponent("SpikeAttackIn", out var spikeAttackIn)
                     .AddComponent(new SpikeAttackAction(
                         werbellion._spikePrefab,
-                        werbellion._spikeSpawnPoints.Select(point => (Vector2)point.transform.localPosition),
+                        werbellion._spikeSpawnPoints.Select(point => (Vector2)point.transform.position),
+                        SpikeAttackAction.SpawnPointType.World,
                         werbellion.StatsInfo.SpikeSpeed,
                         werbellion.StatsInfo.SpikeFireGap),
+                        out var spikeAttack,
                         after: new(spikeAttackIn)
                     )
                     .AddAnimationComponent(
                         MonsterActionType.Idle.ToString(),
                         after: new(spikeAttackIn)
                     )
-                    .AddDelay(
-                        1f,
-                        out var spikeAttackAction,
-                        after: new(spikeAttackIn)
-                    )
                     .AddAnimationComponent(
                         "SpikeAttackOut",
-                        out var spikeAttackOut,
-                        after: new(spikeAttackAction)
+                        after: new(spikeAttack),
+                        interruptAllOnDeactivate: true
                     )
-                    .AddAnimationComponent("TeleportIn", out var spike_teleportIn_b, after: new(spikeAttackOut))
-                    .AddComponent(new WerbellionTeleportComponent(), after: new(spike_teleportIn_b))
-                    .AddAnimationComponent("TeleportOut", after: new(spike_teleportIn_b), interruptAllOnDeactivate: true)
                 );
+
                 AddChild(new MonsterAction("PortalAttack")
                     .AddAnimationComponent()
                 );
+
                 AddChild(new MonsterAction("StunAttack")
                     .AddAnimationComponent(
                         "StunAttackIn",
@@ -148,6 +145,8 @@ namespace Actors.Monsters.Bosses
                         after: new(stunAttack)
                     )
                 );
+                #endregion
+
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
                     .AddComponent(new HitFlash())

@@ -1,7 +1,7 @@
 using System;
-using Actors.Monsters.Bosses;
 using Infrastructure;
 using UnityEngine;
+using World;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

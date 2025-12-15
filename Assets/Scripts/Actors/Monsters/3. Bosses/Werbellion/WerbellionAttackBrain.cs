@@ -53,18 +53,17 @@ namespace Actors.Monsters.Bosses
                     return false;
                 }
 
-                AttackMode mode;
-
-                if (Werbellion._attackMode == AttackMode.Any)
-                    mode = (AttackMode)UnityEngine.Random.Range(
+                var attackmode = Werbellion._attackMode;
+                if (attackmode == AttackMode.Any)
+                {
+                    attackmode = (AttackMode)UnityEngine.Random.Range(
                         minInclusive: 1, // Any Á¦¿Ü
                         maxExclusive: Enum.GetValues(typeof(AttackMode)).Length);
-                else
-                    mode = Werbellion._attackMode;
+                }
 
-                var attackName = mode.ToString() + "Attack";
+                var attackName = attackmode.ToString() + "Attack";
 
-                if (mode == AttackMode.Spike)
+                if (attackmode == AttackMode.Portal)
                     doNextAction = () => AirAttack(attackName);
                 else
                     doNextAction = () => GroundAttack(attackName);
