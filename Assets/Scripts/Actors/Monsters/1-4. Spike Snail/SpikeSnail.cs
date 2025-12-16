@@ -44,7 +44,7 @@ namespace Actors.Monsters
             public SpikeSnailActionController(SpikeSnail monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, startTime: 0.33f, endTime: 2.08f)));
+                    .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, StartTime: 0.33f, EndTime: 2.08f)));
                 AddChild(new MonsterAction(MonsterActionType.Alert)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Walk)

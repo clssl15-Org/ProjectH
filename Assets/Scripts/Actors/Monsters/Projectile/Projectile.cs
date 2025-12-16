@@ -9,6 +9,7 @@ namespace Actors.Monsters
     {
         public Rigidbody2D Rigidbody { get; private set; }
 
+        public bool HasArrived { get; private set; } = false;
         public float Tolerance
         {
             get => _tolerance;
@@ -36,7 +37,7 @@ namespace Actors.Monsters
         {
             if (!_platformManager)
             {
-                Debug.LogError($"[Projectile] PlatformManager가 없기 때문에 투사체 {name}을(를) 사용할 수 없습니다.");
+                Debug.LogError($"[Projectile] {nameof(PlatformManager)}이(가) 없기 때문에 투사체 {name}을(를) 사용할 수 없습니다.");
                 Destroy(gameObject);
                 return;
             }
@@ -53,10 +54,23 @@ namespace Actors.Monsters
             }
         }
 
-        protected virtual void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (_collisionTags == null || _collisionTags.Length == 0)
+            if (HasArrived || _collisionTags == null || _collisionTags.Length == 0)
                 return;
+
+            HasArrived = true;
+
+            if (_collisionTags.Any(t => collider.gameObject.CompareTag(t)))
+                OnArrived();
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (HasArrived || _collisionTags == null || _collisionTags.Length == 0)
+                return;
+
+            HasArrived = true;
 
             if (_collisionTags.Any(t => collision.gameObject.CompareTag(t)))
                 OnArrived();

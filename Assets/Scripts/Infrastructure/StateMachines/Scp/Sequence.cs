@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace Infrastructure.StateMachines.Scp
 {
@@ -23,6 +24,13 @@ namespace Infrastructure.StateMachines.Scp
 
 
         // Content
+        public Sequence() { }
+        public Sequence(Action started = null, Action<bool> stopped = null)
+        {
+            Started += started;
+            Stopped += stopped;
+        }
+
         public Sequence<TBlackboard> Add(IClip clip)
         {
             ThrowIfActive();
@@ -207,5 +215,10 @@ namespace Infrastructure.StateMachines.Scp
         }
     }
 
-    public class Sequence : Sequence<object> { }
+    public class Sequence : Sequence<object>
+    {
+        public Sequence() { }
+        public Sequence(Action started = null, Action<bool> stopped = null)
+            : base(started, stopped) { }
+    }
 }

@@ -125,7 +125,6 @@ namespace Actors.Monsters.Bosses
                         // Attack
                         null,
                         (Func<Vector2>)(() => Werbellion._targetPlayer.transform.position),
-                        null,
 
                         // Teleport Out
                         null,

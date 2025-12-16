@@ -12,12 +12,12 @@ namespace Actors.Monsters.Actions
         Action<bool> Callback = null)
     {
         public MonsterAnimationPlayInfo(
-            MonsterActionType actionType,
-            string trigger = null,
-            float? startTime = null,
-            float? endTime = null,
-            Action<bool> callback = null)
-            : this(actionType.ToString(), trigger, startTime, endTime, callback) { }
+            MonsterActionType ActionType,
+            string Trigger = null,
+            float? StartTime = null,
+            float? EndTime = null,
+            Action<bool> Callback = null)
+            : this(ActionType.ToString(), Trigger, StartTime, EndTime, Callback) { }
     }
 
     public class MonsterAnimationPlayer : IDisposable
@@ -32,7 +32,7 @@ namespace Actors.Monsters.Actions
 
 
         // Content
-        public MonsterAnimationPlayer(Animator animator, Action played)
+        public MonsterAnimationPlayer(Animator animator, Action played = null)
         {
             if (!animator)
                 throw new ArgumentException(nameof(animator), $"{nameof(animator)}이(가) 유효하지 않습니다.");

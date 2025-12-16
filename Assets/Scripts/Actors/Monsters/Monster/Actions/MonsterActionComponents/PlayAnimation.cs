@@ -72,7 +72,6 @@ namespace Actors.Monsters.Actions
                     $"'{input.GetType().Name}' 형식이 입력되었습니다."),
                     nameof(input));
 
-
             _currentAnimationPlayInfo
                 = input as AnimationPlayInfo
                 ?? new(DelayBeforePlay, DelayAfterPlay);

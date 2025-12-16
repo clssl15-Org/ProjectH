@@ -28,16 +28,15 @@ namespace Actors.Monsters.Bosses
             float projectileFireGap)
         {
             var points = spikeSpawnPoints.ToArray();
-            var clips = new IClip[points.Length];
 
             _sequence = new Sequence();
+            IClip before = null;
 
             for (int i = 0; i < points.Length; i++)
             {
                 var index = i;
                 var clip = new Clip($"SpikeLauncher {i}")
-                    .AssignTo(out var self)
-                    .OnStarted((_, _) =>
+                    .OnStarted((self, _) =>
                     {
                         var spike =
                             UnityEngine.Object.Instantiate(spikePrefab.gameObject)
@@ -61,18 +60,20 @@ namespace Actors.Monsters.Bosses
                         self.Stop();
                     });
 
-                clips[i] = clip;
-
                 if (i == 0)
+                {
+                    before = clip;
                     _sequence.Add(clip);
+                }
                 else
                 {
                     _sequence.AddAfter(
-                        clips[i - 1],
+                        before,
                         new Scp.Delay($"Delay {i}", projectileFireGap)
                             .AssignTo(out var delay)
                     );
 
+                    before = delay;
                     _sequence.AddAfter(delay, clip);
                 }
             }
@@ -103,6 +104,8 @@ namespace Actors.Monsters.Bosses
                 Interrupt(succeeded
                     ? InterruptType.Completed
                     : InterruptType.Interrupted);
+
+                Debug.Log("Interruped: " + succeeded);
             }
         }
 

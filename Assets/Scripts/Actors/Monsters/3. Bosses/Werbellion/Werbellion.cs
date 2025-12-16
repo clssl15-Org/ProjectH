@@ -39,6 +39,9 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private KinematicProjectile _spikePrefab;
         [SerializeField] private Transform[] _spikeSpawnPoints;
+        [Space]
+        [SerializeField] private GameObject _portalAttackSpawnerParent;
+        [SerializeField] private WerbellionPortalAttackSpawner[] _portalAttackSpawners;
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -134,8 +137,15 @@ namespace Actors.Monsters.Bosses
 
                     // 공격
                     .AddAnimationComponent(after: new(portal_teleportOut_a))
-                    .AddComponent(new Empty(), after: new(portal_teleportOut_a)) // 공격 수행
-                    .AddComponent(new Delay(1), out var portal_attacked, after: new(portal_teleportOut_a)) // 타이머 (임시)
+                    .AddComponent(new WerbellionPortalAttackAction(
+                            werbellion.Configuration,
+                            werbellion.PlatformManager,
+                            werbellion._portalAttackSpawnerParent,
+                            werbellion._portalAttackSpawners,
+                            () => werbellion._player.transform.position
+                        ),
+                        out var portal_attacked,
+                        after: new(portal_teleportOut_a))
 
                     // 지상으로 텔레포트
                     .AddAnimationComponent("TeleportIn", out var portal_teleportIn_b, after: new(portal_attacked))
