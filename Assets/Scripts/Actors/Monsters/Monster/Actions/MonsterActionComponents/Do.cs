@@ -17,12 +17,6 @@ namespace Actors.Monsters.Actions
             return this;
         }
 
-        public Do AssignTo(out Do self)
-        {
-            self = this;
-            return this;
-        }
-
         protected override void OnEnter(float _, object __)
         {
             _opening?.Invoke();

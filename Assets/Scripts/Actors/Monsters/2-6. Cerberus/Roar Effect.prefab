@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7532317477439072198}
   - component: {fileID: 2770335637014502355}
   - component: {fileID: 2967185526950874032}
-  - component: {fileID: 2860310378466581071}
   m_Layer: 0
   m_Name: Roar Effect
   m_TagString: Untagged
@@ -123,16 +122,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2860310378466581071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 423593999705668195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a591dfff4f8caf478409d78ed74ab2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _deactivateOnAwake: 1

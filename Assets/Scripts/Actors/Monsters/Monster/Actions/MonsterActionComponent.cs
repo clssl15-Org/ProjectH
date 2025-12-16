@@ -56,7 +56,7 @@ namespace Actors.Monsters.Actions
             ResultType.AlreadyDoing | ResultType.OtherActionDoing | ResultType.NotFound => InterruptType.Error,
             ResultType.Interrupted => InterruptType.Interrupted,
             ResultType.InvalidOperation => InterruptType.Error,
-            _ => throw new InvalidOperationException($"알 수 없는 {nameof(ResultType)} '{resultType}'이(가) 감지되었습니다."),
+            _ => throw new ArgumentOutOfRangeException(nameof(resultType), resultType, $"알 수 없는 {nameof(ResultType)}이(가) 감지되었습니다."),
         };
         public static ResultType ToResultType(this InterruptType interruptType) => interruptType switch
         {
@@ -64,7 +64,7 @@ namespace Actors.Monsters.Actions
             InterruptType.Error => ResultType.InvalidOperation,
             InterruptType.Completed => ResultType.Success,
             InterruptType.Interrupted => ResultType.Interrupted,
-            _ => throw new InvalidOperationException($"알 수 없는 {nameof(InterruptType)} '{interruptType}'이(가) 감지되었습니다."),
+            _ => throw new ArgumentOutOfRangeException(nameof(interruptType), interruptType, $"알 수 없는 {nameof(InterruptType)}이(가) 감지되었습니다."),
         };
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Actors.Monsters.Actions;
 using Infrastructure;
 using Infrastructure.StateMachines.BT;
@@ -14,6 +15,7 @@ namespace Actors.Monsters.Bosses
             private int _phase = -1;
             private int _beforeAirPos = -1;
             private Action _callback;
+            private readonly List<AttackMode> _avoidNext = new();
 
 
             public WerbellionAttackBrain()
@@ -43,30 +45,39 @@ namespace Actors.Monsters.Bosses
                 _callback = null;
             }
 
-            private bool TryDoNextAttack(out Action doNextAction)
+            private bool TryDoNextAttack(out Action nextAction)
             {
                 _phase++;
                 if (_phase >= 3)
                 {
                     _phase = -1;
-                     doNextAction = null;
+                     nextAction = null;
                     return false;
                 }
 
                 var attackmode = Werbellion._attackMode;
                 if (attackmode == AttackMode.Any)
                 {
-                    attackmode = (AttackMode)UnityEngine.Random.Range(
-                        minInclusive: 1, // Any 제외
-                        maxExclusive: Enum.GetValues(typeof(AttackMode)).Length);
+                    do
+                    {
+                        attackmode = (AttackMode)UnityEngine.Random.Range(
+                            minInclusive: 1, // Any 제외
+                            maxExclusive: Enum.GetValues(typeof(AttackMode)).Length);
+                    } while (_avoidNext.Contains(attackmode));
                 }
+
+                _avoidNext.Clear();
+
 
                 var attackName = attackmode.ToString() + "Attack";
 
                 if (attackmode == AttackMode.Portal)
-                    doNextAction = () => AirAttack(attackName);
+                {
+                    _avoidNext.Add(attackmode);
+                    nextAction = () => AirAttack(attackName);
+                }
                 else
-                    doNextAction = () => GroundAttack(attackName);
+                    nextAction = () => GroundAttack(attackName);
 
                 return true;
             }
@@ -106,14 +117,17 @@ namespace Actors.Monsters.Bosses
                     name,
                     Inputs: new object[]
                     {
+                        // Teleport In
                         null,
                         airPos,
                         null,
+
+                        // Attack
                         null,
                         (Func<Vector2>)(() => Werbellion._targetPlayer.transform.position),
                         null,
-                        null,
-                        null,
+
+                        // Teleport Out
                         null,
                         groundPos,
                         null,

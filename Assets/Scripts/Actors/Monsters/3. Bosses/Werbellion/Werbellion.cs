@@ -127,7 +127,20 @@ namespace Actors.Monsters.Bosses
                 );
 
                 AddChild(new MonsterAction("PortalAttack")
-                    .AddAnimationComponent()
+                    // 공중으로 텔레포트
+                    .AddAnimationComponent("TeleportIn", out var portal_teleportIn_a)
+                    .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_a))
+                    .AddAnimationComponent("TeleportOut", out var portal_teleportOut_a, after: new(portal_teleportIn_a))
+
+                    // 공격
+                    .AddAnimationComponent(after: new(portal_teleportOut_a))
+                    .AddComponent(new Empty(), after: new(portal_teleportOut_a)) // 공격 수행
+                    .AddComponent(new Delay(1), out var portal_attacked, after: new(portal_teleportOut_a)) // 타이머 (임시)
+
+                    // 지상으로 텔레포트
+                    .AddAnimationComponent("TeleportIn", out var portal_teleportIn_b, after: new(portal_attacked))
+                    .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_b))
+                    .AddAnimationComponent("TeleportOut", after: new(portal_teleportIn_b), interruptAllOnDeactivate: true)
                 );
 
                 AddChild(new MonsterAction("StunAttack")

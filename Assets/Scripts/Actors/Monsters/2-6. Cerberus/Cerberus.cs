@@ -1,6 +1,5 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
-using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -26,6 +25,7 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private FallingStoneManager _fallingStoneManager;
         [SerializeField] private AmbushAttackManager _ambushAttackManager;
         [SerializeField] private GameObject _roarEffect;
+        [SerializeField] private Transform _dropAttack_roarEffectPosition;
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -51,7 +51,7 @@ namespace Actors.Monsters.Bosses
                             HierarchyMode = HierarchyMode.Sequence,
                             LoopType = LoopType.None,
                         }
-                        .AddChild(new Attack("BiteAttack"))
+                        .AddChild(new Attack("AmbushAttack_Intro"))
                         .AddChild(new CerberusAttackPhaseBrain()
                             .AddChild(new CerberusAttackBrain())
                             .AddChild(new Await(
@@ -71,6 +71,8 @@ namespace Actors.Monsters.Bosses
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
+
+                #region Attacks
                 AddChild(new MonsterAction("BiteAttack")
                     .AddAnimationComponent()
                     .AddDelay(0.5f, out var bite_delay)
@@ -79,27 +81,56 @@ namespace Actors.Monsters.Bosses
                         var effect = Instantiate(cerberus._roarEffect);
                         effect.transform.position = cerberus._roarEffect.transform.position;
                         effect.SetActive(true);
-                        
-                        new Timer(5, _ =>
-                        {
-                            if (effect)
-                                Destroy(effect);
-                        });
+
+                        Destroy(effect, 5f);
                     }), after: new(bite_delay))
                     .AddDelay(0.5f, after: new(bite_delay))
                 );
+
                 AddChild(new MonsterAction("DropAttack")
-                    .AddAnimationComponent("Roar")
-                    .AddDelay(1f, out var roar_delay)
+                    .AddAnimationComponent("Roar", out var dropAttack_roar)
+                    .AddDelay(1.3f, out var drop_delay)
+                    .AddComponent(new Do(true, () =>
+                    {
+                        var effect = Instantiate(cerberus._roarEffect);
+                        effect.transform.position = cerberus._dropAttack_roarEffectPosition.position;
+                        effect.SetActive(true);
+
+                        Destroy(effect, 5f);
+                    }), after: new(drop_delay))
+                    .AddAnimationComponent("Idle", after: new(dropAttack_roar))
                     .AddComponent(new Do(false)
                         .AssignTo(out var roar_doFall)
                         .OnOpening(() => cerberus._fallingStoneManager.DoFall(succeed =>
                             roar_doFall.Interrupt(succeed ? InterruptType.Completed : InterruptType.Error))
                         ),
-                        after: new(roar_delay)
+                        after: new(dropAttack_roar)
                     )
-                    .AddDelay(0.5f, after: new(roar_doFall))
+                    .AddDelay(
+                        0.5f,
+                        after: new(roar_doFall),
+                        interruptAllOnDeactivate: true
+                    )
                 );
+
+                AddChild(new MonsterAction("AmbushAttack_Intro")
+                    .AddAnimationComponent("AmbushAttack")
+                    .AddDelay(
+                        0.4f,
+                        out var ambushIntro_attack
+                    )
+                    .AddComponent(
+                        new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
+                        after: new(ambushIntro_attack)
+                    )
+                    .AddAnimationComponent("Idle", after: new(ambushIntro_attack))
+                    .AddDelay(
+                        1f,
+                        after: new(ambushIntro_attack),
+                        interruptAllOnDeactivate: true
+                    )
+                );
+
                 AddChild(new MonsterAction("AmbushAttack")
                     .AddComponent(new Do(true, () => cerberus._ambushAttackManager.ShowIndicator()))
                     .AddDelay(
@@ -116,8 +147,15 @@ namespace Actors.Monsters.Bosses
                         new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
                         after: new(ambush_attack)
                     )
-                    .AddDelay(3f, after: new(ambush_attack))
+                    .AddAnimationComponent("Idle", after: new(ambush_attack))
+                    .AddDelay(
+                        3f,
+                        after: new(ambush_attack),
+                        interruptAllOnDeactivate: true
+                    )
                 );
+                #endregion
+
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
@@ -148,12 +186,17 @@ namespace Actors.Monsters.Bosses
                 throw new System.InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_roarEffect)}'을(를) 가지고 있어야 합니다.");
 
+            if (!_dropAttack_roarEffectPosition)
+                throw new System.InvalidOperationException(
+                    $"{nameof(Cerberus)}은(는) '{nameof(_dropAttack_roarEffectPosition)}'을(를) 가지고 있어야 합니다.");
+
             base.Awake();
         }
 
         protected override void Start()
         {
             base.Start();
+            _fallingStoneManager.Initialize(Configuration, PlatformManager);
 
             ActionController = new CerberusActionController(this);
             ActionController.Enter();
