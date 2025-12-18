@@ -8,49 +8,72 @@ namespace Actors.Monsters
     [RequireComponent(typeof(StandaloneHitAction))]
     public class Snail : Monster<MonsterStats>
     {
+        [Header("Snail")]
         [SerializeField] private Weapon _weapon;
+        [SerializeField] private float _weaponActiveTiming;
+        [SerializeField] private float _weaponActiveDuration;
+
 
         // Internal
         private class SnailBrain : MonsterBrain
         {
-            public SnailBrain(IMonsterInternal owner) : base(owner)
+            public SnailBrain(Snail owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(Engaged.RangeType.Contact)
+                            .AddChild(new Engaged(
+                                    Engaged.RangeType.Ranged,
+                                    Mathf.Abs(owner._weapon.transform.localPosition.x)
+                                )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
 
         private class SnailActionController : MonsterActionController
         {
-            public SnailActionController(IMonsterInternal monster) : base(monster)
+            public SnailActionController(Snail monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Alert).
-                    AddAnimationComponent());
+                    AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._weapon,
+                        monster._weaponActiveTiming,
+                        monster._weaponActiveDuration))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddComponent(new HitFlash()));
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 

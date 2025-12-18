@@ -11,7 +11,7 @@ namespace Actors.Monsters.Bosses
         {
             private DarkTherion DarkTherion => (DarkTherion)Owner;
 
-            private float _lastFireTime;
+            private float _remainingToFire;
             private float _fireCount;
             private Func<Vector2> _getTargetPosition;
 
@@ -20,7 +20,7 @@ namespace Actors.Monsters.Bosses
                 InterruptAllOnDeactivate = true;
             }
 
-            protected override void OnEnter(float startTime, object input)
+            protected override void OnEnter(object input)
             {
                 if (input == null)
                     throw new ArgumentNullException(
@@ -30,12 +30,12 @@ namespace Actors.Monsters.Bosses
                     throw new ArgumentException(
                         $"{nameof(DarkTherionProjectileAttackAction)}의 입력값은 Func<Vector2> 타입이어야 합니다.");
 
-                _lastFireTime = int.MinValue;
+                _remainingToFire = 0f;
                 _fireCount = 0;
                 _getTargetPosition = getTargetPosition;
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float deltaTime)
             {
                 if (_fireCount >= DarkTherion.StatsInfo.ProjectileCount)
                 {
@@ -43,9 +43,10 @@ namespace Actors.Monsters.Bosses
                     return;
                 }
 
-                if (elapsedTime - _lastFireTime >= DarkTherion.StatsInfo.ProjectileFireGap)
+                _remainingToFire -= deltaTime;
+                if (_remainingToFire <= 0)
                 {
-                    _lastFireTime = elapsedTime;
+                    _remainingToFire = DarkTherion.StatsInfo.ProjectileFireGap;
                     var posDelta = _getTargetPosition() - (Vector2)DarkTherion.transform.position;
 
                     var projectileGO = Instantiate(DarkTherion._projectilePrefab.gameObject);

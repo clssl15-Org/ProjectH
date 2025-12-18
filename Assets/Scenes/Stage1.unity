@@ -454,7 +454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7008971268435943797, guid: f2d4cd5be82476b49a31de6f2c432939, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.58
+      value: -3.86
       objectReference: {fileID: 0}
     - target: {fileID: 7008971268435943797, guid: f2d4cd5be82476b49a31de6f2c432939, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1100,6 +1100,14 @@ PrefabInstance:
       propertyPath: SceneAssetsLibrary
       value: 
       objectReference: {fileID: 2097245833}
+    - target: {fileID: 798990402297213930, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
+      propertyPath: _weaponActiveTiming
+      value: 0.4583333
+      objectReference: {fileID: 0}
+    - target: {fileID: 798990402297213930, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
+      propertyPath: _weaponActiveDuration
+      value: 0.04166667
+      objectReference: {fileID: 0}
     - target: {fileID: 8129905357906094998, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
       propertyPath: m_Name
       value: Snail
@@ -1473,13 +1481,17 @@ PrefabInstance:
       propertyPath: SceneAssetsLibrary
       value: 
       objectReference: {fileID: 2097245833}
+    - target: {fileID: 5556646152207689852, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      propertyPath: RandomizeStartDirection
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8716642818191361427, guid: 173cd69897951fa48b561f30f265989e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.16
+      value: -2.63
       objectReference: {fileID: 0}
     - target: {fileID: 8716642818191361427, guid: 173cd69897951fa48b561f30f265989e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.39
+      value: 2.41
       objectReference: {fileID: 0}
     - target: {fileID: 8716642818191361427, guid: 173cd69897951fa48b561f30f265989e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2203,7 +2215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6144783967248736273, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2412,7 +2424,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2088539230560744281, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.14
+      value: -3.02
       objectReference: {fileID: 0}
     - target: {fileID: 2088539230560744281, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2481,7 +2493,7 @@ PrefabInstance:
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: Configuration
       value: 
-      objectReference: {fileID: 4499499619229170096}
+      objectReference: {fileID: 0}
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: PlatformManager
       value: 
@@ -2489,14 +2501,14 @@ PrefabInstance:
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: GameAssetsLibrary
       value: 
-      objectReference: {fileID: 2097245833}
+      objectReference: {fileID: 0}
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: SceneAssetsLibrary
       value: 
       objectReference: {fileID: 2097245833}
     - target: {fileID: 8463299552888927162, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
       propertyPath: _useDebugStatsInfo
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6395,7 +6407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8618085740521409954, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9061239059274336577, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_LocalPosition.x

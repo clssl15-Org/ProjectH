@@ -80,12 +80,12 @@ namespace Actors.Monsters
                             }))));
             }
 
-            protected override void OnEnter(float _, object __)
+            protected override void OnEnter(object _)
             {
                 _work.Enter();
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float _)
             {
                 _work.Update();
             }

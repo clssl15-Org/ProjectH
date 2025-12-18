@@ -50,8 +50,12 @@ namespace Actors.Monsters.Actions
 
                             if (!succeed)
                                 return;
+
                             if (_currentAnimationPlayInfo.DelayAfterPlay < 0)
+                            {
                                 _work.Exit();
+                                return;
+                            }
 
                             _work.SetNext("AfterPlay");
                         }}))
@@ -64,12 +68,11 @@ namespace Actors.Monsters.Actions
                     }));
         }
 
-        protected override void OnEnter(float _, object input = null)
+        protected override void OnEnter(object input)
         {
             if (input != null && input is not AnimationPlayInfo animationPlayInfo)
                 throw new ArgumentException(MonsterAction.Owner.FormatLogMessage(
-                    $"{nameof(input)}은(는) null이거나 {nameof(AnimationPlayInfo)} 형식이어야 하지만 " +
-                    $"'{input.GetType().Name}' 형식이 입력되었습니다."),
+                    $"{nameof(input)}은(는) null이거나 {nameof(AnimationPlayInfo)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다."),
                     nameof(input));
 
             _currentAnimationPlayInfo
@@ -79,13 +82,13 @@ namespace Actors.Monsters.Actions
             _work.Enter();
         }
 
-        protected override void OnUpdate(float elapsedTime)
+        protected override void OnUpdate(float deltaTime)
         {
-            _elapsedTime = elapsedTime;
+            _elapsedTime += deltaTime;
             _work.Update();
         }
 
-        protected override void OnInterrupt(InterruptType reason)
+        protected override void OnInterrupt(InterruptType _)
         {
             _work.Exit();
         }

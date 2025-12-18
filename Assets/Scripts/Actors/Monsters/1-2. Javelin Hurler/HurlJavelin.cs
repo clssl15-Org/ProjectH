@@ -10,6 +10,8 @@ namespace Actors.Monsters
             // Internal
             private JavelinHurler JavelinHurler => (JavelinHurler)MonsterAction.Owner;
             private int _attackPower;
+
+            private float _elapsedTime;
             private bool _isJavelinThrown;
 
 
@@ -18,14 +20,19 @@ namespace Actors.Monsters
             public HurlJavelin(int attackPower) =>
                 _attackPower = attackPower;
 
-            protected override void OnEnter(float _, object __)
+            protected override void OnEnter(object _)
             {
+                _elapsedTime = 0f;
                 _isJavelinThrown = false;
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float deltaTime)
             {
-                if (!_isJavelinThrown && elapsedTime >= JavelinHurler._throwTime)
+                if (_isJavelinThrown)
+                    return;
+
+                _elapsedTime += deltaTime;
+                if (_elapsedTime >= JavelinHurler._throwTime)
                 {
                     _isJavelinThrown = true;
 

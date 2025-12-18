@@ -3,7 +3,7 @@ namespace Actors.Monsters.Actions
     internal class Delay : MonsterActionComponent
     {
         public float Duration { get; set; }
-        private float _startTime;
+        private float _elapsedTime;
 
 
         public Delay(float duration, bool interruptAllOnDeactivate = false)
@@ -12,14 +12,16 @@ namespace Actors.Monsters.Actions
             InterruptAllOnDeactivate = interruptAllOnDeactivate;
         }
 
-        protected override void OnEnter(float currentTime, object _)
+        protected override void OnEnter(object _)
         {
-            _startTime = currentTime;
+            _elapsedTime = 0f;
         }
 
-        protected override void OnUpdate(float elapsedTime)
+        protected override void OnUpdate(float deltaTime)
         {
-            if (elapsedTime - _startTime >= Duration)
+            _elapsedTime += deltaTime;
+
+            if (_elapsedTime >= Duration)
                 Interrupt(InterruptType.Completed);
         }
     }

@@ -7,7 +7,7 @@ namespace Actors.Monsters.Bosses
     {
         private class WerbellionTeleportComponent : MonsterActionComponent
         {
-            protected override void OnEnter(float _, object position)
+            protected override void OnEnter(object position)
             {
                 var werbellion = (Werbellion)Owner;
                 Vector2 targetPosition;

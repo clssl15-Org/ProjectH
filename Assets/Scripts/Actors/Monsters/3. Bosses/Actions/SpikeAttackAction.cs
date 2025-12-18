@@ -13,9 +13,7 @@ namespace Actors.Monsters.Bosses
     {
         // Internal
         private Func<Vector2> _getTargetPoint;
-
         private Sequence _sequence;
-        private float _elapsedTime;
 
 
         // Content
@@ -83,7 +81,7 @@ namespace Actors.Monsters.Bosses
             }
         }
 
-        protected override void OnEnter(float elapsedTime, object input)
+        protected override void OnEnter(object input)
         {
             if (input == null)
                 throw new ArgumentNullException(
@@ -94,15 +92,11 @@ namespace Actors.Monsters.Bosses
                     $"{nameof(SpikeAttackAction)}의 입력값은 Func<Vector2> 타입이어야 합니다.");
 
             _getTargetPoint = getTargetPoint;
-            _elapsedTime = elapsedTime;
             _sequence.Start();
         }
 
-        protected override void OnUpdate(float elapsedTime)
+        protected override void OnUpdate(float deltaTime)
         {
-            var deltaTime = elapsedTime - _elapsedTime;
-            _elapsedTime = elapsedTime;
-
             if (!_sequence.Update(deltaTime, out var succeeded))
             {
                 Interrupt(succeeded

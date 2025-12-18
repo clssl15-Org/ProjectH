@@ -1,7 +1,6 @@
 using System;
 using Infrastructure;
 using Infrastructure.StateMachines.BT;
-using UnityEngine;
 
 namespace Actors.Monsters.Brains
 {
@@ -9,8 +8,8 @@ namespace Actors.Monsters.Brains
     {
         // Front
         public float TargetAttackRange { get; set; } = 2f;
-        public float UpperRangeTolerance { get; set; } = 0.5f;
-        public float LowerRangeTolerance { get; set; } = 0.5f;
+        public float UpperRangeTolerance { get; set; } = 0.2f;
+        public float LowerRangeTolerance { get; set; } = 0.2f;
 
 
         // Content
@@ -70,30 +69,16 @@ namespace Actors.Monsters.Brains
                 throw new InvalidOperationException(Owner.FormatLogMessage(
                     $"{nameof(Owner.DetectedPlayer)}이(가) 유효하지 않습니다."));
 
-            var selfIsRightOfPlayer = Owner.transform.position.x > Owner.DetectedPlayer.transform.position.x;
+            var selfIsLeftOfPlayer = Owner.transform.position.x <= Owner.DetectedPlayer.transform.position.x;
+            Owner.Direction = selfIsLeftOfPlayer ? Direction.Right : Direction.Left;
 
-            var selfBorder = selfIsRightOfPlayer
-                ? Owner.Collider.bounds.min.x
-                : Owner.Collider.bounds.max.x;
+            var posDelta = Owner.DetectedPlayer.transform.position.x - Owner.transform.position.x;
+            if (!selfIsLeftOfPlayer) posDelta *= -1;
 
-            // TODO: Player에게 GetBorder API 추가해서 가져오기
-            if (!Owner.DetectedPlayer.TryGetComponent<Collider2D>(out var playerCollider))
-                throw new InvalidOperationException(Owner.FormatLogMessage(
-                    $"{nameof(Owner.DetectedPlayer)}에서 '{nameof(Collider2D)}' 컴포넌트를 가져오는 데 실패했습니다."));
-
-            var playerBorder = selfIsRightOfPlayer
-                ? playerCollider.bounds.max.x
-                : playerCollider.bounds.min.x;
-
-            var posDelta = selfBorder - playerBorder;
-
-            Owner.Direction = selfIsRightOfPlayer ? Direction.Left : Direction.Right;
-
-            var rangeDelta = Mathf.Abs(posDelta) - TargetAttackRange;
-
+            var rangeDelta = posDelta - TargetAttackRange;
             if (rangeDelta < -LowerRangeTolerance)
             {
-                Blackboard.Moved = Owner.TryMove(posDelta > 0 ? Direction.Right : Direction.Left);
+                Blackboard.Moved = Owner.TryMove(Owner.Direction.Flip());
                 return;
             }
             if (rangeDelta > UpperRangeTolerance)

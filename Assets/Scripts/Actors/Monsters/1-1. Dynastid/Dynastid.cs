@@ -9,26 +9,36 @@ namespace Actors.Monsters
     {
         [Header("Dynastid")]
         [SerializeField] private Weapon _weapon;
+        [SerializeField] private float _weaponActiveTiming;
+        [SerializeField] private float _weaponActiveDuration;
 
 
         // Internal
         private class DynastidBrain : MonsterBrain
         {
-            public DynastidBrain(IMonsterInternal owner) : base(owner)
+            public DynastidBrain(Dynastid owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(Engaged.RangeType.Contact, 1)
-                                .AddChild(new Adjusting())
-                                .AddChild(new DeadEnd()))
+                            .AddChild(new Engaged(
+                                    Engaged.RangeType.Ranged,
+                                    Mathf.Abs(owner._weapon.transform.localPosition.x)
+                                )
+                                .AddChild(new Adjusting(MonsterActionType.Walk))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -50,7 +60,11 @@ namespace Actors.Monsters
                     .AddAnimationComponent()
                 );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent()
+                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._weapon,
+                        monster._weaponActiveTiming,
+                        monster._weaponActiveDuration))
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()

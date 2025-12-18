@@ -23,7 +23,7 @@ namespace Actors.Monsters.Bosses
             }
 
             // Content
-            protected override void OnEnter(float _, object __)
+            protected override void OnEnter(object _)
             {
                 var stats = DarkTherion.StatsInfo;
                 var bullets = new List<OrbitBullet>();

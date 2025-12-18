@@ -74,17 +74,13 @@ namespace Actors.Monsters.Bosses
                 }
             }
 
-            protected override void OnEnter(float elapsedTime, object _)
+            protected override void OnEnter(object _)
             {
-                _elapsedTime = elapsedTime;
                 _sequence.Start();
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float deltaTime)
             {
-                var deltaTime = elapsedTime - _elapsedTime;
-                _elapsedTime = elapsedTime;
-
                 _sequence.Update(deltaTime);
             }
 

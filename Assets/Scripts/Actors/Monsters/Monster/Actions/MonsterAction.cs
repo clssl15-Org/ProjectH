@@ -31,8 +31,6 @@ namespace Actors.Monsters.Actions
             }
         }
 
-        public float ElapsedTime { get; private set; }
-
 
         // Internal
         private readonly Dictionary<MonsterActionComponent, (PlayOrder order, object input)> _components = new();
@@ -171,7 +169,6 @@ namespace Actors.Monsters.Actions
             _callback = playInfo.Callback;
             _reason = InterruptType.None;
 
-            ElapsedTime = 0f;
             _pendings.Clear();
             _pendings.AddRange(_orderedComponents);
 
@@ -202,7 +199,7 @@ namespace Actors.Monsters.Actions
                 return;
             }
 
-            ElapsedTime += Time.deltaTime;
+            var deltaTime = Time.deltaTime;
 
             try
             {
@@ -220,12 +217,12 @@ namespace Actors.Monsters.Actions
                     var component = _readyBuffer[i];
 
                     _pendings.Remove(component);
-                    component.Enter(ElapsedTime, _components[component].input);
+                    component.Enter(_components[component].input);
                     _runnings.Add(component);
                 }
 
                 for (int i = 0; i < _runnings.Count; i++)
-                    _runnings[i].Update(ElapsedTime);
+                    _runnings[i].Update(deltaTime);
             }
             catch
             {

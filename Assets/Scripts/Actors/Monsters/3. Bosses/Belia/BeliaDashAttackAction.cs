@@ -17,7 +17,7 @@ namespace Actors.Monsters.Bosses
                 DashForce = dashForce;
             }
 
-            protected override void OnEnter(float _, object __)
+            protected override void OnEnter(object _)
             {
                 Owner.Rigidbody.AddForce(
                     DashForce * Owner.Direction.ToVector2());

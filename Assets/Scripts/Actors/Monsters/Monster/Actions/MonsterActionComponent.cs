@@ -24,17 +24,17 @@ namespace Actors.Monsters.Actions
         // Content
         public virtual void SetParent(MonsterAction monsterAction) => MonsterAction = monsterAction;
 
-        public void Enter(float currentTime, object input = null)
+        public void Enter(object input = null)
         {
             if (Active)
                 return;
 
             Active = true;
-            OnEnter(currentTime, input);
+            OnEnter(input);
         }
-        protected virtual void OnEnter(float currentTime, object input) { }
+        protected virtual void OnEnter(object input) { }
 
-        public void Update(float elapsedTime) => OnUpdate(elapsedTime);
+        public void Update(float deltaTime) => OnUpdate(deltaTime);
         protected virtual void OnUpdate(float elapsedTime) { }
 
         public void Interrupt(InterruptType reason)

@@ -30,7 +30,7 @@ namespace Actors.Monsters.Bosses
                 EffectLength = effectLength;
             }
 
-            protected override void OnEnter(float _, object __)
+            protected override void OnEnter(object _)
             {
                 _curveEffectInstance = Instantiate(_curveEffectPrefab);
                 _curveEffectInstance.transform.localScale = new Vector3(
@@ -42,9 +42,9 @@ namespace Actors.Monsters.Bosses
                 _effectRemainingTime = EffectLength;
             }
 
-            protected override void OnUpdate(float _)
+            protected override void OnUpdate(float deltaTime)
             {
-                _effectRemainingTime -= Time.deltaTime;
+                _effectRemainingTime -= deltaTime;
                 _effectMat.color = _effectMat.color.WithAlpha(_effectRemainingTime / EffectLength);
 
                 if (_effectRemainingTime <= 0)

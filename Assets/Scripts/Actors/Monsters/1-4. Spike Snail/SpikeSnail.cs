@@ -29,13 +29,18 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged()
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown(MonsterActionType.None)))
+                            .AddChild(new Cooldown(MonsterActionType.None))
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }

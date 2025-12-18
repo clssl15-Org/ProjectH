@@ -8,7 +8,7 @@ namespace Actors.Monsters.Actions
     /// </remarks>
     internal sealed class Empty : MonsterActionComponent
     {
-        protected override void OnEnter(float _, object __)
+        protected override void OnEnter(object _)
         {
             Interrupt(InterruptType.Completed);
         }

@@ -17,7 +17,7 @@ namespace Actors.Monsters.Actions
             return this;
         }
 
-        protected override void OnEnter(float _, object __)
+        protected override void OnEnter(object _)
         {
             _opening?.Invoke();
 

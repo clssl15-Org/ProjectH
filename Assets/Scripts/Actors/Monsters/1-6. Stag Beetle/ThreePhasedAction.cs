@@ -85,7 +85,7 @@ namespace Actors.Monsters
 
                             var play = _whileMainAction.Invoke(
                                 _elapsedTime - _mainActionEnteredTime,
-                                AnimationPlayer.CurrentAnimationTime ?? -1);
+                                AnimationPlayer.CurrentAnimationLength ?? -1);
 
                             if (!play)
                                 _work.SetNext("PostAction");
@@ -104,14 +104,15 @@ namespace Actors.Monsters
                         }));
             }
 
-            protected override void OnEnter(float _, object __)
+            protected override void OnEnter(object _)
             {
+                _elapsedTime = 0f;
                 _work.Enter();
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float deltaTime)
             {
-                _elapsedTime = elapsedTime;
+                _elapsedTime += deltaTime;
                 _work.Update();
             }
 
