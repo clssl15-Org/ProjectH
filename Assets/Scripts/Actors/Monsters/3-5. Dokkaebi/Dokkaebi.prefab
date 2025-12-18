@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2961271304913207064}
   - component: {fileID: 1283677244841743685}
   - component: {fileID: 4907472375751884795}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dokkaebi
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 6151925549069728404}
   - component: {fileID: 17995363303254351}
   - component: {fileID: 5783672885137853598}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,6 +370,10 @@ PrefabInstance:
     - target: {fileID: 2713520897360693659, guid: ef1ad469c5e09bd499dbb1f8431c6d52, type: 3}
       propertyPath: m_Name
       value: Laser
+      objectReference: {fileID: 0}
+    - target: {fileID: 2713520897360693659, guid: ef1ad469c5e09bd499dbb1f8431c6d52, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2713520897360693659, guid: ef1ad469c5e09bd499dbb1f8431c6d52, type: 3}
       propertyPath: m_IsActive

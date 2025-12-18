@@ -56,7 +56,9 @@ namespace Actors.Monsters
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (HasArrived || _collisionTags == null || _collisionTags.Length == 0)
+            if (_collisionTags == null
+                || _collisionTags.Length == 0
+                || HasArrived)
                 return;
 
             HasArrived = true;
@@ -67,7 +69,9 @@ namespace Actors.Monsters
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (HasArrived || _collisionTags == null || _collisionTags.Length == 0)
+            if (_collisionTags == null
+                || _collisionTags.Length == 0
+                || HasArrived)
                 return;
 
             HasArrived = true;

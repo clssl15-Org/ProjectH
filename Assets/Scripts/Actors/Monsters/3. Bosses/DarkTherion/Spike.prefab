@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 1287565196905471747}
   - component: {fileID: 2017701568817140967}
   - component: {fileID: 6329809701536294113}
-  - component: {fileID: 1485211537491443437}
-  m_Layer: 0
+  - component: {fileID: -5804095583846766684}
+  m_Layer: 9
   m_Name: Spike
-  m_TagString: Untagged
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -187,7 +187,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1485211537491443437
+--- !u!114 &-5804095583846766684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,6 +196,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3235053990507511845}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33d24f1e5fa35bd44af3494f6dd29e25, type: 3}
+  m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1

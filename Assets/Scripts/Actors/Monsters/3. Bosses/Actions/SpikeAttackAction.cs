@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.Monsters.Actions;
+using Infrastructure;
 using Infrastructure.StateMachines.Scp;
 using UnityEngine;
 using Scp = Infrastructure.StateMachines.Scp;
@@ -42,6 +43,9 @@ namespace Actors.Monsters.Bosses
                             UnityEngine.Object.Instantiate(spikePrefab.gameObject)
                             .GetComponent<KinematicProjectile>();
                         spike.Initialize(Owner.PlatformManager, "Player", "Ground");
+
+                        if (spike.TryGetComponent<SpriteSizeHandler>(out var ssh))
+                            ssh.Initialize(Owner.Configuration, true);
 
                         spike.transform.position = spawnPointType switch
                         {

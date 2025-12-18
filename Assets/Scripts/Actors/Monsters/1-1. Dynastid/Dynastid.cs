@@ -1,11 +1,16 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
+using UnityEngine;
 
 namespace Actors.Monsters
 {
     public class Dynastid : Monster<MonsterStats>
     {
+        [Header("Dynastid")]
+        [SerializeField] private Weapon _weapon;
+
+
         // Internal
         private class DynastidBrain : MonsterBrain
         {
@@ -30,31 +35,45 @@ namespace Actors.Monsters
 
         private class DynastidActionController : MonsterActionController
         {
-            public DynastidActionController(IMonsterInternal monster) : base(monster)
+            public DynastidActionController(Dynastid monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Alert)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
-
+        
         // Content
         protected override void Start()
         {
             base.Start();
+
+            if (_weapon)
+                _weapon.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new DynastidActionController(this);
             ActionController.Enter();

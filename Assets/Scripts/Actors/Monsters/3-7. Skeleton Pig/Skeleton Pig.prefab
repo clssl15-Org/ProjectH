@@ -106,8 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ratio: 0.05
-  _updateTypes: 2
+  _useManualScaleFactor: 0
+  _scaleFactor: 0.01
+  _configuration: {fileID: 0}
 --- !u!95 &3516674275026078275
 Animator:
   serializedVersion: 5
@@ -215,9 +216,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &7461011937273477063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,7 +249,8 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: 0192307791382c549ad5e6b54901d564, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
-  SceneAssetsLibrary: {fileID: 0}
+  GameAssetsLibrary: {fileID: 0}
+  Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
   _stateDisplay: 
   _attackMode: 0
@@ -266,7 +268,7 @@ GameObject:
   - component: {fileID: 93667827768867958}
   - component: {fileID: 7990593340198176442}
   - component: {fileID: 8360314074144257953}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Detector
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -383,6 +385,10 @@ PrefabInstance:
     - target: {fileID: 602274951155067111, guid: f96c98aca9be99747bdb157efe91225a, type: 3}
       propertyPath: m_Name
       value: Shockwave
+      objectReference: {fileID: 0}
+    - target: {fileID: 602274951155067111, guid: f96c98aca9be99747bdb157efe91225a, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 602274951155067111, guid: f96c98aca9be99747bdb157efe91225a, type: 3}
       propertyPath: m_IsActive

@@ -60,6 +60,7 @@ namespace Actors.Monsters
 #pragma warning disable IDE1006
         string name { get; }
         Transform transform { get; }
+        GameObject gameObject { get; }
 #pragma warning restore
         string FormatLogMessage(string message);
     }

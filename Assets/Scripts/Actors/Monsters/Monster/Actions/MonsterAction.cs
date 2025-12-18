@@ -23,7 +23,8 @@ namespace Actors.Monsters.Actions
             {
                 if (Parent is not MonsterActionController parent)
                     throw new InvalidOperationException(
-                        FormatLogMessage($"{nameof(Parent)}은(는) {nameof(MonsterActionController)} 형식이어야 하지만 '{Parent?.GetType().Name ?? "null"}'이(가) 감지되었습니다. " +
+                        FormatLogMessage($"{nameof(Parent)}은(는) {nameof(MonsterActionController)} 형식이어야 하지만 " +
+                        $"'{Parent?.GetType().Name ?? "null"}'이(가) 감지되었습니다. " +
                         $"Owner을 반환할 수 없습니다."));
 
                 return parent.Owner;

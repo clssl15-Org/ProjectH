@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 2122718108161776538}
   - component: {fileID: 8190160887295669433}
   - component: {fileID: 4050951402670627608}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,3 +199,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1

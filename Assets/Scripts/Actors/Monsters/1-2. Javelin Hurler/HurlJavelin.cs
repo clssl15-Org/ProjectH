@@ -9,10 +9,15 @@ namespace Actors.Monsters
         {
             // Internal
             private JavelinHurler JavelinHurler => (JavelinHurler)MonsterAction.Owner;
+            private int _attackPower;
             private bool _isJavelinThrown;
 
 
+
             // Content
+            public HurlJavelin(int attackPower) =>
+                _attackPower = attackPower;
+
             protected override void OnEnter(float _, object __)
             {
                 _isJavelinThrown = false;
@@ -26,6 +31,7 @@ namespace Actors.Monsters
 
                     var javelin = Instantiate(JavelinHurler._javelinPrefab).GetComponent<Javelin>();
                     javelin.Initialize(JavelinHurler.PlatformManager, "Ground");
+                    javelin.GetComponent<Weapon>().AttackPower = _attackPower;
 
                     javelin.transform.SetParent(JavelinHurler.transform);
                     javelin.transform.localPosition = JavelinHurler._javelinPrefab.transform.localPosition;

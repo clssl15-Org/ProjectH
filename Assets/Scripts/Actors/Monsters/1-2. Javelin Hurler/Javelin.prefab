@@ -14,7 +14,9 @@ GameObject:
   - component: {fileID: 4624606937286188874}
   - component: {fileID: 4003912257965988071}
   - component: {fileID: -5972261664144437874}
-  m_Layer: 0
+  - component: {fileID: 3900711216757548939}
+  - component: {fileID: 1178189270214046841}
+  m_Layer: 9
   m_Name: Javelin
   m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
@@ -172,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4ec8cb3c44b1af44b95301e1e3acb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setColliderSizeOnStart: 0
+  _setColliderSizeOnStart: 0
 --- !u!114 &-5972261664144437874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,3 +187,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f14027451293874baea0dc072f9ef57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
+--- !u!114 &3900711216757548939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8805659128304783242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 8629142542787075218}
+  <TargetTags>k__BackingField: []
+--- !u!114 &1178189270214046841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8805659128304783242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1

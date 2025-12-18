@@ -8,6 +8,8 @@ namespace Actors.Monsters
     [RequireComponent(typeof(StandaloneHitAction))]
     public class Snail : Monster<MonsterStats>
     {
+        [SerializeField] private Weapon _weapon;
+
         // Internal
         private class SnailBrain : MonsterBrain
         {
@@ -57,6 +59,13 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+
+            if (_weapon)
+                _weapon.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new SnailActionController(this);
             ActionController.Enter();

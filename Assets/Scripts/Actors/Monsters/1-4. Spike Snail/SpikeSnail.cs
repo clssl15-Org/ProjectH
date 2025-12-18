@@ -11,6 +11,7 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Spike Snail")]
+        [SerializeField] WeaponManager _weaponManager;
         [SerializeField, Min(0)] internal float spikeSpeed;
         [SerializeField, Min(0)] private float launchTime;
         [SerializeField, Min(0)] private float playtimeBeforeWaiting;
@@ -73,12 +74,19 @@ namespace Actors.Monsters
         protected override void Awake()
         {
             base.Awake();
-            _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
+            if (_weaponManager)
+                _weaponManager.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weaponManager)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
             if (!_spikeLauncher) throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(SpikeSnail)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
-            _spikeLauncher.Initialize(this, PlatformManager, "Ground");
+            _spikeLauncher.Initialize(this, PlatformManager, "Ground", "Player");
         }
 
         protected override void Start()

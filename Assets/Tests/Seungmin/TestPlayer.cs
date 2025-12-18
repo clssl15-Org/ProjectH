@@ -1,25 +1,32 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Actors;
 using Actors.Monsters;
 using Infrastructure;
+using Rules;
 using UnityEngine;
 using World;
 
-[RequireComponent(typeof(PlatformDetector))]
-public class TestPlayer : MonoBehaviour, IPlayer
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(PlatformDetector), typeof(TriggerContactHandler))]
+public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
 {
     // Front
     public int CurrentPlatform { get; private set; }
 
-    public int HP => 100;
-    public int MaxHP => 100;
-    public bool IsAlive => true;
+    public int HP { get; } = 100;
+    public int MaxHP { get; } = 100;
+    public bool IsAlive { get; } = true;
 
     // Property
     [SerializeField] private PlatformManager _platformManager;
+    [SerializeField] private TriggerContactHandler _contactHandler;
 
     // Inspector
+    [Header("Move")]
+    [Min(0)] public float MoveSpeed = 1f;
     [Header("Attack")]
     [Min(0)] public int AttackPower;
     [Header("Knockback")]
@@ -32,7 +39,10 @@ public class TestPlayer : MonoBehaviour, IPlayer
     private readonly StringBuilder _sb = new();
 
     // Internal
+    private SpriteRenderer _renderer;
     private PlatformDetector _platformDetector;
+
+    private IDisposable _damageTimer;
 
 #pragma warning disable CS0067
     public event Action<PlayerCondition> ConditionChanged;
@@ -45,10 +55,15 @@ public class TestPlayer : MonoBehaviour, IPlayer
     {
         if (!_platformManager)
             throw new InvalidOperationException(
-                $"{typeof(TestPlayer).Name} 객체를 사용하려면 {nameof(_platformManager)} 컴포넌트가 할당되어 있어야 합니다.");
+                $"[{nameof(TestPlayer)}] {nameof(_platformManager)} 컴포넌트가 유효하지 않습니다.");
+
+        _renderer = GetComponent<SpriteRenderer>();
 
         _platformDetector = GetComponent<PlatformDetector>();
         _platformDetector.SetPlatformManager(_platformManager);
+
+        _contactHandler = GetComponent<TriggerContactHandler>();
+        _contactHandler.TargetTags = new[] { "Monster" };
     }
 
     void IInjectable<PlatformManager>.Inject(PlatformManager platformManager)
@@ -59,33 +74,69 @@ public class TestPlayer : MonoBehaviour, IPlayer
 
     private void Update()
     {
+        #region Move
+        var speed = MoveSpeed * Time.deltaTime;
+
+        if (Input.GetKey(KeyCode.W))
+            transform.position += speed * Vector3.up;
+        if (Input.GetKey(KeyCode.A))
+            transform.position += speed * Vector3.left;
+        if (Input.GetKey(KeyCode.S))
+            transform.position += speed * Vector3.down;
+        if (Input.GetKey(KeyCode.D))
+            transform.position += speed * Vector3.right;
+        #endregion
+
         if (_platformDetector.TryGetCurrentPlatformId(out var platformId))
             CurrentPlatform = platformId;
         else
             CurrentPlatform = -1;
 
+        if (Input.GetKeyDown(KeyCode.Space))
+            Attack();
+
         UpdateStateDisplay();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        var receiver = collision.gameObject
-            .GetComponentInChildren<MonsterDamageReceiver>();
-
-        if (!receiver)
+    private void Attack()
+    { 
+        if (!_contactHandler || _contactHandler.Collisions.Count == 0)
             return;
 
-        if (UseKnockback)
+        foreach (var contact in _contactHandler.Collisions)
         {
-            var dir = (receiver.transform.position - transform.position).ToDirection();
-            receiver.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
-        }
-        else
-        {
-            receiver.TakeDamage(AttackPower);
+            var receiver = contact.gameObject
+                .GetComponentInChildren<MonsterDamageReceiver>();
+
+            if (!receiver)
+                return;
+
+            if (UseKnockback)
+            {
+                var dir = (receiver.transform.position - transform.position).ToDirection();
+                receiver.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
+            }
+            else
+            {
+                receiver.TakeDamage(AttackPower);
+            }
         }
     }
 
+    public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
+    public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
+    {
+        print("Damaged: " + damage);
+
+        _damageTimer?.Dispose();
+
+        _renderer.material.color = Color.red;
+        _damageTimer = new Timer(0.1f, succeeded =>
+        {
+            if (succeeded)
+                _renderer.material.color = Color.white;
+        });
+    }
 
     private void UpdateStateDisplay()
     {
@@ -93,5 +144,11 @@ public class TestPlayer : MonoBehaviour, IPlayer
         _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
 
         _stateDisplay = _sb.ToString();
+    }
+
+    private void OnDestroy()
+    {
+        _damageTimer?.Dispose();
+        _damageTimer = null;
     }
 }

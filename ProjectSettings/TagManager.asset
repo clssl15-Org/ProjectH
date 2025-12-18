@@ -18,8 +18,8 @@ TagManager:
   - Ground
   - Player
   - Monster
-  - 
-  - 
+  - Monster Weapon
+  - Player Weapon
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2960067373
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

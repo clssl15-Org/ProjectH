@@ -88,7 +88,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 3.6, y: 2.64}
+  m_Size: {x: 5.4, y: 3.9599998}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useManualScaleFactor: 0
-  _scaleFactor: 1
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &3843950773268970679
 Animator:
@@ -162,8 +162,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.1, y: -0.15}
-  m_Size: {x: 2.4, y: 1.5}
+  m_Offset: {x: 0.1, y: -0.28}
+  m_Size: {x: 4.74, y: 2.35}
   m_Direction: 1
 --- !u!50 &2040891973972188694
 Rigidbody2D:
@@ -255,7 +255,7 @@ MonoBehaviour:
   _stateDisplay: 
   _attackMode: 0
   _rollingTime: 3
-  _rollingSpeed: 1
+  _rollingSpeed: 5
   _spikeSpeed: 5
   _waitingTimeAfterLaunch: 0.1
 --- !u!1 &1693476020304026822
@@ -402,6 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &8834881567983858828
 Rigidbody2D:
   serializedVersion: 4
@@ -573,6 +574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &1644352735149407358
 Rigidbody2D:
   serializedVersion: 4
@@ -612,7 +614,7 @@ GameObject:
   - component: {fileID: 64642556491935713}
   - component: {fileID: 7182705186769009934}
   - component: {fileID: 7111300093332696657}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -862,6 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &1115510781779793043
 Rigidbody2D:
   serializedVersion: 4
@@ -1033,6 +1036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &8618666549283189268
 Rigidbody2D:
   serializedVersion: 4
@@ -1204,6 +1208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &231337274477924101
 Rigidbody2D:
   serializedVersion: 4
@@ -1241,7 +1246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 609251623337322214}
   - component: {fileID: 7166250851470824895}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Spike Launcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1434,6 +1439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &3775027209450493168
 Rigidbody2D:
   serializedVersion: 4
@@ -1605,6 +1611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044002d2815e3324f8390be8db8a5285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!50 &5036722268766077830
 Rigidbody2D:
   serializedVersion: 4

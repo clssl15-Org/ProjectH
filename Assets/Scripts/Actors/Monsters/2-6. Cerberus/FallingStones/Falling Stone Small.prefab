@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5794854934026476489}
   - component: {fileID: 8454284035293001268}
   - component: {fileID: 4815881382617605074}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Falling Stone Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d24f1e5fa35bd44af3494f6dd29e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
 --- !u!114 &4815881382617605074
 MonoBehaviour:
   m_ObjectHideFlags: 0

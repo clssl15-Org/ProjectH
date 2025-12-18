@@ -11,14 +11,15 @@ namespace Actors.Monsters.Bosses
         public FallingStone Initialize(
             Configuration configuration,
             PlatformManager platformManager,
-            float gravitySacle)
+            float gravitySacle,
+            params string[] collisionTags)
         {
             GetComponent<SpriteSizeHandler>()
                 .Initialize(configuration)
                 .RequestApplyScaleFactor();
 
             GetComponent<Rigidbody2D>().gravityScale = gravitySacle;
-            GetComponent<Projectile>().Initialize(platformManager);
+            GetComponent<Projectile>().Initialize(platformManager, collisionTags);
 
             return this;
         }

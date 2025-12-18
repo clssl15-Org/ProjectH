@@ -62,7 +62,7 @@ namespace Actors.Monsters.Bosses
                         .AddChild(new DarkTherionAttackBrain())
                     )
                 );
-                AddChild(new TwinBossExhaustedBrain());
+                AddChild(new TwinBossExhaustedBrain("Exhausted"));
                 AddChild(new Dead() { IsSelectable = false });
             }
         }

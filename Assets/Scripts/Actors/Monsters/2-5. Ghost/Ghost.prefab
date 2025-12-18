@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4909378014403421725}
   - component: {fileID: 4202890724833464083}
   - component: {fileID: 7167642575890220686}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ghost
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ratio: 0.04
-  _updateTypes: 2
+  _useManualScaleFactor: 0
+  _scaleFactor: 0.01
+  _configuration: {fileID: 0}
 --- !u!95 &3542576192542134012
 Animator:
   serializedVersion: 5
@@ -202,9 +203,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a91c2979257764ea5765f21008d494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformManager: {fileID: 0}
-  detectionHeight: 1
-  detectionRange: 0.7
+  _platformManager: {fileID: 0}
+  _detectionHeight: 1
+  _detectionRange: 1
 --- !u!114 &7167642575890220686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,7 +223,8 @@ MonoBehaviour:
   _debugStatsInfo: {fileID: 11400000, guid: 1a15704c7e484bc44a4a9e99922c20c6, type: 2}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
-  SceneAssetsLibrary: {fileID: 0}
+  GameAssetsLibrary: {fileID: 0}
+  Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
   _stateDisplay: 
   _attackMode: 0
@@ -240,7 +242,7 @@ GameObject:
   - component: {fileID: 2251112049083207437}
   - component: {fileID: 4795815346750713271}
   - component: {fileID: 8416230944749748295}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,7 +360,7 @@ GameObject:
   - component: {fileID: 6664232328733410857}
   - component: {fileID: 5671579480408397885}
   - component: {fileID: 5313208027442429084}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ghost Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,8 +446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ratio: 0.05
-  _updateTypes: 0
+  _useManualScaleFactor: 0
+  _scaleFactor: 0.01
+  _configuration: {fileID: 0}
 --- !u!95 &5313208027442429084
 Animator:
   serializedVersion: 5
@@ -478,7 +481,7 @@ GameObject:
   - component: {fileID: 2002313739693331261}
   - component: {fileID: 3444846964758707628}
   - component: {fileID: 5635374591814462037}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hit Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}

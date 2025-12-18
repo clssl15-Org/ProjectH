@@ -26,6 +26,7 @@ namespace Actors.Monsters.Brains
                     $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Attack)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
+                return;
             }
 
             Blackboard.Committing = true;

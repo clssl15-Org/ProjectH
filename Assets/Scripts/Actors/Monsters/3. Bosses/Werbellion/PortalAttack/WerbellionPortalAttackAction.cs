@@ -48,7 +48,8 @@ namespace Actors.Monsters.Bosses
                     var currentSpawner = spawner;
                     currentSpawner.gameObject.SetActive(false);
 
-                    currentSpawner.Initialize(configuration, platformManager, getTargetPosition);
+                    // 투사체 사이즈 자동 조절 방지
+                    currentSpawner.Initialize(null, platformManager, getTargetPosition);
                     _sequence.Stopped += succeeded =>
                     {
                         if (!succeeded)

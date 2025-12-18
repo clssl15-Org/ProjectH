@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useDebugStatsInfo: 0
   _statsInfo: {fileID: 11400000, guid: c232f223f006cbd489f233109a31ed1d, type: 2}
-  _debugStatsInfo: {fileID: 11400000, guid: d286e5184f6b92540a6ebd4e0be6720f, type: 2}
+  _debugStatsInfo: {fileID: 0}
   RandomizeStartDirection: 1
   DefaultIsRight: 0
   GameAssetsLibrary: {fileID: 0}
@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 5705955795830512647}
   - component: {fileID: 8991360265285022309}
   - component: {fileID: 5906793794916086965}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 1627839651713259588}
   - component: {fileID: 757627379711674824}
   - component: {fileID: 6347572764264648882}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hit Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,6 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a459d944b67a2694bbf08d6cf077dc26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tolerance: 1
   _impactPrefab: {fileID: 0}
 --- !u!1001 &7053683225301502133
 PrefabInstance:
@@ -535,6 +536,10 @@ PrefabInstance:
     - target: {fileID: 4090249425335531296, guid: 0f079429350d7d847a7b51f2078b9060, type: 3}
       propertyPath: m_Name
       value: Projectile_monster 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4090249425335531296, guid: 0f079429350d7d847a7b51f2078b9060, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4090249425335531357, guid: 0f079429350d7d847a7b51f2078b9060, type: 3}
       propertyPath: m_LocalPosition.x

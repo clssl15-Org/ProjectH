@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8598825783271249468}
   - component: {fileID: 3966513310606092219}
   - component: {fileID: 8453298788530939221}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 9094681739186777756}
   - component: {fileID: 1290625262348654174}
   - component: {fileID: 1958973966598934199}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mad Wood
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ MonoBehaviour:
   _statsInfo: {fileID: 11400000, guid: 2e1b7626f4ddfda4580778fbd5223046, type: 2}
   _debugStatsInfo: {fileID: 11400000, guid: 8576af38fe67d1d4e980503c4038251e, type: 2}
   RandomizeStartDirection: 1
-  DefaultIsRight: 0
+  DefaultIsRight: 1
   GameAssetsLibrary: {fileID: 0}
   Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}

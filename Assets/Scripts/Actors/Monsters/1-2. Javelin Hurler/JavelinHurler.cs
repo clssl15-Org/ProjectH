@@ -52,7 +52,7 @@ namespace Actors.Monsters
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent()
-                    .AddComponent(new HurlJavelin()));
+                    .AddComponent(new HurlJavelin(monster.StatsInfo.AttackPower)));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
                     .AddAnimationComponent());

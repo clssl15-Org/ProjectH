@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8589327078724142313}
   - component: {fileID: 7887807661597861185}
   - component: {fileID: 3648475721116643239}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Shockwave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,8 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ratio: 0.05
-  _applyOnStart: 0
+  _useManualScaleFactor: 0
+  _scaleFactor: 1
+  _configuration: {fileID: 0}
 --- !u!95 &3648475721116643239
 Animator:
   serializedVersion: 5

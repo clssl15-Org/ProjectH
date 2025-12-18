@@ -59,7 +59,7 @@ namespace Actors.Monsters.Bosses
                         .AddChild(new NotValidPlatform())
                     )
                 );
-                AddChild(new TwinBossExhaustedBrain());
+                AddChild(new TwinBossExhaustedBrain("Exhausted"));
                 AddChild(new Dead() { IsSelectable = false });
             }
         }

@@ -39,9 +39,9 @@ namespace Actors.Monsters.Bosses
 
         private void OnEnable()
         {
-            if (!_configuration)
-                throw new InvalidOperationException(
-                    $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_configuration)}을(를) 가지고 있어야 합니다.");
+            //if (!_configuration)
+            //    throw new InvalidOperationException(
+            //        $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_configuration)}을(를) 가지고 있어야 합니다.");
 
             if (!_projectilePrefab)
                 throw new InvalidOperationException(
@@ -56,8 +56,9 @@ namespace Actors.Monsters.Bosses
                     $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_getTargetPosition)} 혹은 {nameof(_target)} " +
                     $"둘 중 하나를 가지고 있어야 합니다.");
 
-            foreach (var ssh in GetComponentsInChildren<SpriteSizeHandler>())
-                ssh.Initialize(_configuration, true);
+            if (_configuration)
+                foreach (var ssh in GetComponentsInChildren<SpriteSizeHandler>())
+                    ssh.Initialize(_configuration, true);
 
             _firedCount = 0;
             _remainingTime = 0;
