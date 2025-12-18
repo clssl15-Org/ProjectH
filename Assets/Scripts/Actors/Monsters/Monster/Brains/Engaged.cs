@@ -7,10 +7,11 @@ namespace Actors.Monsters.Brains
     internal class Engaged : BTNode<IMonsterInternal, MonsterBlackboard>
     {
         // Front
-        public float TargetAttackRange { get; set; } = 2f;
+        public float TargetAttackRange { get; set; } = DefaultTargetAttackRange;
         public float UpperRangeTolerance { get; set; } = 0.2f;
         public float LowerRangeTolerance { get; set; } = 0.2f;
 
+        public const float DefaultTargetAttackRange = 2f;
 
         // Content
         public enum RangeType

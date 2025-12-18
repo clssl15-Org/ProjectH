@@ -10,7 +10,7 @@ namespace Actors.Monsters
     {
         [Header("Snail")]
         [SerializeField] private Weapon _weapon;
-        [SerializeField] private float _weaponActiveTiming;
+        [SerializeField, Min(0)] private float _weaponActiveTiming;
         [SerializeField] private float _weaponActiveDuration;
 
 
@@ -25,7 +25,9 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged(
                                     Engaged.RangeType.Ranged,
-                                    Mathf.Abs(owner._weapon.transform.localPosition.x)
+                                    Mathf.Abs(
+                                        owner._weapon?.transform.localPosition.x
+                                        ?? Engaged.DefaultTargetAttackRange)
                                 )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())

@@ -14,7 +14,6 @@ namespace Actors.Monsters
         public GameObject CurrentPlayer { get; private set; }
 
         // Internal
-        private const string TargetTag = "Player";
         private BoxCollider2D _colliderComponent;
 
 
@@ -51,20 +50,16 @@ namespace Actors.Monsters
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (!collision.CompareTag(TargetTag))
-                return;
-
             CurrentPlayer = collision.gameObject;
             PlayerDetected?.Invoke(CurrentPlayer);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (!collision.CompareTag(TargetTag))
-                return;
-
             CurrentPlayer = null;
         }
+
+        private string Ctx(string message) => $"[MonsterPlayerDetector] {message}";
 
 
 #if UNITY_EDITOR
@@ -95,7 +90,5 @@ namespace Actors.Monsters
             }
         }
 #endif
-
-        private string Ctx(string message) => $"[MonsterPlayerDetector] {message}";
     }
 }

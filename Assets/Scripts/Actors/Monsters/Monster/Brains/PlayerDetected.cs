@@ -19,7 +19,7 @@ namespace Actors.Monsters.Brains
             var player = Owner.DetectedPlayer;
             if (!player) return false;
 
-            var playerPlatform = player.GetComponent<TestPlayer>().CurrentPlatform;
+            var playerPlatform = player.GetComponent<IPlayer>().CurrentPlatform;
             return playerPlatform >= 0 && playerPlatform == Owner.CurrentPlatform;
         }
     }

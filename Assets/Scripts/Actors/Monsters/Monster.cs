@@ -374,6 +374,7 @@ namespace Actors.Monsters
             _sb.AppendLine($"HP: {HP}");
             _sb.AppendLine($"Direction: {Direction.ToString()}");
             _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
+            _sb.AppendLine($"Detected Player: {DetectedPlayer?.name ?? "null"}");
             _sb.AppendLine("----------------");
             _sb.AppendLine($"Is Alive: {IsAlive}");
             if (StandaloneHitBrain != null) _sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");

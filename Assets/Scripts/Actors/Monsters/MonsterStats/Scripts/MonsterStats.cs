@@ -12,6 +12,7 @@ namespace Actors.Monsters
         [Header("기본 능력치")]
         [SerializeField, Min(1)] private int _maxHP = 10;
         [SerializeField] private bool _useCustomSpeed = false;
+        [Tooltip("Slow: 0.7f, Normal: 1f, Fast: 1.5f")]
         [SerializeField] private MoveSpeed _moveSpeed = Monsters.MoveSpeed.Normal;
         [SerializeField, Min(0)] private float _speed = 1;
 

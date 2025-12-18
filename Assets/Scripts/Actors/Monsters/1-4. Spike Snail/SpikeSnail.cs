@@ -12,10 +12,10 @@ namespace Actors.Monsters
         // Property
         [Header("Spike Snail")]
         [SerializeField] WeaponManager _weaponManager;
-        [SerializeField, Min(0)] internal float spikeSpeed;
-        [SerializeField, Min(0)] private float launchTime;
-        [SerializeField, Min(0)] private float playtimeBeforeWaiting;
-        [SerializeField, Min(0)] private float waitingTime;
+        [SerializeField, Min(0)] internal float _spikeSpeed;
+        [SerializeField, Min(0)] private float _launchTime;
+        [SerializeField, Min(0)] private float _playtimeBeforeWaiting;
+        [SerializeField, Min(0)] private float _waitingTime;
 
 
         // Internal
@@ -61,7 +61,7 @@ namespace Actors.Monsters
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithKinematicProjectile(
                         launcher: monster._spikeLauncher,
-                        getLaunchInfo: () => new(monster.launchTime, monster.spikeSpeed),
+                        getLaunchInfo: () => new(monster._launchTime, monster._spikeSpeed),
                         launchType: KinematicProjectileLaunchType.Directions,
                         getDirections: () => (new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }))));
                 AddChild(new MonsterAction(MonsterActionType.Hit)

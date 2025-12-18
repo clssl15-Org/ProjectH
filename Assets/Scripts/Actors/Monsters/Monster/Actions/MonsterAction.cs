@@ -218,7 +218,7 @@ namespace Actors.Monsters.Actions
 
                     _pendings.Remove(component);
                     component.Enter(_components[component].input);
-                    _runnings.Add(component);
+                    if (component.Active) _runnings.Add(component);
                 }
 
                 for (int i = 0; i < _runnings.Count; i++)

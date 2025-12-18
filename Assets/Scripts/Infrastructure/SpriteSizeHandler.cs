@@ -18,7 +18,19 @@ namespace Infrastructure
 
         public SpriteSizeHandler Initialize(Configuration configuration, bool apply = false)
         {
+            _useManualScaleFactor = false;
             _configuration = configuration;
+
+            if (apply)
+                ApplyScaleFactor();
+
+            return this;
+        }
+        public SpriteSizeHandler Initialize(float scaleFactor, bool apply = false)
+        {
+            _configuration = null;
+            _useManualScaleFactor = true;
+            _scaleFactor = scaleFactor;
 
             if (apply)
                 ApplyScaleFactor();

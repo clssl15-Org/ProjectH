@@ -8,6 +8,7 @@ namespace Infrastructure
 {
     public class TriggerContactHandler : MonoBehaviour
     {
+        [Tooltip("이 필드를 할당하지 않으면 자신의 Collider2D 컴포넌트가 자동으로 선택됩니다.")]
         [SerializeField] private Collider2D _myCollider;
         [field: SerializeField] public string[] TargetTags { get; set; }
 

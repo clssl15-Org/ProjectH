@@ -19,11 +19,11 @@ namespace Actors.Monsters.Actions
         public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, float duration = float.MaxValue) =>
             throw new System.NotImplementedException("이 생성자는 더 이상 사용되지 않습니다. 대신 Weapon 타입을 사용하는 생성자를 사용하세요.");
 
-        public AttackWithWeapon(Weapon weaponPrefab, float startTime = 0, float? duration = null)
+        public AttackWithWeapon(Weapon weaponPrefab, float startTime = 0, float duration = -1)
         {
             _weaponPrefab = weaponPrefab;
             _startTime = startTime;
-            _duration = duration ?? float.MaxValue;
+            _duration = duration < 0 ? float.MaxValue : duration;
         }
 
         protected override void OnEnter(object _)
