@@ -103,13 +103,15 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         if (!_contactHandler || _contactHandler.Collisions.Count == 0)
             return;
 
+        HashSet<MonsterDamageReceiver> interacted = null;
+
         foreach (var contact in _contactHandler.Collisions)
         {
             var receiver = contact.gameObject
                 .GetComponentInChildren<MonsterDamageReceiver>();
 
-            if (!receiver)
-                return;
+            if (!receiver || (interacted?.Contains(receiver) ?? false))
+                continue;
 
             if (UseKnockback)
             {
@@ -120,6 +122,9 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
             {
                 receiver.TakeDamage(AttackPower);
             }
+
+            interacted ??= new();
+            interacted.Add(receiver);
         }
     }
 

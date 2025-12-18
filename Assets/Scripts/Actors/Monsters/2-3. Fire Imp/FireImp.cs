@@ -10,7 +10,7 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Fire Imp")]
-        [SerializeField] private GameObject _firePrefab;
+        [SerializeField] private Weapon _firePrefab;
         [SerializeField] private float _fireStartTime;
 
 
@@ -25,13 +25,18 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged(Engaged.RangeType.Contact, 2f)
                                 .AddChild(new Adjusting())
-                                .AddChild(new DeadEnd()))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol(MonsterActionType.Run))))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol(MonsterActionType.Run))
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -41,17 +46,22 @@ namespace Actors.Monsters
             public FireImpController(FireImp monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent(interruptAllOnDeactivate: true)
-                    .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireStartTime)));
+                    .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireStartTime))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -63,7 +73,9 @@ namespace Actors.Monsters
                 throw new InvalidOperationException(
                     $"{GetType().Name}은(는) {nameof(_firePrefab)}을(를) 가지고 있어야 합니다.");
 
-            _firePrefab.SetActive(false);
+            _firePrefab.gameObject.SetActive(false);
+            _firePrefab.AttackPower = StatsInfo.AttackPower;
+
             base.Awake();
         }
 
@@ -83,7 +95,7 @@ namespace Actors.Monsters
             {
                 new(true),
                 new(true),
-                new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+                new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.Unconditional, RerunPolicy.Restart)
             });
         }
     }

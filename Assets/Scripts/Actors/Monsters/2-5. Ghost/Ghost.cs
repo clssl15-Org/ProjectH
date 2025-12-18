@@ -1,5 +1,6 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -25,8 +26,10 @@ namespace Actors.Monsters
         [Header("Ghost")]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
         [Space]
-        [SerializeField] private GameObject _swordPrefab;
+        [SerializeField] private Weapon _swordPrefab;
         [SerializeField] private float _launchStartTime;
+        [Space]
+        [SerializeField] private Weapon _rangedWeaponPrefab;
 
         public enum AttackMode
         {
@@ -36,7 +39,7 @@ namespace Actors.Monsters
         }
 
 
-        // Internal
+        // States
         private class GhostBrain : MonsterBrain
         {
             public GhostBrain(IMonsterInternal owner) : base(owner)
@@ -45,15 +48,24 @@ namespace Actors.Monsters
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged()
+                            .AddChild(new Engaged(Engaged.RangeType.Ranged)
+                                {
+                                    TargetAttackRange = 3f,
+                                    UpperRangeTolerance = 2f,
+                                }
                                 .AddChild(new Adjusting(MonsterActionType.Idle))
-                                .AddChild(new DeadEnd(MonsterActionType.Idle)))
+                                .AddChild(new DeadEnd(MonsterActionType.Idle))
+                            )
                             .AddChild(new GhostAttackBrain())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol(MonsterActionType.Idle))))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol(MonsterActionType.Idle))
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -63,19 +75,25 @@ namespace Actors.Monsters
             public GhostController(Ghost monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("Attack_1")
                     .AddAnimationComponent(interruptAllOnDeactivate: true)
-                    .AddComponent(new AttackWithWeapon(monster._swordPrefab)));
+                    .AddComponent(new AttackWithWeapon(monster._swordPrefab))
+                );
                 AddChild(new MonsterAction("Attack_2")
-                    .AddComponent(new GhostExplosiveAttackAction()));
+                    .AddComponent(new GhostExplosiveAttackAction())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -89,6 +107,11 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+
+            _swordPrefab.AttackPower = StatsInfo.RangedAttackPower;
+            _swordPrefab.GetComponent<SpriteSizeHandler>().Initialize(Configuration, true);
+
+            _rangedWeaponPrefab.AttackPower = StatsInfo.AttackPower;
 
             ActionController = new GhostController(this);
             ActionController.Enter();

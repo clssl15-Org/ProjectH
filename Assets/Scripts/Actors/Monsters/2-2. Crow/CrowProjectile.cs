@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace Actors.Monsters
@@ -12,7 +11,15 @@ namespace Actors.Monsters
         // Content
         public override void OnArrived()
         {
+            if (!_impactPrefab)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             Destroy(transform.GetChild(0).gameObject);
+            GetComponent<Collider2D>().enabled = false;
+
             Speed = 0f;
 
             var impact = Instantiate(_impactPrefab);
@@ -22,7 +29,7 @@ namespace Actors.Monsters
 
             if (TryGetImpactTime(out var impactTime))
             {
-                StartCoroutine(DestroyAfter());
+                Destroy(gameObject, impactTime + 0.1f);
                 impact.SetActive(true);
             }
             else
@@ -52,19 +59,6 @@ namespace Actors.Monsters
 
                 impactTime = clip.length;
                 return true;
-            }
-
-            IEnumerator DestroyAfter()
-            {
-                var playtime = 0f;
-
-                while (playtime < impactTime)
-                {
-                    playtime += Time.deltaTime;
-                    yield return null;
-                }
-
-                Destroy(gameObject);
             }
         }
 

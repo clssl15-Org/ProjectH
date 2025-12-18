@@ -7,49 +7,72 @@ namespace Actors.Monsters
 {
     public class DarkMonsterFirstPhase : Monster<MonsterStats>
     {
-        // Property
         [Header("Dark Monster First Phase")]
+        [SerializeField] private Weapon _weapon;
+        [SerializeField, Min(0)] private float _weaponActiveTiming;
+        [SerializeField] private float _weaponActiveDuration;
+        [Space]
         [SerializeField] private bool _revive = true;
         [SerializeField] private GameObject _secondPhasePrefab;
 
 
-        // Internal
+        // States
         private class DarkMonsterFirstPhaseBrain : MonsterBrain
         {
-            public DarkMonsterFirstPhaseBrain(IMonsterInternal owner) : base(owner)
+            public DarkMonsterFirstPhaseBrain(DarkMonsterFirstPhase owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(Engaged.RangeType.Contact)
+                            .AddChild(new Engaged(
+                                    Engaged.RangeType.Ranged,
+                                    Mathf.Abs(
+                                        owner._weapon?.transform.localPosition.x
+                                        ?? Engaged.DefaultTargetAttackRange)
+                                )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
 
         private class DarkMonsterFirstPhaseController : MonsterActionController
         {
-            public DarkMonsterFirstPhaseController(IMonsterInternal monster) : base(monster)
+            public DarkMonsterFirstPhaseController(DarkMonsterFirstPhase monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._weapon,
+                        monster._weaponActiveTiming,
+                        monster._weaponActiveDuration)
+                    )
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -67,6 +90,13 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+
+            if (_weapon)
+                _weapon.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new DarkMonsterFirstPhaseController(this);
             ActionController.Enter();

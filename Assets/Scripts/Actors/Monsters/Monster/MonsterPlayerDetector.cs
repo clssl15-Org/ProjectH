@@ -32,7 +32,8 @@ namespace Actors.Monsters
                 _colliderComponent = GetComponent<BoxCollider2D>();
 
             if (!_colliderComponent)
-                throw new InvalidOperationException(Ctx("자신이 유효한 콜라이더를 가지고 있지 않습니다."));
+                throw new InvalidOperationException(
+                    Ctx("자신이 유효한 콜라이더를 가지고 있지 않습니다."));
 
 
             _colliderComponent.offset = new Vector2
@@ -50,12 +51,18 @@ namespace Actors.Monsters
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (!collision.CompareTag("Player"))
+                return;
+
             CurrentPlayer = collision.gameObject;
             PlayerDetected?.Invoke(CurrentPlayer);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
+            if (!collision.CompareTag("Player"))
+                return;
+
             CurrentPlayer = null;
         }
 
