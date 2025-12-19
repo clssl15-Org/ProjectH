@@ -125,8 +125,14 @@ public class MonsterSpawner : MonoBehaviour
     /// </summary>
     private void ProcessFixedPool(List<GameObject> pool)
     {
-        if (pool == null) return;
+        if (pool.Count == 0) return;
 
+        // 대형맵의 특정 몬스터 풀을 위함
+        if (pool[0].TryGetComponent<monsterBundle>(out monsterBundle mb))
+        {
+            pool = mb.monsterList;
+        }
+            
         foreach (GameObject monsterPrefab in pool)
         {
             if (monsterPrefab != null)
@@ -169,10 +175,11 @@ public class MonsterSpawner : MonoBehaviour
                 {
                     // 중복 불가 시, 선택된 몬스터를 후보 리스트에서 제거 
                     candidates.RemoveAt(randomIndex);
-                    // 후보가 더 이상 없으면 종료 
+                    // 후보가 더 이상 없으면 리필
                     if (candidates.Count <= 0)
                     {
-                        break;
+                        candidates = new List<GameObject>(pool.monsterPrefabs);
+                        //break;
                     }
                 }
             }
