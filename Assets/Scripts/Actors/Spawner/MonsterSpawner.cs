@@ -156,6 +156,13 @@ public class MonsterSpawner : MonoBehaviour
 
             if (monsterPrefab != null)
             {
+                // stage3의 특수 강력 몬스터 풀을 위한 코드
+                if (monsterPrefab.TryGetComponent<monsterBundle>(out monsterBundle mb))
+                {
+                    int randIndex = Random.Range(0, mb.monsterList.Count);
+                    monsterPrefab = mb.monsterList[randIndex];
+                }
+
                 SpawnMonster(monsterPrefab);
                 
                 if(!pool.canDuplicate)

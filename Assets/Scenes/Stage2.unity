@@ -283,7 +283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &43994166
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -760,8 +759,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1195814843}
-  beforeState: 0
 --- !u!95 &141255609
 Animator:
   serializedVersion: 5
@@ -5854,7 +5851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6056,8 +6053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1393405941}
-  beforeState: 0
 --- !u!95 &206103745
 Animator:
   serializedVersion: 5
@@ -6236,7 +6231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6395,7 +6390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &271416281
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6782,8 +6776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1530659898}
-  beforeState: 0
 --- !u!95 &310501129
 Animator:
   serializedVersion: 5
@@ -6914,7 +6906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7381,7 +7373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7555,8 +7547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1857025190}
-  beforeState: 0
 --- !u!95 &405523515
 Animator:
   serializedVersion: 5
@@ -7682,16 +7672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508609f921a4f24e8eec4f921821a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 1409669071}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &435203835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7704,7 +7684,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 435203834}
 --- !u!114 &435203836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7910,7 +7889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8134,7 +8113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8463,7 +8442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8723,7 +8702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8920,7 +8899,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9180,8 +9159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 435203834}
-  beforeState: 0
 --- !u!95 &673427272
 Animator:
   serializedVersion: 5
@@ -9297,7 +9274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9453,7 +9430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17407,7 +17384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18273,7 +18250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24600,7 +24577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24804,7 +24781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -31216,7 +31193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -31359,7 +31336,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &1023917179
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -31502,8 +31478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c6dc9e87fe11f4891f76949a58ad96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monstersParent: {fileID: 828006786}
-  objectToActivate: {fileID: 28173149}
 --- !u!114 &1047544862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31516,7 +31490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f610d60051ccee145b79a46a5ae2d6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Scene: Stage3
 --- !u!4 &1047544863
 Transform:
   m_ObjectHideFlags: 0
@@ -43547,10 +43520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6617d83b37ce2b4ea8b5f7efbd4530d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 754780852}
-  healthBarFill: {fileID: 128669669}
-  qGauge: {fileID: 1672617603}
-  qGaugeFill: {fileID: 574150830}
 --- !u!1 &1161983678
 GameObject:
   m_ObjectHideFlags: 0
@@ -43865,16 +43834,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508609f921a4f24e8eec4f921821a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 1023917177}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1195814844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43887,7 +43846,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1195814843}
 --- !u!114 &1195814845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44191,7 +44149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -51237,7 +51195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -58360,16 +58318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b94625cb544ed44b8b8d2ee49a2786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 271416279}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1393405942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58382,7 +58330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1393405941}
 --- !u!114 &1393405943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58585,7 +58532,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &1409669073
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -58740,7 +58686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59098,7 +59044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59444,7 +59390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59587,18 +59533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c509b16bdde7a841a08c58a2ce55223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 0
-  MonsterAttack: {fileID: 43994164}
-  body1: {fileID: 310501127}
-  body2: {fileID: 1663471801}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1530659899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59611,7 +59545,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1530659898}
 --- !u!114 &1530659900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60119,9 +60052,9 @@ MonoBehaviour:
   phases:
   - phaseNumber: 1
     fixedMonsterPool:
-    - {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
-    - {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
-    - {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+    - {fileID: 5163356707057488334, guid: 8e6c28b3cc761d543ae26c5b0b3ce321, type: 3}
+    - {fileID: 5163356707057488334, guid: 8e6c28b3cc761d543ae26c5b0b3ce321, type: 3}
+    - {fileID: 959046992594254200, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
     randomMonsterPool:
       spawnCount: 0
       canDuplicate: 0
@@ -60174,8 +60107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1530659898}
-  beforeState: 0
 --- !u!95 &1663471804
 Animator:
   serializedVersion: 5
@@ -60280,7 +60211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &1671687979
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -60517,7 +60447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -65562,7 +65492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -70909,7 +70839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -71129,16 +71059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b94625cb544ed44b8b8d2ee49a2786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 10
-  MonsterAttack: {fileID: 1671687977}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1857025191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71151,7 +71071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1857025190}
 --- !u!114 &1857025192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71489,7 +71408,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -71664,7 +71583,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -87339,7 +87258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z

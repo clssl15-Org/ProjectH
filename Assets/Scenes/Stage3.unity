@@ -283,7 +283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -346,13 +346,61 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[4]
       value: 
       objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -847,7 +895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -922,21 +970,65 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[4]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[3]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -12589,7 +12681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12652,9 +12744,57 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12707,7 +12847,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12769,6 +12909,30 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -12928,7 +13092,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13009,7 +13173,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
       value: 
@@ -13017,7 +13181,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -18550,7 +18714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18612,6 +18776,22 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -24161,7 +24341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -24223,6 +24403,54 @@ PrefabInstance:
       propertyPath: phases.Array.data[1].randomMonsterPool.spawnCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -24263,8 +24491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c6dc9e87fe11f4891f76949a58ad96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monstersParent: {fileID: 828006786}
-  objectToActivate: {fileID: 86692681}
 --- !u!4 &583221275
 Transform:
   m_ObjectHideFlags: 0
@@ -31941,9 +32167,9 @@ MonoBehaviour:
   phases:
   - phaseNumber: 1
     fixedMonsterPool:
-    - {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
-    - {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
-    - {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+    - {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     randomMonsterPool:
       spawnCount: 0
       canDuplicate: 0
@@ -32172,7 +32398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -32235,17 +32461,61 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[4]
       value: 
       objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32450,7 +32720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -32497,6 +32767,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1898265491}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: sceneAssetsLibrary
       value: 
       objectReference: {fileID: 43997186}
@@ -32505,8 +32779,16 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[2].phaseNumber
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.size
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[2].fixedMonsterPool.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
@@ -32514,6 +32796,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.spawnCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[2].randomMonsterPool.spawnCount
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -32549,6 +32835,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.canDuplicate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[2].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[2].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[2].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
@@ -32567,7 +32869,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -32625,7 +32927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -32692,13 +32994,37 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[4]
       value: 
       objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -32851,7 +33177,7 @@ Transform:
   m_GameObject: {fileID: 846826637}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.15, y: -1.26, z: 0}
+  m_LocalPosition: {x: 12.91, y: -1.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -32875,7 +33201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -32938,37 +33264,73 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[4]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[5]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[3]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[4]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -33010,7 +33372,7 @@ Transform:
   m_GameObject: {fileID: 891062920}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.15, y: -1.26, z: 0}
+  m_LocalPosition: {x: 8.52, y: -1.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33058,7 +33420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -33116,6 +33478,54 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -40294,7 +40704,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -40365,9 +40775,57 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -40614,7 +41072,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -40680,6 +41138,30 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.size
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -40733,7 +41215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -40816,17 +41298,37 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 5163356707057488334, guid: 7a654c84de47bbe419051589d720c6a8, type: 3}
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[4]
       value: 
       objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[2]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[3]
       value: 
@@ -40835,6 +41337,30 @@ PrefabInstance:
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[4]
       value: 
       objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -41655,7 +42181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -41752,7 +42278,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -41817,10 +42343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6617d83b37ce2b4ea8b5f7efbd4530d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 754780852}
-  healthBarFill: {fileID: 128669669}
-  qGauge: {fileID: 1672617603}
-  qGaugeFill: {fileID: 574150830}
 --- !u!1 &1161983678
 GameObject:
   m_ObjectHideFlags: 0
@@ -48738,8 +49260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b523aefcee287a14c92c8b17132dd314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 75086187}
-  stageClearImage: {fileID: 945217895}
 --- !u!4 &1218898645
 Transform:
   m_ObjectHideFlags: 0
@@ -59923,7 +60443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59990,9 +60510,49 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -60051,8 +60611,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d63374f3a7d2644b38d5b9e9972466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterAI: {fileID: 1592228104}
-  beforeState: 0
 --- !u!95 &1403196993
 Animator:
   serializedVersion: 5
@@ -60228,7 +60786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -60294,6 +60852,26 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -70825,7 +71403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -70922,7 +71500,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -70934,7 +71512,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -71002,16 +71580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 054a5780f68a86648a06a70cbac2e6b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 2
-  currentHP: 0
-  maxHP: 0
-  MonsterAttack: {fileID: 1766656741}
-  cliffDetectDistance: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
-  idleMoveDuration: 2
 --- !u!114 &1592228105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71024,7 +71592,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d4167b0cf699549a2fbda2511217f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterBase: {fileID: 1592228104}
 --- !u!114 &1592228106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74466,7 +75033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -74537,9 +75104,49 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.canDuplicate
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -74803,7 +75410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1727983881
 Transform:
   m_ObjectHideFlags: 0
@@ -74880,7 +75487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e61c5d6fc5e924ba76d49a5dc9c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
 --- !u!61 &1766656743
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -75128,7 +75734,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -75245,7 +75851,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -75257,7 +75863,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -75575,7 +76181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -75645,6 +76251,22 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -81700,7 +82322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -81771,9 +82393,49 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].fixedMonsterPool.Array.data[1]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -81957,7 +82619,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 4076845378080737680, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
@@ -81990,7 +82652,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1986906698
 Transform:
   m_ObjectHideFlags: 0
@@ -82162,7 +82824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -82302,7 +82964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -82379,7 +83041,7 @@ PrefabInstance:
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
       value: 
@@ -82388,6 +83050,18 @@ PrefabInstance:
       propertyPath: phases.Array.data[0].randomMonsterPool.canDuplicate
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -82436,7 +83110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -82503,9 +83177,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -87764,7 +88454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.91
+      value: -6.3
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z
@@ -87823,9 +88513,25 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[1]
       value: 
-      objectReference: {fileID: 3727985593155022163, guid: 173cd69897951fa48b561f30f265989e, type: 3}
+      objectReference: {fileID: 7106583992451973289, guid: 6cb91cc7b2dff6f4d9b149e51ba1eb20, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 4771730098658838491, guid: d1e0f072bbfe8fb428e0e85097e4e2f4, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 668400060880012410, guid: 8acf3d05595f4bc4ab7b7e338d1e6019, type: 3}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7924842899563321947, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
@@ -87922,6 +88628,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2231082426935981509
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.608098
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7.673397
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.009497823
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129988149187282577, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1365089627577779359, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
+      propertyPath: m_Name
+      value: MonsterBundle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 393e7fc1e7c828542813d49d9194d00e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -87946,3 +88709,4 @@ SceneRoots:
   - {fileID: 1904553532}
   - {fileID: 583221275}
   - {fileID: 86692683}
+  - {fileID: 2231082426935981509}
