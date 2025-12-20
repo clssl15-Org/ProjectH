@@ -80,7 +80,10 @@ namespace Actors.Monsters
             base.Start();
 
             if (_weapon)
+            {
                 _weapon.AttackPower = StatsInfo.AttackPower;
+                _weapon.gameObject.SetActive(false);
+            }
             else
                 Debug.LogWarning(
                     FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),

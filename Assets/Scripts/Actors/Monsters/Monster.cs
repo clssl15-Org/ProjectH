@@ -293,8 +293,11 @@ namespace Actors.Monsters
             }
 
 
-            Debug.LogWarning(FormatLogMessage(
-                $"현재 입력된 {nameof(direction)}({Direction})이(가) 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
+            Debug.LogWarning(
+                FormatLogMessage(
+                    $"현재 입력된 {nameof(direction)}({Direction})이(가) 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. " +
+                    $"false를 반환합니다."),
+                this);
 
             return false;
         }

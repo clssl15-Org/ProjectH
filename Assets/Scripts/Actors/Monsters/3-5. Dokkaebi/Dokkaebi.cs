@@ -10,14 +10,14 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Dokkaebi")]
-        [SerializeField] private GameObject _laserPrefab;
-        [SerializeField] private float _laserAppearTime;
+        [SerializeField] private Weapon _weapon;
+        [SerializeField] private float _weaponActiveTiming;
 
 
         // Internal
         private class DokkaebiBrain : MonsterBrain
         {
-            public DokkaebiBrain(IMonsterInternal owner) : base(owner)
+            public DokkaebiBrain(Dokkaebi owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
@@ -45,21 +45,28 @@ namespace Actors.Monsters
             public DokkaebiActionController(Dokkaebi monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Alert)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent(interruptAllOnDeactivate: true)
-                    .AddComponent(new AttackWithWeapon(monster._laserPrefab, monster._laserAppearTime)));
+                    .AddComponent(new AttackWithWeapon(monster._weapon, monster._weaponActiveTiming))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -67,11 +74,13 @@ namespace Actors.Monsters
         // Content
         protected override void Awake()
         {
-            if (!_laserPrefab)
+            if (!_weapon)
                 throw new InvalidOperationException(
-                    $"{nameof(Dokkaebi)}은(는) {nameof(_laserPrefab)}을(를) 가지고 있어야 합니다.");
+                    $"{nameof(Dokkaebi)}은(는) {nameof(_weapon)}을(를) 가지고 있어야 합니다.");
 
-            _laserPrefab.SetActive(false);
+            _weapon.AttackPower = StatsInfo.AttackPower;
+            _weapon.gameObject.SetActive(false);
+
             base.Awake();
         }
 

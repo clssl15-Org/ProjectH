@@ -8,8 +8,8 @@ namespace Actors.Monsters.Brains
     {
         // Front
         public float TargetAttackRange { get; set; } = DefaultTargetAttackRange;
-        public float UpperRangeTolerance { get; set; } = 0.2f;
-        public float LowerRangeTolerance { get; set; } = 0.2f;
+        public float UpperRangeTolerance { get; set; } = 0.15f;
+        public float LowerRangeTolerance { get; set; } = 0.15f;
 
         public const float DefaultTargetAttackRange = 2f;
 

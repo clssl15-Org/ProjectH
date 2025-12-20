@@ -14,6 +14,7 @@ namespace Actors.Monsters
         public GameObject CurrentPlayer { get; private set; }
 
         // Internal
+        [SerializeField] private bool _setSizeByParentOnAwake = true;
         private BoxCollider2D _colliderComponent;
 
 
@@ -21,6 +22,10 @@ namespace Actors.Monsters
         private void Awake()
         {
             _colliderComponent = GetComponent<BoxCollider2D>();
+
+            if (_setSizeByParentOnAwake)
+                SetSizeByParent();
+
         }
 
         /// <summary>
@@ -66,6 +71,23 @@ namespace Actors.Monsters
             CurrentPlayer = null;
         }
 
+        private void SetSizeByParent()
+        {
+            var parentTransform = transform.parent;
+
+            if (!parentTransform)
+                throw new InvalidOperationException(
+                    Ctx($"{nameof(MonsterPlayerDetectorEditor)}의 부모가 유효하지 않은 상태입니다."));
+
+            if (!parentTransform.TryGetComponent<Collider2D>(out var parentCollider))
+                throw new InvalidOperationException(
+                    Ctx($"몬스터 {parentTransform.name}이(가) 유효한 콜라이더를 가지고 있지 않습니다."));
+
+            SetSize(
+                parentCollider.offset.y,
+                parentCollider.bounds.max.y - parentCollider.bounds.min.y);
+        }
+
         private string Ctx(string message) => $"[MonsterPlayerDetector] {message}";
 
 
@@ -78,22 +100,7 @@ namespace Actors.Monsters
                 base.OnInspectorGUI();
 
                 if (GUILayout.Button("Set Vertical Property"))
-                {
-                    var target = (MonsterPlayerDetector)base.target;
-                    var parentTransform = target.transform.parent;
-
-                    if (!parentTransform)
-                        throw new InvalidOperationException(
-                            target.Ctx($"{nameof(MonsterPlayerDetectorEditor)}의 부모가 유효하지 않은 상태입니다."));
-
-                    if (!parentTransform.TryGetComponent<Collider2D>(out var parentCollider))
-                        throw new InvalidOperationException(
-                            target.Ctx($"몬스터 {parentTransform.name}이(가) 유효한 콜라이더를 가지고 있지 않습니다."));
-
-                    target.SetSize(
-                        parentCollider.offset.y,
-                        parentCollider.bounds.max.y - parentCollider.bounds.min.y);
-                }
+                    ((MonsterPlayerDetector)target).SetSizeByParent();
             }
         }
 #endif

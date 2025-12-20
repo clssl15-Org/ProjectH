@@ -23,6 +23,7 @@ namespace Actors.Monsters.Actions
         private AnimationPlayInfo _currentAnimationPlayInfo;
 
         private Work _work;
+        private float _deltaTime;
         private float _elapsedTime;
         private float _playingFinishedTime;
         private object _playToken;
@@ -40,7 +41,9 @@ namespace Actors.Monsters.Actions
                     {
                         if (_elapsedTime >= _currentAnimationPlayInfo.DelayBeforePlay)
                             _work.SetNext("Play");
-                    }), true)
+                    }),
+                    primary: true
+                )
                 .AddChild(new Work("Play")
                     .SetEnteredAction(() => AnimationPlayer.Play(
                         PlayInfo with { Callback = succeed =>
@@ -58,14 +61,19 @@ namespace Actors.Monsters.Actions
                             }
 
                             _work.SetNext("AfterPlay");
-                        }}))
-                    .SetExitedAction(() => _playingFinishedTime = _elapsedTime))
+                        }},
+                        autoRun: false)
+                    )
+                    .AddUpdatedAction(() => AnimationPlayer.Run(_deltaTime))
+                    .SetExitedAction(() => _playingFinishedTime = _elapsedTime)
+                )
                 .AddChild(new Work("AfterPlay")
                     .AddUpdatedAction(() =>
                     {
                         if (_elapsedTime >= _playingFinishedTime + _currentAnimationPlayInfo.DelayAfterPlay)
                             Interrupt(InterruptType.Completed);
-                    }));
+                    })
+                );
         }
 
         protected override void OnEnter(object input)
@@ -84,7 +92,9 @@ namespace Actors.Monsters.Actions
 
         protected override void OnUpdate(float deltaTime)
         {
+            _deltaTime = deltaTime;
             _elapsedTime += deltaTime;
+
             _work.Update();
         }
 

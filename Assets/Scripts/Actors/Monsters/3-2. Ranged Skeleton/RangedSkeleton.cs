@@ -11,22 +11,33 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Ranged Skeleton")]
+        [SerializeField, Min(0)] private float _targetRangeMin = 0.5f;
+        [SerializeField, Min(0)] private float _targetRangeMax = 5f;
+        [Space]
         [SerializeField, Min(0)] private float _launchTime;
         [SerializeField, Min(0)] private float _projectileSpeed;
 
-
-        // Internal
         private KinematicProjectileLauncher _projectileLauncher;
 
+
+        // States
         private class RangedkeletonBrain : MonsterBrain
         {
-            public RangedkeletonBrain(IMonsterInternal owner) : base(owner)
+            public RangedkeletonBrain(RangedSkeleton owner) : base(owner)
             {
+                var targetAttackRange = (owner._targetRangeMin + owner._targetRangeMax) / 2;
+                var tolerance = owner._targetRangeMax - targetAttackRange;
+
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged()
+                            .AddChild(new Engaged(Engaged.RangeType.Ranged)
+                                {
+                                    TargetAttackRange = targetAttackRange,
+                                    UpperRangeTolerance = tolerance,
+                                    LowerRangeTolerance = tolerance,
+                                }
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd()))
                             .AddChild(new Attack())
@@ -69,7 +80,10 @@ namespace Actors.Monsters
             base.Start();
 
             _projectileLauncher = GetComponent<KinematicProjectileLauncher>();
-            _projectileLauncher.Initialize(this, PlatformManager, "Player", "Ground");
+            _projectileLauncher
+                .Initialize(this, PlatformManager, "Player", "Ground")
+                .SetProjectileInitializer(
+                    p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);
 
             ActionController = new RangedkeletonActionController(this);
             ActionController.Enter();

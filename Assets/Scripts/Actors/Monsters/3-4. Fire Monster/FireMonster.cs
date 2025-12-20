@@ -10,7 +10,7 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Fire Monster")]
-        [SerializeField] private GameObject _firePrefab;
+        [SerializeField] private Weapon _firePrefab;
         [SerializeField] private float _fireAppearTime;
 
 
@@ -28,11 +28,15 @@ namespace Actors.Monsters
                             //    .AddChild(new DeadEnd()))
                             .AddChild(new LookPlayerBrain())
                             .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
-                            .AddChild(new Rest())))
+                            .AddChild(new Rest())
+                        )
+                    )
                     //.AddChild(new Patrol(monsterAction: MonsterActionType.Idle))))
-                    .AddChild(new NotValidPlatform()));
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -62,7 +66,8 @@ namespace Actors.Monsters
                 throw new InvalidOperationException(
                     $"{nameof(FireMonster)}은(는) {nameof(_firePrefab)}을(를) 가지고 있어야 합니다.");
 
-            _firePrefab.SetActive(false);
+            _firePrefab.AttackPower = StatsInfo.AttackPower;
+            _firePrefab.gameObject.SetActive(false);
 
             base.Awake();
             Rigidbody.bodyType = RigidbodyType2D.Static;

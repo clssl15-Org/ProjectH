@@ -17,6 +17,8 @@ namespace Actors.Monsters.Actions
                 !HasDependency || Afters.All(after => completes.Any(c => c == after));
         }
 
+        public float TimeScale { get; set; } = 1f;
+
         public IMonsterInternal Owner
         {
             get
@@ -199,7 +201,7 @@ namespace Actors.Monsters.Actions
                 return;
             }
 
-            var deltaTime = Time.deltaTime;
+            var deltaTime = TimeScale * Time.deltaTime;
 
             try
             {

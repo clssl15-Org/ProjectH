@@ -5,11 +5,11 @@ namespace Actors.Monsters.Actions
     internal class AttackWithWeapon : MonsterActionComponent
     {
         // Internal
-        private Weapon _weaponPrefab;
+        private IWeapon _weaponPrefab;
         private float _startTime;
         private float _duration;
 
-        private Weapon _weapon;
+        private IWeapon _weapon;
         private float _elapsedTime;
         private int _phase;
 
@@ -19,7 +19,7 @@ namespace Actors.Monsters.Actions
         public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, float duration = float.MaxValue) =>
             throw new System.NotImplementedException("이 생성자는 더 이상 사용되지 않습니다. 대신 Weapon 타입을 사용하는 생성자를 사용하세요.");
 
-        public AttackWithWeapon(Weapon weaponPrefab, float startTime = 0, float duration = -1)
+        public AttackWithWeapon(IWeapon weaponPrefab, float startTime = 0, float duration = -1)
         {
             _weaponPrefab = weaponPrefab;
             _startTime = startTime;
@@ -28,7 +28,7 @@ namespace Actors.Monsters.Actions
 
         protected override void OnEnter(object _)
         {
-            if (!_weaponPrefab)
+            if (_weaponPrefab == null)
             {
                 Debug.LogWarning(
                     $"[{nameof(AttackWithWeapon)}] {nameof(_weaponPrefab)}이(가) 유효하지 않으므로 컴포넌트가 비활성화되었습니다.",
@@ -70,7 +70,9 @@ namespace Actors.Monsters.Actions
 
         private void SetWeapon()
         {
-            _weapon = Object.Instantiate(_weaponPrefab);
+            _weapon = Object
+                .Instantiate(_weaponPrefab.gameObject)
+                .GetComponent<IWeapon>();
             _weapon.transform.SetParent(Owner.transform);
 
             _weapon.transform.SetPositionAndRotation(_weaponPrefab.transform.position, _weapon.transform.rotation);
@@ -81,7 +83,15 @@ namespace Actors.Monsters.Actions
 
         private void UnsetWeapon()
         {
-            if (_weapon) Object.Destroy(_weapon.gameObject);
+            if (_weapon != null)
+            {
+                try
+                {
+                    Object.Destroy(_weapon.gameObject);
+                }
+                catch { }
+            }
+
             _weapon = null;
         }
         

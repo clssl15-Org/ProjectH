@@ -1,3 +1,4 @@
+using System;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using UnityEngine;
@@ -10,8 +11,16 @@ namespace Actors.Monsters
         // Front
         [Header("Skeleton Pig")]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
-        [SerializeField] private GameObject _shockwave;
+        [Space]
+        [SerializeField] private Weapon _dashWeapon;
+        [SerializeField, Min(0)] private float _dashWeaponActiveTiming;
+        [SerializeField] private float _dashWeaponActiveDuration;
+        [Space]
+        [SerializeField] private WeaponManager _shockwave;
         [SerializeField] private float _shockwaveTime;
+        [Space]
+        [Header("Animation")]
+        [SerializeField, Min(0)] private float _dieTimeScale = 1f;
 
         public enum AttackMode
         {
@@ -22,7 +31,7 @@ namespace Actors.Monsters
         }
 
 
-        // Internal
+        // States
         private class SkeletonPigBrain : MonsterBrain
         {
             public SkeletonPigBrain(SkeletonPig skeletonPig) : base(skeletonPig)
@@ -54,13 +63,23 @@ namespace Actors.Monsters
             public SkeletonPigActionController(SkeletonPig skeletonPig) : base(skeletonPig)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Alert)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(AttackMode.DashAttack.ToString())
-                    .AddAnimationComponent("Dash"));
+                    .AddAnimationComponent(
+                        "Dash",
+                        interruptAllOnDeactivate: true)
+                    .AddComponent(new AttackWithWeapon(
+                        skeletonPig._dashWeapon,
+                        skeletonPig._dashWeaponActiveTiming,
+                        skeletonPig._dashWeaponActiveDuration))
+                );
                 AddChild(new MonsterAction(AttackMode.StampAttack.ToString())
                     .AddAnimationComponent(
                         "Stamp",
@@ -71,23 +90,47 @@ namespace Actors.Monsters
                         skeletonPig._shockwaveTime))
                 );
                 AddChild(new MonsterAction(AttackMode.Roar.ToString())
-                    .AddAnimationComponent("Roar"));
+                    .AddAnimationComponent("Roar")
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddComponent(new SetTimeSacle(skeletonPig._dieTimeScale))
+                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                );
             }
         }
 
 
         // Content
+        protected override void Awake()
+        {
+            if (!_shockwave)
+                throw new InvalidOperationException(
+                    $"{nameof(SkeletonPig)}은(는) {nameof(_shockwave)}을(를) 가지고 있어야 합니다.");
+
+            _shockwave.AttackPower = StatsInfo.AttackPower;
+            _shockwave.gameObject.SetActive(false);
+
+            base.Awake();
+        }
+
         protected override void Start()
         {
             base.Start();
+
+            if (_dashWeapon)
+            {
+                _dashWeapon.AttackPower = StatsInfo.AttackPower;
+                _dashWeapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_dashWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new SkeletonPigActionController(this);
             ActionController.Enter();
 
             Brain = new SkeletonPigBrain(this);
-            //StandaloneHitBrain.DoKnockback = false;
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

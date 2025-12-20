@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Actors.Monsters
 {
     [RequireComponent(typeof(TriggerContactHandler))]
-    public class Weapon : MonoBehaviour
+    public class Weapon : MonoBehaviour, IWeapon
     {
         [field: SerializeField] public int AttackPower { get; set; } = 1;
         [field: SerializeField] public bool DoKnockback { get; set; } = true;
