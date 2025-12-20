@@ -24,6 +24,10 @@ namespace Actor.PlayerSystem
 
         public int CurrentPlatform { get; private set; } = -1;
 
+        public GameObject StatesGO;
+
+        public SkillManager SkillManager => skillManager;
+
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
@@ -31,6 +35,7 @@ namespace Actor.PlayerSystem
         private bool invincible = false;
         private PlatformDetector platformDetector;
         private PlayerHealth playerHealth;
+        private SkillManager skillManager;
 
         private void Awake()
         {
@@ -38,6 +43,7 @@ namespace Actor.PlayerSystem
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
 
             platformDetector = GetComponent<PlatformDetector>();
+            skillManager = GetComponent<SkillManager>();
         }
 
         public void Start()

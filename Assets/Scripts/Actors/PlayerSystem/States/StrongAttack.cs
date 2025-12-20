@@ -5,7 +5,7 @@ using Rules;
 
 namespace Actor.PlayerSystem
 {
-    public class Ultimate : CharacterState
+    public class StrongAttack : CharacterState
     {
         [Header("Skill Timing Settings")]
         [SerializeField]
@@ -42,14 +42,14 @@ namespace Actor.PlayerSystem
 
         [Header("Cooldown Settings")]
         [SerializeField]
-        private float cooldownRecoveryAmount = 0.02f;
-
-        private float cooldownGauge = 1f;
+        private float cooldownDuration = 10f;
 
         [Header("Gizmos")]
         private bool isHitBoxEnabled = false;
 
         private float attackPower => Player.playerStats.attackPower;
+
+        private CooldownTiemr cooldownTimer;
 
         private float skillCursor = 0f;
 
@@ -58,22 +58,6 @@ namespace Actor.PlayerSystem
         private bool isDone = true;
         private bool isDamageApplied = false;
 
-        private void OnEnable()
-        {
-            Attack1.onAttack1 += RecoverCooldown;
-            Attack2.onAttack2 += RecoverCooldown;
-            Attack3.onAttack3 += RecoverCooldown;
-            Eskill.onEskill += RecoverCooldown;
-            ProjectileDamage.onRangedAttack += RecoverCooldown;
-        }
-        private void OnDisable()
-        {
-            Attack1.onAttack1 -= RecoverCooldown;
-            Attack2.onAttack2 -= RecoverCooldown;
-            Attack3.onAttack3 -= RecoverCooldown;
-            Eskill.onEskill -= RecoverCooldown;
-            ProjectileDamage.onRangedAttack -= RecoverCooldown;
-        }
         private void TakeDamageToEnemy()
         {
             Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
@@ -103,14 +87,7 @@ namespace Actor.PlayerSystem
 
         public override bool CheckEnterTransition(CharacterState fromState)
         {
-            if (cooldownGauge < 1f)
-            {
-                Debug.Log(cooldownGauge);
-                return false;
-            }
-
-            cooldownGauge = 0f;
-            return true;
+            return !cooldownTimer || !cooldownTimer.IsOnCooldown;
         }
         public override void CheckExitTransition()
         {
@@ -144,6 +121,8 @@ namespace Actor.PlayerSystem
 
             ResetSkill();
             UpdateAttackParameters();
+            cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+            cooldownTimer.StartCooldown(cooldownDuration, dt);
         }
 
         public override void UpdateBehaviour(float dt)
@@ -186,12 +165,6 @@ namespace Actor.PlayerSystem
             isDamageApplied = false;
             isHitBoxEnabled = false;
             skillCursor = 0;
-        }
-
-        private void RecoverCooldown()
-        {
-            cooldownGauge += cooldownRecoveryAmount;
-            cooldownGauge = Mathf.Clamp(cooldownGauge, 0f, 1f);
         }
 
 #if UNITY_EDITOR

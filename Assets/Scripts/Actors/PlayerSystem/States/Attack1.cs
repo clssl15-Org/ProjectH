@@ -121,9 +121,9 @@ namespace Actor.PlayerSystem
                 CharacterStateController.EnqueueTransition<Dash>();
             }
 
-            if (CharacterActions.eskill.Started)
+            if (CharacterActions.changeSkill.Started)
             {
-                CharacterStateController.EnqueueTransition<Eskill>();
+                //CharacterStateController.EnqueueTransition<Eskill>();
             }
         }
         public override void EnterBehaviour(float dt)

@@ -11,15 +11,32 @@ namespace Actor.PlayerSystem
         private PlayerHealth playerHealth;
         [SerializeField]
         int damageAmount = 10;
+        private Player player;
 
         private void Awake()
         {
             if (!playerHealth)
                 playerHealth = this.transform.root.GetComponentInChildren<PlayerHealth>();
+
+            player = GetComponent<Player>();
         }
         public void DamageToPlayer()
         {
             playerHealth.TakeDamage(damageAmount);
+        }
+        public void AddFirstSkill()
+        {
+            RushStabbing firstSkill = player.StatesGO.GetComponent<RushStabbing>();
+            player.SkillManager.AddSkill(firstSkill);
+        }
+        public void AddSecondSkill()
+        {
+            StrongAttack secondSkill = player.StatesGO.GetComponent<StrongAttack>();
+            player.SkillManager.AddSkill(secondSkill);
+        }
+        public void AddThirdSkill()
+        {
+
         }
     }
 
@@ -34,6 +51,18 @@ namespace Actor.PlayerSystem
             if (GUILayout.Button("Damage to Player"))
             {
                 script.DamageToPlayer();
+            }
+            if (GUILayout.Button("Add First Skill"))
+            {
+                script.AddFirstSkill();
+            }
+            if (GUILayout.Button("Add Second Skill"))
+            {
+                script.AddSecondSkill();
+            }
+            if (GUILayout.Button("Add Third Skill"))
+            {
+                script.AddThirdSkill();
             }
         }
     }

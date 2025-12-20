@@ -31,11 +31,17 @@ namespace Actor.PlayerSystem
                 CharacterStateController.EnqueueTransition<Dash>();
             }
 
-            if (CharacterActions.eskill.Started)
+            if (CharacterActions.changeSkill.Started)
             {
-                CharacterStateController.EnqueueTransition<Eskill>();
+                //CharacterStateController.EnqueueTransition<Eskill>();
+                Player.SkillManager.ChangeSkill();
             }
 
+            if (CharacterActions.useSkill.Started)
+            {
+                Player.SkillManager.UseSkill();
+            }
+            
             if (CharacterActions.rangedAttack.Started)
             {
                 CharacterStateController.EnqueueTransition<RangedAttack>();
@@ -43,7 +49,6 @@ namespace Actor.PlayerSystem
 
             if (CharacterActions.ultimate.Started)
             {
-                CharacterStateController.EnqueueTransition<Ultimate>();
             }
         }
         public override void UpdateBehaviour(float dt)

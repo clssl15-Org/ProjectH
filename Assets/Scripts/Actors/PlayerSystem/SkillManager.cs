@@ -1,0 +1,53 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Actor.PlayerSystem;
+using UnityEngine;
+
+public class SkillManager : MonoBehaviour
+{
+    public List<CharacterState> skills;
+    private int selectedIndex = 0;
+
+    public CharacterStateController CharacterStateController { get; private set; }
+
+    public event Action<string> OnSkillChanged;
+
+    private void Awake()
+    {
+        CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
+
+        Init();
+    }
+
+    public void ChangeSkill()
+    {
+        if(skills.Count <= 0)
+        {
+            return;
+        }
+
+        selectedIndex = (selectedIndex + 1) % skills.Count;
+        OnSkillChanged?.Invoke(skills[selectedIndex].name); // 선택 스킬이 변경되었다고 알림과 동시에 이름을 전달
+        Debug.Log($"{skills[selectedIndex]} is Selected");
+    }
+
+    public void UseSkill()
+    {
+        if (skills.Count <= 0)
+        {
+            return;
+        }
+
+        CharacterStateController.EnqueueTransition(skills[selectedIndex]);
+    }
+
+    public void Init()
+    {
+        selectedIndex = 0;
+    }
+    public void AddSkill(CharacterState skill)
+    {
+        skills.Add(skill);
+    }
+}

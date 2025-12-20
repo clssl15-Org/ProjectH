@@ -12,7 +12,7 @@ namespace Actor.PlayerSystem
         InputDirection
     }
 
-    public class Eskill : CharacterState
+    public class RushStabbing : CharacterState
     {
         [Header("Movement Settings")]
         [Min(0f)]
@@ -21,10 +21,10 @@ namespace Actor.PlayerSystem
 
         [Min(0f)]
         [SerializeField]
-        private float duration = 0.2f;
+        private float duration = 0.4f;
 
         [SerializeField]
-        private AnimationCurve movementCurve = AnimationCurve.Linear(1, 1, 0, 0);
+        private AnimationCurve movementCurve = AnimationCurve.Linear(0f, 2f, 2f, 0f);
 
         [SerializeField]
         private DirectionMode directionMode = DirectionMode.InputDirection;
@@ -35,10 +35,10 @@ namespace Actor.PlayerSystem
 
         [Header("Attack Range")]
         [SerializeField]
-        private Vector2 attackSize = new Vector2(1.0f, 1.0f);
+        private Vector2 attackSize = new Vector2(3.0f, 1.0f);
 
         [SerializeField]
-        private Vector2 attackPointOffset = new Vector2(0f, 0f);
+        private Vector2 attackPointOffset = new Vector2(1f, 0f);
 
         [Header("Invincible Settings")]
         [SerializeField]

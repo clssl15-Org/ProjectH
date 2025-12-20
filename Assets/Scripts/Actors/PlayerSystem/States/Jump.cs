@@ -41,9 +41,9 @@ namespace Actor.PlayerSystem
             {
                 CharacterStateController.EnqueueTransition<Dash>();
             }
-            if (CharacterActions.eskill.Started)
+            if (CharacterActions.changeSkill.Started) // TODO:  점프할때도 스킬 변경 가능케
             {
-                CharacterStateController.EnqueueTransition<Eskill>();
+                //CharacterStateController.EnqueueTransition<Eskill>();
             }
         }
         public override void EnterBehaviour(float dt)
