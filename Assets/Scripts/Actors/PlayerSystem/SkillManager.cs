@@ -7,15 +7,21 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     public List<CharacterState> skills;
-    private int selectedIndex = 0;
+    public bool canChangeSkill = true;
 
+    public CharacterActions characterActions;
     public CharacterStateController CharacterStateController { get; private set; }
 
     public event Action<string> OnSkillChanged;
 
+    private DamageRoulette damageRoulette;
+    private int selectedIndex = 0;
+
     private void Awake()
     {
         CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
+        characterActions = this.transform.root.GetComponentInChildren<CharacterBrain>().CharacterActions;
+        damageRoulette = this.transform.root.GetComponentInChildren<DamageRoulette>();
 
         Init();
     }
@@ -27,8 +33,13 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
+        if (!canChangeSkill)
+        {
+            return;
+        }
+
         selectedIndex = (selectedIndex + 1) % skills.Count;
-        OnSkillChanged?.Invoke(skills[selectedIndex].name); // ¼±ÅÃ ½ºÅ³ÀÌ º¯°æµÇ¾ú´Ù°í ¾Ë¸²°ú µ¿½Ã¿¡ ÀÌ¸§À» Àü´Ş
+        OnSkillChanged?.Invoke(skills[selectedIndex].name); // ì„ íƒ ìŠ¤í‚¬ì´ ë³€ê²½ë˜ì—ˆë‹¤ê³  ì•Œë¦¼ê³¼ ë™ì‹œì— ì´ë¦„ì„ ì „ë‹¬
         Debug.Log($"{skills[selectedIndex]} is Selected");
     }
 

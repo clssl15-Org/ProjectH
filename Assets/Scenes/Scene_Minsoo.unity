@@ -1421,6 +1421,11 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!1 &320807482 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5944037012842129890, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
+  m_PrefabInstance: {fileID: 5538256909038351615}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &323997550
 GameObject:
   m_ObjectHideFlags: 0
@@ -9788,6 +9793,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 597163057202504664, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
   m_PrefabInstance: {fileID: 5538256909038351615}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1828150559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320807482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8490afddb1e8d7e469986ca49689e0e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterActions:
+    attack:
+      value: 0
+    jump:
+      value: 0
+    dash:
+      value: 0
+    changeSkill:
+      value: 0
+    rangedAttack:
+      value: 0
+    ultimate:
+      value: 0
+    useSkill:
+      value: 0
+    mouseWheelScroll:
+      value: 0
+    movement:
+      value: {x: 0, y: 0}
 --- !u!1 &1942487419
 GameObject:
   m_ObjectHideFlags: 0
@@ -10743,7 +10779,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5944037012842129890, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1828150559}
   m_SourcePrefab: {fileID: 100100000, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

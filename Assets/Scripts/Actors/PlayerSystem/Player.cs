@@ -28,6 +28,8 @@ namespace Actor.PlayerSystem
 
         public SkillManager SkillManager => skillManager;
 
+        public float RouletteDamageMultiplier = 1;
+
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
@@ -57,6 +59,12 @@ namespace Actor.PlayerSystem
                 CurrentPlatform = currentPlatformID;
             else
                 CurrentPlatform = -1;
+        }
+        public int CalculateDamage(float value)
+        {
+            int damage = (int)(value * RouletteDamageMultiplier);
+            RouletteDamageMultiplier = 1;
+            return damage;
         }
     }
 }

@@ -30,12 +30,11 @@ namespace Actor.PlayerSystem
             {
                 CharacterStateController.EnqueueTransition<Dash>();
             }
-
             if (CharacterActions.changeSkill.Started)
             {
-                //CharacterStateController.EnqueueTransition<Eskill>();
-                Player.SkillManager.ChangeSkill();
+                SkillManager.ChangeSkill();
             }
+
 
             if (CharacterActions.useSkill.Started)
             {

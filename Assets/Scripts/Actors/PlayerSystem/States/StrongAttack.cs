@@ -74,7 +74,7 @@ namespace Actor.PlayerSystem
                 if (hitCollider.CompareTag("Player"))
                     continue;
 
-                int amount = (int)(attackPower * damageMultiplier);
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier); ;
                 damageableObject.TakeDamage(amount);
             }
         }
@@ -94,6 +94,7 @@ namespace Actor.PlayerSystem
             if (isDone)
             {
                 CharacterStateController.EnqueueTransition<NormalMovement>();
+                DamageRoulette.ResetRoulette();
             }
         }
 

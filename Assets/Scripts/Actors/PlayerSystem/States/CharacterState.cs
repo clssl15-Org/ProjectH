@@ -11,9 +11,11 @@ namespace Actor.PlayerSystem
         public RuntimeAnimatorController RuntimeAnimatorController => runtimeAnimatorController;
         public CharacterActor CharacterActor { get; private set; }
         CharacterBrain CharacterBrain = null;
+        public DamageRoulette DamageRoulette { get; private set; }
 
         public CharacterActions CharacterActions => CharacterBrain.CharacterActions;
         public CharacterStateController CharacterStateController { get; private set; }
+        public SkillManager SkillManager { get; private set; }
         public Player Player { get; private set; }
         protected virtual void Awake()
         {
@@ -21,6 +23,8 @@ namespace Actor.PlayerSystem
             // If there are multiple target components under the root, it may not work correctly.
             CharacterActor = this.transform.root.GetComponentInChildren<CharacterActor>();
             CharacterBrain = this.transform.root.GetComponentInChildren<CharacterBrain>();
+            DamageRoulette = this.transform.root.GetComponentInChildren<DamageRoulette>();
+            SkillManager = this.transform.root.GetComponentInChildren<SkillManager>();
             CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
             Player = this.transform.root.GetComponentInChildren<Player>();
         }
