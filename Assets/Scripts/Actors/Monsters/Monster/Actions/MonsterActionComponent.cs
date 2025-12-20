@@ -14,7 +14,7 @@ namespace Actors.Monsters.Actions
     {
         // Front
         public bool Active { get; private set; } = false;
-        public bool InterruptAllOnDeactivate { get; set; } = false;
+        public InterruptPriority InterruptPriority { get; set; } = InterruptPriority.Default;
         
         // Internal
         protected MonsterAction MonsterAction { get; private set; }

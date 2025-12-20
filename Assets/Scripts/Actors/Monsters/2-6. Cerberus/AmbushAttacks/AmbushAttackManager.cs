@@ -27,7 +27,7 @@ namespace Actors.Monsters.Bosses
             smokeEffct.transform.position = _smokeEffect.transform.position;
             smokeEffct.SetActive(true);
 
-            new Timer(10, _ =>
+            new Timer(5f, _ =>
             {
                 if (smokeEffct)
                     Destroy(smokeEffct);

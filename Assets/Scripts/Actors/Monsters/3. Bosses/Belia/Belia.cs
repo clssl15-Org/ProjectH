@@ -1,3 +1,4 @@
+using System;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
@@ -21,13 +22,27 @@ namespace Actors.Monsters.Bosses
         }
 
         [Header("Belia")]
+        [Space]
+        [SerializeField] private AttackMode _attackMode = AttackMode.Any;
+        [SerializeField, Min(0)] private float _targetPlayerRange = 5f;
+        [Space]
+        [SerializeField] private Weapon _slashWeapon;
+        [SerializeField, Min(0)] private float _slashActiveTiming;
+        [SerializeField] private float _slashActiveDuration;
+        [Space]
         [SerializeField] private GameObject _curveEffectPrefab;
         [SerializeField] private Vector2 _curveEffectWorldPosition;
         [SerializeField, Min(0)] private float _curveEffectLength = 1f;
         [Space]
-        [SerializeField] private AttackMode _attackMode = AttackMode.Any;
-        [SerializeField] private float _dashStartTime = 0f;
-        [SerializeField] private float _dashForce = 100f;
+        [SerializeField] private Weapon _dashWeapon;
+        [SerializeField, Min(0)] private float _dashWeaponActiveDuration;
+        [SerializeField, Min(0)] private float _dashStartTime = 0f;
+        [SerializeField, Min(0)] private float _dashForce = 100f;
+        [SerializeField, Min(0)] private float _dashMass = 0.5f;
+        [SerializeField, Min(0)] private float _dashDrag = 3f;
+
+        private float _defaultMass;
+        private float _defaultDrag;
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -35,14 +50,14 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
-        public bool IsExhausted { get; set; } = false;
+        [field: SerializeField] public bool IsExhausted { get; set; } = false;
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
 
         // Internal
         private class BeliaBrain : MonsterBrain
         {
-            public BeliaBrain(IMonsterInternal owner) : base(owner)
+            public BeliaBrain(Belia owner) : base(owner)
             {
                 Blackboard.Properties[ITwinBoss.IsAwake] = false;
 
@@ -50,7 +65,12 @@ namespace Actors.Monsters.Bosses
                     .AddChild(new Idle(ITwinBoss.IsAwake))
                     .AddChild(new Awaken(ITwinBoss.IsAwake)
                         .AddChild(new ValidPlatform() { HierarchyMode = HierarchyMode.Sequence }
-                            .AddChild(new Engaged(Engaged.RangeType.Contact)
+                            .AddChild(new Engaged()
+                                {
+                                    TargetAttackRange = owner._targetPlayerRange,
+                                    LowerRangeTolerance = 0.5f,
+                                    UpperRangeTolerance = 0.5f,
+                                }
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
                             )
@@ -66,41 +86,76 @@ namespace Actors.Monsters.Bosses
 
         private class BeliaActionController : MonsterActionController
         {
-            public BeliaActionController(Belia belia) : base(belia)
+            public BeliaActionController(Belia monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("SlashAttack")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._slashWeapon,
+                        monster._slashActiveTiming,
+                        monster._slashActiveDuration))
+                );
                 AddChild(new MonsterAction("CurvedAreaAttack")
                     .AddAnimationComponent(
                         "CurvedAreaAttackStart",
                         out var curvedAreaAttackEnter
                     )
                     .AddComponent(new BeliaCurvedAreaAttackAction(
-                            belia._curveEffectPrefab,
-                            belia._curveEffectWorldPosition,
-                            belia._curveEffectLength),
+                            monster._curveEffectPrefab,
+                            monster._curveEffectWorldPosition,
+                            monster._curveEffectLength),
                         out var curvedAreaAttackAction,
                         after: new(curvedAreaAttackEnter)
                     )
                     .AddAnimationComponent(
                         "CurvedAreaAttackEnd",
-                        after: new(curvedAreaAttackAction))
-                    );
+                        after: new(curvedAreaAttackAction)
+                    )
+                );
                 AddChild(new MonsterAction("DashAttack")
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
-                    .AddDelay(belia._dashStartTime, out var delay)
-                    .AddComponent(new BeliaDashAttackAction(belia._dashForce), after: new(delay)));
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddDelay(monster._dashStartTime, out var delay)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._dashWeapon,
+                        0f,
+                        monster._dashWeaponActiveDuration),
+                        after: new(delay)
+                    )
+                    .AddComponent(new Do(false)
+                        .OnOpening(() =>
+                        {
+                            monster.Rigidbody.mass = monster._dashMass;
+                            monster.Rigidbody.drag = monster._dashDrag;
+                        })
+                        .OnInterrupted(_ =>
+                        {
+                            monster.Rigidbody.mass = monster._defaultMass;
+                            monster.Rigidbody.drag = monster._defaultDrag;
+                        })
+                        .SetInterruptPriotiy(InterruptPriority.Low),
+                        after: new(delay)
+                    )
+                    .AddComponent(new BeliaDashAttackAction(
+                        monster._dashForce),
+                        after: new(delay)
+                    )
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddComponent(new HitFlash()));
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction("Exhausted")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -113,9 +168,44 @@ namespace Actors.Monsters.Bosses
             _player = player;
         }
 
+        protected override void Awake()
+        {
+            if (!_curveEffectPrefab)
+                throw new InvalidOperationException(
+                    $"{nameof(Belia)}은(는) '{nameof(_curveEffectPrefab)}'을(를) 가지고 있어야 합니다.");
+
+            base.Awake();
+
+            _defaultMass = Rigidbody.mass;
+            _defaultDrag = Rigidbody.drag;
+        }
+
         protected override void Start()
         {
             base.Start();
+
+            _curveEffectPrefab.GetComponent<Weapon>().AttackPower =
+                StatsInfo.CurvedAreaAttackPower;
+
+            if (_slashWeapon)
+            {
+                _slashWeapon.AttackPower = StatsInfo.SlashAttackPower;
+                _slashWeapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_slashWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            if (_dashWeapon)
+            {
+                _dashWeapon.AttackPower = StatsInfo.DashAttackPower;
+                _dashWeapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_dashWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new BeliaActionController(this);
             ActionController.Enter();

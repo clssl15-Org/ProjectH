@@ -1,6 +1,7 @@
 using System;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -91,7 +92,10 @@ namespace Actors.Monsters
             if (!_spikeLauncher) throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(SpikeSnail)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
-            _spikeLauncher.Initialize(this, PlatformManager, "Ground", "Player");
+            _spikeLauncher
+                .Initialize(this, PlatformManager, "Ground", "Player")
+                .SetProjectileInitializer(
+                    p => p.GetComponent<SpriteSizeHandler>().Initialize(Configuration, true));
         }
 
         protected override void Start()

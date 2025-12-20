@@ -68,55 +68,55 @@ namespace Actors.Monsters.Actions
         }
 
         #region Tools
-        public MonsterAction AddDelay(float delayDuration = 0f, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
-            AddComponent(new Delay(delayDuration, interruptAllOnDeactivate), after);
-        public MonsterAction AddDelay(float delayDuration, out MonsterActionComponent self, bool interruptAllOnDeactivate = false, PlayOrder after = null) =>
-            AddComponent(new Delay(delayDuration, interruptAllOnDeactivate), out self, after);
+        public MonsterAction AddDelay(float delayDuration = 0f, InterruptPriority interruptPriority = InterruptPriority.Default, PlayOrder after = null) =>
+            AddComponent(new Delay(delayDuration, interruptPriority), after);
+        public MonsterAction AddDelay(float delayDuration, out MonsterActionComponent self, InterruptPriority interruptPriority = InterruptPriority.Default, PlayOrder after = null) =>
+            AddComponent(new Delay(delayDuration, interruptPriority), out self, after);
 
 
         public MonsterAction AddAnimationComponent(
             string animName,
             string trigger = null,
-            bool interruptAllOnDeactivate = false,
+            InterruptPriority interruptPriority = InterruptPriority.Default,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f,
             PlayOrder after = null) =>
-            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), out _, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), out _, trigger, interruptPriority, delayBeforePlay, delayAfterPlay, after);
 
         public MonsterAction AddAnimationComponent(
             string animName,
             out MonsterActionComponent self,
             string trigger = null,
-            bool interruptAllOnDeactivate = false,
+            InterruptPriority interruptPriority = InterruptPriority.Default,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f,
             PlayOrder after = null) =>
-            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), out self, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+            AddAnimationComponent(new MonsterAnimationPlayInfo(animName), out self, trigger, interruptPriority, delayBeforePlay, delayAfterPlay, after);
 
         public MonsterAction AddAnimationComponent(
             MonsterAnimationPlayInfo animPlayInfo = null,
             string trigger = null,
-            bool interruptAllOnDeactivate = false,
+            InterruptPriority interruptPriority = InterruptPriority.Default,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f,
             PlayOrder after = null) =>
-            AddAnimationComponent(animPlayInfo, out _, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+            AddAnimationComponent(animPlayInfo, out _, trigger, interruptPriority, delayBeforePlay, delayAfterPlay, after);
 
         public MonsterAction AddAnimationComponent(
             out MonsterActionComponent self,
             string trigger = null,
-            bool interruptAllOnDeactivate = false,
+            InterruptPriority interruptPriority = InterruptPriority.Default,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f,
             PlayOrder after = null) =>
-            AddAnimationComponent((MonsterAnimationPlayInfo)null, out self, trigger, interruptAllOnDeactivate, delayBeforePlay, delayAfterPlay, after);
+            AddAnimationComponent((MonsterAnimationPlayInfo)null, out self, trigger, interruptPriority, delayBeforePlay, delayAfterPlay, after);
 
 
         public MonsterAction AddAnimationComponent(
             MonsterAnimationPlayInfo animPlayInfo,
             out MonsterActionComponent self,
             string trigger = null,
-            bool interruptAllOnDeactivate = false,
+            InterruptPriority interruptPriority = InterruptPriority.Default,
             float delayBeforePlay = 0f,
             float delayAfterPlay = 0f,
             PlayOrder order = null)
@@ -125,7 +125,7 @@ namespace Actors.Monsters.Actions
                 ? animPlayInfo with { TriggerName = trigger ?? animPlayInfo.TriggerName }
                 : new MonsterAnimationPlayInfo(Name, trigger))
             {
-                InterruptAllOnDeactivate = interruptAllOnDeactivate,
+                InterruptPriority = interruptPriority,
                 DelayBeforePlay = delayBeforePlay,
                 DelayAfterPlay = delayAfterPlay
             }, out self, order);
@@ -184,7 +184,7 @@ namespace Actors.Monsters.Actions
                 var component = _runnings[i];
                 if (!component.Active)
                 {
-                    if (component.InterruptAllOnDeactivate)
+                    if (component.InterruptPriority == InterruptPriority.High)
                     {
                         ExitWith(InterruptType.Completed);
                         return;
@@ -195,7 +195,8 @@ namespace Actors.Monsters.Actions
                 }
             }
 
-            if (_completes.Count >= _components.Count)
+            if (_completes.Count >= _components.Count
+                || _components.Keys.All(c => c.InterruptPriority == InterruptPriority.Low))
             {
                 ExitWith(InterruptType.Completed);
                 return;

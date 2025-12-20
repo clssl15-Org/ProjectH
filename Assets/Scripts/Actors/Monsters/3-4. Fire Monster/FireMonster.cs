@@ -48,7 +48,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireAppearTime)));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()

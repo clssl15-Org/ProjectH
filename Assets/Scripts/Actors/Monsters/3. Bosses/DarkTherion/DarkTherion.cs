@@ -1,7 +1,6 @@
 using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
-using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -23,7 +22,6 @@ namespace Actors.Monsters.Bosses
         }
 
         [Header("Dark Therion")]
-        [SerializeField] private Configuration _configuration;
         [SerializeField] private KinematicProjectile _projectilePrefab;
         [SerializeField] private KinematicProjectile _spikePrefab;
         [Space]
@@ -36,14 +34,14 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private float _arriveDistanceTolerance = 0.1f;
         [Space]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
-
+        [Space]
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
         [SerializeField] private GameObject _targetPlayer;
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
-        public bool IsExhausted { get; set; } = false;
+        [field: SerializeField] public bool IsExhausted { get; set; } = false;
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
 
@@ -79,7 +77,7 @@ namespace Actors.Monsters.Bosses
                     .AddAnimationComponent()
                     .AddComponent(new DarkTherionProjectileAttackAction()));
                 AddChild(new MonsterAction("BulletAttack")
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new DarkTherionBulletAttackAction()));
                 AddChild(new MonsterAction("SpikeAttack")
                     .AddAnimationComponent()
@@ -89,7 +87,9 @@ namespace Actors.Monsters.Bosses
                         SpikeAttackAction.SpawnPointType.Local,
                         darkTherion.StatsInfo.ProjectileSpeed,
                         darkTherion.StatsInfo.ProjectileFireGap))
-                    .AddDelay(5f, true));
+                    .AddDelay(
+                        5f,
+                        InterruptPriority.High));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
                     .AddComponent(new HitFlash()));

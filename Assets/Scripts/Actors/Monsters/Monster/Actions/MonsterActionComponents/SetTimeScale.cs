@@ -2,19 +2,21 @@ using System;
 
 namespace Actors.Monsters.Actions
 {
-    internal class SetTimeSacle : MonsterActionComponent
+    internal class SetTimeScale : MonsterActionComponent
     {
         public float TimeScale { get; set; } = 1f;
         public bool ResetOnInterrupt { get; set; } = true;
 
-        public SetTimeSacle() { }
-        public SetTimeSacle(float timeScale, bool resetOnInterrupt = true)
+        public SetTimeScale() { }
+        public SetTimeScale(float timeScale, bool resetOnInterrupt = true)
         {
             TimeScale = timeScale;
             ResetOnInterrupt = resetOnInterrupt;
+
+            InterruptPriority = InterruptPriority.Low;
         }
 
-        public SetTimeSacle ToDefault()
+        public SetTimeScale ToDefault()
         {
             TimeScale = 1f;
             return this;
@@ -39,7 +41,7 @@ namespace Actors.Monsters.Actions
         {
             if (MonsterAction == null)
                 throw new InvalidOperationException(
-                    $"{nameof(SetTimeSacle)} 컴포넌트가 속한 {nameof(MonsterAction)}이(가) 설정되지 않았습니다.");
+                    $"{nameof(SetTimeScale)} 컴포넌트가 속한 {nameof(MonsterAction)}이(가) 설정되지 않았습니다.");
         }
     }
 }

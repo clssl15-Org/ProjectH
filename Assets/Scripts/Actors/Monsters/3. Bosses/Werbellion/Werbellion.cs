@@ -104,7 +104,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new AttackWithWeapon(
                         werbellion._straightAreaAttackPrefab,
                         werbellion._straightAreaAttackTiming))
-                    .AddDelay(1f, interruptAllOnDeactivate: true)
+                    .AddDelay(1f, interruptPriority: InterruptPriority.High)
                 );
 
                 AddChild(new MonsterAction("SpikeAttack")
@@ -125,7 +125,7 @@ namespace Actors.Monsters.Bosses
                     .AddAnimationComponent(
                         "SpikeAttackOut",
                         after: new(spikeAttack),
-                        interruptAllOnDeactivate: true
+                        interruptPriority: InterruptPriority.High
                     )
                 );
 
@@ -150,7 +150,7 @@ namespace Actors.Monsters.Bosses
                     // 지상으로 텔레포트
                     .AddAnimationComponent("TeleportIn", out var portal_teleportIn_b, after: new(portal_attacked))
                     .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_b))
-                    .AddAnimationComponent("TeleportOut", after: new(portal_teleportIn_b), interruptAllOnDeactivate: true)
+                    .AddAnimationComponent("TeleportOut", after: new(portal_teleportIn_b), interruptPriority: InterruptPriority.High)
                 );
 
                 AddChild(new MonsterAction("StunAttack")
@@ -179,7 +179,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new WerbellionTeleportComponent(), after: new(dead_teleportIn))
                     .AddAnimationComponent("TeleportOut", out var dead_teleportOut, after: new(dead_teleportIn))
                     .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f), after: new(dead_teleportOut))
-                    .AddAnimationComponent("Dead", after: new(dead_teleportOut), interruptAllOnDeactivate: true)
+                    .AddAnimationComponent("Dead", after: new(dead_teleportOut), interruptPriority: InterruptPriority.High)
                 );
                 AddChild(new MonsterAction("DeadGround")
                     .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f))

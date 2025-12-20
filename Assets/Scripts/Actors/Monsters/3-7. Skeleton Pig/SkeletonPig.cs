@@ -74,7 +74,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(AttackMode.DashAttack.ToString())
                     .AddAnimationComponent(
                         "Dash",
-                        interruptAllOnDeactivate: true)
+                        interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(
                         skeletonPig._dashWeapon,
                         skeletonPig._dashWeaponActiveTiming,
@@ -83,7 +83,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(AttackMode.StampAttack.ToString())
                     .AddAnimationComponent(
                         "Stamp",
-                        interruptAllOnDeactivate: true,
+                        interruptPriority: InterruptPriority.High,
                         delayAfterPlay: 0.5f)
                     .AddComponent(new AttackWithWeapon(
                         skeletonPig._shockwave,
@@ -93,8 +93,8 @@ namespace Actors.Monsters
                     .AddAnimationComponent("Roar")
                 );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddComponent(new SetTimeSacle(skeletonPig._dieTimeScale))
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddComponent(new SetTimeScale(skeletonPig._dieTimeScale))
+                    .AddAnimationComponent()
                 );
             }
         }

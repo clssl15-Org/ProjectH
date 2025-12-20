@@ -52,7 +52,7 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(MonsterActionType.Walk)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(monster._weapon))
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)

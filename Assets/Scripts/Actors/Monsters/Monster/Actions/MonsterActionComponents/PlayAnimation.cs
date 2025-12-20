@@ -87,6 +87,7 @@ namespace Actors.Monsters.Actions
                 = input as AnimationPlayInfo
                 ?? new(DelayBeforePlay, DelayAfterPlay);
 
+            _elapsedTime = 0f;
             _work.Enter();
         }
 

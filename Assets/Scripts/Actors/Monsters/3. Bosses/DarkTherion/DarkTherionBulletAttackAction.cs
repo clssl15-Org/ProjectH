@@ -66,7 +66,7 @@ namespace Actors.Monsters.Bosses
 
                         projectileObject
                             .GetComponent<SpriteSizeHandler>()
-                            .Initialize(DarkTherion._configuration)
+                            .Initialize(DarkTherion.Configuration)
                             .RequestApplyScaleFactor();
 
                         if (!projectileObject.TryGetComponent<Rigidbody2D>(out var body))

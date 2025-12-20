@@ -6,10 +6,10 @@ namespace Actors.Monsters.Actions
         private float _elapsedTime;
 
 
-        public Delay(float duration, bool interruptAllOnDeactivate = false)
+        public Delay(float duration, InterruptPriority interruptPriority = InterruptPriority.Default)
         {
             Duration = duration;
-            InterruptAllOnDeactivate = interruptAllOnDeactivate;
+            InterruptPriority = interruptPriority;
         }
 
         protected override void OnEnter(object _)

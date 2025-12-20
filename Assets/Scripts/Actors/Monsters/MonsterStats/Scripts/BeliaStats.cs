@@ -15,7 +15,7 @@ namespace Actors.Monsters
         [SerializeField, Min(0)] private int _curvedAreaAttackPower = 1;
         [SerializeField, Min(0)] private int _dashAttackPower = 1;
 
-        public int GroundAttackPower => _slashAttackPower;
+        public int SlashAttackPower => _slashAttackPower;
         public int CurvedAreaAttackPower => _curvedAreaAttackPower;
         public int DashAttackPower => _dashAttackPower;
 

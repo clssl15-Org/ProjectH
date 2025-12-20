@@ -81,7 +81,7 @@ namespace Actors.Monsters
                     .AddAnimationComponent()
                 );
                 AddChild(new MonsterAction("Attack_1")
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(monster._swordPrefab))
                 );
                 AddChild(new MonsterAction("Attack_2")

@@ -123,8 +123,11 @@ namespace Actors.Monsters
         {
             projectile.Initialize(_platformManager, _collisionTags);
 
-            foreach (var initializer in _projectileInitializers)
-                initializer?.Invoke(projectile);
+            if (_projectileInitializers != null)
+            {
+                foreach (var initializer in _projectileInitializers)
+                    initializer?.Invoke(projectile);
+            }
 
             return projectile;
         }

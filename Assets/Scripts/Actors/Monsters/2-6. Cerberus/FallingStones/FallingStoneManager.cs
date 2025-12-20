@@ -38,6 +38,7 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private Configuration _configuration;
         [SerializeField] private PlatformManager _platformManager;
 
+        private Action<FallingStone>[] _initializers;
         private Action<bool> _callback;
 
         private int _counter;
@@ -46,10 +47,17 @@ namespace Actors.Monsters.Bosses
         private bool _succeeded;
 
 
-        public void Initialize(Configuration configuration, PlatformManager platformManager)
+        public FallingStoneManager Initialize(Configuration configuration, PlatformManager platformManager)
         {
             _configuration = configuration;
             _platformManager = platformManager;
+
+            return this;
+        }
+        public FallingStoneManager SetProjectileInitializer(params Action<FallingStone>[] initializers)
+        {
+            _initializers = initializers;
+            return this;
         }
 
         public void DoFall(Action<bool> callback = null)
@@ -130,6 +138,12 @@ namespace Actors.Monsters.Bosses
                 var stone = Instantiate(_stonePrefabs.GetRandomItem().gameObject)
                     .GetComponent<FallingStone>()
                     .Initialize(_configuration, _platformManager, _gravityScale);
+
+                if (_initializers != null)
+                {
+                    foreach (var initializer in _initializers)
+                        initializer?.Invoke(stone);
+                }
 
                 stone.transform.position = new Vector2
                 {

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
@@ -22,10 +24,39 @@ namespace Actors.Monsters.Bosses
 
         [Header("Cerberus")]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
+        [Space]
+        [SerializeField] private Weapon _biteWeapon;
+        [SerializeField, Min(0)] private float _biteWeaponActiveTiming;
+        [SerializeField] private float _biteWeaponActiveDuration;
+        [Space]
         [SerializeField] private FallingStoneManager _fallingStoneManager;
         [SerializeField] private AmbushAttackManager _ambushAttackManager;
         [SerializeField] private GameObject _roarEffect;
         [SerializeField] private Transform _dropAttack_roarEffectPosition;
+        [Space]
+        [SerializeField] private Weapon _ambushWeapon;
+        [SerializeField] private float _ambushWeaponActiveDuration;
+
+        [Serializable]
+        private class AnimationTimeScale
+        {
+            public string AnimationName;
+            public float TimeScale = 1f;
+
+            public AnimationTimeScale(string animationName, float timeScale = 1f)
+            {
+                AnimationName = animationName;
+                TimeScale = timeScale;
+            }
+        };
+
+        [Header("Animation")]
+        [SerializeField] private AnimationTimeScale[] _animationTimeScales = new AnimationTimeScale[]
+        {
+            new("BiteAttack", 1.0f),
+            new("DropAttack", 1.0f),
+            new("AmbushAttack", 1.0f),
+        };
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -37,7 +68,7 @@ namespace Actors.Monsters.Bosses
         private const string IsAwake = nameof(IsAwake);
 
 
-        // Internal
+        // States
         private class CerberusBrain : MonsterBrain
         {
             public CerberusBrain(IMonsterInternal owner) : base(owner)
@@ -74,30 +105,48 @@ namespace Actors.Monsters.Bosses
 
                 #region Attacks
                 AddChild(new MonsterAction("BiteAttack")
-                    .AddAnimationComponent()
-                    .AddDelay(0.5f, out var bite_delay)
-                    .AddComponent(new Do(true, () =>
-                    {
-                        var effect = Instantiate(cerberus._roarEffect);
-                        effect.transform.position = cerberus._roarEffect.transform.position;
-                        effect.SetActive(true);
+                    .AddComponent(new SetTimeScale(cerberus
+                        ._animationTimeScales
+                        .FirstOrDefault(ats => ats.AnimationName == "BiteAttack")
+                        ?.TimeScale ?? 1f)
+                    )
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new AttackWithWeapon(
+                        cerberus._biteWeapon,
+                        cerberus._biteWeaponActiveTiming,
+                        cerberus._biteWeaponActiveDuration
+                    ))
 
-                        Destroy(effect, 5f);
-                    }), after: new(bite_delay))
-                    .AddDelay(0.5f, after: new(bite_delay))
+                    //.AddDelay(0.5f, out var bite_delay)
+                    //.AddComponent(new Do(true, () =>
+                    //{
+                    //    var effect = Instantiate(cerberus._roarEffect);
+                    //    effect.transform.position = cerberus._roarEffect.transform.position;
+                    //    effect.SetActive(true);
+
+                    //    Destroy(effect, 5f);
+                    //}), after: new(bite_delay))
+                    //.AddDelay(0.5f, after: new(bite_delay))
                 );
 
                 AddChild(new MonsterAction("DropAttack")
+                    .AddComponent(new SetTimeScale(cerberus
+                        ._animationTimeScales
+                        .FirstOrDefault(ats => ats.AnimationName == "DropAttack")
+                        ?.TimeScale ?? 1f)
+                    )
                     .AddAnimationComponent("Roar", out var dropAttack_roar)
                     .AddDelay(1.3f, out var drop_delay)
                     .AddComponent(new Do(true, () =>
-                    {
-                        var effect = Instantiate(cerberus._roarEffect);
-                        effect.transform.position = cerberus._dropAttack_roarEffectPosition.position;
-                        effect.SetActive(true);
+                        {
+                            var effect = Instantiate(cerberus._roarEffect);
+                            effect.transform.position = cerberus._dropAttack_roarEffectPosition.position;
+                            effect.SetActive(true);
 
-                        Destroy(effect, 5f);
-                    }), after: new(drop_delay))
+                            Destroy(effect, 5f);
+                        }),
+                        after: new(drop_delay)
+                    )
                     .AddAnimationComponent("Idle", after: new(dropAttack_roar))
                     .AddComponent(new Do(false)
                         .AssignTo(out var roar_doFall)
@@ -109,12 +158,20 @@ namespace Actors.Monsters.Bosses
                     .AddDelay(
                         0.5f,
                         after: new(roar_doFall),
-                        interruptAllOnDeactivate: true
+                        interruptPriority: InterruptPriority.High
                     )
                 );
 
                 AddChild(new MonsterAction("AmbushAttack_Intro")
-                    .AddAnimationComponent("AmbushAttack")
+                    .AddComponent(new SetTimeScale(cerberus
+                        ._animationTimeScales
+                        .FirstOrDefault(ats => ats.AnimationName == "AmbushAttack")
+                        ?.TimeScale ?? 1f)
+                    )
+                    .AddAnimationComponent(
+                        "AmbushAttack",
+                        out var ambushIntro_anim
+                    )
                     .AddDelay(
                         0.4f,
                         out var ambushIntro_attack
@@ -123,21 +180,38 @@ namespace Actors.Monsters.Bosses
                         new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
                         after: new(ambushIntro_attack)
                     )
-                    .AddAnimationComponent("Idle", after: new(ambushIntro_attack))
+                    .AddComponent(new AttackWithWeapon(
+                        cerberus._ambushWeapon,
+                        0,
+                        cerberus._ambushWeaponActiveDuration),
+                        after: new(ambushIntro_attack)
+                    )
+                    .AddAnimationComponent(
+                        "Idle",
+                        after: new(ambushIntro_anim)
+                    )
                     .AddDelay(
                         1f,
                         after: new(ambushIntro_attack),
-                        interruptAllOnDeactivate: true
+                        interruptPriority: InterruptPriority.High
                     )
                 );
 
                 AddChild(new MonsterAction("AmbushAttack")
+                    .AddComponent(new SetTimeScale(cerberus
+                        ._animationTimeScales
+                        .FirstOrDefault(ats => ats.AnimationName == "AmbushAttack")
+                        ?.TimeScale ?? 1f)
+                    )
                     .AddComponent(new Do(true, () => cerberus._ambushAttackManager.ShowIndicator()))
                     .AddDelay(
                         2f,
                         out var ambush_showIndicator
                     )
-                    .AddAnimationComponent(after: new(ambush_showIndicator))
+                    .AddAnimationComponent(
+                        out var ambush_attack_anim,
+                        after: new(ambush_showIndicator)
+                    )
                     .AddDelay(
                         0.4f,
                         out var ambush_attack, 
@@ -147,11 +221,20 @@ namespace Actors.Monsters.Bosses
                         new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
                         after: new(ambush_attack)
                     )
-                    .AddAnimationComponent("Idle", after: new(ambush_attack))
+                    .AddComponent(new AttackWithWeapon(
+                        cerberus._ambushWeapon,
+                        0,
+                        cerberus._ambushWeaponActiveDuration),
+                        after: new(ambush_attack)
+                    )
+                    .AddAnimationComponent(
+                        "Idle",
+                        after: new(ambush_attack_anim)
+                    )
                     .AddDelay(
                         3f,
                         after: new(ambush_attack),
-                        interruptAllOnDeactivate: true
+                        interruptPriority: InterruptPriority.High
                     )
                 );
                 #endregion
@@ -175,19 +258,19 @@ namespace Actors.Monsters.Bosses
         protected override void Awake()
         {
             if (!_fallingStoneManager)
-                throw new System.InvalidOperationException(
+                throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_fallingStoneManager)}'을(를) 가지고 있어야 합니다.");
 
             if (!_ambushAttackManager)
-                throw new System.InvalidOperationException(
+                throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_ambushAttackManager)}'을(를) 가지고 있어야 합니다.");
 
             if (!_roarEffect)
-                throw new System.InvalidOperationException(
+                throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_roarEffect)}'을(를) 가지고 있어야 합니다.");
 
             if (!_dropAttack_roarEffectPosition)
-                throw new System.InvalidOperationException(
+                throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_dropAttack_roarEffectPosition)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
@@ -196,7 +279,31 @@ namespace Actors.Monsters.Bosses
         protected override void Start()
         {
             base.Start();
-            _fallingStoneManager.Initialize(Configuration, PlatformManager);
+
+            if (_biteWeapon)
+            {
+                _biteWeapon.AttackPower = StatsInfo.BiteAttackPower;
+                _biteWeapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_biteWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            if (_ambushWeapon)
+            {
+                _ambushWeapon.AttackPower = StatsInfo.AmbushAttackPower;
+                _ambushWeapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_ambushWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            _fallingStoneManager
+                .Initialize(Configuration, PlatformManager)
+                .SetProjectileInitializer(
+                    stone => stone.GetComponent<Weapon>().AttackPower = StatsInfo.DropAreaAttackPower);
 
             ActionController = new CerberusActionController(this);
             ActionController.Enter();

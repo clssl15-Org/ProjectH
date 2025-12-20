@@ -20,6 +20,7 @@ namespace Actors.Monsters
             private Action _beforeMainAction;
             private Func<float, float, bool> _whileMainAction;
             private Action _beforePostAction;
+            private Action _afterPostAction;
 
             //private readonly Exception AnimationFailure
             //    = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
@@ -33,7 +34,8 @@ namespace Actors.Monsters
                 Action beforePreAction = null,
                 Action beforeMainAction = null,
                 Func<float, float, bool> whileMainAction = null,
-                Action beforePostAction = null)
+                Action beforePostAction = null,
+                Action afterPostAction = null)
             {
                 _animations = new string[]
                 {
@@ -46,6 +48,7 @@ namespace Actors.Monsters
                 _beforeMainAction = beforeMainAction;
                 _whileMainAction = whileMainAction;
                 _beforePostAction = beforePostAction;
+                _afterPostAction = afterPostAction;
 
                 _work = new Work()
                     .SetExitedAction(() => AnimationPlayer.Stop())
@@ -60,7 +63,9 @@ namespace Actors.Monsters
                                     //if (!succeed) throw AnimationFailure;
                                     _work.SetNext("MainAction");
                                 }));
-                        }), true)
+                        }),
+                        primary: true
+                    )
                     .AddChild(new Work("MainAction")
                         .SetEnteredAction(() =>
                         {
@@ -89,7 +94,8 @@ namespace Actors.Monsters
 
                             if (!play)
                                 _work.SetNext("PostAction");
-                        }))
+                        })
+                    )
                     .AddChild(new Work("PostAction")
                         .SetEnteredAction(() =>
                         {
@@ -101,7 +107,9 @@ namespace Actors.Monsters
                                 }));
 
                             _beforePostAction?.Invoke();
-                        }));
+                        })
+                        .SetExitedAction(() => _afterPostAction?.Invoke())
+                    );
             }
 
             protected override void OnEnter(object _)

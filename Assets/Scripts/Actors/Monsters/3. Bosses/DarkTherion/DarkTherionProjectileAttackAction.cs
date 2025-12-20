@@ -17,7 +17,7 @@ namespace Actors.Monsters.Bosses
 
             public DarkTherionProjectileAttackAction()
             {
-                InterruptAllOnDeactivate = true;
+               InterruptPriority = InterruptPriority.High;
             }
 
             protected override void OnEnter(object input)
@@ -56,7 +56,7 @@ namespace Actors.Monsters.Bosses
 
                     if (projectileGO.TryGetComponent<SpriteSizeHandler>(out var ssh))
                     {
-                        ssh.Initialize(DarkTherion._configuration);
+                        ssh.Initialize(DarkTherion.Configuration);
                         ssh.RequestApplyScaleFactor();
                     }
 

@@ -74,14 +74,14 @@ namespace Actors.Monsters
                     .AddAnimationComponent()
                 );
                 AddChild(new MonsterAction(AttackMode.DefaultAttack.ToString())
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(
                         monster._defaultAttackWeapon,
                         monster._defaultAttackActiveTiming,
                         monster._defaultAttackActiveDuration))
                 );
                 AddChild(new MonsterAction(AttackMode.LandAttack.ToString())
-                    .AddAnimationComponent(interruptAllOnDeactivate: true)
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(
                         monster._landAttackWeapon,
                         monster._landAttackActiveTiming,

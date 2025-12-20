@@ -102,8 +102,6 @@ namespace Actors.Monsters.Bosses
                 Interrupt(succeeded
                     ? InterruptType.Completed
                     : InterruptType.Interrupted);
-
-                Debug.Log("Interruped: " + succeeded);
             }
         }
 

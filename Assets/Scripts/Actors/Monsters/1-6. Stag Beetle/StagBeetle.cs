@@ -13,14 +13,15 @@ namespace Actors.Monsters
         [Header("Stag Beetle")]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
         [Space]
+        [SerializeField] private Weapon _rollingAttackWeapon;
         [SerializeField, Min(0)] private float _rollingTime = 3f;
         [SerializeField, Min(0)] private float _rollingSpeed = 1f;
         [Space]
         [SerializeField, Min(0)] private float _spikeSpeed;
         [SerializeField, Min(0)] private float _spikeScaleFactor = 0.01f;
         [SerializeField, Min(0)] private float _waitTimeAfterLaunch;
-
-        private KinematicProjectileLauncher _spikeLauncher;
+        [Space]
+        [SerializeField] private GameObject _roarIndicator;
 
         public enum AttackMode
         {
@@ -29,6 +30,8 @@ namespace Actors.Monsters
             SpikeAttack,
             Roar
         }
+
+        private KinematicProjectileLauncher _spikeLauncher;
 
 
         // States
@@ -93,7 +96,12 @@ namespace Actors.Monsters
 
                             return playtime <= monster._rollingTime;
                         },
-                        beforePostAction: () => monster.IgnorePlayerInteraction = false))
+                        beforePostAction: () => monster.IgnorePlayerInteraction = false)
+                        { InterruptPriority = InterruptPriority.High })
+                    .AddComponent(new AttackWithWeapon(
+                        monster._rollingAttackWeapon,
+                        0f,
+                        monster._rollingTime))
                 );
                 AddChild(new MonsterAction(AttackMode.SpikeAttack.ToString())
                     .AddComponent(new ThreePhasedAction(AttackMode.SpikeAttack.ToString(),
@@ -112,7 +120,24 @@ namespace Actors.Monsters
                 AddChild(new MonsterAction(AttackMode.Roar.ToString())
                     .AddComponent(new ThreePhasedAction(AttackMode.Roar.ToString(),
                         n => n + "Anticipation", n => n + "Recoil",
-                        whileMainAction: (playtime, length) => playtime > length))
+                        beforeMainAction: () =>
+                        {
+                            if (!monster._roarIndicator)
+                                return;
+                            
+                            var indicator = Instantiate(monster._roarIndicator);
+                            indicator.transform.position = monster._roarIndicator.transform.position;
+                            indicator.SetActive(true);
+
+                            Destroy(
+                                indicator,
+                                indicator
+                                .GetComponent<Animator>()
+                                .FindClip("Indicator Roar")
+                                .length);
+                        },
+                        whileMainAction: (playtime, length) => playtime > length)
+                    )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
@@ -131,7 +156,6 @@ namespace Actors.Monsters
             base.Awake();
 
             _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
-
             if (!_spikeLauncher) throw new InvalidOperationException(
                 FormatLogMessage($"{nameof(StagBeetle)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
@@ -140,6 +164,20 @@ namespace Actors.Monsters
                 .SetProjectileInitializer(
                     p => p.GetComponent<SpriteSizeHandler>().Initialize(_spikeScaleFactor, true),
                     p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);
+
+
+            if (!_rollingAttackWeapon) throw new InvalidOperationException(
+                FormatLogMessage($"{nameof(StagBeetle)}은(는) {nameof(_rollingAttackWeapon)} 컴포넌트를 가지고 있어야 합니다."));
+
+            _rollingAttackWeapon.AttackPower = StatsInfo.AttackPower;
+
+
+            if (!_roarIndicator)
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_roarIndicator)}이(가) 등록되지 않았습니다."),
+                    this);
+            else
+                _roarIndicator.SetActive(false);
         }
 
         protected override void Start()
