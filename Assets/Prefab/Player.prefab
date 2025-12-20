@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 8290243547340287660}
   - component: {fileID: 8379120966633090368}
   - component: {fileID: 5175911527829833112}
+  - component: {fileID: 4268322827769223230}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -282,6 +283,19 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+--- !u!114 &4268322827769223230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944037012842129890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a125aff6e5669ad408c2400814ee769b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skills: []
 --- !u!1 &6801821047128880367
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +600,7 @@ MonoBehaviour:
   attackPointOffset: {x: 1, y: 0}
   invincibleStartTime: 0
   invincibleEndTime: 1
-  cooldownDuration: 7
+  cooldownDuration: 5
 --- !u!114 &6159009817700332398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,7 +642,7 @@ MonoBehaviour:
   attackPointOffset: {x: 0.8, y: 0.5}
   invincibleStartTime: 0
   invincibleEndTime: 1
-  cooldownRecoveryAmount: 0.02
+  cooldownDuration: 10
 --- !u!114 &916220530954613708
 MonoBehaviour:
   m_ObjectHideFlags: 0
