@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
-using World;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
+using World;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 
 namespace Actors.Monsters.Bosses
 {
@@ -32,9 +34,14 @@ namespace Actors.Monsters.Bosses
         [Header("Werbellion")]
         [SerializeField] private Transform[] _groundPoints;
         [SerializeField] private Transform[] _airPoints;
+        [Space]
         [SerializeField] private AttackMode _attackMode;
         [Space]
-        [SerializeField] private GameObject _straightAreaAttackPrefab;
+        [SerializeField] private Weapon _punchAttackWeapon;
+        [SerializeField, Min(0)] private float _punchActiveTiming;
+        [SerializeField] private float _punchActiveDuration;
+        [Space]
+        [SerializeField] private WeaponManager _straightAreaAttackPrefab;
         [SerializeField] float _straightAreaAttackTiming;
         [Space]
         [SerializeField] private KinematicProjectile _spikePrefab;
@@ -42,6 +49,11 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private GameObject _portalAttackSpawnerParent;
         [SerializeField] private WerbellionPortalAttackSpawner[] _portalAttackSpawners;
+        [Space]
+        [SerializeField] private Weapon _stunAttackweapon;
+        [SerializeField, Min(0)] private float _stunAttackActiveTiming;
+        [SerializeField] private float _stunAttackActiveDuration;
+        [SerializeField, Min(0)] private float _stunAttackTimeScale = 1f;
 
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
@@ -79,7 +91,7 @@ namespace Actors.Monsters.Bosses
 
         private class WerbellionActionController : MonsterActionController
         {
-            public WerbellionActionController(Werbellion werbellion) : base(werbellion)
+            public WerbellionActionController(Werbellion monster) : base(monster)
             {
                 AddChild(new MonsterAction("Spawn")
                     .AddAnimationComponent(out var spawn)
@@ -91,35 +103,49 @@ namespace Actors.Monsters.Bosses
                 AddChild(new MonsterAction("Teleport")
                     .AddAnimationComponent("TeleportIn", out var teleportIn)
                     .AddComponent(new WerbellionTeleportComponent(), after: new(teleportIn))
-                    .AddAnimationComponent("TeleportOut", after: new(teleportIn))
+                    .AddAnimationComponent("TeleportOut", after: new(teleportIn), interruptPriority: InterruptPriority.High)
                 );
 
                 #region Attacks
                 AddChild(new MonsterAction("PunchAttack")
-                    .AddAnimationComponent()
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._punchAttackWeapon,
+                        monster._punchActiveTiming,
+                        monster._punchActiveDuration))
                 );
 
                 AddChild(new MonsterAction("StraightAreaAttack")
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithWeapon(
-                        werbellion._straightAreaAttackPrefab,
-                        werbellion._straightAreaAttackTiming))
+                        monster._straightAreaAttackPrefab,
+                        monster._straightAreaAttackTiming))
                     .AddDelay(1f, interruptPriority: InterruptPriority.High)
                 );
 
                 AddChild(new MonsterAction("SpikeAttack")
-                    .AddAnimationComponent("SpikeAttackIn", out var spikeAttackIn)
+                    .AddAnimationComponent(
+                        "SpikeAttackIn",
+                        out var spikeAttackIn
+                    )
                     .AddComponent(new SpikeAttackAction(
-                        werbellion._spikePrefab,
-                        werbellion._spikeSpawnPoints.Select(point => (Vector2)point.transform.position),
+                        monster._spikePrefab,
+                        monster._spikeSpawnPoints.Select(point => point.transform),
                         SpikeAttackAction.SpawnPointType.World,
-                        werbellion.StatsInfo.SpikeSpeed,
-                        werbellion.StatsInfo.SpikeFireGap),
+                        monster.StatsInfo.SpikeSpeed,
+                        monster.StatsInfo.SpikeFireGap)
+                        .SetInitializer(
+                            p => p
+                                .GetComponent<SpriteSizeHandler>()
+                                .Initialize(monster.Configuration, true),
+                            p => p
+                                .GetComponent<Weapon>()
+                                .AttackPower = monster.StatsInfo.SpikeAttackPower),
                         out var spikeAttack,
                         after: new(spikeAttackIn)
                     )
                     .AddAnimationComponent(
-                        MonsterActionType.Idle.ToString(),
+                        "SpikeAttack",
                         after: new(spikeAttackIn)
                     )
                     .AddAnimationComponent(
@@ -138,11 +164,10 @@ namespace Actors.Monsters.Bosses
                     // 공격
                     .AddAnimationComponent(after: new(portal_teleportOut_a))
                     .AddComponent(new WerbellionPortalAttackAction(
-                            werbellion.Configuration,
-                            werbellion.PlatformManager,
-                            werbellion._portalAttackSpawnerParent,
-                            werbellion._portalAttackSpawners,
-                            () => werbellion._player.transform.position
+                            monster.PlatformManager,
+                            monster._portalAttackSpawnerParent,
+                            monster._portalAttackSpawners,
+                            () => monster._player.transform.position
                         ),
                         out var portal_attacked,
                         after: new(portal_teleportOut_a))
@@ -154,19 +179,14 @@ namespace Actors.Monsters.Bosses
                 );
 
                 AddChild(new MonsterAction("StunAttack")
+                    .AddComponent(new SetTimeScale(monster._stunAttackTimeScale))
+                    .AddComponent(new AttackWithWeapon(
+                        monster._stunAttackweapon,
+                        monster._stunAttackActiveTiming,
+                        monster._stunAttackActiveDuration))
                     .AddAnimationComponent(
-                        "StunAttackIn",
-                        out var stunAttackIn
-                    )
-                    .AddDelay(
-                        werbellion.StatsInfo.StunAttackTime,
-                        out var stunAttack,
-                        after: new(stunAttackIn)
-                    )
-                    .AddAnimationComponent(
-                        "StunAttackOut",
-                        after: new(stunAttack)
-                    )
+                        "StunAttack",
+                        interruptPriority: InterruptPriority.High)
                 );
                 #endregion
 
@@ -192,6 +212,15 @@ namespace Actors.Monsters.Bosses
 
 
         // Content
+        protected override void Awake()
+        {
+            if (!_spikePrefab)
+                throw new InvalidOperationException(
+                    $"{nameof(Werbellion)}은(는) '{nameof(_spikePrefab)}'을(를) 가지고 있어야 합니다.");
+
+            base.Awake();
+        }
+
         public void InitializePlayer(IPlayer player)
         {
             _player = player;
@@ -200,6 +229,31 @@ namespace Actors.Monsters.Bosses
         protected override void Start()
         {
             base.Start();
+
+            if (_punchAttackWeapon)
+            {
+                _punchAttackWeapon.AttackPower = StatsInfo.PunckAttackPower;
+                _punchAttackWeapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_punchAttackWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            if (_stunAttackweapon)
+            {
+                _stunAttackweapon.AttackPower = 0;
+                _stunAttackweapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_stunAttackweapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            foreach (var spawner in _portalAttackSpawners)
+                spawner
+                    .Initialize(PlatformManager, () => _player.transform.position)
+                    .SetInitializer(p => p.GetComponent<Weapon>().AttackPower = StatsInfo.PortalAttackPower);
 
             ActionController = new WerbellionActionController(this);
             ActionController.Enter();

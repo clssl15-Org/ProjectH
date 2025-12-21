@@ -15,10 +15,6 @@ namespace Actors.Monsters.Actions
 
 
         // Content
-        [System.Obsolete]
-        public AttackWithWeapon(GameObject weaponPrefab, float startTime = 0, float duration = float.MaxValue) =>
-            throw new System.NotImplementedException("이 생성자는 더 이상 사용되지 않습니다. 대신 Weapon 타입을 사용하는 생성자를 사용하세요.");
-
         public AttackWithWeapon(IWeapon weaponPrefab, float startTime = 0, float duration = -1)
         {
             _weaponPrefab = weaponPrefab;

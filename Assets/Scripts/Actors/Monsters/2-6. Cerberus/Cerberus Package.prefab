@@ -508,8 +508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df06598b65b4c943a9edaa0969c4f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDebugStatsInfo: 1
-  _statsInfo: {fileID: 0}
+  _useDebugStatsInfo: 0
+  _statsInfo: {fileID: 11400000, guid: ece864270861abf49ba30baa0c3aadc8, type: 2}
   _debugStatsInfo: {fileID: 11400000, guid: f589f9b2a8002014aa9fe583a184acce, type: 2}
   RandomizeStartDirection: 0
   DefaultIsRight: 0

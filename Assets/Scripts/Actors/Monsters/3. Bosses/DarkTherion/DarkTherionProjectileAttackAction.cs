@@ -10,6 +10,7 @@ namespace Actors.Monsters.Bosses
         private class DarkTherionProjectileAttackAction : MonsterActionComponent
         {
             private DarkTherion DarkTherion => (DarkTherion)Owner;
+            private Action<GameObject>[] _initializers;
 
             private float _remainingToFire;
             private float _fireCount;
@@ -18,6 +19,12 @@ namespace Actors.Monsters.Bosses
             public DarkTherionProjectileAttackAction()
             {
                InterruptPriority = InterruptPriority.High;
+            }
+
+            public DarkTherionProjectileAttackAction SetInitializer(params Action<GameObject>[] initializers)
+            {
+                _initializers = initializers;
+                return this;
             }
 
             protected override void OnEnter(object input)
@@ -43,21 +50,27 @@ namespace Actors.Monsters.Bosses
                     return;
                 }
 
+                var targetPos = _getTargetPosition();
+
+                Owner.Direction = targetPos.x >= Owner.transform.position.x
+                    ? Direction.Right
+                    : Direction.Left;
+
                 _remainingToFire -= deltaTime;
                 if (_remainingToFire <= 0)
                 {
                     _remainingToFire = DarkTherion.StatsInfo.ProjectileFireGap;
-                    var posDelta = _getTargetPosition() - (Vector2)DarkTherion.transform.position;
+                    var posDelta = targetPos - (Vector2)DarkTherion._projectileLaunchPoint.position;
 
                     var projectileGO = Instantiate(DarkTherion._projectilePrefab.gameObject);
                     projectileGO.transform.SetPositionAndRotation(
-                        DarkTherion.transform.position,
+                        DarkTherion._projectileLaunchPoint.position,
                         KinematicProjectileLauncher.RotationFromDirection(posDelta));
 
-                    if (projectileGO.TryGetComponent<SpriteSizeHandler>(out var ssh))
+                    if (_initializers != null)
                     {
-                        ssh.Initialize(DarkTherion.Configuration);
-                        ssh.RequestApplyScaleFactor();
+                        foreach (var initializer in _initializers)
+                            initializer?.Invoke(projectileGO);
                     }
 
                     var projectile = projectileGO.GetComponent<KinematicProjectile>();

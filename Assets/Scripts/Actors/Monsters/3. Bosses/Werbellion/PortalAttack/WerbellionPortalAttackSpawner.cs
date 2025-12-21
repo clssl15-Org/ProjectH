@@ -17,6 +17,7 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private Configuration _configuration;
         [SerializeField] private PlatformManager _platformManager;
 
+        private Action<KinematicProjectile>[] _initializers;
         private Func<Vector2> _getTargetPosition;
         private int _firedCount;
         private float _remainingTime;
@@ -25,24 +26,26 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private Transform _target;
 
 
-        public void Initialize(
-            Configuration configuration,
+        public WerbellionPortalAttackSpawner Initialize(
             PlatformManager platformManager,
             Func<Vector2> getTargetPosition)
         {
-            _configuration = configuration;
             _platformManager = platformManager;
             _getTargetPosition = getTargetPosition;
+
+            return this;
+        }
+
+        public WerbellionPortalAttackSpawner SetInitializer(params Action<KinematicProjectile>[] initializers)
+        {
+            _initializers = initializers;
+            return this;
         }
 
         public void RequestStart() => gameObject.SetActive(true);
 
         private void OnEnable()
         {
-            //if (!_configuration)
-            //    throw new InvalidOperationException(
-            //        $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_configuration)}을(를) 가지고 있어야 합니다.");
-
             if (!_projectilePrefab)
                 throw new InvalidOperationException(
                     $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_projectilePrefab)}을(를) 가지고 있어야 합니다.");
@@ -85,10 +88,13 @@ namespace Actors.Monsters.Bosses
             var projectile = Instantiate(_projectilePrefab).GetComponent<KinematicProjectile>();
             projectile.transform.position = transform.position;
             projectile.Initialize(_platformManager, "Player", "Ground");
-            projectile.gameObject.SetActive(true);
 
-            foreach (var ssh in projectile.GetComponentsInChildren<SpriteSizeHandler>())
-                ssh.Initialize(_configuration, true);
+            if (_initializers != null)
+            {
+                foreach (var initializer in _initializers)
+                    initializer?.Invoke(projectile);
+            }
+            projectile.gameObject.SetActive(true);
 
             var dir =
                 (_getTargetPosition?.Invoke() ?? (Vector2)_target.position)

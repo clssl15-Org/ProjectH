@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Actors.Monsters.Actions;
 using Infrastructure;
@@ -11,6 +12,7 @@ namespace Actors.Monsters.Bosses
         {
             // Internal
             private DarkTherion DarkTherion => (DarkTherion)Owner;
+            private Action<GameObject>[] _initializers;
 
             private sealed class OrbitBullet
             {
@@ -23,6 +25,12 @@ namespace Actors.Monsters.Bosses
             }
 
             // Content
+            public DarkTherionBulletAttackAction SetInitializer(params Action<GameObject>[] initializers)
+            {
+                _initializers = initializers;
+                return this;
+            }
+
             protected override void OnEnter(object _)
             {
                 var stats = DarkTherion.StatsInfo;
@@ -60,17 +68,15 @@ namespace Actors.Monsters.Bosses
                             Quaternion.identity
                         );
 
-                        projectileObject
-                            .GetComponent<Projectile>()
-                            .Initialize(DarkTherion.PlatformManager);
-
-                        projectileObject
-                            .GetComponent<SpriteSizeHandler>()
-                            .Initialize(DarkTherion.Configuration)
-                            .RequestApplyScaleFactor();
-
                         if (!projectileObject.TryGetComponent<Rigidbody2D>(out var body))
-                            continue;
+                            throw new InvalidOperationException(
+                                $"{nameof(DarkTherionBulletAttackAction)} requires the projectile prefab to have a Rigidbody2D component.");
+
+                        if (_initializers != null)
+                        {
+                            foreach (var initializer in _initializers)
+                                initializer?.Invoke(projectileObject);
+                        }
 
                         body.bodyType = RigidbodyType2D.Kinematic;
                         body.velocity = Vector2.zero;

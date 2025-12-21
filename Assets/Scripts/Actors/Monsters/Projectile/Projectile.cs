@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Infrastructure;
 using UnityEngine;
 using World;
 
@@ -20,6 +22,12 @@ namespace Actors.Monsters
 
         private PlatformManager _platformManager;
         private string[] _collisionTags;
+        private bool _arrived = false;
+
+        /// <summary>
+        /// 안정적인 충돌 처리를 위해 도착 처리를 지연시키는 프레임 수
+        /// </summary>
+        private const int ArrivalDelay = 10;
 
 
         private void Awake()
@@ -37,7 +45,7 @@ namespace Actors.Monsters
         {
             if (!_platformManager)
             {
-                Debug.LogError($"[Projectile] {nameof(PlatformManager)}이(가) 없기 때문에 투사체 {name}을(를) 사용할 수 없습니다.");
+                Debug.LogError($"[Projectile] {nameof(PlatformManager)}이(가) 없기 때문에 투사체 {name}을(를) 사용할 수 없습니다.", this);
                 Destroy(gameObject);
                 return;
             }
@@ -56,28 +64,48 @@ namespace Actors.Monsters
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (_collisionTags == null
-                || _collisionTags.Length == 0
-                || HasArrived)
+            if (_arrived
+                || _collisionTags == null
+                || _collisionTags.Length == 0)
                 return;
 
-            HasArrived = true;
-
             if (_collisionTags.Any(t => collider.gameObject.CompareTag(t)))
-                OnArrived();
+            {
+                _arrived = true;
+                Arrive();
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (_collisionTags == null
-                || _collisionTags.Length == 0
-                || HasArrived)
+            if (_arrived
+                || _collisionTags == null
+                || _collisionTags.Length == 0)
                 return;
 
-            HasArrived = true;
-
             if (_collisionTags.Any(t => collision.gameObject.CompareTag(t)))
+            {
+                _arrived = true;
+                Arrive();
+            }
+        }
+
+        private void Arrive()
+        {
+            // 안정적인 대미지 처리를 위해 지연된 프레임에 도착 처리 실행
+            IDisposable handle = null;
+            int frameCount = ArrivalDelay;
+
+            handle = Loco.Subscribe(() =>
+            {
+                frameCount--;
+                if (frameCount > 0) return;
+
+                handle.Dispose();
+
+                HasArrived = true;
                 OnArrived();
+            });
         }
 
         public virtual void OnArrived()

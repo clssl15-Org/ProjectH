@@ -18,7 +18,6 @@ namespace Actors.Monsters.Bosses
 
 
             public WerbellionPortalAttackAction(
-                Configuration configuration,
                 PlatformManager platformManager,
                 GameObject spawnersParent,
                 IEnumerable<WerbellionPortalAttackSpawner> spawners,
@@ -48,8 +47,6 @@ namespace Actors.Monsters.Bosses
                     var currentSpawner = spawner;
                     currentSpawner.gameObject.SetActive(false);
 
-                    // 투사체 사이즈 자동 조절 방지
-                    currentSpawner.Initialize(null, platformManager, getTargetPosition);
                     _sequence.Stopped += succeeded =>
                     {
                         if (!succeeded)

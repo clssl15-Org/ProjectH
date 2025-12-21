@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
+using Infrastructure;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -22,12 +24,6 @@ namespace Actors.Monsters.Bosses
         }
 
         [Header("Dark Therion")]
-        [SerializeField] private KinematicProjectile _projectilePrefab;
-        [SerializeField] private KinematicProjectile _spikePrefab;
-        [Space]
-        [SerializeField, Min(0)] private float _bulletDestroyTime = 10f;
-        [SerializeField] private Transform[] _spikeSpawnPoints;
-        [Space]
         [SerializeField] private Transform[] _movePoints;
         [SerializeField] private float _acceleration = 20f;
         [SerializeField] private float _deceleration = 30f;
@@ -35,6 +31,14 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
         [Space]
+        [SerializeField] private KinematicProjectile _projectilePrefab;
+        [SerializeField] private Transform _projectileLaunchPoint;
+        [Space]
+        [SerializeField, Min(0)] private float _bulletDestroyTime = 10f;
+        [Space]
+        [SerializeField] private KinematicProjectile _spikePrefab;
+        [SerializeField] private Transform[] _spikeSpawnPoints;
+
         [Header("Debug")]
         [SerializeField] private bool _useTargetPlayer = false;
         [SerializeField] private GameObject _targetPlayer;
@@ -48,7 +52,7 @@ namespace Actors.Monsters.Bosses
         // Internal
         private class DarkTherionBrain : MonsterBrain
         {
-            public DarkTherionBrain(DarkTherion darkTherion) : base(darkTherion)
+            public DarkTherionBrain(DarkTherion owner) : base(owner)
             {
                 Blackboard.Properties[ITwinBoss.IsAwake] = false;
 
@@ -56,7 +60,7 @@ namespace Actors.Monsters.Bosses
                     .AddChild(new Idle(ITwinBoss.IsAwake))
                     .AddChild(new Awaken(ITwinBoss.IsAwake)
                         .AddChild(new DarkTherionMoveBrain())
-                        .AddChild(new Await(darkTherion.StatsInfo.DelayBeforeAttack))
+                        .AddChild(new Await(owner.StatsInfo.DelayBeforeAttack))
                         .AddChild(new DarkTherionAttackBrain())
                     )
                 );
@@ -67,46 +71,92 @@ namespace Actors.Monsters.Bosses
 
         private class DarkTherionActionController : MonsterActionController
         {
-            public DarkTherionActionController(DarkTherion darkTherion) : base(darkTherion)
+            public DarkTherionActionController(DarkTherion monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("ProjectileAttack")
                     .AddAnimationComponent()
-                    .AddComponent(new DarkTherionProjectileAttackAction()));
+                    .AddComponent(new DarkTherionProjectileAttackAction()
+                        .SetInitializer(
+                            p => p
+                                .GetComponent<SpriteSizeHandler>()
+                                .Initialize(monster.Configuration, true),
+                            p => p
+                                .GetComponent<Weapon>()
+                                .AttackPower = monster.StatsInfo.ProjectileAttackPower))
+                );
                 AddChild(new MonsterAction("BulletAttack")
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
-                    .AddComponent(new DarkTherionBulletAttackAction()));
+                    .AddComponent(new DarkTherionBulletAttackAction()
+                        .SetInitializer(
+                            p => p
+                                .GetComponent<SpriteSizeHandler>()
+                                .Initialize(monster.Configuration, true),
+                            p => p
+                                .GetComponent<Projectile>()
+                                .Initialize(monster.PlatformManager),
+                            p => p
+                                .GetComponent<Weapon>()
+                                .AttackPower = monster.StatsInfo.BulletAttackPower))
+                );
                 AddChild(new MonsterAction("SpikeAttack")
                     .AddAnimationComponent()
                     .AddComponent(new SpikeAttackAction(
-                        darkTherion._spikePrefab,
-                        darkTherion._spikeSpawnPoints.Select(p => (Vector2)p.transform.localPosition),
+                        monster._spikePrefab,
+                        monster._spikeSpawnPoints.Select(p => p.transform),
                         SpikeAttackAction.SpawnPointType.Local,
-                        darkTherion.StatsInfo.ProjectileSpeed,
-                        darkTherion.StatsInfo.ProjectileFireGap))
+                        monster.StatsInfo.ProjectileSpeed,
+                        monster.StatsInfo.ProjectileFireGap)
+                        .SetInitializer(
+                            p => p
+                                .GetComponent<SpriteSizeHandler>()
+                                .Initialize(monster.Configuration, true),
+                            p => p
+                                .GetComponent<Weapon>()
+                                .AttackPower = monster.StatsInfo.SpikeAttackPower)
+                    )
                     .AddDelay(
                         5f,
-                        InterruptPriority.High));
+                        InterruptPriority.High)
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddComponent(new HitFlash()));
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction("Exhausted")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
         private IPlayer _player;
 
-
+            
         // Content
         public void InitializePlayer(IPlayer player)
         {
             _player = player;
+        }
+
+        protected override void Awake()
+        {
+            if (!_projectilePrefab)
+                throw new InvalidOperationException(
+                    $"{nameof(DarkTherion)}은(는) '{nameof(_projectilePrefab)}'을(를) 가지고 있어야 합니다.");
+
+            if (!_spikePrefab)
+                throw new InvalidOperationException(
+                    $"{nameof(DarkTherion)}은(는) '{nameof(_spikePrefab)}'을(를) 가지고 있어야 합니다.");
+
+            base.Awake();
         }
 
         protected override void Start()

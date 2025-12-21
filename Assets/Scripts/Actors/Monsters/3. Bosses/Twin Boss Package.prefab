@@ -30,9 +30,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1554209268861194016}
-  - {fileID: 5184910241531609732}
   - {fileID: 2424792761871977279}
+  - {fileID: 5184910241531609732}
+  - {fileID: 1554209268861194016}
   - {fileID: 6705505716852861028}
   - {fileID: 2969727396328729670}
   - {fileID: 8925528449332656683}
@@ -66,9 +66,11 @@ GameObject:
   - component: {fileID: 2660252729470141946}
   - component: {fileID: 1715085295139968884}
   - component: {fileID: 5524036269245245122}
-  m_Layer: 8
-  m_Name: Spike (2)
-  m_TagString: Untagged
+  - component: {fileID: 8351560841252506170}
+  - component: {fileID: 7330524454948710795}
+  m_Layer: 9
+  m_Name: Spike
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,7 +238,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &5524036269245245122
 MonoBehaviour:
@@ -251,6 +253,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+--- !u!114 &8351560841252506170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597251551096377053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 0}
+  <TargetTags>k__BackingField: []
+--- !u!114 &7330524454948710795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597251551096377053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1
 --- !u!1 &1105572613050898948
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,9 +296,11 @@ GameObject:
   - component: {fileID: 4609727820720359170}
   - component: {fileID: 4189121958654986918}
   - component: {fileID: 990167254530227389}
-  m_Layer: 8
-  m_Name: Spike (5)
-  m_TagString: Untagged
+  - component: {fileID: 9176108340496004677}
+  - component: {fileID: 5509435351769182748}
+  m_Layer: 9
+  m_Name: Spike
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,7 +468,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &990167254530227389
 MonoBehaviour:
@@ -451,6 +483,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+--- !u!114 &9176108340496004677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105572613050898948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 0}
+  <TargetTags>k__BackingField: []
+--- !u!114 &5509435351769182748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105572613050898948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1
 --- !u!1 &2193342919693178577
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,9 +526,11 @@ GameObject:
   - component: {fileID: 480879827103541302}
   - component: {fileID: 5855439158409013934}
   - component: {fileID: 5027488606324101910}
-  m_Layer: 8
+  - component: {fileID: 2324169171492815347}
+  - component: {fileID: 7218939920034425659}
+  m_Layer: 9
   m_Name: Spike
-  m_TagString: Untagged
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -481,13 +543,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2193342919693178577}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.020175288, w: 0.99979645}
   m_LocalPosition: {x: 1.7700003, y: 0.5800003, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6322811181645937524}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -2.312}
 --- !u!212 &594225996650629677
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -636,7 +698,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &5027488606324101910
 MonoBehaviour:
@@ -651,6 +713,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+--- !u!114 &2324169171492815347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193342919693178577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 0}
+  <TargetTags>k__BackingField: []
+--- !u!114 &7218939920034425659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193342919693178577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1
 --- !u!1 &2661700418668105197
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,6 +825,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3466061687665739758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1381697736518138193}
+  m_Layer: 0
+  m_Name: Spike Launch Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1381697736518138193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466061687665739758}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.58, y: 1.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5936813002663099084}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3679219656788664088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1220,9 +1341,11 @@ GameObject:
   - component: {fileID: 559971607371417515}
   - component: {fileID: 797760402801868252}
   - component: {fileID: 4346220165452114120}
-  m_Layer: 8
-  m_Name: Spike (4)
-  m_TagString: Untagged
+  - component: {fileID: 2370805863220502616}
+  - component: {fileID: 8911338215755570463}
+  m_Layer: 9
+  m_Name: Spike
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1390,7 +1513,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &4346220165452114120
 MonoBehaviour:
@@ -1405,6 +1528,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+--- !u!114 &2370805863220502616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5810666194657943169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 0}
+  <TargetTags>k__BackingField: []
+--- !u!114 &8911338215755570463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5810666194657943169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1
 --- !u!1 &5878542944565762321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1675,6 +1826,7 @@ MonoBehaviour:
   _useTargetPlayer: 0
   _targetPlayer: {fileID: 0}
   _autoAwake: 0
+  <IsExhausted>k__BackingField: 0
 --- !u!1 &6192492074774084803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1809,9 +1961,11 @@ GameObject:
   - component: {fileID: 2756310709764904134}
   - component: {fileID: 3615581693984691566}
   - component: {fileID: 6608474832524601612}
-  m_Layer: 8
-  m_Name: Spike (1)
-  m_TagString: Untagged
+  - component: {fileID: 4340361036849176816}
+  - component: {fileID: 8428484046983266307}
+  m_Layer: 9
+  m_Name: Spike
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1979,7 +2133,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &6608474832524601612
 MonoBehaviour:
@@ -1994,6 +2148,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+--- !u!114 &4340361036849176816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517864475669406358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 0}
+  <TargetTags>k__BackingField: []
+--- !u!114 &8428484046983266307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7517864475669406358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1
 --- !u!1 &8431915662518892015
 GameObject:
   m_ObjectHideFlags: 0
@@ -2032,6 +2214,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1381697736518138193}
   - {fileID: 6322811181645937524}
   m_Father: {fileID: 8260695215985106612}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2237,8 +2420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d205e77a4fc464646b27aa1e3af613e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDebugStatsInfo: 1
-  _statsInfo: {fileID: 0}
+  _useDebugStatsInfo: 0
+  _statsInfo: {fileID: 11400000, guid: 0167d48d86d8172448fd8cb1cbf210d1, type: 2}
   _debugStatsInfo: {fileID: 11400000, guid: ca9b039f68cf0e04fbbdb81ded008e39, type: 2}
   RandomizeStartDirection: 0
   DefaultIsRight: 1
@@ -2246,17 +2429,6 @@ MonoBehaviour:
   Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
   _stateDisplay: 
-  _configuration: {fileID: 0}
-  _projectilePrefab: {fileID: 4050951402670627608, guid: fcb7cd7181025194080eda2e71fbc8e2, type: 3}
-  _spikePrefab: {fileID: -5804095583846766684, guid: e5c39dc3b3306d74abe44d28f34007f0, type: 3}
-  _bulletDestroyTime: 13
-  _spikeSpawnPoints:
-  - {fileID: 1554209268861194016}
-  - {fileID: 5184910241531609732}
-  - {fileID: 2424792761871977279}
-  - {fileID: 6705505716852861028}
-  - {fileID: 2969727396328729670}
-  - {fileID: 8925528449332656683}
   _movePoints:
   - {fileID: 2340130173303506456}
   - {fileID: 8129540277738632752}
@@ -2266,9 +2438,21 @@ MonoBehaviour:
   _deceleration: 5
   _arriveDistanceTolerance: 0.05
   _attackMode: 0
+  _projectilePrefab: {fileID: 4050951402670627608, guid: fcb7cd7181025194080eda2e71fbc8e2, type: 3}
+  _projectileLaunchPoint: {fileID: 1381697736518138193}
+  _bulletDestroyTime: 13
+  _spikePrefab: {fileID: -5804095583846766684, guid: e5c39dc3b3306d74abe44d28f34007f0, type: 3}
+  _spikeSpawnPoints:
+  - {fileID: 1554209268861194016}
+  - {fileID: 5184910241531609732}
+  - {fileID: 2424792761871977279}
+  - {fileID: 6705505716852861028}
+  - {fileID: 2969727396328729670}
+  - {fileID: 8925528449332656683}
   _useTargetPlayer: 0
   _targetPlayer: {fileID: 0}
   _autoAwake: 0
+  <IsExhausted>k__BackingField: 0
 --- !u!1 &8745377189848666748
 GameObject:
   m_ObjectHideFlags: 0
@@ -2284,9 +2468,11 @@ GameObject:
   - component: {fileID: 7423770190305185965}
   - component: {fileID: 6497428501210988563}
   - component: {fileID: 6577090604588103155}
-  m_Layer: 8
-  m_Name: Spike (3)
-  m_TagString: Untagged
+  - component: {fileID: 131660593629845982}
+  - component: {fileID: 7081298206172769217}
+  m_Layer: 9
+  m_Name: Spike
+  m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2299,13 +2485,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8745377189848666748}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.014351927, w: 0.999897}
   m_LocalPosition: {x: -2.4, y: 0.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6322811181645937524}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 1.645}
 --- !u!212 &7407470484002015679
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2454,7 +2640,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &6577090604588103155
 MonoBehaviour:
@@ -2469,3 +2655,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+--- !u!114 &131660593629845982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745377189848666748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b00d7f33117594180d90f134a0f91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myCollider: {fileID: 0}
+  <TargetTags>k__BackingField: []
+--- !u!114 &7081298206172769217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745377189848666748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AttackPower>k__BackingField: 1
+  <DoKnockback>k__BackingField: 1

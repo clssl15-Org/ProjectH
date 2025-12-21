@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.Monsters.Actions;
-using Infrastructure;
 using Infrastructure.StateMachines.Scp;
 using UnityEngine;
 using Scp = Infrastructure.StateMachines.Scp;
@@ -12,8 +11,14 @@ namespace Actors.Monsters.Bosses
     internal class SpikeAttackAction : MonsterActionComponent
     {
         // Internal
+        private Action<KinematicProjectile>[] _initializers;
         private Func<Vector2> _getTargetPoint;
         private Sequence _sequence;
+
+        private KinematicProjectile _spikePrefab;
+        private Transform[] _spikeSpawnPositions;
+        private SpawnPointType _spawnPointType;
+        private KinematicProjectile[] _spikes;
 
 
         // Content
@@ -21,40 +26,28 @@ namespace Actors.Monsters.Bosses
 
         public SpikeAttackAction(
             KinematicProjectile spikePrefab,
-            IEnumerable<Vector2> spikeSpawnPoints,
+            IEnumerable<Transform> spikeSpawnPoints,
             SpawnPointType spawnPointType,
             float projectileSpeed,
             float projectileFireGap)
         {
-            var points = spikeSpawnPoints.ToArray();
+            _spikeSpawnPositions = spikeSpawnPoints.ToArray();
+            _spawnPointType = spawnPointType;
+
+            _spikePrefab = spikePrefab;
+            _spikes = new KinematicProjectile[_spikeSpawnPositions.Length];
 
             _sequence = new Sequence();
             IClip before = null;
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < _spikeSpawnPositions.Length; i++)
             {
                 var index = i;
                 var clip = new Clip($"SpikeLauncher {i}")
                     .OnStarted((self, _) =>
                     {
-                        var spike =
-                            UnityEngine.Object.Instantiate(spikePrefab.gameObject)
-                            .GetComponent<KinematicProjectile>();
-                        spike.Initialize(Owner.PlatformManager, "Player", "Ground");
-
-                        if (spike.TryGetComponent<SpriteSizeHandler>(out var ssh))
-                            ssh.Initialize(Owner.Configuration, true);
-
-                        spike.transform.position = spawnPointType switch
-                        {
-                            SpawnPointType.World => points[index],
-                            SpawnPointType.Local => Owner.transform.TransformPoint(points[index]),
-                            _ => throw new ArgumentOutOfRangeException(
-                                nameof(spawnPointType), spawnPointType, $"알 수 없는 위치 정보 타입 '{spawnPointType}'이(가) 입력되었습니다."),
-                        };
-
                         new SpikeLauncher(
-                            spike,
+                            _spikes[index],
                             _getTargetPoint,
                             projectileSpeed)
                         .Fire();
@@ -81,6 +74,12 @@ namespace Actors.Monsters.Bosses
             }
         }
 
+        public SpikeAttackAction SetInitializer(params Action<KinematicProjectile>[] initializers)
+        {
+            _initializers = initializers;
+            return this;
+        }
+
         protected override void OnEnter(object input)
         {
             if (input == null)
@@ -90,6 +89,42 @@ namespace Actors.Monsters.Bosses
             if (input is not Func<Vector2> getTargetPoint)
                 throw new ArgumentException(
                     $"{nameof(SpikeAttackAction)}의 입력값은 Func<Vector2> 타입이어야 합니다.");
+
+            for (int i = 0; i < _spikes.Length; i++)
+            {
+                var spike =
+                    UnityEngine.Object.Instantiate(_spikePrefab.gameObject)
+                    .GetComponent<KinematicProjectile>();
+
+                spike.Initialize(Owner.PlatformManager, "Player", "Ground");
+
+                switch (_spawnPointType)
+                {
+                    case SpawnPointType.World:
+                        spike.transform.SetPositionAndRotation(
+                            _spikeSpawnPositions[i].position,
+                            _spikeSpawnPositions[i].rotation);
+                        break;
+
+                    case SpawnPointType.Local:
+                        spike.transform.SetLocalPositionAndRotation(
+                            _spikeSpawnPositions[i].position,
+                            _spikeSpawnPositions[i].rotation);
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(_spawnPointType), _spawnPointType, $"알 수 없는 위치 정보 타입 '{_spawnPointType}'이(가) 입력되었습니다.");
+                }
+
+                if (_initializers != null)
+                {
+                    foreach (var initializer in _initializers)
+                        initializer?.Invoke(spike);
+                }
+
+                _spikes[i] = spike;
+            }
 
             _getTargetPoint = getTargetPoint;
             _sequence.Start();
@@ -107,6 +142,9 @@ namespace Actors.Monsters.Bosses
 
         protected override void OnInterrupt(InterruptType _)
         {
+            for (int i = 0; i < _spikes.Length; i++)
+                _spikes[i] = null;
+
             _sequence.Stop();
         }
     }
