@@ -110,7 +110,9 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
             var receiver = contact.gameObject
                 .GetComponentInChildren<MonsterDamageReceiver>();
 
-            if (!receiver || (interacted?.Contains(receiver) ?? false))
+            if (!receiver
+                || !receiver.Interactable
+                || (interacted?.Contains(receiver) ?? false))
                 continue;
 
             if (UseKnockback)

@@ -1574,6 +1574,7 @@ GameObject:
   - component: {fileID: 5233783686478416266}
   - component: {fileID: 6005502055445277112}
   - component: {fileID: 5899289195953550444}
+  - component: {fileID: 1862625504292106988}
   m_Layer: 8
   m_Name: Bella
   m_TagString: Monster
@@ -1827,6 +1828,28 @@ MonoBehaviour:
   _targetPlayer: {fileID: 0}
   _autoAwake: 0
   <IsExhausted>k__BackingField: 0
+--- !u!114 &1862625504292106988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5878542944565762321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 0
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 0
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &6192492074774084803
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,6 +2217,7 @@ GameObject:
   - component: {fileID: 5982879332036996289}
   - component: {fileID: 6705220806252355649}
   - component: {fileID: 4755052946746460908}
+  - component: {fileID: 6138016247118311145}
   m_Layer: 8
   m_Name: Dark Therion
   m_TagString: Monster
@@ -2453,6 +2477,28 @@ MonoBehaviour:
   _targetPlayer: {fileID: 0}
   _autoAwake: 0
   <IsExhausted>k__BackingField: 0
+--- !u!114 &6138016247118311145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8431915662518892015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 0
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 0
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &8745377189848666748
 GameObject:
   m_ObjectHideFlags: 0

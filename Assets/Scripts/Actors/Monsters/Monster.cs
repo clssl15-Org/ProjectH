@@ -12,7 +12,7 @@ namespace Actors.Monsters
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlatformDetector))]
     public abstract partial class Monster<TStats>
-        : MonoBehaviour, IMonsterInternal, IMonster where TStats : MonsterStats
+        : MonoBehaviour, IMonster, IMonsterInternal where TStats : MonsterStats
     {
         // Front
         public int HP
@@ -48,9 +48,10 @@ namespace Actors.Monsters
             set
             {
                 _ignorePlayerInternaction = value;
+                if (DamageReceiver) DamageReceiver.Interactable = !value;
 
                 var layer = value
-                    ? LayerMask.GetMask("Player")
+                    ? LayerMask.GetMask("Player", "Player Weapon")
                     : default;
 
                 Collider.excludeLayers = layer;
@@ -188,6 +189,7 @@ namespace Actors.Monsters
             if (!DamageReceiver) throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(DamageReceiver)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
+            DamageReceiver.Interactable = !IgnorePlayerInteraction;
             DamageReceiver.Damaged += OnDamaged;
 
             if (TryGetComponent<StandaloneHitAction>(out var standaloneHitAction))
@@ -257,7 +259,10 @@ namespace Actors.Monsters
         {
             HP -= damageInfo.Damage;
 
-            var notification = new MonsterConditionData(MonsterCondition.Damage);
+            var notification = new MonsterConditionData(
+                MonsterCondition.Damaged,
+                payload: damageInfo);
+
             ConditionChanged?.Invoke(notification);
             notification.Complete();
         }

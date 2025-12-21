@@ -83,7 +83,7 @@ namespace Actors.Monsters.Bosses
                             HierarchyMode = HierarchyMode.Sequence,
                             LoopType = LoopType.None,
                         }
-                        .AddChild(new Attack("AmbushAttack_Intro"))
+                        .AddChild(new Attack("AmbushAttack_Intro", false))
                         .AddChild(new CerberusAttackPhaseBrain()
                             .AddChild(new CerberusAttackBrain())
                             .AddChild(new Await(
@@ -251,8 +251,6 @@ namespace Actors.Monsters.Bosses
                 );
                 #endregion
 
-                AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
             }

@@ -10,6 +10,7 @@ namespace Actors.Monsters.Bosses
         internal class CerberusAttackBrain : BTNode<IMonsterInternal, MonsterBlackboard>
         {
             private Cerberus Cerberus => (Cerberus)Owner;
+            private MonsterConditionData _notification;
 
 
             public CerberusAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
@@ -44,7 +45,6 @@ namespace Actors.Monsters.Bosses
 
                 var attackName = mode.ToString() + "Attack";
 
-
                 if (!Owner.TryDoAction(new(
                     Name: attackName,
                     Callback: result => Complete(result)),
@@ -55,7 +55,17 @@ namespace Actors.Monsters.Bosses
                         $"{attackName} 행동에 실패하였기 때문에 {nameof(CerberusAttackBrain)} 상태로 진입할 수 없습니다.\n{reason}"), Cerberus);
 
                     Complete(false);
+                    return;
                 }
+
+                _notification = new MonsterConditionData(MonsterCondition.Attack, mode == AttackMode.Ambush);
+                Owner.NotifyCondition(_notification);
+            }
+
+            protected override void OnHalt(DetailedNodeStatus _)
+            {
+                _notification?.Complete();
+                _notification = null;
             }
         }
     }

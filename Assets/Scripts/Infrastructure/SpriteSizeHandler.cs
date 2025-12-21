@@ -9,7 +9,7 @@ namespace Infrastructure
     public class SpriteSizeHandler : MonoBehaviour
     {
         [SerializeField] private bool _useManualScaleFactor = false;
-        [SerializeField, Min(0)] private float _scaleFactor = 0.05f;
+        [SerializeField, Min(0)] private float _scaleFactor = 0.03f;
         [SerializeField] private Configuration _configuration;
 
         private SpriteRenderer _sr;

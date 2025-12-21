@@ -12,6 +12,9 @@ namespace Actors.Monsters
         [Header("Dokkaebi")]
         [SerializeField] private Weapon _weapon;
         [SerializeField] private float _weaponActiveTiming;
+        [Space]
+        [SerializeField, Min(0)] private float _targetRangeMin = 0.5f;
+        [SerializeField, Min(0)] private float _targetRangeMax = 5f;
 
 
         // Internal
@@ -19,15 +22,23 @@ namespace Actors.Monsters
         {
             public DokkaebiBrain(Dokkaebi owner) : base(owner)
             {
+                var targetAttackRange = (owner._targetRangeMin + owner._targetRangeMax) / 2;
+                var tolerance = owner._targetRangeMax - targetAttackRange;
+
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged()
+                            .AddChild(new Engaged(Engaged.RangeType.Ranged)
+                                {
+                                    TargetAttackRange = targetAttackRange,
+                                    UpperRangeTolerance = tolerance,
+                                    LowerRangeTolerance = tolerance,
+                                }
                                 .AddChild(new Adjusting(MonsterActionType.Idle))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new Attack())
+                            .AddChild(new Attack(true))
                             .AddChild(new Cooldown())
                         )
                         .AddChild(new PlayerNotDetected()

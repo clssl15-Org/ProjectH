@@ -14,8 +14,9 @@ namespace Actors.Monsters.Bosses
             private Werbellion Werbellion => (Werbellion)Owner;
             private int _phase = -1;
             private int _beforeAirPos = -1;
-            private Action _callback;
             private readonly List<AttackMode> _avoidNext = new();
+            private Action _callback;
+            private MonsterConditionData _notification;
 
 
             public WerbellionAttackBrain()
@@ -43,10 +44,14 @@ namespace Actors.Monsters.Bosses
                 _phase = -1;
                 _beforeAirPos = -1;
                 _callback = null;
+
             }
 
             private bool TryDoNextAttack(out Action nextAction)
             {
+                _notification?.Complete();
+                _notification = null;
+
                 _phase++;
                 if (_phase >= 3)
                 {
@@ -79,6 +84,14 @@ namespace Actors.Monsters.Bosses
                 else
                     nextAction = () => GroundAttack(attackName);
 
+                var isRangedAttack =
+                    attackmode == AttackMode.Punch
+                    || attackmode == AttackMode.StraightArea
+                    || attackmode == AttackMode.Stun;
+
+                _notification = new MonsterConditionData(MonsterCondition.Attack, isRangedAttack);
+                Owner.NotifyCondition(_notification);
+
                 return true;
             }
 
@@ -86,7 +99,11 @@ namespace Actors.Monsters.Bosses
             {
                 if (!Owner.TryDoAction(new(
                     name,
-                    Inputs: new object[] { null, (Func<Vector2>)(() => Werbellion._targetPlayer.transform.position) },
+                    Inputs: new object[]
+                    {
+                        null,
+                        (Func<Vector2>)(() => Werbellion._targetPlayer.transform.position)
+                    },
                     Callback: result =>
                     {
                         if (!result)

@@ -19,6 +19,7 @@ namespace Actors
 
         int MaxHP { get; }
         int CurrentPlatform { get; }
+        bool IgnorePlayerInteraction { get; }
 
         void Initialize(
             GameAssetLibrary gameAssetsLibrary,

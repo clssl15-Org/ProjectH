@@ -10,10 +10,7 @@ namespace Actors.Monsters
         public event Action Callback;
 
 
-        public MonsterConditionData()
-        {
-        }
-
+        public MonsterConditionData() { }
         public MonsterConditionData(
             MonsterCondition condition,
             object payload = null)

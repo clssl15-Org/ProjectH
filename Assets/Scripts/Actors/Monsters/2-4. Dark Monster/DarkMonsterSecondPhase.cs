@@ -32,7 +32,7 @@ namespace Actors.Monsters
                                 .AddChild(new Adjusting(MonsterActionType.Idle))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new Attack())
+                            .AddChild(new Attack(false))
                             .AddChild(new Cooldown())
                         )
                         .AddChild(new PlayerNotDetected()

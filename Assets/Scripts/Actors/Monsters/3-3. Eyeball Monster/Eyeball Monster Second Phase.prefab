@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8106358394743842436}
   - component: {fileID: 8111680448376255157}
   - component: {fileID: 7246786767152220795}
+  - component: {fileID: 6633816817213553370}
   m_Layer: 8
   m_Name: Eyeball Monster Second Phase
   m_TagString: Monster
@@ -258,6 +259,28 @@ MonoBehaviour:
   _weapon: {fileID: 6010522310993064704}
   _weaponActiveTiming: 0.4166667
   _weaponActiveDuration: 0.08333334
+--- !u!114 &6633816817213553370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2433133080368807008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &7436663969907029119
 GameObject:
   m_ObjectHideFlags: 0

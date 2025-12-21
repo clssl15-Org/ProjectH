@@ -10,6 +10,11 @@ namespace Actors.Monsters
     {
         private class SkeletonPigAttackBrain : BTNode<IMonsterInternal, MonsterBlackboard>
         {
+            // Internal
+            private MonsterConditionData _notification;
+
+
+            // Content
             public SkeletonPigAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
             protected override void OnOpen(params object[] _)
@@ -29,25 +34,33 @@ namespace Actors.Monsters
                 else
                     mode = owner._attackMode;
 
-
                 if (!Owner.TryDoAction(new(mode.ToString(), result => Complete(result)), out var reason))
                 {
                     Debug.LogWarning(Owner.FormatLogMessage(
                         $"{mode.ToString()} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                     Complete(false);
+                    return;
                 }
 
                 Blackboard.Committing = true;
 
-                // 체력 회복
                 if (mode == AttackMode.Roar)
                     Owner.HP += Mathf.FloorToInt(Owner.StatsInfo.MaxHP * owner.StatsInfo.RoarHealingRate);
+                else
+                {
+                    
+                    _notification = new MonsterConditionData(MonsterCondition.Attack, mode == AttackMode.DashAttack);
+                    Owner.NotifyCondition(_notification);
+                }
             }
 
             protected override void OnHalt(DetailedNodeStatus _)
             {
                 Blackboard.Committing = false;
+
+                _notification?.Complete();
+                _notification = null;
             }
         }
     }

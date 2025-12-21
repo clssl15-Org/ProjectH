@@ -54,29 +54,29 @@ namespace Infrastructure
 
             foreach (var col in _currentCollisions)
             {
-                if (!_previousCollisions.Contains(col))
-                {
-                    col
-                        .GetOrAddComponent<DestroyEventHandler>()
-                        .Register((this, col), () =>
-                        {
-                            _previousCollisions.Remove(col);
-                            CollisionExited?.Invoke(col);
-                        });
+                if (_previousCollisions.Contains(col))
+                    continue;
 
-                    CollisionEntered?.Invoke(col);
-                }
+                col
+                    .GetOrAddComponent<DestroyEventHandler>()
+                    .Register((this, col), () =>
+                    {
+                        _previousCollisions.Remove(col);
+                        CollisionExited?.Invoke(col);
+                    });
+
+                CollisionEntered?.Invoke(col);
             }
 
             foreach (var col in _previousCollisions)
             {
-                if (!_currentCollisions.Contains(col))
-                {
-                    if (col.TryGetComponent<DestroyEventHandler>(out var destHandler))
-                        destHandler.Remove((this, col));
+                if (_currentCollisions.Contains(col) || !IsTarget(col))
+                    continue;
 
-                    CollisionExited?.Invoke(col);
-                }
+                if (col.TryGetComponent<DestroyEventHandler>(out var destHandler))
+                    destHandler.Remove((this, col));
+
+                CollisionExited?.Invoke(col);
             }
 
             _previousCollisions.Clear();

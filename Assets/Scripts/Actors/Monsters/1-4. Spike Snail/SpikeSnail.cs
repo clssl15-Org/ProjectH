@@ -32,7 +32,7 @@ namespace Actors.Monsters
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new Attack())
+                            .AddChild(new Attack(true))
                             .AddChild(new Cooldown(MonsterActionType.None))
                         )
                         .AddChild(new PlayerNotDetected()

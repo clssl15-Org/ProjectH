@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 434647440944836257}
   - component: {fileID: 4883234770006279277}
   - component: {fileID: 6533744710052237920}
+  - component: {fileID: 2784530618770417839}
   m_Layer: 8
   m_Name: Fire Monster
   m_TagString: Monster
@@ -241,6 +242,28 @@ MonoBehaviour:
   _stateDisplay: 
   _firePrefab: {fileID: 3000534296517803573}
   _fireAppearTime: 0.42
+--- !u!114 &2784530618770417839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4076845378080737680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &8739377308858695228
 GameObject:
   m_ObjectHideFlags: 0

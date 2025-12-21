@@ -52,7 +52,7 @@ namespace UI.Monsters
 
         private void Update(IMonsterConditionData condition)
         {
-            if (condition.Is(MonsterCondition.Heal, MonsterCondition.Damage))
+            if (condition.Is(MonsterCondition.Heal, MonsterCondition.Damaged))
                 HealthRateChanged?.Invoke(HealthRate);
         }
 

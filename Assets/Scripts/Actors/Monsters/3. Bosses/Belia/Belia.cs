@@ -50,7 +50,16 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
-        [field: SerializeField] public bool IsExhausted { get; set; } = false;
+        public bool IsExhausted
+        {
+            get => _isExhausted;
+            set
+            {
+                _isExhausted = value;
+                IgnorePlayerInteraction = value;
+            }
+        } bool _isExhausted = false;
+
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
 

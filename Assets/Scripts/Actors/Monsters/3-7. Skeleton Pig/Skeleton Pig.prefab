@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 2832494936368399038}
   - component: {fileID: 7461011937273477063}
   - component: {fileID: 8496999144708250242}
+  - component: {fileID: 2250500306271495520}
   m_Layer: 8
   m_Name: Skeleton Pig
   m_TagString: Monster
@@ -408,6 +409,28 @@ MonoBehaviour:
   _shockwave: {fileID: 8647282128528521532}
   _shockwaveTime: 0.5
   _dieTimeScale: 0.7
+--- !u!114 &2250500306271495520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2242202585856480588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &3698831526918492350
 GameObject:
   m_ObjectHideFlags: 0

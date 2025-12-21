@@ -110,7 +110,8 @@ namespace Actors.Monsters
 
         public virtual void OnArrived()
         {
-            Destroy(gameObject);
+            if (this)
+                Destroy(gameObject);
         }
     }
 }

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 1826062175386077370}
   - component: {fileID: 1516652006512922421}
   - component: {fileID: 6734163311676315518}
+  - component: {fileID: 8611228509469499680}
   m_Layer: 8
   m_Name: Stag Beetle
   m_TagString: Monster
@@ -90,7 +91,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 9, y: 6.6}
+  m_Size: {x: 5.4, y: 3.9599998}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -109,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useManualScaleFactor: 0
-  _scaleFactor: 0.05
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &3843950773268970679
 Animator:
@@ -164,8 +165,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.1, y: -0.45}
-  m_Size: {x: 6.14, y: 3.92}
+  m_Offset: {x: 0.2, y: -0.23}
+  m_Size: {x: 3.53, y: 2.1}
   m_Direction: 1
 --- !u!50 &2040891973972188694
 Rigidbody2D:
@@ -221,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Interactable>k__BackingField: 1
 --- !u!114 &1516652006512922421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +265,28 @@ MonoBehaviour:
   _spikeScaleFactor: 0.03
   _waitTimeAfterLaunch: 0.1
   _roarIndicator: {fileID: 5562771688442936536}
+--- !u!114 &8611228509469499680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 58172870204027201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &521866703730011413
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +356,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0.29, y: -0.31}
   serializedVersion: 2
-  m_Radius: 2.33
+  m_Radius: 1.67
 --- !u!50 &2483833051950597878
 Rigidbody2D:
   serializedVersion: 4

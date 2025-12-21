@@ -109,6 +109,7 @@ namespace Actors.Monsters.Bosses
                 #region Attacks
                 AddChild(new MonsterAction("PunchAttack")
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new Empty())
                     .AddComponent(new AttackWithWeapon(
                         monster._punchAttackWeapon,
                         monster._punchActiveTiming,
@@ -117,6 +118,7 @@ namespace Actors.Monsters.Bosses
 
                 AddChild(new MonsterAction("StraightAreaAttack")
                     .AddAnimationComponent()
+                    .AddComponent(new Empty())
                     .AddComponent(new AttackWithWeapon(
                         monster._straightAreaAttackPrefab,
                         monster._straightAreaAttackTiming))
@@ -180,6 +182,7 @@ namespace Actors.Monsters.Bosses
 
                 AddChild(new MonsterAction("StunAttack")
                     .AddComponent(new SetTimeScale(monster._stunAttackTimeScale))
+                    .AddComponent(new Empty())
                     .AddComponent(new AttackWithWeapon(
                         monster._stunAttackweapon,
                         monster._stunAttackActiveTiming,

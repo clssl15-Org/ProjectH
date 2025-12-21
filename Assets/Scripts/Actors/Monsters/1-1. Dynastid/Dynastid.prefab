@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 8005353908560965261}
   - component: {fileID: 8541476870282129423}
   - component: {fileID: 8463299552888927162}
+  - component: {fileID: 6957099338642912721}
   m_Layer: 8
   m_Name: Dynastid
   m_TagString: Monster
@@ -184,7 +185,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 2.22, y: 2.22}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -203,7 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useManualScaleFactor: 0
-  _scaleFactor: 1
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &3480468872192534036
 Animator:
@@ -258,8 +259,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.1}
-  m_Size: {x: 1, y: 1.3}
+  m_Offset: {x: 0.05, y: 0}
+  m_Size: {x: 0.68, y: 0.85}
   m_Direction: 0
 --- !u!50 &532810587432848662
 Rigidbody2D:
@@ -339,6 +340,21 @@ MonoBehaviour:
   _weapon: {fileID: 5981960959452578662}
   _weaponActiveTiming: 0.33
   _weaponActiveDuration: 0.17
+--- !u!114 &6957099338642912721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5163356707057488334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fontSize: 5
+  _height: 0.7
+  _showTime: 0.5
 --- !u!1001 &2159831523194760979
 PrefabInstance:
   m_ObjectHideFlags: 0

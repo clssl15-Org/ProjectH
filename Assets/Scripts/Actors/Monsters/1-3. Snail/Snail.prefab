@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 4402378424758891098}
   - component: {fileID: 4686785592887335133}
   - component: {fileID: 798990402297213930}
+  - component: {fileID: 5851064693307262152}
   m_Layer: 8
   m_Name: Snail
   m_TagString: Monster
@@ -353,6 +354,28 @@ MonoBehaviour:
   _weapon: {fileID: 388868708847913025}
   _weaponActiveTiming: 0.8333333
   _weaponActiveDuration: 0.1666667
+--- !u!114 &5851064693307262152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8129905357906094998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1001 &5531710459335882150
 PrefabInstance:
   m_ObjectHideFlags: 0

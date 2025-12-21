@@ -9,6 +9,11 @@ namespace Actors.Monsters.Bosses
     {
         private class BeliaAttackBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
         {
+            // Internal
+            private MonsterConditionData _notification;
+
+
+            // Content
             public BeliaAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
             protected override void OnOpen(params object[] _)
@@ -39,7 +44,19 @@ namespace Actors.Monsters.Bosses
                         $"{mode.ToString()} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                     Complete(false);
+                    return;
                 }
+
+                _notification = new MonsterConditionData(
+                    MonsterCondition.Attack,
+                    mode == AttackMode.Slash || mode == AttackMode.Dash);
+                Owner.NotifyCondition(_notification);
+            }
+
+            protected override void OnHalt(DetailedNodeStatus _)
+            {
+                _notification?.Complete();
+                _notification = null;
             }
         }
     }

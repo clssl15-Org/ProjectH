@@ -1,5 +1,6 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -29,8 +30,7 @@ namespace Actors.Monsters
                                 .AddChild(new Adjusting("Fly"))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new Attack())
-                        )
+                            .AddChild(new Attack(true))                            )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
                             .AddChild(new Patrol("Fly")))
@@ -61,7 +61,13 @@ namespace Actors.Monsters
                         launcher: monster._projectileLauncher,
                         getLaunchInfo: () => new(monster._launchTime, monster._projectileSpeed),
                         launchType: KinematicProjectileLaunchType.Rotation,
-                        getDirections: () => (new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position }))
+                        getDirections: () =>
+                        {
+                            if (monster.DetectedPlayer)
+                                return new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position };
+                            else
+                                return new Vector2[] { monster.Direction.ToVector2() }; // 공격 모션 중 플레이어 이탈 시 처리
+                        })
                     )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Dead)

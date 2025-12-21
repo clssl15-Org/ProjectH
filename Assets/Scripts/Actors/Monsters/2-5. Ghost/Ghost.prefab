@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 4909378014403421725}
   - component: {fileID: 4202890724833464083}
   - component: {fileID: 7167642575890220686}
+  - component: {fileID: 7890472303717319670}
   m_Layer: 8
   m_Name: Ghost
   m_TagString: Monster
@@ -329,6 +330,28 @@ MonoBehaviour:
   _swordPrefab: {fileID: 1684838212659111304}
   _launchStartTime: 0.2
   _rangedWeaponPrefab: {fileID: 516844076069038095}
+--- !u!114 &7890472303717319670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2406509105776385268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &3642659859685285092
 GameObject:
   m_ObjectHideFlags: 0

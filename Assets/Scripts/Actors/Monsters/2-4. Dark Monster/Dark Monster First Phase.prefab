@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8472061052786383877}
   - component: {fileID: 626834385104920623}
   - component: {fileID: 4227149967690483739}
+  - component: {fileID: 6240971242522102987}
   m_Layer: 8
   m_Name: Dark Monster First Phase
   m_TagString: Monster
@@ -244,6 +245,28 @@ MonoBehaviour:
   _weaponActiveDuration: 0.08333334
   _revive: 1
   _secondPhasePrefab: {fileID: 6144783967248736273, guid: 3f7caa3f8e4bb4a4a9432c57cd67ce9d, type: 3}
+--- !u!114 &6240971242522102987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325678930059050358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1 &5529303891761165020
 GameObject:
   m_ObjectHideFlags: 0

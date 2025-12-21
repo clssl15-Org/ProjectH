@@ -12,6 +12,11 @@ namespace Actors.Monsters
     {
         private class GhostAttackBrain : BTNode<IMonsterInternal, MonsterBlackboard>
         {
+            // Internal
+            private MonsterConditionData _notification;
+
+
+            // Content
             public GhostAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
             protected override void OnOpen(params object[] _)
@@ -37,6 +42,7 @@ namespace Actors.Monsters
 
                 string action;
                 object[] inputs = null;
+                bool isRanged;
 
                 switch (mode)
                 {
@@ -53,12 +59,17 @@ namespace Actors.Monsters
                                         nameof(weapon));
 
                                 return () => !contactHandler.Collisions.Any();
-                            })};
+                            })
+                        };
+                        isRanged = true;
                         break;
+
 
                     case AttackMode.ExplosiveAttack:
                         action = "Attack_2";
+                        isRanged = false;
                         break;
+
 
                     default:
                         throw new ArgumentOutOfRangeException(
@@ -71,15 +82,22 @@ namespace Actors.Monsters
                         $"{action} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                     Complete(false);
+                    return;
                 }
 
                 Blackboard.Committing = true;
+
+                _notification = new MonsterConditionData(MonsterCondition.Attack, isRanged);
+                Owner.NotifyCondition(_notification);
             }
 
             protected override void OnHalt(DetailedNodeStatus _)
             {
                 Owner.IgnorePlayerInteraction = false;
                 Blackboard.Committing = false;
+
+                _notification?.Complete();
+                _notification = null;
             }
         }
     }

@@ -39,7 +39,7 @@ namespace Actors.Monsters.Brains
 
             Owner.HP -= damageInfo.Damage;
 
-            _notification = new MonsterConditionData(MonsterCondition.Damage);
+            _notification = new MonsterConditionData(MonsterCondition.Damaged, damageInfo);
             Owner.NotifyCondition(_notification);
 
             if (_doKnockback && damageInfo.HasKnockback)

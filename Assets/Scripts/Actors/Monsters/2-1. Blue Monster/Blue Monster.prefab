@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 8541476870282129423}
   - component: {fileID: 4988676114289121319}
   - component: {fileID: 4472788505238115658}
+  - component: {fileID: 2679630518251056895}
   m_Layer: 8
   m_Name: Blue Monster
   m_TagString: Monster
@@ -353,6 +354,28 @@ MonoBehaviour:
   _weapon: {fileID: 1858815759649128289}
   _weaponActiveTiming: 0.4166667
   _weaponActiveDuration: 0.04166667
+--- !u!114 &2679630518251056895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5163356707057488334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1001 &5690468804831073383
 PrefabInstance:
   m_ObjectHideFlags: 0
