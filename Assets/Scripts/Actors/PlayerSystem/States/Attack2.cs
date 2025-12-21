@@ -66,7 +66,7 @@ namespace Actor.PlayerSystem
 
             foreach (Collider2D hitCollider in hitColliders)
             {
-                print($"2, {hitCollider.name}");
+                //print($"2, {hitCollider.name}");
 
                 if (!hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
                     continue;
