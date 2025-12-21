@@ -170,7 +170,11 @@ namespace Actors.Monsters
                 FormatLogMessage($"{nameof(StagBeetle)}은(는) {nameof(_rollingAttackWeapon)} 컴포넌트를 가지고 있어야 합니다."));
 
             _rollingAttackWeapon.AttackPower = StatsInfo.AttackPower;
+        }
 
+        protected override void Start()
+        {
+            base.Start();
 
             if (!_roarIndicator)
                 Debug.LogWarning(
@@ -178,11 +182,6 @@ namespace Actors.Monsters
                     this);
             else
                 _roarIndicator.SetActive(false);
-        }
-
-        protected override void Start()
-        {
-            base.Start();
 
             ActionController = new StagBeetleActionController(this);
             ActionController.Enter();
