@@ -37,7 +37,7 @@ namespace Actors.Monsters
                     _isJavelinThrown = true;
 
                     var javelin = Instantiate(JavelinHurler._javelinPrefab).GetComponent<Javelin>();
-                    javelin.Initialize(JavelinHurler.PlatformManager, "Ground");
+                    javelin.Initialize(JavelinHurler.PlatformManager, "Player", "Ground");
                     javelin.GetComponent<Weapon>().AttackPower = _attackPower;
 
                     javelin.transform.SetParent(JavelinHurler.transform);

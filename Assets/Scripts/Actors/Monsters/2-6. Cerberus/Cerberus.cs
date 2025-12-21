@@ -136,7 +136,7 @@ namespace Actors.Monsters.Bosses
                         ?.TimeScale ?? 1f)
                     )
                     .AddAnimationComponent("Roar", out var dropAttack_roar)
-                    .AddDelay(1.3f, out var drop_delay)
+                    .AddDelay(1.5f, out var drop_delay)
                     .AddComponent(new Do(true, () =>
                         {
                             var effect = Instantiate(cerberus._roarEffect);

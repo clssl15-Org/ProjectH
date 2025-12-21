@@ -42,7 +42,7 @@ namespace Actors.Monsters
 
                 // 체력 회복
                 if (mode == AttackMode.Roar)
-                    Owner.HP = Mathf.FloorToInt(Owner.HP * (1 + owner.StatsInfo.RoarHealingRate));
+                    Owner.HP += Mathf.FloorToInt(Owner.StatsInfo.MaxHP * owner.StatsInfo.RoarHealingRate);
             }
 
             protected override void OnHalt(DetailedNodeStatus _)

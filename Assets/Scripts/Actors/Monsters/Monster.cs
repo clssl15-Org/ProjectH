@@ -18,7 +18,13 @@ namespace Actors.Monsters
         public int HP
         {
             get => _hp;
-            internal set => _hp = value;
+            internal set
+            {
+                if (StatsInfo != null)
+                    _hp = Mathf.Clamp(value, 0, StatsInfo.MaxHP);
+                else
+                    _hp = value;
+            }
         }
 
         public Direction Direction

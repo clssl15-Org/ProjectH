@@ -4799,9 +4799,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1152159162}
     m_Modifications:
+    - target: {fileID: 2578456150127711787, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3466061687665739758, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: m_Name
       value: Projectile Launch Point
+      objectReference: {fileID: 0}
+    - target: {fileID: 3575302693089473263, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4755052946746460908, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: _autoAwake
@@ -4823,6 +4831,10 @@ PrefabInstance:
       propertyPath: _useDebugStatsInfo
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5005195798760142474, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5695413977444961193, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: m_Name
       value: Twin Boss Package
@@ -4833,7 +4845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5878542944565762321, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5899289195953550444, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: _autoAwake
@@ -4849,6 +4861,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5899289195953550444, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: _useDebugStatsInfo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676609214912201634, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6850731828650707367, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7292865077815155584, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
@@ -4898,6 +4918,10 @@ PrefabInstance:
     - target: {fileID: 8260695215985106612, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8431915662518892015, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7330524454948710795, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
@@ -5441,7 +5465,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: _attackMode
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6734163311676315518, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: RandomizeStartDirection
@@ -5735,7 +5759,7 @@ PrefabInstance:
       objectReference: {fileID: 30036953}
     - target: {fileID: 696566839354962244, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _projectileSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1358031871126685765, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _target
@@ -5751,7 +5775,7 @@ PrefabInstance:
       objectReference: {fileID: 30036953}
     - target: {fileID: 1358031871126685765, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _projectileSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1431101880772261716, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _configuration
@@ -5839,7 +5863,7 @@ PrefabInstance:
       objectReference: {fileID: 30036953}
     - target: {fileID: 3495739404347362556, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _projectileSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: m_Name
@@ -5847,7 +5871,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4170960716390125042, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _configuration
@@ -5895,7 +5919,7 @@ PrefabInstance:
       objectReference: {fileID: 30036953}
     - target: {fileID: 7631040738229529703, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _projectileSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7796568340034195556, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _configuration
@@ -5911,7 +5935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8323278961922721415, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _attackMode
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8323278961922721415, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: Configuration

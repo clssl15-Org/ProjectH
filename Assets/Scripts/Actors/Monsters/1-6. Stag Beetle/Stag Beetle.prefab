@@ -259,7 +259,7 @@ MonoBehaviour:
   _rollingAttackWeapon: {fileID: 5738857686286728426}
   _rollingTime: 3
   _rollingSpeed: 5
-  _spikeSpeed: 5
+  _spikeSpeed: 10
   _spikeScaleFactor: 0.03
   _waitTimeAfterLaunch: 0.1
   _roarIndicator: {fileID: 5562771688442936536}
@@ -853,8 +853,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.69, y: -1.35, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4092487191358170573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
