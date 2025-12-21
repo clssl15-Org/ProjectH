@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Actors.Monsters.Actions
@@ -8,6 +9,9 @@ namespace Actors.Monsters.Actions
         private IWeapon _weaponPrefab;
         private float _startTime;
         private float _duration;
+
+        private Func<IWeapon, Func<bool>> _getCheckCondition;
+        private Func<bool> _checkCondition;
 
         private IWeapon _weapon;
         private float _elapsedTime;
@@ -22,12 +26,24 @@ namespace Actors.Monsters.Actions
             _duration = duration < 0 ? float.MaxValue : duration;
         }
 
-        protected override void OnEnter(object _)
+        protected override void OnEnter(object input)
         {
+            if (input != null)
+            {
+                if (input is not Func<IWeapon, Func<bool>> getCheckCondition)
+                    throw new ArgumentException(
+                        Ctx($"{nameof(input)}은(는) null이거나 Func<IWeapon, Func<bool>> 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다."),
+                        nameof(input));
+
+                _getCheckCondition = getCheckCondition;
+            }
+            else
+                _getCheckCondition = null;
+
             if (_weaponPrefab == null)
             {
                 Debug.LogWarning(
-                    $"[{nameof(AttackWithWeapon)}] {nameof(_weaponPrefab)}이(가) 유효하지 않으므로 컴포넌트가 비활성화되었습니다.",
+                    Ctx($"{nameof(_weaponPrefab)}이(가) 유효하지 않으므로 컴포넌트가 비활성화되었습니다."),
                     Owner.gameObject);
 
                 Interrupt(InterruptType.Completed);
@@ -49,6 +65,13 @@ namespace Actors.Monsters.Actions
             if (_phase >= 2)
                 return;
 
+            if (!(_checkCondition?.Invoke() ?? true))
+            {
+                _phase = 2;
+                UnsetWeapon();
+                return;
+            }
+
             _elapsedTime += deltaTime;
 
             if (_phase == 0 && _elapsedTime >= _startTime)
@@ -66,7 +89,7 @@ namespace Actors.Monsters.Actions
 
         private void SetWeapon()
         {
-            _weapon = Object
+            _weapon = UnityEngine.Object
                 .Instantiate(_weaponPrefab.gameObject)
                 .GetComponent<IWeapon>();
             _weapon.transform.SetParent(Owner.transform);
@@ -75,25 +98,25 @@ namespace Actors.Monsters.Actions
             _weapon.transform.localScale = _weaponPrefab.transform.localScale;
 
             _weapon.gameObject.SetActive(true);
+
+            if (_getCheckCondition != null)
+                _checkCondition = _getCheckCondition(_weapon);
         }
 
         private void UnsetWeapon()
         {
-            if (_weapon != null)
-            {
-                try
-                {
-                    Object.Destroy(_weapon.gameObject);
-                }
-                catch { }
-            }
+            if (_weapon != null && _weapon.gameObject)
+                UnityEngine.Object.Destroy(_weapon.gameObject);
 
             _weapon = null;
         }
         
         protected override void OnInterrupt(InterruptType _)
         {
+            _checkCondition = null;
             UnsetWeapon();
         }
+
+        private string Ctx(string message) => $"[{nameof(AttackWithWeapon)}] {message}";
     }
 }

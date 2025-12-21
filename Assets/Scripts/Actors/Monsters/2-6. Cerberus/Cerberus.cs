@@ -36,6 +36,7 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private Weapon _ambushWeapon;
         [SerializeField] private float _ambushWeaponActiveDuration;
+        [SerializeField, Min(0)] private float _ambushReadyTime;
 
         [Serializable]
         private class AnimationTimeScale
@@ -98,23 +99,23 @@ namespace Actors.Monsters.Bosses
 
         private class CerberusActionController : MonsterActionController
         {
-            public CerberusActionController(Cerberus cerberus) : base(cerberus)
+            public CerberusActionController(Cerberus monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
 
                 #region Attacks
                 AddChild(new MonsterAction("BiteAttack")
-                    .AddComponent(new SetTimeScale(cerberus
+                    .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "BiteAttack")
                         ?.TimeScale ?? 1f)
                     )
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(
-                        cerberus._biteWeapon,
-                        cerberus._biteWeaponActiveTiming,
-                        cerberus._biteWeaponActiveDuration
+                        monster._biteWeapon,
+                        monster._biteWeaponActiveTiming,
+                        monster._biteWeaponActiveDuration
                     ))
 
                     //.AddDelay(0.5f, out var bite_delay)
@@ -130,7 +131,7 @@ namespace Actors.Monsters.Bosses
                 );
 
                 AddChild(new MonsterAction("DropAttack")
-                    .AddComponent(new SetTimeScale(cerberus
+                    .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "DropAttack")
                         ?.TimeScale ?? 1f)
@@ -139,8 +140,8 @@ namespace Actors.Monsters.Bosses
                     .AddDelay(1.5f, out var drop_delay)
                     .AddComponent(new Do(true, () =>
                         {
-                            var effect = Instantiate(cerberus._roarEffect);
-                            effect.transform.position = cerberus._dropAttack_roarEffectPosition.position;
+                            var effect = Instantiate(monster._roarEffect);
+                            effect.transform.position = monster._dropAttack_roarEffectPosition.position;
                             effect.SetActive(true);
 
                             Destroy(effect, 5f);
@@ -150,7 +151,7 @@ namespace Actors.Monsters.Bosses
                     .AddAnimationComponent("Idle", after: new(dropAttack_roar))
                     .AddComponent(new Do(false)
                         .AssignTo(out var roar_doFall)
-                        .OnOpening(() => cerberus._fallingStoneManager.DoFall(succeed =>
+                        .OnOpening(() => monster._fallingStoneManager.DoFall(succeed =>
                             roar_doFall.Interrupt(succeed ? InterruptType.Completed : InterruptType.Error))
                         ),
                         after: new(dropAttack_roar)
@@ -163,13 +164,13 @@ namespace Actors.Monsters.Bosses
                 );
 
                 AddChild(new MonsterAction("AmbushAttack_Intro")
-                    .AddComponent(new SetTimeScale(cerberus
+                    .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "AmbushAttack")
                         ?.TimeScale ?? 1f)
                     )
                     .AddAnimationComponent(
-                        "AmbushAttack",
+                        "AmbushAttackIn",
                         out var ambushIntro_anim
                     )
                     .AddDelay(
@@ -177,13 +178,13 @@ namespace Actors.Monsters.Bosses
                         out var ambushIntro_attack
                     )
                     .AddComponent(
-                        new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
+                        new Do(true, () => monster._ambushAttackManager.ShowSmokeEffect()),
                         after: new(ambushIntro_attack)
                     )
                     .AddComponent(new AttackWithWeapon(
-                        cerberus._ambushWeapon,
+                        monster._ambushWeapon,
                         0,
-                        cerberus._ambushWeaponActiveDuration),
+                        monster._ambushWeaponActiveDuration),
                         after: new(ambushIntro_attack)
                     )
                     .AddAnimationComponent(
@@ -198,38 +199,49 @@ namespace Actors.Monsters.Bosses
                 );
 
                 AddChild(new MonsterAction("AmbushAttack")
-                    .AddComponent(new SetTimeScale(cerberus
+                    .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "AmbushAttack")
                         ?.TimeScale ?? 1f)
                     )
-                    .AddComponent(new Do(true, () => cerberus._ambushAttackManager.ShowIndicator()))
+                    .AddComponent(new Do(true, () => monster._ambushAttackManager.ShowIndicator()))
                     .AddDelay(
                         2f,
                         out var ambush_showIndicator
                     )
                     .AddAnimationComponent(
-                        out var ambush_attack_anim,
+                        "AmbushAttackOut",
+                        out var ambush_attack_animOut,
                         after: new(ambush_showIndicator)
                     )
                     .AddDelay(
+                        monster._ambushReadyTime,
+                        out var ambush_attack_await,
+                        after: new(ambush_attack_animOut)
+                    )
+                    .AddAnimationComponent(
+                        "AmbushAttackIn",
+                        out var ambush_attack_animIn,
+                        after: new(ambush_attack_await)
+                    )
+                    .AddDelay(
                         0.4f,
-                        out var ambush_attack, 
-                        after: new(ambush_showIndicator)
+                        out var ambush_attack,
+                        after: new(ambush_attack_await)
                     )
                     .AddComponent(
-                        new Do(true, () => cerberus._ambushAttackManager.ShowSmokeEffect()),
+                        new Do(true, () => monster._ambushAttackManager.ShowSmokeEffect()),
                         after: new(ambush_attack)
                     )
                     .AddComponent(new AttackWithWeapon(
-                        cerberus._ambushWeapon,
+                        monster._ambushWeapon,
                         0,
-                        cerberus._ambushWeaponActiveDuration),
+                        monster._ambushWeaponActiveDuration),
                         after: new(ambush_attack)
                     )
                     .AddAnimationComponent(
                         "Idle",
-                        after: new(ambush_attack_anim)
+                        after: new(ambush_attack_animIn)
                     )
                     .AddDelay(
                         3f,
@@ -331,15 +343,6 @@ namespace Actors.Monsters.Bosses
         protected override void OnDamaged(DamageInfo damageInfo)
         {
             StandaloneHitBrain.TryTakeDamage(damageInfo);
-        }
-
-        public void Die()
-        {
-            Brain.SelectChild(new SelectionRequest[]
-            {
-                new(true),
-                new(nameof(Dead), null, EntryPolicy.Unconditional, RerunPolicy.EnsureRunningAndInjectInputs)
-            });
         }
 
         protected override string GetDisplayContent()

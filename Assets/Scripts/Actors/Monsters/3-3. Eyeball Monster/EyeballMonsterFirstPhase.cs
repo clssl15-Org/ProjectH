@@ -96,7 +96,7 @@ namespace Actors.Monsters
             Brain = new EyeballMonsterFirstPhaseBrain(this);
         }
 
-        internal override void Died()
+        internal override void Die()
         {
             if (_revive)
             {
@@ -120,7 +120,7 @@ namespace Actors.Monsters
                 }
             }
 
-            base.Died();
+            base.Die();
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

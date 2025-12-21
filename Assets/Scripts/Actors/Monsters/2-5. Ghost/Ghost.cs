@@ -1,4 +1,6 @@
+using System;
 using Actors.Monsters.Actions;
+using Actors.Monsters.Bosses;
 using Actors.Monsters.Brains;
 using Infrastructure;
 using Infrastructure.StateMachines.BT;
@@ -101,6 +103,14 @@ namespace Actors.Monsters
         // Content
         protected override void Awake()
         {
+            if (!_swordPrefab)
+                throw new InvalidOperationException(
+                    $"{nameof(Ghost)}은(는) '{nameof(_swordPrefab)}'을(를) 가지고 있어야 합니다.");
+
+            if (!_rangedWeaponPrefab)
+                throw new InvalidOperationException(
+                    $"{nameof(Ghost)}은(는) '{nameof(_rangedWeaponPrefab)}'을(를) 가지고 있어야 합니다.");
+
             base.Awake();
         }
 

@@ -317,7 +317,7 @@ namespace Actors.Monsters
         internal void Knockback(Direction direction, float? knockbackForce = null) =>
             _knockbackHandler.Knockback(direction, knockbackForce);
 
-        internal virtual void Died()
+        internal virtual void Die()
         {
             var notification = new MonsterConditionData(MonsterCondition.Die);
             ConditionChanged?.Invoke(notification);
@@ -330,6 +330,7 @@ namespace Actors.Monsters
 
             Destroy(gameObject);
         }
+        void IMonsterInternal.Die() => Die();
 
         #region Interfaces
         void IMonsterInternal.Knockback(Direction direction, float? knockbackForce) => Knockback(direction, knockbackForce);

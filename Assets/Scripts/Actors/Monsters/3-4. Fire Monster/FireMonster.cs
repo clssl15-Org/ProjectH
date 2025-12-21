@@ -11,7 +11,7 @@ namespace Actors.Monsters
         // Property
         [Header("Fire Monster")]
         [SerializeField] private Weapon _firePrefab;
-        [SerializeField] private float _fireAppearTime;
+        [SerializeField, Min(0)] private float _fireAppearTime;
 
 
         // Internal
@@ -46,15 +46,19 @@ namespace Actors.Monsters
             public FireMonsterActionController(FireMonster monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
-                    .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireAppearTime)));
+                    .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireAppearTime))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -70,7 +74,6 @@ namespace Actors.Monsters
             _firePrefab.gameObject.SetActive(false);
 
             base.Awake();
-            Rigidbody.bodyType = RigidbodyType2D.Static;
         }
 
         protected override void Start()

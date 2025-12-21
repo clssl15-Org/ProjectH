@@ -60,8 +60,7 @@ namespace Actors.Monsters.Brains
             _notification?.Complete();
             _notification = null;
 
-            if (DestroyOwnerOnCompleted)
-                Owner.Destroy();
+            Owner.Die();
         }
     }
 }

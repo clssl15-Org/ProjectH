@@ -239,7 +239,7 @@ namespace Actors.Monsters.Bosses
             HP = Mathf.CeilToInt(hpRate * StatsInfo.MaxHP);
         }
 
-        public void Die()
+        public void SetToDead()
         {
             Brain.SelectChild(new SelectionRequest[]
             {

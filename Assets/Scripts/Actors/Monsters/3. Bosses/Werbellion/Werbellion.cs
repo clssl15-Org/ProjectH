@@ -283,15 +283,6 @@ namespace Actors.Monsters.Bosses
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
 
-        public void Die()
-        {
-            Brain.SelectChild(new SelectionRequest[]
-            {
-                new(true),
-                new(nameof(Dead), null, EntryPolicy.Unconditional, RerunPolicy.EnsureRunningAndInjectInputs)
-            });
-        }
-
         protected override string GetDisplayContent()
         {
             var message = base.GetDisplayContent();

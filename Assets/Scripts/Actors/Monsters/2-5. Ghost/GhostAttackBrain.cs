@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -33,15 +35,37 @@ namespace Actors.Monsters
                     Owner.IgnorePlayerInteraction = true;
 
 
-                var action = mode switch
-                {
-                    AttackMode.RangedAttack => "Attack_1",
-                    AttackMode.ExplosiveAttack => "Attack_2",
-                    _ => throw new ArgumentOutOfRangeException(
-                        nameof(mode), mode, Owner.FormatLogMessage($"알 수 없는 공격 패턴이 입력되었습니다."))
-                };
+                string action;
+                object[] inputs = null;
 
-                if (!Owner.TryDoAction(new(action, result => Complete(result)), out var reason))
+                switch (mode)
+                {
+                    case AttackMode.RangedAttack:
+                        action = "Attack_1";
+                        inputs = new object[]
+                        {
+                            null,
+                            (Func<IWeapon, Func<bool>>)(weapon =>
+                            {
+                                if (!weapon.gameObject.TryGetComponent<TriggerContactHandler>(out var contactHandler))
+                                    throw new ArgumentException(
+                                        Owner.FormatLogMessage($"{nameof(weapon)}은(는) '{nameof(TriggerContactHandler)}' 컴포넌트를 가지고 있어야 합니다."),
+                                        nameof(weapon));
+
+                                return () => !contactHandler.Collisions.Any();
+                            })};
+                        break;
+
+                    case AttackMode.ExplosiveAttack:
+                        action = "Attack_2";
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(mode), mode, Owner.FormatLogMessage($"알 수 없는 공격 패턴이 입력되었습니다."));
+                }
+
+                if (!Owner.TryDoAction(new(action, result => Complete(result), inputs), out var reason))
                 {
                     Debug.LogWarning(Owner.FormatLogMessage(
                         $"{action} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));

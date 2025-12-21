@@ -104,7 +104,7 @@ namespace Actors.Monsters
             Brain = new DarkMonsterFirstPhaseBrain(this);
         }
 
-        internal override void Died()
+        internal override void Die()
         {
             if (_revive && _secondPhasePrefab)
             {
@@ -117,7 +117,7 @@ namespace Actors.Monsters
                 second.transform.position = transform.position;
             }
 
-            base.Died();
+            base.Die();
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

@@ -5330,7 +5330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: _attackMode
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: _targetPlayer
@@ -5338,6 +5338,10 @@ PrefabInstance:
       objectReference: {fileID: 1897027830}
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: _useTargetPlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _useDebugStatsInfo
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
@@ -5350,7 +5354,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3235194340515565401, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4515591590893851459, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_LocalPosition.x

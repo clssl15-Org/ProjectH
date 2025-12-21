@@ -8,6 +8,6 @@ namespace Actors.Monsters.Bosses
         void InitializePlayer(IPlayer player);
         void DoAwake();
         void Revive(float hpRate);
-        void Die();
+        void SetToDead();
     }
 }

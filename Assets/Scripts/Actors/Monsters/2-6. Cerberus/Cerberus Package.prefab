@@ -527,6 +527,7 @@ MonoBehaviour:
   _dropAttack_roarEffectPosition: {fileID: 5248885615722147474}
   _ambushWeapon: {fileID: 7536443909710348846}
   _ambushWeaponActiveDuration: 0.083333336
+  _ambushReadyTime: 0.5
   _animationTimeScales:
   - AnimationName: BiteAttack
     TimeScale: 0.7
@@ -787,7 +788,7 @@ Transform:
   m_GameObject: {fileID: 5216843895455133573}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -20, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -825,7 +826,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -20.232954, y: 1.2272029}
+  m_Offset: {x: 0, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -836,7 +837,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 58.76363, y: 3.4544058}
+  m_Size: {x: 60, y: 1.5}
   m_EdgeRadius: 0
 --- !u!50 &991114150251288698
 Rigidbody2D:

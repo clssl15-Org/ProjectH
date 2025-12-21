@@ -87,7 +87,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 2.8799999, y: 2.8799999}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useManualScaleFactor: 0
-  _scaleFactor: 1
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &8221632711588496350
 Animator:
@@ -161,7 +161,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.35}
+  m_Offset: {x: 0, y: -0.42}
   m_Size: {x: 0.8, y: 0.4}
   m_Direction: 1
 --- !u!50 &6126144677956923757

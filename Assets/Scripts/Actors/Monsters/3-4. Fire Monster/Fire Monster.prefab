@@ -172,7 +172,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4076845378080737680}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -190,7 +190,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 5
 --- !u!114 &434647440944836257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +239,7 @@ MonoBehaviour:
   Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
   _stateDisplay: 
-  _firePrefab: {fileID: 8739377308858695228}
+  _firePrefab: {fileID: 3000534296517803573}
   _fireAppearTime: 0.42
 --- !u!1 &8739377308858695228
 GameObject:
@@ -272,7 +272,7 @@ Transform:
   m_GameObject: {fileID: 8739377308858695228}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.091, y: -0.295, z: 0}
+  m_LocalPosition: {x: -1, y: -0.15, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -488,6 +488,10 @@ PrefabInstance:
     - target: {fileID: 172354662256242199, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 872980189277596305, guid: b59366ce63277f24184eb407157ab667, type: 3}
+      propertyPath: m_Size.x
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3150504008527168885, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_Name
