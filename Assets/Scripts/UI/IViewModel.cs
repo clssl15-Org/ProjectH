@@ -8,8 +8,15 @@ namespace UI
         event Action Disposed;
     }
 
-    public interface IPositionedViewModel : IViewModel
+    public interface IPositionedVM : IViewModel
     {
         Vector2 WorldPosition { get; }
+        Vector2 WorldBottomPosition { get; }
+    }
+
+    public interface IHealthRateVM : IViewModel
+    {
+        HealthRateData HealthRate { get; }
+        event Action<HealthRateData> HealthRateChanged;
     }
 }

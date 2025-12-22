@@ -34,7 +34,7 @@ namespace Actors.Monsters
         // States
         private class SkeletonPigBrain : MonsterBrain
         {
-            public SkeletonPigBrain(SkeletonPig skeletonPig) : base(skeletonPig)
+            public SkeletonPigBrain(SkeletonPig owner) : base(owner)
             {
                 AddChild(new Alive()
                     //.AddChild(new Hit())
@@ -60,7 +60,7 @@ namespace Actors.Monsters
 
         private class SkeletonPigActionController : MonsterActionController
         {
-            public SkeletonPigActionController(SkeletonPig skeletonPig) : base(skeletonPig)
+            public SkeletonPigActionController(SkeletonPig monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent()
@@ -76,9 +76,9 @@ namespace Actors.Monsters
                         "Dash",
                         interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(
-                        skeletonPig._dashWeapon,
-                        skeletonPig._dashWeaponActiveTiming,
-                        skeletonPig._dashWeaponActiveDuration))
+                        monster._dashWeapon,
+                        monster._dashWeaponActiveTiming,
+                        monster._dashWeaponActiveDuration))
                 );
                 AddChild(new MonsterAction(AttackMode.StampAttack.ToString())
                     .AddAnimationComponent(
@@ -86,14 +86,14 @@ namespace Actors.Monsters
                         interruptPriority: InterruptPriority.High,
                         delayAfterPlay: 0.5f)
                     .AddComponent(new AttackWithWeapon(
-                        skeletonPig._shockwave,
-                        skeletonPig._shockwaveTime))
+                        monster._shockwave,
+                        monster._shockwaveTime))
                 );
                 AddChild(new MonsterAction(AttackMode.Roar.ToString())
                     .AddAnimationComponent("Roar")
                 );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddComponent(new SetTimeScale(skeletonPig._dieTimeScale))
+                    .AddComponent(new SetTimeScale(monster._dieTimeScale))
                     .AddAnimationComponent()
                 );
             }

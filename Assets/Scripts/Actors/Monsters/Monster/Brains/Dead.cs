@@ -9,7 +9,6 @@ namespace Actors.Monsters.Brains
     {
         // Front
         public float StayTimeAfterFinised { get; set; } = 0f;
-        public bool DestroyOwnerOnCompleted { get; set; } = true;
 
         // Internal
         private readonly string _monsterAction;
@@ -40,7 +39,7 @@ namespace Actors.Monsters.Brains
 
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
-                Callback: result => Complete(),
+                Callback: result => Complete(result),
                 Inputs: new[]
                 {
                     new PlayAnimation.AnimationPlayInfo(DelayAfterPlay: StayTimeAfterFinised)

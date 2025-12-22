@@ -26,7 +26,9 @@ namespace Infrastructure
         {
             if (!injection)
             {
-                Debug.LogError($"[{nameof(Injector)}] {nameof(injection)}이(가) 유효하지 않습니다.", this);
+                Debug.LogError(
+                    Ctx($"{nameof(injection)}이(가) 유효하지 않습니다."),
+                    this);
                 return;
             }
 
@@ -36,7 +38,9 @@ namespace Infrastructure
             var injectMethod = injectableInterfaceType.GetMethod("Inject");
             if (injectMethod == null)
             {
-                Debug.LogError($"IInjectable<{targetType.Name}> 에 Inject 메서드가 없습니다.", this);
+                Debug.LogError(
+                    Ctx($"IInjectable<{targetType.Name}> 에 Inject 메서드가 없습니다."),
+                    this);
                 return;
             }
 
@@ -56,6 +60,7 @@ namespace Infrastructure
             }
         }
 
+        private string Ctx(string message) => $"[{nameof(Injector)}] {message}";
 
 #if UNITY_EDITOR
         [CustomEditor(typeof(Injector))]

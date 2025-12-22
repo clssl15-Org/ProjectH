@@ -93,7 +93,7 @@ namespace Actors.Monsters.Bosses
                         )
                     )
                 );
-                AddChild(new Dead() { DestroyOwnerOnCompleted = false });
+                AddChild(new Dead());
             }
         }
 
@@ -342,6 +342,8 @@ namespace Actors.Monsters.Bosses
         {
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
+
+        internal override void Die() => Die(false);
 
         protected override string GetDisplayContent()
         {

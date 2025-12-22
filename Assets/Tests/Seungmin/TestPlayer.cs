@@ -16,9 +16,16 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     // Front
     public int CurrentPlatform { get; private set; }
 
-    public int HP { get; } = 100;
-    public int MaxHP { get; } = 100;
-    public bool IsAlive { get; } = true;
+    public int HP
+    {
+        get => _hp;
+        private set => _hp = Mathf.Clamp(value, 0, MaxHP);
+    } int _hp;
+    [field: SerializeField] public int MaxHP { get; set; } = 10;
+    [field: SerializeField] public bool IsAlive { get; set; } = true;
+
+    public event Action<PlayerCondition> ConditionChanged;
+    public event Action Destroyed;
 
     // Property
     [SerializeField] private PlatformManager _platformManager;
@@ -44,11 +51,6 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
 
     private IDisposable _damageTimer;
 
-#pragma warning disable CS0067
-    public event Action<PlayerCondition> ConditionChanged;
-    public event Action Destroyed;
-#pragma warning restore
-
 
     // Content
     private void Awake()
@@ -64,6 +66,8 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
 
         _contactHandler = GetComponent<TriggerContactHandler>();
         _contactHandler.TargetTags = new[] { "Monster" };
+
+        _hp = MaxHP;
     }
 
     void IInjectable<PlatformManager>.Inject(PlatformManager platformManager)
@@ -134,8 +138,16 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
     {
         print("Damaged: " + damage);
-
         _damageTimer?.Dispose();
+
+        HP -= damage;
+        if (HP <= 0)
+        {
+            if (gameObject)
+                Destroy(gameObject);
+
+            return;
+        }
 
         _renderer.material.color = Color.red;
         _damageTimer = new Timer(0.1f, succeeded =>
@@ -143,6 +155,8 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
             if (succeeded)
                 _renderer.material.color = Color.white;
         });
+
+        ConditionChanged?.Invoke(PlayerCondition.Damage);
     }
 
     private void UpdateStateDisplay()
@@ -157,5 +171,8 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     {
         _damageTimer?.Dispose();
         _damageTimer = null;
+
+        IsAlive = false;
+        Destroyed?.Invoke();
     }
 }

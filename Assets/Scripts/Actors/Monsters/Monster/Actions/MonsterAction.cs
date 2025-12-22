@@ -194,9 +194,9 @@ namespace Actors.Monsters.Actions
                     _completes.Add(component);
                 }
             }
-
+            
             if (_completes.Count >= _components.Count
-                || _components.Keys.All(c => c.InterruptPriority == InterruptPriority.Low))
+                || (_runnings.Count > 0 && _runnings.All(c => c.InterruptPriority == InterruptPriority.Low)))
             {
                 ExitWith(InterruptType.Completed);
                 return;
