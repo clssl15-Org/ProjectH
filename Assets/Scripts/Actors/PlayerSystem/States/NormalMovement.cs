@@ -32,22 +32,22 @@ namespace Actors.PlayerSystem
             }
             if (CharacterActions.changeSkill.Started)
             {
-                SkillManager.ChangeSkill();
+                Player.ChangeSkill();
             }
-
 
             if (CharacterActions.useSkill.Started)
             {
-                Player.SkillManager.UseSkill();
+                Player.UseSkill();
             }
             
             if (CharacterActions.rangedAttack.Started)
             {
-                CharacterStateController.EnqueueTransition<RangedAttack>();
+                Player.RangedAttack();
             }
 
             if (CharacterActions.ultimate.Started)
             {
+                Player.UseUltimate();
             }
         }
         public override void UpdateBehaviour(float dt)

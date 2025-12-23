@@ -70,6 +70,10 @@ namespace Actors.PlayerSystem
         {
             characterStateController.EnqueueTransition<Attack1>();
         }
+        public void RangedAttack()
+        {
+            characterStateController.EnqueueTransition<RangedAttack>();
+        }
 
         void Update()
         {
@@ -87,6 +91,14 @@ namespace Actors.PlayerSystem
         public void ChangeSkill()
         {
             skillManager.ChangeSkill();
+        }
+        public void UseSkill()
+        {
+            skillManager.UseSkill();
+        }
+        public void UseUltimate()
+        {
+            skillManager.UseUltimate();
         }
 
         void OnDestroy()
