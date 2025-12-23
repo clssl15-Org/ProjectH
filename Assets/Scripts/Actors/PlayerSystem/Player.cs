@@ -10,6 +10,10 @@ namespace Actors.PlayerSystem
     public class Player : MonoBehaviour, IPlayer
     {
         public int HP => playerHealth.CurrentHealth;
+        public int SelectedIndex
+        {
+            get => skillManager.SelectedIndex;
+        }
 
         public PlayerStatsSO playerStats;
         public bool Invincible
@@ -79,6 +83,10 @@ namespace Actors.PlayerSystem
             int damage = (int)(value * RouletteDamageMultiplier);
             RouletteDamageMultiplier = 1;
             return damage;
+        }
+        public void ChangeSkill()
+        {
+            skillManager.ChangeSkill();
         }
 
         void OnDestroy()
