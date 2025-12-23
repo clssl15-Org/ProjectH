@@ -1,5 +1,6 @@
 using System;
 using Actors.Monsters.Actions;
+using Actors.Monsters.Bosses;
 using Actors.Monsters.Brains;
 using Infrastructure;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace Actors.Monsters
 {
     [RequireComponent(typeof(StandaloneHitAction))]
-    public partial class StagBeetle : Monster<StagBeetleStats>
+    public partial class StagBeetle : Monster<StagBeetleStats>, IBoss
     {
         // Front
         [Header("Stag Beetle")]
@@ -23,6 +24,9 @@ namespace Actors.Monsters
         [Space]
         [SerializeField] private GameObject _roarIndicator;
 
+        [Header("Debug")]
+        [SerializeField] private bool _autoAwake = false;
+
         public enum AttackMode
         {
             Any,
@@ -30,7 +34,7 @@ namespace Actors.Monsters
             SpikeAttack,
             Roar
         }
-
+        private const string IsAwake = nameof(IsAwake);
         private KinematicProjectileLauncher _spikeLauncher;
 
 
@@ -39,7 +43,10 @@ namespace Actors.Monsters
         {
             public StagBeetleBrain(StagBeetle owner) : base(owner)
             {
+                Blackboard.Properties[IsAwake] = false;
+
                 AddChild(new Alive()
+                    .AddChild(new Idle(IsAwake))
                     .AddChild(new Hit(doKnockback: false))
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
@@ -82,7 +89,7 @@ namespace Actors.Monsters
                     .AddComponent(new ThreePhasedAction(AttackMode.RollAttack.ToString(),
                         n => n + "Anticipation", n => n + "Recoil",
                         beforePreAction: () => rollRight = monster.DetectedPlayer.transform.position.x > monster.transform.position.x,
-                        beforeMainAction: () => monster.IgnorePlayerInteraction = true,
+                        //beforeMainAction: () => monster.IgnorePlayerInteraction = true,
                         whileMainAction: (playtime, _) =>
                         {
                             if (monster.TryMove())
@@ -95,8 +102,8 @@ namespace Actors.Monsters
                                 monster.StopMoving();
 
                             return playtime <= monster._rollingTime;
-                        },
-                        beforePostAction: () => monster.IgnorePlayerInteraction = false)
+                        })
+                        //beforePostAction: () => monster.IgnorePlayerInteraction = false)
                         { InterruptPriority = InterruptPriority.High })
                     .AddComponent(new AttackWithWeapon(
                         monster._rollingAttackWeapon,
@@ -188,7 +195,13 @@ namespace Actors.Monsters
 
             Brain = new StagBeetleBrain(this);
             StandaloneHitBrain.DoKnockback = false;
+
+            // ------- Debug -------
+            if (_autoAwake)
+                Commence();
         }
+
+        public void Commence() => Brain.Blackboard.Properties[IsAwake] = true;
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
@@ -206,6 +219,16 @@ namespace Actors.Monsters
             //        new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
             //    });
             //}
+        }
+
+        protected override string GetDisplayContent()
+        {
+            var message = base.GetDisplayContent();
+
+            message += "----------------";
+            message += $"\nAwaken: {Brain.Blackboard.Properties[IsAwake]}";
+
+            return message;
         }
     }
 }

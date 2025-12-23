@@ -45,6 +45,14 @@ namespace UI
                 HealthRateChanged?.Invoke(HealthRate);
         }
 
+        public void DefaultAttack()
+        {
+            ThrowIfDisposed();
+            if (_player == null) return;
+
+            _player.DefaultAttack();
+        }
+
         public void Dispose()
         {
             if (IsDisposed) return;

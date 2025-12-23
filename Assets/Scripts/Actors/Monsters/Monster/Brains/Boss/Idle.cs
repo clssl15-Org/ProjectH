@@ -50,9 +50,16 @@ namespace Actors.Monsters.Bosses
                     $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
+                return;
             }
 
+            Owner.IgnorePlayerInteraction = true;
             _opened?.Invoke();
+        }
+
+        protected override void OnHalt(DetailedNodeStatus _)
+        {
+            Owner.IgnorePlayerInteraction = false;
         }
     }
 }

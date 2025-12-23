@@ -47,36 +47,36 @@ namespace Infrastructure
             _currentCollisions.Clear();
             for (int i = 0; i < count; i++)
             {
-                var col = _overlapResults[i];
-                if (col && IsTarget(col))
-                    _currentCollisions.Add(col);
+                var collision = _overlapResults[i];
+                if (collision && IsTarget(collision))
+                    _currentCollisions.Add(collision);
             }
 
-            foreach (var col in _currentCollisions)
+            foreach (var collision in _currentCollisions)
             {
-                if (_previousCollisions.Contains(col))
+                if (_previousCollisions.Contains(collision))
                     continue;
 
-                col
+                collision
                     .GetOrAddComponent<DestroyEventHandler>()
-                    .Register((this, col), () =>
+                    .Register((this, collision), () =>
                     {
-                        _previousCollisions.Remove(col);
-                        CollisionExited?.Invoke(col);
+                        _previousCollisions.Remove(collision);
+                        CollisionExited?.Invoke(collision);
                     });
 
-                CollisionEntered?.Invoke(col);
+                CollisionEntered?.Invoke(collision);
             }
 
-            foreach (var col in _previousCollisions)
+            foreach (var collision in _previousCollisions)
             {
-                if (_currentCollisions.Contains(col) || !IsTarget(col))
+                if (_currentCollisions.Contains(collision) || !IsTarget(collision))
                     continue;
 
-                if (col.TryGetComponent<DestroyEventHandler>(out var destHandler))
-                    destHandler.Remove((this, col));
+                if (collision.TryGetComponent<DestroyEventHandler>(out var destHandler))
+                    destHandler.Remove((this, collision));
 
-                CollisionExited?.Invoke(col);
+                CollisionExited?.Invoke(collision);
             }
 
             _previousCollisions.Clear();
@@ -85,12 +85,12 @@ namespace Infrastructure
 
         private void OnDisable()
         {
-            foreach (var col in _previousCollisions)
+            foreach (var collision in _previousCollisions)
             {
-                if (col.TryGetComponent<DestroyEventHandler>(out var destHandler))
-                    destHandler.Remove((this, col));
+                if (collision.TryGetComponent<DestroyEventHandler>(out var destHandler))
+                    destHandler.Remove((this, collision));
 
-                CollisionExited?.Invoke(col);
+                CollisionExited?.Invoke(collision);
             }
 
             _previousCollisions.Clear();

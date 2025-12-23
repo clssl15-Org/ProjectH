@@ -32,6 +32,7 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     [SerializeField] private TriggerContactHandler _contactHandler;
 
     // Inspector
+    public bool StandaloneInput = true;
     [Header("Move")]
     [Min(0)] public float MoveSpeed = 1f;
     [Header("Attack")]
@@ -96,13 +97,13 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         else
             CurrentPlatform = -1;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            Attack();
+        if (StandaloneInput && Input.GetKeyDown(KeyCode.Space))
+            DefaultAttack();
 
         UpdateStateDisplay();
     }
 
-    private void Attack()
+    public void DefaultAttack()
     { 
         if (!_contactHandler || _contactHandler.Collisions.Count == 0)
             return;

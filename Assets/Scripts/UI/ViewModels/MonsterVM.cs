@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using Actors;
+using Actors.Monsters.Brains;
 using UnityEngine;
 
 namespace UI
@@ -39,6 +41,7 @@ namespace UI
         }
 
         public event Action<HealthRateData> HealthRateChanged;
+        public event Action Dead;
         public event Action Disposed;
         public bool IsDisposed { get; private set; } = false;
 
@@ -68,6 +71,8 @@ namespace UI
 
             if (condition.Is(MonsterCondition.Heal, MonsterCondition.Damaged))
                 HealthRateChanged?.Invoke(HealthRate);
+            if (condition.Is(MonsterCondition.Die))
+                Dead?.Invoke();
         }
 
         public void Dispose()
@@ -78,10 +83,20 @@ namespace UI
             _monster.ConditionChanged -= Update;
             _monster.Destroyed -= Dispose;
 
-            Disposed?.Invoke();
-            Disposed = null;
+            if (Disposed != null)
+                foreach (Action disposed in Disposed.GetInvocationList())
+                {
+                    if (Disposed == null)
+                        break;
+
+                    if (Disposed.GetInvocationList().Contains(disposed))
+                        disposed();
+                }
 
             HealthRateChanged = null;
+            Dead = null;
+            Disposed = null;
+
             _monster = null;
         }
 

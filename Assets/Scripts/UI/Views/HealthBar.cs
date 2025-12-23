@@ -9,11 +9,10 @@ namespace UI
         public event Action Destroyed;
 
         protected RectTransform Transform { get; private set; }
-        protected IHealthRateVM HeanthRateVM { get; private set; }
+        protected IHealthRateVM HealthRateVM { get; private set; }
 
         [SerializeField] RectTransform _mask;
         private float _originalWidth;
-
 
 
         protected virtual void Awake()
@@ -29,35 +28,33 @@ namespace UI
 
         public void Connect(IHealthRateVM vm)
         {
-            if (HeanthRateVM == vm)
+            if (vm == null)
+                throw new ArgumentNullException(
+                    nameof(vm),
+                    $"[{nameof(HealthBar)}] 인자는 null일 수 없습니다.");
+            if (HealthRateVM == vm)
                 return;
-            if (HeanthRateVM != null)
+            if (HealthRateVM != null)
                 throw new InvalidOperationException(
-                    $"{nameof(IHealthRateVM)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
+                    $"[{nameof(HealthBar)}] {nameof(HealthRateVM)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
 
-            HeanthRateVM = vm;
-            HeanthRateVM.HealthRateChanged += SetHealthRate;
-            HeanthRateVM.Disposed += Destroy;
+            HealthRateVM = vm;
+            HealthRateVM.HealthRateChanged += SetHealthRate;
+            HealthRateVM.Disposed += Destroy;
 
-            SetHealthRate(HeanthRateVM.HealthRate);
+            SetHealthRate(HealthRateVM.HealthRate);
             return;
         }
 
         public void Disconnect()
         {
-            if (HeanthRateVM == null)
+            if (HealthRateVM == null)
                 return;
 
-            HeanthRateVM.HealthRateChanged -= SetHealthRate;
-            HeanthRateVM.Disposed -= Destroy;
+            HealthRateVM.HealthRateChanged -= SetHealthRate;
+            HealthRateVM.Disposed -= Destroy;
 
-            HeanthRateVM = null;
-        }
-
-        protected virtual void Update()
-        {
-            if (HeanthRateVM == null)
-                return;
+            HealthRateVM = null;
         }
 
         private void SetHealthRate(HealthRateData data)

@@ -13,12 +13,12 @@ namespace Infrastructure
                     component.Enabling?.Invoke();
                 })
                 .SetAction(EnableEventType.Enabled, () => component.Enabled?.Invoke())
-               .SetAction(EnableEventType.Disabling, () => component.Disabling?.Invoke())
-               .SetAction(EnableEventType.Disabled, () =>
-               {
-                   component.gameObject.SetActive(false);
-                   component.Disabled?.Invoke();
-               });
+                .SetAction(EnableEventType.Disabling, () => component.Disabling?.Invoke())
+                .SetAction(EnableEventType.Disabled, () =>
+                {
+                    component.gameObject.SetActive(false);
+                    component.Disabled?.Invoke();
+                });
         }
     }
 }

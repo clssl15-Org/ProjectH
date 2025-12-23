@@ -39,6 +39,8 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
+        void DefaultAttack();
+
 #pragma warning disable IDE1006
         string name { get; }
         GameObject gameObject { get; }

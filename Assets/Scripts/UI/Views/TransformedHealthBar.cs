@@ -15,14 +15,12 @@ namespace UI
             _camera = Camera.main;
         }
 
-        protected override void Update()
+        protected virtual void Update()
         {
-            if (HeanthRateVM == null)
+            if (HealthRateVM == null)
                 return;
 
-            base.Update();
-
-            if (HeanthRateVM is IPositionedVM pvm)
+            if (HealthRateVM is IPositionedVM pvm)
                 Transform.position
                     = _camera.WorldToScreenPoint(pvm.WorldBottomPosition)
                     + (Vector3)_localPosition;

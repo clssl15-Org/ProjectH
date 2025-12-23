@@ -58,5 +58,10 @@ namespace Actors.PlayerSystem
             else
                 CurrentPlatform = -1;
         }
+
+        public void DefaultAttack()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
