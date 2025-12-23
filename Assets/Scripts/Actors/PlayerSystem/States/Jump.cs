@@ -19,6 +19,10 @@ namespace Actors.PlayerSystem
         [SerializeField]
         private float jumpInterval = 0.1f;
 
+        [Header("Juicy Jump Settings")]
+        [SerializeField] private float jumpBufferTime = 0.15f; // 점프 입력 저장 시간
+        private float jumpBufferCounter; // 버퍼 타이머
+
         private int extraJumpCount;
 
         protected string heightParameter = "Height";
@@ -31,7 +35,15 @@ namespace Actors.PlayerSystem
         {
             if (isDone)
             {
-                CharacterStateController.EnqueueTransition<NormalMovement>();
+                // 착지 직전에 점프를 눌러서 버퍼가 남아있다면 다시 Jump 상태를 재시작
+                if (jumpBufferCounter > 0f)
+                {
+                    CharacterStateController.EnqueueTransition<Jump>();
+                }
+                else
+                {
+                    CharacterStateController.EnqueueTransition<NormalMovement>();
+                }
             }
             if (CharacterActions.attack.Started)
             {
@@ -49,10 +61,10 @@ namespace Actors.PlayerSystem
         public override void EnterBehaviour(float dt)
         {
             ResetJump();
-            CharacterActor.Rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            ApplyJump(jumpForce);
             //CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
-            extraJumpCount--;
-            subsequentJumpForce = jumpForce * subsequentJumpMultiplier;
+            //extraJumpCount--;
+            //subsequentJumpForce = jumpForce * subsequentJumpMultiplier;
         }
         public override void UpdateBehaviour(float dt)
         {
@@ -61,6 +73,23 @@ namespace Actors.PlayerSystem
             float jumpIntervalDt = dt / jumpInterval;
             jumpCursor += jumpIntervalDt;
 
+            if (CharacterActions.jump.Started)
+            {
+                jumpBufferCounter = jumpBufferTime;
+            }
+            else
+            {
+                jumpBufferCounter -= dt;
+            }
+
+            if (jumpBufferCounter > 0f && extraJumpCount > 0 && (jumpCursor >= 1f))
+            {
+                ApplyJump(subsequentJumpForce);
+                subsequentJumpForce *= subsequentJumpMultiplier;
+                // 버퍼를 소모했으므로 초기화
+                jumpBufferCounter = 0;
+            }
+            /*
             if (CharacterActions.jump.Started && extraJumpCount > 0 && (jumpCursor >= 1f))
             {
                 CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, subsequentJumpForce);
@@ -69,12 +98,20 @@ namespace Actors.PlayerSystem
                 jumpCursor = 0f;
 
                 CharacterActor.Animator.Rebind();
-            }
+            }*/
 
             if (CharacterActor.IsLanded)
             {
                 isDone = true;
             }
+        }
+        private void ApplyJump(float force)
+        {
+            CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, force);
+            extraJumpCount--;
+            jumpCursor = 0f;
+            subsequentJumpForce *= subsequentJumpMultiplier;
+            CharacterActor.Animator.Rebind();
         }
         private void ProcessVelocity(float dt)
         {
@@ -87,6 +124,7 @@ namespace Actors.PlayerSystem
             isDone = false;
             extraJumpCount = maxJumps;
             jumpCursor = 0f;
+            subsequentJumpForce = jumpForce;
         }
     }
 }
