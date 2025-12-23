@@ -136,8 +136,8 @@ namespace Actors.PlayerSystem
             if (!isGroundedFlag)
                 return;
 
-            IsLanded = IsGrounded && (Velocity.y == 0f);
-
+            IsLanded = IsGrounded && ( Velocity.y > -2f && Velocity.y <= 2f);
+            print(Velocity.y);
             if (IsLanded)
             {
                 isGroundedFlag = false;
