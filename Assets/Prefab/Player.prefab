@@ -407,6 +407,7 @@ GameObject:
   - component: {fileID: 6159009817700332398}
   - component: {fileID: 2303108416702557745}
   - component: {fileID: 916220530954613708}
+  - component: {fileID: 5750367696136085131}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -693,6 +694,19 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: dd29d89d23ac32842b9a72d2ba713487, type: 2}
   hitDuration: 0.4
   knockbackPower: 5
+--- !u!114 &5750367696136085131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb16ffa1e5189d749ace1e1b35158e42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 0}
 --- !u!1 &9172967021588867564
 GameObject:
   m_ObjectHideFlags: 0
