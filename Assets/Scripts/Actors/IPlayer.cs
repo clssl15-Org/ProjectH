@@ -39,12 +39,10 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
-<<<<<<< Updated upstream
-=======
+
         void ChangeSkill();
         void UseSkill();
         void UseUltimate();
->>>>>>> Stashed changes
         void DefaultAttack();
 
         int SelectedSkillIndex { get; }

@@ -24,13 +24,10 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     [field: SerializeField] public int MaxHP { get; set; } = 10;
     [field: SerializeField] public bool IsAlive { get; set; } = true;
 
-<<<<<<< Updated upstream
-=======
     [field: SerializeField] public int SelectedSkillIndex { get; set; } = 0;
 
     public float UltimateGauge => 0;
 
->>>>>>> Stashed changes
     public event Action<PlayerCondition> ConditionChanged;
     public event Action Destroyed;
 

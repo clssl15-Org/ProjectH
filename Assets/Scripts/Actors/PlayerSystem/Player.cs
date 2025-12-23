@@ -23,16 +23,12 @@ namespace Actors.PlayerSystem
 
         public int CurrentPlatform { get; private set; } = -1;
 
-<<<<<<< Updated upstream
-=======
         public GameObject StatesGO;
 
         public SkillManager SkillManager => skillManager;
 
         public float UltimateGauge => 0;
         public float RouletteDamageMultiplier = 1;
-
->>>>>>> Stashed changes
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
