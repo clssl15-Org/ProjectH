@@ -35,13 +35,12 @@ namespace UI
         {
             _player = player;
 
-            // 여기서 연결 처리
             _healthBar.Connect(_player);
 
-            _skillBtn.onClick.AddListener(() => { });
-            _defaultAttackBtn.onClick.AddListener(() => _player.DefaultAttack());
-            _rangedAttackBtn.onClick.AddListener(() => { });
-            _ultimateBtn.onClick.AddListener(() => { });
+            _skillBtn.onClick.AddListener(_player.UseSkill);
+            _defaultAttackBtn.onClick.AddListener(_player.DefaultAttack);
+            _rangedAttackBtn.onClick.AddListener(_player.RangedAttack);
+            //_ultimateBtn.onClick.AddListener(null);
         }
 
         public void Disconnect()
@@ -49,8 +48,12 @@ namespace UI
             if (_player == null)
                 return;
 
-            // 여기서 연결 해제
             _healthBar.Disconnect();
+
+            _skillBtn.onClick.RemoveAllListeners();
+            _defaultAttackBtn.onClick.RemoveAllListeners();
+            _rangedAttackBtn.onClick.RemoveAllListeners();
+            _ultimateBtn.onClick.RemoveAllListeners();
 
             _player = null;
         }
@@ -80,10 +83,8 @@ namespace UI
                 if (_currentSelectedButtons.Contains(btn))
                     continue;
 
-                // 시각적 효과 해제 (Pressed -> Normal/Highlighted)
                 ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerUpHandler);
-                // 버튼 뗐을 때 하이라이트 잔상 없애기
-                EventSystem.current.SetSelectedGameObject(null); 
+                EventSystem.current.SetSelectedGameObject(null); // 버튼 뗐을 때 하이라이트 잔상 없애기
             }
 
             foreach (var btn in _currentSelectedButtons)

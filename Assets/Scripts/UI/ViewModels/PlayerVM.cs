@@ -45,6 +45,21 @@ namespace UI
                 HealthRateChanged?.Invoke(HealthRate);
         }
 
+        #region Skill Inputs
+        public void ChangeSkill()
+        {
+            ThrowIfDisposed();
+            if (_player == null) return;
+
+            _player.ChangeSkill();
+        }
+        public void UseSkill()
+        {
+            ThrowIfDisposed();
+            if (_player == null) return;
+
+            //_player.UseSkill();
+        }
         public void DefaultAttack()
         {
             ThrowIfDisposed();
@@ -52,6 +67,14 @@ namespace UI
 
             _player.DefaultAttack();
         }
+        public void RangedAttack()
+        {
+            ThrowIfDisposed();
+            if (_player == null) return;
+
+            _player.RangedAttack();
+        }
+        #endregion
 
         public void Dispose()
         {

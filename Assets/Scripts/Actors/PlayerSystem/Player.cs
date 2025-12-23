@@ -10,7 +10,7 @@ namespace Actors.PlayerSystem
     public class Player : MonoBehaviour, IPlayer
     {
         public int HP => playerHealth.CurrentHealth;
-        public int SelectedIndex
+        public int SelectedSkillIndex
         {
             get => skillManager.SelectedSkillIndex;
         }
