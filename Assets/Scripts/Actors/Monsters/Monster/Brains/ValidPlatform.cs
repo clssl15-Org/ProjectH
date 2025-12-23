@@ -12,7 +12,6 @@ namespace Actors.Monsters.Brains
             LoopType = LoopType.Forced;
         }
 
-
         public override bool CheckCondition()
         {
             if (Blackboard.Committing)

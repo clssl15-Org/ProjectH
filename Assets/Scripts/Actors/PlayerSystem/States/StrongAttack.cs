@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rules;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class StrongAttack : CharacterState
     {

@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Actors.Monsters.Stage3Bosses
+namespace Actors.Monsters.Bosses
 {
     internal interface ITwinBoss : IMonsterInternal
     { 
-        const string IsAwaken = "IsAwaken";
+        const string IsAwake = nameof(IsAwake);
+        bool IsExhausted { get; set; }
 
-        void Die();
+        void InitializePlayer(IPlayer player);
+        void DoAwake();
+        void Revive(float hpRate);
+        void SetToDead();
     }
 }

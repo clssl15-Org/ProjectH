@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -10,6 +12,11 @@ namespace Actors.Monsters
     {
         private class GhostAttackBrain : BTNode<IMonsterInternal, MonsterBlackboard>
         {
+            // Internal
+            private MonsterConditionData _notification;
+
+
+            // Content
             public GhostAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
             protected override void OnOpen(params object[] _)
@@ -33,29 +40,64 @@ namespace Actors.Monsters
                     Owner.IgnorePlayerInteraction = true;
 
 
-                var action = mode switch
-                {
-                    AttackMode.RangedAttack => "Attack_1",
-                    AttackMode.ExplosiveAttack => "Attack_2",
-                    _ => throw new ArgumentOutOfRangeException(
-                        nameof(mode), mode, Owner.FormatLogMessage($"알 수 없는 공격 패턴이 입력되었습니다."))
-                };
+                string action;
+                object[] inputs = null;
+                bool isRanged;
 
-                if (!Owner.TryDoAction(new(action, result => Complete(result)), out var reason))
+                switch (mode)
+                {
+                    case AttackMode.RangedAttack:
+                        action = "Attack_1";
+                        inputs = new object[]
+                        {
+                            null,
+                            (Func<IWeapon, Func<bool>>)(weapon =>
+                            {
+                                if (!weapon.gameObject.TryGetComponent<TriggerContactHandler>(out var contactHandler))
+                                    throw new ArgumentException(
+                                        Owner.FormatLogMessage($"{nameof(weapon)}은(는) '{nameof(TriggerContactHandler)}' 컴포넌트를 가지고 있어야 합니다."),
+                                        nameof(weapon));
+
+                                return () => !contactHandler.Collisions.Any();
+                            })
+                        };
+                        isRanged = true;
+                        break;
+
+
+                    case AttackMode.ExplosiveAttack:
+                        action = "Attack_2";
+                        isRanged = false;
+                        break;
+
+
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(mode), mode, Owner.FormatLogMessage($"알 수 없는 공격 패턴이 입력되었습니다."));
+                }
+
+                if (!Owner.TryDoAction(new(action, result => Complete(result), inputs), out var reason))
                 {
                     Debug.LogWarning(Owner.FormatLogMessage(
                         $"{action} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));
 
                     Complete(false);
+                    return;
                 }
 
                 Blackboard.Committing = true;
+
+                _notification = new MonsterConditionData(MonsterCondition.Attack, isRanged);
+                Owner.NotifyCondition(_notification);
             }
 
             protected override void OnHalt(DetailedNodeStatus _)
             {
                 Owner.IgnorePlayerInteraction = false;
                 Blackboard.Committing = false;
+
+                _notification?.Complete();
+                _notification = null;
             }
         }
     }

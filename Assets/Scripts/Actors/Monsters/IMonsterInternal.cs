@@ -1,6 +1,8 @@
+using System;
 using Actors.Monsters.Actions;
 using Infrastructure;
 using UnityEngine;
+using World;
 
 namespace Actors.Monsters
 {
@@ -10,23 +12,26 @@ namespace Actors.Monsters
         Direction Direction { get; set; }
         bool IsAlive { get; set; }
 
+        event Action<IMonsterConditionData> ConditionChanged;
+        event Action Destroyed;
+
         int CurrentPlatform { get; set; }
         bool IgnorePlayerInteraction { get; set; }
 
         MonsterStats StatsInfo { get; }
-        SceneAssetsLibrary SceneAssetsLibrary { get; }
+        GameAssetLibrary GameAssetsLibrary { get; }
+        Configuration Configuration { get; }
         SpriteRenderer SpriteRenderer { get; }
         Rigidbody2D Rigidbody { get; }
         Collider2D Collider { get; }
 
+        PlatformManager PlatformManager { get; }
         PlatformDetector PlatformDetector { get; }
         GameObject DetectedPlayer { get; }
 
         MonsterAnimationPlayer AnimationPlayer { get; }
         StandaloneHitAction StandaloneHitAction { get; }
         MonsterActionController ActionController { get; }
-
-        void ReviseSpriteSize();
 
         #region Low-level Actions
         bool TryMove();
@@ -35,6 +40,8 @@ namespace Actors.Monsters
         
         void Knockback(Direction direction, float? knockbackForce = null);
         void NotifyCondition(IMonsterConditionData data);
+
+        void Die();
         #endregion
 
         #region High-level Actions
@@ -50,9 +57,12 @@ namespace Actors.Monsters
         void StopCurrentAction();
         #endregion
 
+        void Destroy();
+
 #pragma warning disable IDE1006
         string name { get; }
         Transform transform { get; }
+        GameObject gameObject { get; }
 #pragma warning restore
         string FormatLogMessage(string message);
     }

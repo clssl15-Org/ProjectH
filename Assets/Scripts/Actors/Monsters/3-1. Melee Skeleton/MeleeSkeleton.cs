@@ -8,39 +8,55 @@ namespace Actors.Monsters
     [RequireComponent(typeof(StandaloneHitAction))]
     public class MeleeSkeleton : Monster<MonsterStats>
     {
-        // Internal
+        [Header("Melee Skeleton")]
+        [SerializeField] private Weapon _weapon;
+
+        // Stats
         private class MeleeSkeletonBrain : MonsterBrain
         {
-            public MeleeSkeletonBrain(IMonsterInternal owner) : base(owner)
+            public MeleeSkeletonBrain(MeleeSkeleton owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(Engaged.RangeType.Contact)
+                            .AddChild(new Engaged(
+                                    Engaged.RangeType.Ranged,
+                                    Mathf.Abs(
+                                        owner._weapon?.transform.localPosition.x
+                                        ?? Engaged.DefaultTargetAttackRange)
+                                )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
-                            .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                                .AddChild(new DeadEnd())
+                            )
+                            .AddChild(new Attack(false))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
 
         private class MeleeSkeletonActionController : MonsterActionController
         {
-            public MeleeSkeletonActionController(IMonsterInternal monster) : base(monster)
+            public MeleeSkeletonActionController(MeleeSkeleton monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Walk)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new AttackWithWeapon(monster._weapon))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelay()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
@@ -52,6 +68,13 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+
+            if (_weapon)
+                _weapon.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new MeleeSkeletonActionController(this);
             ActionController.Enter();

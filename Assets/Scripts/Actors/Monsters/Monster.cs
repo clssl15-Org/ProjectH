@@ -4,19 +4,27 @@ using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure;
 using UnityEngine;
+using World;
 
 namespace Actors.Monsters
 {
-    [RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
+    [RequireComponent(typeof(SpriteRenderer), typeof(SpriteSizeHandler), typeof(Animator))]
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlatformDetector))]
-    public abstract partial class Monster<TStats> : MonoBehaviour, IMonsterInternal, IMonster where TStats : MonsterStats
+    public abstract partial class Monster<TStats>
+        : MonoBehaviour, IMonster, IMonsterInternal where TStats : MonsterStats
     {
         // Front
         public int HP
         {
             get => _hp;
-            internal set => _hp = value;
+            internal set
+            {
+                if (StatsInfo != null)
+                    _hp = Mathf.Clamp(value, 0, StatsInfo.MaxHP);
+                else
+                    _hp = value;
+            }
         }
 
         public Direction Direction
@@ -40,9 +48,10 @@ namespace Actors.Monsters
             set
             {
                 _ignorePlayerInternaction = value;
+                if (DamageReceiver) DamageReceiver.Interactable = !value;
 
                 var layer = value
-                    ? LayerMask.GetMask("Player")
+                    ? LayerMask.GetMask("Player", "Player Weapon")
                     : default;
 
                 Collider.excludeLayers = layer;
@@ -68,9 +77,9 @@ namespace Actors.Monsters
         [SerializeField] internal bool DefaultIsRight;
 
         [Header("Bindings")]
-        [SerializeField] internal SceneAssetsLibrary SceneAssetsLibrary;
+        [SerializeField] internal GameAssetLibrary GameAssetsLibrary;
+        [SerializeField] internal Configuration Configuration;
         [SerializeField] internal PlatformManager PlatformManager;
-        SceneAssetsLibrary IMonsterInternal.SceneAssetsLibrary => SceneAssetsLibrary;
 
 
         // Display
@@ -86,7 +95,7 @@ namespace Actors.Monsters
         internal Rigidbody2D Rigidbody { get; private set; }
 
         public int CurrentPlatform { get; set; } = 1;
-        internal PlatformDetector PlatformDetector { get; private set; }
+        internal virtual PlatformDetector PlatformDetector { get; private set; }
         internal virtual GameObject DetectedPlayer => _playerDetector.CurrentPlayer;
 
         private MonsterPlayerDetector _playerDetector;
@@ -111,12 +120,14 @@ namespace Actors.Monsters
         Collider2D IMonsterInternal.Collider => Collider;
         Rigidbody2D IMonsterInternal.Rigidbody => Rigidbody;
         int IMonsterInternal.CurrentPlatform { get => CurrentPlatform; set => CurrentPlatform = value; }
+        GameAssetLibrary IMonsterInternal.GameAssetsLibrary => GameAssetsLibrary;
+        Configuration IMonsterInternal.Configuration => Configuration;
+        PlatformManager IMonsterInternal.PlatformManager => PlatformManager;
         PlatformDetector IMonsterInternal.PlatformDetector => PlatformDetector;
         GameObject IMonsterInternal.DetectedPlayer => DetectedPlayer;
         MonsterAnimationPlayer IMonsterInternal.AnimationPlayer => AnimationPlayer;
         StandaloneHitAction IMonsterInternal.StandaloneHitAction => StandaloneHitAction;
         MonsterActionController IMonsterInternal.ActionController => ActionController;
-        void IMonsterInternal.ReviseSpriteSize() => ReviseSpriteSize();
         #endregion
 
         // Internal 
@@ -126,21 +137,49 @@ namespace Actors.Monsters
 
 
         // Content
+        #region Injections
         /// <summary>
         /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
         /// </summary>
-        public void Initialize(SceneAssetsLibrary sceneAssetsLibrary, PlatformManager platformManager)
+        public void Initialize(
+            GameAssetLibrary gameAssetsLibrary,
+            Configuration configuration,
+            PlatformManager platformManager)
         {
-            SceneAssetsLibrary = sceneAssetsLibrary;
+            Inject(gameAssetsLibrary);
+            Inject(configuration);
+            Inject(platformManager);
+        }
+
+        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetsLibrary) => Inject(gameAssetsLibrary);
+        void IInjectable<Configuration>.Inject(Configuration configuration) => Inject(configuration);
+        void IInjectable<PlatformManager>.Inject(PlatformManager platformManager) => Inject(platformManager);
+
+        private void Inject(GameAssetLibrary gameAssetsLibrary)
+        {
+            GameAssetsLibrary = gameAssetsLibrary;
+        }
+
+        private void Inject(Configuration configuration)
+        {
+            Configuration = configuration;
+
+            if (TryGetComponent<SpriteSizeHandler>(out var sizeHandler))
+                sizeHandler.Initialize(configuration, true);
+        }
+
+        private void Inject(PlatformManager platformManager)
+        {
             PlatformManager = platformManager;
         }
+        #endregion
 
         protected virtual void Awake()
         {
             Collider = GetComponent<Collider2D>();
             Rigidbody = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
-            TryGetComponent(out _spriteSizeHandler);
+            _spriteSizeHandler = GetComponent<SpriteSizeHandler>();
 
             _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
             if (_playerDetector) _playerDetector.PlayerDetected += OnPlayerDetected;
@@ -150,6 +189,7 @@ namespace Actors.Monsters
             if (!DamageReceiver) throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(DamageReceiver)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
+            DamageReceiver.Interactable = !IgnorePlayerInteraction;
             DamageReceiver.Damaged += OnDamaged;
 
             if (TryGetComponent<StandaloneHitAction>(out var standaloneHitAction))
@@ -161,7 +201,9 @@ namespace Actors.Monsters
             }
 
             _knockbackHandler = new KnockbackHandler(Rigidbody);
-            AnimationPlayer = new MonsterAnimationPlayer(GetComponent<Animator>());
+            AnimationPlayer = new MonsterAnimationPlayer(
+                GetComponent<Animator>(),
+                () => _spriteSizeHandler?.RequestApplyScaleFactor());
 
             _direction = DefaultIsRight ? Direction.Right : Direction.Left;
             _hp = StatsInfo.MaxHP;
@@ -178,15 +220,17 @@ namespace Actors.Monsters
                 throw new InvalidOperationException(FormatLogMessage(
                     $"{nameof(PlatformManager)}이(가) 등록되어 있지 않기 때문에 몬스터를 시작할 수 없습니다."));
 
-            if (!SceneAssetsLibrary)
+            if (!GameAssetsLibrary)
                 Debug.LogWarning(FormatLogMessage(
-                    $"이 몬스터는 {nameof(SceneAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
+                    $"이 몬스터는 {nameof(GameAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
                     "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
-            PlatformDetector = GetComponent<PlatformDetector>();
-            PlatformDetector.SetPlatformManager(PlatformManager);
+            var _platformDetector = GetComponent<PlatformDetector>();
+            PlatformDetector = _platformDetector;
+            _platformDetector.SetPlatformManager(PlatformManager);
             #endregion
 
+            _spriteSizeHandler.RequestApplyScaleFactor();
 
             if (RandomizeStartDirection)
             {
@@ -210,13 +254,15 @@ namespace Actors.Monsters
             ActionController?.Update();
         }
 
-        internal void ReviseSpriteSize() => _spriteSizeHandler?.ApplyRatio();
         protected virtual void OnPlayerDetected(GameObject player) { }
         protected virtual void OnDamaged(DamageInfo damageInfo)
         {
             HP -= damageInfo.Damage;
 
-            var notification = new MonsterConditionData(MonsterCondition.Damage);
+            var notification = new MonsterConditionData(
+                MonsterCondition.Damaged,
+                payload: damageInfo);
+
             ConditionChanged?.Invoke(notification);
             notification.Complete();
         }
@@ -258,8 +304,11 @@ namespace Actors.Monsters
             }
 
 
-            Debug.LogWarning(FormatLogMessage(
-                $"현재 입력된 {nameof(direction)}({Direction})이(가) 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. false를 반환합니다."));
+            Debug.LogWarning(
+                FormatLogMessage(
+                    $"현재 입력된 {nameof(direction)}({Direction})이(가) 유효하지 않기 때문에 TryMove 메서드의 평가를 진행할 수 없습니다. " +
+                    $"false를 반환합니다."),
+                this);
 
             return false;
         }
@@ -273,7 +322,8 @@ namespace Actors.Monsters
         internal void Knockback(Direction direction, float? knockbackForce = null) =>
             _knockbackHandler.Knockback(direction, knockbackForce);
 
-        internal virtual void Died()
+        internal virtual void Die() => Die(true);
+        protected void Die(bool destroySelf)
         {
             var notification = new MonsterConditionData(MonsterCondition.Die);
             ConditionChanged?.Invoke(notification);
@@ -284,8 +334,11 @@ namespace Actors.Monsters
             ConditionChanged = null;
             Destroyed = null;
 
-            Destroy(gameObject);
+            if (destroySelf)
+                Destroy(gameObject);
         }
+
+        void IMonsterInternal.Die() => Die();
 
         #region Interfaces
         void IMonsterInternal.Knockback(Direction direction, float? knockbackForce) => Knockback(direction, knockbackForce);
@@ -339,6 +392,7 @@ namespace Actors.Monsters
             _sb.AppendLine($"HP: {HP}");
             _sb.AppendLine($"Direction: {Direction.ToString()}");
             _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
+            _sb.AppendLine($"Detected Player: {DetectedPlayer?.name ?? "null"}");
             _sb.AppendLine("----------------");
             _sb.AppendLine($"Is Alive: {IsAlive}");
             if (StandaloneHitBrain != null) _sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");

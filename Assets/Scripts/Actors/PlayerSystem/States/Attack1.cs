@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Rules;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class Attack1 : CharacterState
     {

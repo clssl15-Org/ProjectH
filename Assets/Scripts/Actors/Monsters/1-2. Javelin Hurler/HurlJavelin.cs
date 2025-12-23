@@ -9,23 +9,36 @@ namespace Actors.Monsters
         {
             // Internal
             private JavelinHurler JavelinHurler => (JavelinHurler)MonsterAction.Owner;
+            private int _attackPower;
+
+            private float _elapsedTime;
             private bool _isJavelinThrown;
 
 
+
             // Content
-            protected override void OnEnter(object input)
+            public HurlJavelin(int attackPower) =>
+                _attackPower = attackPower;
+
+            protected override void OnEnter(object _)
             {
+                _elapsedTime = 0f;
                 _isJavelinThrown = false;
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float deltaTime)
             {
-                if (!_isJavelinThrown && elapsedTime >= JavelinHurler._throwTime)
+                if (_isJavelinThrown)
+                    return;
+
+                _elapsedTime += deltaTime;
+                if (_elapsedTime >= JavelinHurler._throwTime)
                 {
                     _isJavelinThrown = true;
 
                     var javelin = Instantiate(JavelinHurler._javelinPrefab).GetComponent<Javelin>();
-                    javelin.Initialize(JavelinHurler.PlatformManager, "Ground");
+                    javelin.Initialize(JavelinHurler.PlatformManager, "Player", "Ground");
+                    javelin.GetComponent<Weapon>().AttackPower = _attackPower;
 
                     javelin.transform.SetParent(JavelinHurler.transform);
                     javelin.transform.localPosition = JavelinHurler._javelinPrefab.transform.localPosition;

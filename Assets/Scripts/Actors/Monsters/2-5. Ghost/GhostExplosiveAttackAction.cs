@@ -1,6 +1,6 @@
 using Actors.Monsters.Actions;
 using Infrastructure;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
 
 namespace Actors.Monsters
@@ -80,12 +80,12 @@ namespace Actors.Monsters
                             }))));
             }
 
-            protected override void OnEnter(object input = null)
+            protected override void OnEnter(object _)
             {
                 _work.Enter();
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float _)
             {
                 _work.Update();
             }

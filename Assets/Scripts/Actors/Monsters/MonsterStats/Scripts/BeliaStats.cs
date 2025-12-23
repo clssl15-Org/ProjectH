@@ -15,17 +15,17 @@ namespace Actors.Monsters
         [SerializeField, Min(0)] private int _curvedAreaAttackPower = 1;
         [SerializeField, Min(0)] private int _dashAttackPower = 1;
 
-        public int GroundAttackPower => _slashAttackPower;
+        public int SlashAttackPower => _slashAttackPower;
         public int CurvedAreaAttackPower => _curvedAreaAttackPower;
         public int DashAttackPower => _dashAttackPower;
 
-        public override int AttackPower => InvalidProperty(AttackPower, nameof(AttackPower));
-        public override float AttackCooltime => InvalidProperty(AttackCooltime, nameof(AttackCooltime));
+        public override int AttackPower => InvalidProperty<int>(nameof(AttackPower));
+        public override float AttackCooltime => InvalidProperty<float>(nameof(AttackCooltime));
 
-        private T InvalidProperty<T>(T property, string propertyName)
+        private T InvalidProperty<T>(string propertyName)
         {
             throw new InvalidOperationException(
-                $"'{propertyName}' property of {nameof(BeliaStats)} is not supported. Use specific attack power properties instead.");
+                $"'{propertyName}' property of {nameof(BeliaStats)} is not supported. Use specific properties instead.");
         }
 
         

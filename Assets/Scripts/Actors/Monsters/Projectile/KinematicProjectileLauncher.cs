@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using World;
 
 namespace Actors.Monsters
 {
@@ -16,7 +17,8 @@ namespace Actors.Monsters
         [SerializeField] private GameObject[] _projectiles;
 
         // Internal
-        private Vector3[] _projectilesPositions;
+        private Vector3[] _projectilePositions;
+        private Action<KinematicProjectile>[] _projectileInitializers;
 
         private IMonsterInternal _owner;
         private PlatformManager _platformManager;
@@ -26,20 +28,28 @@ namespace Actors.Monsters
         // Content
         private void Start()
         {
-            _projectilesPositions = new Vector3[_projectiles.Length];
+            _projectilePositions = new Vector3[_projectiles.Length];
 
             for (int i = 0; i < _projectiles.Length; i++)
             {
-                _projectilesPositions[i] = _projectiles[i].transform.localPosition;
+                _projectilePositions[i] = _projectiles[i].transform.localPosition;
                 _projectiles[i].SetActive(false);
             }
         }
 
-        public void Initialize(IMonsterInternal owner, PlatformManager platformManager, params string[] collisionTags)
+        public KinematicProjectileLauncher Initialize(IMonsterInternal owner, PlatformManager platformManager, params string[] collisionTags)
         {
             _owner = owner;
             _platformManager = platformManager;
             _collisionTags = collisionTags;
+
+            return this;
+        }
+
+        public KinematicProjectileLauncher SetProjectileInitializer(params Action<KinematicProjectile>[] initializers)
+        {
+            _projectileInitializers = initializers;
+            return this;
         }
 
 
@@ -54,25 +64,25 @@ namespace Actors.Monsters
 
                 var projectile = Instantiate(_projectiles[i]);
 
-                projectile.transform.position = _owner.transform.position + _projectilesPositions[i];
+                projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
                 if (!projectile.TryGetComponent<KinematicProjectile>(out var component))
                     throw new InvalidOperationException(
                         Ctx($"투사체 {projectile.name}이(가) {nameof(KinematicProjectile)} 컴포넌트를 가지고 있지 않습니다."));
 
-                component.Initialize(_platformManager, _collisionTags);
+                InitializeProjectile(component);
                 component.transform.rotation = RotationFromDirection(direction);
 
                 component.Launch(component.transform.right, speed);
             }
+        }
 
-            Quaternion RotationFromDirection(Vector2 dir)
-            {
-                if (dir.sqrMagnitude <= Mathf.Epsilon) return Quaternion.identity;
-                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                return Quaternion.AngleAxis(angle, Vector3.forward);
-            }
+        public static Quaternion RotationFromDirection(Vector2 dir)
+        {
+            if (dir.sqrMagnitude <= Mathf.Epsilon) return Quaternion.identity;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            return Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
         public void LaunchWithLocalRotation(float speed, Vector2 directionUnit)
@@ -83,11 +93,11 @@ namespace Actors.Monsters
             {
                 var projectile = Instantiate(_projectiles[i]);
 
-                projectile.transform.position = _owner.transform.position + _projectilesPositions[i];
+                projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
                 var component = projectile.GetComponent<KinematicProjectile>();
-                component.Initialize(_platformManager, _collisionTags);
+                InitializeProjectile(component);
                 component.Launch(projectile.transform.rotation * directionUnit, speed);
             }
         }
@@ -100,14 +110,28 @@ namespace Actors.Monsters
             {
                 var projectile = Instantiate(_projectiles[i]);
 
-                projectile.transform.position = _owner.transform.position + _projectilesPositions[i];
+                projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
                 var component = projectile.GetComponent<KinematicProjectile>();
-                component.Initialize(_platformManager, _collisionTags);
+                InitializeProjectile(component);
                 component.Launch(directions[i], speed);
             }
         }
+
+        private KinematicProjectile InitializeProjectile(KinematicProjectile projectile)
+        {
+            projectile.Initialize(_platformManager, _collisionTags);
+
+            if (_projectileInitializers != null)
+            {
+                foreach (var initializer in _projectileInitializers)
+                    initializer?.Invoke(projectile);
+            }
+
+            return projectile;
+        }
+
 
 
         private void ThrowIfNotValidState()

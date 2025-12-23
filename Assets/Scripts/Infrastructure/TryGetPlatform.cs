@@ -9,7 +9,7 @@ namespace Infrastructure
         /// <summary>
         /// 입력 Tilemap에서 start 좌표를 기준으로, predicate를 만족하며 수평으로 연결된 타일들을 반환합니다.
         /// </summary>
-        public static bool TryGetPlatform(this Tilemap tilemap, Vector3Int start, Predicate<Vector3Int> predicate, out Vector3Int[] platformCells)
+        public static bool TryGetPlatform(this Tilemap tilemap, Vector3Int start, Func<Vector3Int, bool> predicate, out Vector3Int[] platformCells)
         {
             platformCells = Array.Empty<Vector3Int>();
 

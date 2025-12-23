@@ -1,3 +1,4 @@
+using System;
 using Actors.Monsters.Actions;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
@@ -12,25 +13,33 @@ namespace Actors.Monsters.Brains
         // Internal
         private readonly string _monsterAction;
         private MonsterConditionData _notification;
+        private Action _opening;
 
 
         // Content
-        public Dead(MonsterActionType monsterAction = MonsterActionType.Dead) : this(monsterAction.ToString()) { }
-        public Dead(string monsterAction) => _monsterAction = monsterAction;
+        public Dead(MonsterActionType monsterAction = MonsterActionType.Dead, Action opening = null)
+            : this(monsterAction.ToString(), opening) { }
+        public Dead(string monsterAction, Action opening = null)
+        {
+            _monsterAction = monsterAction;
+            _opening = opening;
+        }
 
         public override bool CheckCondition() => Owner.IsAlive;
 
         protected override void OnOpen(object[] _)
         {
             Owner.IsAlive = false;
-            Owner.Collider.excludeLayers = LayerMask.GetMask("Player");
+            Owner.IgnorePlayerInteraction = true;
+
+            _opening?.Invoke();
 
             _notification = new MonsterConditionData(MonsterCondition.Die);
             Owner.NotifyCondition(_notification);
 
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
-                Callback: result => Complete(),
+                Callback: result => Complete(result),
                 Inputs: new[]
                 {
                     new PlayAnimation.AnimationPlayInfo(DelayAfterPlay: StayTimeAfterFinised)
@@ -49,6 +58,8 @@ namespace Actors.Monsters.Brains
         {
             _notification?.Complete();
             _notification = null;
+
+            Owner.Die();
         }
     }
 }

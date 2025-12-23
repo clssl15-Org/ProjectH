@@ -4,6 +4,8 @@ namespace Actors.Monsters.Brains
 {
     internal class PlayerDetected : BTNode<IMonsterInternal, MonsterBlackboard>
     {
+        private bool _wasDetected = false;
+
         public PlayerDetected()
         {
             AbortPolicies = AbortPolicies.LowerPriority | AbortPolicies.Self;
@@ -17,10 +19,25 @@ namespace Actors.Monsters.Brains
                 return true;
 
             var player = Owner.DetectedPlayer;
-            if (!player) return false;
+            if (!player)
+            {
+                _wasDetected = false;
+                return false;
+            }
 
-            var playerPlatform = player.GetComponent<Actor.IPlayer>().CurrentPlatform;
+            var playerPlatform = player.GetComponent<IPlayer>().CurrentPlatform;
             return playerPlatform >= 0 && playerPlatform == Owner.CurrentPlatform;
+        }
+
+        protected override void OnOpen(params object[] _)
+        {
+            if (!_wasDetected)
+            {
+                _wasDetected = true;
+
+                Owner.NotifyCondition(
+                    new MonsterConditionData(MonsterCondition.PlayerDetected));
+            }
         }
     }
 }

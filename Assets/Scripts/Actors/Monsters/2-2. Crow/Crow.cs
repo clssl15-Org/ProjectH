@@ -1,5 +1,6 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -13,10 +14,10 @@ namespace Actors.Monsters
         [SerializeField, Min(0)] private float _launchTime;
         [SerializeField, Min(0)] private float _projectileSpeed;
 
-
-        // Internal
         private KinematicProjectileLauncher _projectileLauncher;
 
+
+        // States
         private class CrowBrain : MonsterBrain
         {
             public CrowBrain(IMonsterInternal owner) : base(owner)
@@ -27,12 +28,15 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged()
                                 .AddChild(new Adjusting("Fly"))
-                                .AddChild(new DeadEnd()))
-                            .AddChild(new Attack()))
+                                .AddChild(new DeadEnd())
+                            )
+                            .AddChild(new Attack(true))                            )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol("Fly"))))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol("Fly")))
+                        )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -42,20 +46,33 @@ namespace Actors.Monsters
             public CrowActionController(Crow monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction("Fly")
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddAnimationComponent());
+                    .AddDelay()
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithKinematicProjectile(
                         launcher: monster._projectileLauncher,
                         getLaunchInfo: () => new(monster._launchTime, monster._projectileSpeed),
                         launchType: KinematicProjectileLaunchType.Rotation,
-                        getDirections: () => (new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position }))));
+                        getDirections: () =>
+                        {
+                            if (monster.DetectedPlayer)
+                                return new Vector2[] { monster.DetectedPlayer.transform.position - monster.transform.position };
+                            else
+                                return new Vector2[] { monster.Direction.ToVector2() }; // 공격 모션 중 플레이어 이탈 시 처리
+                        })
+                    )
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -66,7 +83,10 @@ namespace Actors.Monsters
             base.Start();
 
             _projectileLauncher = GetComponent<KinematicProjectileLauncher>();
-            _projectileLauncher.Initialize(this, PlatformManager, "Player", "Ground");
+            _projectileLauncher
+                .Initialize(this, PlatformManager, "Player", "Ground")
+                .SetProjectileInitializer(
+                    p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);
 
             ActionController = new CrowActionController(this);
             ActionController.Enter();

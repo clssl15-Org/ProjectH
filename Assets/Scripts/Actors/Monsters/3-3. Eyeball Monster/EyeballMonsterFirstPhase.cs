@@ -10,46 +10,70 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Eyeball Monster First Phase")]
+        [SerializeField] private Weapon _weapon;
+        [SerializeField, Min(0)] private float _weaponActiveTiming;
+        [SerializeField] private float _weaponActiveDuration;
+        [Space]
         [SerializeField] private bool _revive = true;
         [SerializeField] private GameObject[] _secondPhasePrefabs;
 
 
         // Internal
-        private class DarkMonsterFirstPhaseBrain : MonsterBrain
+        private class EyeballMonsterFirstPhaseBrain : MonsterBrain
         {
-            public DarkMonsterFirstPhaseBrain(IMonsterInternal owner) : base(owner)
+            public EyeballMonsterFirstPhaseBrain(EyeballMonsterFirstPhase owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(Engaged.RangeType.Contact, range: 1)
+                            .AddChild(new Engaged(
+                                    Engaged.RangeType.Ranged,
+                                    Mathf.Abs(
+                                        owner._weapon?.transform.localPosition.x
+                                        ?? Engaged.DefaultTargetAttackRange)
+                                )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
-                            .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                                .AddChild(new DeadEnd())
+                            )
+                            .AddChild(new Attack(false))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
 
-        private class DarkMonsterFirstPhaseController : MonsterActionController
+        private class EyeballMonsterFirstPhaseController : MonsterActionController
         {
-            public DarkMonsterFirstPhaseController(IMonsterInternal monster) : base(monster)
+            public EyeballMonsterFirstPhaseController(EyeballMonsterFirstPhase monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._weapon,
+                        monster._weaponActiveTiming,
+                        monster._weaponActiveDuration))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddComponent(new HitFlash()));
+                    .AddDelay()
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -59,13 +83,20 @@ namespace Actors.Monsters
         {
             base.Start();
 
-            ActionController = new DarkMonsterFirstPhaseController(this);
+            if (_weapon)
+                _weapon.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            ActionController = new EyeballMonsterFirstPhaseController(this);
             ActionController.Enter();
 
-            Brain = new DarkMonsterFirstPhaseBrain(this);
+            Brain = new EyeballMonsterFirstPhaseBrain(this);
         }
 
-        internal override void Died()
+        internal override void Die()
         {
             if (_revive)
             {
@@ -82,14 +113,14 @@ namespace Actors.Monsters
                     var second = Instantiate(secondPrefab);
                     second
                         .GetComponent<EyeballMonsterSecondPhase>()
-                        .Initialize(SceneAssetsLibrary, PlatformManager);
+                        .Initialize(GameAssetsLibrary, Configuration, PlatformManager);
 
                     second.transform.position = transform.position;
                     second.SetActive(true);
                 }
             }
 
-            base.Died();
+            base.Die();
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

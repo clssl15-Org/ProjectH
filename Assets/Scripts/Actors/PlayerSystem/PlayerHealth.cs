@@ -5,7 +5,7 @@ using UnityEngine;
 using Rules;
 using Infrastructure;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class PlayerHealth : MonoBehaviour, IDamageable
     {

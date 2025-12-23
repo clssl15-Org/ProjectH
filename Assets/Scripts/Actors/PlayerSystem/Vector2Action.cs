@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     [System.Serializable]
     public struct Vector2Action

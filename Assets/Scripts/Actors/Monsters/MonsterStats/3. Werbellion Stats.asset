@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c32d84638062a409f831f44e24e727, type: 3}
+  m_Name: 3. Werbellion Stats
+  m_EditorClassIdentifier: 
+  _maxHP: 4000
+  _useCustomSpeed: 0
+  _moveSpeed: 3
+  _speed: 0
+  _attackPower: 1
+  _attackCooltime: 0.5
+  _invincibleDuration: 0.5
+  _punchAttackPower: 30
+  _straightAreaAttackPower: 30
+  _spikeAttackPower: 30
+  _spikeSpeed: 10
+  _spikeFireGap: 0.5
+  _portalAttackPower: 30
+  _stunAttackTime: 0.5

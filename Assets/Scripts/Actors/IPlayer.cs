@@ -1,8 +1,9 @@
-using UnityEngine;
-using Infrastructure;
 using System;
+using Infrastructure;
+using UnityEngine;
+using World;
 
-namespace Actor
+namespace Actors
 {
     public enum PlayerCondition
     {
@@ -27,7 +28,7 @@ namespace Actor
     }
 
 
-    public interface IPlayer
+    public interface IPlayer : IInjectable<PlatformManager>
     {
         int HP { get; }
         bool IsAlive { get; }
@@ -36,27 +37,15 @@ namespace Actor
         event Action Destroyed;
 
         int MaxHP { get; }
-
         int CurrentPlatform { get; }
+
+        void DefaultAttack();
 
 #pragma warning disable IDE1006
         string name { get; }
+        GameObject gameObject { get; }
         Transform transform { get; }
 #pragma warning restore
 
     }
-
-    class Foo
-    {
-        public void Update(PlayerCondition cond)
-        {
-            if (cond.IsAttack())
-            {
-                // ╬Нец ui ╤Г©Л╠Б
-            }
-
-
-        }
-    }
-
 }

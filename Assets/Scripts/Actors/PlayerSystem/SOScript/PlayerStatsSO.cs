@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     [CreateAssetMenu(fileName = "New Player Stats", menuName = "Project H/Player Stats")]
     public class PlayerStatsSO : ScriptableObject

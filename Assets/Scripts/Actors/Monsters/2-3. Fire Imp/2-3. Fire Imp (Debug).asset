@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ee14481514b9f4ab325131c40b1fbd, type: 3}
   m_Name: 2-3. Fire Imp (Debug)
   m_EditorClassIdentifier: 
-  maxHP: 45
-  attackPower: 15
-  attackCooltime: 0.5
-  invincibleDuration: 0.5
-  useCustomSpeed: 0
-  moveSpeed: 3
-  speed: 0
+  _maxHP: 3
+  _useCustomSpeed: 0
+  _moveSpeed: 3
+  _speed: 1
+  _attackPower: 1
+  _attackCooltime: 0.5
+  _invincibleDuration: 0.5

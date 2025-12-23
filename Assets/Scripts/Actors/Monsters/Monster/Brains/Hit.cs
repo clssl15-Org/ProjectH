@@ -39,7 +39,7 @@ namespace Actors.Monsters.Brains
 
             Owner.HP -= damageInfo.Damage;
 
-            _notification = new MonsterConditionData(MonsterCondition.Damage);
+            _notification = new MonsterConditionData(MonsterCondition.Damaged, damageInfo);
             Owner.NotifyCondition(_notification);
 
             if (_doKnockback && damageInfo.HasKnockback)
@@ -48,7 +48,7 @@ namespace Actors.Monsters.Brains
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
                 Callback: result => Complete(result),
-                PlayTime: Owner.StatsInfo.InvincibleDuration),
+                Inputs: new object[] { Owner.StatsInfo.InvincibleDuration }),
                 out var reason))
             {
                 Debug.LogWarning(Owner.FormatLogMessage(

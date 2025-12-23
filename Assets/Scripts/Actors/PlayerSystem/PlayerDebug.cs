@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class PlayerDebug : MonoBehaviour
     {

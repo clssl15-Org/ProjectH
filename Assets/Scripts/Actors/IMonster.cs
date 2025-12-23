@@ -1,10 +1,14 @@
 using System;
 using Infrastructure;
 using UnityEngine;
+using World;
 
 namespace Actors
 {
-    public interface IMonster
+    public interface IMonster :
+        IInjectable<GameAssetLibrary>,
+        IInjectable<Configuration>,
+        IInjectable<PlatformManager>
     {
         int HP { get; }
         Direction Direction { get; }
@@ -15,12 +19,18 @@ namespace Actors
 
         int MaxHP { get; }
         int CurrentPlatform { get; }
+        bool IgnorePlayerInteraction { get; }
 
-        void Initialize(SceneAssetsLibrary sceneAssetsLibrary, PlatformManager platformManager);
+        void Initialize(
+            GameAssetLibrary gameAssetsLibrary,
+            Configuration configuration,
+            PlatformManager platformManager);
+
         void Destroy();
 
 #pragma warning disable IDE1006
         string name { get; }
+        GameObject gameObject { get; }
         Transform transform { get; }
 #pragma warning restore
         string FormatLogMessage(string message);

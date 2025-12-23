@@ -8,11 +8,18 @@ namespace Actors.Monsters.Brains
     {
         // Internal
         private readonly string _monsterAction;
+        private readonly bool _isRangedAttack;
+        private MonsterConditionData _notification;
 
 
         // Content
-        public Attack(MonsterActionType monsterAction = MonsterActionType.Attack) : this(monsterAction.ToString()) { }
-        public Attack(string monsterAction) => _monsterAction = monsterAction;
+        public Attack(bool isRangedAttack) : this(MonsterActionType.Attack, isRangedAttack) { }
+        public Attack(MonsterActionType monsterAction, bool isRangedAttack) : this(monsterAction.ToString(), isRangedAttack) { }
+        public Attack(string monsterAction, bool isRangedAttack)
+        {
+            _monsterAction = monsterAction;
+            _isRangedAttack = isRangedAttack;
+        }
 
         protected override void OnOpen(object[] _)
         {
@@ -26,14 +33,21 @@ namespace Actors.Monsters.Brains
                     $"{_monsterAction} 행동에 실패하였기 때문에 {nameof(Attack)} 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
+                return;
             }
 
             Blackboard.Committing = true;
+
+            _notification = new MonsterConditionData(MonsterCondition.Attack, _isRangedAttack);
+            Owner.NotifyCondition(_notification);
         }
 
         protected override void OnHalt(DetailedNodeStatus _)
         {
             Blackboard.Committing = false;
+
+            _notification?.Complete();
+            _notification = null;
         }
     }
 }

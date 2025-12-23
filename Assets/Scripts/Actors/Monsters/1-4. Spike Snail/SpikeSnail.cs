@@ -1,6 +1,7 @@
 using System;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -11,10 +12,11 @@ namespace Actors.Monsters
     {
         // Property
         [Header("Spike Snail")]
-        [SerializeField, Min(0)] internal float spikeSpeed;
-        [SerializeField, Min(0)] private float launchTime;
-        [SerializeField, Min(0)] private float playtimeBeforeWaiting;
-        [SerializeField, Min(0)] private float waitingTime;
+        [SerializeField] WeaponManager _weaponManager;
+        [SerializeField, Min(0)] internal float _spikeSpeed;
+        [SerializeField, Min(0)] private float _launchTime;
+        [SerializeField, Min(0)] private float _playtimeBeforeWaiting;
+        [SerializeField, Min(0)] private float _waitingTime;
 
 
         // Internal
@@ -28,13 +30,18 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged()
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
-                            .AddChild(new Attack())
-                            .AddChild(new Cooldown(MonsterActionType.None)))
+                                .AddChild(new DeadEnd())
+                            )
+                            .AddChild(new Attack(true))
+                            .AddChild(new Cooldown(MonsterActionType.None))
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -44,7 +51,7 @@ namespace Actors.Monsters
             public SpikeSnailActionController(SpikeSnail monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, startTime: 0.33f, endTime: 2.08f)));
+                    .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, StartTime: 0.33f, EndTime: 2.08f)));
                 AddChild(new MonsterAction(MonsterActionType.Alert)
                     .AddAnimationComponent());
                 AddChild(new MonsterAction(MonsterActionType.Walk)
@@ -55,10 +62,11 @@ namespace Actors.Monsters
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithKinematicProjectile(
                         launcher: monster._spikeLauncher,
-                        getLaunchInfo: () => new(monster.launchTime, monster.spikeSpeed),
+                        getLaunchInfo: () => new(monster._launchTime, monster._spikeSpeed),
                         launchType: KinematicProjectileLaunchType.Directions,
                         getDirections: () => (new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }))));
                 AddChild(new MonsterAction(MonsterActionType.Hit)
+                    .AddDelay()
                     .AddComponent(new HitFlash()));
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent());
@@ -72,12 +80,22 @@ namespace Actors.Monsters
         protected override void Awake()
         {
             base.Awake();
-            _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
 
+            if (_weaponManager)
+                _weaponManager.AttackPower = StatsInfo.AttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weaponManager)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
+            _spikeLauncher = GetComponentInChildren<KinematicProjectileLauncher>(true);
             if (!_spikeLauncher) throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(SpikeSnail)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
-            _spikeLauncher.Initialize(this, PlatformManager, "Ground");
+            _spikeLauncher
+                .Initialize(this, PlatformManager, "Ground", "Player")
+                .SetProjectileInitializer(
+                    p => p.GetComponent<SpriteSizeHandler>().Initialize(Configuration, true));
         }
 
         protected override void Start()

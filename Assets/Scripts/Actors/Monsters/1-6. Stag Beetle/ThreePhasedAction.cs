@@ -1,6 +1,6 @@
 using System;
 using Actors.Monsters.Actions;
-using Infrastructure.StateMachines.FSM;
+using Infrastructure.StateMachines.Fsm;
 
 namespace Actors.Monsters
 {
@@ -20,9 +20,10 @@ namespace Actors.Monsters
             private Action _beforeMainAction;
             private Func<float, float, bool> _whileMainAction;
             private Action _beforePostAction;
+            private Action _afterPostAction;
 
-            private readonly Exception AnimationFailure
-                = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
+            //private readonly Exception AnimationFailure
+            //    = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
 
 
             // Content
@@ -33,19 +34,21 @@ namespace Actors.Monsters
                 Action beforePreAction = null,
                 Action beforeMainAction = null,
                 Func<float, float, bool> whileMainAction = null,
-                Action beforePostAction = null)
+                Action beforePostAction = null,
+                Action afterPostAction = null)
             {
                 _animations = new string[]
                 {
-                getPreActionName(animationName),
-                animationName,
-                getPostActionName(animationName)
+                    getPreActionName(animationName),
+                    animationName,
+                    getPostActionName(animationName)
                 };
 
                 _beforePreAction = beforePreAction;
                 _beforeMainAction = beforeMainAction;
                 _whileMainAction = whileMainAction;
                 _beforePostAction = beforePostAction;
+                _afterPostAction = afterPostAction;
 
                 _work = new Work()
                     .SetExitedAction(() => AnimationPlayer.Stop())
@@ -57,10 +60,12 @@ namespace Actors.Monsters
                             AnimationPlayer.Play(
                                 new MonsterAnimationPlayInfo(_animations[0], Callback: succeed =>
                                 {
-                                    if (!succeed) throw AnimationFailure;
+                                    //if (!succeed) throw AnimationFailure;
                                     _work.SetNext("MainAction");
                                 }));
-                        }), true)
+                        }),
+                        primary: true
+                    )
                     .AddChild(new Work("MainAction")
                         .SetEnteredAction(() =>
                         {
@@ -70,7 +75,7 @@ namespace Actors.Monsters
                             Action<bool> callback = _whileMainAction == null
                             ? (bool succeed) =>
                             {
-                                if (!succeed) throw AnimationFailure;
+                                //if (!succeed) throw AnimationFailure;
                                 _work.SetNext("PostAction");
                             }
                             : null;
@@ -85,33 +90,37 @@ namespace Actors.Monsters
 
                             var play = _whileMainAction.Invoke(
                                 _elapsedTime - _mainActionEnteredTime,
-                                AnimationPlayer.CurrentAnimationTime ?? -1);
+                                AnimationPlayer.CurrentAnimationLength ?? -1);
 
                             if (!play)
                                 _work.SetNext("PostAction");
-                        }))
+                        })
+                    )
                     .AddChild(new Work("PostAction")
                         .SetEnteredAction(() =>
                         {
                             AnimationPlayer.Play(
                                 new MonsterAnimationPlayInfo(_animations[2], Callback: succeed =>
                                 {
-                                    if (!succeed) throw AnimationFailure;
+                                    //if (!succeed) throw AnimationFailure;
                                     Interrupt(InterruptType.Completed);
                                 }));
 
                             _beforePostAction?.Invoke();
-                        }));
+                        })
+                        .SetExitedAction(() => _afterPostAction?.Invoke())
+                    );
             }
 
-            protected override void OnEnter(object input = null)
+            protected override void OnEnter(object _)
             {
+                _elapsedTime = 0f;
                 _work.Enter();
             }
 
-            protected override void OnUpdate(float elapsedTime)
+            protected override void OnUpdate(float deltaTime)
             {
-                _elapsedTime = elapsedTime;
+                _elapsedTime += deltaTime;
                 _work.Update();
             }
 

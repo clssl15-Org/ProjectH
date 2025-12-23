@@ -5,7 +5,6 @@ namespace Actors.Monsters.Actions
     public enum InterruptType
     {
         None,
-        Timeover,
         Error,
         Completed,
         Interrupted,
@@ -15,7 +14,7 @@ namespace Actors.Monsters.Actions
     {
         // Front
         public bool Active { get; private set; } = false;
-        public bool InterruptAllOnDeactivate { get; set; } = false;
+        public InterruptPriority InterruptPriority { get; set; } = InterruptPriority.Default;
         
         // Internal
         protected MonsterAction MonsterAction { get; private set; }
@@ -35,7 +34,7 @@ namespace Actors.Monsters.Actions
         }
         protected virtual void OnEnter(object input) { }
 
-        public void Update(float elapsedTime) => OnUpdate(elapsedTime);
+        public void Update(float deltaTime) => OnUpdate(deltaTime);
         protected virtual void OnUpdate(float elapsedTime) { }
 
         public void Interrupt(InterruptType reason)
@@ -57,16 +56,15 @@ namespace Actors.Monsters.Actions
             ResultType.AlreadyDoing | ResultType.OtherActionDoing | ResultType.NotFound => InterruptType.Error,
             ResultType.Interrupted => InterruptType.Interrupted,
             ResultType.InvalidOperation => InterruptType.Error,
-            _ => throw new InvalidOperationException($"알 수 없는 {nameof(ResultType)} '{resultType}'이(가) 감지되었습니다."),
+            _ => throw new ArgumentOutOfRangeException(nameof(resultType), resultType, $"알 수 없는 {nameof(ResultType)}이(가) 감지되었습니다."),
         };
         public static ResultType ToResultType(this InterruptType interruptType) => interruptType switch
         {
             InterruptType.None => ResultType.Interrupted,
-            InterruptType.Timeover => ResultType.Success,
             InterruptType.Error => ResultType.InvalidOperation,
             InterruptType.Completed => ResultType.Success,
             InterruptType.Interrupted => ResultType.Interrupted,
-            _ => throw new InvalidOperationException($"알 수 없는 {nameof(InterruptType)} '{interruptType}'이(가) 감지되었습니다."),
+            _ => throw new ArgumentOutOfRangeException(nameof(interruptType), interruptType, $"알 수 없는 {nameof(InterruptType)}이(가) 감지되었습니다."),
         };
     }
 }

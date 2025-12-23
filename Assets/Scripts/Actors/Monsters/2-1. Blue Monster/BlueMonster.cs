@@ -8,42 +8,68 @@ namespace Actors.Monsters
     [RequireComponent(typeof(StandaloneHitAction))]
     public class BlueMonster : Monster<MonsterStats>
     {
+        [Header("Blue Monster")]
+        [SerializeField] private Weapon _weapon;
+        [SerializeField, Min(0)] private float _weaponActiveTiming;
+        [SerializeField] private float _weaponActiveDuration;
+
+
         // Internal
         private class BlueMonsterBrain : MonsterBrain
         {
-            public BlueMonsterBrain(IMonsterInternal owner) : base(owner)
+            public BlueMonsterBrain(BlueMonster owner) : base(owner)
             {
                 AddChild(new Alive()
                     .AddChild(new Hit())
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(Engaged.RangeType.Contact)
+                            .AddChild(new Engaged(
+                                    Engaged.RangeType.Ranged,
+                                    Mathf.Abs(
+                                        owner._weapon?.transform.localPosition.x
+                                        ?? Engaged.DefaultTargetAttackRange)
+                                )
                                 .AddChild(new Adjusting())
-                                .AddChild(new DeadEnd()))
-                            .AddChild(new Attack())
-                            .AddChild(new Cooldown()))
+                                .AddChild(new DeadEnd())
+                            )
+                            .AddChild(new Attack(false))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol(MonsterActionType.Run))))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol(MonsterActionType.Run))
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
 
         private class BlueMonsterActionController : MonsterActionController
         {
-            public BlueMonsterActionController(IMonsterInternal monster) : base(monster)
+            public BlueMonsterActionController(BlueMonster monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddComponent(new AttackWithWeapon(
+                        monster._weapon,
+                        monster._weaponActiveTiming,
+                        monster._weaponActiveDuration))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
-                    .AddComponent(new HitFlash()));
+                    .AddDelay()
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -52,6 +78,16 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+
+            if (_weapon)
+            {
+                _weapon.AttackPower = StatsInfo.AttackPower;
+                _weapon.gameObject.SetActive(false);
+            }
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_weapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
 
             ActionController = new BlueMonsterActionController(this);
             ActionController.Enter();
@@ -65,7 +101,7 @@ namespace Actors.Monsters
             {
                 new(true),
                 new(true),
-                new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.CheckAlways, RerunPolicy.Restart)
+                new(nameof(Hit), new object[] { damageInfo }, EntryPolicy.Unconditional, RerunPolicy.Restart)
             });
         }
     }

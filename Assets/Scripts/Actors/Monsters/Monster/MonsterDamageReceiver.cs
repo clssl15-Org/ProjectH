@@ -7,6 +7,7 @@ namespace Actors.Monsters
 {
     public class MonsterDamageReceiver : MonoBehaviour, IDamageable
     {
+        [field: SerializeField] public bool Interactable { get; set; } = true;
         public event Action<DamageInfo> Damaged;
 
         public void TakeDamage(int damage) =>

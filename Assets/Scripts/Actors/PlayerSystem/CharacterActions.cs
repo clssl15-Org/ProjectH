@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     [System.Serializable]
     public struct CharacterActions

@@ -12,6 +12,7 @@ namespace Infrastructure
 
         // Internal
         float _remainingTime;
+        Action _updated;
         Action<bool> _callback;
         IDisposable _handle;
 
@@ -19,13 +20,14 @@ namespace Infrastructure
 
 
         // Content
-        public Timer(float time, Action<bool> callback = null)
+        public Timer(float time, Action<bool> callback = null, Action updated = null)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(
                     nameof(time), time, $"{nameof(time)}은(는) 0 이상이어야 합니다.");
 
             _remainingTime = time;
+            _updated = updated;
             _callback = callback;
             _handle = Loco.Subscribe(Update);
         }
@@ -33,6 +35,8 @@ namespace Infrastructure
         private void Update()
         {
             _remainingTime -= Time.deltaTime * Factor;
+            _updated?.Invoke();
+
             if (_remainingTime > 0f) return;
 
             _remainingTime = 0f;
@@ -54,6 +58,7 @@ namespace Infrastructure
 
         private void CallbackAndClear(bool succeed)
         {
+            _updated = null;
             if (_callback == null)
                 return;
 

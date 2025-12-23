@@ -8,19 +8,20 @@ TagManager:
   - Monster
   - PlayerAttack
   - MonsterAttack
+  - Indicator
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Indicator
   - Water
   - UI
   - Ground
   - Player
   - Monster
-  - 
-  - 
-  - 
+  - Monster Weapon
+  - Player Weapon
+  - Monster Player Detector
   - 
   - 
   - 
@@ -42,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2960067373
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

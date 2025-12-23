@@ -15,6 +15,7 @@ namespace Actors.Monsters.Actions
         private Func<Vector2[]> _getDirections;
 
         private LaunchInfo _currentLaunchInfo;
+        private float _elapsedTime;
         private bool _launched;
 
 
@@ -34,12 +35,17 @@ namespace Actors.Monsters.Actions
         protected override void OnEnter(object _)
         {
             _currentLaunchInfo = _getLaunchInfo();
+            _elapsedTime = 0f;
             _launched = false;
         }
 
-        protected override void OnUpdate(float elapsedTime)
+        protected override void OnUpdate(float deltaTime)
         {
-            if (!_launched && elapsedTime >= _currentLaunchInfo.LaunchTime)
+            if (_launched)
+                return;
+
+            _elapsedTime += deltaTime;
+            if (_elapsedTime >= _currentLaunchInfo.LaunchTime)
             {
                 _launched = true;
 

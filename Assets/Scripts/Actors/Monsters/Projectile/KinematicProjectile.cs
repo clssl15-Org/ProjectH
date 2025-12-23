@@ -7,24 +7,27 @@ namespace Actors.Monsters
         protected Vector3 Direction { get; set; }
         protected float Speed { get; set; }
 
+        private bool _stopWhenArrived;
+
 
         private void Start()
         {
-            var rb = GetComponent<Rigidbody2D>();
-
-            rb.isKinematic = true;
-            rb.useFullKinematicContacts = true;
+            Rigidbody.isKinematic = true;
+            Rigidbody.useFullKinematicContacts = true;
         }
 
-        public void Launch(Vector2 direction, float speed)
+        public void Launch(Vector2 direction, float speed, bool stopWhenArrived = true)
         {
             Direction = direction.normalized;
             Speed = speed;
+            _stopWhenArrived = stopWhenArrived;
         }
 
         protected override void Update()
         {
-            transform.position += Time.deltaTime * Speed * Direction;
+            if (!_stopWhenArrived || !HasArrived)
+                transform.position += Time.deltaTime * Speed * Direction;
+
             base.Update();
         }
     }
