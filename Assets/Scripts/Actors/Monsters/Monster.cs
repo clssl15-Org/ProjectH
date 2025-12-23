@@ -151,7 +151,7 @@ namespace Actors.Monsters
         /// <summary>
         /// 외부에서 몬스터를 직접 생성할 경우 이 메서드를 호출하여 필수 컴포넌트를 할당하세요.
         /// </summary>
-        public void Initialize(
+        public virtual void Initialize(
             GameAssetLibrary gameAssetsLibrary,
             Configuration configuration,
             PlatformManager platformManager)
