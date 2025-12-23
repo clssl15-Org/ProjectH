@@ -1,7 +1,7 @@
 using Actors.PlayerSystem;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraFollowForLarge : MonoBehaviour
 {
     public Transform target; // 추적할 플레이어의 Transform
     public float smoothSpeed = 0f;  // 카메라 얼마나 부드럽게 천천히 오게 만들건지. (0은 그냥 바로 따라옴)
@@ -28,11 +28,6 @@ public class CameraFollow : MonoBehaviour
         {
             target = FindObjectOfType<Player>().transform;
         }
-
-        cameraMinX = -21;
-        cameraMaxX = 21;
-        cameraMinY = -18;
-        cameraMaxY = 18;
     }
 
     void LateUpdate()
