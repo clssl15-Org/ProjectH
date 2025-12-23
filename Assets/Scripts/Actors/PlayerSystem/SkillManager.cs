@@ -10,6 +10,8 @@ public class SkillManager : MonoBehaviour
     public List<CharacterState> skills;
     public bool canChangeSkill = true;
 
+    public CharacterState ultimateSkill;
+
     public CharacterActions characterActions;
     public CharacterStateController CharacterStateController { get; private set; }
 
@@ -52,6 +54,15 @@ public class SkillManager : MonoBehaviour
         }
 
         CharacterStateController.EnqueueTransition(skills[selectedIndex]);
+    }
+    public void UseUltimate()
+    {
+        if (ultimateSkill == null)
+        {
+            return;
+        }
+
+        CharacterStateController.EnqueueTransition(ultimateSkill);
     }
 
     public void Init()

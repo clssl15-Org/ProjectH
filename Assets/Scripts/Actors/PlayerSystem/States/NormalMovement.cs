@@ -37,7 +37,7 @@ namespace Actors.PlayerSystem
 
             if (CharacterActions.useSkill.Started)
             {
-                SkillManager.UseSkill();
+                Player.UseSkill();
             }
             
             if (CharacterActions.rangedAttack.Started)
@@ -47,6 +47,7 @@ namespace Actors.PlayerSystem
 
             if (CharacterActions.ultimate.Started)
             {
+                Player.UseUltimate();
             }
         }
         public override void UpdateBehaviour(float dt)

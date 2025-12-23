@@ -92,6 +92,14 @@ namespace Actors.PlayerSystem
         {
             skillManager.ChangeSkill();
         }
+        public void UseSkill()
+        {
+            skillManager.UseSkill();
+        }
+        public void UseUltimate()
+        {
+            skillManager.UseUltimate();
+        }
 
         void OnDestroy()
         {
