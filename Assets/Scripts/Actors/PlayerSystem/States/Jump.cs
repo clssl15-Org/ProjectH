@@ -25,7 +25,13 @@ namespace Actors.PlayerSystem
 
         [Header("Juicy Jump Settings")]
         [SerializeField] private float jumpBufferTime = 0.15f; // 점프 입력 저장 시간
+        [SerializeField] private float apexBonusMultiplier = 1.2f; // 정점에서 이동 속도 보너스
+        [SerializeField] private float apexThreshold = 0.5f;      // 정점으로 판정할 Y축 속도 임계값
+        [SerializeField] private float gravityScale = 3f;         // 기본 중력 배율
+        [SerializeField] private float fallMultiplier = 1.2f;       // 하강 시 중력 배율
+        [SerializeField] private float apexGravityMultiplier = 0.2f;     // 정점에서 중력 배율
         private float jumpBufferCounter; // 버퍼 타이머
+
 
         private int extraJumpCount;
 
@@ -75,6 +81,9 @@ namespace Actors.PlayerSystem
         {
             ProcessVelocity(dt);
 
+            // 상황에 따른 중력 스케일 조정
+            ApplyBetterGravity();
+
             float jumpIntervalDt = dt / jumpInterval;
             jumpCursor += jumpIntervalDt;
 
@@ -109,6 +118,10 @@ namespace Actors.PlayerSystem
                 isDone = true;
             }
         }
+        public override void ExitBehaviour(float dt)
+        {
+            CharacterActor.Rigidbody.gravityScale = gravityScale;
+        }
         private void ApplyJump(float force)
         {
             CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, force);
@@ -120,17 +133,36 @@ namespace Actors.PlayerSystem
         }
         private void ProcessVelocity(float dt)
         {
-            Vector3 targetVelocity = CharacterStateController.InputMovementReference * subsequentJumpSpeed;
+            // 정점 판정
+            bool isAtApex = Mathf.Abs(CharacterActor.Velocity.y) < apexThreshold;
 
-            // 점프 상태이거나 공중에 떠 있는 경우 airAcceleration을 사용합니다.
+            // 정점일 때 좌우 이동 속도에 보너스를 주어 포물선을 넓게 만듦
+            float currentMaxSpeed = isAtApex ? subsequentJumpSpeed * apexBonusMultiplier : subsequentJumpSpeed;
             float currentAcceleration = CharacterActor.IsLanded ? acceleration : airAcceleration;
 
-            // MoveTowards는 수치상 선형 보간을 해주므로, 가속도가 낮을수록 목표 속도에 도달하는 시간이 길어집니다.
+            Vector2 targetVelocity = CharacterStateController.InputMovementReference * currentMaxSpeed;
+
             CharacterActor.Velocity = Vector2.MoveTowards(
                 CharacterActor.Velocity,
-                new Vector2(targetVelocity.x, CharacterActor.Velocity.y), // Y축은 물리 엔진(중력)에 맡기고 X축만 제어
+                new Vector2(targetVelocity.x, CharacterActor.Velocity.y),
                 currentAcceleration * dt
             );
+        }
+
+        private void ApplyBetterGravity()
+        {
+            if (CharacterActor.Velocity.y < 0) // 하강 중
+            {
+                CharacterActor.Rigidbody.gravityScale = gravityScale * fallMultiplier;
+            }
+            else if (Mathf.Abs(CharacterActor.Velocity.y) < apexThreshold) // 정점 부근
+            {
+                CharacterActor.Rigidbody.gravityScale = gravityScale * apexGravityMultiplier;
+            }
+            else // 일반 상승
+            {
+                CharacterActor.Rigidbody.gravityScale = gravityScale;
+            }
         }
 
         public void ResetJump()
