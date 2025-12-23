@@ -47,6 +47,13 @@ namespace Game.Stage
 
                     Register(monster);
                 }
+<<<<<<< Updated upstream
+=======
+
+
+            if (SpawnManaer.Instance != null)
+                SpawnManaer.Instance.OnMonsterCreate(monster => Register(monster));
+>>>>>>> Stashed changes
         }
         
         public void Register(IPlayer player, bool connectUI = true)

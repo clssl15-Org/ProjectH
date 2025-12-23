@@ -15,7 +15,7 @@ namespace Actors.Monsters.Actions
         // Front
         public bool Active { get; private set; } = false;
         public InterruptPriority InterruptPriority { get; set; } = InterruptPriority.Default;
-        
+
         // Internal
         protected MonsterAction MonsterAction { get; private set; }
         protected IMonsterInternal Owner => MonsterAction.Owner;
@@ -35,7 +35,7 @@ namespace Actors.Monsters.Actions
         protected virtual void OnEnter(object input) { }
 
         public void Update(float deltaTime) => OnUpdate(deltaTime);
-        protected virtual void OnUpdate(float elapsedTime) { }
+        protected virtual void OnUpdate(float deltaTime) { }
 
         public void Interrupt(InterruptType reason)
         {

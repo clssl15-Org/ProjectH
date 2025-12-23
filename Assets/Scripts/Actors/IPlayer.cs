@@ -39,7 +39,16 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
+<<<<<<< Updated upstream
+=======
+        void ChangeSkill();
+        void UseSkill();
+        void UseUltimate();
+>>>>>>> Stashed changes
         void DefaultAttack();
+
+        int SelectedSkillIndex { get; }
+        float UltimateGauge { get; }
 
 #pragma warning disable IDE1006
         string name { get; }

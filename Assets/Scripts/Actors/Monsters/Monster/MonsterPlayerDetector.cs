@@ -41,16 +41,18 @@ namespace Actors.Monsters
                     Ctx("자신이 유효한 콜라이더를 가지고 있지 않습니다."));
 
 
+            var factor = transform.lossyScale.z;
+
             _colliderComponent.offset = new Vector2
             {
                 x = 0,
-                y = offset
+                y = offset / factor
             };
 
             _colliderComponent.size = new Vector2
             {
-                x = _colliderComponent.size.x,
-                y = height
+                x = _colliderComponent.size.x / factor,
+                y = height / factor
             };
         }
 
@@ -82,6 +84,7 @@ namespace Actors.Monsters
             if (!parentTransform.TryGetComponent<Collider2D>(out var parentCollider))
                 throw new InvalidOperationException(
                     Ctx($"몬스터 {parentTransform.name}이(가) 유효한 콜라이더를 가지고 있지 않습니다."));
+
 
             SetSize(
                 parentCollider.offset.y,

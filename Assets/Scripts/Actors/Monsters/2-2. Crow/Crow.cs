@@ -30,7 +30,7 @@ namespace Actors.Monsters
                                 .AddChild(new Adjusting("Fly"))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new Attack(true))                            )
+                            .AddChild(new Attack(true)))
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
                             .AddChild(new Patrol("Fly")))

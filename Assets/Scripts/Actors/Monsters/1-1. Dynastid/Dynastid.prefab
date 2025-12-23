@@ -68,7 +68,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.3
 --- !u!114 &1366167057418263615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,8 +132,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.67, y: 1.67, z: 1.67}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2277995632207364356}
   - {fileID: 2630748657414775013}
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useManualScaleFactor: 0
+  _useManualScaleFactor: 1
   _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &3480468872192534036
@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Interactable>k__BackingField: 1
 --- !u!114 &8541476870282129423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,9 +353,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fontSize: 5
-  _height: 0.7
-  _showTime: 0.5
+  <ShowPlayerDetection>k__BackingField: 1
+  <PlayerDetectionHeight>k__BackingField: 0.3
+  <PlayerDetectionShowTime>k__BackingField: 0.5
+  <ShowExclamationMark>k__BackingField: 1
+  <ExclamationMarkHeight>k__BackingField: 0.3
+  <ExclamationMarkShowTime>k__BackingField: 0.5
+  ShowDamageText: 1
+  <DamageFontSize>k__BackingField: 5
+  <DamageHeight>k__BackingField: 0.7
+  <DamageShowTime>k__BackingField: 0.5
 --- !u!1001 &2159831523194760979
 PrefabInstance:
   m_ObjectHideFlags: 0

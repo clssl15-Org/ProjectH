@@ -133,7 +133,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.67, y: 1.67, z: 1.67}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5665747117707975601}
@@ -186,7 +186,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 2.32, y: 1.48}
+  m_Size: {x: 1.74, y: 1.11}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -204,8 +204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useManualScaleFactor: 0
-  _scaleFactor: 1
+  _useManualScaleFactor: 1
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &1965159995193618003
 Animator:
@@ -260,8 +260,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.15, y: 0}
-  m_Size: {x: 1.8, y: 1.1}
+  m_Offset: {x: 0.09423246, y: -0.118504696}
+  m_Size: {x: 1.2795112, y: 0.8629916}
   m_Direction: 1
 --- !u!50 &7391344048938946231
 Rigidbody2D:
@@ -317,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Interactable>k__BackingField: 1
 --- !u!114 &4686785592887335133
 MonoBehaviour:
   m_ObjectHideFlags: 0

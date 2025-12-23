@@ -36,9 +36,19 @@ namespace Actors.Monsters
                 _direction = value;
 
                 if (_direction == Direction.Left)
-                    transform.localScale = new Vector3(DefaultIsRight ? -1f : 1f, 1f, 1f);
+                    transform.localScale = new Vector3
+                    {
+                        x = (DefaultIsRight ? -1f : 1f) * Mathf.Abs(transform.localScale.x),
+                        y = transform.localScale.y,
+                        z = transform.localScale.z,
+                    };
                 else if (_direction == Direction.Right)
-                    transform.localScale = new Vector3(DefaultIsRight ? 1f : -1f, 1f, 1f);
+                    transform.localScale = new Vector3
+                    {
+                        x = (DefaultIsRight ? 1f : -1f) * Mathf.Abs(transform.localScale.x),
+                        y = transform.localScale.y,
+                        z = transform.localScale.z,
+                    };
             }
         }
 
