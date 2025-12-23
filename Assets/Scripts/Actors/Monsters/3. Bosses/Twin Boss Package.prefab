@@ -1091,8 +1091,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.14593963, y: 1.7194515}
-  m_Size: {x: 5.410661, y: 3.2377727}
+  m_Offset: {x: -0.03102513, y: 1.0772744}
+  m_Size: {x: 3.3962693, y: 1.9534343}
   m_Direction: 1
 --- !u!50 &1487488481851444771
 Rigidbody2D:
@@ -1168,7 +1168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &128604092584201680
 Transform:
   m_ObjectHideFlags: 0
@@ -1216,8 +1216,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.5517437, y: 0.93608683}
-  m_Size: {x: 2.5954564, y: 1.6710579}
+  m_Offset: {x: 0.04476224, y: 0.5980995}
+  m_Size: {x: 2.0141232, y: 0.9950877}
   m_Direction: 1
 --- !u!50 &141008681217925445
 Rigidbody2D:
@@ -1592,8 +1592,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.56, y: -9.83, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.6699998, y: 1.6699998, z: 1.6699998}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7435251465514867091}
   - {fileID: 128604092584201680}
@@ -1645,7 +1645,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.5899999, y: 1.38}
+  m_Size: {x: 2.82, y: 1.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1663,7 +1663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useManualScaleFactor: 0
+  _useManualScaleFactor: 1
   _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &4686532462904685003
@@ -2235,8 +2235,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.15, y: -1.78, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.6699998, y: 1.6699998, z: 1.6699998}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1381697736518138193}
   - {fileID: 6322811181645937524}
@@ -2306,7 +2306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be301887ad1798747aeb9dc540940c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useManualScaleFactor: 0
+  _useManualScaleFactor: 1
   _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &6715461759336039422

@@ -23,9 +23,6 @@ namespace Actors.Monsters
                     .AddChild(new Hit(doKnockback: false))
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            //.AddChild(new Engaged(Engaged.RangeType.Contact, 2f)
-                            //    .AddChild(new Adjusting(MonsterActionType.Idle))
-                            //    .AddChild(new DeadEnd()))
                             .AddChild(new LookPlayerBrain())
                             .AddChild(new Attack(false))
                             .AddChild(new Cooldown())
@@ -34,7 +31,6 @@ namespace Actors.Monsters
                             .AddChild(new Rest())
                         )
                     )
-                    //.AddChild(new Patrol(monsterAction: MonsterActionType.Idle))))
                     .AddChild(new NotValidPlatform())
                 );
                 AddChild(new Dead());

@@ -195,12 +195,6 @@ namespace Actors.Monsters.Actions
                 }
             }
             
-            if (_completes.Count >= _components.Count
-                || (_runnings.Count > 0 && _runnings.All(c => c.InterruptPriority == InterruptPriority.Low)))
-            {
-                ExitWith(InterruptType.Completed);
-                return;
-            }
 
             var deltaTime = TimeScale * Time.deltaTime;
 
@@ -226,6 +220,13 @@ namespace Actors.Monsters.Actions
 
                 for (int i = 0; i < _runnings.Count; i++)
                     _runnings[i].Update(deltaTime);
+
+                if (_completes.Count >= _components.Count
+                    || (_runnings.Count > 0 && _runnings.All(c => c.InterruptPriority == InterruptPriority.Low)))
+                {
+                    ExitWith(InterruptType.Completed);
+                    return;
+                }
             }
             catch
             {

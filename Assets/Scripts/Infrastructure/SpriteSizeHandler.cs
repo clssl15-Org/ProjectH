@@ -5,6 +5,7 @@ using UnityEditor;
 
 namespace Infrastructure
 {
+    [CanEditMultipleObjects]
     [RequireComponent(typeof(SpriteRenderer))]
     public class SpriteSizeHandler : MonoBehaviour
     {
@@ -52,7 +53,7 @@ namespace Infrastructure
             if (!_useManualScaleFactor && _configuration)
                 _scaleFactor = _configuration.PixelScaleFactor;
 
-            _sr.drawMode = SpriteDrawMode.Sliced;
+            //_sr.drawMode = SpriteDrawMode.Sliced;
             _sr.size = new Vector2(
                 _scaleFactor * _sr.sprite.rect.size.x,
                 _scaleFactor * _sr.sprite.rect.size.y);

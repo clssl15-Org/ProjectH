@@ -25,9 +25,10 @@ namespace Actors.Monsters
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged(
                                     Engaged.RangeType.Ranged,
-                                    Mathf.Abs(
+                                    Mathf.Abs((
                                         owner._weapon?.transform.localPosition.x
                                         ?? Engaged.DefaultTargetAttackRange)
+                                        * owner.transform.lossyScale.z)
                                 )
                                 .AddChild(new Adjusting())
                                 .AddChild(new DeadEnd())
