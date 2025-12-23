@@ -12,7 +12,7 @@ namespace Actors.PlayerSystem
         public int HP => playerHealth.CurrentHealth;
         public int SelectedIndex
         {
-            get => skillManager.SelectedIndex;
+            get => skillManager.SelectedSkillIndex;
         }
 
         public PlayerStatsSO playerStats;

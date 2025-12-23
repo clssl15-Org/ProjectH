@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
+    public int SelectedSkillIndex => selectedIndex;
     public List<CharacterState> skills;
     public bool canChangeSkill = true;
 
@@ -28,7 +29,7 @@ public class SkillManager : MonoBehaviour
 
     public void ChangeSkill()
     {
-        if(skills.Count <= 0)
+        if (skills.Count <= 0)
         {
             return;
         }

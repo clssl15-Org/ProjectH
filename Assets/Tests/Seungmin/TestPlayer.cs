@@ -24,6 +24,24 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     [field: SerializeField] public int MaxHP { get; set; } = 10;
     [field: SerializeField] public bool IsAlive { get; set; } = true;
 
+    public int SelectedIndex => throw new NotImplementedException();
+
+    int IPlayer.HP => throw new NotImplementedException();
+
+    bool IPlayer.IsAlive => throw new NotImplementedException();
+
+    int IPlayer.MaxHP => throw new NotImplementedException();
+
+    int IPlayer.CurrentPlatform => throw new NotImplementedException();
+
+    int IPlayer.SelectedIndex => throw new NotImplementedException();
+
+    string IPlayer.name => throw new NotImplementedException();
+
+    GameObject IPlayer.gameObject => throw new NotImplementedException();
+
+    Transform IPlayer.transform => throw new NotImplementedException();
+
     public event Action<PlayerCondition> ConditionChanged;
     public event Action Destroyed;
 
@@ -52,6 +70,32 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     private PlatformDetector _platformDetector;
 
     private IDisposable _damageTimer;
+
+    event Action<PlayerCondition> IPlayer.ConditionChanged
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    event Action IPlayer.Destroyed
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
     // Content
@@ -161,6 +205,11 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         ConditionChanged?.Invoke(PlayerCondition.Damage);
     }
 
+    public void ChangeSkill()
+    {
+        throw new NotImplementedException();
+    }
+
     private void UpdateStateDisplay()
     {
         _sb.Clear();
@@ -176,5 +225,20 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
 
         IsAlive = false;
         Destroyed?.Invoke();
+    }
+
+    void IPlayer.ChangeSkill()
+    {
+        throw new NotImplementedException();
+    }
+
+    void IPlayer.DefaultAttack()
+    {
+        throw new NotImplementedException();
+    }
+
+    void IPlayer.RangedAttack()
+    {
+        throw new NotImplementedException();
     }
 }

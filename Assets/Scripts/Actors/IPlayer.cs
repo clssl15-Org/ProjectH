@@ -43,6 +43,7 @@ namespace Actors
         int SelectedIndex { get; }
 
         void DefaultAttack();
+        void RangedAttack();
 
 #pragma warning disable IDE1006
         string name { get; }
