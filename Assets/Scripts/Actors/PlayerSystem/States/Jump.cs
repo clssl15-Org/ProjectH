@@ -13,7 +13,11 @@ namespace Actors.PlayerSystem
         [SerializeField]
         private float baseSpeed = 5f;
         [SerializeField]
+        private float subsequentJumpSpeedMultiplier = 0.8f;
+        [SerializeField]
         private float acceleration = 50f;
+        [SerializeField]
+        private float airAcceleration = 20f;
         [SerializeField]
         private int maxJumps = 2;
         [SerializeField]
@@ -30,6 +34,7 @@ namespace Actors.PlayerSystem
         private bool isDone = false;
         private float jumpCursor;
         private float subsequentJumpForce;
+        private float subsequentJumpSpeed;
 
         public override void CheckExitTransition()
         {
@@ -85,7 +90,6 @@ namespace Actors.PlayerSystem
             if (jumpBufferCounter > 0f && extraJumpCount > 0 && (jumpCursor >= 1f))
             {
                 ApplyJump(subsequentJumpForce);
-                subsequentJumpForce *= subsequentJumpMultiplier;
                 // 버퍼를 소모했으므로 초기화
                 jumpBufferCounter = 0;
             }
@@ -111,12 +115,22 @@ namespace Actors.PlayerSystem
             extraJumpCount--;
             jumpCursor = 0f;
             subsequentJumpForce *= subsequentJumpMultiplier;
+            subsequentJumpSpeed *= subsequentJumpSpeedMultiplier;
             CharacterActor.Animator.Rebind();
         }
         private void ProcessVelocity(float dt)
         {
-            Vector3 targetVelocity = CharacterStateController.InputMovementReference * baseSpeed;
-            CharacterActor.Velocity = Vector2.MoveTowards(CharacterActor.Velocity, targetVelocity, acceleration * dt);
+            Vector3 targetVelocity = CharacterStateController.InputMovementReference * subsequentJumpSpeed;
+
+            // 점프 상태이거나 공중에 떠 있는 경우 airAcceleration을 사용합니다.
+            float currentAcceleration = CharacterActor.IsLanded ? acceleration : airAcceleration;
+
+            // MoveTowards는 수치상 선형 보간을 해주므로, 가속도가 낮을수록 목표 속도에 도달하는 시간이 길어집니다.
+            CharacterActor.Velocity = Vector2.MoveTowards(
+                CharacterActor.Velocity,
+                new Vector2(targetVelocity.x, CharacterActor.Velocity.y), // Y축은 물리 엔진(중력)에 맡기고 X축만 제어
+                currentAcceleration * dt
+            );
         }
 
         public void ResetJump()
@@ -125,6 +139,7 @@ namespace Actors.PlayerSystem
             extraJumpCount = maxJumps;
             jumpCursor = 0f;
             subsequentJumpForce = jumpForce;
+            subsequentJumpSpeed = baseSpeed;
         }
     }
 }

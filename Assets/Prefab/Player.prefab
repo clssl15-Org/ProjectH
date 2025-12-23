@@ -535,8 +535,10 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: 199e98b270f870b4198dc9793ad74bdf, type: 2}
   jumpForce: 38
   subsequentJumpMultiplier: 1
-  baseSpeed: 5
+  baseSpeed: 8.5
+  subsequentJumpSpeedMultiplier: 0.85
   acceleration: 30
+  airAcceleration: 20
   maxJumps: 2
   jumpInterval: 0.2
   jumpBufferTime: 0.1
