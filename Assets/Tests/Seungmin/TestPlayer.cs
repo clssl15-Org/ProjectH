@@ -107,7 +107,7 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     }
 
     public void DefaultAttack()
-    { 
+    {
         if (!_contactHandler || _contactHandler.Collisions.Count == 0)
             return;
 
@@ -162,8 +162,11 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
 
         ConditionChanged?.Invoke(PlayerCondition.Damage);
     }
-    void IPlayer.ChangeSkill() { }
-    void IPlayer.RangedAttack() { }
+
+    public void ChangeSkill() { }
+    public void RangedAttack() { }
+    public void UseSkill() { }
+    public void UseUltimate() { }
 
     private void UpdateStateDisplay()
     {

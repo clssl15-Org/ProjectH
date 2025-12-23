@@ -6,6 +6,9 @@ namespace Actors.PlayerSystem
 {
     public class NormalMovement : CharacterState
     {
+        [SerializeField]
+        private bool useStandaloneAttack = true;
+
         private float moveSpeed => Player.playerStats.moveSpeed;
         [SerializeField]
         private float acceleration = 50f;
@@ -23,7 +26,8 @@ namespace Actors.PlayerSystem
 
             if (CharacterActions.attack.Started)
             {
-                Player.DefaultAttack();
+                if (useStandaloneAttack)
+                    Player.DefaultAttack();
             }
 
             if (CharacterActions.dash.Started)
@@ -32,22 +36,26 @@ namespace Actors.PlayerSystem
             }
             if (CharacterActions.changeSkill.Started)
             {
-                Player.ChangeSkill();
+                if (useStandaloneAttack)
+                    Player.ChangeSkill();
             }
 
             if (CharacterActions.useSkill.Started)
             {
-                Player.UseSkill();
+                if (useStandaloneAttack)
+                    Player.UseSkill();
             }
-            
+
             if (CharacterActions.rangedAttack.Started)
             {
-                Player.RangedAttack();
+                if (useStandaloneAttack)
+                    Player.RangedAttack();
             }
 
             if (CharacterActions.ultimate.Started)
             {
-                Player.UseUltimate();
+                if (useStandaloneAttack)
+                    Player.UseUltimate();
             }
         }
         public override void UpdateBehaviour(float dt)

@@ -40,6 +40,8 @@ namespace Actors
         int CurrentPlatform { get; }
 
         void ChangeSkill();
+        void UseSkill();
+        void UseUltimate();
         int SelectedSkillIndex { get; }
 
         void DefaultAttack();

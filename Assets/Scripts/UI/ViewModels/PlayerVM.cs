@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Actors;
 
 namespace UI
@@ -58,7 +59,7 @@ namespace UI
             ThrowIfDisposed();
             if (_player == null) return;
 
-            //_player.UseSkill();
+            _player.UseSkill();
         }
         public void DefaultAttack()
         {

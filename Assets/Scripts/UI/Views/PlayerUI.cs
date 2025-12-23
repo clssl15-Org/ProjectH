@@ -93,6 +93,7 @@ namespace UI
                     continue;
 
                 btn.Select();
+                ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerClickHandler);
                 ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerDownHandler);
             }
 
