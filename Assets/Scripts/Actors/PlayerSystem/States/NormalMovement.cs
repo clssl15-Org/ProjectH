@@ -32,18 +32,17 @@ namespace Actors.PlayerSystem
             }
             if (CharacterActions.changeSkill.Started)
             {
-                SkillManager.ChangeSkill();
+                Player.ChangeSkill();
             }
-
 
             if (CharacterActions.useSkill.Started)
             {
-                Player.SkillManager.UseSkill();
+                SkillManager.UseSkill();
             }
             
             if (CharacterActions.rangedAttack.Started)
             {
-                CharacterStateController.EnqueueTransition<RangedAttack>();
+                Player.RangedAttack();
             }
 
             if (CharacterActions.ultimate.Started)

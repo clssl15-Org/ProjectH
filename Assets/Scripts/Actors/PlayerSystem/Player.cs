@@ -70,6 +70,10 @@ namespace Actors.PlayerSystem
         {
             characterStateController.EnqueueTransition<Attack1>();
         }
+        public void RangedAttack()
+        {
+            characterStateController.EnqueueTransition<RangedAttack>();
+        }
 
         void Update()
         {
