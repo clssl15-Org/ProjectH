@@ -1645,7 +1645,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 4.7000003, y: 2.6000001}
+  m_Size: {x: 1.5899999, y: 1.38}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1664,7 +1664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useManualScaleFactor: 0
-  _scaleFactor: 0.05
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &4686532462904685003
 Animator:
@@ -1719,8 +1719,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1}
-  m_Size: {x: 1.52, y: 2.03}
+  m_Offset: {x: -0.09, y: 0.61}
+  m_Size: {x: 0.91, y: 1.26}
   m_Direction: 0
 --- !u!50 &2283018699933472830
 Rigidbody2D:
@@ -1789,6 +1789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Interactable>k__BackingField: 1
 --- !u!114 &5899289195953550444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1827,7 +1828,6 @@ MonoBehaviour:
   _useTargetPlayer: 0
   _targetPlayer: {fileID: 0}
   _autoAwake: 0
-  <IsExhausted>k__BackingField: 0
 --- !u!114 &1862625504292106988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2288,7 +2288,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 2.65, y: 2.3}
+  m_Size: {x: 1.5899999, y: 1.38}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2307,7 +2307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useManualScaleFactor: 0
-  _scaleFactor: 0.05
+  _scaleFactor: 0.03
   _configuration: {fileID: 0}
 --- !u!95 &6715461759336039422
 Animator:
@@ -2362,8 +2362,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.1}
-  m_Size: {x: 1.12, y: 2.1}
+  m_Offset: {x: 0, y: 0.57}
+  m_Size: {x: 0.54, y: 1.15}
   m_Direction: 0
 --- !u!50 &2301891397882099764
 Rigidbody2D:
@@ -2432,6 +2432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858a2afd1c65a8d4ab16417f155dd9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Interactable>k__BackingField: 1
 --- !u!114 &4755052946746460908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2476,7 +2477,6 @@ MonoBehaviour:
   _useTargetPlayer: 0
   _targetPlayer: {fileID: 0}
   _autoAwake: 0
-  <IsExhausted>k__BackingField: 0
 --- !u!114 &6138016247118311145
 MonoBehaviour:
   m_ObjectHideFlags: 0

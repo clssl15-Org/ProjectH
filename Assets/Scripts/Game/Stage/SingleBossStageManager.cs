@@ -8,11 +8,11 @@ using UnityEditor;
 
 namespace Game.Stage
 {
-    [RequireComponent(typeof(UIManager), typeof(PlayerManager), typeof(MonsterManager))]
     public class SingleBossStageManager : StageManager
     {
         // Bindings
         [Space]
+        [SerializeField] private GameObject _playerObject;
         [SerializeField] private GameObject _bossObject;
         [SerializeField] private BossUI _bossUI;
 
@@ -49,6 +49,17 @@ namespace Game.Stage
         {
             if (!MonsterManager.Register(boss))
                 return;
+
+            if (boss is IPlayerIInitializable playerIInitializable)
+            {
+                if (_playerObject
+                    && _playerObject.TryGetComponent<IPlayer>(out var player))
+                    playerIInitializable.InitializePlayer(player);
+                else
+                    Debug.LogWarning(Ctx(
+                        $"{nameof(boss)}에 {nameof(_playerObject)}을(를) 등록하지 못했습니다. " +
+                        $"해당 컴포넌트가 유효한지 확인하세요."));
+            }
 
             if (createUI)
             {

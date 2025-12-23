@@ -11,7 +11,7 @@ using UnityEditor;
 namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
-    public partial class Cerberus : Monster<CerberusStats>
+    public partial class Cerberus : Monster<CerberusStats>, IBoss, IPlayerIInitializable
     {
         // Front
         public enum AttackMode
@@ -329,10 +329,10 @@ namespace Actors.Monsters.Bosses
                 InitializePlayer(player);
 
             if (_autoAwake)
-                DoAwake();
+                Commence();
         }
 
-        public void DoAwake()
+        public void Commence()
         {
             Brain.Blackboard.Properties[IsAwake] = true;
             Brain.Blackboard.Committing = true;
@@ -366,7 +366,7 @@ namespace Actors.Monsters.Bosses
                 var target = (Cerberus)base.target;
 
                 if (!target._autoAwake && GUILayout.Button("Awake"))
-                    target.DoAwake();
+                    target.Commence();
             }
         }
 #endif

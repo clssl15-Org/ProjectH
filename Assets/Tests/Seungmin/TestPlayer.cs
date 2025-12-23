@@ -32,6 +32,7 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     [SerializeField] private TriggerContactHandler _contactHandler;
 
     // Inspector
+    [Header("Input")]
     public bool StandaloneInput = true;
     [Header("Move")]
     [Min(0)] public float MoveSpeed = 1f;

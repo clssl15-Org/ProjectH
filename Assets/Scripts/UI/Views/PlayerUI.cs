@@ -38,10 +38,10 @@ namespace UI
             // 여기서 연결 처리
             _healthBar.Connect(_player);
 
-            _skillBtn.onClick.AddListener(() => print("Skill"));
+            _skillBtn.onClick.AddListener(() => { });
             _defaultAttackBtn.onClick.AddListener(() => _player.DefaultAttack());
-            _rangedAttackBtn.onClick.AddListener(() => print("Ranged Attack"));
-            _ultimateBtn.onClick.AddListener(() => print("Ultimate"));
+            _rangedAttackBtn.onClick.AddListener(() => { });
+            _ultimateBtn.onClick.AddListener(() => { });
         }
 
         public void Disconnect()
@@ -84,7 +84,6 @@ namespace UI
                 ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerUpHandler);
                 // 기능 실행 (Click)
                 ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerClickHandler);
-
                 // 버튼 뗐을 때 하이라이트 잔상 없애기
                 EventSystem.current.SetSelectedGameObject(null); 
             }
