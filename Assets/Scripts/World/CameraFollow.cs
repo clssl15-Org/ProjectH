@@ -1,3 +1,4 @@
+using Actors.PlayerSystem;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -21,6 +22,11 @@ public class CameraFollow : MonoBehaviour
         {
             Debug.LogError("이 스크립트는 Camera 컴포넌트가 있는 오브젝트에 연결해야 합니다.");
             enabled = false;
+        }
+
+        if (target == null)
+        {
+            target = FindObjectOfType<Player>().transform;
         }
     }
 

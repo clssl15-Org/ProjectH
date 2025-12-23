@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 8379120966633090368}
   - component: {fileID: 5175911527829833112}
   - component: {fileID: 4268322827769223230}
+  - component: {fileID: 5996600878902521526}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -298,6 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skills: []
   canChangeSkill: 1
+  ultimateSkill: {fileID: 0}
   characterActions:
     attack:
       value: 0
@@ -315,6 +317,19 @@ MonoBehaviour:
       value: 0
     movement:
       value: {x: 0, y: 0}
+--- !u!114 &5996600878902521526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944037012842129890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8490afddb1e8d7e469986ca49689e0e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isApplied: 0
 --- !u!1 &6801821047128880367
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,6 +455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 36c21c6f536c8ec4b84bc22005f2d3b7, type: 2}
+  useStandaloneAttack: 1
   acceleration: 130
   monsterOverlapSpeedMultiplier: 0.7
 --- !u!114 &303451325805896508

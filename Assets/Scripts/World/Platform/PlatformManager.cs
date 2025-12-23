@@ -24,6 +24,7 @@ namespace World
         public Bounds Bounds { get; private set; }
 
         // Property
+        [SerializeField] private bool _autoAssignTilemaps = true;
         [SerializeField] private Tilemap[] _tilemaps;
         [Space]
         [SerializeField] private int _platformCount = 0;
@@ -42,6 +43,9 @@ namespace World
         {
             _platforms = new();
             Platforms = new ReadOnlyDictionary<Vector3Int, int>(_platforms);
+
+            if (_autoAssignTilemaps)
+                _tilemaps = GetComponentsInChildren<Tilemap>();
 
             _initialized = true;
             SetPlatforms();

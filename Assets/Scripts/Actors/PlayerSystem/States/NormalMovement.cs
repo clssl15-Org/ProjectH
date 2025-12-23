@@ -19,6 +19,11 @@ namespace Actors.PlayerSystem
 
         public override void CheckExitTransition()
         {
+            if (CharacterActions.jump.Started && CharacterActions.movement.Down)
+            {
+                CharacterStateController.EnqueueTransition<FallingJump>();
+            }
+
             if (CharacterActions.jump.Started)
             {
                 CharacterStateController.EnqueueTransition<Jump>();
