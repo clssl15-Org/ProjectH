@@ -82,6 +82,10 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         _platformDetector?.SetPlatformManager(platformManager);
     }
 
+    public void ChangeSkill() { }
+    public void UseSkill() { }
+    public void UseUltimate() { }
+
     private void Update()
     {
         #region Move
