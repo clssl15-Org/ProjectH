@@ -23,7 +23,7 @@ namespace Actors.PlayerSystem
 
             if (CharacterActions.attack.Started)
             {
-                CharacterStateController.EnqueueTransition<Attack1>();
+                Player.DefaultAttack();
             }
 
             if (CharacterActions.dash.Started)

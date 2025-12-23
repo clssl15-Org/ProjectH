@@ -26,8 +26,8 @@ namespace Actors.Monsters
                 receiver.TakeDamage(
                     AttackPower,
                     DoKnockback
-                        ? Direction.Center
-                        : (c.transform.position - transform.position).ToDirection(),
+                        ? (c.transform.position - transform.position).ToDirection()
+                        : Direction.Center,
                     KnockbackForce);
             };
         }

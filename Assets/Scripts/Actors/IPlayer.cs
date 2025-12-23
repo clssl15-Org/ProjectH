@@ -39,6 +39,9 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
+        void ChangeSkill();
+        int SelectedIndex { get; }
+
         void DefaultAttack();
 
 #pragma warning disable IDE1006

@@ -47,6 +47,8 @@ namespace Game.Stage
 
                     Register(monster);
                 }
+
+            SpawnManaer.Instance.OnMonsterCreate(monster => Register(monster));
         }
         
         public void Register(IPlayer player, bool connectUI = true)

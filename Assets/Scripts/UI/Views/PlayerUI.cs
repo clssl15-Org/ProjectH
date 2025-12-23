@@ -82,8 +82,6 @@ namespace UI
 
                 // 시각적 효과 해제 (Pressed -> Normal/Highlighted)
                 ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerUpHandler);
-                // 기능 실행 (Click)
-                ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerClickHandler);
                 // 버튼 뗐을 때 하이라이트 잔상 없애기
                 EventSystem.current.SetSelectedGameObject(null); 
             }

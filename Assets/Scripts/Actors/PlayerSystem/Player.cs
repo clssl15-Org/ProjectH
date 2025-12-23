@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Infrastructure;
+using World;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     [RequireComponent(typeof(PlayerHealth))]
     public class Player : MonoBehaviour, IPlayer
@@ -38,6 +38,7 @@ namespace Actor.PlayerSystem
         private PlatformDetector platformDetector;
         private PlayerHealth playerHealth;
         private SkillManager skillManager;
+        private CharacterStateController characterStateController;
 
         private void Awake()
         {
@@ -46,11 +47,24 @@ namespace Actor.PlayerSystem
 
             platformDetector = GetComponent<PlatformDetector>();
             skillManager = GetComponent<SkillManager>();
+
+            characterStateController = GetComponentInChildren<CharacterStateController>();
+        }
+
+        public void Inject(PlatformManager platformManager)
+        {
+            GetComponent<PlatformDetector>()
+                .SetPlatformManager(platformManager);
         }
 
         public void Start()
         {
             ConditionChanged += cond => print($"Player: {cond}");
+        }
+
+        public void DefaultAttack()
+        {
+            characterStateController.EnqueueTransition<Attack1>();
         }
 
         void Update()
@@ -65,6 +79,11 @@ namespace Actor.PlayerSystem
             int damage = (int)(value * RouletteDamageMultiplier);
             RouletteDamageMultiplier = 1;
             return damage;
+        }
+
+        void OnDestroy()
+        {
+            Destroyed?.Invoke();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Infrastructure;
 
 namespace Actors.PlayerSystem
 {
@@ -21,18 +22,22 @@ namespace Actors.PlayerSystem
                 CharacterStateController.EnqueueTransition<NormalMovement>();
             }
         }
+
         public override void EnterBehaviour(float dt)
         {
             ResetHit();
             TakeKnockback();
         }
+
         private void TakeKnockback()
         {
-            Vector2 knockbackDirection = CharacterActor.Backward;
-            CharacterActor.Velocity = Vector2.zero;
+            Vector2 knockbackDirection =
+                Player.GetComponentInChildren<PlayerHealth>().RecentKnockback.ToVector2();// CharacterActor.Backward;
 
+            CharacterActor.Velocity = Vector2.zero;
             CharacterActor.Rigidbody.AddForce(knockbackDirection * knockbackPower, ForceMode2D.Impulse);
         }
+
         public override void UpdateBehaviour(float dt)
         {
             float animationDt = dt / hitDuration;
@@ -43,6 +48,7 @@ namespace Actors.PlayerSystem
                 isDone = true;
             }
         }
+
         private void ResetHit()
         {
             hitCursor = 0f;

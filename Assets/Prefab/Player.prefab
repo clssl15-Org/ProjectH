@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 8379120966633090368}
   - component: {fileID: 5175911527829833112}
   - component: {fileID: 4268322827769223230}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 067b2a6e5c394bb46b587f772c37c729, type: 2}
   StatesGO: {fileID: 7853671354700595129}
+  RouletteDamageMultiplier: 1
 --- !u!114 &8290243547340287660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +297,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skills: []
+  canChangeSkill: 1
+  characterActions:
+    attack:
+      value: 0
+    jump:
+      value: 0
+    dash:
+      value: 0
+    changeSkill:
+      value: 0
+    rangedAttack:
+      value: 0
+    ultimate:
+      value: 0
+    useSkill:
+      value: 0
+    movement:
+      value: {x: 0, y: 0}
 --- !u!1 &6801821047128880367
 GameObject:
   m_ObjectHideFlags: 0

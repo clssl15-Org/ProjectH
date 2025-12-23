@@ -20,6 +20,11 @@ namespace Actors.PlayerSystem
             get => currentHealth;
         }
         private int currentHealth;
+
+        /// <summary>
+        /// 임시 방편
+        /// </summary>
+        public Direction RecentKnockback { get; set; }
         public bool IsAlive { get; private set; } = true;
 
         public event Action Damaged;
@@ -39,6 +44,8 @@ namespace Actors.PlayerSystem
 
             currentHealth -= damage;
             currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+
+            RecentKnockback = direction;
 
             Damaged?.Invoke();
             Debug.Log("Player Health: " + currentHealth + "/" + MaxHealth);
