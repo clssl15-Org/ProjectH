@@ -2369,8 +2369,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.6}
-  m_Size: {x: 1.2, y: 2.95}
+  m_Offset: {x: 0, y: 1.5404613}
+  m_Size: {x: 1.1999998, y: 3.0690763}
   m_Direction: 0
 --- !u!50 &7741757068647905354
 Rigidbody2D:
@@ -2508,16 +2508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ShowPlayerDetection>k__BackingField: 0
-  <PlayerDetectionHeight>k__BackingField: 0.3
-  <PlayerDetectionShowTime>k__BackingField: 0.5
-  <ShowExclamationMark>k__BackingField: 0
-  <ExclamationMarkHeight>k__BackingField: 0.3
-  <ExclamationMarkShowTime>k__BackingField: 0.5
-  ShowDamageText: 1
-  <DamageFontSize>k__BackingField: 5
-  <DamageHeight>k__BackingField: 0.7
-  <DamageShowTime>k__BackingField: 0.5
+  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
 --- !u!1 &4391684830438023231
 GameObject:
   m_ObjectHideFlags: 0

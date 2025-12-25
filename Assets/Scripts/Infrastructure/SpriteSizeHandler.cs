@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,7 +17,6 @@ namespace Infrastructure
 
         private SpriteRenderer _sr;
         private int _applyScaleFactorCount = 0;
-
 
         public SpriteSizeHandler Initialize(Configuration configuration, bool apply = false)
         {

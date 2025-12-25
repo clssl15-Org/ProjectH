@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2181310763289908931
 Transform:
   m_ObjectHideFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2504996490564337493}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.89, y: -0.47, z: 0}
+  m_LocalPosition: {x: -0.63, y: -0.388, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -68,7 +68,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.2
 --- !u!114 &5445085745256070489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,8 +260,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09423246, y: -0.118504696}
-  m_Size: {x: 1.2795112, y: 0.8629916}
+  m_Offset: {x: 0.06904736, y: -0.16879925}
+  m_Size: {x: 1.0377367, y: 0.7624069}
   m_Direction: 1
 --- !u!50 &7391344048938946231
 Rigidbody2D:
@@ -367,16 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ShowPlayerDetection>k__BackingField: 1
-  <PlayerDetectionHeight>k__BackingField: 0.3
-  <PlayerDetectionShowTime>k__BackingField: 0.5
-  <ShowExclamationMark>k__BackingField: 1
-  <ExclamationMarkHeight>k__BackingField: 0.3
-  <ExclamationMarkShowTime>k__BackingField: 0.5
-  ShowDamageText: 1
-  <DamageFontSize>k__BackingField: 5
-  <DamageHeight>k__BackingField: 0.7
-  <DamageShowTime>k__BackingField: 0.5
+  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
 --- !u!1001 &5531710459335882150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -424,6 +415,14 @@ PrefabInstance:
     - target: {fileID: 172354662256242199, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 872980189277596305, guid: b59366ce63277f24184eb407157ab667, type: 3}
+      propertyPath: m_Size.y
+      value: 0.76240695
+      objectReference: {fileID: 0}
+    - target: {fileID: 872980189277596305, guid: b59366ce63277f24184eb407157ab667, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.1687992
       objectReference: {fileID: 0}
     - target: {fileID: 3150504008527168885, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_Name

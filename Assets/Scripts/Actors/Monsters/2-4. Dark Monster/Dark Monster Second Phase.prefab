@@ -260,8 +260,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.26}
-  m_Size: {x: 4.4, y: 2.26}
+  m_Offset: {x: -0.000000033690466, y: -0.28261614}
+  m_Size: {x: 4.4000006, y: 2.3052375}
   m_Direction: 1
 --- !u!50 &5161581973083953287
 Rigidbody2D:
@@ -367,16 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ShowPlayerDetection>k__BackingField: 1
-  <PlayerDetectionHeight>k__BackingField: 0.3
-  <PlayerDetectionShowTime>k__BackingField: 0.5
-  <ShowExclamationMark>k__BackingField: 1
-  <ExclamationMarkHeight>k__BackingField: 0.3
-  <ExclamationMarkShowTime>k__BackingField: 0.5
-  ShowDamageText: 1
-  <DamageFontSize>k__BackingField: 5
-  <DamageHeight>k__BackingField: 0.7
-  <DamageShowTime>k__BackingField: 0.5
+  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
 --- !u!1001 &2419400361196618923
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -427,11 +418,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 872980189277596305, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_Size.y
-      value: 2.2600002
+      value: 2.3052375
       objectReference: {fileID: 0}
     - target: {fileID: 872980189277596305, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_Offset.y
-      value: -0.26
+      value: -0.2826161
       objectReference: {fileID: 0}
     - target: {fileID: 3150504008527168885, guid: b59366ce63277f24184eb407157ab667, type: 3}
       propertyPath: m_Name

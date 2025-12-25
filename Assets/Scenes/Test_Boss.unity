@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594f0d4d340a39d418f378efbe9e857e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoAssignTilemaps: 1
   _tilemaps:
   - {fileID: 1309707469}
   _platformCount: 0
@@ -4761,7 +4762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5695413977444961193, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5878542944565762321, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: m_IsActive

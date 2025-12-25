@@ -64,6 +64,7 @@ namespace Actors.Monsters
 
                 var projectile = Instantiate(_projectiles[i]);
 
+                projectile.transform.localScale = _projectiles[i].transform.lossyScale;
                 projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
@@ -93,6 +94,7 @@ namespace Actors.Monsters
             {
                 var projectile = Instantiate(_projectiles[i]);
 
+                projectile.transform.localScale = _projectiles[i].transform.lossyScale;
                 projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
@@ -110,6 +112,7 @@ namespace Actors.Monsters
             {
                 var projectile = Instantiate(_projectiles[i]);
 
+                projectile.transform.localScale = _projectiles[i].transform.lossyScale;
                 projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
@@ -131,7 +134,6 @@ namespace Actors.Monsters
 
             return projectile;
         }
-
 
 
         private void ThrowIfNotValidState()

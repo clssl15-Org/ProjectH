@@ -31,7 +31,7 @@ namespace Actors.Monsters
         /// <summary>
         /// 몬스터의 콜라이더 크기와 위치에 맞게 자신의 높이를 자동으로 조절합니다.
         /// </summary>
-        internal void SetSize(float offset, float height)
+        internal void SetSize(float worldCenterY, float worldHeight)
         {
             if (!Application.isPlaying)
                 _colliderComponent = GetComponent<BoxCollider2D>();
@@ -40,20 +40,14 @@ namespace Actors.Monsters
                 throw new InvalidOperationException(
                     Ctx("자신이 유효한 콜라이더를 가지고 있지 않습니다."));
 
+            var factorY = Mathf.Abs(transform.lossyScale.y) < Mathf.Epsilon ? 1f : transform.lossyScale.y;
+            var localHeight = worldHeight / factorY;
 
-            var factor = transform.lossyScale.z;
+            var worldCenterPos = new Vector3(transform.position.x, worldCenterY, transform.position.z);
+            var localCenterPos = transform.InverseTransformPoint(worldCenterPos);
 
-            _colliderComponent.offset = new Vector2
-            {
-                x = 0,
-                y = offset / factor
-            };
-
-            _colliderComponent.size = new Vector2
-            {
-                x = _colliderComponent.size.x / factor,
-                y = height / factor
-            };
+            _colliderComponent.offset = new Vector2(0, localCenterPos.y);
+            _colliderComponent.size = new Vector2(_colliderComponent.size.x, localHeight);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -70,7 +64,8 @@ namespace Actors.Monsters
             if (!collision.CompareTag("Player"))
                 return;
 
-            CurrentPlayer = null;
+            if (CurrentPlayer == collision.gameObject)
+                CurrentPlayer = null;
         }
 
         private void SetSizeByParent()
@@ -87,8 +82,8 @@ namespace Actors.Monsters
 
 
             SetSize(
-                parentCollider.offset.y,
-                parentCollider.bounds.max.y - parentCollider.bounds.min.y);
+                parentCollider.bounds.center.y,
+                parentCollider.bounds.size.y);
         }
 
         private string Ctx(string message) => $"[MonsterPlayerDetector] {message}";

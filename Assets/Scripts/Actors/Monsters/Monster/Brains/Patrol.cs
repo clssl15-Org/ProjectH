@@ -14,6 +14,7 @@ namespace Actors.Monsters.Brains
         // Internal
         private readonly string _monsterAction;
         private float _remainingTime;
+        private int _turnCount;
 
 
         // Content
@@ -34,7 +35,10 @@ namespace Actors.Monsters.Brains
                     $"{_monsterAction} 행동에 실패하였기 때문에 Patrol 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete(false);
+                return;
             }
+
+            _turnCount = 0;
         }
 
         protected override void OnTick()
@@ -42,10 +46,25 @@ namespace Actors.Monsters.Brains
             _remainingTime -= Time.deltaTime;
 
             if (_remainingTime <= 0)
+            {
                 Complete();
+                return;
+            }
 
             if (!Owner.TryMove())
+            {
+                _turnCount++;
+                if (_turnCount >= 2)
+                {
+                    // 이동 공간 없음
+                    Complete(false);
+                    return;
+                }
+
                 Owner.Direction = Owner.Direction.Flip();
+            }
+            else
+                _turnCount = 0;
         }
 
         protected override void OnHalt(DetailedNodeStatus _)

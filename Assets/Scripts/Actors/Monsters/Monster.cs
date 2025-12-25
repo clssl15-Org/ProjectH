@@ -194,7 +194,6 @@ namespace Actors.Monsters
             _playerDetector = GetComponentInChildren<MonsterPlayerDetector>();
             if (_playerDetector) _playerDetector.PlayerDetected += OnPlayerDetected;
 
-
             DamageReceiver = GetComponentInChildren<MonsterDamageReceiver>(true);
             if (!DamageReceiver) throw new InvalidOperationException(FormatLogMessage(
                 $"{nameof(DamageReceiver)}이(가) 존재하지 않기 때문에 몬스터를 시작할 수 없습니다."));
@@ -235,9 +234,11 @@ namespace Actors.Monsters
                     $"이 몬스터는 {nameof(GameAssetsLibrary)}을(를) 가지고 있지 않습니다. " +
                     "관련 기능이 정상적으로 작동하지 않을 수 있습니다."));
 
-            var _platformDetector = GetComponent<PlatformDetector>();
-            PlatformDetector = _platformDetector;
-            _platformDetector.SetPlatformManager(PlatformManager);
+            var platformDetector = GetComponent<PlatformDetector>();
+            PlatformDetector = platformDetector;
+
+            platformDetector.SetPlatformManager(PlatformManager);
+            platformDetector.DetectionRange = (Collider.bounds.max.x - Collider.bounds.min.x) * 0.5f;
             #endregion
 
             _spriteSizeHandler.RequestApplyScaleFactor();

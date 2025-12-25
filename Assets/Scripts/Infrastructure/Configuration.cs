@@ -1,3 +1,4 @@
+using Actors.Monsters;
 using UnityEngine;
 
 namespace Infrastructure
@@ -5,8 +6,10 @@ namespace Infrastructure
     [DisallowMultipleComponent]
     public class Configuration : MonoBehaviour
     {
-        [SerializeField, Min(0f)] private float _pixelScaleFactor = 1f;
+        [field: Header("Rendering")]
+        [field: SerializeField, Min(0f)] public float PixelScaleFactor { get; set; } = 0.03f;
 
-        public float PixelScaleFactor => _pixelScaleFactor;
+        [field: Header("Indicator")]
+        [field: SerializeField] public IndicatorConfiguration IndicatorConfiguration { get; set; }
     }
 }

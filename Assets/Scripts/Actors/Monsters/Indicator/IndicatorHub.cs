@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Actors.Monsters
@@ -6,34 +7,27 @@ namespace Actors.Monsters
     [RequireComponent(typeof(IMonsterInternal))]
     public class IndicatorHub : MonoBehaviour
     {
-        [field: Header("Player Detection")]
-        [field: SerializeField] public bool ShowPlayerDetection { get; set; } = true;
-        [field: SerializeField, Min(0)] public float PlayerDetectionHeight { get; set; } = 0.3f;
-        [field: SerializeField, Min(0)] public float PlayerDetectionShowTime { get; set; } = 0.5f;
-
-        [field: Header("Exclamation Mark")]
-        [field: SerializeField] public bool ShowExclamationMark { get; set; } = true;
-        [field: SerializeField, Min(0)] public float ExclamationMarkHeight { get; set; } = 0.3f;
-        [field: SerializeField, Min(0)] public float ExclamationMarkShowTime { get; set; } = 0.5f;
-
-        [field: Header("Damage Text")]
-        [field: SerializeField] private bool ShowDamageText = true;
-        [field: SerializeField, Min(0)] public float DamageFontSize { get; set; } = 5f;
-        [field: SerializeField, Min(0)] public float DamageHeight { get; set; } = 0.7f;
-        [field: SerializeField, Min(0)] public float DamageShowTime { get; set; } = 0.5f;
+        [field: SerializeField] public IndicatorConfiguration IndicatorConfigurationOverride { get; set; }
 
         private IMonsterInternal _monster;
+        private IndicatorConfigurationView _config;
 
 
         private void Start()
         {
             _monster = GetComponent<IMonsterInternal>();
+
+            var configuraton = _monster.Configuration?.IndicatorConfiguration
+                ?? throw new InvalidOperationException(Ctx(
+                    $"{nameof(_monster.Configuration)}이(가) 유효하지 않기 떄문에 객체를 실행할 수 없습니다."));
+            _config = new(configuraton, IndicatorConfigurationOverride);
+
             _monster.ConditionChanged += cd =>
             {
-                if (cd.Is(MonsterCondition.PlayerDetected) && ShowPlayerDetection)
+                if (cd.Is(MonsterCondition.PlayerDetected) && _config.ShowPlayerDetection)
                     ShowPlayerDetectionIndicator();
 
-                if (cd.Is(MonsterCondition.Attack) && ShowExclamationMark)
+                if (cd.Is(MonsterCondition.Attack) && _config.ShowExclamationMark)
                 {
                     if (cd.Payload is not bool isRanged)
                     {
@@ -49,7 +43,7 @@ namespace Actors.Monsters
                     ShowExclamationMarkIndicator();
                 }
 
-                if (cd.Is(MonsterCondition.Damaged) && ShowDamageText)
+                if (cd.Is(MonsterCondition.Damaged) && _config.ShowDamageText)
                 {
                     if (cd.Payload is not DamageInfo damageInfo)
                     {
@@ -71,8 +65,8 @@ namespace Actors.Monsters
                 .Indicator_PlayerDetection
                 .ShowAsIndicator(
                     _monster,
-                    PlayerDetectionHeight,
-                    PlayerDetectionShowTime);
+                    _config.PlayerDetectionHeight * _monster.transform.lossyScale.z,
+                    _config.PlayerDetectionShowTime);
         }
 
         private void ShowExclamationMarkIndicator()
@@ -82,21 +76,33 @@ namespace Actors.Monsters
                 .Indicator_ExclamationMark
                 .ShowAsIndicator(
                     _monster,
-                    ExclamationMarkHeight,
-                    ExclamationMarkShowTime);
+                    _config.ExclamationMarkHeight * _monster.transform.lossyScale.z,
+                    _config.ExclamationMarkShowTime);
         }
 
         private void ShowDamageTextIndicator(int damage)
         {
-            _monster
+            var text = _monster
                 .GameAssetsLibrary
                 .Indicator_Text
                 .ShowAsIndicator(
                     _monster,
                     damage.ToString(),
-                    DamageHeight,
-                    DamageShowTime,
-                    DamageFontSize);
+                    _config.DamageHeight,
+                    _config.DamageShowTime,
+                    _config.DamageFontSize);
+
+
+            text.color = _config.DefaultDamageColor;
+
+            if (_config.DamageColorItems?.Length > 0)
+                foreach (var dci in _config.DamageColorItems)
+                {
+                    if (dci.Damage > damage)
+                        break;
+
+                    text.color = dci.Color;
+                }
         }
 
 
