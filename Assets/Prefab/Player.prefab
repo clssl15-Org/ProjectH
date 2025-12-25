@@ -472,11 +472,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 741d1bab4c27aa4469fec3ecd64588d3, type: 2}
-  attackDuration: 0.7
-  damageApplyTime: 0.5
+  attackDuration: 0.4
+  damageApplyTime: 0.2
   comboTimeWindow: 0.1
   nextComboTime: 0.9
-  comboInputTimeWindow: 0.7
+  comboInputTimeWindow: 0.5
   damageMultiplier: 1
   attackRange: 1.5
   attackAngle: 90
@@ -494,11 +494,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 35211715565348640ab8daad52c5d67e, type: 2}
-  attackDuration: 0.7
-  damageApplyTime: 0.2
+  attackDuration: 0.4
+  damageApplyTime: 0.1
   comboTimeWindow: 0.1
   nextComboTime: 0.9
-  comboInputTimeWindow: 0.7
+  comboInputTimeWindow: 0.5
   damageMultiplier: 1
   attackSize: {x: 2, y: 2}
   attackPointOffset: {x: 0, y: 0}
@@ -515,8 +515,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: fd4a4b3344e5ef64c9b8dc1e03eba9e3, type: 2}
-  attackDuration: 0.7
-  damageApplyTime: 0.3
+  attackDuration: 0.5
+  damageApplyTime: 0.2
   damageMultiplier: 1.5
   attackSize: {x: 2, y: 1}
   attackPointOffset: {x: 1, y: 0}
