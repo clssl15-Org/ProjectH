@@ -37,7 +37,7 @@ namespace Actors.Monsters.Bosses
                 if (!Owner.TryDoAction(new(
                     mode.ToString() + "Attack",
                     result => Complete(result),
-                    Inputs: new object[] { null, (Func<Vector2>)(() => owner._targetPlayer.transform.position) }),
+                    Inputs: new object[] { null, (Func<Vector2>)(() => owner.DetectedPlayer.transform.position) }),
                     out var reason,
                     allowRestart: true))
                 {

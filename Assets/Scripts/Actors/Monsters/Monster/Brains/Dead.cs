@@ -25,7 +25,8 @@ namespace Actors.Monsters.Brains
             _opening = opening;
         }
 
-        public override bool CheckCondition() => Owner.IsAlive;
+        public override bool CheckCondition() =>
+            Owner.IsAlive;
 
         protected override void OnOpen(object[] _)
         {

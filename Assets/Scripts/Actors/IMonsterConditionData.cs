@@ -27,5 +27,9 @@ namespace Actors
         event Action Callback;
 
         bool Is(params MonsterCondition[] conditions);
+        /// <summary>
+        /// 이 메서드는 발행자만 호출할 수 있습니다.
+        /// </summary>
+        void Complete();
     }
 }

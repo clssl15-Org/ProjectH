@@ -40,6 +40,7 @@ namespace Actors.Monsters
         
         void Knockback(Direction direction, float? knockbackForce = null);
         void NotifyCondition(IMonsterConditionData data);
+        void NotifyConditionImmediately(IMonsterConditionData data);
 
         void Die();
         #endregion

@@ -18,11 +18,10 @@ namespace Actors.Monsters.Brains
 
         public override bool CheckCondition()
         {
-            if (Owner.HP <= 0)
-            {
-                Owner.HP = 0;
+            if (!Owner.IsAlive)
                 return false;
-            }
+            if (Owner.HP <= 0)
+                return false;
 
             return true;
         }

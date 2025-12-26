@@ -3,7 +3,6 @@ using System.Linq;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure;
-using Infrastructure.StateMachines.BT;
 using UnityEngine;
 using World;
 #if UNITY_EDITOR
@@ -14,7 +13,7 @@ using UnityEditor;
 namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
-    public partial class Werbellion : Monster<WerbellionStats>
+    public partial class Werbellion : Monster<WerbellionStats>, IBoss, IPlayerInitializable
     {
         // Front
         public enum AttackMode
@@ -60,6 +59,8 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private GameObject _targetPlayer;
         [Space]
         [SerializeField] private bool _autoAwake = false;
+        [Tooltip("2 키를 누르면 해당 페이즈를 자동으로 넘어갑니다.")]
+        [SerializeField] private bool _forceClear_2 = false;
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
         internal override PlatformDetector PlatformDetector => throw new InvalidOperationException(
@@ -264,6 +265,14 @@ namespace Actors.Monsters.Bosses
             Brain = new WerbellionBrain(this);
             StandaloneHitBrain.DoKnockback = false;
 
+            // 시작 애니메이션 지연 방지
+            SpriteRenderer.enabled = false;
+            new Timer(0.1f, _ =>
+            {
+                if (this && SpriteRenderer)
+                    SpriteRenderer.enabled = true;
+            });
+
 
             // ------- Debug -------
             if (_useTargetPlayer
@@ -272,13 +281,24 @@ namespace Actors.Monsters.Bosses
                 InitializePlayer(player);
 
             if (_autoAwake)
-                DoAwake();
+                Commence();
         }
 
-        public void DoAwake()
+        public void Commence()
         {
             Brain.Blackboard.Properties[IsAwake] = true;
             Brain.Blackboard.Committing = true;
+        }
+
+        protected override void Update()
+        {
+            if (_forceClear_2 && Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                OnDamaged(new DamageInfo(int.MaxValue) { HasKnockback = false });
+                return;
+            }
+
+            base.Update();
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)
@@ -307,7 +327,7 @@ namespace Actors.Monsters.Bosses
                 var target = (Werbellion)base.target;
 
                 if (!target._autoAwake && GUILayout.Button("Awake"))
-                    target.DoAwake();
+                    target.Commence();
             }
         }
 #endif

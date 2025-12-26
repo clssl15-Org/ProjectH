@@ -8,11 +8,11 @@ namespace Game.Stage
     public class StageManager : MonoBehaviour
     {
         [SerializeField] private UILibrary _uILibrary;
-        [Space]
-        [Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 플레이어를 자동으로 등록합니다")]
-        [SerializeField] private bool _autoBindScenePlayer = true;
-        [Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 몬스터들을 자동으로 등록합니다")]
-        [SerializeField] private bool _autoBindSceneMonsters = true;
+        [field: Space]
+        [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 플레이어를 자동으로 등록합니다")]
+        [field: SerializeField] protected bool AutoBindScenePlayer { get; set; } = true;
+        [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 몬스터들을 자동으로 등록합니다")]
+        [field: SerializeField] protected bool AutoBindSceneMonsters { get; set; } = true;
 
         protected UILibrary UILibrary => _uILibrary;
 
@@ -31,7 +31,7 @@ namespace Game.Stage
 
         protected virtual void Start()
         {
-            if (_autoBindScenePlayer)
+            if (AutoBindScenePlayer)
             {
                 var playerObject = GameObject.FindGameObjectWithTag("Player");
 
@@ -39,7 +39,7 @@ namespace Game.Stage
                     Register(player);
             }
 
-            if (_autoBindSceneMonsters)
+            if (AutoBindSceneMonsters)
                 foreach (var monsterObject in GameObject.FindGameObjectsWithTag("Monster"))
                 {
                     if (!monsterObject.TryGetComponent<IMonster>(out var monster))

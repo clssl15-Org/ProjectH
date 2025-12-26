@@ -22,7 +22,7 @@ namespace Actors.Monsters
         public bool Is(params MonsterCondition[] conditions) =>
             conditions.Contains(Condition);
 
-        internal void Complete()
+        public void Complete()
         {
             Callback?.Invoke();
             Callback = null;

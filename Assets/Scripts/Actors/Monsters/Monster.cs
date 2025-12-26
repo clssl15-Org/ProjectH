@@ -348,13 +348,18 @@ namespace Actors.Monsters
             if (destroySelf)
                 Destroy(gameObject);
         }
-
         void IMonsterInternal.Die() => Die();
 
-        #region Interfaces
+        protected void NotifyCondition(IMonsterConditionData data) => ConditionChanged?.Invoke(data);
+        protected void NotifyConditionImmediately(IMonsterConditionData data)
+        {
+            ((IMonsterInternal)this).NotifyCondition(data);
+            data.Complete();
+        }
+        void IMonsterInternal.NotifyCondition(IMonsterConditionData data) => NotifyCondition(data);
+        void IMonsterInternal.NotifyConditionImmediately(IMonsterConditionData data) => NotifyConditionImmediately(data);
+
         void IMonsterInternal.Knockback(Direction direction, float? knockbackForce) => Knockback(direction, knockbackForce);
-        void IMonsterInternal.NotifyCondition(IMonsterConditionData data) => ConditionChanged?.Invoke(data);
-        #endregion
         #endregion
 
 

@@ -185,10 +185,10 @@ namespace Actors.Monsters.Bosses
                 InitializePlayer(player);
 
             if (_autoAwake)
-                DoAwake();
+                Commence();
         }
 
-        public void DoAwake()
+        public void Commence()
         {
             Brain.Blackboard.Properties[ITwinBoss.IsAwake] = true;
             Brain.Blackboard.Committing = true;
@@ -202,6 +202,7 @@ namespace Actors.Monsters.Bosses
         public void Revive(float hpRate)
         {
             HP = Mathf.CeilToInt(hpRate * StatsInfo.MaxHP);
+            NotifyConditionImmediately(new MonsterConditionData(MonsterCondition.Heal));
         }
 
         public void SetToDead()
@@ -209,7 +210,7 @@ namespace Actors.Monsters.Bosses
             Brain.SelectChild(new SelectionRequest[]
             {
                 new(true),
-                new(nameof(Dead), null, EntryPolicy.Unconditional, RerunPolicy.EnsureRunningAndInjectInputs)
+                new(nameof(Dead), null, EntryPolicy.Unconditional, RerunPolicy.Restart)
             });
         }
 
@@ -234,7 +235,7 @@ namespace Actors.Monsters.Bosses
                 var target = (DarkTherion)base.target;
 
                 if (!target._autoAwake && GUILayout.Button("Awake"))
-                    target.DoAwake();
+                    target.Commence();
             }
         }
 #endif

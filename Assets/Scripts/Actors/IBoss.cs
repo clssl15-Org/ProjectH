@@ -5,7 +5,7 @@ namespace Actors
         void Commence();
     }
 
-    public interface IPlayerIInitializable
+    public interface IPlayerInitializable
     {
         void InitializePlayer(IPlayer player);
     }

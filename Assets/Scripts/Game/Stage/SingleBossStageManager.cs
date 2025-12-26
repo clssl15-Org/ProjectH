@@ -24,6 +24,7 @@ namespace Game.Stage
         // Front
         protected override void Awake()
         {
+            AutoBindSceneMonsters = false;
             base.Awake();
 
             if (!_bossObject)
@@ -50,7 +51,7 @@ namespace Game.Stage
             if (!MonsterManager.Register(boss))
                 return;
 
-            if (boss is IPlayerIInitializable playerIInitializable)
+            if (boss is IPlayerInitializable playerIInitializable)
             {
                 if (_playerObject
                     && _playerObject.TryGetComponent<IPlayer>(out var player))

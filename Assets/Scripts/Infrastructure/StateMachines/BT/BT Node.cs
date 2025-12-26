@@ -170,7 +170,6 @@ namespace Infrastructure.StateMachines.BT
             SelectionRequest.ThrowIfNullOrEmpty(requests, Ctx);
 
             var self = (IBTNodeInternal<TOwner, TBlackboard>)this;
-
             if (self.CheckSelectionCondition(requests.First()) != SelectionResult.Selected)
                 return;
 
@@ -201,7 +200,6 @@ namespace Infrastructure.StateMachines.BT
         {
             SelectionRequest.ThrowIfNullOrEmpty(requests, Ctx);
             var request = requests.First();
-
 
             if (IsRunning)
             {

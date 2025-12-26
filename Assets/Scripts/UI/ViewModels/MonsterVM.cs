@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Actors;
-using Actors.Monsters.Brains;
 using UnityEngine;
 
 namespace UI

@@ -11,12 +11,17 @@ namespace UI
         protected RectTransform Transform { get; private set; }
         protected IHealthRateVM HealthRateVM { get; private set; }
 
-        [SerializeField] RectTransform _mask;
+        [SerializeField] private RectTransform _mask;
         private float _originalWidth;
+
+        private bool _awaken = false;
 
 
         protected virtual void Awake()
         {
+            if (_awaken) return;
+            _awaken = true;
+
             if (!_mask)
                 throw new InvalidOperationException(
                     $"{nameof(_mask)} 필드는 null일 수 없습니다. " +
@@ -28,6 +33,8 @@ namespace UI
 
         public void Connect(IHealthRateVM vm)
         {
+            Awake();
+
             if (vm == null)
                 throw new ArgumentNullException(
                     nameof(vm),

@@ -7,6 +7,7 @@ namespace UI
     [RequireComponent(typeof(RectTransform))]
     public class BossUI : MonoBehaviour, IView, IEnablable
     {
+        [field: SerializeField] public bool DestoyOnMonsterDead { get; set; } = true;
         [SerializeField] private HealthBar _healthBar;
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
@@ -20,13 +21,17 @@ namespace UI
         Action IEnablable.Disabled => _desabled;
         #endregion
 
+        private bool _awaken = false;
         private MonsterVM _boss;
         private Action _desabled = null;
 
 
         // Content
-        private void Awake()
+        public void Awake()
         {
+            if (_awaken) return;
+            _awaken = true;
+
             if (!_healthBar)
                 throw new InvalidOperationException(
                     $"[{nameof(BossUI)}] {nameof(_healthBar)} 필드는 null일 수 없습니다. " +
@@ -49,9 +54,10 @@ namespace UI
                     $"[{nameof(HealthBar)}] {nameof(_boss)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
 
             _boss = boss;
+            _healthBar.Connect(boss);
 
-            _boss.Dead += DestoyOnMonsterDead;
-            _healthBar.Connect(boss);    
+            if (DestoyOnMonsterDead)
+                _boss.Dead += DestoyOnDead;
         }
 
         public void Disconnect()
@@ -63,7 +69,7 @@ namespace UI
             _boss = null;
         }
 
-        private void DestoyOnMonsterDead()
+        private void DestoyOnDead()
         {
             Disconnect();
 
@@ -71,10 +77,26 @@ namespace UI
             Disable();
         }
 
-        public void Enable() => _enabler.Enable();
-        public void Disable() => _enabler.Disable();
-        public void SetToEnabled() => _enabler.SetToEnabled();
-        public void SetToDisabled() => _enabler.SetToDisabled();
+        public void Enable()
+        {
+            Awake();
+            _enabler.Enable();
+        }
+        public void Disable()
+        {
+            Awake();
+            _enabler.Disable();
+        }
+        public void SetToEnabled()
+        {
+            Awake();
+            _enabler.SetToEnabled();
+        }
+        public void SetToDisabled()
+        {
+            Awake();
+            _enabler.SetToDisabled();
+        }
 
         public void SetParent(RectTransform parent) =>
             GetComponent<RectTransform>().SetParent(parent);

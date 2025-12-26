@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -5,12 +6,19 @@ namespace Actors.Monsters.Bosses
 {
     public class TwinBossManager : MonoBehaviour
     {
+        // Front
+        public event Action Cleared;
+
         // Internal
         [SerializeField] private GameObject[] _bosses;
         [SerializeField] private float _reviveTime = 10f;
         [SerializeField] private float _bonusTime = 5f;
+        [Tooltip("1 키를 누르면 해당 페이즈를 자동으로 넘어갑니다.")]
+        [SerializeField] private bool _forceClear_1 = false;
 
         private bool _isPending;
+        private bool _isCleared;
+
         private int _pendingCount;
         private ITwinBoss[] _twinBosses;
         private float _reviveTimer;
@@ -24,22 +32,31 @@ namespace Actors.Monsters.Bosses
                 .ToArray();
         }
 
-        public void DoAwake()
+        public void Commence()
         {
             _isPending = false;
+            _isCleared = false;
             _pendingCount = 0;
 
             foreach (var boss in _twinBosses)
-                boss.DoAwake();
+                boss.Commence();
         }
 
         private void Update()
         {
+            if (_forceClear_1 && Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                TwinBossClear();
+                return;
+            }
+
+            if (_isCleared)
+                return;
+
             if (_twinBosses.All(b => b.IsExhausted))
             {
                 // 공략 성공
-                print("공략 성공");
-                gameObject.SetActive(false);
+                TwinBossClear();
                 return;
             }
 
@@ -73,6 +90,16 @@ namespace Actors.Monsters.Bosses
 
                 _isPending = false; // 이제 2명이 살아있는 상태
             }
+        }
+
+        private void TwinBossClear()
+        {
+            _isCleared = true;
+
+            foreach (var boss in _twinBosses)
+                boss.SetToDead();
+
+            Cleared?.Invoke();
         }
     }
 }

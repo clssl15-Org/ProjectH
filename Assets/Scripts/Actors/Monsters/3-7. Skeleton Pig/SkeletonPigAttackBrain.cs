@@ -46,10 +46,13 @@ namespace Actors.Monsters
                 Blackboard.Committing = true;
 
                 if (mode == AttackMode.Roar)
+                {
                     Owner.HP += Mathf.FloorToInt(Owner.StatsInfo.MaxHP * owner.StatsInfo.RoarHealingRate);
+                    Owner.NotifyConditionImmediately(new MonsterConditionData(MonsterCondition.Heal));
+                }
                 else
                 {
-                    
+
                     _notification = new MonsterConditionData(MonsterCondition.Attack, mode == AttackMode.DashAttack);
                     Owner.NotifyCondition(_notification);
                 }

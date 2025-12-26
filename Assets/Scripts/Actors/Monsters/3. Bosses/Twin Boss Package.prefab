@@ -1168,7 +1168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &128604092584201680
 Transform:
   m_ObjectHideFlags: 0
@@ -1324,8 +1324,8 @@ MonoBehaviour:
   _bosses:
   - {fileID: 5878542944565762321}
   - {fileID: 8431915662518892015}
-  _reviveTime: 3
-  _bonusTime: 3
+  _reviveTime: 5
+  _bonusTime: 10
 --- !u!1 &5810666194657943169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1576,7 +1576,7 @@ GameObject:
   - component: {fileID: 5899289195953550444}
   - component: {fileID: 1862625504292106988}
   m_Layer: 8
-  m_Name: Bella
+  m_Name: Belia
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1591,7 +1591,7 @@ Transform:
   m_GameObject: {fileID: 5878542944565762321}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.56, y: -9.83, z: 0}
+  m_LocalPosition: {x: -8.14, y: -5.45, z: 0}
   m_LocalScale: {x: 1.6699998, y: 1.6699998, z: 1.6699998}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1817,7 +1817,7 @@ MonoBehaviour:
   _slashActiveTiming: 0.16666667
   _slashActiveDuration: 0.41666666
   _curveEffectPrefab: {fileID: 1762814488377009823, guid: e33d10a5eb425ca4ea9d3a8e36b2c3f3, type: 3}
-  _curveEffectWorldPosition: {x: 0, y: 12}
+  _curveEffectWorldPosition: {x: 0, y: 15}
   _curveEffectLength: 1
   _dashWeapon: {fileID: 4362225961267172411}
   _dashWeaponActiveDuration: 0.8333333

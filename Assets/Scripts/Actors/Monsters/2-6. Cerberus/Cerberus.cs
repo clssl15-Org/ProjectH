@@ -11,7 +11,7 @@ using UnityEditor;
 namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction))]
-    public partial class Cerberus : Monster<CerberusStats>, IBoss, IPlayerIInitializable
+    public partial class Cerberus : Monster<CerberusStats>, IBoss, IPlayerInitializable
     {
         // Front
         public enum AttackMode

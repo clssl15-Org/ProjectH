@@ -21,9 +21,9 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         get => _hp;
         private set => _hp = Mathf.Clamp(value, 0, MaxHP);
     } int _hp;
+    [field: Header("Properties")]
     [field: SerializeField] public int MaxHP { get; set; } = 10;
     [field: SerializeField] public bool IsAlive { get; set; } = true;
-
     [field: SerializeField] public int SelectedSkillIndex { get; set; } = 0;
 
     public event Action<PlayerCondition> ConditionChanged;
@@ -44,6 +44,8 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     public bool UseKnockback = true;
     public bool UseDefaultKnockbackForce = true;
     public float KnockbackForce = 0;
+    [field: Header("Settings")]
+    [field: SerializeField] public bool DestroyOnDead { get; set; } = false;
     [Header("State Disply")]
     [SerializeField, TextArea(3, 10)]
     private string _stateDisplay = string.Empty;
@@ -147,8 +149,11 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         HP -= damage;
         if (HP <= 0)
         {
-            if (gameObject)
-                Destroy(gameObject);
+            if (DestroyOnDead)
+            {
+                if (gameObject)
+                    Destroy(gameObject);
+            }
 
             return;
         }

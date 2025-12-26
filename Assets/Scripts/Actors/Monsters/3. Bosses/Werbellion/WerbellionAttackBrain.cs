@@ -102,7 +102,7 @@ namespace Actors.Monsters.Bosses
                     Inputs: new object[]
                     {
                         null,
-                        (Func<Vector2>)(() => Werbellion._targetPlayer.transform.position)
+                        (Func<Vector2>)(() => Werbellion.DetectedPlayer.transform.position)
                     },
                     Callback: result =>
                     {

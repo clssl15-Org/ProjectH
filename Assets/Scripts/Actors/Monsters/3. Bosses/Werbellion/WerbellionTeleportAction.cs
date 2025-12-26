@@ -22,10 +22,14 @@ namespace Actors.Monsters.Bosses
                         $"'{position?.GetType().Name ?? "null"}'형식이 입력되었습니다.");
 
                 werbellion.transform.position = targetPosition;
-                werbellion.transform.localScale = new Vector3(
-                    werbellion.transform.position.x - werbellion._targetPlayer.transform.position.x
-                    > 0 ? -1 : 1 
-                    , 1, 1);
+                werbellion.transform.localScale = new Vector3
+                {
+                    x = werbellion.transform.position.x
+                        - werbellion.DetectedPlayer.transform.position.x
+                        > 0 ? -1: 1,
+                    y = 1,
+                    z = 1,
+                } * werbellion.transform.localScale.z;
 
                 Interrupt(InterruptType.Completed);
             }
