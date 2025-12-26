@@ -20,6 +20,9 @@ namespace Actors.PlayerSystem
 
             player = GetComponent<Player>();
         }
+        private void Start()
+        {
+        }
         public void DamageToPlayer()
         {
             playerHealth.TakeDamage(damageAmount);
@@ -36,7 +39,8 @@ namespace Actors.PlayerSystem
         }
         public void AddThirdSkill()
         {
-
+            Skill3 thirdSkill = player.StatesGO.GetComponent<Skill3>();
+            player.SkillManager.AddSkill(thirdSkill);
         }
         public void StunPlayer()
         {

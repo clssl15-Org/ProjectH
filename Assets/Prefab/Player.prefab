@@ -409,6 +409,7 @@ GameObject:
   - component: {fileID: 916220530954613708}
   - component: {fileID: 5750367696136085131}
   - component: {fileID: 1155873405815763261}
+  - component: {fileID: 2397189881599282200}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -730,6 +731,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: ef27b7fe692147f409a887df2a2e0f0a, type: 2}
   stunDuration: 1
+--- !u!114 &2397189881599282200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb15a9cc3f4a4a42b2f2c56e77eb289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: 4e527cb0ee0374747b069e8393eda8f5, type: 2}
+  motionDuration: 0.5
+  launchDelay: 0.8
+  projectilePrefab: {fileID: 1593081316257219599, guid: b8b4e3d86b932914492642bd89243e7d, type: 3}
+  isSizeSynced: 1
+  offset: {x: 2, y: 0}
+  damageMultiplier: 10
+  cooldownDuration: 1
+  invincibleStartTime: 0
+  invincibleEndTime: 1
 --- !u!1 &9172967021588867564
 GameObject:
   m_ObjectHideFlags: 0
