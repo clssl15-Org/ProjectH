@@ -38,6 +38,10 @@ namespace Actors.PlayerSystem
         {
 
         }
+        public void StunPlayer()
+        {
+            playerHealth.Stun();
+        }
     }
 
     [CustomEditor(typeof(PlayerDebug))]
@@ -63,6 +67,10 @@ namespace Actors.PlayerSystem
             if (GUILayout.Button("Add Third Skill"))
             {
                 script.AddThirdSkill();
+            }
+            if (GUILayout.Button("Stun Player"))
+            {
+                script.StunPlayer();
             }
         }
     }

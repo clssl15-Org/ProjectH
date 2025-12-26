@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 2303108416702557745}
   - component: {fileID: 916220530954613708}
   - component: {fileID: 5750367696136085131}
+  - component: {fileID: 1155873405815763261}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -493,7 +494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 371bf6ffb2bae2d408104489c8ec4461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeAnimatorController: {fileID: 9100000, guid: 35211715565348640ab8daad52c5d67e, type: 2}
+  runtimeAnimatorController: {fileID: 9100000, guid: bb9ccbb76ecaeef40844129656ea0c59, type: 2}
   attackDuration: 0.4
   damageApplyTime: 0.1
   comboTimeWindow: 0.1
@@ -715,6 +716,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 199e98b270f870b4198dc9793ad74bdf, type: 2}
+--- !u!114 &1155873405815763261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271af45623be34a499e8a12db43b0e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: ef27b7fe692147f409a887df2a2e0f0a, type: 2}
+  stunDuration: 1
 --- !u!1 &9172967021588867564
 GameObject:
   m_ObjectHideFlags: 0

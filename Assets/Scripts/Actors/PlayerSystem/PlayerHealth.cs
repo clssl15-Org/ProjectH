@@ -67,5 +67,10 @@ namespace Actors.PlayerSystem
             IsAlive = false;
             Debug.Log("Player Died");
         }
+
+        public void Stun()
+        {
+            CharacterStateController.EnqueueTransition<Stun>();
+        }
     }
 }
