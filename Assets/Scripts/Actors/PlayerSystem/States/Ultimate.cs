@@ -15,6 +15,9 @@ namespace Actor.PlayerSystem
         [SerializeField]
         private float launchDelay = 0.1f;
 
+        [SerializeField]
+        private float auraEffectDestroyTiming;
+
         [Header("Effect Settings")]
         [SerializeField]
         private GameObject auraEffectPrefab;
@@ -66,6 +69,7 @@ namespace Actor.PlayerSystem
 
         private bool isDone = true;
         private bool isProjectileLaunched = false;
+        private bool isAuraEffectDestroyed = false;
 
         private GameObject auraEffect;
 
@@ -146,6 +150,12 @@ namespace Actor.PlayerSystem
                 Player.Invincible = false;
             }
 
+            if (skillCursor >= auraEffectDestroyTiming && !isAuraEffectDestroyed)
+            {
+                isAuraEffectDestroyed = true;
+                Destroy(auraEffect);
+            }
+
             if (skillCursor >= launchDelay && !isProjectileLaunched)
             {
                 Vector2 position = CharacterActor.Position + (attackPointOffset * CharacterActor.Forward);
@@ -181,6 +191,7 @@ namespace Actor.PlayerSystem
         {
             isDone = false;
             isProjectileLaunched = false;
+            isAuraEffectDestroyed = false;
             skillCursor = 0;
         }
 
