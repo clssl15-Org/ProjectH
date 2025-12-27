@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e2f61d2441c7e4f91963a319147fa3, type: 3}
+  m_Name: 008_TrainedSwordsmanshipManualSO
+  m_EditorClassIdentifier: 
+  relicNumber: 8
+  icon: {fileID: 0}
+  relicName: "\uB2E8\uB828\uB41C \uAC80\uC220 \uAD50\uBCF8"
+  description: "- \uAE30\uC0AC\uB2E8\uC774 \uB0A8\uAE34 \uAE30\uBCF8 \uAC80\uC220
+    \uAD50\uBC94. \uB2E8\uB828\uC758 \uAE30\uB85D\uC774 \uB2F9\uC2E0\uC758 \uC77C\uACA9\uC744
+    \uAC15\uD654\uD55C\uB2E4.\r\n- \uAE30\uBCF8 : \uAE30\uBCF8\uACF5\uACA9 \uB370\uBBF8\uC9C0
+    10% \uC99D\uAC00\r\n- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uAE30\uBCF8\uACF5\uACA9
+    \uB370\uBBF8\uC9C0 20%(+10%) \uC99D\uAC00\r\n- \uB204\uC801 : ex) \uAE30\uBCF8\uACF5\uACA9
+    \uB370\uBBF8\uC9C0 60%(+50%) \uC99D\uAC00"
+  baseValue: 0.1
+  coinFlipValue: 0.2
+  canStack: 1
