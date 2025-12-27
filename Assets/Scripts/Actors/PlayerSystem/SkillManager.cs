@@ -73,4 +73,8 @@ public class SkillManager : MonoBehaviour
     {
         skills.Add(skill);
     }
+    public void AddUltimateSkill(CharacterState skill)
+    {
+        ultimateSkill = skill;
+    }
 }

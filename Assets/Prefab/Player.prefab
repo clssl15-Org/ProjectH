@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 5750367696136085131}
   - component: {fileID: 1155873405815763261}
   - component: {fileID: 2397189881599282200}
+  - component: {fileID: 2168851036350252161}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -562,7 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 5d7acc218ae1b2346b8273354fbbe20a, type: 2}
-  initalVelocity: 10
+  initalVelocity: 20
   duration: 0.4
   movementCurve:
     serializedVersion: 2
@@ -753,6 +754,30 @@ MonoBehaviour:
   cooldownDuration: 1
   invincibleStartTime: 0
   invincibleEndTime: 1
+--- !u!114 &2168851036350252161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2870c502703758944a2a89088ee9422a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: e14c16b1ff1d2c14da1d86eabdc15423, type: 2}
+  skillDuration: 0.6
+  launchDelay: 0.6
+  projectilePrefab: {fileID: 1611088545178221253, guid: c65d8d0525c3aa847b65f93a12605006, type: 3}
+  targetRadius: 12
+  directionMode: 1
+  damageMultiplier: 50
+  attackSize: {x: 1, y: 1}
+  attackPointOffset: {x: 0, y: 0}
+  invincibleStartTime: 0
+  invincibleEndTime: 1
+  cooldownRecoveryAmount: 0.02
 --- !u!1 &9172967021588867564
 GameObject:
   m_ObjectHideFlags: 0

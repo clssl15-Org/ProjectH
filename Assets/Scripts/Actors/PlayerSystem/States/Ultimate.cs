@@ -18,6 +18,8 @@ namespace Actor.PlayerSystem
         [Header("Projectile Settings")]
         [SerializeField]
         private GameObject projectilePrefab;
+        [SerializeField]
+        private float targetRadius;
 
         [SerializeField]
         private DirectionMode directionMode = DirectionMode.InputDirection;
@@ -61,7 +63,7 @@ namespace Actor.PlayerSystem
         private Vector2 direction = Vector2.right;
 
         private bool isDone = true;
-        private bool isDamageApplied = false;
+        private bool isProjectileLaunched = false;
 
         private void OnEnable()
         {
@@ -79,12 +81,6 @@ namespace Actor.PlayerSystem
             RushStabbing.onEskill -= RecoverCooldown;
             ProjectileDamage.onRangedAttack -= RecoverCooldown;
         }
-        private void UpdateAttackParameters()
-        {
-            attackPoint = CharacterActor.Position;
-            scaledSize = attackSize * CharacterActor.Size;
-            attackAngle = CharacterActor.Rotation.eulerAngles.z;
-        }
 
         public override bool CheckEnterTransition(CharacterState fromState)
         {
@@ -94,7 +90,7 @@ namespace Actor.PlayerSystem
                 return false;
             }
 
-            cooldownGauge = 0f;
+            //cooldownGauge = 0f;
             return true;
         }
         public override void CheckExitTransition()
@@ -128,7 +124,6 @@ namespace Actor.PlayerSystem
             }
 
             ResetSkill();
-            UpdateAttackParameters();
         }
 
         public override void UpdateBehaviour(float dt)
@@ -145,17 +140,27 @@ namespace Actor.PlayerSystem
                 Player.Invincible = false;
             }
 
-            if (skillCursor >= damageApplyTime && !isDamageApplied)
+            if (skillCursor >= launchDelay && !isProjectileLaunched)
             {
-                isDamageApplied = true;
-                isHitBoxEnabled = true;
-                TakeDamageToEnemy();
+                Vector2 position = CharacterActor.Position;
+                Vector2 direction = CharacterActor.Forward;
+                Quaternion rotation = CharacterActor.Rotation;
+                if (projectilePrefab != null)
+                {
+                    GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
+                    newProjectile.GetComponent<UltimateProjectileMovement>().ResetProjectile(dt, direction);
+                    newProjectile.GetComponent<UltimateProjectileMovement>().GrowRadius(targetRadius);
+                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier);
+                    newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
+
+                }
+
+                isProjectileLaunched = true;
             }
 
             if (skillCursor >= 1)
             {
                 isDone = true;
-                isHitBoxEnabled = false;
                 skillCursor = 0f;
             }
         }
@@ -168,8 +173,7 @@ namespace Actor.PlayerSystem
         private void ResetSkill()
         {
             isDone = false;
-            isDamageApplied = false;
-            isHitBoxEnabled = false;
+            isProjectileLaunched = false;
             skillCursor = 0;
         }
 
