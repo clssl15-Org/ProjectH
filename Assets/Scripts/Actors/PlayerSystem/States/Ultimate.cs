@@ -142,7 +142,7 @@ namespace Actor.PlayerSystem
 
             if (skillCursor >= launchDelay && !isProjectileLaunched)
             {
-                Vector2 position = CharacterActor.Position;
+                Vector2 position = CharacterActor.Position + (attackPointOffset * CharacterActor.Forward);
                 Vector2 direction = CharacterActor.Forward;
                 Quaternion rotation = CharacterActor.Rotation;
                 if (projectilePrefab != null)
