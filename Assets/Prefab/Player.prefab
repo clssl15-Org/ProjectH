@@ -769,12 +769,13 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: e14c16b1ff1d2c14da1d86eabdc15423, type: 2}
   skillDuration: 0.6
   launchDelay: 0.6
+  auraEffectPrefab: {fileID: 976038449137352176, guid: 0df22f801db488743867823e25b25368, type: 3}
   projectilePrefab: {fileID: 1611088545178221253, guid: c65d8d0525c3aa847b65f93a12605006, type: 3}
   targetRadius: 12
   directionMode: 1
   damageMultiplier: 50
   attackSize: {x: 1, y: 1}
-  attackPointOffset: {x: 0, y: 0}
+  attackPointOffset: {x: 3, y: 0}
   invincibleStartTime: 0
   invincibleEndTime: 1
   cooldownRecoveryAmount: 0.02

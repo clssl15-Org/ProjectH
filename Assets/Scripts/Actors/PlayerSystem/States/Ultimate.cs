@@ -15,7 +15,9 @@ namespace Actor.PlayerSystem
         [SerializeField]
         private float launchDelay = 0.1f;
 
-        [Header("Projectile Settings")]
+        [Header("Effect Settings")]
+        [SerializeField]
+        private GameObject auraEffectPrefab;
         [SerializeField]
         private GameObject projectilePrefab;
         [SerializeField]
@@ -64,6 +66,8 @@ namespace Actor.PlayerSystem
 
         private bool isDone = true;
         private bool isProjectileLaunched = false;
+
+        private GameObject auraEffect;
 
         private void OnEnable()
         {
@@ -123,6 +127,8 @@ namespace Actor.PlayerSystem
                 }
             }
 
+            auraEffect = Instantiate(auraEffectPrefab, CharacterActor.Position, CharacterActor.Rotation);
+
             ResetSkill();
         }
 
@@ -155,6 +161,7 @@ namespace Actor.PlayerSystem
 
                 }
 
+                Destroy(auraEffect);
                 isProjectileLaunched = true;
             }
 
