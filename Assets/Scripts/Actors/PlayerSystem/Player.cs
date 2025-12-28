@@ -32,18 +32,23 @@ namespace Actors.PlayerSystem
 
         public SkillManager SkillManager => skillManager;
 
+        public List<int> Relics { get; } = new();
+        IReadOnlyList<int> IPlayer.Relics => Relics;
+
         public float RouletteDamageMultiplier = 1;
 
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
+        public event Action<int> RelicAcquired;
+        public event Action<int> RelicAbandoned;
 
         private bool invincible = false;
         private PlatformDetector platformDetector;
         private PlayerHealth playerHealth;
         private SkillManager skillManager;
         private CharacterStateController characterStateController;
-
+        
         private void Awake()
         {
             playerHealth = GetComponent<PlayerHealth>();
@@ -88,10 +93,15 @@ namespace Actors.PlayerSystem
             RouletteDamageMultiplier = 1;
             return damage;
         }
-        public void ChangeSkill()
+        public void ChangeSkill(int skillIndex)
         {
             skillManager.ChangeSkill();
         }
+        public void ApplyRandomSkillBuff(float factor)
+        {
+            print($"스킬 랜덤 배수 적용: {factor}");
+        }
+
         public void UseSkill()
         {
             skillManager.UseSkill();

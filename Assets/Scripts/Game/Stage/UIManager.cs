@@ -17,6 +17,13 @@ namespace Game.Stage
 
 
         // Content
+        private void Awake()
+        {
+            if (!_canvas)
+                throw new InvalidOperationException(
+                    $"[{nameof(UIManager)}] {nameof(_canvas)} 컴포넌트가 유효하지 않습니다.");
+        }
+
         public void RegisterVM(IViewModel viewModel)
         {
             if (viewModel == null)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Infrastructure;
 using UnityEngine;
 using World;
@@ -39,7 +40,13 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
-        void ChangeSkill();
+        void ChangeSkill(int skillIndex);
+        void ApplyRandomSkillBuff(float factor);
+
+        IReadOnlyList<int> Relics { get; }
+        event Action<int> RelicAcquired;
+        event Action<int> RelicAbandoned;
+
         void UseSkill();
         void UseUltimate();
         int SelectedSkillIndex { get; }

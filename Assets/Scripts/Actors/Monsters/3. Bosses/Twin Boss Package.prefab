@@ -1326,6 +1326,7 @@ MonoBehaviour:
   - {fileID: 8431915662518892015}
   _reviveTime: 5
   _bonusTime: 10
+  _forceClear_1: 0
 --- !u!1 &5810666194657943169
 GameObject:
   m_ObjectHideFlags: 0
@@ -2450,10 +2451,10 @@ MonoBehaviour:
   - {fileID: 8129540277738632752}
   - {fileID: 6705550594487722379}
   - {fileID: 7365715866640743596}
-  _acceleration: 3
+  _acceleration: 100
   _deceleration: 5
   _arriveDistanceTolerance: 0.05
-  _attackMode: 0
+  _attackMode: 1
   _projectilePrefab: {fileID: 4050951402670627608, guid: fcb7cd7181025194080eda2e71fbc8e2, type: 3}
   _projectileLaunchPoint: {fileID: 1381697736518138193}
   _bulletDestroyTime: 13

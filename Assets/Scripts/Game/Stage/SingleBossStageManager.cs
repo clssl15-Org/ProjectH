@@ -12,7 +12,6 @@ namespace Game.Stage
     {
         // Bindings
         [Space]
-        [SerializeField] private GameObject _playerObject;
         [SerializeField] private GameObject _bossObject;
         [SerializeField] private BossUI _bossUI;
 
@@ -51,14 +50,13 @@ namespace Game.Stage
             if (!MonsterManager.Register(boss))
                 return;
 
-            if (boss is IPlayerInitializable playerIInitializable)
+            if (boss is IPlayerInitializable playerInitializable)
             {
-                if (_playerObject
-                    && _playerObject.TryGetComponent<IPlayer>(out var player))
-                    playerIInitializable.InitializePlayer(player);
+                if (Player != null)
+                    playerInitializable.InitializePlayer(Player);
                 else
                     Debug.LogWarning(Ctx(
-                        $"{nameof(boss)}에 {nameof(_playerObject)}을(를) 등록하지 못했습니다. " +
+                        $"{nameof(boss)}에 {nameof(Player)}을(를) 등록하지 못했습니다. " +
                         $"해당 컴포넌트가 유효한지 확인하세요."));
             }
 

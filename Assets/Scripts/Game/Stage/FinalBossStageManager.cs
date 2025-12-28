@@ -13,9 +13,6 @@ namespace Game.Stage
 {
     public class FinalBossStageManager : StageManager
     {
-        [Header("Player")]
-        [SerializeField] private GameObject _playerObject;
-
         [Header("Twin Boss")]
         [SerializeField] private TwinBossManager _twinBossManager;
         [SerializeField] private GameObject _beliaObject;
@@ -115,12 +112,11 @@ namespace Game.Stage
 
             if (boss is IPlayerInitializable playerInitializable)
             {
-                if (_playerObject
-                    && _playerObject.TryGetComponent<IPlayer>(out var player))
-                    playerInitializable.InitializePlayer(player);
+                if (Player != null)
+                    playerInitializable.InitializePlayer(Player);
                 else
                     Debug.LogWarning(Ctx(
-                        $"{nameof(boss)}에 {nameof(_playerObject)}을(를) 등록하지 못했습니다. " +
+                        $"{nameof(boss)}에 {nameof(Player)}을(를) 등록하지 못했습니다. " +
                         $"해당 컴포넌트가 유효한지 확인하세요."));
             }
 

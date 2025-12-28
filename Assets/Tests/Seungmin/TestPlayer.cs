@@ -26,7 +26,12 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
     [field: SerializeField] public bool IsAlive { get; set; } = true;
     [field: SerializeField] public int SelectedSkillIndex { get; set; } = 0;
 
+    public List<int> Relics { get; } = new();
+    IReadOnlyList<int> IPlayer.Relics => Relics;
+
     public event Action<PlayerCondition> ConditionChanged;
+    public event Action<int> RelicAcquired;
+    public event Action<int> RelicAbandoned;
     public event Action Destroyed;
 
     // Property
@@ -105,6 +110,45 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         if (StandaloneInput && Input.GetKeyDown(KeyCode.Space))
             DefaultAttack();
 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                Add(1);
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                Add(2);
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+                Add(3);
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+                Add(4);
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+                Add(5);
+
+            void Add(int id)
+            {
+                Relics.Add(id);
+                RelicAcquired?.Invoke(id);
+            }
+        }
+        else if (Input.GetKey(KeyCode.RightShift))
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                Remove(1); 
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                Remove(2);
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+                Remove(3);
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+                Remove(4);
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+                Remove(5);
+
+            void Remove(int id)
+            {
+                Relics.Remove(id);
+                RelicAbandoned?.Invoke(id);
+            }
+        }
+
         UpdateStateDisplay();
     }
 
@@ -168,7 +212,9 @@ public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
         ConditionChanged?.Invoke(PlayerCondition.Damage);
     }
 
-    public void ChangeSkill() { }
+    public void ChangeSkill(int skillIndex) => Debug.Log($"선택된 스킬: {skillIndex}");
+    public void ApplyRandomSkillBuff(float factor) => Debug.Log($"스킬 랜덤 배수 적용: {factor}");
+
     public void RangedAttack() { }
     public void UseSkill() { }
     public void UseUltimate() { }

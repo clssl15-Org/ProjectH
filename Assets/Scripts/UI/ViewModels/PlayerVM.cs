@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using Actors;
 
 namespace UI
@@ -14,8 +14,12 @@ namespace UI
                 return new(_player.HP, _player.MaxHP);
             }
         }
-
         public event Action<HealthRateData> HealthRateChanged;
+
+        public IReadOnlyList<int> Relics => _player?.Relics;
+        public event Action<int> RelicAcquired;
+        public event Action<int> RelicAbandoned;
+
         public event Action Disposed;
         public bool IsDisposed { get; private set; } = false;
 
@@ -34,6 +38,11 @@ namespace UI
             _player = player;
 
             _player.ConditionChanged += Update;
+
+            // TODO: ConditionChanged에 Payload 담아서 보내기
+            _player.RelicAcquired += id => RelicAcquired?.Invoke(id);
+            _player.RelicAbandoned += id => RelicAbandoned?.Invoke(id);
+
             _player.Destroyed += Dispose;
         }
 
@@ -47,13 +56,18 @@ namespace UI
         }
 
         #region Skill Inputs
-        public void ChangeSkill()
+        public void ChangeSkill(int skillIndex)
         {
             ThrowIfDisposed();
             if (_player == null) return;
 
-            _player.ChangeSkill();
+            _player.ChangeSkill(skillIndex);
         }
+        public void ApplyRandomSkillBuff(float factor)
+        {
+            _player.ApplyRandomSkillBuff(factor);
+        }
+
         public void UseSkill()
         {
             ThrowIfDisposed();

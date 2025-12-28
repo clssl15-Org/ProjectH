@@ -42,7 +42,7 @@ namespace Actors.PlayerSystem
             if (CharacterActions.changeSkill.Started)
             {
                 if (useStandaloneAttack)
-                    Player.ChangeSkill();
+                    Player.ChangeSkill(-1); // юс╫ц
             }
 
             if (CharacterActions.useSkill.Started)
