@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Actors.Monsters.Bosses;
 using Infrastructure;
-using UI.PlayerView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
