@@ -96,7 +96,8 @@ namespace UI
                 _relicManager.AddRelic(id);
 
             // TODO: 소유권 수정하기
-            RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
+            if (RelicManager.Instance)
+                RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
             //_player.RelicAcquired += _relicManager.AddRelic;
             //_player.RelicAbandoned += _relicManager.RemoveRelic;
         }
@@ -114,7 +115,8 @@ namespace UI
 
             _healthBar.Disconnect();
 
-            RelicManager.Instance.RelicAcquired -= _relicManager.AddRelic;
+            if (RelicManager.Instance)
+                RelicManager.Instance.RelicAcquired -= _relicManager.AddRelic;
             //_player.RelicAcquired -= _relicManager.AddRelic;
             //_player.RelicAbandoned -= _relicManager.RemoveRelic;
 
