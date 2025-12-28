@@ -7,9 +7,9 @@ namespace Actors
     [RequireComponent(typeof(SpriteSizeHandler), typeof(Animator))]
     public class Rubiel : MonoBehaviour
     {
-        public enum State { None, Small, Big }
-        public State CurrentState { get; private set; } = State.None;
-        [field: SerializeField] public bool ChangeState_T { get; set; } = false;
+        public enum Shape { None, Small, Big }
+        public Shape CurrentShape { get; private set; } = Shape.None;
+        [SerializeField] private bool _changeShape_T = false;
 
         private SpriteSizeHandler _ssh;
         private MonsterSystem.MonsterAnimationPlayer _player;
@@ -25,9 +25,9 @@ namespace Actors
 
         private void Update()
         {
-            if (ChangeState_T && Input.GetKeyDown(KeyCode.T))
+            if (_changeShape_T && Input.GetKeyDown(KeyCode.T))
             {
-                if (CurrentState == State.Small)
+                if (CurrentShape == Shape.Small)
                     ToBig();
                 else
                     ToSmall();
@@ -36,8 +36,8 @@ namespace Actors
 
         public void ToBig()
         {
-            if (CurrentState == State.Big) return;
-            CurrentState = State.Big;
+            if (CurrentShape == Shape.Big) return;
+            CurrentShape = Shape.Big;
 
             _player.Play(new("SmallToBig", Callback: succeeded =>
             {
@@ -51,8 +51,8 @@ namespace Actors
         }
         public void ToSmall()
         {
-            if (CurrentState == State.Small) return;
-            CurrentState = State.Small;
+            if (CurrentShape == Shape.Small) return;
+            CurrentShape = Shape.Small;
 
             _player.Play(new("BigToSmall", Callback: succeeded =>
             {
@@ -67,16 +67,16 @@ namespace Actors
 
         public void SetToBig()
         {
-            if (CurrentState == State.Big) return;
-            CurrentState = State.Big;
+            if (CurrentShape == Shape.Big) return;
+            CurrentShape = Shape.Big;
 
             _player.Play(new("Big"));
             ValidateSpriteSize();
         }
         public void SetToSmall()
         {
-            if (CurrentState == State.Small) return;
-            CurrentState = State.Small;
+            if (CurrentShape == Shape.Small) return;
+            CurrentShape = Shape.Small;
 
             _player.Play(new("Small"));
             ValidateSpriteSize();

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
+using System;
 
 public class RelicManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class RelicManager : MonoBehaviour
     [Header("Relic Prefab Registry")]
     // 모든 유물 프리팹을 인스펙터에서 등록합니다.
     [SerializeField] private List<GameObject> relicPrefabs;
+
+    public event Action<RelicDataSO> RelicAcquiring;
+    public event Action<int> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> _ownedRelics = new Dictionary<int, List<GameObject>>();
@@ -28,7 +32,7 @@ public class RelicManager : MonoBehaviour
     }
 
     // --- 랜덤으로 유물 데이터 뽑기 (UI용) ---
-    public RelicDataSO GetRandomRelicData()
+    public void GetRandomRelicData()
     {
         // 프리팹에 붙어있는 Relic 컴포넌트에서 데이터를 읽어와 필터링합니다.
         var available = relicPrefabs
@@ -36,13 +40,13 @@ public class RelicManager : MonoBehaviour
             .Where(d => d.CanStack || !_ownedRelics.ContainsKey(d.RelicNumber))
             .ToList();
 
-        if (available.Count == 0) return null;
-        return available[Random.Range(0, available.Count)];
+        if (available.Count == 0) return;
+        RelicAcquiring?.Invoke(available[UnityEngine.Random.Range(0, available.Count)]);
     }
 
     public bool StartCoinRandom(int key)
     {
-        int rnd = Random.Range(0, 2);
+        int rnd = UnityEngine.Random.Range(0, 2);
         bool canReinforced = false;
 
         if (rnd == 0)
@@ -56,7 +60,6 @@ public class RelicManager : MonoBehaviour
             canReinforced = true;
         }
 
-        AddRelic(key, canReinforced);
         return canReinforced;
     }
 
@@ -86,5 +89,7 @@ public class RelicManager : MonoBehaviour
             // 획득 효과 발동
             relicScript.OnAcquire();
         }
+
+        RelicAcquired?.Invoke(key);
     }
 }

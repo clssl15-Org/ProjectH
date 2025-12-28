@@ -14,15 +14,6 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _nametagUI;
         [SerializeField] private TextMeshProUGUI _dialogueUI;
 
-        public enum Character
-        {
-            Player,
-            Rubiel_Small,
-            Rubiel_Big,
-            Belia,
-            DarkTherion,
-            Werbellion,
-        }
         [Serializable]
         public struct PortraitInfo
         {
@@ -56,14 +47,14 @@ namespace UI
             SetToDisabled();
         }
 
-        public void SetContent(Character character, string name, string dialogue)
+        public void SetContent(DialogueData dialogue)
         {
             _portraitUI.sprite = _portraits
-                .FirstOrDefault(pi => pi.Character == character)
+                .FirstOrDefault(pi => pi.Character == dialogue.Character)
                 .Icon ?? null;
 
-            _nametagUI.text = name;
-            _dialogueUI.text = dialogue;
+            _nametagUI.text = dialogue.Name;
+            _dialogueUI.text = dialogue.Dialogue;
         }
 
 

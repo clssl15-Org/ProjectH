@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Actors.Monsters
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(IMonsterInternal))]
     public class IndicatorHub : MonoBehaviour
     {
         [field: SerializeField] public IndicatorConfiguration IndicatorConfigurationOverride { get; set; }

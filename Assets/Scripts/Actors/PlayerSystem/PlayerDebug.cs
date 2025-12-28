@@ -23,6 +23,9 @@ namespace Actors.PlayerSystem
         }
         private void Start()
         {
+            AddFirstSkill();
+            AddSecondSkill();
+            AddThirdSkill();
             AddUltimate();
         }
         public void DamageToPlayer()
@@ -53,6 +56,11 @@ namespace Actors.PlayerSystem
             Ultimate ultimateSkill = player.StatesGO.GetComponent<Ultimate>();
             player.SkillManager.AddUltimateSkill(ultimateSkill);
         }
+        public void AddRelic(int key)
+        {
+            RelicManager.Instance.AddRelic(key, false);
+            player.OnRelicAcquired(key);
+        }
     }
 
     [CustomEditor(typeof(PlayerDebug))]
@@ -79,13 +87,21 @@ namespace Actors.PlayerSystem
             {
                 script.AddThirdSkill();
             }
-            if(GUILayout.Button("Add Ultimate Skill"))
+            if (GUILayout.Button("Add Ultimate Skill"))
             {
                 script.AddUltimate();
             }
             if (GUILayout.Button("Stun Player"))
             {
                 script.StunPlayer();
+            }
+            if (GUILayout.Button("Try Add Relic"))
+            {
+                RelicManager.Instance.GetRandomRelicData();
+            }
+            if (GUILayout.Button("Force Add Relic"))
+            {
+                script.AddRelic(5);
             }
         }
     }

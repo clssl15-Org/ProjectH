@@ -27,7 +27,7 @@ namespace UI
         [SerializeField] private Button _ultimateBtn;
         [Space]
         [SerializeField] private HealthBar _healthBar;
-        [SerializeField] private RelicManager _relicManager;
+        [SerializeField] private PlayerView.RelicManager _relicManager;
 
         [Header("Resources")]
         [SerializeField, Min(0)] private float _skillRouletteVideoPlaytime = 3.5f;
@@ -95,8 +95,10 @@ namespace UI
             foreach (var id in _player.Relics)
                 _relicManager.AddRelic(id);
 
-            _player.RelicAcquired += _relicManager.AddRelic;
-            _player.RelicAbandoned += _relicManager.RemoveRelic;
+            // TODO: 소유권 수정하기
+            RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
+            //_player.RelicAcquired += _relicManager.AddRelic;
+            //_player.RelicAbandoned += _relicManager.RemoveRelic;
         }
 
         public void Disconnect()
@@ -112,8 +114,9 @@ namespace UI
 
             _healthBar.Disconnect();
 
-            _player.RelicAcquired -= _relicManager.AddRelic;
-            _player.RelicAbandoned -= _relicManager.RemoveRelic;
+            RelicManager.Instance.RelicAcquired -= _relicManager.AddRelic;
+            //_player.RelicAcquired -= _relicManager.AddRelic;
+            //_player.RelicAbandoned -= _relicManager.RemoveRelic;
 
             _player = null;
         }
