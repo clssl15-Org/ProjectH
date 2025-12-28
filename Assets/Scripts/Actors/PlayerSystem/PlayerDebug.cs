@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Actor.PlayerSystem;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,10 @@ namespace Actors.PlayerSystem
 
             player = GetComponent<Player>();
         }
+        private void Start()
+        {
+            AddUltimate();
+        }
         public void DamageToPlayer()
         {
             playerHealth.TakeDamage(damageAmount);
@@ -36,7 +41,17 @@ namespace Actors.PlayerSystem
         }
         public void AddThirdSkill()
         {
-
+            Skill3 thirdSkill = player.StatesGO.GetComponent<Skill3>();
+            player.SkillManager.AddSkill(thirdSkill);
+        }
+        public void StunPlayer()
+        {
+            playerHealth.Stun();
+        }
+        public void AddUltimate()
+        {
+            Ultimate ultimateSkill = player.StatesGO.GetComponent<Ultimate>();
+            player.SkillManager.AddUltimateSkill(ultimateSkill);
         }
     }
 
@@ -63,6 +78,14 @@ namespace Actors.PlayerSystem
             if (GUILayout.Button("Add Third Skill"))
             {
                 script.AddThirdSkill();
+            }
+            if(GUILayout.Button("Add Ultimate Skill"))
+            {
+                script.AddUltimate();
+            }
+            if (GUILayout.Button("Stun Player"))
+            {
+                script.StunPlayer();
             }
         }
     }

@@ -22,6 +22,10 @@ namespace World
         /// 모든 타일맵의 경계 (단위: World Position)
         /// </summary>
         public Bounds Bounds { get; private set; }
+        public Tilemap OneWayPlatformTilemap
+        {
+            get => _tilemaps[1];
+        }
 
         // Property
         [SerializeField] private bool _autoAssignTilemaps = true;

@@ -13,7 +13,7 @@ namespace Actors.PlayerSystem
         public CharacterStateController CharacterStateController { get; private set; }
         public int MaxHealth
         {
-            get => Player.playerStats.maxHealth;
+            get =>(int) ((Player.playerStats.maxHealth + Player.playerStats.additionalMaxHealth) * Player.playerStats.maxHeathMultiplier);
         }
         public int CurrentHealth
         {
@@ -28,6 +28,7 @@ namespace Actors.PlayerSystem
         public bool IsAlive { get; private set; } = true;
 
         public event Action Damaged;
+        public event Action Healed;
 
         private void Awake()
         {
@@ -60,12 +61,24 @@ namespace Actors.PlayerSystem
         {
             currentHealth += healAmount;
             currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+            Healed?.Invoke();
+        }
+        public void HealByPercent(float percent)
+        {
+            currentHealth += (int) (MaxHealth * percent);
+            currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+            Healed?.Invoke();
         }
 
         private void Die()
         {
             IsAlive = false;
             Debug.Log("Player Died");
+        }
+
+        public void Stun()
+        {
+            CharacterStateController.EnqueueTransition<Stun>();
         }
     }
 }

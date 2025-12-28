@@ -25,6 +25,7 @@ namespace Actors.PlayerSystem
         public bool IsAlive => playerHealth.IsAlive;
 
         public int MaxHP => playerHealth.MaxHealth;
+        public int AttackPower => (int)((playerStats.attackPower + playerStats.additionalAttackPower) * playerStats.attackPowerMultiplier);
 
         public int CurrentPlatform { get; private set; } = -1;
 

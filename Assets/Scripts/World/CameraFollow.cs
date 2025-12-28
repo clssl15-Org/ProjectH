@@ -7,10 +7,10 @@ public class CameraFollow : MonoBehaviour
     public float smoothSpeed = 0f;  // 카메라 얼마나 부드럽게 천천히 오게 만들건지. (0은 그냥 바로 따라옴)
     public Vector3 offset; // 플레이어로부터의 카메라 오프셋
 
-    public float cameraMinX = -20; // 카메라의 최소 X 좌표
-    public float cameraMaxX = 20; // 카메라의 최대 X 좌표
-    public float cameraMinY = -10; // 카메라의 최소 Y 좌표
-    public float cameraMaxY = 10; // 카메라의 최대 Y 좌표
+    public float cameraMinX = -21; // 카메라의 최소 X 좌표
+    public float cameraMaxX = 21; // 카메라의 최대 X 좌표
+    public float cameraMinY = -18; // 카메라의 최소 Y 좌표
+    public float cameraMaxY = 18; // 카메라의 최대 Y 좌표
 
     private Vector3 velocity = Vector3.zero;
     private Camera mainCamera;
@@ -28,6 +28,11 @@ public class CameraFollow : MonoBehaviour
         {
             target = FindObjectOfType<Player>().transform;
         }
+
+        cameraMinX = -21;
+        cameraMaxX = 21;
+        cameraMinY = -18;
+        cameraMaxY = 18;
     }
 
     void LateUpdate()

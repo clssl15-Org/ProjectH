@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 694132363, guid: 0bf194a91cee5714595477c35428c674, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -407,6 +407,10 @@ GameObject:
   - component: {fileID: 6159009817700332398}
   - component: {fileID: 2303108416702557745}
   - component: {fileID: 916220530954613708}
+  - component: {fileID: 5750367696136085131}
+  - component: {fileID: 1155873405815763261}
+  - component: {fileID: 2397189881599282200}
+  - component: {fileID: 2168851036350252161}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -471,11 +475,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 741d1bab4c27aa4469fec3ecd64588d3, type: 2}
-  attackDuration: 0.7
-  damageApplyTime: 0.5
+  attackDuration: 0.4
+  damageApplyTime: 0.2
   comboTimeWindow: 0.1
   nextComboTime: 0.9
-  comboInputTimeWindow: 0.7
+  comboInputTimeWindow: 0.5
   damageMultiplier: 1
   attackRange: 1.5
   attackAngle: 90
@@ -492,12 +496,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 371bf6ffb2bae2d408104489c8ec4461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeAnimatorController: {fileID: 9100000, guid: 35211715565348640ab8daad52c5d67e, type: 2}
-  attackDuration: 0.7
-  damageApplyTime: 0.2
+  runtimeAnimatorController: {fileID: 9100000, guid: bb9ccbb76ecaeef40844129656ea0c59, type: 2}
+  attackDuration: 0.4
+  damageApplyTime: 0.1
   comboTimeWindow: 0.1
   nextComboTime: 0.9
-  comboInputTimeWindow: 0.7
+  comboInputTimeWindow: 0.5
   damageMultiplier: 1
   attackSize: {x: 2, y: 2}
   attackPointOffset: {x: 0, y: 0}
@@ -514,8 +518,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: fd4a4b3344e5ef64c9b8dc1e03eba9e3, type: 2}
-  attackDuration: 0.7
-  damageApplyTime: 0.3
+  attackDuration: 0.5
+  damageApplyTime: 0.2
   damageMultiplier: 1.5
   attackSize: {x: 2, y: 1}
   attackPointOffset: {x: 1, y: 0}
@@ -534,10 +538,18 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: 199e98b270f870b4198dc9793ad74bdf, type: 2}
   jumpForce: 38
   subsequentJumpMultiplier: 1
-  baseSpeed: 5
+  baseSpeed: 13
+  subsequentJumpSpeedMultiplier: 0.8
   acceleration: 30
+  airAcceleration: 20
   maxJumps: 2
   jumpInterval: 0.2
+  jumpBufferTime: 0.15
+  apexBonusMultiplier: 2
+  apexThreshold: 1.5
+  gravityScale: 10
+  fallMultiplier: 1.4
+  apexGravityMultiplier: 0.2
 --- !u!114 &7898384630930269409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -551,7 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: 5d7acc218ae1b2346b8273354fbbe20a, type: 2}
-  initalVelocity: 10
+  initalVelocity: 20
   duration: 0.4
   movementCurve:
     serializedVersion: 2
@@ -693,6 +705,81 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: dd29d89d23ac32842b9a72d2ba713487, type: 2}
   hitDuration: 0.4
   knockbackPower: 5
+--- !u!114 &5750367696136085131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb16ffa1e5189d749ace1e1b35158e42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: 199e98b270f870b4198dc9793ad74bdf, type: 2}
+--- !u!114 &1155873405815763261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271af45623be34a499e8a12db43b0e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: ef27b7fe692147f409a887df2a2e0f0a, type: 2}
+  stunDuration: 1
+--- !u!114 &2397189881599282200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb15a9cc3f4a4a42b2f2c56e77eb289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: 4e527cb0ee0374747b069e8393eda8f5, type: 2}
+  motionDuration: 0.5
+  launchDelay: 0.8
+  projectilePrefab: {fileID: 1593081316257219599, guid: b8b4e3d86b932914492642bd89243e7d, type: 3}
+  isSizeSynced: 1
+  offset: {x: 2, y: 0}
+  damageMultiplier: 10
+  cooldownDuration: 1
+  invincibleStartTime: 0
+  invincibleEndTime: 1
+--- !u!114 &2168851036350252161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853671354700595129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2870c502703758944a2a89088ee9422a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeAnimatorController: {fileID: 9100000, guid: e14c16b1ff1d2c14da1d86eabdc15423, type: 2}
+  skillDuration: 1.1
+  launchDelay: 0.7
+  auraEffectDestroyTiming: 0.4
+  auraEffectPrefab: {fileID: 976038449137352176, guid: 0df22f801db488743867823e25b25368, type: 3}
+  projectilePrefab: {fileID: 1611088545178221253, guid: c65d8d0525c3aa847b65f93a12605006, type: 3}
+  targetRadius: 12
+  directionMode: 1
+  damageMultiplier: 50
+  attackSize: {x: 1, y: 1}
+  attackPointOffset: {x: 3, y: 0}
+  invincibleStartTime: 0
+  invincibleEndTime: 1
+  cooldownRecoveryAmount: 0.02
 --- !u!1 &9172967021588867564
 GameObject:
   m_ObjectHideFlags: 0

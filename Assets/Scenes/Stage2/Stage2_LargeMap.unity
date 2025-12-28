@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: 0.2
 --- !u!212 &176189350
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1018,7 +1018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: 0.2
 --- !u!212 &587104051
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1314,7 +1314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: 0.2
 --- !u!212 &642553030
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -33320,8 +33320,8 @@ GameObject:
   - component: {fileID: 1688742729}
   - component: {fileID: 1688742728}
   - component: {fileID: 1688742727}
-  - component: {fileID: 1688742726}
   - component: {fileID: 1688742725}
+  - component: {fileID: 1688742730}
   m_Layer: 0
   m_Name: Main Camera For Large Map
   m_TagString: MainCamera
@@ -33341,25 +33341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5140f8cc95c796244899712242e0a3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1688742726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1688742724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40c0a6ccdb1011944aa501f7208b69e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  smoothSpeed: 0
-  offset: {x: 0, y: 0, z: 0}
-  cameraMinX: -60.1
-  cameraMaxX: 60.3
-  cameraMinY: -25
-  cameraMaxY: 24.7
 --- !u!81 &1688742727
 AudioListener:
   m_ObjectHideFlags: 0
@@ -33434,6 +33415,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1688742730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688742724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda7235eccd69fe46a3dc5ee6bdafb85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  smoothSpeed: 0
+  offset: {x: 0, y: 0, z: 0}
+  cameraMinX: -60
+  cameraMaxX: 60
+  cameraMinY: -25
+  cameraMaxY: 25
 --- !u!1 &1809919279
 GameObject:
   m_ObjectHideFlags: 0

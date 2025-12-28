@@ -47,6 +47,7 @@ namespace World
 
         // Content
         public void SetPlatformManager(PlatformManager platformManager) => _platformManager = platformManager;
+        public PlatformManager GetPlatformManager() => _platformManager;
 
         public bool TryGetCurrentPlatformId(out int platformId) => TryGetPlatformId(Bottom, out platformId);
         public bool TryGetPlatformId(Vector3 position, out int platformId)

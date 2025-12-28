@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: 0.2
 --- !u!1001 &479618953
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -607,8 +607,8 @@ GameObject:
   - component: {fileID: 516502359}
   - component: {fileID: 516502358}
   - component: {fileID: 516502357}
-  - component: {fileID: 516502356}
   - component: {fileID: 516502355}
+  - component: {fileID: 516502360}
   m_Layer: 0
   m_Name: Main Camera For Large Map
   m_TagString: MainCamera
@@ -628,25 +628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5140f8cc95c796244899712242e0a3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &516502356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 516502354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40c0a6ccdb1011944aa501f7208b69e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 590122100}
-  smoothSpeed: 0
-  offset: {x: 0, y: 0, z: 0}
-  cameraMinX: -60.1
-  cameraMaxX: 60.3
-  cameraMinY: -25
-  cameraMaxY: 24.7
 --- !u!81 &516502357
 AudioListener:
   m_ObjectHideFlags: 0
@@ -721,6 +702,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &516502360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516502354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda7235eccd69fe46a3dc5ee6bdafb85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  smoothSpeed: 0
+  offset: {x: 0, y: 0, z: 0}
+  cameraMinX: -60
+  cameraMaxX: 60
+  cameraMinY: -25
+  cameraMaxY: 25
 --- !u!1001 &533402922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -953,11 +953,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
   m_PrefabInstance: {fileID: 567515895}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &590122100 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 597163057202504664, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
-  m_PrefabInstance: {fileID: 94094722}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &725106546
 GameObject:
@@ -2630,7 +2625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: 0.2
 --- !u!1 &1173989403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1347340959331417089, guid: fe091ff7d7ba1504191c9d2d699c5a70, type: 3}
@@ -31184,7 +31179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: -0.1
+  parallaxFactor: 0.2
 --- !u!1001 &2013876085
 PrefabInstance:
   m_ObjectHideFlags: 0
