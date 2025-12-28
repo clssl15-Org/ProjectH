@@ -10,10 +10,13 @@ using MonsterSystem = Actors.Monsters.Actions;
 
 namespace UI
 {
+
+
     [RequireComponent(typeof(RectTransform))]
     public class PlayerUI : MonoBehaviour, IView, IEnablable
     {
         // Front
+        [field: SerializeField] public bool BlockInput { get; set; } = false;
         public event Action Destroyed;
 
         // Internal
@@ -120,6 +123,9 @@ namespace UI
         // 여기서 UI 이벤트 처리
         private void Update()
         {
+            if (BlockInput)
+                return;
+
             _currentSelectedButtons.Clear();
 
             if (Input.GetKeyDown(KeyCode.E))

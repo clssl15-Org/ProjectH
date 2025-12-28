@@ -93,7 +93,7 @@ namespace Actors.PlayerSystem
                 //hitEnemies.Add(damageableObject);
                 int amount = Player.CalculateDamage(attackPower * damageMultiplier);
                 damageableObject.TakeDamage(amount);
-
+                print(amount);
                 onEskill?.Invoke();
             }
         }
@@ -112,7 +112,9 @@ namespace Actors.PlayerSystem
             if (isDone)
             {
                 CharacterStateController.EnqueueTransition<NormalMovement>();
-                DamageRoulette.ResetRoulette();
+                Player.ResetRandomSkillBuff();
+                if (DamageRoulette)
+                    DamageRoulette.ResetRoulette();
             }
         }
         public override void EnterBehaviour(float dt)

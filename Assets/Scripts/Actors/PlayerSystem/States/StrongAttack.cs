@@ -94,7 +94,9 @@ namespace Actors.PlayerSystem
             if (isDone)
             {
                 CharacterStateController.EnqueueTransition<NormalMovement>();
-                DamageRoulette.ResetRoulette();
+                Player.ResetRandomSkillBuff();
+                if (DamageRoulette)
+                    DamageRoulette.ResetRoulette();
             }
         }
 

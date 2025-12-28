@@ -56,6 +56,7 @@ namespace Actors.PlayerSystem
             if (isDone)
             {
                 CharacterStateController.EnqueueTransition<NormalMovement>();
+                Player.ResetRandomSkillBuff();
             }
         }
 
@@ -93,7 +94,7 @@ namespace Actors.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<Skill3ProjectileMovement>().ResetProjectile(dt, direction);
-                newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier);
+                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier));
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

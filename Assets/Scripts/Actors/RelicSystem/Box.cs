@@ -48,12 +48,12 @@ public class Box : MonoBehaviour
     private void OpenBox()
     {
         spriteRenderer.sprite = openedSprite;
-
         StartCoroutine(GenerateUI());
     }
     IEnumerator GenerateUI()
     {
         yield return new WaitForSeconds(1f);
         // UI »ý¼º
+        RelicManager.Instance.GetRandomRelicData();
     }
 }

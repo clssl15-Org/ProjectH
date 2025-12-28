@@ -23,6 +23,8 @@ namespace UI
         [SerializeField] private VideoPlayer _coinRawVideoPlayer;
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
 
+        public PlayerUI PlayerUI;
+
         [Serializable]
         public struct VideoData
         {
@@ -64,6 +66,9 @@ namespace UI
             }
             _operating = true;
 
+            if (PlayerUI)
+                PlayerUI.BlockInput = true;
+
             _relic = relicInfo;
             gameObject.SetActive(true);
 
@@ -83,6 +88,22 @@ namespace UI
             _throwCoin.SetActive(true);
             _coinDescripton.text = $"강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}";
 
+            var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
+            print($"강화 여부: {(reinforced ? "성공" : "실패")}");
+
+            var clip = _videoClips.FirstOrDefault(v => v.IsFront == reinforced);
+            if (!clip.Video || !clip.AlphaMask)
+                throw new InvalidOperationException(
+                    $"[{nameof(RelicAcquisitionUI)}] {nameof(clip)}이(가) 유효하지 않습니다.");
+
+            _coinRawVideoPlayer.playbackSpeed = 0f;
+            _coinMaskVideoPlayer.playbackSpeed = 0f;
+
+            _coinRawVideoPlayer.clip = clip.Video;
+            _coinMaskVideoPlayer.clip = clip.AlphaMask;
+
+
+
             _updater = Loco.Subscribe(() =>
             {
                 if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) <= 0.0001f)
@@ -94,16 +115,8 @@ namespace UI
 
             void ThrowCoin()
             {
-                var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
-                print($"강화 여부: {(reinforced ? "성공" : "실패")}");
-
-                var clip = _videoClips.FirstOrDefault(v => v.IsFront == reinforced);
-                if (!clip.Video || !clip.AlphaMask)
-                    throw new InvalidOperationException(
-                        $"[{nameof(RelicAcquisitionUI)}] {nameof(clip)}이(가) 유효하지 않습니다.");
-
-                _coinRawVideoPlayer.clip = clip.Video;
-                _coinMaskVideoPlayer.clip = clip.AlphaMask;
+                _coinRawVideoPlayer.playbackSpeed = 1f;
+                _coinMaskVideoPlayer.playbackSpeed = 1f;
 
                 _timer = new Timer((float)clip.Video.length, succeeded =>
                 {
@@ -119,6 +132,9 @@ namespace UI
                         _close.gameObject.SetActive(true);
 
                         _throwCoin.SetActive(false);
+
+                        if (PlayerUI)
+                            PlayerUI.BlockInput = false;
                     }
                 });
             }
@@ -134,6 +150,9 @@ namespace UI
 
             gameObject.SetActive(false);
             _operating = false;
+
+            if (PlayerUI)
+                PlayerUI.BlockInput = false;
         }
 
         private void OnDestroy()

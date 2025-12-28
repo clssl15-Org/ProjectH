@@ -36,7 +36,14 @@ namespace Actors.PlayerSystem
         public List<int> Relics { get; } = new();
         IReadOnlyList<int> IPlayer.Relics => Relics;
 
-        public float RouletteDamageMultiplier = 1;
+        public float RouletteDamageMultiplier
+        {
+            get => a;
+            set => a = value;
+        }
+
+        float a = 1;
+
 
 
         public event Action<PlayerCondition> ConditionChanged;
@@ -91,7 +98,6 @@ namespace Actors.PlayerSystem
         public int CalculateDamage(float value)
         {
             int damage = (int)(value * RouletteDamageMultiplier);
-            RouletteDamageMultiplier = 1;
             return damage;
         }
         public void ChangeSkill(int skillIndex)
@@ -100,7 +106,13 @@ namespace Actors.PlayerSystem
         }
         public void ApplyRandomSkillBuff(float factor)
         {
-            print($"스킬 랜덤 배수 적용: {factor}");
+            RouletteDamageMultiplier = 1 + factor / 100f;
+            //print($"스킬 랜덤 배수 적용: {factor}");
+        }
+
+        public void ResetRandomSkillBuff()
+        {
+            RouletteDamageMultiplier = 1;
         }
 
         public void UseSkill()

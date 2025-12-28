@@ -312,6 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 222eaa4be3e6add49bc616492cbbb8f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <BlockInput>k__BackingField: 0
   _skillBtn: {fileID: 2141246960101817829}
   _skillRouletteBackground: {fileID: 903285621539336900}
   _skillRoulette: {fileID: 2752488836996822302}
@@ -320,7 +321,7 @@ MonoBehaviour:
   _ultimateBtn: {fileID: 4199043323936479198}
   _healthBar: {fileID: 5845550822554001825}
   _relicManager: {fileID: 920669961842527904}
-  _skillRouletteVideoPlaytime: 5
+  _skillRouletteVideoPlaytime: 4.5
   _skillRouletteVideos:
   - {fileID: 32900000, guid: 6f249747330477a43a4a447de3b84c03, type: 3}
   - {fileID: 32900000, guid: c33a04b0adde58549bbd28763c2c07b1, type: 3}
