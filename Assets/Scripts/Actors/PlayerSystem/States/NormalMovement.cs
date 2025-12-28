@@ -41,26 +41,22 @@ namespace Actors.PlayerSystem
             }
             if (CharacterActions.changeSkill.Started)
             {
-                if (useStandaloneAttack)
-                    Player.ChangeSkill(-1); // юс╫ц
+                Player.ChangeSkill(-1);
             }
 
             if (CharacterActions.useSkill.Started)
             {
-                if (useStandaloneAttack)
-                    Player.UseSkill();
+                Player.UseSkill();
             }
 
             if (CharacterActions.rangedAttack.Started)
             {
-                if (useStandaloneAttack)
-                    Player.RangedAttack();
+                Player.RangedAttack();
             }
 
             if (CharacterActions.ultimate.Started)
             {
-                if (useStandaloneAttack)
-                    Player.UseUltimate();
+                Player.UseUltimate();
             }
         }
         public override void UpdateBehaviour(float dt)

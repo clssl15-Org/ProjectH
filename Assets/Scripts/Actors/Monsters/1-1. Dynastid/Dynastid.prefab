@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2630748657414775013
 Transform:
   m_ObjectHideFlags: 0
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 8005353908560965261}
   - component: {fileID: 8541476870282129423}
   - component: {fileID: 8463299552888927162}
-  - component: {fileID: 6957099338642912721}
+  - component: {fileID: 1101870491281015417}
   m_Layer: 8
   m_Name: Dynastid
   m_TagString: Monster
@@ -341,7 +341,7 @@ MonoBehaviour:
   _weapon: {fileID: 5981960959452578662}
   _weaponActiveTiming: 0.33
   _weaponActiveDuration: 0.17
---- !u!114 &6957099338642912721
+--- !u!114 &1101870491281015417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

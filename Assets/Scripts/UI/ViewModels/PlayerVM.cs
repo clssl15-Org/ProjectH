@@ -70,24 +70,24 @@ namespace UI
 
         public void UseSkill()
         {
-            ThrowIfDisposed();
-            if (_player == null) return;
+            //ThrowIfDisposed();
+            //if (_player == null) return;
 
-            _player.UseSkill();
+            //_player.UseSkill();
         }
         public void DefaultAttack()
         {
-            ThrowIfDisposed();
-            if (_player == null) return;
+            //ThrowIfDisposed();
+            //if (_player == null) return;
 
-            _player.DefaultAttack();
+            //_player.DefaultAttack();
         }
         public void RangedAttack()
         {
-            ThrowIfDisposed();
-            if (_player == null) return;
+            //ThrowIfDisposed();
+            //if (_player == null) return;
 
-            _player.RangedAttack();
+            //_player.RangedAttack();
         }
         #endregion
 
