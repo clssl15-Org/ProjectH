@@ -143,8 +143,7 @@ namespace Actors.Monsters.Bosses
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent()
                     .AddComponent(new Do(true)
-                        .OnOpening(() => monster.Rigidbody.gravityScale = 2f)
-                    )
+                        .OnOpening(() => monster.Rigidbody.gravityScale = 1f))
                 );
             }
         }

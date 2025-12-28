@@ -3,8 +3,6 @@ using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
-using Infrastructure;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -30,8 +28,7 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private Weapon _slashWeapon;
         [SerializeField, Min(0)] private float _slashActiveTiming;
-        [SerializeField, Min(0)] private float _slashActiveDuration;
-        [SerializeField, Min(0)] private float _slashMoveDistance = 10f;
+        [SerializeField] private float _slashActiveDuration;
         [Space]
         [SerializeField] private GameObject _curveEffectPrefab;
         [SerializeField] private Vector2 _curveEffectWorldPosition;
@@ -121,20 +118,13 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new BeliaCurvedAreaAttackAction(
                             monster._curveEffectPrefab,
                             monster._curveEffectWorldPosition,
-                            monster._curveEffectLength)
-                            { InterruptPriority = InterruptPriority.High },
+                            monster._curveEffectLength),
+                        out var curvedAreaAttackAction,
                         after: new(curvedAreaAttackEnter)
                     )
                     .AddAnimationComponent(
                         "CurvedAreaAttackEnd",
-                        after: new(curvedAreaAttackEnter)
-                    )
-                    .AddComponent(new Do(true)
-                        .OnOpening(() =>
-                            monster.transform.position
-                                += monster.Direction.ToVector3() * monster._slashMoveDistance
-                        ),
-                        after: new(curvedAreaAttackEnter)
+                        after: new(curvedAreaAttackAction)
                     )
                 );
                 AddChild(new MonsterAction("DashAttack")
