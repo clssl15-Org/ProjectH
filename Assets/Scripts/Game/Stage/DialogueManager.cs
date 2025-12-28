@@ -3,12 +3,14 @@ using Actors;
 using Infrastructure;
 using UI;
 using UnityEngine;
+using Actors.PlayerSystem;
 
 namespace Game
 {
     public class RubielDialogueManager : MonoBehaviour
     {
         [SerializeField] private Rubiel _rubiel;
+        [SerializeField] private CharacterStateController playerStateController;
         [SerializeField] private Dialogue _dialogueUI;
         [Space]
         [SerializeField] private DialogueData[] _dialogues;
@@ -28,6 +30,8 @@ namespace Game
         {
             if (_running) return;
             _running = true;
+
+            playerStateController.EnqueueTransition<NoInputState>();
 
             _dialogueUI.Enable();
             _rubiel.ToBig();
@@ -49,6 +53,7 @@ namespace Game
                         _updateHandle?.Dispose();
                         _updateHandle = null;
 
+                        playerStateController.EnqueueTransition<NormalMovement>();
                         _running = false;
                         return;
                     }

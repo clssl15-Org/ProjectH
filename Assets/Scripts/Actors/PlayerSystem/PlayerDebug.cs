@@ -59,7 +59,6 @@ namespace Actors.PlayerSystem
         public void AddRelic(int key)
         {
             RelicManager.Instance.AddRelic(key, false);
-            player.OnRelicAcquired(key);
         }
     }
 
@@ -87,7 +86,7 @@ namespace Actors.PlayerSystem
             {
                 script.AddThirdSkill();
             }
-            if (GUILayout.Button("Add Ultimate Skill"))
+            if(GUILayout.Button("Add Ultimate Skill"))
             {
                 script.AddUltimate();
             }
@@ -95,11 +94,7 @@ namespace Actors.PlayerSystem
             {
                 script.StunPlayer();
             }
-            if (GUILayout.Button("Try Add Relic"))
-            {
-                RelicManager.Instance.GetRandomRelicData();
-            }
-            if (GUILayout.Button("Force Add Relic"))
+            if (GUILayout.Button("Add Relic"))
             {
                 script.AddRelic(5);
             }
