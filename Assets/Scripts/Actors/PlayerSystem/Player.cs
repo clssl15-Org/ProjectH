@@ -112,6 +112,8 @@ namespace Actors.PlayerSystem
             skillManager.UseUltimate();
         }
 
+        public void OnRelicAcquired(int id) => RelicAcquired?.Invoke(id);
+
         void OnDestroy()
         {
             Destroyed?.Invoke();

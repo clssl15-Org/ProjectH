@@ -62,7 +62,7 @@ public class RelicManager : MonoBehaviour
 
 
     // --- 유물 추가 (프리팹 생성) ---
-    public void AddRelic(int key, bool isReinforced)
+    public void AddRelic(int key, bool isReinforced = false)
     {
         // 1. 레지스트리에서 해당 번호를 가진 프리팹 찾기
         GameObject prefab = relicPrefabs.Find(p => p.GetComponent<Relic>().Data.RelicNumber == key);
@@ -85,6 +85,7 @@ public class RelicManager : MonoBehaviour
 
             // 획득 효과 발동
             relicScript.OnAcquire();
+            player.OnRelicAcquired(key);
         }
     }
 }

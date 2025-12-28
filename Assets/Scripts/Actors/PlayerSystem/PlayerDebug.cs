@@ -23,6 +23,9 @@ namespace Actors.PlayerSystem
         }
         private void Start()
         {
+            AddFirstSkill();
+            AddSecondSkill();
+            AddThirdSkill();
             AddUltimate();
         }
         public void DamageToPlayer()
@@ -52,6 +55,10 @@ namespace Actors.PlayerSystem
         {
             Ultimate ultimateSkill = player.StatesGO.GetComponent<Ultimate>();
             player.SkillManager.AddUltimateSkill(ultimateSkill);
+        }
+        public void AddRelic(int key)
+        {
+            RelicManager.Instance.AddRelic(key, false);
         }
     }
 
@@ -86,6 +93,10 @@ namespace Actors.PlayerSystem
             if (GUILayout.Button("Stun Player"))
             {
                 script.StunPlayer();
+            }
+            if (GUILayout.Button("Add Relic"))
+            {
+                script.AddRelic(5);
             }
         }
     }

@@ -27,7 +27,7 @@ namespace UI
         [SerializeField] private Button _ultimateBtn;
         [Space]
         [SerializeField] private HealthBar _healthBar;
-        [SerializeField] private RelicManager _relicManager;
+        [SerializeField] private UI.PlayerView.RelicManager _relicManager;
 
         [Header("Resources")]
         [SerializeField, Min(0)] private float _skillRouletteVideoPlaytime = 3.5f;
@@ -68,7 +68,8 @@ namespace UI
 
             _transform = GetComponent<RectTransform>();
 
-            if (!(_skillBtn?.TryGetComponent<Animator>(out var skillAnimator) ?? false))
+            Animator skillAnimator = null;
+            if (!(_skillBtn?.TryGetComponent<Animator>(out skillAnimator) ?? false))
                 throw new InvalidOperationException(
                     $"[{nameof(PlayerUI)}] '{nameof(_skillBtn)}' 컴포넌트는 {nameof(Animator)}을(를) 가지고 있어야 합니다.");
 
