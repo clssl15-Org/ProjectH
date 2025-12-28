@@ -1088,7 +1088,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.03102513, y: 1.0772744}
@@ -1324,9 +1324,9 @@ MonoBehaviour:
   _bosses:
   - {fileID: 5878542944565762321}
   - {fileID: 8431915662518892015}
-  _reviveTime: 5
+  _reviveTime: 10
   _bonusTime: 10
-  _forceClear_1: 0
+  _forceClear_1: 1
 --- !u!1 &5810666194657943169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1592,7 +1592,7 @@ Transform:
   m_GameObject: {fileID: 5878542944565762321}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.14, y: -5.45, z: 0}
+  m_LocalPosition: {x: -9.46, y: -5.24, z: 0}
   m_LocalScale: {x: 1.6699998, y: 1.6699998, z: 1.6699998}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1812,11 +1812,12 @@ MonoBehaviour:
   Configuration: {fileID: 0}
   PlatformManager: {fileID: 0}
   _stateDisplay: 
-  _attackMode: 0
+  _attackMode: 2
   _targetPlayerRange: 2.5
   _slashWeapon: {fileID: 6260784467558026640}
   _slashActiveTiming: 0.16666667
   _slashActiveDuration: 0.41666666
+  _slashMoveDistance: 10
   _curveEffectPrefab: {fileID: 1762814488377009823, guid: e33d10a5eb425ca4ea9d3a8e36b2c3f3, type: 3}
   _curveEffectWorldPosition: {x: 0, y: 15}
   _curveEffectLength: 1
