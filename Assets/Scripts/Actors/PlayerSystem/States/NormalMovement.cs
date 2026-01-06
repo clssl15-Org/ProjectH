@@ -19,6 +19,7 @@ namespace Actors.PlayerSystem
 
         public override void CheckExitTransition()
         {
+            if (!Player.canMove) return;
             if (CharacterActions.jump.Started && CharacterActions.movement.Down)
             {
                 CharacterStateController.EnqueueTransition<FallingJump>();
@@ -61,6 +62,8 @@ namespace Actors.PlayerSystem
         }
         public override void UpdateBehaviour(float dt)
         {
+            if (!Player.canMove) return;
+
             ProcessVelocity(dt);
 
             CharacterActor.ChangeFlipX(CharacterStateController.InputMovementReference);

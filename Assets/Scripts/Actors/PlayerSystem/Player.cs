@@ -27,6 +27,7 @@ namespace Actors.PlayerSystem
         public int MaxHP => playerHealth.MaxHealth;
         public int AttackPower => (int)((playerStats.attackPower + playerStats.additionalAttackPower) * playerStats.attackPowerMultiplier);
 
+        public bool canMove { get; set; } = true;
         public int CurrentPlatform { get; private set; } = -1;
 
         public GameObject StatesGO;

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Actors.PlayerSystem;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
@@ -68,6 +69,8 @@ namespace UI
 
             if (PlayerUI)
                 PlayerUI.BlockInput = true;
+
+            FindAnyObjectByType<Player>().canMove = false; // 플레이어 이동 막기
 
             _relic = relicInfo;
             gameObject.SetActive(true);
@@ -153,6 +156,8 @@ namespace UI
 
             if (PlayerUI)
                 PlayerUI.BlockInput = false;
+
+            FindAnyObjectByType<Player>().canMove = true; // 플레이어 이동 막기 제거
         }
 
         private void OnDestroy()
@@ -161,6 +166,8 @@ namespace UI
             _timer?.Dispose();
 
             RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
+
+            
         }
     }
 }
