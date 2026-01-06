@@ -54,7 +54,7 @@ namespace Actors.PlayerSystem
                 Player.RangedAttack();
             }
 
-            if (CharacterActions.ultimate.Started)
+            if (CharacterActions.ultimate.Started && CharacterActor.IsGrounded)
             {
                 Player.UseUltimate();
             }
