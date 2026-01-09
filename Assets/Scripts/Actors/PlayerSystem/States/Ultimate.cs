@@ -8,12 +8,16 @@ namespace Actor.PlayerSystem
 {
     public class Ultimate : CharacterState
     {
+        [SerializeField]
+        RuntimeAnimatorController nextRuntimeAnimatorController = null;
+        public RuntimeAnimatorController NextRuntimeAnimatorController => nextRuntimeAnimatorController;
+
         [Header("Skill Timing Settings")]
         [SerializeField]
-        private float skillDuration = 1.5f;
+        private float skillDuration = 1f;
 
         [SerializeField]
-        private float launchDelay = 0.1f;
+        private float cancleTime = 0.8f;
 
         [SerializeField]
         private float auraEffectDestroyTiming;
@@ -63,10 +67,12 @@ namespace Actor.PlayerSystem
 
         private float attackPower => Player.playerStats.attackPower;
 
-        private float skillCursor = 0f;
+        private float skillCursor = 0f; 
+        private float currentSkillTime = 0f;
 
         private Vector2 direction = Vector2.right;
 
+        private bool isCanceled = false;
         private bool isDone = true;
         private bool isProjectileLaunched = false;
         private bool isAuraEffectDestroyed = false;
@@ -138,25 +144,22 @@ namespace Actor.PlayerSystem
 
         public override void UpdateBehaviour(float dt)
         {
-            float animationDt = dt / skillDuration;
-            skillCursor += animationDt;
+            currentSkillTime += dt;
 
-            if (skillCursor >= invincibleStartTime && skillCursor <= invincibleEndTime)
+            if (CharacterActions.ultimate.Canceled)
             {
-                Player.Invincible = true;
-            }
-            else
-            {
-                Player.Invincible = false;
+                isCanceled = true;
             }
 
-            if (skillCursor >= auraEffectDestroyTiming && !isAuraEffectDestroyed)
+            if (isCanceled && currentSkillTime < cancleTime)
             {
-                isAuraEffectDestroyed = true;
+                print(currentSkillTime);
+                isDone = true;
                 Destroy(auraEffect);
+                return;
             }
 
-            if (skillCursor >= launchDelay && !isProjectileLaunched)
+            if (isCanceled && !isProjectileLaunched)
             {
                 Vector2 position = CharacterActor.Position + (attackPointOffset * CharacterActor.Forward);
                 Vector2 direction = CharacterActor.Forward;
@@ -173,12 +176,20 @@ namespace Actor.PlayerSystem
 
                 Destroy(auraEffect);
                 isProjectileLaunched = true;
+                Player.Invincible = true;
+                CharacterActor.Animator.runtimeAnimatorController = nextRuntimeAnimatorController;
             }
 
-            if (skillCursor >= 1)
+            if (isProjectileLaunched)
             {
-                isDone = true;
-                skillCursor = 0f;
+                float animationDt = dt / skillDuration;
+                skillCursor += animationDt;
+
+                if (skillCursor > 1)
+                {
+                    isDone = true;
+                    skillCursor = 0f;
+                }
             }
         }
 
@@ -190,9 +201,11 @@ namespace Actor.PlayerSystem
         private void ResetSkill()
         {
             isDone = false;
+            isCanceled = false;
             isProjectileLaunched = false;
             isAuraEffectDestroyed = false;
             skillCursor = 0;
+            currentSkillTime = 0f;
         }
 
         private void RecoverCooldown()
