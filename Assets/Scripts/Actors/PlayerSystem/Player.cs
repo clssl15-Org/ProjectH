@@ -33,9 +33,6 @@ namespace Actors.PlayerSystem
 
         public SkillManager SkillManager => skillManager;
 
-        public List<int> Relics { get; } = new();
-        IReadOnlyList<int> IPlayer.Relics => Relics;
-
         public float RouletteDamageMultiplier
         {
             get => a;
@@ -48,8 +45,6 @@ namespace Actors.PlayerSystem
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
-        public event Action<int> RelicAcquired;
-        public event Action<int> RelicAbandoned;
 
         private bool invincible = false;
         private PlatformDetector platformDetector;
@@ -123,8 +118,6 @@ namespace Actors.PlayerSystem
         {
             skillManager.UseUltimate();
         }
-
-        public void OnRelicAcquired(int id) => RelicAcquired?.Invoke(id);
 
         void OnDestroy()
         {

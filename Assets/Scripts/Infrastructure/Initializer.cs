@@ -4,7 +4,7 @@ namespace Infrastructure
 {
     public class Initializer : MonoBehaviour
     {
-        [field: SerializeField] public bool InitializeAtStart { get; set; } = true;
+        [field: SerializeField] public bool InitializeOnStart { get; set; } = true;
 
         private void Start()
         {

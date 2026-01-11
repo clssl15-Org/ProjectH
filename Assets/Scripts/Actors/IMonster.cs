@@ -22,7 +22,7 @@ namespace Actors
         bool IgnorePlayerInteraction { get; }
 
         void Initialize(
-            GameAssetLibrary gameAssetsLibrary,
+            GameAssetLibrary gameAssetLibrary,
             Configuration configuration,
             PlatformManager platformManager);
 

@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace UI
 {
-    public class Darkscreen : MonoBehaviour, IEnablable
+    public class Darkscreen : MonoBehaviour, IEnablableView
     {
         public event Action Enabling;
         public event Action Enabled;
         public event Action Disabling;
         public event Action Disabled;
 
-        Action IEnablable.Enabling => Enabling;
-        Action IEnablable.Enabled => Enabled;
-        Action IEnablable.Disabling => Disabling;
-        Action IEnablable.Disabled => Disabled;
+        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnEnabled => Enabled;
+        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabled => Disabled;
 
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;

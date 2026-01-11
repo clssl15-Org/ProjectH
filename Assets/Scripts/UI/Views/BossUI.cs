@@ -5,25 +5,27 @@ using UnityEngine;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class BossUI : MonoBehaviour, IView, IEnablable
+    public class BossUI : MonoBehaviour, IView, IEnablableView
     {
         [field: SerializeField] public bool DestoyOnMonsterDead { get; set; } = true;
-        [SerializeField] private HealthBar _healthBar;
+        [SerializeField] private HealthBarUI _healthBar;
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
 
+        public event Action Enabling;
+        public event Action Disabling;
         public event Action Destroyed;
 
         #region Interfaces
-        Action IEnablable.Enabling => null;
-        Action IEnablable.Enabled => null;
-        Action IEnablable.Disabling => null;
-        Action IEnablable.Disabled => _desabled;
+        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnEnabled => null;
+        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabled => _disabled;
         #endregion
 
         private bool _awaken = false;
         private MonsterVM _boss;
-        private Action _desabled = null;
+        private Action _disabled = null;
 
 
         // Content
@@ -46,12 +48,12 @@ namespace UI
             if (boss == null)
                 throw new ArgumentNullException(
                     nameof(boss),
-                    $"[{nameof(HealthBar)}] 인자는 null일 수 없습니다.");
+                    $"[{nameof(HealthBarUI)}] 인자는 null일 수 없습니다.");
             if (_boss == boss)
                 return;
             if (_boss != null)
                 throw new InvalidOperationException(
-                    $"[{nameof(HealthBar)}] {nameof(_boss)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
+                    $"[{nameof(HealthBarUI)}] {nameof(_boss)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
 
             _boss = boss;
             _healthBar.Connect(boss);
@@ -66,6 +68,8 @@ namespace UI
                 return;
 
             _healthBar.Disconnect();
+            _boss.Dead -= DestoyOnDead;
+
             _boss = null;
         }
 
@@ -73,7 +77,7 @@ namespace UI
         {
             Disconnect();
 
-            _desabled = Destroy;
+            _disabled = Destroy;
             Disable();
         }
 

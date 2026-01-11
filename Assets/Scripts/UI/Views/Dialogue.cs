@@ -27,10 +27,10 @@ namespace UI
         public event Action Disabling;
 
         #region Interfaces
-        Action IEnablable.Enabling => null;
-        Action IEnablable.Enabled => null;
-        Action IEnablable.Disabling => Disabling;
-        Action IEnablable.Disabled => null;
+        Action IEnablable.OnEnabling => null;
+        Action IEnablable.OnEnabled => null;
+        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabled => null;
         #endregion
 
         private EnableWithAnimation _enabler;

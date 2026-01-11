@@ -14,10 +14,10 @@ namespace Game.Title
         public event Action Enabling;
         public event Action Disabling;
 
-        Action IEnablable.Enabling => Enabling;
-        Action IEnablable.Disabling => Disabling;
-        Action IEnablable.Enabled => null;
-        Action IEnablable.Disabled => null;
+        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnEnabled => null;
+        Action IEnablable.OnDisabled => null;
 
         [SerializeField] private Darkscreen _darkscreen;
         [SerializeField] private Animation _animation;

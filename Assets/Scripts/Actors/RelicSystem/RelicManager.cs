@@ -18,8 +18,8 @@ public class RelicManager : MonoBehaviour
     public event Action<int> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
-    private Dictionary<int, List<GameObject>> _ownedRelics = new Dictionary<int, List<GameObject>>();
-    public IReadOnlyDictionary<int, List<GameObject>> OwnedRelics => _ownedRelics;
+    private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
+    public IReadOnlyDictionary<int, List<GameObject>> OwnedRelics => ownedRelics;
 
     private void Awake() => Instance = this;
 
@@ -37,7 +37,7 @@ public class RelicManager : MonoBehaviour
         // 프리팹에 붙어있는 Relic 컴포넌트에서 데이터를 읽어와 필터링합니다.
         var available = relicPrefabs
             .Select(p => p.GetComponent<Relic>().Data)
-            .Where(d => d.CanStack || !_ownedRelics.ContainsKey(d.RelicNumber))
+            .Where(d => d.CanStack || !ownedRelics.ContainsKey(d.RelicNumber))
             .ToList();
 
         if (available.Count == 0) return;
@@ -74,21 +74,21 @@ public class RelicManager : MonoBehaviour
 
         // 2. 데이터 가져오기 및 중복 체크
         RelicDataSO data = prefab.GetComponent<Relic>().Data;
-        if (!data.CanStack && _ownedRelics.ContainsKey(key)) return;
+        if (!data.CanStack && ownedRelics.ContainsKey(key)) return;
 
         // 3. 프리팹 생성 및 설정
         GameObject relicObj = Instantiate(prefab, this.transform);
         Relic relicScript = relicObj.GetComponent<Relic>();
-        relicScript.isReinforced = isReinforced;
 
         if (relicScript != null)
         {
-            if (!_ownedRelics.ContainsKey(key)) _ownedRelics[key] = new List<GameObject>();
-            _ownedRelics[key].Add(relicObj);
+            relicScript.isReinforced = isReinforced;
+
+            if (!ownedRelics.ContainsKey(key)) ownedRelics[key] = new List<GameObject>();
+            ownedRelics[key].Add(relicObj);
 
             // 획득 효과 발동
             relicScript.OnAcquire();
-            player.OnRelicAcquired(key);
         }
 
         RelicAcquired?.Invoke(key);

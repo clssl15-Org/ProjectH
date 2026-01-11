@@ -6,7 +6,7 @@ namespace Actors.Monsters
     [DisallowMultipleComponent]
     public class IndicatorHub : MonoBehaviour
     {
-        [field: SerializeField] public IndicatorConfiguration IndicatorConfigurationOverride { get; set; }
+        [field: SerializeField] public IndicatorConfiguration ConfigurationOverride { get; set; }
 
         private IMonsterInternal _monster;
         private IndicatorConfigurationView _config;
@@ -14,12 +14,14 @@ namespace Actors.Monsters
 
         private void Start()
         {
-            _monster = GetComponent<IMonsterInternal>();
+            if (!TryGetComponent(out _monster))
+                throw new InvalidOperationException(Ctx(
+                    $"{nameof(gameObject)} '{name}'에서 {nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
 
             var configuraton = _monster.Configuration?.IndicatorConfiguration
                 ?? throw new InvalidOperationException(Ctx(
-                    $"{nameof(_monster.Configuration)}이(가) 유효하지 않기 떄문에 객체를 실행할 수 없습니다."));
-            _config = new(configuraton, IndicatorConfigurationOverride);
+                    $"{nameof(_monster.Configuration)}이(가) 유효하지 않습니다."));
+            _config = new(configuraton, ConfigurationOverride);
 
             _monster.ConditionChanged += cd =>
             {

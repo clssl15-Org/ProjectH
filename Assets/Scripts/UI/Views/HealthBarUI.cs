@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class HealthBar : MonoBehaviour, IView
+    public class HealthBarUI : MonoBehaviour, IView
     {
         public event Action Destroyed;
 
@@ -38,12 +38,12 @@ namespace UI
             if (vm == null)
                 throw new ArgumentNullException(
                     nameof(vm),
-                    $"[{nameof(HealthBar)}] 인자는 null일 수 없습니다.");
+                    $"[{nameof(HealthBarUI)}] 인자는 null일 수 없습니다.");
             if (HealthRateVM == vm)
                 return;
             if (HealthRateVM != null)
                 throw new InvalidOperationException(
-                    $"[{nameof(HealthBar)}] {nameof(HealthRateVM)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
+                    $"[{nameof(HealthBarUI)}] {nameof(HealthRateVM)}이(가) 이미 존재하기 때문에 새로운 연결을 구성할 수 없습니다.");
 
             HealthRateVM = vm;
             HealthRateVM.HealthRateChanged += SetHealthRate;

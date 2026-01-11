@@ -1,6 +1,7 @@
 using Actors;
 using UI;
 using UnityEngine;
+using BlackboxSystem;
 
 namespace Game.Stage
 {
@@ -39,11 +40,17 @@ namespace Game.Stage
         {
             if (AutoBindScenePlayer)
             {
-                var playerObject = GameObject.FindGameObjectWithTag("Player");
-                if (playerObject != null && playerObject.TryGetComponent<IPlayer>(out var player))
+                foreach (var playerObj in GameObject.FindGameObjectsWithTag("Player"))
                 {
-                    Player = player;
-                    Register(player);
+                    if (playerObj
+                        && playerObj.activeSelf
+                        && playerObj.TryGetComponent<IPlayer>(out var player))
+                    {
+                        Player = player;
+                        Register(player);
+
+                        break;
+                    }
                 }
             }
             else
@@ -68,8 +75,13 @@ namespace Game.Stage
                     Register(monster);
                 }
 
-            if (SpawnManaer.Instance != null)
+            if (SpawnManaer.Instance)
                 SpawnManaer.Instance.OnMonsterCreate(monster => Register(monster));
+            else
+                Debug.LogWarning(
+                    "[StageManager] SpawnManaer.Instance이(가) 유효하지 않습니다. " +
+                    "새로 스폰되는 몬스터는 매니저에 등록되지 않으며, UI 등이 생성되지 않을 수 있습니다.",
+                    this);
         }
         
         public void Register(IPlayer player, bool connectUI = true)

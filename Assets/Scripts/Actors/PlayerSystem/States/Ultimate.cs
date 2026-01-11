@@ -4,7 +4,7 @@ using UnityEngine;
 using Rules;
 using Actors.PlayerSystem;
 
-namespace Actor.PlayerSystem
+namespace Actors.PlayerSystem
 {
     public class Ultimate : CharacterState
     {

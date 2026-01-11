@@ -16,10 +16,6 @@ namespace UI
         }
         public event Action<HealthRateData> HealthRateChanged;
 
-        public IReadOnlyList<int> Relics => _player?.Relics;
-        public event Action<int> RelicAcquired;
-        public event Action<int> RelicAbandoned;
-
         public event Action Disposed;
         public bool IsDisposed { get; private set; } = false;
 
@@ -38,11 +34,6 @@ namespace UI
             _player = player;
 
             _player.ConditionChanged += Update;
-
-            // TODO: ConditionChanged에 Payload 담아서 보내기
-            _player.RelicAcquired += id => RelicAcquired?.Invoke(id);
-            _player.RelicAbandoned += id => RelicAbandoned?.Invoke(id);
-
             _player.Destroyed += Dispose;
         }
 
@@ -65,9 +56,13 @@ namespace UI
         }
         public void ApplyRandomSkillBuff(float factor)
         {
+            ThrowIfDisposed();
+            if (_player == null) return;
+
             _player.ApplyRandomSkillBuff(factor);
         }
 
+        [Obsolete("현재 Player Input은 Standalone으로 처리됩니다.")]
         public void UseSkill()
         {
             //ThrowIfDisposed();
@@ -75,6 +70,7 @@ namespace UI
 
             //_player.UseSkill();
         }
+        [Obsolete("현재 Player Input은 Standalone으로 처리됩니다.")]
         public void DefaultAttack()
         {
             //ThrowIfDisposed();
@@ -82,6 +78,7 @@ namespace UI
 
             //_player.DefaultAttack();
         }
+        [Obsolete("현재 Player Input은 Standalone으로 처리됩니다.")]
         public void RangedAttack()
         {
             //ThrowIfDisposed();

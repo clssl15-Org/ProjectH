@@ -8,7 +8,7 @@ using UnityEngine.Video;
 
 namespace UI
 {
-    public class RelicAcquisitionUI : MonoBehaviour, IInitializable
+    public class RelicAcquisitionUI : MonoBehaviour, IInitializable, IEnablableView
     {
         [Header("Relic")]
         [SerializeField] private Image _relicIcon;
@@ -23,7 +23,8 @@ namespace UI
         [SerializeField] private VideoPlayer _coinRawVideoPlayer;
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
 
-        public PlayerUI PlayerUI;
+        public event Action Enabling;
+        public event Action Disabling;
 
         [Serializable]
         public struct VideoData
@@ -36,9 +37,17 @@ namespace UI
 
         private IDisposable _updater, _timer;
         private RelicDataSO _relic;
+        private EnableWithAnimation _enabler;
 
         private bool _initialized = false;
         private bool _operating = false;
+
+        #region Interfaces
+        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnEnabled => null;
+        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabled => null;
+        #endregion
 
 
         private void Awake() => Initialize();
@@ -66,10 +75,9 @@ namespace UI
             }
             _operating = true;
 
-            if (PlayerUI)
-                PlayerUI.BlockInput = true;
-
             _relic = relicInfo;
+
+            // TODO: Enable();
             gameObject.SetActive(true);
 
             _toThrowCoin.gameObject.SetActive(true);
@@ -132,9 +140,6 @@ namespace UI
                         _close.gameObject.SetActive(true);
 
                         _throwCoin.SetActive(false);
-
-                        if (PlayerUI)
-                            PlayerUI.BlockInput = false;
                     }
                 });
             }
@@ -148,11 +153,9 @@ namespace UI
             _timer?.Dispose();
             _timer = null;
 
+            // TODO: Disable();
             gameObject.SetActive(false);
             _operating = false;
-
-            if (PlayerUI)
-                PlayerUI.BlockInput = false;
         }
 
         private void OnDestroy()
@@ -162,5 +165,10 @@ namespace UI
 
             RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
         }
+
+        public void Enable() => _enabler.Enable();
+        public void Disable() => _enabler.Disable();
+        public void SetToEnabled() => _enabler.SetToEnabled();
+        public void SetToDisabled() => _enabler.SetToDisabled();
     }
 }

@@ -10,13 +10,14 @@ using MonsterSystem = Actors.Monsters.Actions;
 
 namespace UI
 {
-
-
     [RequireComponent(typeof(RectTransform))]
-    public class PlayerUI : MonoBehaviour, IView, IEnablable
+    public class PlayerUI : MonoBehaviour, IEnablableView, IInputEnabledView
     {
         // Front
-        [field: SerializeField] public bool BlockInput { get; set; } = false;
+        public bool EnableInput { get; set; } = true;
+
+        public event Action Enabling;
+        public event Action Disabling;
         public event Action Destroyed;
 
         // Internal
@@ -27,21 +28,20 @@ namespace UI
         [SerializeField] private Button _rangedAttackBtn;
         [SerializeField] private Button _ultimateBtn;
         [Space]
-        [SerializeField] private HealthBar _healthBar;
-        [SerializeField] private UI.PlayerView.RelicManager _relicManager;
+        [SerializeField] private HealthBarUI _healthBar;
+        [SerializeField] private PlayerView.RelicManager _relicManager;
 
         [Header("Resources")]
         [SerializeField, Min(0)] private float _skillRouletteVideoPlaytime = 3.5f;
         [SerializeField] private VideoClip[] _skillRouletteVideos;
 
         #region Interfaces
-        Action IEnablable.Enabling =>
-            () => _skillRouletteBackground.gameObject.SetActive(true);
-        Action IEnablable.Enabled =>
-            null;
-        Action IEnablable.Disabling =>
-            null;
-        Action IEnablable.Disabled =>
+        Action IEnablable.OnEnabling => 
+            (() => _skillRouletteBackground.gameObject.SetActive(true))
+            + Enabling;
+        Action IEnablable.OnEnabled => null;
+        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabled =>
             () => _skillRouletteBackground.gameObject.SetActive(false);
         #endregion
 
@@ -70,9 +70,9 @@ namespace UI
             _transform = GetComponent<RectTransform>();
 
             Animator skillAnimator = null;
-            if (!(_skillBtn?.TryGetComponent<Animator>(out skillAnimator) ?? false))
+            if (!(_skillBtn?.TryGetComponent(out skillAnimator) ?? false))
                 throw new InvalidOperationException(
-                    $"[{nameof(PlayerUI)}] '{nameof(_skillBtn)}' 컴포넌트는 {nameof(Animator)}을(를) 가지고 있어야 합니다.");
+                    $"[{nameof(PlayerUI)}] {nameof(_skillBtn)} 컴포넌트는 '{nameof(Animator)}'을(를) 가지고 있어야 합니다.");
 
             _skillRouletteEnabler = new EnableWithAnimation(_skillRouletteBackground, false)
                 .InitializeWithIEnablable(this, false);
@@ -87,18 +87,25 @@ namespace UI
             _player = player;
 
             _skillBtn.onClick.AddListener(ApplyRandomSkillBuff);
-            _defaultAttackBtn.onClick.AddListener(_player.DefaultAttack);
-            _rangedAttackBtn.onClick.AddListener(_player.RangedAttack);
+
+            // TODO: Player Input 배선 작업
+            //_defaultAttackBtn.onClick.AddListener(_player.DefaultAttack);
+            //_rangedAttackBtn.onClick.AddListener(_player.RangedAttack);
             //_ultimateBtn.onClick.AddListener(null);
             
-
             _healthBar.Connect(_player);
 
-            foreach (var id in _player.Relics)
+
+            #region RelicManager 연결
+            if (!RelicManager.Instance)
+                throw new InvalidOperationException(
+                    $"[{nameof(PlayerUI)}] {nameof(RelicManager.Instance)}이(가) 유효하지 않습니다.");
+
+            foreach (var id in RelicManager.Instance.OwnedRelics.Keys)
                 _relicManager.AddRelic(id);
 
-            _player.RelicAcquired += _relicManager.AddRelic;
-            _player.RelicAbandoned += _relicManager.RemoveRelic;
+            RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
+            #endregion
         }
 
         public void Disconnect()
@@ -111,11 +118,10 @@ namespace UI
             _rangedAttackBtn.onClick.RemoveAllListeners();
             _ultimateBtn.onClick.RemoveAllListeners();
 
-
             _healthBar.Disconnect();
 
-            _player.RelicAcquired -= _relicManager.AddRelic;
-            _player.RelicAbandoned -= _relicManager.RemoveRelic;
+            if (RelicManager.Instance)
+                RelicManager.Instance.RelicAcquired -= _relicManager.AddRelic;
 
             _player = null;
         }
@@ -123,7 +129,7 @@ namespace UI
         // 여기서 UI 이벤트 처리
         private void Update()
         {
-            if (BlockInput)
+            if (EnableInput)
                 return;
 
             _currentSelectedButtons.Clear();
@@ -131,8 +137,7 @@ namespace UI
             if (Input.GetKeyDown(KeyCode.E))
                 SelectNextSkill();
 
-            if (Input.GetMouseButtonDown(2)
-                || Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.0001f)
+            if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.0001f)
                 _currentSelectedButtons.Add(_skillBtn);
 
             if (Input.GetMouseButton(0))

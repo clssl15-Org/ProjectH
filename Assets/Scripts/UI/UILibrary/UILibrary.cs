@@ -6,7 +6,7 @@ namespace UI
     {
         [SerializeField] private GameObject _healthBar;
 
-        public HealthBar HealthBar => Instantiate(_healthBar).GetComponent<HealthBar>();
+        public HealthBarUI HealthBar => Instantiate(_healthBar).GetComponent<HealthBarUI>();
 
 
         private void Start()

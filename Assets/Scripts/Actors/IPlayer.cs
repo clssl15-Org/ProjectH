@@ -31,6 +31,7 @@ namespace Actors
 
     public interface IPlayer : IInjectable<PlatformManager>
     {
+        // ---------- Properties ----------
         int HP { get; }
         bool IsAlive { get; }
 
@@ -40,25 +41,27 @@ namespace Actors
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
-        void ChangeSkill(int skillIndex);
-        void ApplyRandomSkillBuff(float factor);
-
-        IReadOnlyList<int> Relics { get; }
-        event Action<int> RelicAcquired;
-        event Action<int> RelicAbandoned;
-
-        void UseSkill();
-        void UseUltimate();
+        // Skill
         int SelectedSkillIndex { get; }
 
+
+        // ---------- Methods ----------
+        // Attack
         void DefaultAttack();
         void RangedAttack();
 
+        // Skill
+        void UseSkill();
+        void UseUltimate();
+        void ChangeSkill(int skillIndex);
+        void ApplyRandomSkillBuff(float factor);
+
+
+        // ---------- MonoBehaviour ----------
 #pragma warning disable IDE1006
         string name { get; }
         GameObject gameObject { get; }
         Transform transform { get; }
 #pragma warning restore
-
     }
 }

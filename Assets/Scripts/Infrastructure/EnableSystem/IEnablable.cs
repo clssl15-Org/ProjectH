@@ -5,10 +5,10 @@ namespace Infrastructure
 {
     public interface IEnablable
     {
-        Action Enabling { get; }
-        Action Enabled { get; }
-        Action Disabling { get;}
-        Action Disabled { get; }
+        Action OnEnabling { get; }
+        Action OnEnabled { get; }
+        Action OnDisabling { get;}
+        Action OnDisabled { get; }
 
         void Enable();
         void Disable();
