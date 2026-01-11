@@ -19,7 +19,7 @@ namespace Game.Title
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabled => null;
 
-        [SerializeField] private Darkscreen _darkscreen;
+        [SerializeField] private DarkscreenUI _darkscreen;
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
 

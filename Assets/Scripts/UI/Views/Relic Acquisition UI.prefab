@@ -1591,8 +1591,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1555541183956866340}
   - component: {fileID: 3194588562940674162}
+  - component: {fileID: 1639502756631222003}
   m_Layer: 5
-  m_Name: Relic Acquisition
+  m_Name: Relic Acquisition UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1631,6 +1632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f380a92d9eaae23418c55b2e518ea20e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animation: {fileID: 0}
   _relicIcon: {fileID: 1143011454080391625}
   _relicNametag: {fileID: 6629757791489179127}
   _relicDescrption: {fileID: 3033511679090883231}
@@ -1647,3 +1649,19 @@ MonoBehaviour:
   - IsFront: 0
     Video: {fileID: 32900000, guid: 3391b108da4372a4ba6914cb4b5304e1, type: 3}
     AlphaMask: {fileID: 32900000, guid: 0f27444deeefe214fb5d909395eaf54b, type: 3}
+--- !u!111 &1639502756631222003
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158238539528485429}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: d1bceade5c68aa5438a187a5359e780f, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: d1bceade5c68aa5438a187a5359e780f, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0

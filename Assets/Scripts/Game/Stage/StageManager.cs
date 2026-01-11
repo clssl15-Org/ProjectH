@@ -34,6 +34,8 @@ namespace Game.Stage
             UIManager = GetComponent<UIManager>();
             PlayerManager = GetComponent<PlayerManager>();
             MonsterManager = GetComponent<MonsterManager>();
+
+            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log);
         }
 
         protected virtual void Start()

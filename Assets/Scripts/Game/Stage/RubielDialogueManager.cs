@@ -11,7 +11,7 @@ namespace Game
     {
         [SerializeField] private Rubiel _rubiel;
         [SerializeField] private CharacterStateController playerStateController;
-        [SerializeField] private Dialogue _dialogueUI;
+        [SerializeField] private DialogueUI _dialogueUI;
         [Space]
         [SerializeField] private DialogueData[] _dialogues;
         [SerializeField] private bool _commence_C = false;

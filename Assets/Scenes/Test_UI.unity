@@ -452,7 +452,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 2081308166}
-  _exclusiveInputViews: []
+  _exclusiveInputViews:
+  - {fileID: 1903538162}
 --- !u!114 &299724564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5210,6 +5211,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1555541183956866340, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
   m_PrefabInstance: {fileID: 8444397290604352235}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1903538162 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3194588562940674162, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+  m_PrefabInstance: {fileID: 8444397290604352235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f380a92d9eaae23418c55b2e518ea20e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!111 &1903538163 stripped
+Animation:
+  m_CorrespondingSourceObject: {fileID: 1639502756631222003, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+  m_PrefabInstance: {fileID: 8444397290604352235}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2042097376 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5944037012842129890, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
@@ -5689,13 +5706,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3194588562940674162, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: _animation
+      value: 
+      objectReference: {fileID: 1903538163}
     - target: {fileID: 9158238539528485429, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
       propertyPath: m_Name
       value: Relic Acquisition
       objectReference: {fileID: 0}
     - target: {fileID: 9158238539528485429, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UI;
 using UnityEngine;
+using BlackboxSystem;
 
 namespace Game.Stage
 {
@@ -21,6 +22,8 @@ namespace Game.Stage
         // Content
         private void Awake()
         {
+            BlackboxHandle.Of(this).Write("Awake");
+            
             if (!_canvas)
                 throw new InvalidOperationException(
                     $"[{nameof(UIManager)}] {nameof(_canvas)} 컴포넌트가 유효하지 않습니다.");
@@ -44,10 +47,19 @@ namespace Game.Stage
                     continue;
                 }
 
-                view.Enabling += () => _viewInputHub.BlockExcept(iView);
-                view.Disabling += () => _viewInputHub.UnblockAll();
+                view.Enabling += () =>
+                {
+                    _viewInputHub.BlockExcept(iView);
+                    BlackboxHandle.Of(view).Exert(_viewInputHub, "Block Except Self");
+                };
+                view.Disabling += () =>
+                {
+                    _viewInputHub.UnblockAll();
+                    BlackboxHandle.Of(view).Exert(_viewInputHub, "Unblock All");
+                };
+                BlackboxHandle.Of(this).Exert(_viewInputHub, $"Register '{viewObj.name}' (Enable/Disable)");
 
-                RegisterView(iView);   
+                RegisterView(iView);
             }
         }
 
@@ -84,6 +96,11 @@ namespace Game.Stage
             view.SetParent(_canvas);
         }
 
+        //private void Update()
+        //{
+        //    if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl))
+        //        BlackboxHandle.Of(this).Export(-1, true);
+        //}
 
         internal void Destroy()
         {

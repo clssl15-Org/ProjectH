@@ -129,7 +129,7 @@ namespace UI
         // 여기서 UI 이벤트 처리
         private void Update()
         {
-            if (EnableInput)
+            if (!EnableInput)
                 return;
 
             _currentSelectedButtons.Clear();

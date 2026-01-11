@@ -59,8 +59,8 @@ namespace BlackboxSystem
         internal BlackboxHandle(Blackbox blackbox) => _blackbox = blackbox;
 
         #region Static Methods
-        public static void Initialize(Action<string> logger, bool strongReference) => Initialize(string.Empty, logger, strongReference);
-        public static void Initialize(string logDirectory, Action<string> logger, bool strongReference)
+        public static void Initialize(Action<string> logger, bool strongReference = false) => Initialize(string.Empty, logger, strongReference);
+        public static void Initialize(string logDirectory, Action<string> logger, bool strongReference = false)
         {
             LogDirectory = logDirectory;
             Logger = logger;

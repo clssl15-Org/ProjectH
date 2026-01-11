@@ -8,8 +8,12 @@ using UnityEngine.Video;
 
 namespace UI
 {
-    public class RelicAcquisitionUI : MonoBehaviour, IInitializable, IEnablableView
+    [RequireComponent(typeof(RectTransform))]
+    public class RelicAcquisitionUI : MonoBehaviour, IInitializable, IEnablableView, IInputEnabledView
     {
+        [Header("Main")]
+        [SerializeField] private Animation _animation;
+
         [Header("Relic")]
         [SerializeField] private Image _relicIcon;
         [SerializeField] private TextMeshProUGUI _relicNametag;
@@ -25,6 +29,7 @@ namespace UI
 
         public event Action Enabling;
         public event Action Disabling;
+        public event Action Destroyed;
 
         [Serializable]
         public struct VideoData
@@ -47,6 +52,8 @@ namespace UI
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => Disabling;
         Action IEnablable.OnDisabled => null;
+
+        public bool EnableInput { get; set; } = true;
         #endregion
 
 
@@ -60,7 +67,10 @@ namespace UI
             _close.onClick.AddListener(Close);
 
             RelicManager.Instance.RelicAcquiring += OnRelicAcquiring;
-            gameObject.SetActive(false);
+
+            _enabler = new EnableWithAnimation(_animation)
+                .InitializeWithIEnablable(this);
+            SetToDisabled();
         }
 
         private void OnRelicAcquiring(RelicDataSO relicInfo)
@@ -77,8 +87,7 @@ namespace UI
 
             _relic = relicInfo;
 
-            // TODO: Enable();
-            gameObject.SetActive(true);
+            Enable();
 
             _toThrowCoin.gameObject.SetActive(true);
             _close.gameObject.SetActive(false);
@@ -109,7 +118,6 @@ namespace UI
 
             _coinRawVideoPlayer.clip = clip.Video;
             _coinMaskVideoPlayer.clip = clip.AlphaMask;
-
 
 
             _updater = Loco.Subscribe(() =>
@@ -153,8 +161,7 @@ namespace UI
             _timer?.Dispose();
             _timer = null;
 
-            // TODO: Disable();
-            gameObject.SetActive(false);
+            Disable();
             _operating = false;
         }
 
@@ -170,5 +177,17 @@ namespace UI
         public void Disable() => _enabler.Disable();
         public void SetToEnabled() => _enabler.SetToEnabled();
         public void SetToDisabled() => _enabler.SetToDisabled();
+
+        public void SetParent(RectTransform parent) =>
+            GetComponent<RectTransform>().SetParent(parent);
+
+        public void Destroy()
+        {
+            _enabler?.Dispose();
+            Destroyed?.Invoke();
+
+            if (gameObject)
+                Destroy(gameObject);
+        }
     }
 }

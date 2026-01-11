@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace UI
 {
     [RequireComponent(typeof(Animation))]
-    public class Dialogue : MonoBehaviour, IEnablable
+    public class DialogueUI : MonoBehaviour, IEnablable
     {
         [SerializeField] private Image _portraitUI;
         [SerializeField] private TextMeshProUGUI _nametagUI;
