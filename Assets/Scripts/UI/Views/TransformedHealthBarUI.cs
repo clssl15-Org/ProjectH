@@ -3,7 +3,7 @@ using UnityEngine;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class TransformedHealthBar : HealthBarUI
+    public class TransformedHealthBarUI : HealthBarUI
     {
         [SerializeField] Vector2 _localPosition = Vector2.zero;
         private Camera _camera;

@@ -53,9 +53,9 @@ namespace Actors
         /// </summary>
         public void RegisterToSpawnManager()
         {
-            if (SpawnManaer.Instance != null)
+            if (SpawnManager.Instance != null)
             {
-                SpawnManaer.Instance.AddSpawner(this.gameObject);
+                SpawnManager.Instance.AddSpawner(this.gameObject);
             }
         }
 

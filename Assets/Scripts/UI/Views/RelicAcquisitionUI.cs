@@ -165,14 +165,6 @@ namespace UI
             _operating = false;
         }
 
-        private void OnDestroy()
-        {
-            _updater?.Dispose();
-            _timer?.Dispose();
-
-            RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
-        }
-
         public void Enable() => _enabler.Enable();
         public void Disable() => _enabler.Disable();
         public void SetToEnabled() => _enabler.SetToEnabled();
@@ -188,6 +180,14 @@ namespace UI
 
             if (gameObject)
                 Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            _updater?.Dispose();
+            _timer?.Dispose();
+
+            RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
         }
     }
 }

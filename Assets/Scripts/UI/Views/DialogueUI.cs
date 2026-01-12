@@ -36,6 +36,7 @@ namespace UI
         private EnableWithAnimation _enabler;
         private bool _awaked = false;
 
+
         public void Awake()
         {
             if (_awaked) return;

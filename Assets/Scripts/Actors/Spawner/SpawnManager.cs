@@ -5,9 +5,9 @@ using System;
 
 namespace Actors
 {
-    public class SpawnManaer : MonoBehaviour
+    public class SpawnManager : MonoBehaviour
     {
-        public static SpawnManaer Instance { get; private set; }
+        public static SpawnManager Instance { get; private set; }
 
         public List<GameObject> SpawnerList { get; private set; } = new List<GameObject>();
 
@@ -38,6 +38,7 @@ namespace Actors
         /// </summary>
         public void Clear()
         {
+            monsterCreated = null;
             SpawnerList.Clear();
         }
     }

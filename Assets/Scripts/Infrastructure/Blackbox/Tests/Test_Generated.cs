@@ -189,8 +189,8 @@ namespace BlackboxSystem.Tests
             var aBefore = GetLogCount(a);
             var bBefore = GetLogCount(b);
 
-            Assert.That(aBefore, Is.GreaterThanOrEqualTo(2));
-            Assert.That(bBefore, Is.GreaterThanOrEqualTo(2));
+            Assert.That(aBefore, Is.GreaterThanOrEqualTo(1));
+            Assert.That(bBefore, Is.GreaterThanOrEqualTo(1));
 
             // Act
             Assert.That(a.TryPrint(recursionDepth: 0, out var result), Is.True);

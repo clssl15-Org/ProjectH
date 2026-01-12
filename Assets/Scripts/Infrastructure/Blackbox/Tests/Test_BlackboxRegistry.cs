@@ -1,23 +1,30 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using static BlackboxSystem.Tests.Asserts;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace BlackboxSystem.Tests
 {
     public class Test_BlackboxRegistry
     {
+        private const int MaxTryCount = 5;
+
         [SetUp]
         public void SetUp()
         {
-            Blackbox.ForceResetStaticProperties();
+            BlackboxRegistry.ForceReset();
             Infrastructure.StrongReference = false;
         }
 
         private void CreateOwner(string name, out NamedOwner owner)
         {
             owner = new NamedOwner(name);
+        }
+        private void GetBlackbox(object owner, out Blackbox blackbox)
+        {
+            blackbox = BlackboxRegistry.GetBlackbox(owner);
         }
 
 
@@ -137,19 +144,33 @@ namespace BlackboxSystem.Tests
             // Act
             owner = null;
 
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-            GC.WaitForPendingFinalizers();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-
             // Assert
-            Assert.That(BlackboxRegistry.Count(), Is.EqualTo(0));
+            int count = 0;
+            while (true)
+            {
+                Tools.ForceGC();
+
+                try
+                {
+                    Assert.That(BlackboxRegistry.Count(), Is.EqualTo(0));
+                    break;
+                }
+                catch (AssertionException) { }
+
+                if (++count > MaxTryCount)
+                {
+                    Assert.Fail($"BlackboxRegistry.Count() is '{BlackboxRegistry.Count()}'");
+                    break;
+                }
+            }
         }
         [TestCase(true), TestCase(false)]
         public void ReferenceLost_Multiple(bool strongReference)
         {
             // Arrange
+            var holdingOwner = new object();
             Infrastructure.StrongReference = strongReference;
-            BlackboxRegistry.GetBlackbox(new object());
+            BlackboxRegistry.GetBlackbox(holdingOwner);
 
             CreateOwner("Owner", out var owner);
             BlackboxRegistry.GetBlackbox(owner);
@@ -157,12 +178,65 @@ namespace BlackboxSystem.Tests
             // Act
             owner = null;
 
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-            GC.WaitForPendingFinalizers();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
+            // Assert
+            int count = 0;
+            while (true)
+            {
+                Tools.ForceGC();
+
+                try
+                {
+                    Assert.That(BlackboxRegistry.Count(), Is.EqualTo(1));
+                    break;
+                }
+                catch (AssertionException) { }
+
+                if (++count > MaxTryCount)
+                {
+                    Assert.Fail($"BlackboxRegistry.Count() is '{BlackboxRegistry.Count()}'");
+                    break;
+                }
+            }
+        }
+        [TestCase(true), TestCase(false)]
+        public void ReferenceLost_Related(bool strongReference)
+        {
+            // Arrange
+            Infrastructure.StrongReference = strongReference;
+
+            CreateOwner("Owner 1", out var owner1);
+            CreateOwner("Owner 2", out var owner2);
+
+            GetBlackbox(owner1, out Blackbox bb1);
+            GetBlackbox(owner2, out Blackbox bb2);
+
+            bb1.Exert(bb2, "Exerting");
+
+            // Act
+            owner1 = null;
+            owner2 = null;
+            bb1 = null;
+            bb2 = null;
 
             // Assert
-            Assert.That(BlackboxRegistry.Count(), Is.EqualTo(1));
+            int count = 0;
+            while (true)
+            {
+                Tools.ForceGC();
+
+                try
+                {
+                    Assert.That(BlackboxRegistry.Count(), Is.EqualTo(0));
+                    break;
+                }
+                catch (AssertionException) { }
+
+                if (++count > MaxTryCount)
+                {
+                    Assert.Fail($"BlackboxRegistry.Count() is '{BlackboxRegistry.Count()}'");
+                    break;
+                }
+            }
         }
         #endregion
     }

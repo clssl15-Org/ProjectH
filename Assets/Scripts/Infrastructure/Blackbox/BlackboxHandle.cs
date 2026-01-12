@@ -110,17 +110,22 @@ namespace BlackboxSystem
             return BlackboxHandle.Of(other).Exert(Owner, message);
         }
 
-        public void Export(int recursionDepth = 0, bool openLog = true)
+        public string CrashExport(string message, int recursionDepth = -1, bool openLog = true)
+        {
+            Write($"[CRASH] {message}");
+            Write($"[STACK TRACE]\n{new StackTrace(true).ToString()}\n");
+
+            Export(recursionDepth, true, openLog);
+            return message;
+        }
+        public void Export(int recursionDepth = -1, bool openLog = true) => Export(recursionDepth, false, openLog);
+        private void Export(int recursionDepth, bool isCrash, bool openLog)
         {
             if (string.IsNullOrWhiteSpace(Infrastructure.LogDirectory))
                 throw new InvalidOperationException(
                     $"[BlackboxHandle] {nameof(Infrastructure.LogDirectory)} is empty. " +
                     $"Use 'Export(string path, int recursionDepth, bool openLog)' method instead.");
 
-            Export(Infrastructure.LogDirectory, recursionDepth, openLog);
-        }
-        public void Export(string path, int recursionDepth = 0, bool openLog = true)
-        {
             if (_blackbox == null)
                 return;
 
@@ -133,9 +138,12 @@ namespace BlackboxSystem
             }
 
 
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory(Infrastructure.LogDirectory);
 
-            var fullPath = Path.Combine(path, $"Blackbox {TrimSmart(_blackbox.OwnerString)} ({_blackbox.Id}).txt");
+            var fileName = $"Blackbox {TrimSmart(_blackbox.OwnerString)} ({_blackbox.Id}).txt";
+            if (isCrash) fileName = "[CRASH] " + fileName;
+
+            var fullPath = Path.Combine(Infrastructure.LogDirectory, fileName);
             File.WriteAllText(fullPath, result);
 
             Infrastructure.Log($"[BlackboxHandle] Log successfully exported to '{fullPath}'");

@@ -69,8 +69,6 @@ namespace BlackboxSystem
 
             Id = Interlocked.Increment(ref GlobalId);
             _ownerDescription = owner.ToString();
-
-            Write("Created");
         }
 
         public static void ForceResetStaticProperties()
@@ -166,7 +164,7 @@ namespace BlackboxSystem
             var description = $"Depth = {currentDepth}";
             if (before != null) description += $" | From = #{before.Id}: {before.OwnerString}";
 
-            sb.AppendLine($"========= {OwnerString} (Id = #{Id} | {description}) =========");
+            sb.AppendLine($"========= #{Id}: {OwnerString} ({description}) =========");
 
 
             int tryDequeueCount = 0;
@@ -198,6 +196,7 @@ namespace BlackboxSystem
                     if (history.Contains(subject))
                         continue;
 
+                    sb.AppendLine();
                     sb.AppendLine();
                     sb.Append(subject.Print(currentDepth, maxDepth, this, history));
                 }

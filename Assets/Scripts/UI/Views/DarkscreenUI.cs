@@ -11,10 +11,12 @@ namespace UI
         public event Action Disabling;
         public event Action Disabled;
 
+        #region Interfaces
         Action IEnablable.OnEnabling => Enabling;
         Action IEnablable.OnEnabled => Enabled;
         Action IEnablable.OnDisabling => Disabling;
         Action IEnablable.OnDisabled => Disabled;
+        #endregion
 
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
@@ -51,6 +53,11 @@ namespace UI
         {
             EnsureInitialization();
             _enabler.SetToDisabled();
+        }
+
+        private void OnDestroy()
+        {
+            _enabler?.Dispose();
         }
     }
 }
