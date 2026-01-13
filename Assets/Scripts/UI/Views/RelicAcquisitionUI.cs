@@ -9,7 +9,7 @@ using UnityEngine.Video;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class RelicAcquisitionUI : MonoBehaviour, IInitializable, IEnablableView, IInputEnabledView
+    public class RelicAcquisitionUI : MonoBehaviour, IStandaloneInitializable, IEnablableView, IInputEnabledView
     {
         [Header("Main")]
         [SerializeField] private Animation _animation;
@@ -18,8 +18,8 @@ namespace UI
         [SerializeField] private Image _relicIcon;
         [SerializeField] private TextMeshProUGUI _relicNametag;
         [SerializeField] private TextMeshProUGUI _relicDescrption;
-        [SerializeField] private Button _toThrowCoin;
-        [SerializeField] private Button _close;
+        [SerializeField] private Button _toThrowCoinBtn;
+        [SerializeField] private Button _closeBtn;
 
         [Header("Throw Coin")]
         [SerializeField] private GameObject _throwCoin;
@@ -46,6 +46,7 @@ namespace UI
 
         private bool _initialized = false;
         private bool _operating = false;
+        private bool _isDestroyed = false;
 
         #region Interfaces
         Action IEnablable.OnEnabling => Enabling;
@@ -57,14 +58,14 @@ namespace UI
         #endregion
 
 
-        private void Awake() => Initialize();
-        public void Initialize()
+        private void Awake() => ((IStandaloneInitializable)this).StandaloneInitialize();
+        void IStandaloneInitializable.StandaloneInitialize()
         {
             if (_initialized) return;
             _initialized = true;
 
-            _toThrowCoin.onClick.AddListener(ToThrowCoin);
-            _close.onClick.AddListener(Close);
+            _toThrowCoinBtn.onClick.AddListener(ToThrowCoin);
+            _closeBtn.onClick.AddListener(Close);
 
             RelicManager.Instance.RelicAcquiring += OnRelicAcquiring;
 
@@ -89,8 +90,8 @@ namespace UI
 
             Enable();
 
-            _toThrowCoin.gameObject.SetActive(true);
-            _close.gameObject.SetActive(false);
+            _toThrowCoinBtn.gameObject.SetActive(true);
+            _closeBtn.gameObject.SetActive(false);
 
             _relicIcon.sprite = relicInfo.Icon;
             _relicNametag.text = relicInfo.RelicName;
@@ -144,8 +145,8 @@ namespace UI
                             $"강화 {(reinforced ? "성공" : "실패")}\n\n" +
                             _relicDescrption.text;
 
-                        _toThrowCoin.gameObject.SetActive(false);
-                        _close.gameObject.SetActive(true);
+                        _toThrowCoinBtn.gameObject.SetActive(false);
+                        _closeBtn.gameObject.SetActive(true);
 
                         _throwCoin.SetActive(false);
                     }
@@ -173,17 +174,15 @@ namespace UI
         public void SetParent(RectTransform parent) =>
             GetComponent<RectTransform>().SetParent(parent);
 
+        private void OnDestroy() => Destroy();
         public void Destroy()
         {
+            if (_isDestroyed) return;
+            _isDestroyed = true;
+
             _enabler?.Dispose();
             Destroyed?.Invoke();
 
-            if (gameObject)
-                Destroy(gameObject);
-        }
-
-        private void OnDestroy()
-        {
             _updater?.Dispose();
             _timer?.Dispose();
 

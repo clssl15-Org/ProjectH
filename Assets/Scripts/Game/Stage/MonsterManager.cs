@@ -39,7 +39,7 @@ namespace Game.Stage
             if (_isDestroyed) return;
             _isDestroyed = true;
 
-            BlackboxHandle.Of(this).Write("Destroy");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _monsters.ToList().ForEach(m =>
             {

@@ -12,22 +12,37 @@ namespace UI
 
         public void BlockAll()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("BlockAll");
+
             foreach (var view in _views.Keys)
+            {
+                BlackboxHandle.Of(this).Exert(view, "Block");
                 view.EnableInput = false;
+            }
         }
         public void BlockExcept(params IInputEnabledView[] views)
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("BlockExcept");
+
             foreach (var view in _views.Keys)
             {
                 if (!views.Contains(view))
+                {
+                    BlackboxHandle.Of(this).Exert(view, "Block");
                     view.EnableInput = false;
+                }
             }
         }
 
         public void UnblockAll()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("UnblockAll");
+
             foreach (var view in _views.Keys)
+            {
+                BlackboxHandle.Of(this).Exert(view, "Unblock");
                 view.EnableInput = true;
+            }
         }
 
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
@@ -50,6 +51,9 @@ namespace BlackboxSystem
         private WeakReference<object> _weakOwner;
         private string _ownerDescription;
 
+        private int _scopeIndex = 0;
+        private Stack<string> _scopeStack = new();
+
         private ConcurrentQueue<LogData> _logs = new();
 
         private long _logCount = 0;
@@ -77,7 +81,7 @@ namespace BlackboxSystem
             _printed = 0;
         }
 
-        public string Write(string message)
+        public string Write(string message, string methodName)
         {
             if (string.IsNullOrWhiteSpace(message))
                 throw new ArgumentException("[Blackbox] The message cannot be empty", nameof(message));
@@ -85,11 +89,19 @@ namespace BlackboxSystem
             if (Volatile.Read(ref _printed) != 0)
                 return message;
 
-            EnqueueLog(new LogData(message));
+            EnqueueLog(new LogData(_scopeIndex, _scopeStack.Count, methodName, message));
             return message;
         }
+        public DisposableHandle WriteScope(string message, string methodName)
+        {
+            if (_scopeStack.Count == 0) _scopeIndex++;
+            _scopeStack.Push(methodName);
 
-        public string Exert(Blackbox other, string message)
+            Write(message, methodName);
+            return new DisposableHandle(this);
+        }
+
+        public string Exert(Blackbox other, string message, string methodName)
         {
             if (other == null)
                 throw new ArgumentNullException(nameof(other), $"[Blackbox] {nameof(other)} cannot be null");
@@ -102,13 +114,33 @@ namespace BlackboxSystem
 
             if (other != this)
             {
-                other.EnqueueLog(new LogData(this, InteractionType.Exerted, message));
-                EnqueueLog(new LogData(other, InteractionType.Exerting, message));
+                other.EnqueueLog(new LogData(other._scopeIndex, 0, methodName, this, InteractionType.Exerted, message));
+                EnqueueLog(new LogData(_scopeIndex, _scopeStack.Count, methodName, other, InteractionType.Exerting, message));
             }
             else
-                EnqueueLog(new LogData(this, InteractionType.Self, message));
+                EnqueueLog(new LogData(_scopeIndex, _scopeStack.Count, methodName, this, InteractionType.Self, message));
 
             return message;
+        }
+        public DisposableHandle ExertScope(Blackbox other, string message, string methodName)
+        {
+            if (_scopeStack.Count == 0) _scopeIndex++;
+            _scopeStack.Push(methodName);
+
+            Exert(other, message, methodName);
+            return new DisposableHandle(this);
+        }
+
+        /// <summary>
+        /// This method is called by DisposableHandle.
+        /// </summary>
+        internal void PopScope()
+        {
+            if (_scopeStack.Count > 0)
+            {
+                _scopeStack.Pop();
+                _scopeIndex++;
+            }
         }
 
         private void EnqueueLog(LogData logData)
@@ -166,6 +198,7 @@ namespace BlackboxSystem
 
             sb.AppendLine($"========= #{Id}: {OwnerString} ({description}) =========");
 
+            int currentScopeIndex = 0;
 
             int tryDequeueCount = 0;
             while (tryDequeueCount < MaxTryCount)
@@ -175,9 +208,15 @@ namespace BlackboxSystem
                     if (logData.InteractionPeer != null && logData.InteractionPeer != this)
                         relatedBlackboxes.Add(logData.InteractionPeer);
 
+                    if (currentScopeIndex != logData.ScopeIndex)
+                    {
+                        sb.AppendLine(new string('-', 30));
+                        currentScopeIndex = logData.ScopeIndex;
+                    }
+
                     var message = logData.ToString();
 
-                    if (before != null && logData.InteractionPeer == before)
+                    if (logData.Interaction == InteractionType.Exerted)
                         message = $"-> {message}";
 
                     sb.AppendLine(message);
@@ -186,6 +225,10 @@ namespace BlackboxSystem
                 else
                     tryDequeueCount++;
             }
+
+            if (currentScopeIndex != 0)
+                sb.AppendLine(new string('-', 30));
+
 
             if (currentDepth < maxDepth)
             {

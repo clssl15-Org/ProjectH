@@ -56,7 +56,7 @@ namespace BlackboxSystem.Tests
             var a = new Blackbox(new NamedOwner("A"), strongReference: true);
             var b = new Blackbox(new NamedOwner("B"), strongReference: true);
 
-            a.Exert(b, "A->B");
+            a.Exert(b, "A->B", default);
 
             // Act
             Assert.That(a.TryPrint(recursionDepth: 0, out var result), Is.True);
@@ -64,8 +64,8 @@ namespace BlackboxSystem.Tests
             // Assert
             Debug.Log(result);
 
-            Assert.That(result, Does.Contain("========= A"));
-            Assert.That(result, Does.Not.Contain("========= B"));
+            Assert.That(result, Does.Contain("A".ToTitle()));
+            Assert.That(result, Does.Not.Contain("B".ToTitle()));
         }
 
         [Test]
@@ -76,8 +76,8 @@ namespace BlackboxSystem.Tests
             var b = new Blackbox(new NamedOwner("B"), strongReference: true);
             var c = new Blackbox(new NamedOwner("C"), strongReference: true);
 
-            a.Exert(b, "A->B");
-            b.Exert(c, "B->C");
+            a.Exert(b, "A->B", default);
+            b.Exert(c, "B->C", default);
 
             // Act
             Assert.That(a.TryPrint(recursionDepth: 1, out var result), Is.True);
@@ -85,9 +85,9 @@ namespace BlackboxSystem.Tests
             // Assert
             Debug.Log(result);
 
-            Assert.That(result, Does.Contain("========= A"));
-            Assert.That(result, Does.Contain("========= B"));
-            Assert.That(result, Does.Not.Contain("========= C"));
+            Assert.That(result, Does.Contain("A".ToTitle()));
+            Assert.That(result, Does.Contain("B".ToTitle()));
+            Assert.That(result, Does.Not.Contain("C".ToTitle()));
 
             // Nested section should include "From" marker.
             Assert.That(result, Does.Contain("From = #0: A"));
@@ -101,8 +101,8 @@ namespace BlackboxSystem.Tests
             var b = new Blackbox(new NamedOwner("B"), strongReference: true);
             var c = new Blackbox(new NamedOwner("C"), strongReference: true);
 
-            a.Exert(b, "A->B");
-            b.Exert(c, "B->C");
+            a.Exert(b, "A->B", default);
+            b.Exert(c, "B->C", default);
 
             // Act
             Assert.That(a.TryPrint(recursionDepth: 2, out var result), Is.True);
@@ -110,9 +110,9 @@ namespace BlackboxSystem.Tests
             // Assert
             Debug.Log(result);
 
-            Assert.That(result, Does.Contain("========= A"));
-            Assert.That(result, Does.Contain("========= B"));
-            Assert.That(result, Does.Contain("========= C"));
+            Assert.That(result, Does.Contain("A".ToTitle()));
+            Assert.That(result, Does.Contain("B".ToTitle()));
+            Assert.That(result, Does.Contain("C".ToTitle()));
 
             // C section should be printed as depth 2 and should mention that it came from B.
             Assert.That(result, Does.Contain("Depth = 2 | From = #1: B"));
@@ -128,8 +128,8 @@ namespace BlackboxSystem.Tests
             var a = new Blackbox(new NamedOwner("A"), strongReference: true);
             var b = new Blackbox(new NamedOwner("B"), strongReference: true);
 
-            a.Exert(b, "A->B");
-            b.Exert(a, "B->A");
+            a.Exert(b, "A->B", default);
+            b.Exert(a, "B->A", default);
 
             // Act
             Assert.That(a.TryPrint(recursionDepth: 10, out var result), Is.True);
@@ -138,8 +138,8 @@ namespace BlackboxSystem.Tests
             Debug.Log(result);
 
             // In a 2-node cycle, it should print exactly two sections (A and B) once each.
-            Assert.That(CountOf(result, "========= A"), Is.EqualTo(1));
-            Assert.That(CountOf(result, "========= B"), Is.EqualTo(1));
+            Assert.That(CountOf(result, "A".ToTitle()), Is.EqualTo(1));
+            Assert.That(CountOf(result, "B".ToTitle()), Is.EqualTo(1));
         }
         #endregion
 
@@ -152,11 +152,11 @@ namespace BlackboxSystem.Tests
             Infrastructure.MaxLogCount = 3;
             var a = new Blackbox(new NamedOwner("A"), strongReference: true);
 
-            a.Write("MSG_001");
-            a.Write("MSG_002");
-            a.Write("MSG_003");
-            a.Write("MSG_004");
-            a.Write("MSG_005");
+            a.Write("MSG_001", default);
+            a.Write("MSG_002", default);
+            a.Write("MSG_003", default);
+            a.Write("MSG_004", default);
+            a.Write("MSG_005", default);
 
             // Act
             Assert.That(a.TryPrint(recursionDepth: 0, out var result), Is.True);
@@ -183,8 +183,8 @@ namespace BlackboxSystem.Tests
             var a = new Blackbox(new NamedOwner("A"), strongReference: true);
             var b = new Blackbox(new NamedOwner("B"), strongReference: true);
 
-            a.Write("A_1");
-            b.Write("B_1");
+            a.Write("A_1", default);
+            b.Write("B_1", default);
 
             var aBefore = GetLogCount(a);
             var bBefore = GetLogCount(b);
@@ -205,8 +205,8 @@ namespace BlackboxSystem.Tests
             Assert.That(GetLogCount(b), Is.EqualTo(bBefore));
 
             // After any print, logging is globally disabled.
-            a.Write("A_2");
-            b.Write("B_2");
+            a.Write("A_2", default);
+            b.Write("B_2", default);
 
             Assert.That(GetLogCount(a), Is.EqualTo(0));
             Assert.That(GetLogCount(b), Is.EqualTo(bBefore));

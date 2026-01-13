@@ -56,7 +56,8 @@ namespace BlackboxSystem.Tests
             var dir = Path.Combine(path, "BlackboxIntegrationTests", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(dir);
 
-            a.Export(dir, recursionDepth: 3, openLog: OpenLog);
+            BlackboxHandle.LogDirectory = dir;
+            a.Export(recursionDepth: 3, openLog: OpenLog);
 
             // Assert: Export 파일 1개 생성 + 내용 검증
             var files = Directory.GetFiles(dir, "*.txt");
@@ -66,8 +67,8 @@ namespace BlackboxSystem.Tests
             Debug.Log(text);
 
             // 4개 섹션이 모두 포함되는지
-            Assert.That(text, Does.Contain("========= A"));
-            Assert.That(text, Does.Contain("========= D"));
+            Assert.That(text, Does.Contain("A".ToTitle()));
+            Assert.That(text, Does.Contain("D".ToTitle()));
 
             // 중간에 Reference Lost가 실제로 반영되는지 (헤더/peer 표기 어디든 등장하면 OK)
             Assert.That(text, Does.Contain("B (Reference Lost)"));

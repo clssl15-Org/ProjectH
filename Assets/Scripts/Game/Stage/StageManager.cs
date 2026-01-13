@@ -33,16 +33,18 @@ namespace Game.Stage
         // Front
         protected virtual void Awake()
         {
+            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log);
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+
             UIManager = GetComponent<UIManager>();
             PlayerManager = GetComponent<PlayerManager>();
             MonsterManager = GetComponent<MonsterManager>();
-
-            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log);
-            BlackboxHandle.Of(this).Write("Awake");
         }
 
         protected virtual void Start()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Start");
+
             if (AutoBindScenePlayer)
             {
                 foreach (var playerObj in GameObject.FindGameObjectsWithTag("Player"))
@@ -66,7 +68,7 @@ namespace Game.Stage
                     {
                         throw new System.InvalidOperationException(
                             BlackboxHandle.Of(this).CrashExport(
-                                $"Start: [{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
+                                $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
                     }
 
                     Player = player;
@@ -85,7 +87,7 @@ namespace Game.Stage
 
             if (SpawnManager.Instance)
             {
-                BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Start: Spawner에 Register 대리자 등록");
+                BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Spawner에 Register 대리자 등록");
                 SpawnManager.Instance.OnMonsterCreate(monster => Register(monster));
             }
             else
@@ -100,14 +102,14 @@ namespace Game.Stage
             if (_isDestroyed)
                 return;
 
-            BlackboxHandle.Of(this).Exert(player, "Register: PlayerManager에 Player 등록");
+            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, "PlayerManager에 Player 등록");
 
             if (!PlayerManager.Register(player))
                 return;
 
             if (connectUI)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "Register: UIManager에 PlayerUI 등록");
+                BlackboxHandle.Of(this).Exert(UIManager, "UIManager에 PlayerUI 등록");
 
                 var vm = new PlayerVM(player);
                 var ui = _playerUI;
@@ -123,14 +125,14 @@ namespace Game.Stage
             if (_isDestroyed)
                 return;
 
-            BlackboxHandle.Of(this).Exert(monster, "Register: MonsterManager에 Monster 등록");
+            using var _ = BlackboxHandle.Of(this).ExertScope(monster, "MonsterManager에 Monster 등록");
 
             if (!MonsterManager.Register(monster))
                 return;
 
             if (createUI)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "Register: UIManager에 MonsterUI 등록");
+                BlackboxHandle.Of(this).Exert(UIManager, "UIManager에 MonsterUI 등록");
 
                 var vm = new MonsterVM(monster);
                 var ui = UILibrary.HealthBar;
@@ -161,25 +163,25 @@ namespace Game.Stage
 
             if (SpawnManager.Instance)
             {
-                BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "OnDestroy: Clear");
+                BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Clear");
                 SpawnManager.Instance.Clear();
             }
 
             if (UIManager)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "OnDestroy: Destroy");
+                BlackboxHandle.Of(this).Exert(UIManager, "Destroy");
                 UIManager.Destroy();
             }
 
             if (PlayerManager)
             {
-                BlackboxHandle.Of(this).Exert(PlayerManager, "OnDestroy: Destroy");
+                BlackboxHandle.Of(this).Exert(PlayerManager, "Destroy");
                 PlayerManager.Destroy();
             }
 
             if (MonsterManager)
             {
-                BlackboxHandle.Of(this).Exert(MonsterManager, "OnDestroy: Destroy");
+                BlackboxHandle.Of(this).Exert(MonsterManager, "Destroy");
                 MonsterManager.Destroy();
             }
         }

@@ -1632,12 +1632,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f380a92d9eaae23418c55b2e518ea20e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animation: {fileID: 0}
+  _animation: {fileID: 1639502756631222003}
   _relicIcon: {fileID: 1143011454080391625}
   _relicNametag: {fileID: 6629757791489179127}
   _relicDescrption: {fileID: 3033511679090883231}
-  _toThrowCoin: {fileID: 1057240237092153659}
-  _close: {fileID: 423331054033561738}
+  _toThrowCoinBtn: {fileID: 1057240237092153659}
+  _closeBtn: {fileID: 423331054033561738}
   _throwCoin: {fileID: 6012487259278628800}
   _coinDescripton: {fileID: 4924947053915159809}
   _coinRawVideoPlayer: {fileID: 3942333979934291775}
@@ -1662,6 +1662,6 @@ Animation:
   m_Animations:
   - {fileID: 7400000, guid: d1bceade5c68aa5438a187a5359e780f, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0

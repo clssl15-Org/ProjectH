@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class TestRelicAcquirer : MonoBehaviour
 {
-    [field: SerializeField]
-    public bool DirectAcquire { get; set; } = false;
+    [field: SerializeField] public bool DirectAcquire { get; set; } = false;
+    [field: SerializeField] public KeyCode AcquireKey { get; set; } = KeyCode.Slash;
+    [field: SerializeField] public KeyCode RemoveKey { get; set; } = KeyCode.RightShift;
 
     private void Update()
     {
-        if (DirectAcquire && Input.GetKey(KeyCode.Tab))
+        if (DirectAcquire && Input.GetKey(AcquireKey))
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 Add(1);
@@ -25,11 +26,11 @@ public class TestRelicAcquirer : MonoBehaviour
                 RelicManager.Instance.AddRelic(id);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Tab))
+        else if (Input.GetKeyDown(AcquireKey))
         {
             RelicManager.Instance.GetRandomRelicData();
         }
-        else if (Input.GetKey(KeyCode.RightShift))
+        else if (Input.GetKey(RemoveKey))
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 Remove(1);

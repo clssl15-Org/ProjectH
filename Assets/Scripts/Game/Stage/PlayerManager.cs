@@ -22,7 +22,7 @@ namespace Game.Stage
                     nameof(player));
             }
 
-            BlackboxHandle.Of(this).Exert(player, "Register: 플레이어 등록");
+            using var _ = BlackboxHandle.Of(this).ExertScope(player, "플레이어 등록");
 
             if (_player != null)
             {
@@ -52,11 +52,11 @@ namespace Game.Stage
             if (_isDestroyed) return;
             _isDestroyed = true;
 
-            BlackboxHandle.Of(this).Write("Destroy");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             if (_player != null && _player.gameObject)
             {
-                BlackboxHandle.Of(this).Exert(_player, "Destroy: 플레이어 Destroy");
+                BlackboxHandle.Of(this).Exert(_player, "플레이어 Destroy");
                 Destroy(_player.gameObject);
             }
 

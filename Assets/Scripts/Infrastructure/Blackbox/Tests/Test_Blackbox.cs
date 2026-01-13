@@ -57,7 +57,7 @@ namespace BlackboxSystem.Tests
             var blackbox = new Blackbox(owner, strongReference);
 
             // Act
-            var message = blackbox.Write(Message);
+            var message = blackbox.Write(Message, default);
 
             // Assert
             AssertBlackbox(blackbox, owner, name, 0);
@@ -83,7 +83,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.Owner, Is.Null); // Assure owner lost
             
             // Act
-            var message = blackbox.Write(Message);
+            var message = blackbox.Write(Message, default);
 
             // Assert
             AssertBlackbox(blackbox, null, default, 0);
@@ -106,7 +106,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.TryPrint(-1, out _), Is.True); // Assure print execution
 
             // Act & Assert
-            Assert.That(() => blackbox.Write(Message), Throws.Nothing);
+            Assert.That(() => blackbox.Write(Message, default), Throws.Nothing);
         }
 
 
@@ -119,7 +119,7 @@ namespace BlackboxSystem.Tests
             var blackbox = new Blackbox(owner, strongReference);
 
             // Act & Assert
-            Assert.That(() => blackbox.Write(null), Throws.ArgumentException);
+            Assert.That(() => blackbox.Write(null, default), Throws.ArgumentException);
         }
         [TestCase(true), TestCase(false)]
         public void Write_InvalidMessage_Empty(bool strongReference)
@@ -130,7 +130,7 @@ namespace BlackboxSystem.Tests
             var blackbox = new Blackbox(owner, strongReference);
 
             // Act & Assert
-            Assert.That(() => blackbox.Write(string.Empty), Throws.ArgumentException);
+            Assert.That(() => blackbox.Write(string.Empty, default), Throws.ArgumentException);
         }
         #endregion
 
@@ -150,7 +150,7 @@ namespace BlackboxSystem.Tests
             var peerBlackbox = new Blackbox(peerOwner, strongReference_peer);
 
             // Act
-            var message = blackbox.Exert(peerBlackbox, Message);
+            var message = blackbox.Exert(peerBlackbox, Message, default);
             Assert.That(message, Is.EqualTo(Message));
 
             // Assert
@@ -182,7 +182,7 @@ namespace BlackboxSystem.Tests
             var peerBlackbox = new Blackbox(peerOwner, strongReference_other);
 
             // Act
-            var message = blackbox.Exert(peerBlackbox, Message);
+            var message = blackbox.Exert(peerBlackbox, Message, default);
             Assert.That(message, Is.EqualTo(Message));
 
             // Assert
@@ -213,7 +213,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.TryPrint(-1, out _), Is.True); // Assure print execution
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(blackbox, Message), Throws.Nothing);
+            Assert.That(() => blackbox.Exert(blackbox, Message, default), Throws.Nothing);
         }
 
 
@@ -226,7 +226,7 @@ namespace BlackboxSystem.Tests
             var blackbox = new Blackbox(owner, strongReference);
 
             // Act
-            var message = blackbox.Exert(blackbox, Message);
+            var message = blackbox.Exert(blackbox, Message, default);
             Assert.That(message, Is.EqualTo(Message));
 
             // Assert
@@ -253,7 +253,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.Owner, Is.Null); // Assure owner lost
 
             // Act
-            var message = blackbox.Exert(blackbox, Message);
+            var message = blackbox.Exert(blackbox, Message, default);
             Assert.That(message, Is.EqualTo(Message));
 
             // Assert
@@ -278,7 +278,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.TryPrint(-1, out _), Is.True); // Assure print execution
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(blackbox, Message), Throws.Nothing);
+            Assert.That(() => blackbox.Exert(blackbox, Message, default), Throws.Nothing);
         }
 
 
@@ -291,7 +291,7 @@ namespace BlackboxSystem.Tests
             var blackbox = new Blackbox(owner, strongReference);
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(null, Message), Throws.ArgumentNullException);
+            Assert.That(() => blackbox.Exert(null, Message, default), Throws.ArgumentNullException);
         }
         [Test]
         public void Exert_InvalidOther_OwnerLost()
@@ -306,7 +306,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.Owner, Is.Null); // Assure owner lost
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(null, Message), Throws.ArgumentNullException);
+            Assert.That(() => blackbox.Exert(null, Message, default), Throws.ArgumentNullException);
         }
         [TestCase(true), TestCase(false)]
         public void Exert_InvalidOther_Printed(bool strongReference)
@@ -319,7 +319,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.TryPrint(-1, out _), Is.True); // Assure print execution
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(null, Message), Throws.ArgumentNullException);
+            Assert.That(() => blackbox.Exert(null, Message, default), Throws.ArgumentNullException);
         }
 
 
@@ -337,7 +337,7 @@ namespace BlackboxSystem.Tests
             var peerBlackbox = new Blackbox(peerOwner, strongReference_peer);
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(peerBlackbox, null), Throws.ArgumentException);
+            Assert.That(() => blackbox.Exert(peerBlackbox, null, default), Throws.ArgumentException);
         }
         [TestCase(true), TestCase(false)]
         public void Exert_InvalidMessage_OwnerLost(bool strongReference_other)
@@ -356,7 +356,7 @@ namespace BlackboxSystem.Tests
             var peerBlackbox = new Blackbox(peerOwner, strongReference_other);
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(peerBlackbox, null), Throws.ArgumentException);
+            Assert.That(() => blackbox.Exert(peerBlackbox, null, default), Throws.ArgumentException);
         }
         [TestCase(true, true), TestCase(true, false)]
         [TestCase(false, true), TestCase(false, false)]
@@ -374,7 +374,7 @@ namespace BlackboxSystem.Tests
             Assert.That(blackbox.TryPrint(-1, out _), Is.True); // Assure print execution
 
             // Act & Assert
-            Assert.That(() => blackbox.Exert(peerBlackbox, null), Throws.ArgumentException);
+            Assert.That(() => blackbox.Exert(peerBlackbox, null, default), Throws.ArgumentException);
         }
         #endregion
 

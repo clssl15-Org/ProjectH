@@ -11,5 +11,7 @@ namespace BlackboxSystem.Tests
             GC.WaitForPendingFinalizers();
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
         }
+
+        public static string ToTitle(this string name) => $": {name} (";
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace BlackboxSystem
 {
@@ -86,31 +87,54 @@ namespace BlackboxSystem
 #endif
         }
 
-        public string Write(object message)
+        public string Write(object message, [CallerMemberName] string methodName = "")
         {
             var messageStr = message?.ToString() ?? "null";
             if (_blackbox == null) return messageStr;
 
-            return _blackbox.Write(messageStr);
+            return _blackbox.Write(messageStr, methodName);
+        }
+        public DisposableHandle WriteScope(object message, [CallerMemberName] string methodName = "")
+        {
+            if (_blackbox == null) return default;
+            var messageStr = message?.ToString() ?? "null";
+
+            return _blackbox.WriteScope(messageStr, methodName);
         }
 
-        public string Exert(object other, object message)
+        public string Exert(object other, object message, [CallerMemberName] string methodName = "")
         {
             var messageStr = message?.ToString() ?? "null";
             if (_blackbox == null) return messageStr;
 
             var otherBlackbox = BlackboxRegistry.GetBlackbox(other);
-            return _blackbox.Exert(otherBlackbox, messageStr);
+            return _blackbox.Exert(otherBlackbox, messageStr, methodName);
         }
-        public string Exerted(object other, object message)
+        public DisposableHandle ExertScope(object other, object message, [CallerMemberName] string methodName = "")
+        {
+            if (_blackbox == null) return default;
+            var messageStr = message?.ToString() ?? "null";
+
+            var otherBlackbox = BlackboxRegistry.GetBlackbox(other);
+            return _blackbox.ExertScope(otherBlackbox, messageStr, methodName);
+        }
+
+        public string Exerted(object other, object message, [CallerMemberName] string methodName = "")
         {
             var messageStr = message?.ToString() ?? "null";
             if (_blackbox == null) return messageStr;
 
-            return BlackboxHandle.Of(other).Exert(Owner, message);
+            return BlackboxHandle.Of(other).Exert(Owner, message, methodName);
+        }
+        public DisposableHandle ExertedScope(object other, object message, [CallerMemberName] string methodName = "")
+        {
+            if (_blackbox == null) return default;
+            var messageStr = message?.ToString() ?? "null";
+
+            return BlackboxHandle.Of(other).ExertScope(Owner, message, methodName);
         }
 
-        public string CrashExport(string message, int recursionDepth = -1, bool openLog = true)
+        public string CrashExport(string message, int recursionDepth = 5, bool openLog = true)
         {
             Write($"[CRASH] {message}");
             Write($"[STACK TRACE]\n{new StackTrace(true).ToString()}\n");
@@ -118,7 +142,7 @@ namespace BlackboxSystem
             Export(recursionDepth, true, openLog);
             return message;
         }
-        public void Export(int recursionDepth = -1, bool openLog = true) => Export(recursionDepth, false, openLog);
+        public void Export(int recursionDepth = 5, bool openLog = true) => Export(recursionDepth, false, openLog);
         private void Export(int recursionDepth, bool isCrash, bool openLog)
         {
             if (string.IsNullOrWhiteSpace(Infrastructure.LogDirectory))

@@ -31,6 +31,17 @@ public class RelicManager : MonoBehaviour
         }
     }
 
+    // --- Id로 유물 데이터 가져오기 ---
+    public bool TryGetRelicData(int id, out RelicDataSO relicData)
+    {
+        relicData = relicPrefabs
+            .Select(p => p.GetComponent<Relic>().Data)
+            .FirstOrDefault(rd => rd.RelicNumber == id);
+
+        return relicData != null;
+    }
+
+
     // --- 랜덤으로 유물 데이터 뽑기 (UI용) ---
     public void GetRandomRelicData()
     {
@@ -70,7 +81,15 @@ public class RelicManager : MonoBehaviour
         // 1. 레지스트리에서 해당 번호를 가진 프리팹 찾기
         GameObject prefab = relicPrefabs.Find(p => p.GetComponent<Relic>().Data.RelicNumber == key);
 
-        if (prefab == null) return;
+        // 예외 안내 메세지 추가
+        if (prefab == null)
+        {
+            Debug.LogWarning(
+                $"입력 키 '{key}'에 해당하는 {nameof(Relic)}을(를) 찾는 데 실패했습니다. " +
+                $"렐릭을 추가하지 않습니다.");
+
+            return;
+        }
 
         // 2. 데이터 가져오기 및 중복 체크
         RelicDataSO data = prefab.GetComponent<Relic>().Data;
@@ -78,9 +97,8 @@ public class RelicManager : MonoBehaviour
 
         // 3. 프리팹 생성 및 설정
         GameObject relicObj = Instantiate(prefab, this.transform);
-        Relic relicScript = relicObj.GetComponent<Relic>();
 
-        if (relicScript != null)
+        if (relicObj.TryGetComponent<Relic>(out var relicScript))
         {
             relicScript.isReinforced = isReinforced;
 

@@ -23,7 +23,7 @@ namespace Game.Stage
         // Content
         private void Awake()
         {
-            BlackboxHandle.Of(this).Write("Awake");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             
             if (!_canvas)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
@@ -73,7 +73,7 @@ namespace Game.Stage
 
         public void RegisterVM(IViewModel viewModel)
         {
-            BlackboxHandle.Of(this).Exert(viewModel, "RegisterVM");
+            using var _ = BlackboxHandle.Of(this).ExertScope(viewModel, "RegisterVM");
 
             if (viewModel == null)
                 throw new ArgumentNullException(
@@ -94,7 +94,7 @@ namespace Game.Stage
 
         public void RegisterView(IView view)
         {
-            BlackboxHandle.Of(this).Exert(view, "RegisterView");
+            using var _ = BlackboxHandle.Of(this).ExertScope(view, "RegisterView");
 
             if (view == null)
                 throw new ArgumentNullException(
@@ -110,7 +110,7 @@ namespace Game.Stage
 
             if (view is IInputEnabledView iView)
             {
-                BlackboxHandle.Of(this).Exert(_viewInputHub, "RegisterView: view가 IInputEnabledView이기 떄문에 viewInputHub에 등록합니다.");
+                BlackboxHandle.Of(this).Exert(_viewInputHub, $"view '{view}'이(가) IInputEnabledView이기 때문에 viewInputHub에 등록합니다.");
                 _viewInputHub.Register(iView);
             }
 
@@ -123,16 +123,16 @@ namespace Game.Stage
             if (_isDestroyed) return;
             _isDestroyed = true;
 
-            BlackboxHandle.Of(this).Write("Destroy");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _views.ToList().ForEach(v =>
             {
-                BlackboxHandle.Of(this).Exert(v, "Destroy: Destroy view");
+                BlackboxHandle.Of(this).Exert(v, "Destroy view");
                 v.Destroy();
             });
             _viewModels.ToList().ForEach(vm =>
             {
-                BlackboxHandle.Of(this).Exert(vm, "Destroy: Destroy viewModel");
+                BlackboxHandle.Of(this).Exert(vm, "Destroy viewModel");
                 vm.Dispose();
             });
 

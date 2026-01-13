@@ -210,7 +210,7 @@ namespace BlackboxSystem.Tests
             GetBlackbox(owner1, out Blackbox bb1);
             GetBlackbox(owner2, out Blackbox bb2);
 
-            bb1.Exert(bb2, "Exerting");
+            bb1.Exert(bb2, "Exerting", default);
 
             // Act
             owner1 = null;

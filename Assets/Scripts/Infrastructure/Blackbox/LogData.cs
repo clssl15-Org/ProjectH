@@ -14,14 +14,24 @@ namespace BlackboxSystem
     {
         public string Message { get; }
         public DateTime Time { get; }
+
+        public int ScopeIndex { get; }
+        public int ScopeDepth { get; }
+        public string MethodName { get; }
+
         public Blackbox InteractionPeer { get; }
         public InteractionType Interaction { get; }
 
-        public LogData(string message) : this(null, InteractionType.None, message) { }
-        public LogData(Blackbox interactionPeer, InteractionType interaction, string message)
+        public LogData(int scopeIndex, int scopeDepth, string methodName, string message) : this(scopeIndex, scopeDepth, methodName, null, InteractionType.None, message) { }
+        public LogData(int scopeIndex, int scopeDepth, string methodName, Blackbox interactionPeer, InteractionType interaction, string message)
         {
             Message = message;
             Time = DateTime.UtcNow;
+
+            ScopeIndex = scopeIndex;
+            ScopeDepth = scopeDepth;
+            MethodName = methodName;
+
             InteractionPeer = interactionPeer;
             Interaction = interaction;
         }
@@ -29,6 +39,10 @@ namespace BlackboxSystem
         public override string ToString()
         {
             var time = Time.ToString("HH:mm:ss.fffffff");
+            var indent = new string(' ', Math.Max(0, (ScopeDepth - 1) * 2));
+
+            var prefix = $"[{time}] {indent}";
+            if (!string.IsNullOrEmpty(MethodName)) prefix += $"[{MethodName}] ";
 
             if (InteractionPeer != null)
             {
@@ -36,21 +50,21 @@ namespace BlackboxSystem
                 switch (Interaction)
                 {
                     case InteractionType.Self:
-                        return $"[{time}] [this <-> this] {Message}";
+                        return $"{prefix}[this <-> this] {Message}";
 
                     case InteractionType.Exerting:
-                        return $"[{time}] [this -> #{InteractionPeer.Id}: {InteractionPeer.OwnerString}] {Message}";
+                        return $"{prefix}[this -> #{InteractionPeer.Id}: {InteractionPeer.OwnerString}] {Message}";
 
                     case InteractionType.Exerted:
-                        return $"[{time}] [#{InteractionPeer.Id}: {InteractionPeer.OwnerString} -> this] {Message}";
+                        return $"{prefix}[#{InteractionPeer.Id}: {InteractionPeer.OwnerString} -> this] {Message}";
 
                     default:
-                        return $"[{time}] [#{InteractionPeer.Id}: {InteractionPeer.OwnerString}] {Message}";
+                        return $"{prefix}[#{InteractionPeer.Id}: {InteractionPeer.OwnerString}] {Message}";
                 }
 #pragma warning restore
             }
 
-            return $"[{time}] {Message}";
+            return $"{prefix}{Message}";
         }
     }
 }

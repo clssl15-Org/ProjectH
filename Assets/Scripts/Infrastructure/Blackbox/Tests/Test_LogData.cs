@@ -29,7 +29,7 @@ namespace BlackboxSystem.Tests
         public void Create_Peerless()
         {
             // Act
-            var logData = new LogData(Message);
+            var logData = new LogData(default, default, default, Message);
 
             // Assert
             AssertLogData(logData, Message, DateTime.UtcNow, null, InteractionType.None);
@@ -42,7 +42,7 @@ namespace BlackboxSystem.Tests
             var interaction = (InteractionType)interactionType;
 
             // Act
-            var logData = new LogData(peer, interaction, Message);
+            var logData = new LogData(default, default, default, peer, interaction, Message);
 
             // Assert
             AssertLogData(logData, Message, DateTime.UtcNow, peer, interaction);
@@ -55,7 +55,7 @@ namespace BlackboxSystem.Tests
         public void ToString_Peerless()
         {
             // Arrange
-            var logData = new LogData(Message);
+            var logData = new LogData(default, default, default, Message);
 
             // Act
             var result = logData.ToString();
@@ -74,7 +74,7 @@ namespace BlackboxSystem.Tests
             var peer = new Blackbox(new NamedOwner(peerName), true);
             var interaction = exerting ? InteractionType.Exerting : InteractionType.Exerted;
 
-            var logData = new LogData(peer, interaction, Message);
+            var logData = new LogData(default, default, default, peer, interaction, Message);
 
             // Act
             var result = logData.ToString();
