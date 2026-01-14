@@ -48,6 +48,7 @@ namespace Actors.PlayerSystem
         private bool isHitBoxEnabled = false;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 
         private CooldownTiemr cooldownTimer;
 
@@ -128,7 +129,7 @@ namespace Actors.PlayerSystem
             ResetSkill();
             UpdateAttackParameters();
             cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
-            cooldownTimer.StartCooldown(cooldownDuration, dt);
+            cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
 
         public override void UpdateBehaviour(float dt)

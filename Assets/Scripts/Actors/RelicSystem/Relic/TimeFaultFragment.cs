@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeFaultFragment : MonoBehaviour
+public class TimeFaultFragment : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnAcquire()
     {
-        
-    }
+        OnReinforcedAcquire();
 
-    // Update is called once per frame
-    void Update()
+        RelicManager.Instance.player.playerStats.skillCooldownMultiplier += value;
+    }
+    public override void OnLose()
     {
-        
+        RelicManager.Instance.player.playerStats.skillCooldownMultiplier -= value;
     }
 }
