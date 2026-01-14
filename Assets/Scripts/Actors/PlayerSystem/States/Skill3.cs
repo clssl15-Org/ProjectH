@@ -44,6 +44,7 @@ namespace Actors.PlayerSystem
 
         private bool isDone = true;
         private bool isProjectileLaunched = true;
+        public float BonusMultiplier { get; set; } = 1f;
 
         private CooldownTiemr cooldownTimer;
 
@@ -94,7 +95,7 @@ namespace Actors.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<Skill3ProjectileMovement>().ResetProjectile(dt, direction);
-                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier));
+                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier * BonusMultiplier));
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

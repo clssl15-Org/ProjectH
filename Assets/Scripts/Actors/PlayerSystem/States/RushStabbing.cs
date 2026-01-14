@@ -71,6 +71,8 @@ namespace Actors.PlayerSystem
 
         public static Action onEskill;
 
+        public float BonusMultiplier { get; set; } = 1f;
+
         private void TakeDamageToEnemy()
         {
             Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
@@ -91,7 +93,7 @@ namespace Actors.PlayerSystem
                 //    continue;
 
                 //hitEnemies.Add(damageableObject);
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier);
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier);
                 damageableObject.TakeDamage(amount);
                 print(amount);
                 onEskill?.Invoke();

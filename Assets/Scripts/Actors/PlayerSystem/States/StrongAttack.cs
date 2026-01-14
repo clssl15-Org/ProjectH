@@ -58,6 +58,8 @@ namespace Actors.PlayerSystem
         private bool isDone = true;
         private bool isDamageApplied = false;
 
+        public float BonusMultiplier { get; set; } = 1f;
+
         private void TakeDamageToEnemy()
         {
             Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
@@ -74,7 +76,7 @@ namespace Actors.PlayerSystem
                 if (hitCollider.CompareTag("Player"))
                     continue;
 
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier); ;
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier); ;
                 damageableObject.TakeDamage(amount);
             }
         }
