@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuardianEngravedPunishmentRune : MonoBehaviour
+public class GuardianEngravedPunishmentRune : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnAcquire()
     {
-        
-    }
+        OnReinforcedAcquire();
 
-    // Update is called once per frame
-    void Update()
+        RelicManager.Instance.player.playerStats.skillPowerMultiplier += value;
+    }
+    public override void OnLose()
     {
-        
+        RelicManager.Instance.player.playerStats.skillPowerMultiplier -= value;
     }
 }

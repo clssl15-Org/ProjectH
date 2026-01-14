@@ -39,6 +39,7 @@ namespace Actors.PlayerSystem
         private float invincibleEndTime = 0.5f;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
 
         private float skillCursor = 0f;
 
@@ -95,7 +96,7 @@ namespace Actors.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<Skill3ProjectileMovement>().ResetProjectile(dt, direction);
-                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier * BonusMultiplier));
+                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier));
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

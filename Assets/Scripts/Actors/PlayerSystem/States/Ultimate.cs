@@ -66,6 +66,7 @@ namespace Actor.PlayerSystem
         private bool isHitBoxEnabled = false;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
 
         private float skillCursor = 0f; 
         private float currentSkillTime = 0f;
@@ -169,7 +170,7 @@ namespace Actor.PlayerSystem
                     GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                     newProjectile.GetComponent<UltimateProjectileMovement>().ResetProjectile(dt, direction);
                     newProjectile.GetComponent<UltimateProjectileMovement>().GrowRadius(targetRadius);
-                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier);
+                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier * skillPowerMultiflier);
                     newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
 
                 }

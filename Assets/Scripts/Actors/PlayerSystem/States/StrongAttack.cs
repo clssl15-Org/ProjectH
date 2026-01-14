@@ -59,6 +59,7 @@ namespace Actors.PlayerSystem
         private bool isDamageApplied = false;
 
         public float BonusMultiplier { get; set; } = 1f;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
 
         private void TakeDamageToEnemy()
         {
@@ -76,7 +77,7 @@ namespace Actors.PlayerSystem
                 if (hitCollider.CompareTag("Player"))
                     continue;
 
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier); ;
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier); ;
                 damageableObject.TakeDamage(amount);
             }
         }

@@ -16,5 +16,6 @@ namespace Actors.PlayerSystem
         public float maxHeathMultiplier = 1f;
         public float attackPowerMultiplier = 1f;
         public float moveSpeedMultiplier = 1f;
+        public float skillPowerMultiplier = 1f;
     }
 }

@@ -57,6 +57,7 @@ namespace Actors.PlayerSystem
         private float attackAngle = 0f;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
 
         private float skillCursor = 0;
 
@@ -93,7 +94,7 @@ namespace Actors.PlayerSystem
                 //    continue;
 
                 //hitEnemies.Add(damageableObject);
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier);
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier);
                 damageableObject.TakeDamage(amount);
                 print(amount);
                 onEskill?.Invoke();
