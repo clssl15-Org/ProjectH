@@ -12,7 +12,15 @@ public class DamageRoulette : MonoBehaviour
     // 룰렛 보너스 수치 정의
     private readonly float[] bonuses = { 1, 1.1f, 1.25f, 1.5f, 1.75f, 2 };
     // 기획서에 명시된 각 보너스별 확률 (%)
-    private readonly int[] probabilities = { 22, 30, 25, 15, 6, 2 };
+    private int[] probabilities = { 22, 30, 25, 15, 6, 2 };
+    public int[] Probabilities
+    {
+        get => probabilities;
+        set
+        {
+            probabilities = value;
+        }
+    }
 
     private void Awake()
     {
