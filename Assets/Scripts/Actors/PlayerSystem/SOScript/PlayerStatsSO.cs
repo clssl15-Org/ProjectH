@@ -18,5 +18,6 @@ namespace Actors.PlayerSystem
         public float moveSpeedMultiplier = 1f;
         public float skillPowerMultiplier = 1f;
         public float skillCooldownMultiplier = 1f;
+        public float ultimateCooldownMultiplier = 1f;
     }
 }

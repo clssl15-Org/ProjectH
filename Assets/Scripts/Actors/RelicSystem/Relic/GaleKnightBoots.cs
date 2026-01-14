@@ -1,18 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using Actors.PlayerSystem;
 using UnityEngine;
 
-public class GaleKnightBoots : MonoBehaviour
+public class GaleKnightBoots : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    private CooldownTiemr cooldownTimer;
+    public override void OnAcquire()
     {
-        
-    }
+        OnReinforcedAcquire();
 
-    // Update is called once per frame
-    void Update()
+        RelicManager.Instance.player.playerStats.moveSpeedMultiplier += value;
+
+
+        cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+        cooldownTimer.StartCooldown(value, Time.deltaTime);
+    }
+    private void Update()
     {
-        
+        if (!cooldownTimer || !cooldownTimer.IsOnCooldown)
+        {
+            OnLose();
+        }
+    }
+    public override void OnLose()
+    {
+        RelicManager.Instance.player.playerStats.moveSpeedMultiplier -= value;
     }
 }

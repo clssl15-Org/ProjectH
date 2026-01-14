@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RadiantHeartstone : MonoBehaviour
+public class RadiantHeartstone : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnAcquire()
     {
-        
-    }
+        OnReinforcedAcquire();
 
-    // Update is called once per frame
-    void Update()
+        RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier += value;
+    }
+    public override void OnLose()
     {
-        
+        RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier -= value;
     }
 }

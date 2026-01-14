@@ -17,6 +17,8 @@ namespace Actors.PlayerSystem
 
         protected string planarSpeedParameter = "PlanarSpeed";
 
+        public float speedMultiplier => Player.playerStats.moveSpeedMultiplier;
+
         public override void CheckExitTransition()
         {
             if (!Player.canMove) return;
@@ -71,7 +73,7 @@ namespace Actors.PlayerSystem
 
         private void ProcessVelocity(float dt)
         {
-            Vector3 targetVelocity = CharacterStateController.InputMovementReference * moveSpeed;
+            Vector3 targetVelocity = CharacterStateController.InputMovementReference * moveSpeed * speedMultiplier;
             float targetSpeedX = targetVelocity.x;
 
             // Reduce speed when overlapping with monsters

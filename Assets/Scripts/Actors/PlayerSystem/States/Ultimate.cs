@@ -67,6 +67,7 @@ namespace Actor.PlayerSystem
 
         private float attackPower => Player.playerStats.attackPower;
         private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
+        private float ultimateCooldownMultiplier => Player.playerStats.ultimateCooldownMultiplier;
 
         private float skillCursor = 0f; 
         private float currentSkillTime = 0f;
@@ -211,7 +212,7 @@ namespace Actor.PlayerSystem
 
         private void RecoverCooldown()
         {
-            cooldownGauge += cooldownRecoveryAmount;
+            cooldownGauge += cooldownRecoveryAmount * ultimateCooldownMultiplier;
             cooldownGauge = Mathf.Clamp(cooldownGauge, 0f, 1f);
         }
     }
