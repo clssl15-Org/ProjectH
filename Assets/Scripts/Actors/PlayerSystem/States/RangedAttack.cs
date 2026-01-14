@@ -39,6 +39,7 @@ namespace Actors.PlayerSystem
         private bool isProjectileLaunched = true;
 
         private CooldownTiemr cooldownTimer;
+        public float BonusMultiplier { get; set; } = 1f;
 
         public override bool CheckEnterTransition(CharacterState fromState)
         {
@@ -77,7 +78,7 @@ namespace Actors.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<ProjectileMovement>().ResetProjectile(dt, direction);
-                newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier);
+                newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier * BonusMultiplier);
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

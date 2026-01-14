@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Actors.PlayerSystem;
 using UnityEngine;
 
-public class ScoutAccuracyGlasses : MonoBehaviour
+public class ScoutAccuracyGlasses : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnAcquire()
     {
-        
-    }
+        OnReinforcedAcquire();
 
-    // Update is called once per frame
-    void Update()
+        Player player = RelicManager.Instance.player;
+        RangedAttack skill = player.StatesGO.GetComponent<RangedAttack>();
+        skill.BonusMultiplier += value;
+    }
+    public override void OnLose()
     {
-        
+        RelicManager.Instance.player.StatesGO.GetComponent<RangedAttack>().BonusMultiplier -= value;
     }
 }
