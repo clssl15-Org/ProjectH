@@ -4,13 +4,16 @@ using Infrastructure;
 using UI.RelicInfoPanelView;
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace UI
 {
     public class RelicInfoPanelUI : MonoBehaviour,
         IStandaloneUpdatable, IEnablable, IInputController
     {
-        [field: SerializeField] public bool PressTabToOpen { get; set; } = true;
+        [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
         [Space]
         [SerializeField] private Button _closeBtn;
         [SerializeField] private RectTransform _relicListParent;
@@ -20,9 +23,23 @@ namespace UI
         public event Action Destroyed;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => () => _inputHub?.BlockAll();
+        Action IEnablable.OnEnabling => () =>
+        {
+            if (_inputHub != null)
+            {
+                BlackboxHandle.Of(this).Exert(_inputHub, "BlockAll");
+                _inputHub.BlockAll();
+            }
+        };
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
+        Action IEnablable.OnDisabling => () =>
+        {
+            if (_inputHub != null)
+            {
+                BlackboxHandle.Of(this).Exert(_inputHub, "UnblockAll");
+                _inputHub.UnblockAll();
+            }
+        };
         Action IEnablable.OnDisabled => null;
         #endregion
 
@@ -114,7 +131,7 @@ namespace UI
 
         void IStandaloneUpdatable.StandaloneUpdate()
         {
-            if (PressTabToOpen && Input.GetKeyDown(KeyCode.Tab))
+            if (OpenKey != KeyCode.None && Input.GetKeyDown(OpenKey))
                 Open();
         }
         private void Update()
@@ -151,5 +168,23 @@ namespace UI
             Destroyed?.Invoke();
             _enabler?.Dispose();
         }
+
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(RelicInfoPanelUI))]
+        private class RelicInfoPanelUIEditor : Editor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+
+                if (Application.isPlaying && GUILayout.Button("Export Log"))
+                {
+                    GUILayout.Space(8);
+                    BlackboxHandle.Of(target).Export(openLog: true);
+                }
+            }
+        }
+#endif
     }
 }

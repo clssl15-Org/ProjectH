@@ -2,10 +2,14 @@ using System;
 using System.Linq;
 using BlackboxSystem;
 using Infrastructure;
+using Tests.Seungmin;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace UI
 {
@@ -28,11 +32,6 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _coinDescripton;
         [SerializeField] private VideoPlayer _coinRawVideoPlayer;
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
-
-#if UNITY_EDITOR
-        [Header("Log")]
-        [SerializeField] private bool _exportLog = false;
-#endif
 
         public bool EnableInput { get; set; } = true;
         public event Action Destroyed;
@@ -161,23 +160,6 @@ namespace UI
             }
         }
 
-#if UNITY_EDITOR
-        private bool _logExported = false;
-        private void Update()
-        {
-            if (!_exportLog)
-                return;
-
-            if (!_logExported
-                && Input.GetKey(KeyCode.LeftControl)
-                && Input.GetKey(KeyCode.RightControl))
-            {
-                _logExported = true;
-                BlackboxHandle.Of(this).Export(openLog: true);
-            }
-        }
-#endif
-
         private void Close()
         {
             _updater?.Dispose();
@@ -212,5 +194,23 @@ namespace UI
 
             RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
         }
+
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(RelicAcquisitionUI))]
+        private class RelicAcquisitionUIEditor : Editor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+
+                if (Application.isPlaying && GUILayout.Button("Export Log"))
+                {
+                    GUILayout.Space(8);
+                    BlackboxHandle.Of(target).Export(openLog: true);
+                }
+            }
+        }
+#endif
     }
 }
