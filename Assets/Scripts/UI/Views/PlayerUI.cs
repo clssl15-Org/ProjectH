@@ -11,13 +11,10 @@ using MonsterSystem = Actors.Monsters.Actions;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class PlayerUI : MonoBehaviour, IEnablableView, IInputEnabledView
+    public class PlayerUI : MonoBehaviour, IView, IEnablable, IInputControllable
     {
         // Front
-        public bool EnableInput { get; set; } = true;
-
-        public event Action Enabling;
-        public event Action Disabling;
+        public bool AllowInput { get; set; } = true;
         public event Action Destroyed;
 
         // Internal
@@ -37,10 +34,9 @@ namespace UI
 
         #region Interfaces
         Action IEnablable.OnEnabling => 
-            (() => _skillRouletteBackground.gameObject.SetActive(true))
-            + Enabling;
+            () => _skillRouletteBackground.gameObject.SetActive(true);
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabling => null;
         Action IEnablable.OnDisabled =>
             () => _skillRouletteBackground.gameObject.SetActive(false);
         #endregion
@@ -129,7 +125,7 @@ namespace UI
         // 여기서 UI 이벤트 처리
         private void Update()
         {
-            if (!EnableInput)
+            if (!AllowInput)
                 return;
 
             _currentSelectedButtons.Clear();
@@ -261,7 +257,6 @@ namespace UI
                 Destroy(gameObject);
         }
 
-        #region Interfaces
         void IEnablable.Enable() =>
             throw new InvalidOperationException();
         void IEnablable.Disable() =>
@@ -270,6 +265,5 @@ namespace UI
             throw new InvalidOperationException();
         void IEnablable.SetToDisabled() =>
             throw new InvalidOperationException();
-        #endregion
     }
 }

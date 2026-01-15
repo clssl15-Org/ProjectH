@@ -1,11 +1,14 @@
+using System.Linq;
 using Actors;
 using BlackboxSystem;
+using Infrastructure;
 using UI;
 using UnityEngine;
 
 namespace Game.Stage
 {
-    [RequireComponent(typeof(UIManager), typeof(PlayerManager), typeof(MonsterManager))]
+    [RequireComponent(typeof(InputHub), typeof(UIManager))]
+    [RequireComponent(typeof(PlayerManager), typeof(MonsterManager))]
     public class StageManager : MonoBehaviour
     {        
         [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 플레이어를 자동으로 등록합니다")]
@@ -13,16 +16,25 @@ namespace Game.Stage
         [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 몬스터들을 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindSceneMonsters { get; set; } = true;
 
-        [Space]
+        [Header("Bindings")]
         [SerializeField] private UILibrary _uILibrary;
+
+        [Header("Inputs")]
+        [SerializeField] private MonoBehaviour[] _inputControllers;
+        [SerializeField] private MonoBehaviour[] _inputControllables;
 
         [Header("Player")]
         [SerializeField] private GameObject _playerObject;
+
+        [Header("UIs")]
         [SerializeField] private PlayerUI _playerUI;
+        [SerializeField] private RelicAcquisitionUI _relicAcquisitionUI;
+        [SerializeField] private RelicInfoPanelUI _relicInfoPanelUI;
 
         protected IPlayer Player { get; private set; }
         protected UILibrary UILibrary => _uILibrary;
 
+        protected InputHub InputHub { get; private set; }
         protected UIManager UIManager { get; private set; }
         protected PlayerManager PlayerManager { get; private set; }
         protected MonsterManager MonsterManager { get; private set; }
@@ -36,6 +48,7 @@ namespace Game.Stage
             BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log);
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
+            InputHub = GetComponent<InputHub>();
             UIManager = GetComponent<UIManager>();
             PlayerManager = GetComponent<PlayerManager>();
             MonsterManager = GetComponent<MonsterManager>();
@@ -45,6 +58,7 @@ namespace Game.Stage
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Start");
 
+            #region Auto Bind
             if (AutoBindScenePlayer)
             {
                 foreach (var playerObj in GameObject.FindGameObjectsWithTag("Player"))
@@ -84,7 +98,9 @@ namespace Game.Stage
 
                     Register(monster);
                 }
+            #endregion
 
+            #region Spawn Manager
             if (SpawnManager.Instance)
             {
                 BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Spawner에 Register 대리자 등록");
@@ -95,8 +111,34 @@ namespace Game.Stage
                     "[StageManager] SpawnManager.Instance이(가) 유효하지 않습니다. " +
                     "새로 스폰되는 몬스터는 매니저에 등록되지 않으며, UI 등이 생성되지 않을 수 있습니다."),
                     this);
+            #endregion
+
+            #region Input Hub
+            if (_playerUI)
+                InputHub.Register(_playerUI);
+
+            if (_relicAcquisitionUI)
+                ((IInputController)_relicAcquisitionUI).Initialize(InputHub);
+            if (_relicInfoPanelUI)
+                ((IInputController)_relicInfoPanelUI).Initialize(InputHub);
+
+
+            foreach (var controlObj in _inputControllers.Concat(_inputControllables))
+            {
+                if (controlObj is IInputControllable controllable)
+                {
+                    BlackboxHandle.Of(this).Exert(controllable, $"등록: {controlObj.name}");
+                    InputHub.Register(controllable);
+                }
+                if (controlObj is IInputController controller)
+                {
+                    BlackboxHandle.Of(this).Exert(controller, $"초기화: {controlObj.name}");
+                    controller.Initialize(InputHub);
+                }
+            }
+            #endregion
         }
-        
+
         public void Register(IPlayer player, bool connectUI = true)
         {
             if (_isDestroyed)
@@ -149,7 +191,7 @@ namespace Game.Stage
         {
             if (!_logExported
                 && Input.GetKey(KeyCode.LeftControl)
-                && Input.GetKey(KeyCode.RightControl))
+                && Input.GetKey(KeyCode.RightAlt))
             {
                 _logExported = true;
                 BlackboxHandle.Of(this).Export(openLog: true);

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BlackboxSystem;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,8 @@ using UnityEngine.Video;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class RelicAcquisitionUI : MonoBehaviour, IStandaloneInitializable, IEnablableView, IInputEnabledView
+    public class RelicAcquisitionUI : MonoBehaviour,
+        IView, IStandaloneInitializable, IEnablable, IInputController
     {
         [Header("Main")]
         [SerializeField] private Animation _animation;
@@ -27,8 +29,12 @@ namespace UI
         [SerializeField] private VideoPlayer _coinRawVideoPlayer;
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
 
-        public event Action Enabling;
-        public event Action Disabling;
+#if UNITY_EDITOR
+        [Header("Log")]
+        [SerializeField] private bool _exportLog = false;
+#endif
+
+        public bool EnableInput { get; set; } = true;
         public event Action Destroyed;
 
         [Serializable]
@@ -40,6 +46,7 @@ namespace UI
         }
         [SerializeField] private VideoData[] _videoClips;
 
+        private IInputHub _inputHub;
         private IDisposable _updater, _timer;
         private RelicDataSO _relic;
         private EnableWithAnimation _enabler;
@@ -49,12 +56,10 @@ namespace UI
         private bool _isDestroyed = false;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnEnabling => () => _inputHub?.BlockAll();
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
         Action IEnablable.OnDisabled => null;
-
-        public bool EnableInput { get; set; } = true;
         #endregion
 
 
@@ -73,6 +78,8 @@ namespace UI
                 .InitializeWithIEnablable(this);
             SetToDisabled();
         }
+
+        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         private void OnRelicAcquiring(RelicDataSO relicInfo)
         {
@@ -153,6 +160,23 @@ namespace UI
                 });
             }
         }
+
+#if UNITY_EDITOR
+        private bool _logExported = false;
+        private void Update()
+        {
+            if (!_exportLog)
+                return;
+
+            if (!_logExported
+                && Input.GetKey(KeyCode.LeftControl)
+                && Input.GetKey(KeyCode.RightControl))
+            {
+                _logExported = true;
+                BlackboxHandle.Of(this).Export(openLog: true);
+            }
+        }
+#endif
 
         private void Close()
         {

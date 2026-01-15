@@ -11,12 +11,10 @@ namespace Game.Stage
     {
         // Bindings
         [SerializeField] private RectTransform _canvas;
-        [SerializeField] private MonoBehaviour[] _exclusiveInputViews;
 
         // Internal
         private readonly HashSet<IViewModel> _viewModels = new();
         private readonly HashSet<IView> _views = new();
-        private ViewInputHub _viewInputHub = new();
         private bool _isDestroyed = false;
 
 
@@ -28,47 +26,6 @@ namespace Game.Stage
             if (!_canvas)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
                     $"[{nameof(UIManager)}] {nameof(_canvas)} 컴포넌트가 유효하지 않습니다."));
-
-            foreach (var viewObj in _exclusiveInputViews)
-            {
-                if (viewObj is not IEnablableView view)
-                {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
-                        $"[{nameof(UIManager)}] exclusiveInputViews '{viewObj.name}'을(를) 등록하는 데 실패했습니다. " +
-                        $"exclusiveInputViews는 {nameof(IEnablableView)}인 동시에 {nameof(IInputEnabledView)}(이)여야 합니다."));
-
-                    continue;
-                }
-                if (viewObj is not IInputEnabledView iView)
-                {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
-                        $"[{nameof(UIManager)}] exclusiveInputViews '{viewObj.name}'을(를) 등록하는 데 실패했습니다. " +
-                        $"exclusiveInputViews는 {nameof(IEnablableView)}인 동시에 {nameof(IInputEnabledView)}(이)여야 합니다."));
-
-                    continue;
-                }
-
-                view.Enabling += () =>
-                {
-                    if (_isDestroyed)
-                        return;
-
-                    BlackboxHandle.Of(view).Exerted(view, "view.Enabling");
-                    BlackboxHandle.Of(view).Exert(_viewInputHub, "view.Enabling: Block Except Self");
-                    _viewInputHub.BlockExcept(iView);
-                };
-                view.Disabling += () =>
-                {
-                    if (_isDestroyed)
-                        return;
-
-                    BlackboxHandle.Of(view).Exerted(view, "view.Disabling");
-                    BlackboxHandle.Of(view).Exert(_viewInputHub, "view.Disabling: Unblock All");
-                    _viewInputHub.UnblockAll();
-                };
-
-                RegisterView(iView);
-            }
         }
 
         public void RegisterVM(IViewModel viewModel)
@@ -108,12 +65,6 @@ namespace Game.Stage
             _views.Add(view);
             view.Destroyed += () => _views.Remove(view);
 
-            if (view is IInputEnabledView iView)
-            {
-                BlackboxHandle.Of(this).Exert(_viewInputHub, $"view '{view}'이(가) IInputEnabledView이기 때문에 viewInputHub에 등록합니다.");
-                _viewInputHub.Register(iView);
-            }
-
             view.SetParent(_canvas);
         }
 
@@ -138,8 +89,6 @@ namespace Game.Stage
 
             _views.Clear();
             _viewModels.Clear();
-
-            _viewInputHub = null;
         }
 
         private string Ctx(string message) => $"[{nameof(UIManager)}] {message}";

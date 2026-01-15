@@ -5,21 +5,19 @@ using UnityEngine;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class BossUI : MonoBehaviour, IView, IEnablableView
+    public class BossUI : MonoBehaviour, IView, IEnablable
     {
         [field: SerializeField] public bool DestoyOnMonsterDead { get; set; } = true;
         [SerializeField] private HealthBarUI _healthBar;
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
 
-        public event Action Enabling;
-        public event Action Disabling;
         public event Action Destroyed;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnEnabling => null;
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabling => null;
         Action IEnablable.OnDisabled => _disabled;
         #endregion
 

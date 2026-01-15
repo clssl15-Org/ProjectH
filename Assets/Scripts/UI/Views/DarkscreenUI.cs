@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class DarkscreenUI : MonoBehaviour, IEnablableView
+    public class DarkscreenUI : MonoBehaviour, IEnablable
     {
         public event Action Enabling;
         public event Action Enabled;

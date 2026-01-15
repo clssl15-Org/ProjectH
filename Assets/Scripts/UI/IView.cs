@@ -11,15 +11,4 @@ namespace UI
         void SetParent(RectTransform parent);
         void Destroy();
     }
-
-    public interface IEnablableView : IEnablable
-    {
-        event Action Enabling;
-        event Action Disabling;
-    }
-
-    internal interface IInputEnabledView : IView
-    {
-        bool EnableInput { get; set; }
-    }
 }

@@ -17,11 +17,11 @@ namespace Game.Stage
         // Content
         public bool Register(IMonster monster)
         {
-            BlackboxHandle.Of(this).Exert(monster, "Register: 몬스터 등록");
+            BlackboxHandle.Of(this).Exert(monster, "몬스터 등록");
 
             if (!monster.IsValid())
                 throw new ArgumentException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx("Register: 유효하지 않은 인자가 입력되었습니다.")),
+                    Ctx("유효하지 않은 인자가 입력되었습니다.")),
                     nameof(monster));
 
             if (_monsters.Contains(monster))
@@ -43,7 +43,7 @@ namespace Game.Stage
 
             _monsters.ToList().ForEach(m =>
             {
-                BlackboxHandle.Of(this).Exert(m, "Destroy: 몬스터 삭제");
+                BlackboxHandle.Of(this).Exert(m, "몬스터 삭제");
                 m.Destroy();
             });
             _monsters.Clear();

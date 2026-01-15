@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class RelicInfoPanelUI : MonoBehaviour, IEnablableView, IStandaloneUpdatable
+    public class RelicInfoPanelUI : MonoBehaviour,
+        IStandaloneUpdatable, IEnablable, IInputController
     {
         [field: SerializeField] public bool PressTabToOpen { get; set; } = true;
         [Space]
@@ -16,18 +17,17 @@ namespace UI
         [SerializeField] private RelicInfoUI _relicInfoPrefab;
         [SerializeField] private Animation _animation;
 
-        public event Action Enabling;
-        public event Action Disabling;
         public event Action Destroyed;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => Enabling;
+        Action IEnablable.OnEnabling => () => _inputHub?.BlockAll();
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => Disabling;
+        Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
         Action IEnablable.OnDisabled => null;
         #endregion
 
         private EnableWithAnimation _enabler;
+        private IInputHub _inputHub;
         private bool _initialized = false;
 
 
@@ -64,6 +64,8 @@ namespace UI
             _closeBtn.onClick.AddListener(Close);
             ((IEnablable)this).SetToDisabled();
         }
+
+        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         public void Open()
         {
@@ -146,6 +148,7 @@ namespace UI
 
         private void OnDestroy()
         {
+            Destroyed?.Invoke();
             _enabler?.Dispose();
         }
     }
