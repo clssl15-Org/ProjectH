@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using BlackboxSystem;
 using Infrastructure;
-using Tests.Seungmin;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -204,10 +203,11 @@ namespace UI
             {
                 base.OnInspectorGUI();
 
-                if (Application.isPlaying && GUILayout.Button("Export Log"))
+                if (Application.isPlaying)
                 {
                     GUILayout.Space(8);
-                    BlackboxHandle.Of(target).Export(openLog: true);
+                    if (GUILayout.Button("Export Log"))
+                        BlackboxHandle.Of(target).Export(openLog: true);
                 }
             }
         }

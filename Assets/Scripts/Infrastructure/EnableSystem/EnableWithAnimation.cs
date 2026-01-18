@@ -15,7 +15,7 @@ namespace Infrastructure
     public class EnableWithAnimation : IDisposable
     {
         // Front
-        public bool Enabled => _enabled;
+        public bool IsEnabled => _enabled;
 
         // Internal
         private Animation _animation;

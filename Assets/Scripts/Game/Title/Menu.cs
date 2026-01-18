@@ -3,13 +3,11 @@ using Infrastructure;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using BlackboxSystem;
 
 namespace Game.Title
 {
-    public class Menu : MonoBehaviour, IEnablable
+    public class Menu : MonoBehaviour, IEnablable, IInjectable<GameContext>
     {
         public event Action Enabling;
         public event Action Disabling;
@@ -19,6 +17,7 @@ namespace Game.Title
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabled => null;
 
+        [SerializeField] private GameContext _gameContext;
         [SerializeField] private DarkscreenUI _darkscreen;
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
@@ -30,6 +29,8 @@ namespace Game.Title
 
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+
             _enabler = new EnableWithAnimation(_animation)
                 .InitializeWithIEnablable(this);
 
@@ -37,9 +38,15 @@ namespace Game.Title
                 _darkscreen.SetToDisabled();
         }
 
+        void IInjectable<GameContext>.Inject(GameContext gameContext)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameContext Injected");
+            _gameContext = gameContext;
+        }
+
         private void Update()
         {
-            if (_enabler.Enabled && Input.GetKeyDown(KeyCode.Escape))
+            if (_enabler.IsEnabled && Input.GetKeyDown(KeyCode.Escape))
                 Disable();
         }
 
@@ -51,6 +58,8 @@ namespace Game.Title
         #region Actions
         public void ToPlay()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("To Play");
+
             if (_darkscreen)
             {
                 _darkscreen.Enabled += () => SceneManager.LoadScene(_gameSceneName);
@@ -62,6 +71,8 @@ namespace Game.Title
 
         public void ToBoss()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("To Boss");
+
             if (_darkscreen)
             {
                 _darkscreen.Enabled += () => SceneManager.LoadScene(_bossSceneName);
@@ -71,18 +82,25 @@ namespace Game.Title
                 SceneManager.LoadScene(_bossSceneName);
         }
 
-        public void ToSetting()
+        public void ToSettings()
         {
-            Debug.LogWarning($"'{nameof(ToSetting)}'은(는) 아직 구현되지 않았습니다.", this);
+            using var _ = BlackboxHandle.Of(this).WriteScope("To Settings");
+            Debug.LogWarning($"'[Menu] '{nameof(ToSettings)}'은(는) 아직 구현되지 않았습니다.", this);
         }
 
         public void ToQuit()
         {
-#if UNITY_EDITOR
-            EditorApplication.ExitPlaymode();
-#else
-            Application.Quit();
-#endif
+            using var _ = BlackboxHandle.Of(this).WriteScope("To Quit");
+
+            if (_gameContext)
+                _gameContext.Quit(this);
+            else
+            {
+                Debug.LogWarning(
+                    BlackboxHandle.Of(this).Write(
+                        $"[Menu] {nameof(_gameContext)}이(가) 유효하지 않기 때문에 Quit 메서드를 수행할 수 없습니다."),
+                    this);
+            }
         }
         #endregion
 

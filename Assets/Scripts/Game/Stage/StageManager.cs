@@ -30,6 +30,7 @@ namespace Game.Stage
         [SerializeField] private PlayerUI _playerUI;
         [SerializeField] private RelicAcquisitionUI _relicAcquisitionUI;
         [SerializeField] private RelicInfoPanelUI _relicInfoPanelUI;
+        [SerializeField] private SettingsUI _settingsUI;
 
         protected IPlayer Player { get; private set; }
         protected UILibrary UILibrary => _uILibrary;
@@ -45,7 +46,6 @@ namespace Game.Stage
         // Front
         protected virtual void Awake()
         {
-            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log);
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             InputHub = GetComponent<InputHub>();
@@ -58,7 +58,7 @@ namespace Game.Stage
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Start");
 
-            #region Auto Bind
+            #region Player / Monsters
             if (AutoBindScenePlayer)
             {
                 foreach (var playerObj in GameObject.FindGameObjectsWithTag("Player"))
@@ -68,7 +68,7 @@ namespace Game.Stage
                         && playerObj.TryGetComponent<IPlayer>(out var player))
                     {
                         Player = player;
-                        Register(player);
+                        Register(player, _playerUI != null);
 
                         break;
                     }
@@ -86,7 +86,7 @@ namespace Game.Stage
                     }
 
                     Player = player;
-                    Register(Player);
+                    Register(Player, _playerUI != null);
                 }
             }
 
@@ -114,6 +114,8 @@ namespace Game.Stage
             #endregion
 
             #region Input Hub
+            //if (Player != null)
+            //    InputHub.Register(Player);
             if (_playerUI)
                 InputHub.Register(_playerUI);
 
@@ -121,6 +123,25 @@ namespace Game.Stage
                 ((IInputController)_relicAcquisitionUI).Initialize(InputHub);
             if (_relicInfoPanelUI)
                 ((IInputController)_relicInfoPanelUI).Initialize(InputHub);
+            if (_settingsUI)
+            {
+                InputHub.Register((IInputControllable)_settingsUI);
+                ((IInputController)_settingsUI).Initialize(InputHub);
+
+                _settingsUI.OpenRelicsUI += () =>
+                {
+                    using var _ = BlackboxHandle.Of(this).ExertScope(_settingsUI, "_settingsUI -> RelicsUI 열기 요청 처리");
+                    if (!_relicInfoPanelUI)
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                            "[StageManager] _relicInfoPanelUI가 할당되지 않아 RelicsUI를 열 수 없습니다."), this);
+                        return;
+                    }
+
+                    BlackboxHandle.Of(this).Exert(_relicInfoPanelUI, "RelicsUI 열기");
+                    _relicInfoPanelUI.Open();
+                };
+            }
 
 
             foreach (var controlObj in _inputControllers.Concat(_inputControllables))

@@ -11,7 +11,7 @@ using UnityEditor;
 namespace UI
 {
     public class RelicInfoPanelUI : MonoBehaviour,
-        IStandaloneUpdatable, IEnablable, IInputController
+        IStandaloneUpdatable, IEnablable, IInputController, IInputControllable
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
         [Space]
@@ -20,6 +20,7 @@ namespace UI
         [SerializeField] private RelicInfoUI _relicInfoPrefab;
         [SerializeField] private Animation _animation;
 
+        public bool AllowInput { get; set; } = true;
         public event Action Destroyed;
 
         #region Interfaces
@@ -28,7 +29,7 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "BlockAll");
-                _inputHub.BlockAll();
+                _inputHub.BlockExcept(this);
             }
         };
         Action IEnablable.OnEnabled => null;
@@ -45,16 +46,16 @@ namespace UI
 
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
-        private bool _initialized = false;
+        private bool _isInitialized = false;
 
 
         private void Awake() => Initialize();
         public void Initialize()
         {
-            if (_initialized) return;
-            _initialized = true;
+            if (_isInitialized) return;
+            _isInitialized = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Initialize");
 
             if (!_closeBtn)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
@@ -110,7 +111,7 @@ namespace UI
                     BlackboxHandle.Of(this).Write($"Add: {relicData.RelicName}");
 
                     relicInfo.Initialize(relicData.Icon, relicData.RelicName, relicData.Description);
-                    relicInfo.GetComponent<RectTransform>().SetParent(_relicListParent);
+                    relicInfo.GetComponent<RectTransform>().SetParent(_relicListParent, false);
                     relicInfo.name = _relicInfoPrefab.name + $" {relicData.RelicName}";
                     relicInfo.gameObject.SetActive(true);
                 }
@@ -131,13 +132,13 @@ namespace UI
 
         void IStandaloneUpdatable.StandaloneUpdate()
         {
-            if (OpenKey != KeyCode.None && Input.GetKeyDown(OpenKey))
-                Open();
-        }
-        private void Update()
-        {
+            if (!AllowInput)
+                return;
+
             if (Input.GetKeyDown(KeyCode.Escape))
                 Close();
+            else if (OpenKey != KeyCode.None && Input.GetKeyDown(OpenKey))
+                Open();
         }
 
         void IEnablable.Enable()
@@ -178,10 +179,11 @@ namespace UI
             {
                 base.OnInspectorGUI();
 
-                if (Application.isPlaying && GUILayout.Button("Export Log"))
+                if (Application.isPlaying)
                 {
                     GUILayout.Space(8);
-                    BlackboxHandle.Of(target).Export(openLog: true);
+                    if (GUILayout.Button("Export Log"))
+                        BlackboxHandle.Of(target).Export(openLog: true);
                 }
             }
         }
