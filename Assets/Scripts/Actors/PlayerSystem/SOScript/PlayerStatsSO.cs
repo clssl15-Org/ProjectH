@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Actors.PlayerSystem
@@ -8,6 +9,9 @@ namespace Actors.PlayerSystem
         public int maxHealth = 100;
         public int attackPower = 10;
         public float moveSpeed = 5f;
+        public int maxDashCount = 1;
+        public int maxJumpCount = 2;
+        public bool canJumpAfterDash = false;
 
         public int additionalMaxHealth = 0;
         public int additionalAttackPower = 0;

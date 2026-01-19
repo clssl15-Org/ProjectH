@@ -69,6 +69,12 @@ namespace Actors.PlayerSystem
             ProcessVelocity(dt);
 
             CharacterActor.ChangeFlipX(CharacterStateController.InputMovementReference);
+
+            if (CharacterActor.IsGrounded)
+            {
+                Player.CurrentDashCount = Player.MaxDashCount;
+                Player.CurrentJumpCount = Player.MaxJumpCount;
+            }
         }
 
         private void ProcessVelocity(float dt)

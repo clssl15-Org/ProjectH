@@ -42,6 +42,10 @@ namespace Actors.PlayerSystem
         private float subsequentJumpForce;
         private float subsequentJumpSpeed;
 
+        public override bool CheckEnterTransition(CharacterState fromState)
+        {
+            return Player.CurrentJumpCount > 0;
+        }
         public override void CheckExitTransition()
         {
             if (isDone)

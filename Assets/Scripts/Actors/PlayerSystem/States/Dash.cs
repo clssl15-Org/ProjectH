@@ -44,7 +44,19 @@ namespace Actors.PlayerSystem
 
         public override bool CheckEnterTransition(CharacterState fromState)
         {
-            return !cooldownTimer || !cooldownTimer.IsOnCooldown;
+            if (Player.CurrentDashCount > 1)
+            {
+                return true;
+            }
+            else if (Player.CurrentDashCount == 1)
+            {
+                if (!cooldownTimer || !cooldownTimer.IsOnCooldown)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public override void CheckExitTransition()
@@ -78,8 +90,18 @@ namespace Actors.PlayerSystem
             }
 
             ResetDash();
-            cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
-            cooldownTimer.StartCooldown(cooldownDuration, dt);
+
+            Player.CurrentDashCount--;
+            if (Player.playerStats.canJumpAfterDash)
+            {
+                Player.CurrentJumpCount++;
+            }
+
+            if (Player.CurrentDashCount == 1)
+            {
+                cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+                cooldownTimer.StartCooldown(cooldownDuration, dt);
+            }
         }
 
         public override void UpdateBehaviour(float dt)

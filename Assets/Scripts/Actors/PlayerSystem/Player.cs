@@ -32,6 +32,11 @@ namespace Actors.PlayerSystem
         public bool canMove { get; set; } = true;
         public int CurrentPlatform { get; private set; } = -1;
 
+        public int MaxDashCount => playerStats.maxDashCount;
+        public int CurrentDashCount { get; set; }
+        public int MaxJumpCount => playerStats.maxJumpCount;
+        public int CurrentJumpCount { get; set; }
+
         public GameObject StatesGO;
 
         public SkillManager SkillManager => skillManager;

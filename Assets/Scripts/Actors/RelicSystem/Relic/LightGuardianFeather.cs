@@ -2,17 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightGuardianFeather : MonoBehaviour
+public class LightGuardianFeather : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnAcquire()
     {
-        
+        OnReinforcedAcquire();
+
+        RelicManager.Instance.player.playerStats.maxDashCount += 1;
+
+        if (value == 2)
+        {
+            RelicManager.Instance.player.playerStats.canJumpAfterDash = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnLose()
     {
-        
+        RelicManager.Instance.player.playerStats.maxDashCount -= 1;
+
+        if (value == 2)
+        {
+            RelicManager.Instance.player.playerStats.canJumpAfterDash = false;
+        }
     }
 }
