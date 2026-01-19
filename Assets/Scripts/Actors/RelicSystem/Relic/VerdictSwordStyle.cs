@@ -10,9 +10,9 @@ public class VerdictSwordStyle : Relic
         OnReinforcedAcquire();
 
         Player player = RelicManager.Instance.player;
-        StrongAttack firstSkill = player.StatesGO.GetComponent<StrongAttack>();
-        firstSkill.BonusMultiplier += value;
-        player.SkillManager.AddSkill(firstSkill);
+        StrongAttack skill = player.StatesGO.GetComponent<StrongAttack>();
+        skill.BonusMultiplier += value;
+        player.SkillManager.AddSkill(skill);
     }
     public override void OnLose()
     {

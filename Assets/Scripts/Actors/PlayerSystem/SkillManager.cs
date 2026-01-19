@@ -71,10 +71,12 @@ public class SkillManager : MonoBehaviour
     }
     public void AddSkill(CharacterState skill)
     {
+        skill.enabled = true;
         skills.Add(skill);
     }
     public void AddUltimateSkill(CharacterState skill)
     {
+        skill.enabled = true;
         ultimateSkill = skill;
     }
 }

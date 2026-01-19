@@ -42,10 +42,6 @@ namespace Actors.PlayerSystem
             {
                 CharacterStateController.EnqueueTransition<Dash>();
             }
-            if (CharacterActions.changeSkill.Started)
-            {
-                Player.ChangeSkill(-1);
-            }
 
             if (CharacterActions.useSkill.Started)
             {
