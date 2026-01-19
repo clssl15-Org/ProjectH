@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7068ae7090f1b46855903a7d412628, type: 3}
+  m_Name: Blue Monster Indicator Configuration
+  m_EditorClassIdentifier: 
+  <ShowPlayerDetection>k__BackingField:
+    Value: 1
+    Override: 0
+  <PlayerDetectionHeight>k__BackingField:
+    Value: 0.5
+    Override: 1
+  <PlayerDetectionSize>k__BackingField:
+    Value: 1
+    Override: 0
+  <PlayerDetectionShowTime>k__BackingField:
+    Value: 0.5
+    Override: 0
+  <ShowExclamationMark>k__BackingField:
+    Value: 1
+    Override: 0
+  <ExclamationMarkHeight>k__BackingField:
+    Value: 0.5
+    Override: 1
+  <ExclamationMarkSize>k__BackingField:
+    Value: 1
+    Override: 0
+  <ExclamationMarkShowTime>k__BackingField:
+    Value: 0.5
+    Override: 0
+  <ShowDamageText>k__BackingField:
+    Value: 1
+    Override: 0
+  <DamageHeight>k__BackingField:
+    Value: 0.7
+    Override: 0
+  <DamageFontSize>k__BackingField:
+    Value: 5
+    Override: 0
+  <DamageShowTime>k__BackingField:
+    Value: 0.5
+    Override: 0
+  <DefaultDamageColor>k__BackingField:
+    Value: {r: 1, g: 1, b: 1, a: 1}
+    Override: 0
+  <DamageColorItems>k__BackingField:
+    Value:
+    - Damage: 10
+      Color: {r: 1, g: 0.85882354, b: 0.49411765, a: 1}
+    - Damage: 30
+      Color: {r: 0.95686275, g: 0.6666667, b: 0.29411766, a: 1}
+    Override: 0

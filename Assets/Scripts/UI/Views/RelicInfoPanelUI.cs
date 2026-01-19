@@ -11,7 +11,10 @@ using UnityEditor;
 namespace UI
 {
     public class RelicInfoPanelUI : MonoBehaviour,
-        IStandaloneUpdatable, IEnablable, IInputController, IInputControllable
+        IStandaloneUpdatable,
+        IEnablable,
+        IInputController,
+        IInputControllable
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
         [Space]
@@ -137,7 +140,7 @@ namespace UI
 
             if (Input.GetKeyDown(KeyCode.Escape))
                 Close();
-            else if (OpenKey != KeyCode.None && Input.GetKeyDown(OpenKey))
+            else if (Input.GetKeyDown(OpenKey))
                 Open();
         }
 

@@ -17,9 +17,10 @@ namespace UI
         IView, IStandaloneInitializable, IEnablable, IInputController
     {
         [Header("Main")]
-        [SerializeField] private Animation _animation;
+        [SerializeField] private Animation _openAnimation;
 
         [Header("Relic")]
+        [SerializeField] private GameObject _relicPage;
         [SerializeField] private Image _relicIcon;
         [SerializeField] private TextMeshProUGUI _relicNametag;
         [SerializeField] private TextMeshProUGUI _relicDescrption;
@@ -27,8 +28,10 @@ namespace UI
         [SerializeField] private Button _closeBtn;
 
         [Header("Throw Coin")]
-        [SerializeField] private GameObject _throwCoin;
+        [SerializeField] private GameObject _coinPage;
         [SerializeField] private TextMeshProUGUI _coinDescripton;
+        [SerializeField] private GameObject _coinImage;
+        [SerializeField] private GameObject _coinAnimation;
         [SerializeField] private VideoPlayer _coinRawVideoPlayer;
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
 
@@ -54,7 +57,16 @@ namespace UI
         private bool _isDestroyed = false;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => () => _inputHub?.BlockAll();
+        Action IEnablable.OnEnabling => () =>
+        {
+            _relicPage.SetActive(true);
+            _coinPage.SetActive(false);
+
+            _toThrowCoinBtn.gameObject.SetActive(true);
+            _closeBtn.gameObject.SetActive(false);
+
+            _inputHub?.BlockAll();
+        };
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
         Action IEnablable.OnDisabled => null;
@@ -72,7 +84,7 @@ namespace UI
 
             RelicManager.Instance.RelicAcquiring += OnRelicAcquiring;
 
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_openAnimation)
                 .InitializeWithIEnablable(this);
             SetToDisabled();
         }
@@ -95,9 +107,6 @@ namespace UI
 
             Enable();
 
-            _toThrowCoinBtn.gameObject.SetActive(true);
-            _closeBtn.gameObject.SetActive(false);
-
             _relicIcon.sprite = relicInfo.Icon;
             _relicNametag.text = relicInfo.RelicName;
             _relicDescrption.text = relicInfo.Description;
@@ -108,7 +117,12 @@ namespace UI
 
         private void ToThrowCoin()
         {
-            _throwCoin.SetActive(true);
+            _relicPage.SetActive(false);
+            _coinPage.SetActive(true);
+
+            _coinImage.SetActive(true);
+            _coinAnimation.SetActive(false);
+
             _coinDescripton.text = $"강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}";
 
             var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
@@ -137,6 +151,11 @@ namespace UI
 
             void ThrowCoin()
             {
+                print("throw coin");
+
+                _coinImage.SetActive(false);
+                _coinAnimation.SetActive(true);
+
                 _coinRawVideoPlayer.playbackSpeed = 1f;
                 _coinMaskVideoPlayer.playbackSpeed = 1f;
 
@@ -153,7 +172,8 @@ namespace UI
                         _toThrowCoinBtn.gameObject.SetActive(false);
                         _closeBtn.gameObject.SetActive(true);
 
-                        _throwCoin.SetActive(false);
+                        _coinPage.SetActive(false);
+                        _relicPage.SetActive(true);
                     }
                 });
             }

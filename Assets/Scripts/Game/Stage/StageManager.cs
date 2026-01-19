@@ -20,8 +20,8 @@ namespace Game.Stage
         [SerializeField] private UILibrary _uILibrary;
 
         [Header("Inputs")]
-        [SerializeField] private MonoBehaviour[] _inputControllers;
-        [SerializeField] private MonoBehaviour[] _inputControllables;
+        [SerializeField] private MonoBehaviour[] _additionalInputControllers;
+        [SerializeField] private MonoBehaviour[] _additionalInputControllables;
 
         [Header("Player")]
         [SerializeField] private GameObject _playerObject;
@@ -138,13 +138,16 @@ namespace Game.Stage
                         return;
                     }
 
+                    // UI를 최상위 창으로 열기
+                    _relicInfoPanelUI.transform.SetAsLastSibling();
+
                     BlackboxHandle.Of(this).Exert(_relicInfoPanelUI, "RelicsUI 열기");
                     _relicInfoPanelUI.Open();
                 };
             }
 
 
-            foreach (var controlObj in _inputControllers.Concat(_inputControllables))
+            foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
             {
                 if (controlObj is IInputControllable controllable)
                 {

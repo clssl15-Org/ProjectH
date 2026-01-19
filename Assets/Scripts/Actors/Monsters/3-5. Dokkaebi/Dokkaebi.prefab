@@ -257,16 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ShowPlayerDetection>k__BackingField: 1
-  <PlayerDetectionHeight>k__BackingField: 0.3
-  <PlayerDetectionShowTime>k__BackingField: 0.5
-  <ShowExclamationMark>k__BackingField: 1
-  <ExclamationMarkHeight>k__BackingField: 0.3
-  <ExclamationMarkShowTime>k__BackingField: 0.5
-  ShowDamageText: 1
-  <DamageFontSize>k__BackingField: 5
-  <DamageHeight>k__BackingField: 0.7
-  <DamageShowTime>k__BackingField: 0.5
+  <ConfigurationOverride>k__BackingField: {fileID: 11400000, guid: 72351de33eca83c488cbc9e2edc19689, type: 2}
 --- !u!1 &8684761657309231096
 GameObject:
   m_ObjectHideFlags: 0

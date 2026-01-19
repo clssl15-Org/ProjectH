@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3496842018732511570}
   - component: {fileID: 5877297422985938262}
   - component: {fileID: 8850392527160003477}
+  - component: {fileID: 7949563743810638369}
   - component: {fileID: 7147540255479205691}
   m_Layer: 0
   m_Name: Rubiel
@@ -123,6 +124,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7949563743810638369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6806742729329093408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5fa679e49ed0824b87cbe62c8045fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsEnabled>k__BackingField: 1
+  <DefaultIsRight>k__BackingField: 1
+  target: {fileID: 0}
+  followStartDistanceX: 3
+  followStopDistanceX: 2
+  followStartDistanceY: 0.4
+  followStopDistanceY: 0.2
+  maxFollowSpeed: 3
+  followSmoothTime: 0.15
+  followOffset: {x: 0, y: 1}
+  faceDeadzone: 0.01
+  hoverAmplitude: 0.15
+  hoverFrequency: 1.2
+  randomizeHoverPhase: 1
 --- !u!114 &7147540255479205691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,4 +162,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f7191dbd1169045a55735191ef63eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Debug_ChangeState_T>k__BackingField: 0
+  _player: {fileID: 0}
+  _changeShapeKey: 116

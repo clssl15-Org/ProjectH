@@ -1,5 +1,9 @@
 using System;
+using Infrastructure;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Actors.Monsters
 {
@@ -16,7 +20,7 @@ namespace Actors.Monsters
         {
             if (!TryGetComponent(out _monster))
                 throw new InvalidOperationException(Ctx(
-                    $"{nameof(gameObject)} '{name}'에서 {nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
+                    $"{nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
 
             var configuraton = _monster.Configuration?.IndicatorConfiguration
                 ?? throw new InvalidOperationException(Ctx(
@@ -67,7 +71,8 @@ namespace Actors.Monsters
                 .ShowAsIndicator(
                     _monster,
                     _config.PlayerDetectionHeight * _monster.transform.lossyScale.z,
-                    _config.PlayerDetectionShowTime);
+                    _config.PlayerDetectionShowTime,
+                    _config.PlayerDetectionSize);
         }
 
         private void ShowExclamationMarkIndicator()
@@ -78,7 +83,8 @@ namespace Actors.Monsters
                 .ShowAsIndicator(
                     _monster,
                     _config.ExclamationMarkHeight * _monster.transform.lossyScale.z,
-                    _config.ExclamationMarkShowTime);
+                    _config.ExclamationMarkShowTime,
+                    _config.ExclamationMarkSize);
         }
 
         private void ShowDamageTextIndicator(int damage)
@@ -106,7 +112,37 @@ namespace Actors.Monsters
                 }
         }
 
+        private string Ctx(string message) => $"[{nameof(IndicatorHub)}] {name}: {message}";
 
-        private string Ctx(string message) => $"[{nameof(IndicatorHub)}] {message}";
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(IndicatorHub))]
+        private class IndicatorHubEditor : Editor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+                GUILayout.Space(8);
+
+                if (Application.isPlaying)
+                {
+                    var target = (IndicatorHub)base.target;
+
+                    if (GUILayout.Button("Show Player Detection Indicator"))
+                        target.ShowPlayerDetectionIndicator();
+                    if (GUILayout.Button("Show Exclamation Mark Indicator"))
+                        target.ShowExclamationMarkIndicator();
+                    if (GUILayout.Button("Show Damage Text Indicator"))
+                        target.ShowDamageTextIndicator(1);
+                }
+                else
+                {
+                    EditorGUILayout.HelpBox(
+                        "Indicator 테스트는 플레이 모드에서만 사용할 수 있습니다.",
+                        MessageType.Info);
+                }
+            }
+        }
+#endif
     }
 }

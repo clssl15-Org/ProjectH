@@ -21,7 +21,7 @@ namespace UI
         [SerializeField] private Animation _animation;
         [Header("Controllers")]
         [SerializeField] private Scrollbar _bgmScroll;
-        [SerializeField] private Scrollbar _effectScroll;
+        [SerializeField] private Scrollbar _sfxScroll;
         [SerializeField] private Button _continueBtn;
         [SerializeField] private Button _restartBtn;
         [SerializeField] private Button _guideBtn;
@@ -42,6 +42,11 @@ namespace UI
         {
             if (_inputHub != null)
             {
+                using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+
+                _bgmScroll.value = _gameContext.BgmVolume / 100f;
+                _sfxScroll.value = _gameContext.SfxVolume / 100f;
+
                 BlackboxHandle.Of(this).Exert(_inputHub, "BlockAll");
                 _inputHub.BlockExcept(this);
             }
@@ -51,6 +56,8 @@ namespace UI
         {
             if (_inputHub != null)
             {
+                using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
+
                 BlackboxHandle.Of(this).Exert(_inputHub, "UnblockAll");
                 _inputHub.UnblockAll();
             }
@@ -80,19 +87,19 @@ namespace UI
                 _bgmScroll.onValueChanged.AddListener(val =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_bgmScroll, "Set Bgm Vol");
-                    print($"Bgm 설정: {val}");
+                    _gameContext.SetBgmVolume(Mathf.RoundToInt(val * 100), this);
                 });
 
-            if (!_effectScroll)
+            if (!_sfxScroll)
             {
                 throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_effectScroll)} 컴포넌트가 유효하지 않습니다.")));
+                    Ctx($"{nameof(_sfxScroll)} 컴포넌트가 유효하지 않습니다.")));
             }
             else
-                _effectScroll.onValueChanged.AddListener(val =>
+                _sfxScroll.onValueChanged.AddListener(val =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_effectScroll, "Set Effect Vol");
-                    print($"효과음 설정: {val}");
+                    using var _ = BlackboxHandle.Of(this).ExertedScope(_sfxScroll, "Set Sfx Vol");
+                    _gameContext.SetSfxVolume(Mathf.RoundToInt(val * 100), this);
                 });
 
             if (!_continueBtn)
@@ -175,7 +182,7 @@ namespace UI
             if (!AllowInput)
                 return;
 
-            if (OpenKey != KeyCode.None && Input.GetKeyDown(OpenKey))
+            if (Input.GetKeyDown(OpenKey))
             {
                 if (!_enabler.IsEnabled)
                     Enable();
@@ -194,7 +201,7 @@ namespace UI
                 return;
             }
 
-            SetToDisabled();
+            Disable();
             OpenRelicsUI.Invoke();
         }
 

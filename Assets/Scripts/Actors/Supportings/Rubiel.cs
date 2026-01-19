@@ -1,3 +1,5 @@
+using System;
+using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using MonsterSystem = Actors.Monsters.Actions;
@@ -5,33 +7,51 @@ using MonsterSystem = Actors.Monsters.Actions;
 namespace Actors
 {
     [RequireComponent(typeof(SpriteSizeHandler), typeof(Animator))]
+    [RequireComponent(typeof(TargetFollower))]
     public class Rubiel : MonoBehaviour
     {
         public enum Shape { None, Small, Big }
         public Shape CurrentShape { get; private set; } = Shape.None;
-        [SerializeField] private bool _changeShape_T = false;
+
+        [SerializeField] private Transform _player;
+        [SerializeField] private KeyCode _changeShapeKey = KeyCode.None;
 
         private SpriteSizeHandler _ssh;
-        private MonsterSystem.MonsterAnimationPlayer _player;
+        private TargetFollower _targetFollower;
+        private MonsterSystem.MonsterAnimationPlayer _animPlayer;
 
 
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+
+            if (!_player)
+                throw new InvalidOperationException(BlackboxHandle.Of(this).Write(
+                    $"[Rubiel] {nameof(_player)}이(가) 유효하지 않습니다."));
+
             _ssh = GetComponent<SpriteSizeHandler>();
-            _player = new(GetComponent<Animator>());
+            _animPlayer = new(GetComponent<Animator>());
+
+            _targetFollower = GetComponent<TargetFollower>();
+            _targetFollower.Initialize(_player);
         }
 
         private void Start() => SetToSmall();
 
         private void Update()
         {
-            if (_changeShape_T && Input.GetKeyDown(KeyCode.T))
-            {
-                if (CurrentShape == Shape.Small)
-                    ToBig();
-                else
-                    ToSmall();
-            }
+            if (Input.GetKeyDown(_changeShapeKey))
+                ChangeShape();
+        }
+
+        public void ChangeShape()
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Change Shape");
+
+            if (CurrentShape == Shape.Small)
+                ToBig();
+            else
+                ToSmall();
         }
 
         public void ToBig()
@@ -39,13 +59,12 @@ namespace Actors
             if (CurrentShape == Shape.Big) return;
             CurrentShape = Shape.Big;
 
-            _player.Play(new("SmallToBig", Callback: succeeded =>
+            _targetFollower.IsEnabled = false;
+
+            _animPlayer.Play(new("SmallToBig", Callback: _ =>
             {
-                if (succeeded)
-                {
-                    _player.Play(new("Big"));
-                    ValidateSpriteSize();
-                }
+                _animPlayer.Play(new("Big"));
+                ValidateSpriteSize();
             }));
             ValidateSpriteSize();
         }
@@ -54,13 +73,12 @@ namespace Actors
             if (CurrentShape == Shape.Small) return;
             CurrentShape = Shape.Small;
 
-            _player.Play(new("BigToSmall", Callback: succeeded =>
+            _targetFollower.IsEnabled = true;
+
+            _animPlayer.Play(new("BigToSmall", Callback: _ =>
             {
-                if (succeeded)
-                {
-                    _player.Play(new("Small"));
-                    ValidateSpriteSize();
-                }
+                _animPlayer.Play(new("Small"));
+                ValidateSpriteSize();
             }));
             ValidateSpriteSize();
         }
@@ -70,7 +88,7 @@ namespace Actors
             if (CurrentShape == Shape.Big) return;
             CurrentShape = Shape.Big;
 
-            _player.Play(new("Big"));
+            _animPlayer.Play(new("Big"));
             ValidateSpriteSize();
         }
         public void SetToSmall()
@@ -78,7 +96,7 @@ namespace Actors
             if (CurrentShape == Shape.Small) return;
             CurrentShape = Shape.Small;
 
-            _player.Play(new("Small"));
+            _animPlayer.Play(new("Small"));
             ValidateSpriteSize();
         }
 

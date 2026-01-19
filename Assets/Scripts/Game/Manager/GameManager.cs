@@ -1,6 +1,7 @@
 using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
+using Game.Management;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,9 +17,19 @@ namespace Game
     /// </remarks>
     public sealed class GameManager : GameContext
     {
+        // Forwardings
+        public override int BgmVolume => _volumeManager.BgmVolume;
+        public override int SfxVolume => _volumeManager.SfxVolume;
+
+        // Properties
+        private VolumeManager _volumeManager;
+
+        // Internal
         [SerializeField] private bool _injectSelfOnSceneLoading = true;
         private static bool _isInitialized = false;
 
+
+        // Content
         private void Awake()
         {
             if (_isInitialized)
@@ -35,14 +46,17 @@ namespace Game
             DontDestroyOnLoad(gameObject);
 
             BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log);
-            using var _ = BlackboxHandle.Of(this).WriteScope(Ctx("인스턴스가 생성되었습니다."));
+            using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            _volumeManager = new VolumeManager();
+            BlackboxHandle.Of(this).Exert(_volumeManager, "VolumeManager를 초기화했습니다.");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _)
         {
-            using var __ = BlackboxHandle.Of(this).WriteScope(Ctx($"씬 '{scene.name}'이(가) 로드되었습니다."));
+            using var __ = BlackboxHandle.Of(this).WriteScope($"씬 '{scene.name}'이(가) 로드되었습니다.");
             InjectSelf(scene);
         }
         private void InjectSelf(Scene scene)
@@ -74,6 +88,21 @@ namespace Game
             }
         }
 
+        public override void SetBgmVolume(int volume, object context = null)
+        {
+            using var _ = BlackboxHandle.Of(this).ExertedScope(context,
+                $"Bgm 볼륨을 {volume}으로 설정합니다.");
+
+            _volumeManager.SetBgmVolume(volume);
+        }
+        public override void SetSfxVolume(int volume, object context = null)
+        {
+            using var _ = BlackboxHandle.Of(this).ExertedScope(context,
+                $"Sfx 볼륨을 {volume}으로 설정합니다.");
+
+            _volumeManager.SetSfxVolume(volume);
+        }
+
         public override void Quit(object context = null)
         {
             if (context != null)
@@ -90,7 +119,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope(Ctx($"GameManager이(가) 삭제되었습니다."));
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager이(가) 삭제되었습니다.");
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 

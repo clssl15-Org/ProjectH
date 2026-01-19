@@ -1326,7 +1326,7 @@ MonoBehaviour:
   - {fileID: 8431915662518892015}
   _reviveTime: 10
   _bonusTime: 10
-  _forceClear_1: 1
+  _forceClearKey: 0
 --- !u!1 &5810666194657943169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1842,7 +1842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
+  <ConfigurationOverride>k__BackingField: {fileID: 11400000, guid: 25a68df0ea2caa14d925e7cbf0597aa3, type: 2}
 --- !u!1 &6192492074774084803
 GameObject:
   m_ObjectHideFlags: 0
@@ -2482,7 +2482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
+  <ConfigurationOverride>k__BackingField: {fileID: 11400000, guid: 25a68df0ea2caa14d925e7cbf0597aa3, type: 2}
 --- !u!1 &8745377189848666748
 GameObject:
   m_ObjectHideFlags: 0

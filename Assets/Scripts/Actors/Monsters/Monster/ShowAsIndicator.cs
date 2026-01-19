@@ -10,7 +10,8 @@ namespace Actors.Monsters
             this GameObject indicator,
             IMonsterInternal owner,
             float height = 0.3f,
-            float showTime = 0.5f)
+            float showTime = 0.5f,
+            float scale = 1f)
         {
             indicator.transform.SetParent(owner.transform);
             indicator.transform.position = new Vector2
@@ -18,12 +19,12 @@ namespace Actors.Monsters
                 x = owner.transform.position.x,
                 y = owner.Collider.bounds.max.y + height
             };
+            indicator.transform.localScale *= scale;
 
             if (indicator.TryGetComponent<SpriteSizeHandler>(out var ssh))
                 ssh.Initialize(owner.Configuration, true);
 
             Object.Destroy(indicator, showTime);
-
             return indicator;
         }
 

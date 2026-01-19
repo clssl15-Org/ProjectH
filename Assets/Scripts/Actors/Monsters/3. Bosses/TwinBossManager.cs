@@ -13,8 +13,7 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private GameObject[] _bosses;
         [SerializeField] private float _reviveTime = 10f;
         [SerializeField] private float _bonusTime = 5f;
-        [Tooltip("1 키를 누르면 해당 페이즈를 자동으로 넘어갑니다.")]
-        [SerializeField] private bool _forceClear_1 = false;
+        [SerializeField] private KeyCode _forceClearKey = KeyCode.None;
 
         private bool _isPending;
         private bool _isCleared;
@@ -44,7 +43,7 @@ namespace Actors.Monsters.Bosses
 
         private void Update()
         {
-            if (_forceClear_1 && Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(_forceClearKey))
             {
                 TwinBossClear();
                 return;
