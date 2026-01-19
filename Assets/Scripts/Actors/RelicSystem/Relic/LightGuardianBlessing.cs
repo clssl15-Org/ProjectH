@@ -1,18 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rules;
+using Actors.PlayerSystem;
 
-public class LightGuardianBlessing : MonoBehaviour
+public class LightGuardianBlessing : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    private PlayerHealth playerHealth;
+    public override void OnAcquire()
     {
-        
+        OnReinforcedAcquire();
+
+        playerHealth = RelicManager.Instance.player.GetComponent<PlayerHealth>();
+        GameEvents.OnMonsterDied += OnPlayerHeal;
+    }
+    public override void OnLose()
+    {
+        GameEvents.OnMonsterDied -= OnPlayerHeal;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPlayerHeal()
     {
-        
+        playerHealth.HealByPercent(value);
     }
 }
