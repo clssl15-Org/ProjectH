@@ -19,12 +19,14 @@ namespace Actors.PlayerSystem
         private void Awake()
         {
             if (!playerHealth)
-                playerHealth = this.transform.root.GetComponentInChildren<PlayerHealth>();
+                playerHealth = FindAnyObjectByType<PlayerHealth>();
 
             player = GetComponent<Player>();
         }
         private void Start()
         {
+            if (!playerHealth)
+                playerHealth = FindAnyObjectByType<PlayerHealth>();
             //AddFirstSkill();
             //AddSecondSkill();
             //AddThirdSkill();

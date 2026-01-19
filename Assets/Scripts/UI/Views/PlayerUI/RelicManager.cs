@@ -29,7 +29,7 @@ namespace UI.PlayerView
         {
             var relicUI = Instantiate(_relicPrefab);
 
-            relicUI.Initialize(id, _relicSprites[id]);
+            relicUI.Initialize(id, _relicSprites[id-1]);
             relicUI.GetComponent<RectTransform>().SetParent(_transform);
 
             _relics.Add(relicUI);

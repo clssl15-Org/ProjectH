@@ -15,7 +15,8 @@ namespace Actors.PlayerSystem
             get => skillManager.SelectedSkillIndex;
         }
 
-        public PlayerStatsSO playerStats;
+        public PlayerStatsSO originStats;
+        public PlayerStats playerStats;
         public bool Invincible
         {
             get => invincible;
@@ -67,6 +68,7 @@ namespace Actors.PlayerSystem
         
         private void Awake()
         {
+            playerStats = originStats.CreateRuntimeStats();
             playerHealth = GetComponent<PlayerHealth>();
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
 

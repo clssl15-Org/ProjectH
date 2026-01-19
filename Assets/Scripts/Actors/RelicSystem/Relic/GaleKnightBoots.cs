@@ -14,15 +14,16 @@ public class GaleKnightBoots : Relic
 
 
         cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
-        cooldownTimer.StartCooldown(value, Time.deltaTime);
+        cooldownTimer.StartCooldown(value * 60, Time.deltaTime);
     }
     private void Update()
     {
         if (!cooldownTimer || !cooldownTimer.IsOnCooldown)
         {
-            OnLose();
+            RelicManager.Instance.RemoveRelic(data.RelicNumber);
         }
     }
+
     public override void OnLose()
     {
         RelicManager.Instance.player.playerStats.moveSpeedMultiplier -= value;

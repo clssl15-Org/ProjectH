@@ -23,5 +23,29 @@ namespace Actors.PlayerSystem
         public float skillPowerMultiplier = 1f;
         public float skillCooldownMultiplier = 1f;
         public float ultimateCooldownMultiplier = 1f;
+
+        public PlayerStats CreateRuntimeStats()
+        {
+            return new PlayerStats
+            {
+                maxHealth = this.maxHealth,
+                attackPower = this.attackPower,
+                moveSpeed = this.moveSpeed,
+                maxDashCount = this.maxDashCount,
+                maxJumpCount = this.maxJumpCount,
+                canJumpAfterDash = this.canJumpAfterDash,
+
+                additionalMaxHealth = this.additionalMaxHealth,
+                additionalAttackPower = this.additionalAttackPower,
+                additionalMoveSpeed = this.additionalMoveSpeed,
+
+                maxHeathMultiplier = this.maxHeathMultiplier,
+                attackPowerMultiplier = this.attackPowerMultiplier,
+                moveSpeedMultiplier = this.moveSpeedMultiplier,
+                skillPowerMultiplier = this.skillPowerMultiplier,
+                skillCooldownMultiplier = this.skillCooldownMultiplier,
+                ultimateCooldownMultiplier = this.ultimateCooldownMultiplier
+            };
+        }
     }
 }

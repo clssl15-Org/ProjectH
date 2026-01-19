@@ -21,7 +21,18 @@ public class RelicManager : MonoBehaviour
     private Dictionary<int, List<GameObject>> _ownedRelics = new Dictionary<int, List<GameObject>>();
     public IReadOnlyDictionary<int, List<GameObject>> OwnedRelics => _ownedRelics;
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        // --- DontDestroyOnLoad 및 싱글톤 중복 방지 로직 ---
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // 이미 존재한다면 새로 생성된 객체 삭제
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // 씬 전환 시 파괴 방지
+    }
 
     private void Start()
     {
@@ -92,5 +103,56 @@ public class RelicManager : MonoBehaviour
         }
 
         RelicAcquired?.Invoke(key);
+    }
+
+    // --- 유물 제거 ---
+    public void RemoveRelic(int key)
+    {
+        // 1. 소유 여부 확인
+        if (!_ownedRelics.ContainsKey(key) || _ownedRelics[key].Count == 0)
+        {
+            Debug.LogWarning($"제거하려는 유물(Key: {key})을 플레이어가 소유하고 있지 않습니다.");
+            return;
+        }
+
+        // 2. 가장 최근에 추가된 유물 객체 가져오기 (리스트의 마지막 요소)
+        List<GameObject> relicList = _ownedRelics[key];
+        GameObject relicToRemove = relicList[relicList.Count - 1];
+
+        // 3. 유물 효과 해제 호출
+        Relic relicScript = relicToRemove.GetComponent<Relic>();
+        if (relicScript != null)
+        {
+            relicScript.OnLose(); // 유물 상실 시 발동할 로직 (스탯 감소 등)
+        }
+
+        // 4. 리스트에서 제거 및 실제 객체 파괴
+        relicList.RemoveAt(relicList.Count - 1);
+        Destroy(relicToRemove);
+
+        // 5. 만약 해당 종류의 유물이 더 이상 없다면 키 삭제
+        if (relicList.Count == 0)
+        {
+            _ownedRelics.Remove(key);
+        }
+
+        Debug.Log($"유물(Key: {key}) 제거 완료.");
+    }
+
+
+    private void OnEnable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        // 씬이 바뀌면 새로운 플레이어 오브젝트를 자동으로 할당
+        //player = FindObjectOfType<Player>();
     }
 }

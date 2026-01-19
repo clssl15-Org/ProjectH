@@ -241,7 +241,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 027efc0da2840cc4481466b3f6862580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 11400000, guid: 067b2a6e5c394bb46b587f772c37c729, type: 2}
+  originStats: {fileID: 11400000, guid: 067b2a6e5c394bb46b587f772c37c729, type: 2}
+  playerStats:
+    maxHealth: 0
+    attackPower: 0
+    moveSpeed: 0
+    maxDashCount: 0
+    maxJumpCount: 0
+    canJumpAfterDash: 0
+    additionalMaxHealth: 0
+    additionalAttackPower: 0
+    additionalMoveSpeed: 0
+    maxHeathMultiplier: 0
+    attackPowerMultiplier: 0
+    moveSpeedMultiplier: 0
+    skillPowerMultiplier: 0
+    skillCooldownMultiplier: 0
+    ultimateCooldownMultiplier: 0
   StatesGO: {fileID: 7853671354700595129}
 --- !u!114 &8290243547340287660
 MonoBehaviour:
