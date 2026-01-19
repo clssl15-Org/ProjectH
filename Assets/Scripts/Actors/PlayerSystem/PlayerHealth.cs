@@ -29,6 +29,7 @@ namespace Actors.PlayerSystem
 
         public event Action Damaged;
         public event Action Healed;
+        public event Action OnSieldBreak;
 
         private void Awake()
         {
@@ -42,6 +43,18 @@ namespace Actors.PlayerSystem
         {
             if (Player.Invincible)
                 return;
+
+            if (Player.sieldCount > 0)
+            {
+                Player.sieldCount--;
+                Debug.Log("Shielded! Remaining Shields: " + Player.sieldCount);
+
+                if (Player.sieldCount == 0)
+                {
+                    OnSieldBreak?.Invoke();
+                }
+                return;
+            }
 
             currentHealth -= damage;
             currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);

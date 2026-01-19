@@ -22,6 +22,8 @@ namespace Actors.PlayerSystem
             set => invincible = value;
         }
 
+        public int sieldCount { get; set; } = 0;
+
         public bool IsAlive => playerHealth.IsAlive;
 
         public int MaxHP => playerHealth.MaxHealth;
@@ -45,7 +47,7 @@ namespace Actors.PlayerSystem
 
         float a = 1;
 
-
+        public PlayerHealth PlayerHealth => playerHealth;
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;

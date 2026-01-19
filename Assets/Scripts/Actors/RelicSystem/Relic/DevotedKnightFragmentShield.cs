@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DevotedKnightFragmentShield : MonoBehaviour
+public class DevotedKnightFragmentShield : Relic
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnAcquire()
     {
-        
+        OnReinforcedAcquire();
+
+        RelicManager.Instance.player.sieldCount += (int)value;
+        RelicManager.Instance.player.PlayerHealth.OnSieldBreak += OnLose;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnLose()
     {
-        
+        // 가지고 있는 렐릭 리스트에서 제거
     }
 }
