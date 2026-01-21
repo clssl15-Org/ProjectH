@@ -1,7 +1,6 @@
 using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
-using Game.Management;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,11 +17,11 @@ namespace Game
     public sealed class GameManager : GameContext
     {
         // Forwardings
-        public override int BgmVolume => _volumeManager.BgmVolume;
-        public override int SfxVolume => _volumeManager.SfxVolume;
+        public override int BgmVolume => _soundManager.BgmVolume;
+        public override int SfxVolume => _soundManager.SfxVolume;
 
         // Properties
-        private VolumeManager _volumeManager;
+        private Management.SoundManager _soundManager;
 
         // Internal
         [SerializeField] private bool _injectSelfOnSceneLoading = true;
@@ -50,8 +49,8 @@ namespace Game
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            _volumeManager = new VolumeManager();
-            BlackboxHandle.Of(this).Exert(_volumeManager, "VolumeManager를 초기화했습니다.");
+            _soundManager = new Management.SoundManager();
+            BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager 초기화했습니다.");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _)
@@ -93,14 +92,14 @@ namespace Game
             using var _ = BlackboxHandle.Of(this).ExertedScope(context,
                 $"Bgm 볼륨을 {volume}으로 설정합니다.");
 
-            _volumeManager.SetBgmVolume(volume);
+            _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).ExertedScope(context,
                 $"Sfx 볼륨을 {volume}으로 설정합니다.");
 
-            _volumeManager.SetSfxVolume(volume);
+            _soundManager.SetSfxVolume(volume);
         }
 
         public override void Quit(object context = null)

@@ -52,8 +52,8 @@ namespace UI
         private RelicDataSO _relic;
         private EnableWithAnimation _enabler;
 
-        private bool _initialized = false;
-        private bool _operating = false;
+        private bool _isInitialized = false;
+        private bool _isOperating = false;
         private bool _isDestroyed = false;
 
         #region Interfaces
@@ -76,8 +76,8 @@ namespace UI
         private void Awake() => ((IStandaloneInitializable)this).StandaloneInitialize();
         void IStandaloneInitializable.StandaloneInitialize()
         {
-            if (_initialized) return;
-            _initialized = true;
+            if (_isInitialized) return;
+            _isInitialized = true;
 
             _toThrowCoinBtn.onClick.AddListener(ToThrowCoin);
             _closeBtn.onClick.AddListener(Close);
@@ -93,7 +93,7 @@ namespace UI
 
         private void OnRelicAcquiring(RelicDataSO relicInfo)
         {
-            if (_operating)
+            if (_isOperating)
             {
                 Debug.LogWarning(
                     $"{nameof(RelicAcquisitionUI)} 이미 선행 작업이 진행 중이므로 새로운 렐릭을 얻을 수 없습니다.",
@@ -101,7 +101,7 @@ namespace UI
 
                 return;
             }
-            _operating = true;
+            _isOperating = true;
 
             _relic = relicInfo;
 
@@ -188,7 +188,7 @@ namespace UI
             _timer = null;
 
             Disable();
-            _operating = false;
+            _isOperating = false;
         }
 
         public void Enable() => _enabler.Enable();

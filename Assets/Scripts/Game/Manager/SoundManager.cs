@@ -3,7 +3,7 @@ using BlackboxSystem;
 
 namespace Game.Management
 {
-    internal class VolumeManager
+    internal class SoundManager
     {
         public int BgmVolume { get; private set; } = 100;
         public int SfxVolume { get; private set; } = 100;

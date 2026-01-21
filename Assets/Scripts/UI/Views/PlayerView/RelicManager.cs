@@ -10,7 +10,6 @@ namespace UI.PlayerView
         [SerializeField] private RelicUI _relicPrefab;
         [SerializeField] private SealUI _sealPrefab;
         [SerializeField, Min(0)] private int _maxRelicCount = 10;
-        [SerializeField] private Sprite[] _relicSprites;
 
         private RectTransform _transform;
         private readonly List<RelicUI> _relics = new();
@@ -25,11 +24,11 @@ namespace UI.PlayerView
                 Destroy(child.gameObject);
         }
 
-        public void AddRelic(int id)
+        public void AddRelic(RelicDataSO relicData)
         {
             var relicUI = Instantiate(_relicPrefab);
 
-            relicUI.Initialize(id, _relicSprites[id]);
+            relicUI.Initialize(relicData);
             relicUI.GetComponent<RectTransform>().SetParent(_transform);
 
             _relics.Add(relicUI);

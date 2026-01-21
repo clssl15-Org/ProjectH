@@ -50,18 +50,18 @@ namespace UI
         private EnableWithAnimation _skillRouletteEnabler;
         private IDisposable _skillRouletteDeactivateTimer;
 
-        private bool _skillRulettelocked = false;
+        private bool _isSkillRulettelocked = false;
         private MonsterSystem.MonsterAnimationPlayer _skillAnimPlayer;
         private int _currentSelectedSkillIndex = 0;
 
-        private bool _awaked = false;
+        private bool _isAwaked = false;
 
 
         // Content
         private void Awake()
         {
-            if (_awaked) return;
-            _awaked = true;
+            if (_isAwaked) return;
+            _isAwaked = true;
 
             _transform = GetComponent<RectTransform>();
 
@@ -98,7 +98,16 @@ namespace UI
                     $"[{nameof(PlayerUI)}] {nameof(RelicManager.Instance)}이(가) 유효하지 않습니다.");
 
             foreach (var id in RelicManager.Instance.OwnedRelics.Keys)
-                _relicManager.AddRelic(id);
+            {
+                if (!RelicManager.Instance.TryGetRelicData(id, out var relicData))
+                {
+                    Debug.LogWarning(
+                        $"[{nameof(PlayerUI)}] Relic ID '{id}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾을 수 없습니다.");
+                    continue;
+                }
+
+                _relicManager.AddRelic(relicData);
+            }
 
             RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
             #endregion
@@ -190,8 +199,8 @@ namespace UI
 
         private void ApplyRandomSkillBuff()
         {
-            if (_skillRulettelocked) return;
-            _skillRulettelocked = true;
+            if (_isSkillRulettelocked) return;
+            _isSkillRulettelocked = true;
 
             // TODO: 이 부분 PlayerVM으로 옮기기
             var table = new (float weight, int index, float factor)[]
@@ -229,7 +238,7 @@ namespace UI
                     {
                         _skillRouletteEnabler.Disable();
                         _skillRoulette.clip = null;
-                        _skillRulettelocked = false;
+                        _isSkillRulettelocked = false;
 
                         _player.ApplyRandomSkillBuff(factor);
                     }

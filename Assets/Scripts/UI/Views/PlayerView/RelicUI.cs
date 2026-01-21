@@ -12,10 +12,10 @@ namespace UI.PlayerView
         private void Awake() =>
             _img = GetComponent<Image>();
 
-        public void Initialize(int id, Sprite sprite)
+        public void Initialize(RelicDataSO relicData)
         {
-            ID = id;
-            _img.sprite = sprite;
+            ID = relicData.RelicNumber;
+            _img.sprite = relicData.Icon;
         }
     }
 }

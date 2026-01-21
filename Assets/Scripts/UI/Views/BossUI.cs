@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class BossUI : MonoBehaviour, IView, IEnablable
+    public class BossUI : MonoBehaviour, IView, IStandaloneInitializable, IEnablable
     {
         [field: SerializeField] public bool DestoyOnMonsterDead { get; set; } = true;
         [SerializeField] private HealthBarUI _healthBar;
@@ -21,16 +21,18 @@ namespace UI
         Action IEnablable.OnDisabled => _disabled;
         #endregion
 
-        private bool _awaken = false;
+        private bool _isInitialized = false;
         private MonsterVM _boss;
         private Action _disabled = null;
 
 
         // Content
-        public void Awake()
+        private void Awake() => Initialize();
+        void IStandaloneInitializable.StandaloneInitialize() => Initialize();
+        public void Initialize()
         {
-            if (_awaken) return;
-            _awaken = true;
+            if (_isInitialized) return;
+            _isInitialized = true;
 
             if (!_healthBar)
                 throw new InvalidOperationException(
@@ -81,22 +83,22 @@ namespace UI
 
         public void Enable()
         {
-            Awake();
+            Initialize();
             _enabler.Enable();
         }
         public void Disable()
         {
-            Awake();
+            Initialize();
             _enabler.Disable();
         }
         public void SetToEnabled()
         {
-            Awake();
+            Initialize();
             _enabler.SetToEnabled();
         }
         public void SetToDisabled()
         {
-            Awake();
+            Initialize();
             _enabler.SetToDisabled();
         }
 

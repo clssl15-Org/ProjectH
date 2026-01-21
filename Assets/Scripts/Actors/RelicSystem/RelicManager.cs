@@ -15,7 +15,7 @@ public class RelicManager : MonoBehaviour
     [SerializeField] private List<GameObject> relicPrefabs;
 
     public event Action<RelicDataSO> RelicAcquiring;
-    public event Action<int> RelicAcquired;
+    public event Action<RelicDataSO> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
@@ -93,7 +93,14 @@ public class RelicManager : MonoBehaviour
 
         // 2. 데이터 가져오기 및 중복 체크
         RelicDataSO data = prefab.GetComponent<Relic>().Data;
-        if (!data.CanStack && ownedRelics.ContainsKey(key)) return;
+        if (!data.CanStack && ownedRelics.ContainsKey(key))
+        {
+            Debug.LogWarning(
+                $"입력 키 '{key}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾는 데 실패했습니다. " +
+                $"렐릭을 추가하지 않습니다.");
+
+            return;
+        }
 
         // 3. 프리팹 생성 및 설정
         GameObject relicObj = Instantiate(prefab, this.transform);
@@ -109,6 +116,6 @@ public class RelicManager : MonoBehaviour
             relicScript.OnAcquire();
         }
 
-        RelicAcquired?.Invoke(key);
+        RelicAcquired?.Invoke(data);
     }
 }
