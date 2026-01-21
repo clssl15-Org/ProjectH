@@ -15,7 +15,8 @@ public class RelicManager : MonoBehaviour
     [SerializeField] private List<GameObject> relicPrefabs;
 
     public event Action<RelicDataSO> RelicAcquiring;
-    public event Action<RelicDataSO> RelicAcquired;
+    //public event Action<RelicDataSO> RelicAcquired;
+    public event Action<(RelicDataSO, string)> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
