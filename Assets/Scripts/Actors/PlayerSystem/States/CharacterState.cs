@@ -28,7 +28,9 @@ namespace Actors.PlayerSystem
             CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
             Player = this.transform.root.GetComponentInChildren<Player>();
         }
-
+        protected virtual void Start()
+        {
+        }
         // This method runs once when the state has entered the state machine.
         public virtual void EnterBehaviour(float dt)
         {

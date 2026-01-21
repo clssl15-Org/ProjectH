@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e2f61d2441c7e4f91963a319147fa3, type: 3}
+  m_Name: 016_KnighthoodLastOathStoneSO
+  m_EditorClassIdentifier: 
+  relicNumber: 16
+  icon: {fileID: 21300000, guid: 20bf9f94b6007dd4db98a5aca543a72c, type: 3}
+  relicName: "\uAE30\uC0AC\uB2E8\uC758 \uCD5C\uD6C4 \uB9F9\uC138\uC11D"
+  description: "- \uD6C4\uC758 \uC804\uD22C\uC5D0\uC11C \uAE30\uC0AC\uB2E8\uC774
+    \uB0A8\uAE34 \uB9F9\uC138\uAC00 \uC751\uCD95\uB41C \uC11D\uD310. \uBAB0\uB9B4\uC218\uB85D
+    \uB354\uC6B1 \uAC15\uD574\uC9C0\uB294 \uACB0\uC758\uB97C \uBD80\uC5EC\uD55C\uB2E4.\r\n-
+    \uAE30\uBCF8 : \uCCB4\uB825 20% \uC774\uD558\uC77C \uB54C \uACF5\uACA9\uB825
+    \uC99D\uAC00\r\n- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uCCB4\uB825 30%(+10%)
+    \uC774\uD558\uC77C \uB54C \uACF5\uACA9\uB825 \uC99D\uAC00\r\n- \uB204\uC801 : 
+    ex)  \uCCB4\uB825 50%(+40%) \uC774\uD558\uC77C \uB54C \uACF5\uACA9\uB825 \uC99D\uAC00"
+  baseValue: 0.2
+  coinFlipValue: 0.3
+  canStack: 1

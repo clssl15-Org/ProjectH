@@ -241,9 +241,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 027efc0da2840cc4481466b3f6862580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 11400000, guid: 067b2a6e5c394bb46b587f772c37c729, type: 2}
+  originStats: {fileID: 11400000, guid: 067b2a6e5c394bb46b587f772c37c729, type: 2}
+  playerStats:
+    maxHealth: 0
+    attackPower: 0
+    moveSpeed: 0
+    maxDashCount: 0
+    maxJumpCount: 0
+    canJumpAfterDash: 0
+    additionalMaxHealth: 0
+    additionalAttackPower: 0
+    additionalMoveSpeed: 0
+    maxHeathMultiplier: 0
+    attackPowerMultiplier: 0
+    moveSpeedMultiplier: 0
+    skillPowerMultiplier: 0
+    skillCooldownMultiplier: 0
+    ultimateCooldownMultiplier: 0
   StatesGO: {fileID: 7853671354700595129}
-  RouletteDamageMultiplier: 1
 --- !u!114 &8290243547340287660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: {fileID: 8290243547340287660}
   damageAmount: 10
+  relicKey: 0
 --- !u!114 &5175911527829833112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,7 +626,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7853671354700595129}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50659c5dc7cb9774999d5581a063c492, type: 3}
   m_Name: 
@@ -676,7 +692,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7853671354700595129}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da871b8370680f54a902a5778400b732, type: 3}
   m_Name: 
@@ -740,7 +756,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7853671354700595129}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fb15a9cc3f4a4a42b2f2c56e77eb289, type: 3}
   m_Name: 
@@ -768,8 +784,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeAnimatorController: {fileID: 9100000, guid: e14c16b1ff1d2c14da1d86eabdc15423, type: 2}
-  skillDuration: 1.1
-  launchDelay: 0.7
+  nextRuntimeAnimatorController: {fileID: 9100000, guid: f164b92de8ab8d24d9957d3ef1bcc6e4, type: 2}
+  skillDuration: 0.6
+  cancleTime: 0.8
   auraEffectDestroyTiming: 0.4
   auraEffectPrefab: {fileID: 976038449137352176, guid: 0df22f801db488743867823e25b25368, type: 3}
   projectilePrefab: {fileID: 1611088545178221253, guid: c65d8d0525c3aa847b65f93a12605006, type: 3}

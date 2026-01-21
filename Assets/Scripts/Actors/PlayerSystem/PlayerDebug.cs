@@ -12,21 +12,25 @@ namespace Actors.PlayerSystem
         private PlayerHealth playerHealth;
         [SerializeField]
         int damageAmount = 10;
+        [SerializeField]
+        private int relicKey;
         private Player player;
 
         private void Awake()
         {
             if (!playerHealth)
-                playerHealth = this.transform.root.GetComponentInChildren<PlayerHealth>();
+                playerHealth = FindAnyObjectByType<PlayerHealth>();
 
             player = GetComponent<Player>();
         }
         private void Start()
         {
-            AddFirstSkill();
-            AddSecondSkill();
-            AddThirdSkill();
-            AddUltimate();
+            if (!playerHealth)
+                playerHealth = FindAnyObjectByType<PlayerHealth>();
+            //AddFirstSkill();
+            //AddSecondSkill();
+            //AddThirdSkill();
+            //AddUltimate();
         }
         public void DamageToPlayer()
         {
@@ -56,9 +60,9 @@ namespace Actors.PlayerSystem
             Ultimate ultimateSkill = player.StatesGO.GetComponent<Ultimate>();
             player.SkillManager.AddUltimateSkill(ultimateSkill);
         }
-        public void AddRelic(int key)
+        public void AddRelic()
         {
-            RelicManager.Instance.AddRelic(key, false);
+            RelicManager.Instance.AddRelic(relicKey, false);
         }
     }
 
@@ -96,7 +100,7 @@ namespace Actors.PlayerSystem
             }
             if (GUILayout.Button("Add Relic"))
             {
-                script.AddRelic(5);
+                script.AddRelic();
             }
         }
     }

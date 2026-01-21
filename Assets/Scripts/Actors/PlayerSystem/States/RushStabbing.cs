@@ -57,6 +57,8 @@ namespace Actors.PlayerSystem
         private float attackAngle = 0f;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
+        private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 
         private float skillCursor = 0;
 
@@ -70,6 +72,8 @@ namespace Actors.PlayerSystem
         private CooldownTiemr cooldownTimer;
 
         public static Action onEskill;
+
+        public float BonusMultiplier { get; set; } = 1f;
 
         private void TakeDamageToEnemy()
         {
@@ -91,7 +95,7 @@ namespace Actors.PlayerSystem
                 //    continue;
 
                 //hitEnemies.Add(damageableObject);
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier);
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier);
                 damageableObject.TakeDamage(amount);
                 print(amount);
                 onEskill?.Invoke();
@@ -141,7 +145,7 @@ namespace Actors.PlayerSystem
 
             ResetSkill();
             cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
-            cooldownTimer.StartCooldown(cooldownDuration, dt);
+            cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
         public override void UpdateBehaviour(float dt)
         {

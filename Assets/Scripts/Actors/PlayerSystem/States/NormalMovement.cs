@@ -17,8 +17,11 @@ namespace Actors.PlayerSystem
 
         protected string planarSpeedParameter = "PlanarSpeed";
 
+        public float speedMultiplier => Player.playerStats.moveSpeedMultiplier;
+
         public override void CheckExitTransition()
         {
+            if (!Player.canMove) return;
             if (CharacterActions.jump.Started && CharacterActions.movement.Down)
             {
                 CharacterStateController.EnqueueTransition<FallingJump>();
@@ -39,10 +42,6 @@ namespace Actors.PlayerSystem
             {
                 CharacterStateController.EnqueueTransition<Dash>();
             }
-            if (CharacterActions.changeSkill.Started)
-            {
-                Player.ChangeSkill(-1);
-            }
 
             if (CharacterActions.useSkill.Started)
             {
@@ -54,21 +53,29 @@ namespace Actors.PlayerSystem
                 Player.RangedAttack();
             }
 
-            if (CharacterActions.ultimate.Started)
+            if (CharacterActions.ultimate.Started && CharacterActor.IsGrounded)
             {
                 Player.UseUltimate();
             }
         }
         public override void UpdateBehaviour(float dt)
         {
+            if (!Player.canMove) return;
+
             ProcessVelocity(dt);
 
             CharacterActor.ChangeFlipX(CharacterStateController.InputMovementReference);
+
+            if (CharacterActor.IsGrounded)
+            {
+                Player.CurrentDashCount = Player.MaxDashCount;
+                Player.CurrentJumpCount = Player.MaxJumpCount;
+            }
         }
 
         private void ProcessVelocity(float dt)
         {
-            Vector3 targetVelocity = CharacterStateController.InputMovementReference * moveSpeed;
+            Vector3 targetVelocity = CharacterStateController.InputMovementReference * moveSpeed * speedMultiplier;
             float targetSpeedX = targetVelocity.x;
 
             // Reduce speed when overlapping with monsters

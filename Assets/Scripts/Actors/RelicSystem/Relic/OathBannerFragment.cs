@@ -1,0 +1,21 @@
+using System.Collections;
+using System.Collections.Generic;
+using Actors.PlayerSystem;
+using UnityEngine;
+
+public class OathBannerFragment : Relic
+{
+    public override void OnAcquire()
+    {
+        OnReinforcedAcquire();
+
+        Player player = RelicManager.Instance.player;
+        Skill3 firstSkill = player.StatesGO.GetComponent<Skill3>();
+        firstSkill.BonusMultiplier += value;
+        player.SkillManager.AddSkill(firstSkill);
+    }
+    public override void OnLose()
+    {
+
+    }
+}

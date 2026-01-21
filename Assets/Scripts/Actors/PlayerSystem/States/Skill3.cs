@@ -39,11 +39,14 @@ namespace Actors.PlayerSystem
         private float invincibleEndTime = 0.5f;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
+        private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 
         private float skillCursor = 0f;
 
         private bool isDone = true;
         private bool isProjectileLaunched = true;
+        public float BonusMultiplier { get; set; } = 1f;
 
         private CooldownTiemr cooldownTimer;
 
@@ -64,7 +67,7 @@ namespace Actors.PlayerSystem
         {
             ResetSkill();
             cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
-            cooldownTimer.StartCooldown(cooldownDuration, dt);
+            cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
 
         public override void UpdateBehaviour(float dt)
@@ -94,7 +97,7 @@ namespace Actors.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<Skill3ProjectileMovement>().ResetProjectile(dt, direction);
-                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier));
+                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier));
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

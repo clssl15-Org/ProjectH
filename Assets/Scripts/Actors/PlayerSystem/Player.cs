@@ -15,19 +15,28 @@ namespace Actors.PlayerSystem
             get => skillManager.SelectedSkillIndex;
         }
 
-        public PlayerStatsSO playerStats;
+        public PlayerStatsSO originStats;
+        public PlayerStats playerStats;
         public bool Invincible
         {
             get => invincible;
             set => invincible = value;
         }
 
+        public int sieldCount { get; set; } = 0;
+
         public bool IsAlive => playerHealth.IsAlive;
 
         public int MaxHP => playerHealth.MaxHealth;
         public int AttackPower => (int)((playerStats.attackPower + playerStats.additionalAttackPower) * playerStats.attackPowerMultiplier);
 
+        public bool canMove { get; set; } = true;
         public int CurrentPlatform { get; private set; } = -1;
+
+        public int MaxDashCount => playerStats.maxDashCount;
+        public int CurrentDashCount { get; set; }
+        public int MaxJumpCount => playerStats.maxJumpCount;
+        public int CurrentJumpCount { get; set; }
 
         public GameObject StatesGO;
 
@@ -41,7 +50,7 @@ namespace Actors.PlayerSystem
 
         float a = 1;
 
-
+        public PlayerHealth PlayerHealth => playerHealth;
 
         public event Action<PlayerCondition> ConditionChanged;
         public event Action Destroyed;
@@ -54,6 +63,7 @@ namespace Actors.PlayerSystem
         
         private void Awake()
         {
+            playerStats = originStats.CreateRuntimeStats();
             playerHealth = GetComponent<PlayerHealth>();
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
 

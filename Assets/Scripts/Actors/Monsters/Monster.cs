@@ -5,6 +5,7 @@ using Actors.Monsters.Brains;
 using Infrastructure;
 using UnityEngine;
 using World;
+using Rules;
 
 namespace Actors.Monsters
 {
@@ -341,6 +342,7 @@ namespace Actors.Monsters
             notification.Complete();
 
             Destroyed?.Invoke();
+            GameEvents.OnMonsterDied?.Invoke();
 
             ConditionChanged = null;
             Destroyed = null;

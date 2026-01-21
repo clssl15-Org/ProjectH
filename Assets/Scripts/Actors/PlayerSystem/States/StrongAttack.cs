@@ -48,6 +48,7 @@ namespace Actors.PlayerSystem
         private bool isHitBoxEnabled = false;
 
         private float attackPower => Player.playerStats.attackPower;
+        private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 
         private CooldownTiemr cooldownTimer;
 
@@ -57,6 +58,9 @@ namespace Actors.PlayerSystem
 
         private bool isDone = true;
         private bool isDamageApplied = false;
+
+        public float BonusMultiplier { get; set; } = 1f;
+        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
 
         private void TakeDamageToEnemy()
         {
@@ -74,7 +78,7 @@ namespace Actors.PlayerSystem
                 if (hitCollider.CompareTag("Player"))
                     continue;
 
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier); ;
+                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier); ;
                 damageableObject.TakeDamage(amount);
             }
         }
@@ -125,7 +129,7 @@ namespace Actors.PlayerSystem
             ResetSkill();
             UpdateAttackParameters();
             cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
-            cooldownTimer.StartCooldown(cooldownDuration, dt);
+            cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
 
         public override void UpdateBehaviour(float dt)

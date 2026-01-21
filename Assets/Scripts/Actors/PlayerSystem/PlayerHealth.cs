@@ -29,11 +29,18 @@ namespace Actors.PlayerSystem
 
         public event Action Damaged;
         public event Action Healed;
+        public event Action OnSieldBreak;
+        public event Action OnMaxHealthChanged;
 
         private void Awake()
         {
             Player = this.transform.root.GetComponentInChildren<Player>();
             CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
+            
+        }
+
+        private void Start()
+        {
             currentHealth = MaxHealth;
         }
 
@@ -42,6 +49,18 @@ namespace Actors.PlayerSystem
         {
             if (Player.Invincible)
                 return;
+
+            if (Player.sieldCount > 0)
+            {
+                Player.sieldCount--;
+                Debug.Log("Shielded! Remaining Shields: " + Player.sieldCount);
+
+                if (Player.sieldCount == 0)
+                {
+                    OnSieldBreak?.Invoke();
+                }
+                return;
+            }
 
             currentHealth -= damage;
             currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
@@ -68,6 +87,15 @@ namespace Actors.PlayerSystem
             currentHealth += (int) (MaxHealth * percent);
             currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
             Healed?.Invoke();
+        }
+
+        /// <summary>
+        /// 최대체력을 변경했을 때 호출
+        /// 현재는 최대체력은 프로퍼티에서 계산되므로 이벤트만 발생
+        /// </summary>
+        public void ChangeMaxHealth()
+        {
+            OnMaxHealthChanged?.Invoke();
         }
 
         private void Die()
