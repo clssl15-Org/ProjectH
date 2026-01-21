@@ -15,11 +15,11 @@ public class RelicManager : MonoBehaviour
     [SerializeField] private List<GameObject> relicPrefabs;
 
     public event Action<RelicDataSO> RelicAcquiring;
-    public event Action<int> RelicAcquired;
+    public event Action<RelicDataSO> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
-    private Dictionary<int, List<GameObject>> _ownedRelics = new Dictionary<int, List<GameObject>>();
-    public IReadOnlyDictionary<int, List<GameObject>> OwnedRelics => _ownedRelics;
+    private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
+    public IReadOnlyDictionary<int, List<GameObject>> OwnedRelics => ownedRelics;
 
     private void Awake()
     {
@@ -42,13 +42,24 @@ public class RelicManager : MonoBehaviour
         }
     }
 
+    // --- Id로 유물 데이터 가져오기 ---
+    public bool TryGetRelicData(int id, out RelicDataSO relicData)
+    {
+        relicData = relicPrefabs
+            .Select(p => p.GetComponent<Relic>().Data)
+            .FirstOrDefault(rd => rd.RelicNumber == id);
+
+        return relicData != null;
+    }
+
+
     // --- 랜덤으로 유물 데이터 뽑기 (UI용) ---
     public void GetRandomRelicData()
     {
         // 프리팹에 붙어있는 Relic 컴포넌트에서 데이터를 읽어와 필터링합니다.
         var available = relicPrefabs
             .Select(p => p.GetComponent<Relic>().Data)
-            .Where(d => d.CanStack || !_ownedRelics.ContainsKey(d.RelicNumber))
+            .Where(d => d.CanStack || !ownedRelics.ContainsKey(d.RelicNumber))
             .ToList();
 
         if (available.Count == 0) return;
@@ -81,42 +92,56 @@ public class RelicManager : MonoBehaviour
         // 1. 레지스트리에서 해당 번호를 가진 프리팹 찾기
         GameObject prefab = relicPrefabs.Find(p => p.GetComponent<Relic>().Data.RelicNumber == key);
 
-        if (prefab == null) return;
+        // 예외 안내 메세지 추가
+        if (prefab == null)
+        {
+            Debug.LogWarning(
+                $"입력 키 '{key}'에 해당하는 {nameof(Relic)}을(를) 찾는 데 실패했습니다. " +
+                $"렐릭을 추가하지 않습니다.");
+
+            return;
+        }
 
         // 2. 데이터 가져오기 및 중복 체크
         RelicDataSO data = prefab.GetComponent<Relic>().Data;
-        if (!data.CanStack && _ownedRelics.ContainsKey(key)) return;
+        if (!data.CanStack && ownedRelics.ContainsKey(key))
+        {
+            Debug.LogWarning(
+                $"입력 키 '{key}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾는 데 실패했습니다. " +
+                $"렐릭을 추가하지 않습니다.");
+
+            return;
+        }
 
         // 3. 프리팹 생성 및 설정
         GameObject relicObj = Instantiate(prefab, this.transform);
-        Relic relicScript = relicObj.GetComponent<Relic>();
-        relicScript.isReinforced = isReinforced;
 
-        if (relicScript != null)
+        if (relicObj.TryGetComponent<Relic>(out var relicScript))
         {
-            if (!_ownedRelics.ContainsKey(key)) _ownedRelics[key] = new List<GameObject>();
-            _ownedRelics[key].Add(relicObj);
+            relicScript.isReinforced = isReinforced;
+
+            if (!ownedRelics.ContainsKey(key)) ownedRelics[key] = new List<GameObject>();
+            ownedRelics[key].Add(relicObj);
 
             // 획득 효과 발동
             relicScript.OnAcquire();
-            player.OnRelicAcquired(key);
         }
 
-        RelicAcquired?.Invoke(key);
+        RelicAcquired?.Invoke(data);
     }
 
     // --- 유물 제거 ---
     public void RemoveRelic(int key)
     {
         // 1. 소유 여부 확인
-        if (!_ownedRelics.ContainsKey(key) || _ownedRelics[key].Count == 0)
+        if (!ownedRelics.ContainsKey(key) || ownedRelics[key].Count == 0)
         {
             Debug.LogWarning($"제거하려는 유물(Key: {key})을 플레이어가 소유하고 있지 않습니다.");
             return;
         }
 
         // 2. 가장 최근에 추가된 유물 객체 가져오기 (리스트의 마지막 요소)
-        List<GameObject> relicList = _ownedRelics[key];
+        List<GameObject> relicList = ownedRelics[key];
         GameObject relicToRemove = relicList[relicList.Count - 1];
 
         // 3. 유물 효과 해제 호출
@@ -133,7 +158,7 @@ public class RelicManager : MonoBehaviour
         // 5. 만약 해당 종류의 유물이 더 이상 없다면 키 삭제
         if (relicList.Count == 0)
         {
-            _ownedRelics.Remove(key);
+            ownedRelics.Remove(key);
         }
 
         Debug.Log($"유물(Key: {key}) 제거 완료.");

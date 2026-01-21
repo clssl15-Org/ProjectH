@@ -37,6 +37,7 @@ namespace Actors.PlayerSystem
         public int CurrentDashCount { get; set; }
         public int MaxJumpCount => playerStats.maxJumpCount;
         public int CurrentJumpCount { get; set; }
+        public bool AllowInput { get; set; }
 
         public GameObject StatesGO;
 

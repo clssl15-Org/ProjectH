@@ -29,14 +29,13 @@ namespace Actors
     }
 
 
-    public interface IPlayer : IInjectable<PlatformManager>
+    public interface IPlayer : IInjectable<PlatformManager>, IInputControllable
     {
         // ---------- Properties ----------
         int HP { get; }
         bool IsAlive { get; }
 
         event Action<PlayerCondition> ConditionChanged;
-        event Action Destroyed;
 
         int MaxHP { get; }
         int CurrentPlatform { get; }

@@ -1,194 +1,194 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Actors;
-using Actors.Monsters;
-using Infrastructure;
-using Rules;
-using UnityEngine;
-using World;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using Actors;
+//using Actors.Monsters;
+//using Infrastructure;
+//using Rules;
+//using UnityEngine;
+//using World;
 
-[RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(PlatformDetector), typeof(TriggerContactHandler))]
-public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
-{
-    // Front
-    public int CurrentPlatform { get; private set; }
+//[RequireComponent(typeof(SpriteRenderer))]
+//[RequireComponent(typeof(PlatformDetector), typeof(TriggerContactHandler))]
+//public class TestPlayer : MonoBehaviour, IPlayer, IDamageable
+//{
+//    // Front
+//    public int CurrentPlatform { get; private set; }
 
-    public int HP
-    {
-        get => _hp;
-        private set => _hp = Mathf.Clamp(value, 0, MaxHP);
-    } int _hp;
-    [field: Header("Properties")]
-    [field: SerializeField] public int MaxHP { get; set; } = 10;
-    [field: SerializeField] public bool IsAlive { get; set; } = true;
-    [field: SerializeField] public int SelectedSkillIndex { get; set; } = 0;
+//    public int HP
+//    {
+//        get => _hp;
+//        private set => _hp = Mathf.Clamp(value, 0, MaxHP);
+//    } int _hp;
+//    [field: Header("Properties")]
+//    [field: SerializeField] public int MaxHP { get; set; } = 10;
+//    [field: SerializeField] public bool IsAlive { get; set; } = true;
+//    [field: SerializeField] public int SelectedSkillIndex { get; set; } = 0;
 
-    public event Action<PlayerCondition> ConditionChanged;
-    public event Action Destroyed;
+//    public event Action<PlayerCondition> ConditionChanged;
+//    public event Action Destroyed;
 
-    // Property
-    [SerializeField] private PlatformManager _platformManager;
-    [SerializeField] private TriggerContactHandler _contactHandler;
+//    // Property
+//    [SerializeField] private PlatformManager _platformManager;
+//    [SerializeField] private TriggerContactHandler _contactHandler;
 
-    // Inspector
-    [Header("Input")]
-    public bool StandaloneInput = true;
-    [Header("Move")]
-    [Min(0)] public float MoveSpeed = 1f;
-    [Header("Attack")]
-    [Min(0)] public int AttackPower;
-    [Header("Knockback")]
-    public bool UseKnockback = true;
-    public bool UseDefaultKnockbackForce = true;
-    public float KnockbackForce = 0;
-    [field: Header("Settings")]
-    [field: SerializeField] public bool DestroyOnDead { get; set; } = false;
-    [Header("State Disply")]
-    [SerializeField, TextArea(3, 10)]
-    private string _stateDisplay = string.Empty;
-    private readonly StringBuilder _sb = new();
+//    // Inspector
+//    [Header("Input")]
+//    public bool StandaloneInput = true;
+//    [Header("Move")]
+//    [Min(0)] public float MoveSpeed = 1f;
+//    [Header("Attack")]
+//    [Min(0)] public int AttackPower;
+//    [Header("Knockback")]
+//    public bool UseKnockback = true;
+//    public bool UseDefaultKnockbackForce = true;
+//    public float KnockbackForce = 0;
+//    [field: Header("Settings")]
+//    [field: SerializeField] public bool DestroyOnDead { get; set; } = false;
+//    [Header("State Disply")]
+//    [SerializeField, TextArea(3, 10)]
+//    private string _stateDisplay = string.Empty;
+//    private readonly StringBuilder _sb = new();
 
-    // Internal
-    private SpriteRenderer _renderer;
-    private PlatformDetector _platformDetector;
+//    // Internal
+//    private SpriteRenderer _renderer;
+//    private PlatformDetector _platformDetector;
 
-    private IDisposable _damageTimer;
+//    private IDisposable _damageTimer;
 
 
-    // Content
-    private void Awake()
-    {
-        if (!_platformManager)
-            throw new InvalidOperationException(
-                $"[{nameof(TestPlayer)}] {nameof(_platformManager)} 컴포넌트가 유효하지 않습니다.");
+//    // Content
+//    private void Awake()
+//    {
+//        if (!_platformManager)
+//            throw new InvalidOperationException(
+//                $"[{nameof(TestPlayer)}] {nameof(_platformManager)} 컴포넌트가 유효하지 않습니다.");
 
-        _renderer = GetComponent<SpriteRenderer>();
+//        _renderer = GetComponent<SpriteRenderer>();
 
-        _platformDetector = GetComponent<PlatformDetector>();
-        _platformDetector.SetPlatformManager(_platformManager);
+//        _platformDetector = GetComponent<PlatformDetector>();
+//        _platformDetector.SetPlatformManager(_platformManager);
 
-        _contactHandler = GetComponent<TriggerContactHandler>();
-        _contactHandler.TargetTags = new[] { "Monster" };
+//        _contactHandler = GetComponent<TriggerContactHandler>();
+//        _contactHandler.TargetTags = new[] { "Monster" };
 
-        _hp = MaxHP;
-    }
+//        _hp = MaxHP;
+//    }
 
-    void IInjectable<PlatformManager>.Inject(PlatformManager platformManager)
-    {
-        _platformManager = platformManager;
-        _platformDetector?.SetPlatformManager(platformManager);
-    }
+//    void IInjectable<PlatformManager>.Inject(PlatformManager platformManager)
+//    {
+//        _platformManager = platformManager;
+//        _platformDetector?.SetPlatformManager(platformManager);
+//    }
 
-    private void Update()
-    {
-        #region Move
-        var speed = MoveSpeed * Time.deltaTime;
+//    private void Update()
+//    {
+//        #region Move
+//        var speed = MoveSpeed * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.W))
-            transform.position += speed * Vector3.up;
-        if (Input.GetKey(KeyCode.A))
-            transform.position += speed * Vector3.left;
-        if (Input.GetKey(KeyCode.S))
-            transform.position += speed * Vector3.down;
-        if (Input.GetKey(KeyCode.D))
-            transform.position += speed * Vector3.right;
-        #endregion
+//        if (Input.GetKey(KeyCode.W))
+//            transform.position += speed * Vector3.up;
+//        if (Input.GetKey(KeyCode.A))
+//            transform.position += speed * Vector3.left;
+//        if (Input.GetKey(KeyCode.S))
+//            transform.position += speed * Vector3.down;
+//        if (Input.GetKey(KeyCode.D))
+//            transform.position += speed * Vector3.right;
+//        #endregion
 
-        if (_platformDetector.TryGetCurrentPlatformId(out var platformId))
-            CurrentPlatform = platformId;
-        else
-            CurrentPlatform = -1;
+//        if (_platformDetector.TryGetCurrentPlatformId(out var platformId))
+//            CurrentPlatform = platformId;
+//        else
+//            CurrentPlatform = -1;
 
-        if (StandaloneInput && Input.GetKeyDown(KeyCode.Space))
-            DefaultAttack();
+//        if (StandaloneInput && Input.GetKeyDown(KeyCode.Space))
+//            DefaultAttack();
 
-        UpdateStateDisplay();
-    }
+//        UpdateStateDisplay();
+//    }
 
-    public void DefaultAttack()
-    {
-        if (!_contactHandler || _contactHandler.Collisions.Count == 0)
-            return;
+//    public void DefaultAttack()
+//    {
+//        if (!_contactHandler || _contactHandler.Collisions.Count == 0)
+//            return;
 
-        HashSet<MonsterDamageReceiver> interacted = null;
+//        HashSet<MonsterDamageReceiver> interacted = null;
 
-        foreach (var contact in _contactHandler.Collisions)
-        {
-            var receiver = contact.gameObject
-                .GetComponentInChildren<MonsterDamageReceiver>();
+//        foreach (var contact in _contactHandler.Collisions)
+//        {
+//            var receiver = contact.gameObject
+//                .GetComponentInChildren<MonsterDamageReceiver>();
 
-            if (!receiver
-                || !receiver.Interactable
-                || (interacted?.Contains(receiver) ?? false))
-                continue;
+//            if (!receiver
+//                || !receiver.Interactable
+//                || (interacted?.Contains(receiver) ?? false))
+//                continue;
 
-            if (UseKnockback)
-            {
-                var dir = (receiver.transform.position - transform.position).ToDirection();
-                receiver.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
-            }
-            else
-            {
-                receiver.TakeDamage(AttackPower);
-            }
+//            if (UseKnockback)
+//            {
+//                var dir = (receiver.transform.position - transform.position).ToDirection();
+//                receiver.TakeDamage(AttackPower, dir, UseDefaultKnockbackForce ? null : KnockbackForce);
+//            }
+//            else
+//            {
+//                receiver.TakeDamage(AttackPower);
+//            }
 
-            interacted ??= new();
-            interacted.Add(receiver);
-        }
-    }
+//            interacted ??= new();
+//            interacted.Add(receiver);
+//        }
+//    }
 
-    public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
-    public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
-    {
-        print("Damaged: " + damage);
-        _damageTimer?.Dispose();
+//    public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
+//    public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
+//    {
+//        print("Damaged: " + damage);
+//        _damageTimer?.Dispose();
 
-        HP -= damage;
-        if (HP <= 0)
-        {
-            if (DestroyOnDead)
-            {
-                if (gameObject)
-                    Destroy(gameObject);
-            }
+//        HP -= damage;
+//        if (HP <= 0)
+//        {
+//            if (DestroyOnDead)
+//            {
+//                if (gameObject)
+//                    Destroy(gameObject);
+//            }
 
-            return;
-        }
+//            return;
+//        }
 
-        _renderer.material.color = Color.red;
-        _damageTimer = new Timer(0.1f, succeeded =>
-        {
-            if (succeeded)
-                _renderer.material.color = Color.white;
-        });
+//        _renderer.material.color = Color.red;
+//        _damageTimer = new Timer(0.1f, succeeded =>
+//        {
+//            if (succeeded)
+//                _renderer.material.color = Color.white;
+//        });
 
-        ConditionChanged?.Invoke(PlayerCondition.Damage);
-    }
+//        ConditionChanged?.Invoke(PlayerCondition.Damage);
+//    }
 
-    public void ChangeSkill(int skillIndex) => Debug.Log($"선택된 스킬: {skillIndex}");
-    public void ApplyRandomSkillBuff(float factor) => Debug.Log($"스킬 랜덤 배수 적용: {factor}");
+//    public void ChangeSkill(int skillIndex) => Debug.Log($"선택된 스킬: {skillIndex}");
+//    public void ApplyRandomSkillBuff(float factor) => Debug.Log($"스킬 랜덤 배수 적용: {factor}");
 
-    public void RangedAttack() { }
-    public void UseSkill() { }
-    public void UseUltimate() { }
+//    public void RangedAttack() { }
+//    public void UseSkill() { }
+//    public void UseUltimate() { }
 
-    private void UpdateStateDisplay()
-    {
-        _sb.Clear();
-        _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
+//    private void UpdateStateDisplay()
+//    {
+//        _sb.Clear();
+//        _sb.AppendLine($"Current Platform: {(CurrentPlatform >= 0 ? CurrentPlatform : "null")}");
 
-        _stateDisplay = _sb.ToString();
-    }
+//        _stateDisplay = _sb.ToString();
+//    }
 
-    private void OnDestroy()
-    {
-        _damageTimer?.Dispose();
-        _damageTimer = null;
+//    private void OnDestroy()
+//    {
+//        _damageTimer?.Dispose();
+//        _damageTimer = null;
 
-        IsAlive = false;
-        Destroyed?.Invoke();
-    }
-}
+//        IsAlive = false;
+//        Destroyed?.Invoke();
+//    }
+//}

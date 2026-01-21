@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using BlackboxSystem;
 using Infrastructure;
@@ -14,7 +14,7 @@ namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
     public class RelicAcquisitionUI : MonoBehaviour,
-        IView, IStandaloneInitializable, IEnablable, IInputController
+        IView, IEnablable, IInputController
     {
         [Header("Main")]
         [SerializeField] private Animation _openAnimation;
@@ -73,8 +73,7 @@ namespace UI
         #endregion
 
 
-        private void Awake() => ((IStandaloneInitializable)this).StandaloneInitialize();
-        void IStandaloneInitializable.StandaloneInitialize()
+        private void Start()
         {
             if (_isInitialized) return;
             _isInitialized = true;
@@ -96,7 +95,7 @@ namespace UI
             if (_isOperating)
             {
                 Debug.LogWarning(
-                    $"{nameof(RelicAcquisitionUI)} ÀÌ¹Ì ¼±Çà ÀÛ¾÷ÀÌ ÁøÇà ÁßÀÌ¹Ç·Î »õ·Î¿î ·¼¸¯À» ¾òÀ» ¼ö ¾ø½À´Ï´Ù.",
+                    $"{nameof(RelicAcquisitionUI)} ì´ë¯¸ ì„ í–‰ ì‘ì—…ì´ ì§„í–‰ ì¤‘ì´ë¯€ë¡œ ìƒˆë¡œìš´ ë ë¦­ì„ ì–»ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
                     this);
 
                 return;
@@ -123,15 +122,15 @@ namespace UI
             _coinImage.SetActive(true);
             _coinAnimation.SetActive(false);
 
-            _coinDescripton.text = $"°­È­ ¼º°ø ½Ã ´É·ÂÄ¡ {_relic.BaseValue} ¡æ {_relic.CoinFlipValue}";
+            _coinDescripton.text = $"ê°•í™” ì„±ê³µ ì‹œ ëŠ¥ë ¥ì¹˜ {_relic.BaseValue} â†’ {_relic.CoinFlipValue}";
 
             var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
-            print($"°­È­ ¿©ºÎ: {(reinforced ? "¼º°ø" : "½ÇÆĞ")}");
+            print($"ê°•í™” ì—¬ë¶€: {(reinforced ? "ì„±ê³µ" : "ì‹¤íŒ¨")}");
 
             var clip = _videoClips.FirstOrDefault(v => v.IsFront == reinforced);
             if (!clip.Video || !clip.AlphaMask)
                 throw new InvalidOperationException(
-                    $"[{nameof(RelicAcquisitionUI)}] {nameof(clip)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
+                    $"[{nameof(RelicAcquisitionUI)}] {nameof(clip)}ì´(ê°€) ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 
             _coinRawVideoPlayer.playbackSpeed = 0f;
             _coinMaskVideoPlayer.playbackSpeed = 0f;
@@ -166,7 +165,7 @@ namespace UI
                         RelicManager.Instance.AddRelic(_relic.RelicNumber, reinforced);
 
                         _relicDescrption.text =
-                            $"°­È­ {(reinforced ? "¼º°ø" : "½ÇÆĞ")}\n\n" +
+                            $"ê°•í™” {(reinforced ? "ì„±ê³µ" : "ì‹¤íŒ¨")}\n\n" +
                             _relicDescrption.text;
 
                         _toThrowCoinBtn.gameObject.SetActive(false);
