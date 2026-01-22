@@ -2,69 +2,82 @@ using System;
 
 namespace BlackboxSystem
 {
-    internal enum InteractionType
+    internal enum ScopeType
     {
         None,
-        Self,
-        Exerting,
-        Exerted
+        Open,
+        Close
     }
 
     internal readonly struct LogData
     {
+        public Blackbox Owner { get; }
+
         public string Message { get; }
         public DateTime Time { get; }
 
-        public int ScopeIndex { get; }
         public int ScopeDepth { get; }
         public string MethodName { get; }
+        public ScopeType ScopeType { get; }
 
-        public Blackbox InteractionPeer { get; }
-        public InteractionType Interaction { get; }
+        public Blackbox ExertedBy { get; }
+        public Blackbox ExertingTo { get; }
+        public long InteractionId { get; }
 
-        public LogData(int scopeIndex, int scopeDepth, string methodName, string message) : this(scopeIndex, scopeDepth, methodName, null, InteractionType.None, message) { }
-        public LogData(int scopeIndex, int scopeDepth, string methodName, Blackbox interactionPeer, InteractionType interaction, string message)
+        private const int IndentCount = 4;
+
+        public LogData(Blackbox owner, int scopeDepth, string message, string methodName, ScopeType scopeType, long interactionId = -1)
+            : this(owner, scopeDepth, message, methodName, scopeType, null, null, interactionId) { }
+        public LogData(Blackbox owner, int scopeDepth, string message, string methodName, ScopeType scopeType, Blackbox exertedBy, Blackbox exertingTo, long interactionId = -1)
         {
+            Owner = owner;
+
             Message = message;
             Time = DateTime.UtcNow;
 
-            ScopeIndex = scopeIndex;
-            ScopeDepth = scopeDepth;
+            ScopeDepth = scopeDepth >= 0 ? scopeDepth : 0;
             MethodName = methodName;
+            ScopeType = scopeType;
 
-            InteractionPeer = interactionPeer;
-            Interaction = interaction;
+            ExertedBy = exertedBy;
+            ExertingTo = exertingTo;
+            InteractionId = interactionId;
         }
 
         public override string ToString()
         {
             var time = Time.ToString("HH:mm:ss.fffffff");
-            var indent = new string(' ', Math.Max(0, (ScopeDepth - 1) * 2));
+            var indent = "";
+            for (int i = 0; i < Math.Max(0, ScopeDepth); i++)
+                indent += $"|{new string(' ', Math.Max(0, IndentCount - 1))}";
 
             var prefix = $"[{time}] {indent}";
-            if (!string.IsNullOrEmpty(MethodName)) prefix += $"[{MethodName}] ";
 
-            if (InteractionPeer != null)
-            {
-#pragma warning disable IDE0066
-                switch (Interaction)
+            if (!string.IsNullOrEmpty(MethodName))
+                prefix += ScopeType switch
                 {
-                    case InteractionType.Self:
-                        return $"{prefix}[this <-> this] {Message}";
+                    ScopeType.Open => $"<{MethodName}> ",
+                    ScopeType.Close => $"</{MethodName}> ",
+                    _ => $"[{MethodName}] ",
+                };
 
-                    case InteractionType.Exerting:
-                        return $"{prefix}[this -> #{InteractionPeer.Id}: {InteractionPeer.OwnerString}] {Message}";
-
-                    case InteractionType.Exerted:
-                        return $"{prefix}[#{InteractionPeer.Id}: {InteractionPeer.OwnerString} -> this] {Message}";
-
-                    default:
-                        return $"{prefix}[#{InteractionPeer.Id}: {InteractionPeer.OwnerString}] {Message}";
-                }
-#pragma warning restore
-            }
+            if (ExertedBy != null && ExertingTo != null)
+                return $"{prefix}{Message} (#{ExertedBy.Id}: {ExertedBy.OwnerString} {Arrow(true, InteractionId)} #{Owner.Id}: this {Arrow(true, InteractionId)} #{ExertingTo.Id}: {ExertingTo.OwnerString} )";
+            if (ExertedBy != null)
+                return $"{prefix}{Message} (#{Owner.Id}: this {Arrow(false, InteractionId)} #{ExertedBy.Id}: {ExertedBy.OwnerString})";
+            if (ExertingTo != null)
+                return $"{prefix}{Message} (#{Owner.Id}: this {Arrow(true, InteractionId)} #{ExertingTo.Id}: {ExertingTo.OwnerString})";
 
             return $"{prefix}{Message}";
+
+
+            string Arrow(bool right, long interactionId)
+            {
+                if (interactionId >= 0)
+                    return right ? $"-[{interactionId}]->" : $"<-[{interactionId}]-";
+                else
+                    return right ? "->" : "<-";
+            }
         }
     }
 }

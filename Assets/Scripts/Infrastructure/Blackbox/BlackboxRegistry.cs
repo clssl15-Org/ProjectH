@@ -38,6 +38,7 @@ namespace BlackboxSystem
             lock (_lock)
             {
                 _subjects = new();
+                Infrastructure.ForceResetRuntimeState();
                 Blackbox.ForceResetStaticProperties();
             }
         }

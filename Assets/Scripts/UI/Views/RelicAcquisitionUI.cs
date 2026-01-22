@@ -226,7 +226,7 @@ namespace UI
                 {
                     GUILayout.Space(8);
                     if (GUILayout.Button("Export Log"))
-                        BlackboxHandle.Of(target).Export(openLog: true);
+                        BlackboxHandle.Of(target).Export(openLogOption: OpenLogOption.Open);
                 }
             }
         }

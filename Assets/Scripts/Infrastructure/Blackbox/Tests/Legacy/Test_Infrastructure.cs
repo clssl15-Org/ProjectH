@@ -8,7 +8,7 @@ namespace BlackboxSystem.Tests
         [TearDown]
         public void TearDown()
         {
-            Infrastructure.Logger = null;
+            Infrastructure.NormalLogger = null;
         }
 
 
@@ -33,7 +33,7 @@ namespace BlackboxSystem.Tests
             var recorded = string.Empty;
 
             var logger = (Action<string>)(msg => recorded = msg);
-            Infrastructure.Logger = logger;
+            Infrastructure.NormalLogger = logger;
 
             // Act
             var succeed = Infrastructure.Log(message);

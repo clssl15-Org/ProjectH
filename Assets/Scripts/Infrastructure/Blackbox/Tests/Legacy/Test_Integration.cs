@@ -14,7 +14,8 @@ namespace BlackboxSystem.Tests
         public void SetUp()
         {
             BlackboxHandle.ForceReset();
-            BlackboxHandle.Logger = Debug.Log;
+            BlackboxHandle.NormalLogger = Debug.Log;
+            BlackboxHandle.WarningLogger = Debug.LogWarning;
 
             // Reference Lost(Owner WeakReference) 시나리오를 위해 필요
             Infrastructure.StrongReference = false;
@@ -26,7 +27,8 @@ namespace BlackboxSystem.Tests
         [TearDown]
         public void TearDown()
         {
-            BlackboxHandle.Logger = null;
+            BlackboxHandle.NormalLogger = null;
+            BlackboxHandle.WarningLogger = null;
         }
 
 
@@ -83,8 +85,10 @@ namespace BlackboxSystem.Tests
             // Cleanup (원하시면 유지해도 됩니다)
             if (!OpenLog)
             {
+#pragma warning disable CS0162
                 try { Directory.Delete(dir, recursive: true); }
                 catch { /* ignore */ }
+#pragma warning restore
             }
         }
 

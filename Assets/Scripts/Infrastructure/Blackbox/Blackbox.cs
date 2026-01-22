@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 
 namespace BlackboxSystem
@@ -14,12 +11,8 @@ namespace BlackboxSystem
         {
             get
             {
-                if (_strongOwner != null)
-                    return _strongOwner;
-
-                if (_weakOwner?.TryGetTarget(out var owner) ?? false)
-                    return owner;
-
+                if (_strongOwner != null) return _strongOwner;
+                if (_weakOwner?.TryGetTarget(out var owner) ?? false) return owner;
                 return null;
             }
         }
@@ -28,15 +21,25 @@ namespace BlackboxSystem
         {
             get
             {
-                var owner = Owner;
+                try
+                {
+                    var owner = Owner;
 
-                if (owner != null)
-                    return owner.ToString();
+                    if (owner != null)
+                        return owner.ToString() ?? "null";
 
-                if (!string.IsNullOrEmpty(_ownerDescription))
-                    return $"{_ownerDescription} (Reference Lost)";
+                    if (!string.IsNullOrEmpty(_ownerDescription))
+                        return $"{_ownerDescription} (Reference Lost)";
 
-                return "null";
+                    return "null";
+                }
+                catch (Exception ex)
+                {
+                    if (!string.IsNullOrEmpty(_ownerDescription))
+                        return $"{_ownerDescription} (Fallback: {ex.GetType().Name})";
+
+                    return "null";
+                }
             }
         }
 
@@ -45,19 +48,17 @@ namespace BlackboxSystem
 
         // Internal
         private static long GlobalId = -1;
-        private const int MaxTryCount = 10;
+        private static long GlobalInteractionId = -1;
 
-        private object _strongOwner;
-        private WeakReference<object> _weakOwner;
-        private string _ownerDescription;
+        private readonly object _strongOwner;
+        private readonly WeakReference<object> _weakOwner;
+        private readonly string _ownerDescription;
 
-        private int _scopeIndex = 0;
         private Stack<string> _scopeStack = new();
 
-        private ConcurrentQueue<LogData> _logs = new();
-
-        private long _logCount = 0;
-        private static int _printed = 0;
+        private readonly LogData[] _logBuffer;
+        private readonly int _bufferSize;
+        private long _currentLogIndex = -1;
 
 
         // Content
@@ -73,179 +74,217 @@ namespace BlackboxSystem
 
             Id = Interlocked.Increment(ref GlobalId);
             _ownerDescription = owner.ToString();
+
+            _bufferSize = Infrastructure.MaxLogCount;
+            _logBuffer = new LogData[_bufferSize];
         }
 
         public static void ForceResetStaticProperties()
         {
             GlobalId = -1;
-            _printed = 0;
+            GlobalInteractionId = -1;
         }
 
+        #region Write and Exert
         public string Write(string message, string methodName)
         {
-            if (string.IsNullOrWhiteSpace(message))
-                throw new ArgumentException("[Blackbox] The message cannot be empty", nameof(message));
+            if (string.IsNullOrWhiteSpace(message)) return message;
+            if (Infrastructure.IsPrinted) return message;
 
-            if (Volatile.Read(ref _printed) != 0)
-                return message;
-
-            EnqueueLog(new LogData(_scopeIndex, _scopeStack.Count, methodName, message));
+            EnqueueLog(message, methodName, ScopeType.None);
             return message;
         }
+
         public DisposableHandle WriteScope(string message, string methodName)
         {
-            if (_scopeStack.Count == 0) _scopeIndex++;
-            _scopeStack.Push(methodName);
+            var scopeMesage = message;
+            if (TryMergeScope(out var exertedBy, out var prevMessage, out var prevInteractionId))
+            {
+                if (!string.IsNullOrEmpty(prevMessage))
+                    scopeMesage = $"{message} <- {prevMessage}";
+            }
 
-            Write(message, methodName);
-            return new DisposableHandle(this);
+            WriteInternal(scopeMesage, methodName, ScopeType.Open, exertedBy, prevInteractionId);
+
+            _scopeStack.Push(methodName);
+            return new DisposableHandle(this, message);
         }
 
-        public string Exert(Blackbox other, string message, string methodName)
+        private string WriteInternal(string message, string methodName, ScopeType scopeType, Blackbox exertedBy = null, long interactionId = -1)
         {
-            if (other == null)
-                throw new ArgumentNullException(nameof(other), $"[Blackbox] {nameof(other)} cannot be null");
+            if (string.IsNullOrWhiteSpace(message)) return message;
+            if (Infrastructure.IsPrinted) return message;
 
-            if (string.IsNullOrWhiteSpace(message))
-                throw new ArgumentException("[Blackbox] The message cannot be empty", nameof(message));
+            EnqueueLog(message, methodName, scopeType, exertedBy, interactionId: interactionId);
+            return message;
+        }
 
-            if (Volatile.Read(ref _printed) != 0)
-                return message;
 
-            if (other != this)
+        public string Exert(Blackbox other, string message, string methodName) =>
+            ExertInternal(other, message, methodName, ScopeType.None);
+
+        public DisposableHandle ExertScope(Blackbox other, string message, string methodName)
+        {
+            var scopeMesage = message;
+            if (TryMergeScope(out var exertedBy, out var prevMessage, out var prevInteractionId))
             {
-                other.EnqueueLog(new LogData(other._scopeIndex, 0, methodName, this, InteractionType.Exerted, message));
-                EnqueueLog(new LogData(_scopeIndex, _scopeStack.Count, methodName, other, InteractionType.Exerting, message));
+                if (!string.IsNullOrEmpty(prevMessage))
+                    scopeMesage = $"{message} <- {prevMessage}";
+            }
+
+            ExertInternal(other, scopeMesage, methodName, ScopeType.Open, exertedBy, prevInteractionId);
+
+            _scopeStack.Push(methodName);
+            return new DisposableHandle(this, message);
+        }
+
+        private string ExertInternal(Blackbox exertingTo, string message, string methodName, ScopeType scopeType, Blackbox exertedBy = null, long interactionId = -1)
+        {
+            if (exertingTo == null)
+                throw new ArgumentNullException(nameof(exertingTo));
+
+            if (string.IsNullOrWhiteSpace(message)) return message;
+            if (Infrastructure.IsPrinted) return message;
+
+            if (exertingTo != this)
+            {
+                var currentInteractionId = interactionId >= 0 ? interactionId : Interlocked.Increment(ref GlobalInteractionId);
+
+                exertingTo.EnqueueLog(message, methodName, ScopeType.None, this, null, currentInteractionId);
+                EnqueueLog(message, methodName, scopeType, exertedBy, exertingTo, currentInteractionId);
             }
             else
-                EnqueueLog(new LogData(_scopeIndex, _scopeStack.Count, methodName, this, InteractionType.Self, message));
+                EnqueueLog(message, methodName, scopeType, exertedBy ?? this, this);
 
             return message;
         }
-        public DisposableHandle ExertScope(Blackbox other, string message, string methodName)
-        {
-            if (_scopeStack.Count == 0) _scopeIndex++;
-            _scopeStack.Push(methodName);
 
-            Exert(other, message, methodName);
-            return new DisposableHandle(this);
-        }
-
-        /// <summary>
-        /// This method is called by DisposableHandle.
-        /// </summary>
-        internal void PopScope()
+        public DisposableHandle ExertedScope(Blackbox exertedBy, string message, string methodName)
         {
-            if (_scopeStack.Count > 0)
+            long interactionId = -1;
+            string finalMessage = message;
+
+            if (TryMergeScope(exertedBy, out var prevMessage, out var prevInteractionId))
             {
-                _scopeStack.Pop();
-                _scopeIndex++;
+                interactionId = prevInteractionId;
+
+                if (!string.IsNullOrEmpty(prevMessage))
+                    finalMessage = $"{message} <- {prevMessage}";
             }
-        }
 
-        private void EnqueueLog(LogData logData)
-        {
-            if (Volatile.Read(ref _printed) != 0)
-                return;
-
-            _logs.Enqueue(logData);
-            Interlocked.Increment(ref _logCount);
-
-            if (Infrastructure.MaxLogCount < 0)
-                return;
-
-            int tryDequeueCount = 0;
-            while (Volatile.Read(ref _logCount) > Infrastructure.MaxLogCount)
+            if (interactionId == -1)
             {
-                if (_logs.TryDequeue(out _))
+                interactionId = Interlocked.Increment(ref GlobalInteractionId);
+
+                if (exertedBy != null && exertedBy != this)
                 {
-                    tryDequeueCount = 0;
-                    Interlocked.Decrement(ref _logCount);
+                    exertedBy.EnqueueLog(message, methodName, ScopeType.None, null, this, interactionId);
+                }
+            }
+
+            EnqueueLog(finalMessage, methodName, ScopeType.Open, exertedBy, null, interactionId);
+
+            _scopeStack.Push(methodName);
+            return new DisposableHandle(this, message);
+
+
+            bool TryMergeScope(Blackbox expectedExertedBy, out string prevMessage, out long prevInteractionId)
+            {
+                var currentIndex = Interlocked.Read(ref _currentLogIndex);
+
+                var prevIndex = (currentIndex + _bufferSize) % _bufferSize;
+                var prev = _logBuffer[prevIndex];
+
+                if (prev.Time != default
+                    && prev.ScopeType == ScopeType.None
+                    && prev.ExertedBy != null
+                    && prev.ExertedBy != this
+                    && (expectedExertedBy == null || prev.ExertedBy == expectedExertedBy))
+                {
+                    prevMessage = prev.Message;
+                    prevInteractionId = prev.InteractionId;
+
+                    Interlocked.Decrement(ref _currentLogIndex);
+                    return true;
                 }
                 else
                 {
-                    tryDequeueCount++;
-                    if (tryDequeueCount > MaxTryCount) break;
+                    prevMessage = default;
+                    prevInteractionId = -1;
+                    return false;
                 }
             }
         }
 
-        public bool TryPrint(int recursionDepth, out string result)
+        private bool TryMergeScope(out Blackbox exertedBy, out string prevMessage, out long prevInteractionId)
         {
-            if (Interlocked.CompareExchange(ref _printed, 1, 0) != 0)
+            var currentIndex = Interlocked.Read(ref _currentLogIndex);
+
+            var prevIndex = (currentIndex + _bufferSize) % _bufferSize;
+            var prev = _logBuffer[prevIndex];
+
+            if (prev.Time != default
+                && prev.ScopeType == ScopeType.None // Avoid duplicate merge
+                && prev.ExertedBy != null
+                && prev.ExertedBy != this)
             {
-                result = string.Empty;
+                exertedBy = prev.ExertedBy;
+                prevMessage = prev.Message;
+                prevInteractionId = prev.InteractionId;
+
+                Interlocked.Decrement(ref _currentLogIndex);
+                return true;
+            }
+            else
+            {
+                exertedBy = null;
+                prevMessage = default;
+                prevInteractionId = -1;
                 return false;
             }
-
-            result = Print(
-                currentDepth: 0,
-                maxDepth: recursionDepth >= 0 ? recursionDepth : int.MaxValue,
-                before: null,
-                history: new());
-
-            return true;
         }
-        private string Print(int currentDepth, int maxDepth, Blackbox before, HashSet<Blackbox> history)
+
+        internal void CloseScope(string scopeMessage)
         {
-            history.Add(this);
+            if (_scopeStack.Count == 0)
+                return;
 
-            var sb = new StringBuilder();
-            var relatedBlackboxes = new HashSet<Blackbox>();
+            var scope = _scopeStack.Pop();
+            EnqueueLog(scopeMessage, scope, ScopeType.Close);
+        }
+        #endregion
 
-            var description = $"Depth = {currentDepth}";
-            if (before != null) description += $" | From = #{before.Id}: {before.OwnerString}";
 
-            sb.AppendLine($"========= #{Id}: {OwnerString} ({description}) =========");
+        private void EnqueueLog(string message, string methodName, ScopeType scopeType, Blackbox exertedBy = null, Blackbox exertingTo = null, long interactionId = -1) =>
+            EnqueueLog(new LogData(this, _scopeStack.Count, message, methodName, scopeType, exertedBy, exertingTo, interactionId));
+        private void EnqueueLog(LogData logData)
+        {
+            if (Infrastructure.IsPrinted)
+                return;
 
-            int currentScopeIndex = 0;
+            var currentIndex = Interlocked.Increment(ref _currentLogIndex);
+            var bufferIndex = currentIndex % _bufferSize;
 
-            int tryDequeueCount = 0;
-            while (tryDequeueCount < MaxTryCount)
+            _logBuffer[bufferIndex] = logData;
+        }
+
+
+        public IEnumerable<LogData> GetLogs()
+        {
+            var capturedIndex = Interlocked.Read(ref _currentLogIndex);
+            var count = Math.Min(capturedIndex + 1, _bufferSize);
+            var start = Math.Max(0, capturedIndex - _bufferSize + 1);
+
+            for (var i = 0; i < count; i++)
             {
-                if (_logs.TryDequeue(out var logData))
-                {
-                    if (logData.InteractionPeer != null && logData.InteractionPeer != this)
-                        relatedBlackboxes.Add(logData.InteractionPeer);
-
-                    if (currentScopeIndex != logData.ScopeIndex)
-                    {
-                        sb.AppendLine(new string('-', 30));
-                        currentScopeIndex = logData.ScopeIndex;
-                    }
-
-                    var message = logData.ToString();
-
-                    if (logData.Interaction == InteractionType.Exerted)
-                        message = $"-> {message}";
-
-                    sb.AppendLine(message);
-                    tryDequeueCount = 0;
-                }
-                else
-                    tryDequeueCount++;
+                var targetIndex = start + i;
+                int bufferIndex = (int)(targetIndex % _bufferSize);
+                
+                var log = _logBuffer[bufferIndex];
+                if (log.Time == default) continue; 
+                
+                yield return log;
             }
-
-            if (currentScopeIndex != 0)
-                sb.AppendLine(new string('-', 30));
-
-
-            if (currentDepth < maxDepth)
-            {
-                currentDepth += 1;
-
-                foreach (var subject in relatedBlackboxes)
-                {
-                    if (history.Contains(subject))
-                        continue;
-
-                    sb.AppendLine();
-                    sb.AppendLine();
-                    sb.Append(subject.Print(currentDepth, maxDepth, this, history));
-                }
-            }
-
-            return sb.ToString();
         }
     }
 }

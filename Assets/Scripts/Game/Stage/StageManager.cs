@@ -218,7 +218,7 @@ namespace Game.Stage
                 && Input.GetKey(KeyCode.RightAlt))
             {
                 _logExported = true;
-                BlackboxHandle.Of(this).Export(openLog: true);
+                BlackboxHandle.Of(this).Export(openLogOption: OpenLogOption.Open);
             }
         }
 #endif

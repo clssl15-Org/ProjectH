@@ -1,48 +1,52 @@
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
+using BlackboxSystem.Exporters;
 
 namespace BlackboxSystem
 {
+    public enum ExportFormat
+    {
+        Txt,
+        Html,
+        BasedOnSettings,
+    }
+
+    public enum FullExportOption
+    {
+        Focused,
+        Full,
+        BasedOnSettings,
+    }
+
+    public enum OpenLogOption
+    {
+        Open,
+        Never,
+        BasedOnSettings,
+    }
+
     public readonly struct BlackboxHandle
     {
         // Forwarders
-        public object Owner
-        {
-            get
-            {
-                ThrowIfInvalid();
-                return _blackbox.Owner;
-            }
-        }
-        public string OwnerString
-        {
-            get
-            {
-                ThrowIfInvalid();
-                return _blackbox.OwnerString;
-            }
-        }
-        public long Id
-        {
-            get
-            {
-                ThrowIfInvalid();
-                return _blackbox.Id;
-            }
-        }
+        public object Owner { get { ThrowIfInvalid(); return _blackbox.Owner; } }
+        public string OwnerString { get { ThrowIfInvalid(); return _blackbox.OwnerString; } }
+        public long Id { get { ThrowIfInvalid(); return _blackbox.Id; } }
 
         public static string LogDirectory
         {
             get => Infrastructure.LogDirectory;
             set => Infrastructure.LogDirectory = value;
         }
-        public static Action<string> Logger
+        public static Action<string> NormalLogger
         {
-            get => Infrastructure.Logger;
-            set => Infrastructure.Logger = value;
+            get => Infrastructure.NormalLogger;
+            set => Infrastructure.NormalLogger = value;
+        }
+        public static Action<string> WarningLogger
+        {
+            get => Infrastructure.WarningLogger;
+            set => Infrastructure.WarningLogger = value;
         }
         public static int MaxLogCount
         {
@@ -55,22 +59,40 @@ namespace BlackboxSystem
             set => Infrastructure.StrongReference = value;
         }
 
+        public static ExportFormat ExportFormat
+        {
+            get => Infrastructure.ExportFormat;
+            set => Infrastructure.ExportFormat = value;
+        }
+        public static FullExportOption FullExportOption
+        {
+            get => Infrastructure.FullExportOption;
+            set => Infrastructure.FullExportOption = value;
+        }
+        public static OpenLogOption OpenLogOption
+        {
+            get => Infrastructure.OpenLogOption;
+            set => Infrastructure.OpenLogOption = value;
+        }
 
+
+        // Internal
         private readonly Blackbox _blackbox;
+
+
+        // Content
         internal BlackboxHandle(Blackbox blackbox) => _blackbox = blackbox;
 
         #region Static Methods
-        public static void Initialize(Action<string> logger, bool strongReference = false) => Initialize(string.Empty, logger, strongReference);
-        public static void Initialize(string logDirectory, Action<string> logger, bool strongReference = false)
+        public static void Initialize(Action<string> logger, bool strongReference = false) => Initialize(string.Empty, logger, logger, strongReference);
+        public static void Initialize(string logDirectory, Action<string> logger, bool strongReference = false) => Initialize(logDirectory, logger, logger, strongReference);
+        public static void Initialize(string logDirectory, Action<string> normalLogger, Action<string> warningLogger, bool strongReference = false)
         {
-            LogDirectory = logDirectory;
-            Logger = logger;
-            StrongReference = strongReference;
+            Infrastructure.LogDirectory = logDirectory;
+            Infrastructure.NormalLogger = normalLogger;
+            Infrastructure.WarningLogger = warningLogger;
+            Infrastructure.StrongReference = strongReference;
         }
-
-        /// <summary>
-        /// Force to initialize all black box records. This feature should be used carefully.
-        /// </summary>
         public static void ForceReset() => BlackboxRegistry.ForceReset();
         #endregion
 
@@ -79,137 +101,97 @@ namespace BlackboxSystem
 #if !BLACKBOX
             return default;
 #else
-            if (subject == null)
-                throw new ArgumentNullException(
-                    nameof(subject), "[BlackboxHandle] Subject cannot be null");
-
+            if (subject == null) throw new ArgumentNullException(nameof(subject));
             return new BlackboxHandle(BlackboxRegistry.GetBlackbox(subject));
 #endif
         }
 
         public string Write(object message, [CallerMemberName] string methodName = "")
         {
-            var messageStr = message?.ToString() ?? "null";
-            if (_blackbox == null) return messageStr;
-
-            return _blackbox.Write(messageStr, methodName);
+            return _blackbox?.Write(message?.ToString() ?? "null", methodName);
         }
         public DisposableHandle WriteScope(object message, [CallerMemberName] string methodName = "")
         {
-            if (_blackbox == null) return default;
-            var messageStr = message?.ToString() ?? "null";
-
-            return _blackbox.WriteScope(messageStr, methodName);
+            return _blackbox?.WriteScope(message?.ToString() ?? "null", methodName) ?? default;
         }
-
         public string Exert(object other, object message, [CallerMemberName] string methodName = "")
         {
-            var messageStr = message?.ToString() ?? "null";
-            if (_blackbox == null) return messageStr;
-
-            var otherBlackbox = BlackboxRegistry.GetBlackbox(other);
-            return _blackbox.Exert(otherBlackbox, messageStr, methodName);
+            return _blackbox?.Exert(BlackboxRegistry.GetBlackbox(other), message?.ToString() ?? "null", methodName);
+        }
+        public string Exerted(object other, object message, [CallerMemberName] string methodName = "")
+        {
+            if (_blackbox == null) return default;
+            return BlackboxHandle.Of(other).Exert(Owner, message, methodName);
         }
         public DisposableHandle ExertScope(object other, object message, [CallerMemberName] string methodName = "")
         {
-            if (_blackbox == null) return default;
-            var messageStr = message?.ToString() ?? "null";
-
-            var otherBlackbox = BlackboxRegistry.GetBlackbox(other);
-            return _blackbox.ExertScope(otherBlackbox, messageStr, methodName);
-        }
-
-        public string Exerted(object other, object message, [CallerMemberName] string methodName = "")
-        {
-            var messageStr = message?.ToString() ?? "null";
-            if (_blackbox == null) return messageStr;
-
-            return BlackboxHandle.Of(other).Exert(Owner, message, methodName);
+            return _blackbox?.ExertScope(BlackboxRegistry.GetBlackbox(other), message?.ToString() ?? "null", methodName) ?? default;
         }
         public DisposableHandle ExertedScope(object other, object message, [CallerMemberName] string methodName = "")
         {
-            if (_blackbox == null) return default;
-            var messageStr = message?.ToString() ?? "null";
-
-            return BlackboxHandle.Of(other).ExertScope(Owner, message, methodName);
+            return _blackbox?.ExertedScope(BlackboxRegistry.GetBlackbox(other), message?.ToString() ?? "null", methodName) ?? default;
         }
-
-        public string CrashExport(string message, int recursionDepth = 5, bool openLog = true)
+        
+        public string CrashExport(string message, int recursionDepth = -1, ExportFormat format = ExportFormat.Html, FullExportOption fullExport = FullExportOption.BasedOnSettings, OpenLogOption openLog = OpenLogOption.BasedOnSettings)
         {
+            Infrastructure.Log($"[BlackboxHandle] CRASH: {message}", LogLevel.Warning);
             Write($"[CRASH] {message}");
-            Write($"[STACK TRACE]\n{new StackTrace(true).ToString()}\n");
+            Write($"[STACK TRACE]\n{new StackTrace(true)}\n");
 
-            Export(recursionDepth, true, openLog);
+            ExportInternal(recursionDepth, true, format, fullExport, openLog);
             return message;
         }
-        public void Export(int recursionDepth = 5, bool openLog = true) => Export(recursionDepth, false, openLog);
-        private void Export(int recursionDepth, bool isCrash, bool openLog)
-        {
-            if (string.IsNullOrWhiteSpace(Infrastructure.LogDirectory))
-                throw new InvalidOperationException(
-                    $"[BlackboxHandle] {nameof(Infrastructure.LogDirectory)} is empty. " +
-                    $"Use 'Export(string path, int recursionDepth, bool openLog)' method instead.");
 
+        public void Export(int recursionDepth = -1, ExportFormat format = ExportFormat.BasedOnSettings, FullExportOption fullExportOption = FullExportOption.BasedOnSettings, OpenLogOption openLogOption = OpenLogOption.BasedOnSettings) =>
+            ExportInternal(recursionDepth, false, format, fullExportOption, openLogOption);
+
+        private void ExportInternal(int recursionDepth, bool isCrash, ExportFormat format, FullExportOption fullExportOption, OpenLogOption openLogOption)
+        {
             if (_blackbox == null)
                 return;
 
-            if (!_blackbox.TryPrint(recursionDepth, out var result))
+            if (!Infrastructure.TryMarkPrinted())
             {
-                var message = $"[BlackboxHandle] Cannot print because the print is already been done.";
-
-                Infrastructure.Log(message);
+                Infrastructure.Log(
+                    $"[Blackbox] Blackbox has already been exported. Skipping duplicate export.",
+                    LogLevel.Warning);
                 return;
             }
 
-
-            Directory.CreateDirectory(Infrastructure.LogDirectory);
-
-            var fileName = $"Blackbox {TrimSmart(_blackbox.OwnerString)} ({_blackbox.Id}).txt";
-            if (isCrash) fileName = "[CRASH] " + fileName;
-
-            var fullPath = Path.Combine(Infrastructure.LogDirectory, fileName);
-            File.WriteAllText(fullPath, result);
-
-            Infrastructure.Log($"[BlackboxHandle] Log successfully exported to '{fullPath}'");
-
-            if (openLog)
+            var fullExport = fullExportOption switch
             {
-                try
-                {
-                    Process.Start(new ProcessStartInfo(fullPath) { UseShellExecute = true });
-                }
-                catch (Exception ex)
-                {
-                    Infrastructure.Log(
-                        $"[BlackboxHandle] Failed to open the file automatically.\n{ex.ToString()}");
-                }
-            }
-
-
-            string TrimSmart(string input)
+                FullExportOption.Full => true,
+                FullExportOption.Focused => false,
+                FullExportOption.BasedOnSettings => Infrastructure.FullExportOption == FullExportOption.Full,
+                _ => false,
+            };
+            var openLog = openLogOption switch
             {
-                if (string.IsNullOrEmpty(input))
-                    return input;
+                OpenLogOption.Open => true,
+                OpenLogOption.Never => false,
+                OpenLogOption.BasedOnSettings => Infrastructure.OpenLogOption == OpenLogOption.Open,
+                _ => false,
+            };
 
-                var invalidChars = Path.GetInvalidPathChars().Concat(Path.GetInvalidFileNameChars()).Distinct();
-                foreach (var c in invalidChars)
-                    input = input.Replace(c, '.');
+            if (format == ExportFormat.BasedOnSettings)
+                format = Infrastructure.ExportFormat;
 
-                if (input.Length <= 10)
-                    return input;
+            switch (format)
+            {
+                case ExportFormat.Html:
+                    HtmlExporter.Export(_blackbox, recursionDepth, isCrash, fullExport, openLog);
+                    break;
 
-                var start = input[..5];
-                var end = input.Substring(input.Length - 5, 5);
-
-                return $"{start}...{end}";
+                default:
+                    TxtExporter.Export(_blackbox, recursionDepth, isCrash, fullExport, openLog);
+                    break;
             }
         }
 
         private void ThrowIfInvalid()
         {
             if (_blackbox == null)
-                throw new InvalidOperationException(
-                    "[BlackboxHandle] Invalid handle. Use BlackboxHandle.Of(subject) to create it.");
+                throw new InvalidOperationException("[BlackboxHandle] Invalid handle.");
         }
     }
 }

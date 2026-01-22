@@ -42,7 +42,7 @@ namespace BlackboxSystem.Tests
             var interaction = (InteractionType)interactionType;
 
             // Act
-            var logData = new LogData(default, default, default, peer, interaction, Message);
+            var logData = new LogData(default, default, Message, default, peer, interaction);
 
             // Assert
             AssertLogData(logData, Message, DateTime.UtcNow, peer, interaction);
@@ -74,7 +74,7 @@ namespace BlackboxSystem.Tests
             var peer = new Blackbox(new NamedOwner(peerName), true);
             var interaction = exerting ? InteractionType.Exerting : InteractionType.Exerted;
 
-            var logData = new LogData(default, default, default, peer, interaction, Message);
+            var logData = new LogData(default, default, Message, default, peer, interaction);
 
             // Act
             var result = logData.ToString();
