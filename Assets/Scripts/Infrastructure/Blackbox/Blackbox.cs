@@ -250,6 +250,32 @@ namespace BlackboxSystem
                 return;
 
             var scope = _scopeStack.Pop();
+
+            // Flatten empty scopes into Step logs.
+            var currentIndex = Interlocked.Read(ref _currentLogIndex);
+            if (currentIndex >= 0)
+            {
+                var bufferIndex = currentIndex % _bufferSize;
+                var lastLog = _logBuffer[bufferIndex];
+
+                if (lastLog.ScopeType == ScopeType.Open && lastLog.MethodName == scope)
+                {
+                    var newLog = new LogData(
+                        lastLog.Owner,
+                        lastLog.ScopeDepth,
+                        lastLog.Message,
+                        lastLog.MethodName,
+                        ScopeType.Step,
+                        lastLog.ExertedBy,
+                        lastLog.ExertingTo,
+                        lastLog.InteractionId
+                    );
+
+                    _logBuffer[bufferIndex] = newLog;
+                    return;
+                }
+            }
+
             EnqueueLog(scopeMessage, scope, ScopeType.Close);
         }
         #endregion

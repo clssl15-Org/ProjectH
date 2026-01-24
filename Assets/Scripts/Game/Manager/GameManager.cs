@@ -45,7 +45,7 @@ namespace Game
             DontDestroyOnLoad(gameObject);
 
             BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log, Debug.LogError);
-            BlackboxHandle.ExportFormat = ExportFormat.Txt;
+            BlackboxHandle.ExportFormat = ExportFormat.Html;
             BlackboxHandle.FullExportOption = FullExportOption.Full;
             BlackboxHandle.OpenLogOption = OpenLogOption.Open;
             using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");

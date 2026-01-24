@@ -72,7 +72,7 @@ namespace BlackboxSystem.Tests
             private void B_Private()
             {
                 using var _ = BlackboxHandle.Of(this).WriteScope("Entering B_Private");
-                BlackboxHandle.Of(this).Write("Do/Did B_Private");
+                //BlackboxHandle.Of(this).Write("Do/Did B_Private");
             }
         }
 

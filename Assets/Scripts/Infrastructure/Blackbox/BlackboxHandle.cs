@@ -75,7 +75,6 @@ namespace BlackboxSystem
             set => Infrastructure.OpenLogOption = value;
         }
 
-
         // Internal
         private readonly Blackbox _blackbox;
 

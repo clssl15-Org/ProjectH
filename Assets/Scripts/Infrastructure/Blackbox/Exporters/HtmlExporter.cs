@@ -313,6 +313,8 @@ namespace BlackboxSystem.Exporters
                     sb.Append($"<span style='color:{scopeColor}'>&lt;{log.MethodName}&gt;</span> ");
                 else if (log.ScopeType == ScopeType.Close)
                     sb.Append($"<span style='color:{scopeColor}'>&lt;/{log.MethodName}&gt;</span> ");
+                else if (log.ScopeType == ScopeType.Step)
+                    sb.Append($"<span style='color:{scopeColor}'>&lt;{log.MethodName} /&gt;</span> ");
                 else if (!string.IsNullOrEmpty(log.MethodName))
                     sb.Append($"<span class='method' style='color:{messageColor}'>[{log.MethodName}]</span> ");
 

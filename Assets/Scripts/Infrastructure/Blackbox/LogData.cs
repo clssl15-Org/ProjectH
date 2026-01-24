@@ -6,7 +6,8 @@ namespace BlackboxSystem
     {
         None,
         Open,
-        Close
+        Close,
+        Step,
     }
 
     internal readonly struct LogData
@@ -58,6 +59,7 @@ namespace BlackboxSystem
                 {
                     ScopeType.Open => $"<{MethodName}> ",
                     ScopeType.Close => $"</{MethodName}> ",
+                    ScopeType.Step => $"<{MethodName} /> ",
                     _ => $"[{MethodName}] ",
                 };
 
