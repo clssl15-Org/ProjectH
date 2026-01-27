@@ -16,7 +16,7 @@ public class RelicManager : MonoBehaviour
 
     public event Action<RelicDataSO> RelicAcquiring;
     //public event Action<RelicDataSO> RelicAcquired;
-    public event Action<(RelicDataSO, string)> RelicAcquired;
+    public event Action<RelicDataSO, string> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
@@ -128,7 +128,10 @@ public class RelicManager : MonoBehaviour
             relicScript.OnAcquire();
         }
 
-        RelicAcquired?.Invoke(data);
+        string description = data.Description + "\n";
+        description += relicScript.isReinforced ? data.UpgradeEffect : data.NomalEffect;
+
+        RelicAcquired?.Invoke(data, description);
     }
 
     // --- 유물 제거 ---
