@@ -102,7 +102,7 @@ namespace UI
 
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
-        private void OnRelicAcquiring(RelicDataSO relicInfo)
+        private void OnRelicAcquiring(RelicDataSO relicInfo, string description)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Relic Acquiring: {relicInfo.name}");
 
@@ -122,7 +122,7 @@ namespace UI
 
             _relicIcon.sprite = relicInfo.Icon;
             _relicNametag.text = relicInfo.RelicName;
-            _relicDescrption.text = relicInfo.Description;
+            _relicDescrption.text = description;
 
             _coinRawVideoPlayer.clip = null;
             _coinMaskVideoPlayer.clip = null;

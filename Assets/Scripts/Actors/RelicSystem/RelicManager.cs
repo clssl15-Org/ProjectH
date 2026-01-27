@@ -14,7 +14,7 @@ public class RelicManager : MonoBehaviour
     // 모든 유물 프리팹을 인스펙터에서 등록합니다.
     [SerializeField] private List<GameObject> relicPrefabs;
 
-    public event Action<RelicDataSO> RelicAcquiring;
+    public event Action<RelicDataSO, string> RelicAcquiring;
     public event Action<RelicDataSO, string> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
@@ -122,7 +122,9 @@ public class RelicManager : MonoBehaviour
 
         if (selectedData == null) selectedData = candidates.Last().Key;
 
-        RelicAcquiring?.Invoke(selectedData);
+        string description = selectedData.Description + "\n" + selectedData.NomalEffect + "\n" + selectedData.UpgradeEffect;
+
+        RelicAcquiring?.Invoke(selectedData, description);
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
