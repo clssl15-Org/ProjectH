@@ -21,6 +21,7 @@ public class RelicDataSO : ScriptableObject
 
     [Header("설정")]
     [SerializeField] private bool canStack;          // 중복 가능 여부
+    [SerializeField] private int maxStackCount = 1;  // 최대 중첩 개수
 
     // --- 외부 접근용 프로퍼티 (Getter) ---
     public int RelicNumber => relicNumber;
@@ -32,4 +33,5 @@ public class RelicDataSO : ScriptableObject
     public float BaseValue => baseValue;
     public float CoinFlipValue => coinFlipValue;
     public bool CanStack => canStack;
+    public int MaxStackCount => maxStackCount;
 }
