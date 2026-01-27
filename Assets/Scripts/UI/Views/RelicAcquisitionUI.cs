@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using UI.RelicInfoPanelView;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -56,6 +58,8 @@ namespace UI
         private bool _isOperating = false;
         private bool _isDestroyed = false;
 
+        private readonly bool UseCoinReadyImage = false;
+
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
@@ -86,12 +90,20 @@ namespace UI
             _enabler = new EnableWithAnimation(_openAnimation)
                 .InitializeWithIEnablable(this);
             SetToDisabled();
+
+            if (!UseCoinReadyImage)
+            {
+                _coinImage.SetActive(false);
+                _coinAnimation.SetActive(true);
+            }
         }
 
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         private void OnRelicAcquiring(RelicDataSO relicInfo)
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Relic Acquiring: {relicInfo.name}");
+
             if (_isOperating)
             {
                 Debug.LogWarning(
@@ -100,8 +112,8 @@ namespace UI
 
                 return;
             }
-            _isOperating = true;
 
+            _isOperating = true;
             _relic = relicInfo;
 
             Enable();
@@ -116,16 +128,23 @@ namespace UI
 
         private void ToThrowCoin()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("To Throw Coin");
+
             _relicPage.SetActive(false);
             _coinPage.SetActive(true);
 
-            _coinImage.SetActive(true);
-            _coinAnimation.SetActive(false);
+            if (UseCoinReadyImage)
+            {
+                _coinImage.SetActive(true);
+                _coinAnimation.SetActive(false);
+            }
+            else
+                _coinAnimation.SetActive(true);
+
 
             _coinDescripton.text = $"강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}";
 
             var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
-            print($"강화 여부: {(reinforced ? "성공" : "실패")}");
 
             var clip = _videoClips.FirstOrDefault(v => v.IsFront == reinforced);
             if (!clip.Video || !clip.AlphaMask)
@@ -137,6 +156,9 @@ namespace UI
 
             _coinRawVideoPlayer.clip = clip.Video;
             _coinMaskVideoPlayer.clip = clip.AlphaMask;
+
+            _coinRawVideoPlayer.frame = 0;
+            _coinMaskVideoPlayer.frame = 0;
 
 
             _updater = Loco.Subscribe(() =>
@@ -150,18 +172,24 @@ namespace UI
 
             void ThrowCoin()
             {
-                print("throw coin");
+                using var _ = BlackboxHandle.Of(this).WriteScope("Throw Coin");
 
-                _coinImage.SetActive(false);
-                _coinAnimation.SetActive(true);
+                if (UseCoinReadyImage)
+                {
+                    _coinImage.SetActive(false);
+                    _coinAnimation.SetActive(true);
+                }
 
                 _coinRawVideoPlayer.playbackSpeed = 1f;
                 _coinMaskVideoPlayer.playbackSpeed = 1f;
 
                 _timer = new Timer((float)clip.Video.length, succeeded =>
                 {
+                    using var _ = BlackboxHandle.Of(this).WriteScope("Play Ended");
+
                     if (succeeded)
                     {
+                        BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Add Relic");
                         RelicManager.Instance.AddRelic(_relic.RelicNumber, reinforced);
 
                         _relicDescrption.text =
@@ -174,12 +202,16 @@ namespace UI
                         _coinPage.SetActive(false);
                         _relicPage.SetActive(true);
                     }
+                    else
+                        BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Play Failed");
                 });
             }
         }
 
         private void Close()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Close");
+
             _updater?.Dispose();
             _updater = null;
 

@@ -107,30 +107,44 @@ namespace BlackboxSystem
 
         public string Write(object message, [CallerMemberName] string methodName = "")
         {
-            return _blackbox?.Write(message?.ToString() ?? "null", methodName);
+            var messageStr = ToMessageString(message);
+            return _blackbox?.Write(messageStr, methodName) ?? messageStr;
         }
         public DisposableHandle WriteScope(object message, [CallerMemberName] string methodName = "")
         {
-            return _blackbox?.WriteScope(message?.ToString() ?? "null", methodName) ?? default;
+            var messageStr = ToMessageString(message);
+            return _blackbox?.WriteScope(messageStr, methodName) ?? default;
         }
         public string Exert(object other, object message, [CallerMemberName] string methodName = "")
         {
-            return _blackbox?.Exert(BlackboxRegistry.GetBlackbox(other), message?.ToString() ?? "null", methodName);
+            var messageStr = ToMessageString(message);
+            return _blackbox?.Exert(BlackboxRegistry.GetBlackbox(other), messageStr, methodName) ?? messageStr;
         }
         public string Exerted(object other, object message, [CallerMemberName] string methodName = "")
         {
-            if (_blackbox == null) return default;
+            if (_blackbox == null) return ToMessageString(message);
             return BlackboxHandle.Of(other).Exert(Owner, message, methodName);
         }
         public DisposableHandle ExertScope(object other, object message, [CallerMemberName] string methodName = "")
         {
-            return _blackbox?.ExertScope(BlackboxRegistry.GetBlackbox(other), message?.ToString() ?? "null", methodName) ?? default;
+            return _blackbox?.ExertScope(BlackboxRegistry.GetBlackbox(other), ToMessageString(message), methodName) ?? default;
         }
         public DisposableHandle ExertedScope(object other, object message, [CallerMemberName] string methodName = "")
         {
-            return _blackbox?.ExertedScope(BlackboxRegistry.GetBlackbox(other), message?.ToString() ?? "null", methodName) ?? default;
+            return _blackbox?.ExertedScope(BlackboxRegistry.GetBlackbox(other), ToMessageString(message), methodName) ?? default;
         }
-        
+
+        public string WriteOrExerted(object message, object other, [CallerMemberName] string methodName = "")
+        {
+            if (other == null) return Write(message, methodName); 
+            return Exerted(other, message, methodName);
+        }
+        public DisposableHandle WriteOrExertedScope(object message, object other, [CallerMemberName] string methodName = "")
+        {
+            if (other == null) return WriteScope(message, methodName);
+            return ExertedScope(other, message, methodName);
+        }
+
         public string CrashExport(string message, int recursionDepth = -1, ExportFormat format = ExportFormat.Html, FullExportOption fullExport = FullExportOption.BasedOnSettings, OpenLogOption openLog = OpenLogOption.BasedOnSettings)
         {
             Infrastructure.Log($"[BlackboxHandle] CRASH: {message}", LogLevel.Warning);
@@ -186,6 +200,8 @@ namespace BlackboxSystem
                     break;
             }
         }
+
+        private string ToMessageString(object obj) => obj?.ToString() ?? "null";
 
         private void ThrowIfInvalid()
         {

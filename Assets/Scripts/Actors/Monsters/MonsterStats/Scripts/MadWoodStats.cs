@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Mad Wood Stats", menuName = "Project H/Mad Wood Stats")]
+    [CreateAssetMenu(fileName = "Mad Wood Stats", menuName = "Project H/Monster Stats/Mad Wood Stats")]
     public class MadWoodStats : MonsterStats
     {
         [Header("¶¥ °ø°Ý")]

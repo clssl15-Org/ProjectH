@@ -1,3 +1,4 @@
+using System;
 using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Game
             if (_isInitialized)
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).Write(
-                    Ctx($"인스턴스가 중복 생성되었습니다. 현재 생성 중인 인스턴스를 삭제합니다.")),
+                    Ctx("인스턴스가 중복 생성되었습니다. 현재 생성 중인 인스턴스를 삭제합니다.")),
                     this);
 
                 Destroy(gameObject);
@@ -44,7 +45,7 @@ namespace Game
             _isInitialized = true;
             DontDestroyOnLoad(gameObject);
 
-            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log, Debug.LogError);
+            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log, Debug.LogWarning);
             BlackboxHandle.ExportFormat = ExportFormat.Html;
             BlackboxHandle.FullExportOption = FullExportOption.Full;
             BlackboxHandle.OpenLogOption = OpenLogOption.Open;
@@ -82,7 +83,7 @@ namespace Game
                 }
 
                 if (!injector)
-                    throw new System.InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                    throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
                         Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. injector에 자기 주입을 수행할 수 없습니다.")));
 
                 injector.AddInjection(this, typeof(GameContext));
@@ -92,25 +93,41 @@ namespace Game
 
         public override void SetBgmVolume(int volume, object context = null)
         {
-            using var _ = BlackboxHandle.Of(this).ExertedScope(context,
-                $"Bgm 볼륨을 {volume}으로 설정합니다.");
+            using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
+                $"Bgm 볼륨을 {volume}으로 설정합니다.", context);
 
             _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
-            using var _ = BlackboxHandle.Of(this).ExertedScope(context,
-                $"Sfx 볼륨을 {volume}으로 설정합니다.");
+            using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
+                $"Sfx 볼륨을 {volume}으로 설정합니다.", context);
 
             _soundManager.SetSfxVolume(volume);
         }
 
+        public override void ChangeScene(string sceneName, object context = null)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
+                $"씬을 {sceneName}(으)로 설정합니다.", context);
+
+            try
+            {
+                SceneManager.LoadScene(sceneName);
+                BlackboxHandle.Of(this).Write("씬 전환에 성공했습니다.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(BlackboxHandle.Of(this).CrashExport(
+                    $"씬 전환에 실패했습니다.\n{ex.ToString()}"));
+                throw;
+            }
+        }
+
         public override void Quit(object context = null)
         {
-            if (context != null)
-                BlackboxHandle.Of(this).Exerted(context, "게임을 종료합니다.");
-            else
-                BlackboxHandle.Of(this).Write("게임을 종료합니다.");
+            using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
+                "게임을 종료합니다.", context);
 
 #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
@@ -121,7 +138,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager이(가) 삭제되었습니다.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager가 삭제되었습니다.");
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 

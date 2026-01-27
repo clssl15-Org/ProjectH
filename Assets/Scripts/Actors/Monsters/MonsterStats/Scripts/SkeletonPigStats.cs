@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Skeleton Pig Stats", menuName = "Project H/Skeleton Pig Stats")]
+    [CreateAssetMenu(fileName = "Skeleton Pig Stats", menuName = "Project H/Monster Stats/Skeleton Pig Stats")]
     public class SkeletonPigStats : MonsterStats
     {
         [Header("포효 힐링 비율")]

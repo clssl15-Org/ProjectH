@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Dark Therion Stats", menuName = "Project H/Dark Therion Stats")]
+    [CreateAssetMenu(fileName = "Dark Therion Stats", menuName = "Project H/Monster Stats/Dark Therion Stats")]
     public class DarkTherionStats : MonsterStats
     {
         [Header("Common")]

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using BlackboxSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,12 +26,15 @@ namespace Infrastructure
 
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+
             if (_injectOnAwake)
             {
-                Debug.Log(Ctx(
+                Debug.Log(BlackboxHandle.Of(this).Write(Ctx(
                     $"'{nameof(_injectOnAwake)}'이(가) true이므로 Inject를 수행합니다. " +
                     $"GameManager를 사용중이라면 Inject는 GameManager에서만 이루어져야 합니다. " +
-                    $"GameManager를 사용하지 않는 것이 의도된 동작인지 확인하세요."), this);
+                    $"GameManager를 사용하지 않는 것이 의도된 동작인지 확인하세요.")),
+                    this);
 
                 Inject();
             }
@@ -38,10 +42,12 @@ namespace Infrastructure
 
         public void AddInjection(MonoBehaviour injection, Type intendedType = null)
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Add Injection: {injection.name} (Intended type: {intendedType})");
+
             if (!injection)
             {
-                Debug.LogError(
-                    Ctx($"{nameof(injection)}이(가) 유효하지 않습니다."),
+                Debug.LogError(BlackboxHandle.Of(this).Write(Ctx(
+                    $"{nameof(injection)}이(가) 유효하지 않습니다.")),
                     this);
                 return;
             }
@@ -56,9 +62,11 @@ namespace Infrastructure
 
         public void Inject()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Inject");
+
             if (_isInjected)
             {
-                Debug.LogError(
+                Debug.LogWarning(
                     Ctx("이미 Inject가 수행되었습니다. 중복 실행을 방지합니다."), this);
                 return;
             }
@@ -82,6 +90,8 @@ namespace Infrastructure
 
         private void Inject(Injection injection)
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Inject ({injection.Item.ToString() ?? "null"})");
+
             if (!injection.Item)
             {
                 Debug.LogError(
@@ -96,10 +106,8 @@ namespace Infrastructure
             var injectMethod = injectableInterfaceType.GetMethod("Inject");
             if (injectMethod == null)
             {
-                Debug.LogError(
-                    Ctx($"IInjectable<{targetType.Name}> 에 Inject 메서드가 없습니다."),
-                    this);
-                return;
+                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                    Ctx($"IInjectable<{targetType.Name}> 에 Inject 메서드가 없습니다.")));
             }
 
             var behaviours = FindObjectsOfType<MonoBehaviour>(true);
@@ -114,6 +122,7 @@ namespace Infrastructure
                 if (!injectableInterfaceType.IsAssignableFrom(behaviourType))
                     continue;
 
+                BlackboxHandle.Of(this).Exert(behaviour, $"Injecting: {injection.Item} as {injectableInterfaceType}");
                 injectMethod.Invoke(behaviour, new object[] { injection.Item });
             }
         }

@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Belia Stats", menuName = "Project H/Belia Stats")]
+    [CreateAssetMenu(fileName = "Belia Stats", menuName = "Project H/Monster Stats/Belia Stats")]
     public class BeliaStats : MonsterStats
     {
         [Header("특수 공격")]

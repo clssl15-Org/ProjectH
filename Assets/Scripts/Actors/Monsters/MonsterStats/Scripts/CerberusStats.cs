@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Cerberus Stats", menuName = "Project H/Cerberus Stats")]
+    [CreateAssetMenu(fileName = "Cerberus Stats", menuName = "Project H/Monster Stats/Cerberus Stats")]
     public class CerberusStats : MonsterStats
     {
         [Header("기준 거리")]

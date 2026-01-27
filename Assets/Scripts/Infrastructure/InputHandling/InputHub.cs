@@ -58,6 +58,8 @@ namespace Infrastructure
             if (_controllables.ContainsKey(controllable))
                 return;
 
+            using var _ = BlackboxHandle.Of(this).ExertScope(controllable, "Register");
+
             _controllables[controllable] = () => Remove(controllable);
             controllable.Destroyed += _controllables[controllable];
         }

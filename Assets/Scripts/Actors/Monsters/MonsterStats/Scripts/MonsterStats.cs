@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Monster Stats", menuName = "Project H/Monster Stats")]
+    [CreateAssetMenu(fileName = "Monster Stats", menuName = "Project H/Monster Stats/Default Monster Stats")]
     public class MonsterStats : ScriptableObject
     {
         [Header("기본 능력치")]

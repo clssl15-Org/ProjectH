@@ -31,6 +31,7 @@ namespace Game.Stage
         [SerializeField] private RelicAcquisitionUI _relicAcquisitionUI;
         [SerializeField] private RelicInfoPanelUI _relicInfoPanelUI;
         [SerializeField] private SettingsUI _settingsUI;
+        [SerializeField] private DialogueUI _dialogueUI;
 
         protected IPlayer Player { get; private set; }
         protected UILibrary UILibrary => _uILibrary;
@@ -114,8 +115,8 @@ namespace Game.Stage
             #endregion
 
             #region Input Hub
-            //if (Player != null)
-            //    InputHub.Register(Player);
+            if (Player != null)
+                InputHub.Register(Player);
             if (_playerUI)
                 InputHub.Register(_playerUI);
 
@@ -125,7 +126,7 @@ namespace Game.Stage
                 ((IInputController)_relicInfoPanelUI).Initialize(InputHub);
             if (_settingsUI)
             {
-                InputHub.Register((IInputControllable)_settingsUI);
+                InputHub.Register(_settingsUI);
                 ((IInputController)_settingsUI).Initialize(InputHub);
 
                 _settingsUI.OpenRelicsUI += () =>
@@ -145,6 +146,8 @@ namespace Game.Stage
                     _relicInfoPanelUI.Open();
                 };
             }
+            if (_dialogueUI)
+                ((IInputController)_dialogueUI).Initialize(InputHub);
 
 
             foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
