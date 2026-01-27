@@ -4,6 +4,9 @@ using Infrastructure;
 using UI;
 using UnityEngine;
 using World;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Game
 {
@@ -67,6 +70,8 @@ namespace Game
             _currentScriptTitle = title;
 
             OnPlayStarting();
+
+            BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
             _dialogueUI.Enable();
 
             int currentIdx = -1;
@@ -95,6 +100,8 @@ namespace Game
 
                 _dialogueUI.SetContent(script[currentIdx]);
             }
+
+            //BlackboxHandle.Of(this).Export();
         }
         protected virtual void OnPlayStarting() { }
         protected virtual void OnPlayCompleting() { }
@@ -120,5 +127,24 @@ namespace Game
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
             Stop();
         }
+
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(DialogueManager))]
+        private class DialogueManagerEditor : Editor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+
+                if (Application.isPlaying)
+                {
+                    GUILayout.Space(8);
+                    if (GUILayout.Button("Export Log"))
+                        BlackboxHandle.Of(target).Export(openLogOption: OpenLogOption.Open);
+                }
+            }
+        }
+#endif
     }
 }

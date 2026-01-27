@@ -19,7 +19,7 @@ namespace Game.Title
 
         private void Awake()
         {
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
         }
 

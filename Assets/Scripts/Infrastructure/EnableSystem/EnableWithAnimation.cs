@@ -21,16 +21,14 @@ namespace Infrastructure
         private Animation _animation;
         private readonly Dictionary<EnableEventType, Action> _events = new();
 
-        private bool _enabled = true;
+        private bool _enabled;
         private IDisposable _timer;
 
         private bool _isDisposed = false;
 
 
         // Content
-        public EnableWithAnimation(
-            Animation animation,
-            bool isEnabled = true)
+        public EnableWithAnimation(Animation animation, bool isEnabled)
         {
             _animation = animation;
             _enabled = isEnabled;

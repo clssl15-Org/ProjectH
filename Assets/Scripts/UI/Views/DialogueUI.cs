@@ -65,10 +65,12 @@ namespace UI
             _isAwaked = true;
 
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
-            _enabler = new EnableWithAnimation(GetComponent<Animation>())
+            _enabler = new EnableWithAnimation(GetComponent<Animation>(), gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
+
+            BlackboxHandle.Of(this).Write("Set To Disabled");
+            SetToDisabled();
         }
-        private void Start() => SetToDisabled();
 
         void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary)
         {
@@ -112,7 +114,11 @@ namespace UI
 
         public void Enable()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Enabled");
+
             Awake();
+
+            BlackboxHandle.Of(this).Exert(_enabler, "Enable");
             _enabler.Enable();
         }
         public void Disable()

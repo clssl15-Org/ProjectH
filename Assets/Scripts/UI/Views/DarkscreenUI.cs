@@ -28,7 +28,7 @@ namespace UI
             if (_initialized) return;
             _initialized = true;
 
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
         }
         private void Awake() => EnsureInitialization();

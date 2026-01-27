@@ -79,10 +79,12 @@ namespace UI
 
             _relicInfoPrefab.gameObject.SetActive(false);
 
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
 
             _closeBtn.onClick.AddListener(Close);
+
+            BlackboxHandle.Of(this).Write("Set To Disable");
             ((IEnablable)this).SetToDisabled();
         }
 

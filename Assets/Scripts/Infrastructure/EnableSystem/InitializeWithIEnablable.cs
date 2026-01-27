@@ -1,3 +1,5 @@
+using BlackboxSystem;
+
 namespace Infrastructure
 {
     public static class EnableSystemExtensions
@@ -11,7 +13,10 @@ namespace Infrastructure
                 .SetAction(EnableEventType.Enabling, () =>
                 {
                     if (setGameObjectActive)
+                    {
+                        BlackboxHandle.Of("EnableSystemExtensions").Exert(component, "Enable");
                         component.gameObject.SetActive(true);
+                    }
 
                     component.OnEnabling?.Invoke();
                 })

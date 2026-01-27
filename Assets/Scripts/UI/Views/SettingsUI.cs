@@ -168,7 +168,7 @@ namespace UI
                 });
 
 
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
 
             ((IEnablable)this).SetToDisabled();

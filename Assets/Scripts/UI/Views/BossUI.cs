@@ -39,7 +39,7 @@ namespace UI
                     $"[{nameof(BossUI)}] {nameof(_healthBar)} 필드는 null일 수 없습니다. " +
                     $"인스펙터에서 올바르게 설정되었는지 확인하세요.");
 
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
         }
 

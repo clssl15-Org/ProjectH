@@ -16,7 +16,7 @@ namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
     public class RelicAcquisitionUI : MonoBehaviour,
-        IView, IEnablable, IInputController
+        IStandaloneInitializable, IView, IEnablable, IInputController
     {
         [Header("Main")]
         [SerializeField] private Animation _openAnimation;
@@ -77,6 +77,8 @@ namespace UI
         #endregion
 
 
+
+        void IStandaloneInitializable.StandaloneInitialize() => Start();
         private void Start()
         {
             if (_isInitialized) return;
@@ -87,7 +89,7 @@ namespace UI
 
             RelicManager.Instance.RelicAcquiring += OnRelicAcquiring;
 
-            _enabler = new EnableWithAnimation(_openAnimation)
+            _enabler = new EnableWithAnimation(_openAnimation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
             SetToDisabled();
 
@@ -222,10 +224,26 @@ namespace UI
             _isOperating = false;
         }
 
-        public void Enable() => _enabler.Enable();
-        public void Disable() => _enabler.Disable();
-        public void SetToEnabled() => _enabler.SetToEnabled();
-        public void SetToDisabled() => _enabler.SetToDisabled();
+        public void Enable()
+        {
+            Start();
+            _enabler.Enable();
+        }
+        public void Disable()
+        {
+            Start();
+            _enabler.Disable();
+        }
+        public void SetToEnabled()
+        {
+            Start();
+            _enabler.SetToEnabled();
+        }
+        public void SetToDisabled()
+        {
+            Start();
+            _enabler.SetToDisabled();
+        }
 
         public void SetParent(RectTransform parent) =>
             GetComponent<RectTransform>().SetParent(parent);

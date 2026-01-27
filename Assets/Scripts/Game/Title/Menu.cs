@@ -31,7 +31,7 @@ namespace Game.Title
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
-            _enabler = new EnableWithAnimation(_animation)
+            _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
 
             if (_darkscreen)
