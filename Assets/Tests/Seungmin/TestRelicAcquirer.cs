@@ -23,7 +23,7 @@ public class TestRelicAcquirer : MonoBehaviour
 
             void Add(int id)
             {
-                RelicManager.Instance.AddRelic(id);
+                RelicManager.Instance.AddRelic(id, out _);
             }
         }
         else if (Input.GetKeyDown(AcquireKey))

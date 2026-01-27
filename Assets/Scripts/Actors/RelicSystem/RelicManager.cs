@@ -143,8 +143,9 @@ public class RelicManager : MonoBehaviour
     }
 
     // --- 유물 추가 (프리팹 생성) ---
-    public void AddRelic(int key, bool isReinforced = false)
+    public void AddRelic(int key, out string description, bool isReinforced = false)
     {
+        description = string.Empty;
         GameObject prefab = relicPrefabs.Find(p => p.GetComponent<Relic>().Data.RelicNumber == key);
 
         if (prefab == null)
@@ -182,7 +183,7 @@ public class RelicManager : MonoBehaviour
             relicScript.OnAcquire();
         }
 
-        string description = data.Description + "\n";
+        description = data.Description + "\n";
         description += relicScript.isReinforced ? data.UpgradeEffect : data.NomalEffect;
 
         RelicAcquired?.Invoke(data, description);

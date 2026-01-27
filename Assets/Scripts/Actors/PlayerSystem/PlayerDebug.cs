@@ -62,7 +62,7 @@ namespace Actors.PlayerSystem
         }
         public void AddRelic()
         {
-            RelicManager.Instance.AddRelic(relicKey, false);
+            RelicManager.Instance.AddRelic(relicKey, out _, false);
         }
     }
 

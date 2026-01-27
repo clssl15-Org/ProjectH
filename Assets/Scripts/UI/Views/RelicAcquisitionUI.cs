@@ -192,11 +192,14 @@ namespace UI
                     if (succeeded)
                     {
                         BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Add Relic");
-                        RelicManager.Instance.AddRelic(_relic.RelicNumber, reinforced);
+                        RelicManager.Instance.AddRelic(
+                            _relic.RelicNumber,
+                            out var description,
+                            reinforced);
 
                         _relicDescrption.text =
                             $"강화 {(reinforced ? "성공" : "실패")}\n\n" +
-                            _relicDescrption.text;
+                            description;
 
                         _toThrowCoinBtn.gameObject.SetActive(false);
                         _closeBtn.gameObject.SetActive(true);

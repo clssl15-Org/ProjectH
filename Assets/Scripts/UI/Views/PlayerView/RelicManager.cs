@@ -24,7 +24,7 @@ namespace UI.PlayerView
                 Destroy(child.gameObject);
         }
 
-        public void AddRelic(RelicDataSO relicData, string description)
+        public void AddRelic(RelicDataSO relicData)
         {
             var relicUI = Instantiate(_relicPrefab);
 

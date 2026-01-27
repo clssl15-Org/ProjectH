@@ -106,12 +106,16 @@ namespace UI
                     continue;
                 }
 
-                string description = relicData.Description + "\n" + relicData.NomalEffect;
-                _relicManager.AddRelic(relicData, description);
+                _relicManager.AddRelic(relicData);
             }
 
-            RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
+            RelicManager.Instance.RelicAcquired += OnRelicAcquired;
             #endregion
+        }
+
+        private void OnRelicAcquired(RelicDataSO relicSO, string _)
+        {
+            _relicManager.AddRelic(relicSO);
         }
 
         public void Disconnect()
@@ -127,7 +131,7 @@ namespace UI
             _healthBar.Disconnect();
 
             if (RelicManager.Instance)
-                RelicManager.Instance.RelicAcquired -= _relicManager.AddRelic;
+                RelicManager.Instance.RelicAcquired -= OnRelicAcquired;
 
             _player = null;
         }
