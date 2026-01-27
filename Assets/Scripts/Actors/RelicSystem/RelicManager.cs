@@ -15,15 +15,17 @@ public class RelicManager : MonoBehaviour
     [SerializeField] private List<GameObject> relicPrefabs;
 
     public event Action<RelicDataSO> RelicAcquiring;
-    public event Action<RelicDataSO> RelicAcquired;
+    public event Action<RelicDataSO, string> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
     public IReadOnlyDictionary<int, List<GameObject>> OwnedRelics => ownedRelics;
 
+    private readonly float[] skillArtifactProbs = { 33.333f, 25.0f, 40.0f, 0f };
+    private readonly float[] normalArtifactProbs = { 0f, 3.846f, 4.615f, 7.692f };
+
     private void Awake()
     {
-        // --- DontDestroyOnLoad 및 싱글톤 중복 방지 로직 ---
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject); // 이미 존재한다면 새로 생성된 객체 삭제
@@ -52,68 +54,122 @@ public class RelicManager : MonoBehaviour
         return relicData != null;
     }
 
-
-    // --- 랜덤으로 유물 데이터 뽑기 (UI용) ---
     public void GetRandomRelicData()
     {
-        // 프리팹에 붙어있는 Relic 컴포넌트에서 데이터를 읽어와 필터링합니다.
-        var available = relicPrefabs
-            .Select(p => p.GetComponent<Relic>().Data)
-            .Where(d => d.CanStack || !ownedRelics.ContainsKey(d.RelicNumber))
-            .ToList();
+        int currentSkillCount = GetSkillRelicCount();
+        int stateIndex = Mathf.Clamp(currentSkillCount, 0, 3);
 
-        if (available.Count == 0) return;
-        RelicAcquiring?.Invoke(available[UnityEngine.Random.Range(0, available.Count)]);
+        Dictionary<RelicDataSO, float> candidates = new Dictionary<RelicDataSO, float>();
+        float totalWeight = 0f;
+
+        foreach (var prefab in relicPrefabs)
+        {
+            RelicDataSO data = prefab.GetComponent<Relic>().Data;
+            int id = data.RelicNumber;
+
+            // 1. 현재 보유 개수 확인
+            int currentCount = 0;
+            if (ownedRelics.ContainsKey(id))
+            {
+                currentCount = ownedRelics[id].Count;
+            }
+
+            // 2. 보유 개수가 최대 중첩 수 이상이면 후보에서 제외
+            if (currentCount >= data.MaxStackCount)
+            {
+                continue;
+            }
+
+            // 3. 확률 적용 로직
+            float weight = 0f;
+
+            if (id >= 1 && id <= 3) // 스킬 유물
+            {
+                weight = skillArtifactProbs[stateIndex];
+            }
+            else // 일반 유물
+            {
+                weight = normalArtifactProbs[stateIndex];
+            }
+
+            if (weight > 0)
+            {
+                candidates.Add(data, weight);
+                totalWeight += weight;
+            }
+        }
+
+        if (candidates.Count == 0)
+        {
+            Debug.Log("더 이상 획득 가능한 유물이 없습니다 (모든 유물 최대치 도달).");
+            return;
+        }
+
+        // 룰렛 휠 선택
+        float randomValue = UnityEngine.Random.Range(0f, totalWeight);
+        float currentSum = 0f;
+        RelicDataSO selectedData = null;
+
+        foreach (var kvp in candidates)
+        {
+            currentSum += kvp.Value;
+            if (randomValue <= currentSum)
+            {
+                selectedData = kvp.Key;
+                break;
+            }
+        }
+
+        if (selectedData == null) selectedData = candidates.Last().Key;
+
+        RelicAcquiring?.Invoke(selectedData);
+    }
+
+    // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
+    private int GetSkillRelicCount()
+    {
+        int count = 0;
+        if (ownedRelics.ContainsKey(1)) count++;
+        if (ownedRelics.ContainsKey(2)) count++;
+        if (ownedRelics.ContainsKey(3)) count++;
+        return count;
     }
 
     public bool StartCoinRandom(int key)
     {
         int rnd = UnityEngine.Random.Range(0, 2);
-        bool canReinforced = false;
-
-        if (rnd == 0)
-        {
-            // 실패
-            canReinforced = false;
-        }
-        else if (rnd == 1)
-        {
-            // 성공
-            canReinforced = true;
-        }
-
-        return canReinforced;
+        // 0이면 실패(false), 1이면 성공(true)
+        return rnd == 1;
     }
-
 
     // --- 유물 추가 (프리팹 생성) ---
     public void AddRelic(int key, bool isReinforced = false)
     {
-        // 1. 레지스트리에서 해당 번호를 가진 프리팹 찾기
         GameObject prefab = relicPrefabs.Find(p => p.GetComponent<Relic>().Data.RelicNumber == key);
 
-        // 예외 안내 메세지 추가
         if (prefab == null)
         {
-            Debug.LogWarning(
-                $"입력 키 '{key}'에 해당하는 {nameof(Relic)}을(를) 찾는 데 실패했습니다. " +
-                $"렐릭을 추가하지 않습니다.");
-
+            Debug.LogWarning($"AddRelic 실패: Key {key}에 해당하는 프리팹 없음.");
             return;
         }
 
-        // 2. 데이터 가져오기 및 중복 체크
         RelicDataSO data = prefab.GetComponent<Relic>().Data;
-        if (!data.CanStack && ownedRelics.ContainsKey(key))
-        {
-            Debug.LogWarning(
-                $"입력 키 '{key}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾는 데 실패했습니다. " +
-                $"렐릭을 추가하지 않습니다.");
 
+        // 현재 보유량 체크
+        int currentCount = 0;
+        if (ownedRelics.ContainsKey(key))
+        {
+            currentCount = ownedRelics[key].Count;
+        }
+
+        // 최대 중첩 수 초과 시 추가 중단
+        if (currentCount >= data.MaxStackCount)
+        {
+            Debug.LogWarning($"유물 '{data.RelicName}'(Key:{key})은 최대 중첩 수({data.MaxStackCount})에 도달하여 더 이상 추가할 수 없습니다.");
             return;
         }
 
-        // 3. 프리팹 생성 및 설정
+        // 생성 및 리스트 추가
         GameObject relicObj = Instantiate(prefab, this.transform);
 
         if (relicObj.TryGetComponent<Relic>(out var relicScript))
@@ -123,11 +179,13 @@ public class RelicManager : MonoBehaviour
             if (!ownedRelics.ContainsKey(key)) ownedRelics[key] = new List<GameObject>();
             ownedRelics[key].Add(relicObj);
 
-            // 획득 효과 발동
             relicScript.OnAcquire();
         }
 
-        RelicAcquired?.Invoke(data);
+        string description = data.Description + "\n";
+        description += relicScript.isReinforced ? data.UpgradeEffect : data.NomalEffect;
+
+        RelicAcquired?.Invoke(data, description);
     }
 
     // --- 유물 제거 ---
@@ -136,11 +194,11 @@ public class RelicManager : MonoBehaviour
         // 1. 소유 여부 확인
         if (!ownedRelics.ContainsKey(key) || ownedRelics[key].Count == 0)
         {
-            Debug.LogWarning($"제거하려는 유물(Key: {key})을 플레이어가 소유하고 있지 않습니다.");
+            Debug.LogWarning($"제거하려는 유물(Key: {key})을 소유하고 있지 않습니다.");
             return;
         }
 
-        // 2. 가장 최근에 추가된 유물 객체 가져오기 (리스트의 마지막 요소)
+        // 2. 가장 최근에 추가된 유물 객체 가져오기 (LIFO)
         List<GameObject> relicList = ownedRelics[key];
         GameObject relicToRemove = relicList[relicList.Count - 1];
 
@@ -148,14 +206,14 @@ public class RelicManager : MonoBehaviour
         Relic relicScript = relicToRemove.GetComponent<Relic>();
         if (relicScript != null)
         {
-            relicScript.OnLose(); // 유물 상실 시 발동할 로직 (스탯 감소 등)
+            relicScript.OnLose();
         }
 
         // 4. 리스트에서 제거 및 실제 객체 파괴
         relicList.RemoveAt(relicList.Count - 1);
         Destroy(relicToRemove);
 
-        // 5. 만약 해당 종류의 유물이 더 이상 없다면 키 삭제
+        // 5. 키 삭제
         if (relicList.Count == 0)
         {
             ownedRelics.Remove(key);

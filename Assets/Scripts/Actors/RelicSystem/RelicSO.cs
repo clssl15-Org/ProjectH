@@ -10,6 +10,10 @@ public class RelicDataSO : ScriptableObject
 
     [TextArea]
     [SerializeField] private string description;     // 설명
+    [TextArea]
+    [SerializeField] private string nomalEffect;    // 일반 효과 설명
+    [TextArea]
+    [SerializeField] private string upgradeEffect; // 강화 설명
 
     [Header("수치 정보")]
     [SerializeField] private float baseValue;        // 기본 value (예: 데미지 증가량 0.1f)
@@ -17,13 +21,17 @@ public class RelicDataSO : ScriptableObject
 
     [Header("설정")]
     [SerializeField] private bool canStack;          // 중복 가능 여부
+    [SerializeField] private int maxStackCount = 1;  // 최대 중첩 개수
 
     // --- 외부 접근용 프로퍼티 (Getter) ---
     public int RelicNumber => relicNumber;
     public Sprite Icon => icon;
     public string RelicName => relicName;
     public string Description => description;
+    public string NomalEffect => nomalEffect;
+    public string UpgradeEffect => upgradeEffect;
     public float BaseValue => baseValue;
     public float CoinFlipValue => coinFlipValue;
     public bool CanStack => canStack;
+    public int MaxStackCount => maxStackCount;
 }

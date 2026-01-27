@@ -106,7 +106,8 @@ namespace UI
                     continue;
                 }
 
-                _relicManager.AddRelic(relicData);
+                string description = relicData.Description + "\n" + relicData.NomalEffect;
+                _relicManager.AddRelic(relicData, description);
             }
 
             RelicManager.Instance.RelicAcquired += _relicManager.AddRelic;
