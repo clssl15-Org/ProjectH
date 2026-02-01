@@ -6967,17 +6967,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8798525031514620034, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
   m_PrefabInstance: {fileID: 533402922}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &533402924 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
-  m_PrefabInstance: {fileID: 533402922}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db37b3cef8b110b489e35e926666cfc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &590122100 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 597163057202504664, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
@@ -7186,6 +7175,7 @@ GameObject:
   - component: {fileID: 1374360487}
   - component: {fileID: 1374360486}
   - component: {fileID: 1374360485}
+  - component: {fileID: 1374360490}
   m_Layer: 0
   m_Name: Stage 1
   m_TagString: Untagged
@@ -7225,10 +7215,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injections:
-  - {fileID: 2097245833}
-  - {fileID: 533402924}
-  - {fileID: 342072858}
-  _injectAtAwake: 1
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  _injectOnAwake: 0
 --- !u!114 &1374360485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7244,8 +7234,14 @@ MonoBehaviour:
   <AutoBindScenePlayer>k__BackingField: 0
   <AutoBindSceneMonsters>k__BackingField: 1
   _uILibrary: {fileID: 102672348}
+  _additionalInputControllers: []
+  _additionalInputControllables: []
   _playerObject: {fileID: 1045973750}
   _playerUI: {fileID: 1173989406}
+  _relicAcquisitionUI: {fileID: 0}
+  _relicInfoPanelUI: {fileID: 0}
+  _settingsUI: {fileID: 0}
+  _dialogueUI: {fileID: 0}
 --- !u!114 &1374360486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7295,7 +7291,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93ccb18447142f14fbeb25e352a74dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <InitializeAtStart>k__BackingField: 1
+  <StandaloneInitialize>k__BackingField: 1
+  <StandaloneUpdate>k__BackingField: 1
+--- !u!114 &1374360490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374360482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19052516c81045b4eabe50cd59783529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1418518198
 GameObject:
   m_ObjectHideFlags: 0
@@ -7773,17 +7782,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2097245833 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8708658426037089991, guid: f61e406118a84934fb2ce4dba15b83e1, type: 3}
-  m_PrefabInstance: {fileID: 479618953}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61d2f75a5a6d66b4f888c95ef90a5e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2097245834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1758655682569303859, guid: f61e406118a84934fb2ce4dba15b83e1, type: 3}

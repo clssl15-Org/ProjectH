@@ -307,6 +307,7 @@ GameObject:
   - component: {fileID: 344952886}
   - component: {fileID: 344952885}
   - component: {fileID: 344952884}
+  - component: {fileID: 344952888}
   m_Layer: 0
   m_Name: Stage 3
   m_TagString: Untagged
@@ -344,10 +345,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injections:
-  - {fileID: 43997186}
-  - {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
-  - {fileID: 1986906699}
-  _injectAtAwake: 1
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  _injectOnAwake: 0
 --- !u!114 &344952884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,8 +364,13 @@ MonoBehaviour:
   <AutoBindScenePlayer>k__BackingField: 0
   <AutoBindSceneMonsters>k__BackingField: 1
   _uILibrary: {fileID: 4445242400318062758, guid: a39913bc4f304a64b9dbb5519eeaf460, type: 3}
+  _additionalInputControllers: []
+  _additionalInputControllables: []
   _playerObject: {fileID: 742639654}
   _playerUI: {fileID: 1091976374}
+  _relicAcquisitionUI: {fileID: 0}
+  _relicInfoPanelUI: {fileID: 0}
+  _settingsUI: {fileID: 0}
 --- !u!114 &344952885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,6 +408,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 1063422505}
+--- !u!114 &344952888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344952881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19052516c81045b4eabe50cd59783529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &384229637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -616,6 +634,7 @@ MonoBehaviour:
       spawnCount: 0
       canDuplicate: 0
       monsterPrefabs: []
+  monsterSpawnIndicator: {fileID: 8864012734817497381, guid: 8a2ced6a080564e4aaf408f5d0e9016b, type: 3}
   gameAssetLibrary: {fileID: 0}
   platformManager: {fileID: 1986906699}
   configuration: {fileID: 0}
