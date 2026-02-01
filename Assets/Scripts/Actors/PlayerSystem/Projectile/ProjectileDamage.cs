@@ -27,6 +27,8 @@ namespace Actors.PlayerSystem
 
             damageableObject.TakeDamage(damage);
             onRangedAttack?.Invoke();
+
+            Destroy(gameObject);
         }
     }
 }
