@@ -9,11 +9,13 @@ namespace Infrastructure
     public class InputHub : MonoBehaviour, IInputHub
     {
         private readonly Dictionary<IInputControllable, Action> _controllables = new();
+        private bool _isBlocking = false;
 
 
         public void BlockAll()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("BlockAll");
+            _isBlocking = true;
 
             foreach (var view in _controllables.Keys)
             {
@@ -24,6 +26,7 @@ namespace Infrastructure
         public void BlockExcept(params IInputControllable[] controllables)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("BlockExcept");
+            _isBlocking = true;
 
             foreach (var controllable in _controllables.Keys)
             {
@@ -35,14 +38,35 @@ namespace Infrastructure
             }
         }
 
-        public void UnblockAll()
+        public void UnblockAll(bool delayFrame = true)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("UnblockAll");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"UnblockAll (delay: {delayFrame})");
+            _isBlocking = false;
 
-            foreach (var controllable in _controllables.Keys)
+            if (delayFrame)
             {
-                BlackboxHandle.Of(this).Exert(controllable, "Unblock");
-                controllable.AllowInput = true;
+                IDisposable unblocker = null;
+                unblocker = Loco.Subscribe(() =>
+                {
+                    unblocker.Dispose();
+
+                    if (_isBlocking) return;
+                    Unblock();
+                });
+            }
+            else
+            {
+                Unblock();
+            }
+
+
+            void Unblock()
+            {
+                foreach (var controllable in _controllables.Keys)
+                {
+                    BlackboxHandle.Of(this).Exert(controllable, "Unblock");
+                    controllable.AllowInput = true;
+                }
             }
         }
 
@@ -61,7 +85,7 @@ namespace Infrastructure
             using var _ = BlackboxHandle.Of(this).ExertScope(controllable, "Register");
 
             _controllables[controllable] = () => Remove(controllable);
-            controllable.Destroyed += _controllables[controllable];
+            controllable.Destroying += _controllables[controllable];
         }
 
         public void Remove(IInputControllable controllable)
@@ -75,7 +99,7 @@ namespace Infrastructure
 
             using var _ = BlackboxHandle.Of(this).ExertScope(controllable, "Remove");
 
-            controllable.Destroyed -= _controllables[controllable];
+            controllable.Destroying -= _controllables[controllable];
             _controllables.Remove(controllable);
         }
     }

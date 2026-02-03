@@ -15,7 +15,7 @@ namespace UI
     {
         // Front
         public bool AllowInput { get; set; } = true;
-        public event Action Destroyed;
+        public event Action Destroying;
 
         // Internal
         [SerializeField] private Button _skillBtn;
@@ -265,7 +265,7 @@ namespace UI
         public void Destroy()
         {
             Disconnect();
-            Destroyed?.Invoke();
+            Destroying?.Invoke();
 
             if (this && gameObject)
                 Destroy(gameObject);

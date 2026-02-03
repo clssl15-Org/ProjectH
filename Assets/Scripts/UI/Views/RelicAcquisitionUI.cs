@@ -38,7 +38,7 @@ namespace UI
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
 
         public bool EnableInput { get; set; } = true;
-        public event Action Destroyed;
+        public event Action Destroying;
 
         [Serializable]
         public struct VideoData
@@ -258,7 +258,7 @@ namespace UI
             _isDestroyed = true;
 
             _enabler?.Dispose();
-            Destroyed?.Invoke();
+            Destroying?.Invoke();
 
             _updater?.Dispose();
             _timer?.Dispose();

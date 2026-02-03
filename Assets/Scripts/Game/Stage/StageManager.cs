@@ -4,13 +4,18 @@ using BlackboxSystem;
 using Infrastructure;
 using UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using World;
 
 namespace Game.Stage
 {
-    [RequireComponent(typeof(InputHub), typeof(UIManager))]
+    [RequireComponent(typeof(Injector), typeof(InputHub), typeof(UIManager))]
     [RequireComponent(typeof(PlayerManager), typeof(MonsterManager))]
     public class StageManager : MonoBehaviour
-    {        
+    {
+        [field: Tooltip("게임이 시작될 때 필요한 구성 요소들을 씬에서 찾아 자동으로 등록합니다")]
+        [field: SerializeField] protected bool AutoBindDependencies { get; set; } = true;
+        [field: Space]
         [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 플레이어를 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindScenePlayer { get; set; } = false;
         [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 몬스터들을 자동으로 등록합니다")]
@@ -18,6 +23,8 @@ namespace Game.Stage
 
         [Header("Bindings")]
         [SerializeField] private UILibrary _uILibrary;
+        [SerializeField] private PlatformManager _platformManager;
+        [SerializeField] private EventSystem _eventSystem;
 
         [Header("Inputs")]
         [SerializeField] private MonoBehaviour[] _additionalInputControllers;
@@ -53,11 +60,69 @@ namespace Game.Stage
             UIManager = GetComponent<UIManager>();
             PlayerManager = GetComponent<PlayerManager>();
             MonsterManager = GetComponent<MonsterManager>();
+
+            // Auto Bindings
+            if (AutoBindDependencies)
+            {
+                if (!UIManager.HasCanvas)
+                {
+                    var canvas = FindAnyObjectByType<RectTransform>(FindObjectsInactive.Include);
+
+                    if (canvas)
+                    {
+                        BlackboxHandle.Of(this).Exert(UIManager, $"Set Canvas: {canvas}");
+                        UIManager.SetCanvas(canvas);
+                    }
+                    else
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                            $"씬에서 {nameof(canvas)}을(를) 찾는 데 실패했습니다."), this);
+                    }
+                }
+
+                var allEventSystems = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+                if (allEventSystems.Length > 1)
+                {
+                    var isHeaderLogged = false;
+
+                    foreach (var es in allEventSystems)
+                    {
+                        if (es == _eventSystem)
+                            continue;
+
+                        if (!isHeaderLogged)
+                        {
+                            BlackboxHandle.Of(this).Write("씬에 둘 이상의 이벤트 시스템이 존재합니다.");
+                            isHeaderLogged = true;
+                        }
+
+                        BlackboxHandle.Of(this).Write($"이벤트 시스템 삭제: {es.name}");
+                        Destroy(es.gameObject);
+                    }
+                }
+
+                var injector = GetComponent<Injector>();
+                if (!injector.HasInjection<PlatformManager>())
+                {
+                    var platformManager = FindAnyObjectByType<PlatformManager>(FindObjectsInactive.Include);
+
+                    if (platformManager)
+                    {
+                        injector.AddInjection(platformManager, typeof(PlatformManager));
+                    }
+                    else
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                            $"씬에서 {nameof(platformManager)}을(를) 찾는 데 실패했습니다."), this);
+                    }
+                }
+            }
         }
 
         protected virtual void Start()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Start");
+            if (AutoBindDependencies) AutoBindDependenciesInScene();
 
             #region Player / Monsters
             if (AutoBindScenePlayer)
@@ -164,6 +229,68 @@ namespace Game.Stage
                 }
             }
             #endregion
+        }
+        private void AutoBindDependenciesInScene()
+        {
+            if (!_playerUI)
+            {
+                _playerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
+                if (!_playerUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"씬에서 {nameof(_playerUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_relicAcquisitionUI)
+            {
+                _relicAcquisitionUI = FindAnyObjectByType<RelicAcquisitionUI>(FindObjectsInactive.Include);
+                if (!_relicAcquisitionUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"씬에서 {nameof(_relicAcquisitionUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_relicInfoPanelUI)
+            {
+                _relicInfoPanelUI = FindAnyObjectByType<RelicInfoPanelUI>(FindObjectsInactive.Include);
+                if (!_relicInfoPanelUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"씬에서 {nameof(_relicInfoPanelUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_playerUI)
+            {
+                _playerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
+                if (!_playerUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"씬에서 {nameof(_playerUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_settingsUI)
+            {
+                _settingsUI = FindAnyObjectByType<SettingsUI>(FindObjectsInactive.Include);
+                if (!_settingsUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"씬에서 {nameof(_settingsUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_dialogueUI)
+            {
+                _dialogueUI = FindAnyObjectByType<DialogueUI>(FindObjectsInactive.Include);
+                if (!_dialogueUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"씬에서 {nameof(_dialogueUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
         }
 
         public void Register(IPlayer player, bool connectUI = true)

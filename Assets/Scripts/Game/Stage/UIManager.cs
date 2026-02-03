@@ -10,7 +10,8 @@ namespace Game.Stage
     public class UIManager : MonoBehaviour
     {
         // Bindings
-        [SerializeField] private RectTransform _canvas;
+        [SerializeField] internal RectTransform _canvas;
+        public bool HasCanvas => _canvas != null;
 
         // Internal
         private readonly HashSet<IViewModel> _viewModels = new();
@@ -26,6 +27,16 @@ namespace Game.Stage
             if (!_canvas)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
                     $"[{nameof(UIManager)}] {nameof(_canvas)} 컴포넌트가 유효하지 않습니다."));
+        }
+        internal void SetCanvas(RectTransform canvas)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Canvas: {canvas}");
+
+            if (_canvas != null)
+                Debug.Log(BlackboxHandle.Of(this).Write(Ctx(
+                    $"캔버스를 교체합니다. '{canvas}' -> '{_canvas}'")));
+
+            _canvas = canvas;
         }
 
         public void RegisterVM(IViewModel viewModel)
@@ -63,7 +74,7 @@ namespace Game.Stage
                 return;
 
             _views.Add(view);
-            view.Destroyed += () => _views.Remove(view);
+            view.Destroying += () => _views.Remove(view);
 
             view.SetParent(_canvas);
         }

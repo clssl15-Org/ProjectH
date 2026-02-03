@@ -45,16 +45,21 @@ namespace Game
             _isInitialized = true;
             DontDestroyOnLoad(gameObject);
 
-            BlackboxHandle.Initialize(Application.persistentDataPath, Debug.Log, Debug.LogWarning);
-            BlackboxHandle.ExportFormat = ExportFormat.Html;
-            BlackboxHandle.FullExportOption = FullExportOption.Full;
-            BlackboxHandle.OpenLogOption = OpenLogOption.Open;
+            BlackboxHandle.Configure(
+                logDirectory: Application.persistentDataPath,
+                normalLogger: Debug.Log,
+                warningLogger: Debug.LogWarning,
+                strongReference: false,
+                exportFormat: ExportFormat.Html,
+                fullExportOption: FullExportOption.Full,
+                openLogOption: OpenLogOption.Open);
+
             using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
 
             _soundManager = new Management.SoundManager();
-            BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager 초기화했습니다.");
+            BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager를 생성했습니다.");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _)

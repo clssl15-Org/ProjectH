@@ -18,6 +18,7 @@ namespace BlackboxSystem
 
         public static int MaxLogCount { get; set; } = 100;
         public static bool StrongReference { get; set; } = false;
+        public static int DefaultRecursionDepth { get; set; } = 100;
 
         public static bool IsPrinted => Volatile.Read(ref _isPrinted) != 0;
         private static int _isPrinted = 0;

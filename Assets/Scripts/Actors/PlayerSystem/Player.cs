@@ -54,7 +54,7 @@ namespace Actors.PlayerSystem
         public PlayerHealth PlayerHealth => playerHealth;
 
         public event Action<PlayerCondition> ConditionChanged;
-        public event Action Destroyed;
+        public event Action Destroying;
 
         private bool invincible = false;
         private PlatformDetector platformDetector;
@@ -132,7 +132,7 @@ namespace Actors.PlayerSystem
 
         void OnDestroy()
         {
-            Destroyed?.Invoke();
+            Destroying?.Invoke();
         }
     }
 }

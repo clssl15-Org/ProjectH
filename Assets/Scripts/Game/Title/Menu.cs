@@ -7,19 +7,27 @@ using BlackboxSystem;
 
 namespace Game.Title
 {
-    public class Menu : MonoBehaviour, IEnablable, IInjectable<GameContext>
+    public class Menu : MonoBehaviour,
+        IInjectable<GameContext>,
+        IEnablable,
+        IInputControllable
     {
         public event Action Enabling;
         public event Action Disabling;
+        public event Action Destroying;
 
         Action IEnablable.OnEnabling => Enabling;
         Action IEnablable.OnDisabling => Disabling;
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabled => null;
 
-        [SerializeField] private GameContext _gameContext;
+        public bool AllowInput { get; set; } = true;
+
         [SerializeField] private DarkscreenUI _darkscreen;
+        [SerializeField] private SettingsUI _settingsUI;
         [SerializeField] private Animation _animation;
+
+        private GameContext _gameContext;
         private EnableWithAnimation _enabler;
 
         [Space]
@@ -47,7 +55,16 @@ namespace Game.Title
         private void Update()
         {
             if (_enabler.IsEnabled && Input.GetKeyDown(KeyCode.Escape))
+            {
+                using var _ = BlackboxHandle.Of(this).WriteScope("Esc");
+                if (!AllowInput)
+                {
+                    BlackboxHandle.Of(this).Write("Input Blocked");
+                    return;
+                }
+
                 Disable();
+            }
         }
 
         public void Enable() => _enabler.Enable();
@@ -59,6 +76,11 @@ namespace Game.Title
         public void ToPlay()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("To Play");
+            if (!AllowInput)
+            {
+                BlackboxHandle.Of(this).Write("Input Blocked");
+                return;
+            }
 
             if (_darkscreen)
             {
@@ -69,9 +91,26 @@ namespace Game.Title
                 SceneManager.LoadScene(_gameSceneName);
         }
 
+        public void ToGuide()
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("To Guide");
+            if (!AllowInput)
+            {
+                BlackboxHandle.Of(this).Write("Input Blocked");
+                return;
+            }
+
+            Debug.LogWarning($"'[Menu] '{nameof(ToGuide)}'은(는) 아직 구현되지 않았습니다.", this);
+        }
+
         public void ToBoss()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("To Boss");
+            if (!AllowInput)
+            {
+                BlackboxHandle.Of(this).Write("Input Blocked");
+                return;
+            }
 
             if (_darkscreen)
             {
@@ -85,12 +124,34 @@ namespace Game.Title
         public void ToSettings()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("To Settings");
-            Debug.LogWarning($"'[Menu] '{nameof(ToSettings)}'은(는) 아직 구현되지 않았습니다.", this);
+            if (!AllowInput)
+            {
+                BlackboxHandle.Of(this).Write("Input Blocked");
+                return;
+            }
+
+            if (_settingsUI)
+            {
+                BlackboxHandle.Of(this).Exert(_settingsUI, "Enable");
+                _settingsUI.Enable();
+            }
+            else
+            {
+                Debug.LogWarning(
+                    BlackboxHandle.Of(this).Write(
+                        $"[Menu] {nameof(_settingsUI)}이(가) 유효하지 않기 때문에 ToSettings 메서드를 수행할 수 없습니다."),
+                    this);
+            }
         }
 
         public void ToQuit()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("To Quit");
+            if (!AllowInput)
+            {
+                BlackboxHandle.Of(this).Write("Input Blocked");
+                return;
+            }
 
             if (_gameContext)
                 _gameContext.Quit(this);
@@ -108,6 +169,8 @@ namespace Game.Title
         {
             _enabler.Dispose();
             _enabler = null;
+
+            Destroying?.Invoke();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace UI
 {
     public interface IView
     {
-        event Action Destroyed;
+        event Action Destroying;
 
         void SetParent(RectTransform parent);
         void Destroy();

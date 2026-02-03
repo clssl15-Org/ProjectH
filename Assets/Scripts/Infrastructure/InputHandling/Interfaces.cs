@@ -6,7 +6,7 @@ namespace Infrastructure
     {
         void BlockAll();
         void BlockExcept(params IInputControllable[] controllables);
-        void UnblockAll();
+        void UnblockAll(bool delayFrame = true);
     }
 
     public interface IInputController
@@ -17,6 +17,6 @@ namespace Infrastructure
     public interface IInputControllable
     {
         bool AllowInput { get; set; }
-        event Action Destroyed;
+        event Action Destroying;
     }
 }

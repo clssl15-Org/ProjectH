@@ -24,7 +24,7 @@ namespace UI
         [SerializeField] private Animation _animation;
 
         public bool AllowInput { get; set; } = true;
-        public event Action Destroyed;
+        public event Action Destroying;
 
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
@@ -171,7 +171,7 @@ namespace UI
 
         private void OnDestroy()
         {
-            Destroyed?.Invoke();
+            Destroying?.Invoke();
             _enabler?.Dispose();
         }
 

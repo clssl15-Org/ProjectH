@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: 2614023883349732603}
   - component: {fileID: 4950576554456026468}
   - component: {fileID: 3632647419853842006}
+  - component: {fileID: 7394125281854984930}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -126,7 +127,6 @@ MonoBehaviour:
   _injections:
   - Item: {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
   - Item: {fileID: 8708658426037089991, guid: f61e406118a84934fb2ce4dba15b83e1, type: 3}
-  - Item: {fileID: 0}
   _injectOnAwake: 0
 --- !u!114 &4368608802743908026
 MonoBehaviour:
@@ -203,16 +203,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90bfba8bb918ec147919a9d497f9ef0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <AutoBindScenePlayer>k__BackingField: 0
+  <AutoBindDependencies>k__BackingField: 1
+  <AutoBindScenePlayer>k__BackingField: 1
   <AutoBindSceneMonsters>k__BackingField: 1
   _uILibrary: {fileID: 7126731971134200903}
-  _inputControllers: []
-  _inputControllables: []
+  _eventSystem: {fileID: 911937369077231003}
+  _additionalInputControllers: []
+  _additionalInputControllables: []
   _playerObject: {fileID: 0}
   _playerUI: {fileID: 0}
   _relicAcquisitionUI: {fileID: 0}
   _relicInfoPanelUI: {fileID: 0}
   _settingsUI: {fileID: 0}
+  _dialogueUI: {fileID: 0}
+--- !u!114 &7394125281854984930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9072449599195621900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f8890955b1d8cc4daad52e5f465f30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 3632647419853842006}
 --- !u!1001 &5563312866348345819
 PrefabInstance:
   m_ObjectHideFlags: 0

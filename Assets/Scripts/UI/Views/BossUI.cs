@@ -12,7 +12,7 @@ namespace UI
         [SerializeField] private Animation _animation;
         private EnableWithAnimation _enabler;
 
-        public event Action Destroyed;
+        public event Action Destroying;
 
         #region Interfaces
         Action IEnablable.OnEnabling => null;
@@ -107,7 +107,7 @@ namespace UI
 
         public void Destroy()
         {
-            Destroyed?.Invoke();
+            Destroying?.Invoke();
 
             if (this && gameObject)
                 Destroy(gameObject);

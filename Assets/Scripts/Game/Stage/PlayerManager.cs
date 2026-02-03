@@ -37,7 +37,7 @@ namespace Game.Stage
             }
 
             _player = player;
-            player.Destroyed += () =>
+            player.Destroying += () =>
             {
                 if (!_isDestroyed)
                     _player = null;

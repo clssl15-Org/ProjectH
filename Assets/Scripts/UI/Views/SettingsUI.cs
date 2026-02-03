@@ -3,9 +3,6 @@ using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using UnityEngine.UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace UI
 {
@@ -30,7 +27,7 @@ namespace UI
 
         public bool AllowInput { get; set; } = true;
         public event Action OpenRelicsUI;
-        public event Action Destroyed;
+        public event Action Destroying;
 
         private GameContext _gameContext;
         private EnableWithAnimation _enabler;
@@ -80,8 +77,8 @@ namespace UI
 
             if (!_bgmScroll)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_bgmScroll)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_bgmScroll)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _bgmScroll.onValueChanged.AddListener(val =>
@@ -92,8 +89,8 @@ namespace UI
 
             if (!_sfxScroll)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_sfxScroll)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_sfxScroll)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _sfxScroll.onValueChanged.AddListener(val =>
@@ -104,8 +101,8 @@ namespace UI
 
             if (!_continueBtn)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_continueBtn)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_continueBtn)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _continueBtn.onClick.AddListener(() =>
@@ -116,8 +113,8 @@ namespace UI
 
             if (!_restartBtn)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_restartBtn)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_restartBtn)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _restartBtn.onClick.AddListener(() =>
@@ -128,8 +125,8 @@ namespace UI
 
             if (!_guideBtn)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_guideBtn)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_guideBtn)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _guideBtn.onClick.AddListener(() =>
@@ -140,8 +137,8 @@ namespace UI
 
             if (!_relicsBtn)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_relicsBtn)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_relicsBtn)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _relicsBtn.onClick.AddListener(() =>
@@ -152,8 +149,8 @@ namespace UI
 
             if (!_exitBtn)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_exitBtn)} 컴포넌트가 유효하지 않습니다.")));
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(_exitBtn)} 컴포넌트가 유효하지 않습니다.");
             }
             else
                 _exitBtn.onClick.AddListener(() =>
@@ -214,29 +211,10 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
-            Destroyed?.Invoke();
+            Destroying?.Invoke();
             _enabler?.Dispose();
         }
 
         private string Ctx(string message) => $"[{nameof(SettingsUI)}] {message}";
-
-
-#if UNITY_EDITOR
-        [CustomEditor(typeof(SettingsUI))]
-        private class SettingsUIEditor : Editor
-        {
-            public override void OnInspectorGUI()
-            {
-                base.OnInspectorGUI();
-
-                if (Application.isPlaying)
-                {
-                    GUILayout.Space(8);
-                    if (GUILayout.Button("Export Log"))
-                        BlackboxHandle.Of(target).Export();
-                }
-            }
-        }
-#endif
     }
 }

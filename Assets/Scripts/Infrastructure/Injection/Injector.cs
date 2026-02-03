@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using BlackboxSystem;
+using System.Linq;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -39,6 +41,8 @@ namespace Infrastructure
                 Inject();
             }
         }
+
+        public bool HasInjection<T>() => _injections.Any(i => i.Item is T);
 
         public void AddInjection(MonoBehaviour injection, Type intendedType = null)
         {

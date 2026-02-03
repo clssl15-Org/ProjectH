@@ -6,7 +6,7 @@ namespace UI
     [RequireComponent(typeof(RectTransform))]
     public class HealthBarUI : MonoBehaviour, IView
     {
-        public event Action Destroyed;
+        public event Action Destroying;
 
         protected RectTransform Transform { get; private set; }
         protected IHealthRateVM HealthRateVM { get; private set; }
@@ -75,8 +75,8 @@ namespace UI
 
         public void Destroy()
         {
-            Destroyed?.Invoke();
-            Destroyed = null;
+            Destroying?.Invoke();
+            Destroying = null;
 
             Disconnect();
             if (this && gameObject) Destroy(gameObject);

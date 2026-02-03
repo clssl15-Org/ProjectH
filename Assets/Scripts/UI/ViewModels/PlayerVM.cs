@@ -34,7 +34,7 @@ namespace UI
             _player = player;
 
             _player.ConditionChanged += Update;
-            _player.Destroyed += Dispose;
+            _player.Destroying += Dispose;
         }
 
         private void Update(PlayerCondition condition)
@@ -94,7 +94,7 @@ namespace UI
             IsDisposed = true;
 
             _player.ConditionChanged -= Update;
-            _player.Destroyed -= Dispose;
+            _player.Destroying -= Dispose;
 
             Disposed?.Invoke();
             Disposed = null;

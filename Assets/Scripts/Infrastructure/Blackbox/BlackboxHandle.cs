@@ -26,6 +26,12 @@ namespace BlackboxSystem
         BasedOnSettings,
     }
 
+    public enum ExceptionHandlingOption
+    {
+        None,
+        CrashExport,
+    }
+
     public readonly struct BlackboxHandle
     {
         // Forwarders
@@ -58,6 +64,11 @@ namespace BlackboxSystem
             get => Infrastructure.StrongReference;
             set => Infrastructure.StrongReference = value;
         }
+        public static int DefaultRecursionDepth
+        {
+            get => Infrastructure.DefaultRecursionDepth;
+            set => Infrastructure.DefaultRecursionDepth = value;
+        }
 
         public static ExportFormat ExportFormat
         {
@@ -82,15 +93,35 @@ namespace BlackboxSystem
         // Content
         internal BlackboxHandle(Blackbox blackbox) => _blackbox = blackbox;
 
-        #region Static Methods
-        public static void Initialize(Action<string> logger, bool strongReference = false) => Initialize(string.Empty, logger, logger, strongReference);
-        public static void Initialize(string logDirectory, Action<string> logger, bool strongReference = false) => Initialize(logDirectory, logger, logger, strongReference);
-        public static void Initialize(string logDirectory, Action<string> normalLogger, Action<string> warningLogger, bool strongReference = false)
+        #region Configuration
+        public static void Configure(
+            string logDirectory,
+            Action<string> logger,
+            bool strongReference = false,
+            ExportFormat exportFormat = ExportFormat.BasedOnSettings,
+            FullExportOption fullExportOption = FullExportOption.BasedOnSettings,
+            OpenLogOption openLogOption = OpenLogOption.BasedOnSettings)
+        {
+            Configure(logDirectory, logger, logger, strongReference, exportFormat, fullExportOption, openLogOption);
+        }
+
+        public static void Configure(
+            string logDirectory,
+            Action<string> normalLogger,
+            Action<string> warningLogger,
+            bool strongReference = false,
+            ExportFormat exportFormat = ExportFormat.BasedOnSettings,
+            FullExportOption fullExportOption = FullExportOption.BasedOnSettings,
+            OpenLogOption openLogOption = OpenLogOption.BasedOnSettings)
         {
             Infrastructure.LogDirectory = logDirectory;
             Infrastructure.NormalLogger = normalLogger;
             Infrastructure.WarningLogger = warningLogger;
             Infrastructure.StrongReference = strongReference;
+
+            Infrastructure.ExportFormat = exportFormat;
+            Infrastructure.FullExportOption = fullExportOption;
+            Infrastructure.OpenLogOption = openLogOption;
         }
         public static void ForceReset() => BlackboxRegistry.ForceReset();
         #endregion
@@ -145,18 +176,35 @@ namespace BlackboxSystem
             return ExertedScope(other, message, methodName);
         }
 
-        public string CrashExport(string message, int recursionDepth = -1, ExportFormat format = ExportFormat.Html, FullExportOption fullExport = FullExportOption.BasedOnSettings, OpenLogOption openLog = OpenLogOption.BasedOnSettings)
-        {
-            Infrastructure.Log($"[BlackboxHandle] CRASH: {message}", LogLevel.Warning);
-            Write($"[CRASH] {message}");
-            Write($"[STACK TRACE]\n{new StackTrace(true)}\n");
 
-            ExportInternal(recursionDepth, true, format, fullExport, openLog);
-            return message;
+        public string WriteError(object message, ExceptionHandlingOption exceptionHandlingOption = ExceptionHandlingOption.None, [CallerMemberName] string methodName = "")
+        {
+            var messageStr = ToMessageString(message);
+            
+            if (exceptionHandlingOption == ExceptionHandlingOption.CrashExport)
+            {
+                CrashExport(messageStr);
+                return messageStr;
+            }
+
+            _blackbox?.Write($"[Error] {messageStr}", methodName);
+            return messageStr;
         }
 
-        public void Export(int recursionDepth = -1, ExportFormat format = ExportFormat.BasedOnSettings, FullExportOption fullExportOption = FullExportOption.BasedOnSettings, OpenLogOption openLogOption = OpenLogOption.BasedOnSettings) =>
-            ExportInternal(recursionDepth, false, format, fullExportOption, openLogOption);
+        public string CrashExport(object message, int? recursionDepth = null, ExportFormat format = ExportFormat.Html, FullExportOption fullExport = FullExportOption.BasedOnSettings, OpenLogOption openLog = OpenLogOption.BasedOnSettings)
+        {
+            var messageStr = ToMessageString(message);
+
+            Infrastructure.Log($"[Blackbox] CRASH: {messageStr}", LogLevel.Warning);
+            WriteError(messageStr);
+            Write($"[STACK TRACE]\n{new StackTrace(true)}\n");
+
+            ExportInternal(recursionDepth ?? DefaultRecursionDepth, true, format, fullExport, openLog);
+            return messageStr;
+        }
+
+        public void Export(int? recursionDepth = null, ExportFormat format = ExportFormat.BasedOnSettings, FullExportOption fullExportOption = FullExportOption.BasedOnSettings, OpenLogOption openLogOption = OpenLogOption.BasedOnSettings) =>
+            ExportInternal(recursionDepth ?? DefaultRecursionDepth, false, format, fullExportOption, openLogOption);
 
         private void ExportInternal(int recursionDepth, bool isCrash, ExportFormat format, FullExportOption fullExportOption, OpenLogOption openLogOption)
         {
