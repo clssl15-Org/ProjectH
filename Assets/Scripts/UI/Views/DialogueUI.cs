@@ -59,7 +59,7 @@ namespace UI
         private bool _isAwaked = false;
 
 
-        private void Awake()
+        private void Start()
         {
             if (_isAwaked) return;
             _isAwaked = true;
@@ -116,24 +116,24 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabled");
 
-            Awake();
+            Start();
 
             BlackboxHandle.Of(this).Exert(_enabler, "Enable");
             _enabler.Enable();
         }
         public void Disable()
         {
-            Awake();
+            Start();
             _enabler.Disable();
         }
         public void SetToEnabled()
         {
-            Awake();
+            Start();
             _enabler.SetToEnabled();
         }
         public void SetToDisabled()
         {
-            Awake();
+            Start();
             _enabler.SetToDisabled();
         }
     }
