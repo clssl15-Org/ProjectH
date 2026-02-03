@@ -257,7 +257,7 @@ namespace Actors
             };
 
             // 스폰 인디케이터 표시
-            if (monsterSpawnIndicator != null)
+            if (monsterSpawnIndicator != null && currentPhaseIndex != 0)
             {
                 GameObject indicator = Instantiate(monsterSpawnIndicator, spawnTransform.position, Quaternion.identity);
             }
