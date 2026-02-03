@@ -234,10 +234,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injections:
-  - {fileID: 1052354694}
-  - {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
-  - {fileID: 459002117}
-  _injectAtAwake: 1
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  _injectOnAwake: 0
 --- !u!1 &611408358
 GameObject:
   m_ObjectHideFlags: 0
@@ -5592,7 +5592,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 29
-      m_TileSpriteIndex: 18
+      m_TileSpriteIndex: 19
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -6117,10 +6117,10 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: -1127110149, guid: 0de62c09a9abae348b08c28b014c2160, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: -1127110149, guid: 0de62c09a9abae348b08c28b014c2160, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1987757962, guid: 0de62c09a9abae348b08c28b014c2160, type: 3}
   - m_RefCount: 1
@@ -6980,6 +6980,7 @@ MonoBehaviour:
       spawnCount: 0
       canDuplicate: 0
       monsterPrefabs: []
+  monsterSpawnIndicator: {fileID: 8864012734817497381, guid: 8a2ced6a080564e4aaf408f5d0e9016b, type: 3}
   gameAssetLibrary: {fileID: 0}
   platformManager: {fileID: 459002117}
   configuration: {fileID: 0}

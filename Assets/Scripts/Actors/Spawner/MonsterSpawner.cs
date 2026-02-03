@@ -21,6 +21,10 @@ namespace Actors
         [SerializeField]
         private List<SpawnPhase> phases = new List<SpawnPhase>();
 
+        [Header("인디케이터 설정")]
+        [SerializeField]
+        private GameObject monsterSpawnIndicator;
+
         public GameAssetLibrary gameAssetLibrary;
         public PlatformManager platformManager;
         public Configuration configuration;
@@ -251,6 +255,12 @@ namespace Actors
                     OnMonsterDied(monsterInstance);
                 }
             };
+
+            // 스폰 인디케이터 표시
+            if (monsterSpawnIndicator != null && currentPhaseIndex != 0)
+            {
+                GameObject indicator = Instantiate(monsterSpawnIndicator, spawnTransform.position, Quaternion.identity);
+            }
         }
 
         /// <summary>

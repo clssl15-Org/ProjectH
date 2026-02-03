@@ -967,17 +967,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8798525031514620034, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
   m_PrefabInstance: {fileID: 533402922}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &533402924 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
-  m_PrefabInstance: {fileID: 533402922}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db37b3cef8b110b489e35e926666cfc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &594535622
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,6 +1261,7 @@ GameObject:
   - component: {fileID: 1374360487}
   - component: {fileID: 1374360486}
   - component: {fileID: 1374360485}
+  - component: {fileID: 1374360489}
   m_Layer: 0
   m_Name: Stage 1
   m_TagString: Untagged
@@ -1311,10 +1301,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injections:
-  - {fileID: 2097245833}
-  - {fileID: 533402924}
-  - {fileID: 1720937595}
-  _injectAtAwake: 1
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  _injectOnAwake: 0
 --- !u!114 &1374360485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1330,8 +1320,13 @@ MonoBehaviour:
   <AutoBindScenePlayer>k__BackingField: 0
   <AutoBindSceneMonsters>k__BackingField: 1
   _uILibrary: {fileID: 102672348}
+  _additionalInputControllers: []
+  _additionalInputControllables: []
   _playerObject: {fileID: 75176963}
   _playerUI: {fileID: 1173989406}
+  _relicAcquisitionUI: {fileID: 0}
+  _relicInfoPanelUI: {fileID: 0}
+  _settingsUI: {fileID: 0}
 --- !u!114 &1374360486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1369,6 +1364,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 2081308166}
+--- !u!114 &1374360489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374360482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19052516c81045b4eabe50cd59783529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1418518198
 GameObject:
   m_ObjectHideFlags: 0
@@ -5025,7 +5032,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 4
-      m_TileSpriteIndex: 6
+      m_TileSpriteIndex: 15
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -5445,7 +5452,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 8
-      m_TileSpriteIndex: 7
+      m_TileSpriteIndex: 14
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -6745,7 +6752,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 1
-      m_TileSpriteIndex: 8
+      m_TileSpriteIndex: 10
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -6992,26 +6999,26 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 2
     m_Data: {fileID: 871872151, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 21166158, guid: ed7e83f18ebe31a40a72f37f044254bf, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: -356370471, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: -1881721056, guid: ed7e83f18ebe31a40a72f37f044254bf, type: 3}
-  - m_RefCount: 296
-    m_Data: {fileID: 113793096, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 296
+    m_Data: {fileID: 113793096, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: -1881721056, guid: ed7e83f18ebe31a40a72f37f044254bf, type: 3}
   - m_RefCount: 10
     m_Data: {fileID: -1553667066, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
   - m_RefCount: 2
     m_Data: {fileID: 342663762, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 319058423, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: -356370471, guid: f40544b1cd71aa94ca95b3b4fb5d9d3d, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 21166158, guid: ed7e83f18ebe31a40a72f37f044254bf, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -492745140, guid: ed7e83f18ebe31a40a72f37f044254bf, type: 3}
   - m_RefCount: 2
@@ -7345,6 +7352,7 @@ MonoBehaviour:
       spawnCount: 0
       canDuplicate: 0
       monsterPrefabs: []
+  monsterSpawnIndicator: {fileID: 8864012734817497381, guid: 8a2ced6a080564e4aaf408f5d0e9016b, type: 3}
   gameAssetLibrary: {fileID: 0}
   platformManager: {fileID: 1720937595}
   configuration: {fileID: 0}

@@ -406,10 +406,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injections:
-  - {fileID: 43997186}
-  - {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
-  - {fileID: 73715376}
-  _injectAtAwake: 1
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  _injectOnAwake: 0
 --- !u!1 &589188951
 GameObject:
   m_ObjectHideFlags: 0
@@ -7329,7 +7329,7 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
-      m_AllTileFlags: 2147483649
+      m_AllTileFlags: 1073741825
   - first: {x: 21, y: 26, z: 0}
     second:
       serializedVersion: 2
@@ -7339,7 +7339,7 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
-      m_AllTileFlags: 2147483649
+      m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 0
@@ -8475,7 +8475,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.3
+      value: -8.63
       objectReference: {fileID: 0}
     - target: {fileID: 5206959040189568651, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: m_LocalPosition.z

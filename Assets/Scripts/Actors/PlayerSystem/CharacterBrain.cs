@@ -6,6 +6,7 @@ namespace Actors.PlayerSystem
 {
     public class CharacterBrain : MonoBehaviour
     {
+        private Player player;
         private InputHandler inputHandler;
         private CharacterActions characterActions = new CharacterActions();
 
@@ -20,6 +21,8 @@ namespace Actors.PlayerSystem
                 return;
             if (!canPlayerControl)
                 return;
+            if (!player.AllowInput)
+                return;
 
             characterActions.SetValues(inputHandler);
             characterActions.Update(dt);
@@ -29,6 +32,7 @@ namespace Actors.PlayerSystem
         private void Awake()
         {
             characterActions.InitializeActions();
+            player = this.transform.root.GetComponentInChildren<Player>();
             inputHandler = GetComponent<InputHandler>();
         }
 

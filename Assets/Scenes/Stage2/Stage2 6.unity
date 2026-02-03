@@ -375,10 +375,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _injections:
-  - {fileID: 1052354694}
-  - {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
-  - {fileID: 64851829}
-  _injectAtAwake: 1
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  - Item: {fileID: 0}
+  _injectOnAwake: 0
 --- !u!1001 &604632151
 PrefabInstance:
   m_ObjectHideFlags: 0
