@@ -4,9 +4,6 @@ using Infrastructure;
 using UI.RelicInfoPanelView;
 using UnityEngine;
 using UnityEngine.UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace UI
 {
@@ -14,7 +11,8 @@ namespace UI
         IStandaloneUpdatable,
         IEnablable,
         IInputController,
-        IInputControllable
+        IInputControllable,
+        IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
         [Space]
@@ -29,6 +27,14 @@ namespace UI
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+
+            if (_darkscreenUI)
+            {
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Enable for '{name}'");
+                _darkscreenUI.EnableFor(this, ((IEnablable)this).Disable);
+            }
+
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "BlockAll");
@@ -38,6 +44,14 @@ namespace UI
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () =>
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
+
+            if (_darkscreenUI)
+            {
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Disable from '{name}'");
+                _darkscreenUI.Disable();
+            }
+
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "UnblockAll");
@@ -49,6 +63,7 @@ namespace UI
 
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
+        private DarkscreenUI _darkscreenUI;
         private bool _isInitialized = false;
 
 
@@ -89,6 +104,7 @@ namespace UI
         }
 
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         public void Open()
         {
@@ -174,24 +190,5 @@ namespace UI
             Destroying?.Invoke();
             _enabler?.Dispose();
         }
-
-
-#if UNITY_EDITOR
-        [CustomEditor(typeof(RelicInfoPanelUI))]
-        private class RelicInfoPanelUIEditor : Editor
-        {
-            public override void OnInspectorGUI()
-            {
-                base.OnInspectorGUI();
-
-                if (Application.isPlaying)
-                {
-                    GUILayout.Space(8);
-                    if (GUILayout.Button("Export Log"))
-                        BlackboxHandle.Of(target).Export(openLogOption: OpenLogOption.Open);
-                }
-            }
-        }
-#endif
     }
 }

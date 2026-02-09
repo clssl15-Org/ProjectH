@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5796551326715296538}
   - component: {fileID: 6042495627723871398}
   - component: {fileID: 2024988469432630074}
-  - component: {fileID: 523821204606114324}
+  - component: {fileID: 2748922667782780618}
   m_Layer: 5
   m_Name: Settings UI
   m_TagString: Untagged
@@ -117,7 +117,7 @@ MonoBehaviour:
   _guideBtn: {fileID: 4977184009327839181}
   _relicsBtn: {fileID: 4440608289466822533}
   _exitBtn: {fileID: 9000524071899636152}
---- !u!114 &523821204606114324
+--- !u!114 &2748922667782780618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 302101666878175328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f8890955b1d8cc4daad52e5f465f30a, type: 3}
+  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 2024988469432630074}

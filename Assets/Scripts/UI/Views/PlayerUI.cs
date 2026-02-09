@@ -1,23 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using MonsterSystem = Actors.Monsters.Actions;
 
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class PlayerUI : MonoBehaviour, IView, IEnablable, IInputControllable
+    public class PlayerUI : MonoBehaviour,
+        IView,
+        IEnablable,
+        IInputControllable
     {
         // Front
         public bool AllowInput { get; set; } = true;
         public event Action Destroying;
 
         // Internal
+        [SerializeField] private PlayerView.SkillManager _skillManager;
         [SerializeField] private Button _skillBtn;
         [SerializeField] private Animation _skillRouletteBackground;
         [SerializeField] private VideoPlayer _skillRoulette;
@@ -51,36 +55,34 @@ namespace UI
         private IDisposable _skillRouletteDeactivateTimer;
 
         private bool _isSkillRulettelocked = false;
-        private MonsterSystem.MonsterAnimationPlayer _skillAnimPlayer;
-        private int _currentSelectedSkillIndex = 0;
-
         private bool _isAwaked = false;
 
 
         // Content
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+
             if (_isAwaked) return;
             _isAwaked = true;
 
             _transform = GetComponent<RectTransform>();
-
-            Animator skillAnimator = null;
-            if (!(_skillBtn?.TryGetComponent(out skillAnimator) ?? false))
-                throw new InvalidOperationException(
-                    $"[{nameof(PlayerUI)}] {nameof(_skillBtn)} 컴포넌트는 '{nameof(Animator)}'을(를) 가지고 있어야 합니다.");
 
             _skillRouletteEnabler = new EnableWithAnimation(_skillRouletteBackground, false)
                 .InitializeWithIEnablable(this, false);
             _skillRouletteEnabler.SetToDisabled();
 
             _skillRoulette.clip = null;
-            _skillAnimPlayer = new(skillAnimator);
         }
 
         public void Connect(PlayerVM player)
         {
+            using var _ = BlackboxHandle.Of(this).ExertScope(player, $"Connect: {player}");
             _player = player;
+
+            _skillManager.Initialize(player.HavingSkills.ToArray());
+            player.SkillAdded += _skillManager.AddSkill;
+            player.SkillChanged += _skillManager.OnSkillChanged;
 
             _skillBtn.onClick.AddListener(ApplyRandomSkillBuff);
 
@@ -94,15 +96,17 @@ namespace UI
 
             #region RelicManager 연결
             if (!RelicManager.Instance)
-                throw new InvalidOperationException(
-                    $"[{nameof(PlayerUI)}] {nameof(RelicManager.Instance)}이(가) 유효하지 않습니다.");
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                    $"[{nameof(PlayerUI)}] {nameof(RelicManager.Instance)}이(가) 유효하지 않습니다."));
+            BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Connect");
 
             foreach (var id in RelicManager.Instance.OwnedRelics.Keys)
             {
                 if (!RelicManager.Instance.TryGetRelicData(id, out var relicData))
                 {
-                    Debug.LogWarning(
-                        $"[{nameof(PlayerUI)}] Relic ID '{id}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾을 수 없습니다.");
+                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        $"[{nameof(PlayerUI)}] Relic ID '{id}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾을 수 없습니다."),
+                        this);
                     continue;
                 }
 
@@ -115,13 +119,22 @@ namespace UI
 
         private void OnRelicAcquired(RelicDataSO relicSO, string _)
         {
+            using var __ = BlackboxHandle.Of(this).ExertScope(_relicManager, $"Relic Acquired: {relicSO.name}");
             _relicManager.AddRelic(relicSO);
         }
 
         public void Disconnect()
         {
-            if (_player == null)
-                return;
+            using var _ = BlackboxHandle.Of(this).WriteScope("Disconnect");
+
+            if (_player != null)
+            {
+                BlackboxHandle.Of(this).Exert(_player, "Disconnect");
+
+                _player.SkillAdded -= _skillManager.AddSkill;
+                _player.SkillChanged -= _skillManager.OnSkillChanged;
+                _player = null;
+            }
 
             _skillBtn.onClick.RemoveAllListeners();
             _defaultAttackBtn.onClick.RemoveAllListeners();
@@ -131,9 +144,10 @@ namespace UI
             _healthBar.Disconnect();
 
             if (RelicManager.Instance)
+            {
+                BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Disconnect");
                 RelicManager.Instance.RelicAcquired -= OnRelicAcquired;
-
-            _player = null;
+            }
         }
 
         // 여기서 UI 이벤트 처리
@@ -147,7 +161,7 @@ namespace UI
             if (Input.GetKeyDown(KeyCode.E))
                 SelectNextSkill();
 
-            if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.0001f)
+            if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.01f)
                 _currentSelectedButtons.Add(_skillBtn);
 
             if (Input.GetMouseButton(0))
@@ -187,23 +201,18 @@ namespace UI
 
         private void SelectNextSkill()
         {
-            var animName = _currentSelectedSkillIndex switch
-            {
-                0 => "1 to 2",
-                1 => "2 to 3",
-                2 => "3 to 1",
-                var i => throw new ArgumentOutOfRangeException(
-                    nameof(_currentSelectedSkillIndex), i , "인자는 0 이상 2 이하여야 합니다.")
-            };
+            if (_player == null)
+                Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    "[PlayerUI] Player가 null이기 때문에 SelectNextSkill 메서드를 실행할 수 없습니다."));
 
-            _currentSelectedSkillIndex = (_currentSelectedSkillIndex + 1) % 3;
-            _skillAnimPlayer.Play(new(animName));
-
-            _player.ChangeSkill(_currentSelectedSkillIndex);
+            _player.ChangeSkill();
         }
 
         private void ApplyRandomSkillBuff()
         {
+            if (!_player.CanApplySkillBuff)
+                return;
+
             if (_isSkillRulettelocked) return;
             _isSkillRulettelocked = true;
 
@@ -255,7 +264,6 @@ namespace UI
         }
 
 
-
         public void SetParent(RectTransform parent)
         {
             Awake();
@@ -264,6 +272,8 @@ namespace UI
 
         public void Destroy()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
+
             Disconnect();
             Destroying?.Invoke();
 
@@ -272,12 +282,12 @@ namespace UI
         }
 
         void IEnablable.Enable() =>
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         void IEnablable.Disable() =>
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         void IEnablable.SetToEnabled() =>
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
         void IEnablable.SetToDisabled() =>
-            throw new InvalidOperationException();
+            throw new NotImplementedException();
     }
 }

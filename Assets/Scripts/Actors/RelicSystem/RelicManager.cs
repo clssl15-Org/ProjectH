@@ -33,7 +33,9 @@ public class RelicManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 씬 전환 시 파괴 방지
+
+        // Game Manager의 자식이기 때문에 씬 전환 시 파괴되지 않습니다.
+        //DontDestroyOnLoad(gameObject); // 씬 전환 시 파괴 방지
     }
 
     private void Start()

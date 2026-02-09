@@ -39,6 +39,7 @@ namespace Game.Stage
         [SerializeField] private RelicInfoPanelUI _relicInfoPanelUI;
         [SerializeField] private SettingsUI _settingsUI;
         [SerializeField] private DialogueUI _dialogueUI;
+        [SerializeField] private DarkscreenUI _darkScreenUI;
 
         protected IPlayer Player { get; private set; }
         protected UILibrary UILibrary => _uILibrary;
@@ -104,16 +105,32 @@ namespace Game.Stage
                 var injector = GetComponent<Injector>();
                 if (!injector.HasInjection<PlatformManager>())
                 {
-                    var platformManager = FindAnyObjectByType<PlatformManager>(FindObjectsInactive.Include);
+                    if (!_platformManager)
+                        _platformManager = FindAnyObjectByType<PlatformManager>(FindObjectsInactive.Include);
 
-                    if (platformManager)
+                    if (_platformManager)
                     {
-                        injector.AddInjection(platformManager, typeof(PlatformManager));
+                        injector.AddInjection(_platformManager, typeof(PlatformManager));
                     }
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).Write(
-                            $"씬에서 {nameof(platformManager)}을(를) 찾는 데 실패했습니다."), this);
+                            $"씬에서 {nameof(_platformManager)}을(를) 찾는 데 실패했습니다."), this);
+                    }
+                }
+                if (!injector.HasInjection<DarkscreenUI>())
+                {
+                    if (!_darkScreenUI)
+                        _darkScreenUI = FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include);
+
+                    if (_darkScreenUI)
+                    {
+                        injector.AddInjection(_darkScreenUI, typeof(DarkscreenUI));
+                    }
+                    else
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                            $"씬에서 {nameof(_darkScreenUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
             }

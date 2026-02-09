@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Actors.PlayerSystem;
 using UnityEngine;
 
@@ -15,7 +16,14 @@ public class SkillManager : MonoBehaviour
     public CharacterActions characterActions;
     public CharacterStateController CharacterStateController { get; private set; }
 
-    public event Action<string> OnSkillChanged;
+    public IEnumerable<SkillType> HavingSkills => skills.Select(skill => skill.SkillType);
+
+    public SkillType SelectedSkillType => skills.Count > 0
+        ? skills[selectedIndex].SkillType
+        : SkillType.None;
+
+    public event Action<SkillType> SkillAdded;
+    public event Action<SkillType> SkillChanged;
 
     private DamageRoulette damageRoulette;
     private int selectedIndex = 0;
@@ -42,7 +50,7 @@ public class SkillManager : MonoBehaviour
         }
 
         selectedIndex = (selectedIndex + 1) % skills.Count;
-        OnSkillChanged?.Invoke(skills[selectedIndex].name); // 선택 스킬이 변경되었다고 알림과 동시에 이름을 전달
+        SkillChanged?.Invoke(skills[selectedIndex].SkillType); // 선택 스킬이 변경되었다고 알림과 동시에 이름을 전달
         Debug.Log($"{skills[selectedIndex]} is Selected");
     }
 
@@ -73,10 +81,14 @@ public class SkillManager : MonoBehaviour
     {
         skill.enabled = true;
         skills.Add(skill);
+
+        SkillAdded?.Invoke(skill.SkillType);
     }
     public void AddUltimateSkill(CharacterState skill)
     {
         skill.enabled = true;
         ultimateSkill = skill;
+
+        SkillAdded?.Invoke(skill.SkillType);
     }
 }

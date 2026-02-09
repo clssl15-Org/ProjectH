@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Actors.PlayerSystem;
 using Infrastructure;
 using UnityEngine;
 using World;
@@ -35,13 +36,19 @@ namespace Actors
         int HP { get; }
         bool IsAlive { get; }
 
+        IEnumerable<SkillType> HavingSkills { get; }
+        SkillType SelectedSkillType { get; }
+
         event Action<PlayerCondition> ConditionChanged;
+        event Action<SkillType> SkillAdded;
+        event Action<SkillType> SkillChanged;
 
         int MaxHP { get; }
         int CurrentPlatform { get; }
 
         // Skill
         int SelectedSkillIndex { get; }
+        bool CanApplySkillBuff { get; }
 
 
         // ---------- Methods ----------
@@ -52,8 +59,9 @@ namespace Actors
         // Skill
         void UseSkill();
         void UseUltimate();
-        void ChangeSkill(int skillIndex);
+        void ChangeSkill();
         void ApplyRandomSkillBuff(float factor);
+
 
 
         // ---------- MonoBehaviour ----------

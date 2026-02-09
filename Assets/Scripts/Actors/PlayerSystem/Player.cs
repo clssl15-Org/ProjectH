@@ -14,6 +14,8 @@ namespace Actors.PlayerSystem
         {
             get => skillManager.SelectedSkillIndex;
         }
+        // юс╫ц
+        public bool CanApplySkillBuff => true;
 
         public PlayerStatsSO originStats;
         public PlayerStats playerStats;
@@ -26,6 +28,9 @@ namespace Actors.PlayerSystem
         public int sieldCount { get; set; } = 0;
 
         public bool IsAlive => playerHealth.IsAlive;
+
+        public IEnumerable<SkillType> HavingSkills => skillManager.HavingSkills;
+        public SkillType SelectedSkillType => skillManager.SelectedSkillType;
 
         public int MaxHP => playerHealth.MaxHealth;
         public int AttackPower => (int)((playerStats.attackPower + playerStats.additionalAttackPower) * playerStats.attackPowerMultiplier);
@@ -54,6 +59,17 @@ namespace Actors.PlayerSystem
         public PlayerHealth PlayerHealth => playerHealth;
 
         public event Action<PlayerCondition> ConditionChanged;
+        public event Action<SkillType> SkillAdded
+        {
+            add => skillManager.SkillAdded += value;
+            remove => skillManager.SkillAdded -= value;
+        }
+        public event Action<SkillType> SkillChanged
+        {
+            add => skillManager.SkillChanged += value;
+            remove => skillManager.SkillChanged -= value;
+        }
+
         public event Action Destroying;
 
         private bool invincible = false;
@@ -106,7 +122,7 @@ namespace Actors.PlayerSystem
             int damage = (int)(value * RouletteDamageMultiplier);
             return damage;
         }
-        public void ChangeSkill(int skillIndex)
+        public void ChangeSkill()
         {
             skillManager.ChangeSkill();
         }

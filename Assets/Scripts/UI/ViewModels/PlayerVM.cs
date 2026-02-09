@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Actors;
+using Actors.PlayerSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace UI
 {
@@ -15,6 +17,33 @@ namespace UI
             }
         }
         public event Action<HealthRateData> HealthRateChanged;
+
+        public IEnumerable<SkillType> HavingSkills
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _player.HavingSkills;
+            }
+        }
+        public SkillType SelectedSkillType
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _player.SelectedSkillType;
+            }
+        }
+        public bool CanApplySkillBuff
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _player.CanApplySkillBuff;
+            }
+        }
+        public event Action<SkillType> SkillAdded;
+        public event Action<SkillType> SkillChanged;
 
         public event Action Disposed;
         public bool IsDisposed { get; private set; } = false;
@@ -33,26 +62,52 @@ namespace UI
 
             _player = player;
 
-            _player.ConditionChanged += Update;
+            _player.ConditionChanged += OnHealthUpdated;
+            _player.SkillAdded += OnSkillAdded;
+            _player.SkillChanged += OnSkillChanged;
             _player.Destroying += Dispose;
         }
 
-        private void Update(PlayerCondition condition)
+        private void OnHealthUpdated(PlayerCondition condition)
         {
             ThrowIfDisposed();
 
             if (condition == PlayerCondition.Damage
                 || condition == PlayerCondition.Heal)
+            {
                 HealthRateChanged?.Invoke(HealthRate);
+            }
+        }
+        private void OnSkillChanged(SkillType skillType)
+        {
+            ThrowIfDisposed();
+
+            if (skillType == SkillType.RangedAttack
+                || skillType == SkillType.StrongAttack
+                || skillType == SkillType.RushStabbing)
+            {
+                SkillChanged?.Invoke(skillType);
+            }
+        }
+        private void OnSkillAdded(SkillType skillType)
+        {
+            ThrowIfDisposed();
+
+            if (skillType == SkillType.RangedAttack
+                || skillType == SkillType.StrongAttack
+                || skillType == SkillType.RushStabbing)
+            {
+                SkillAdded?.Invoke(skillType);
+            }
         }
 
         #region Skill Inputs
-        public void ChangeSkill(int skillIndex)
+        public void ChangeSkill()
         {
             ThrowIfDisposed();
             if (_player == null) return;
 
-            _player.ChangeSkill(skillIndex);
+            _player.ChangeSkill();
         }
         public void ApplyRandomSkillBuff(float factor)
         {
@@ -93,14 +148,20 @@ namespace UI
             if (IsDisposed) return;
             IsDisposed = true;
 
-            _player.ConditionChanged -= Update;
-            _player.Destroying -= Dispose;
+            if (_player != null)
+            {
+                _player.ConditionChanged -= OnHealthUpdated;
+                _player.SkillAdded -= OnSkillAdded;
+                _player.SkillChanged -= OnSkillChanged;
+                _player.Destroying -= Dispose;
+
+                _player = null;
+            }
+
+            HealthRateChanged = null;
 
             Disposed?.Invoke();
             Disposed = null;
-
-            HealthRateChanged = null;
-            _player = null;
         }
 
         private void ThrowIfDisposed()
@@ -110,6 +171,6 @@ namespace UI
                     Ctx("이미 Dispose된 객체에 접근하려고 시도했습니다."));
         }
 
-        private string Ctx(string message) => $"[{nameof(MonsterVM)}] {message}";
+        private string Ctx(string message) => $"[{nameof(PlayerVM)}] {message}";
     }
 }

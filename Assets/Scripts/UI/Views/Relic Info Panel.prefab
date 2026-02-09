@@ -530,6 +530,7 @@ GameObject:
   - component: {fileID: 7753504626244449266}
   - component: {fileID: 5374743149364554971}
   - component: {fileID: 6102389977471404125}
+  - component: {fileID: 1211822472328427176}
   m_Layer: 5
   m_Name: Relic Info Panel
   m_TagString: Untagged
@@ -625,11 +626,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d531932a5f942443972b9a4907ecbaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PressTabToOpen>k__BackingField: 1
+  <OpenKey>k__BackingField: 9
   _closeBtn: {fileID: 2551660268137255990}
   _relicListParent: {fileID: 3554552723969534572}
   _relicInfoPrefab: {fileID: 8783996122224119249}
   _animation: {fileID: 5374743149364554971}
+--- !u!114 &1211822472328427176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2237323143425982677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 6102389977471404125}
 --- !u!1 &3417583191095682756
 GameObject:
   m_ObjectHideFlags: 0

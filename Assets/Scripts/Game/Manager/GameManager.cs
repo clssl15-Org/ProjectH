@@ -52,7 +52,8 @@ namespace Game
                 strongReference: false,
                 exportFormat: ExportFormat.Html,
                 fullExportOption: FullExportOption.Full,
-                openLogOption: OpenLogOption.Open);
+                openLogOption: OpenLogOption.Open,
+                exceptionHandlingOption: ExceptionHandlingOption.CrashExport);
 
             using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");
 

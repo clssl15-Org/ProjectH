@@ -12,7 +12,8 @@ namespace UI
         IEnablable,
         IInputController,
         IInputControllable,
-        IInjectable<GameContext>
+        IInjectable<GameContext>,
+        IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Escape;
         [SerializeField] private Animation _animation;
@@ -30,17 +31,24 @@ namespace UI
         public event Action Destroying;
 
         private GameContext _gameContext;
+        private DarkscreenUI _darkscreenUI;
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
         private bool _isInitialized = false;
 
-        #region interfaces
+        #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+
+            if (_darkscreenUI)
+            {
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Enable for '{name}'");
+                _darkscreenUI.EnableFor(this, Disable);
+            }
+
             if (_inputHub != null)
             {
-                using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
-
                 _bgmScroll.value = _gameContext.BgmVolume / 100f;
                 _sfxScroll.value = _gameContext.SfxVolume / 100f;
 
@@ -51,10 +59,16 @@ namespace UI
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () =>
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
+
+            if (_darkscreenUI)
+            {
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Disable from '{name}'");
+                _darkscreenUI.Disable();
+            }
+
             if (_inputHub != null)
             {
-                using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
-
                 BlackboxHandle.Of(this).Exert(_inputHub, "UnblockAll");
                 _inputHub.UnblockAll();
             }
@@ -172,6 +186,7 @@ namespace UI
         }
 
         void IInjectable<GameContext>.Inject(GameContext gameContext) => _gameContext = gameContext;
+        void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         void IStandaloneUpdatable.StandaloneUpdate()

@@ -1668,6 +1668,7 @@ GameObject:
   - component: {fileID: 1555541183956866340}
   - component: {fileID: 1639502756631222003}
   - component: {fileID: 3194588562940674162}
+  - component: {fileID: 2204206218207335048}
   m_Layer: 5
   m_Name: Relic Acquisition UI
   m_TagString: Untagged
@@ -1744,3 +1745,16 @@ MonoBehaviour:
   - IsFront: 0
     Video: {fileID: 32900000, guid: 5cb9286ec19e7d442a0771fe6c303592, type: 3}
     AlphaMask: {fileID: 32900000, guid: c89612d0928bd994b8f44ee072325b13, type: 3}
+--- !u!114 &2204206218207335048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158238539528485429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 3194588562940674162}

@@ -582,6 +582,7 @@ GameObject:
   - component: {fileID: 9197773602851334039}
   - component: {fileID: 7767110655553157410}
   - component: {fileID: 1469731473334030968}
+  - component: {fileID: 2374745376589761337}
   m_Layer: 5
   m_Name: Dialogue UI
   m_TagString: Untagged
@@ -679,16 +680,16 @@ MonoBehaviour:
   _portraitUI: {fileID: 8185993656156951199}
   _nametagUI: {fileID: 4313493550177781126}
   _dialogueUI: {fileID: 665646787475707627}
-  _portraits:
-  - Character: 0
-    Icon: {fileID: 21300000, guid: e31da06a823188748a6b49ac0d9c4641, type: 3}
-  - Character: 1
-    Icon: {fileID: 21300000, guid: 5e35ff775d600ef4f8062c6e08320a18, type: 3}
-  - Character: 2
-    Icon: {fileID: 21300000, guid: 5e35ff775d600ef4f8062c6e08320a18, type: 3}
-  - Character: 3
-    Icon: {fileID: 21300000, guid: 2f0cc149530f48943a7fd1ebdabe8b77, type: 3}
-  - Character: 4
-    Icon: {fileID: 21300000, guid: 421b8a8f71ec2a6458757d2b0faf547f, type: 3}
-  - Character: 5
-    Icon: {fileID: 21300000, guid: 11e7b6ac0a0a2514d9a923296be877ea, type: 3}
+--- !u!114 &2374745376589761337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8795469811139950718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 1469731473334030968}

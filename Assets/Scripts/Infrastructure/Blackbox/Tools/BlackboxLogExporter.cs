@@ -33,7 +33,7 @@ namespace BlackboxSystem
                         BlackboxHandle.Of(target).Export();
                 }
                 else
-                    GUILayout.Label("Enter Play Mode to export logs", EditorStyles.centeredGreyMiniLabel);
+                    GUILayout.Label("Enter play mode to export logs", EditorStyles.centeredGreyMiniLabel);
             }
         }
 #endif

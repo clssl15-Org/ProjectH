@@ -4,8 +4,22 @@ using UnityEngine;
 
 namespace Actors.PlayerSystem
 {
+    public enum SkillType
+    {
+        None,
+        Undefined,
+        RushStabbing,
+        RangedAttack,
+        StrongAttack,
+    }
+
     public abstract class CharacterState : MonoBehaviour
     {
+        // 어떤 스킬인지
+        [field: SerializeField]
+        public SkillType SkillType { get; protected set; } = SkillType.Undefined;
+
+        [Space]
         [SerializeField]
         RuntimeAnimatorController runtimeAnimatorController = null;
         public RuntimeAnimatorController RuntimeAnimatorController => runtimeAnimatorController;
