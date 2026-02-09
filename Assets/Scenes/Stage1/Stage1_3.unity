@@ -6226,7 +6226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxFactor: 0.1
+  parallaxFactor: 0.3
 --- !u!212 &1705851755
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6289,7 +6289,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1742010411}
   - component: {fileID: 1742010413}
-  - component: {fileID: 1742010412}
   m_Layer: 0
   m_Name: Layer-1
   m_TagString: Untagged
@@ -6314,19 +6313,6 @@ Transform:
   - {fileID: 1686174574}
   m_Father: {fileID: 426317850}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1742010412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742010410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57d76878b08378e49b2376f224bb8f78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parallaxFactor: 0.2
 --- !u!212 &1742010413
 SpriteRenderer:
   m_ObjectHideFlags: 0
