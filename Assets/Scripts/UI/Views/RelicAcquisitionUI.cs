@@ -6,8 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using UI.RelicInfoPanelView;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

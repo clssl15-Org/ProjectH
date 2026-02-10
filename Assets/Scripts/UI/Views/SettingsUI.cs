@@ -16,6 +16,8 @@ namespace UI
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Escape;
+        [field: SerializeField] public bool AllowKeyOnlyWhenOpen { get; set; } = false;
+        [Space]
         [SerializeField] private Animation _animation;
         [Header("Controllers")]
         [SerializeField] private Scrollbar _bgmScroll;
@@ -197,7 +199,10 @@ namespace UI
             if (Input.GetKeyDown(OpenKey))
             {
                 if (!_enabler.IsEnabled)
-                    Enable();
+                {
+                    if (!AllowKeyOnlyWhenOpen)
+                        Enable();
+                }
                 else
                     Disable();
             }

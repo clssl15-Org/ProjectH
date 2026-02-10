@@ -18,6 +18,16 @@ namespace Game
     public sealed class GameManager : GameContext
     {
         // Forwardings
+        public override event Action<float> BgmChanged
+        {
+            add => _soundManager.BgmChanged += value;
+            remove => _soundManager.BgmChanged -= value;
+        }
+        public override event Action<float> SfxChanged
+        {
+            add => _soundManager.SfxChanged += value;
+            remove => _soundManager.SfxChanged -= value;
+        }
         public override int BgmVolume => _soundManager.BgmVolume;
         public override int SfxVolume => _soundManager.SfxVolume;
 

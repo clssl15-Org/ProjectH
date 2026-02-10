@@ -1,0 +1,61 @@
+using System;
+using System.Linq;
+using BlackboxSystem;
+using UnityEngine;
+using Infrastructure;
+
+namespace Sound
+{
+    [RequireComponent(typeof(AudioSource))]
+    public abstract class AudioPlayManager<TName> : MonoBehaviour,
+        IStandaloneInitializable,
+        IInjectable<GameContext>
+        where TName : Enum
+    {
+        [Serializable]
+        public struct AudioData
+        {
+            public TName Name;
+            public AudioClip AudioClip;
+        }
+        [SerializeField] private AudioData[] _audios;
+
+        protected GameContext GameContext { get; private set; }
+        private AudioSource _audioSource;
+        private bool _isAwaked = false;
+
+
+        void IStandaloneInitializable.StandaloneInitialize() => Awake();
+        private void Awake()
+        {
+            if (_isAwaked) return;
+            _isAwaked = true;
+
+            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+            _audioSource = GetComponent<AudioSource>();
+        }
+
+        void IInjectable<GameContext>.Inject(GameContext gameContext) =>
+            GameContext = gameContext;
+
+        public void Play(TName name)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Play: {name}");
+
+            var clip = _audios.FirstOrDefault(a => a.Name.Equals(name));
+            if (clip.Name == null)
+            {
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteError("" +
+                    $"'{name}' 오디오 파일을 찾는 데 실패했습니다."),
+                    this);
+                return;
+            }
+
+            _audioSource.PlayOneShot(clip.AudioClip);
+        }
+
+        public void Stop() => _audioSource.Stop();
+
+        public void SetVolume(float volume) => _audioSource.volume = volume / 100f;
+    }
+}
