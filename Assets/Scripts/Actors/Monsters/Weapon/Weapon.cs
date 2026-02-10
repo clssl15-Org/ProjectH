@@ -12,11 +12,14 @@ namespace Actors.Monsters
         public float? KnockbackForce { get; set; } = null;
 
         private TriggerContactHandler _contactHandler;
+        private Transform rootTransform;
 
         private void Awake()
         {
             _contactHandler = GetComponent<TriggerContactHandler>();
             _contactHandler.TargetTags = new[] { "Player" };
+
+            rootTransform = this.transform.root.GetComponent<Transform>();
 
             _contactHandler.CollisionEntered += c =>
             {
@@ -26,7 +29,7 @@ namespace Actors.Monsters
                 receiver.TakeDamage(
                     AttackPower,
                     DoKnockback
-                        ? (c.transform.position - transform.position).ToDirection()
+                        ? (c.transform.position - (transform.position + rootTransform.position)/2).ToDirection()
                         : Direction.Center,
                     KnockbackForce);
             };

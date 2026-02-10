@@ -69,10 +69,13 @@ namespace Actors.PlayerSystem
 
             Damaged?.Invoke();
             Debug.Log("Player Health: " + currentHealth + "/" + MaxHealth);
-            CharacterStateController.EnqueueTransition<Hit>();
             if (currentHealth <= 0)
             {
                 Die();
+            }
+            else
+            {
+                CharacterStateController.EnqueueTransition<Hit>();
             }
         }
 
@@ -101,7 +104,8 @@ namespace Actors.PlayerSystem
         private void Die()
         {
             IsAlive = false;
-            Debug.Log("Player Died");
+            Player.AllowInput = false;
+            CharacterStateController.EnqueueTransition<Die>();
         }
 
         public void Stun()
