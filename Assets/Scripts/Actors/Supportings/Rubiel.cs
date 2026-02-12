@@ -26,7 +26,7 @@ namespace Actors
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             if (!_player)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).Write(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteMessage(
                     $"[Rubiel] {nameof(_player)}이(가) 유효하지 않습니다."));
 
             _ssh = GetComponent<SpriteSizeHandler>();

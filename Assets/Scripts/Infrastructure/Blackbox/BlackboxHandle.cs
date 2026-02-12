@@ -33,7 +33,7 @@ namespace BlackboxSystem
         BasedOnSettings,
     }
 
-    public struct BlackboxHandle
+    public partial struct BlackboxHandle
     {
         // Forwarders
         public object Owner => Blackbox?.Owner;
@@ -182,41 +182,104 @@ namespace BlackboxSystem
 #endif
         }
 
-        public string Write(object message, [CallerMemberName] string methodName = "")
+        [Conditional("BLACKBOX")]
+        public void Write([InterpolatedStringHandlerArgument("")] ref WriteHandler handler, [CallerMemberName] string methodName = "")
         {
-            var messageStr = ToMessageString(message);
-            return Blackbox?.Write(messageStr, methodName) ?? messageStr;
+            if (!handler.ShouldLog) return;
+            WriteMessage(handler.GetTextAndClear(), methodName);
         }
-        public DisposableHandle WriteScope(object message, [CallerMemberName] string methodName = "")
+        [Conditional("BLACKBOX")]
+        public void Write(string message, [CallerMemberName] string methodName = "")
         {
-            var messageStr = ToMessageString(message);
-            return Blackbox?.WriteScope(messageStr, methodName) ?? default;
+            WriteMessage(message, methodName);
         }
-        public string Exert(object other, object message, [CallerMemberName] string methodName = "")
+        public string WriteMessage(string message, [CallerMemberName] string methodName = "")
         {
-            var messageStr = ToMessageString(message);
-            return Blackbox?.Exert(BlackboxRegistry.GetBlackbox(other), messageStr, methodName) ?? messageStr;
-        }
-        public string Exerted(object other, object message, [CallerMemberName] string methodName = "")
-        {
-            if (Blackbox == null) return ToMessageString(message);
-            return BlackboxHandle.Of(other).Exert(Owner, message, methodName);
-        }
-        public DisposableHandle ExertScope(object other, object message, [CallerMemberName] string methodName = "")
-        {
-            return Blackbox?.ExertScope(BlackboxRegistry.GetBlackbox(other), ToMessageString(message), methodName) ?? default;
-        }
-        public DisposableHandle ExertedScope(object other, object message, [CallerMemberName] string methodName = "")
-        {
-            return Blackbox?.ExertedScope(BlackboxRegistry.GetBlackbox(other), ToMessageString(message), methodName) ?? default;
+            return Blackbox?.Write(message, methodName) ?? message;
         }
 
-        public string WriteOrExerted(object message, object other, [CallerMemberName] string methodName = "")
+        public DisposableHandle WriteScope([InterpolatedStringHandlerArgument("")] ref WriteHandler handler, [CallerMemberName] string methodName = "")
         {
-            if (other == null) return Write(message, methodName); 
-            return Exerted(other, message, methodName);
+            if (!handler.ShouldLog) return default;
+            return WriteScope(handler.GetTextAndClear(), methodName);
         }
-        public DisposableHandle WriteOrExertedScope(object message, object other, [CallerMemberName] string methodName = "")
+        public DisposableHandle WriteScope(string message, [CallerMemberName] string methodName = "")
+        {
+            return Blackbox?.WriteScope(message, methodName) ?? default;
+        }
+
+        [Conditional("BLACKBOX")]
+        public void Exert<T>(T other, [InterpolatedStringHandlerArgument("")] ref WriteHandler handler, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (!handler.ShouldLog) return;
+            ExertMessage(other, handler.GetTextAndClear(), methodName);
+        }
+        [Conditional("BLACKBOX")]
+        public void Exert<T>(T other, string message, [CallerMemberName] string methodName = "") where T : class
+        {
+            ExertMessage(other, message, methodName);
+        }
+        public string ExertMessage<T>(T other, string message, [CallerMemberName] string methodName = "") where T : class
+        {
+            return Blackbox?.Exert(BlackboxRegistry.GetBlackbox(other), message, methodName) ?? message;
+        }
+
+        [Conditional("BLACKBOX")]
+        public void Exerted<T>(T other, [InterpolatedStringHandlerArgument("")] ref WriteHandler handler, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (!handler.ShouldLog) return;
+            ExertedMessage(other, handler.GetTextAndClear(), methodName);
+        }
+        [Conditional("BLACKBOX")]
+        public void Exerted<T>(T other, string message, [CallerMemberName] string methodName = "") where T : class
+        {
+            ExertedMessage(other, message, methodName);
+        }
+        public string ExertedMessage<T>(T other, string message, [CallerMemberName] string methodName = "") where T : class
+        {
+            return BlackboxHandle.Of(other).ExertMessage(Owner, message, methodName);
+        }
+
+        public DisposableHandle ExertScope<T>(T other, [InterpolatedStringHandlerArgument("")] ref WriteHandler handler, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (!handler.ShouldLog) return default;
+            return ExertScope(other, handler.GetTextAndClear(), methodName);
+        }
+        public DisposableHandle ExertScope<T>(T other, string message, [CallerMemberName] string methodName = "") where T : class
+        {
+            return Blackbox?.ExertScope(BlackboxRegistry.GetBlackbox(other), message, methodName) ?? default;
+        }
+
+        public DisposableHandle ExertedScope<T>(T other, [InterpolatedStringHandlerArgument("")] ref WriteHandler handler, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (!handler.ShouldLog) return default;
+            return ExertedScope(other, handler.GetTextAndClear(), methodName);
+        }
+        public DisposableHandle ExertedScope<T>(T other, string message, [CallerMemberName] string methodName = "") where T : class
+        {
+            return Blackbox?.ExertedScope(BlackboxRegistry.GetBlackbox(other), message, methodName) ?? default;
+        }
+
+        [Conditional("BLACKBOX")]
+        public void WriteOrExerted<T>([InterpolatedStringHandlerArgument("")] ref WriteHandler handler, T other, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (!handler.ShouldLog) return;
+            WriteOrExertedMessage(handler.GetTextAndClear(), other, methodName);
+        }
+        public string WriteOrExertedMessage<T>(string message, T other, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (other == null) return WriteMessage(message, methodName); 
+            return ExertedMessage(other, message, methodName);
+        }
+
+        public DisposableHandle WriteOrExertedScope<T>([InterpolatedStringHandlerArgument("")] ref WriteHandler handler, T other, [CallerMemberName] string methodName = "") where T : class
+        {
+            if (!handler.ShouldLog) return default;
+
+            if (other == null) return WriteScope(ref handler, methodName);
+            return ExertedScope(other, ref handler, methodName);
+        }
+        public DisposableHandle WriteOrExertedScope<T>(string message, T other, [CallerMemberName] string methodName = "") where T : class
         {
             if (other == null) return WriteScope(message, methodName);
             return ExertedScope(other, message, methodName);
@@ -249,7 +312,7 @@ namespace BlackboxSystem
 
             Infrastructure.Log($"[Blackbox] CRASH: {messageStr}", LogLevel.Warning);
             WriteErrorToBlackbox(messageStr, others, methodName);
-            Write($"[STACK TRACE]\n{new StackTrace(true)}\n");
+            WriteMessage($"[STACK TRACE]\n{new StackTrace(true)}\n");
 
             ExportInternal(recursionDepth ?? DefaultRecursionDepth, true, format, fullExport, openLog);
             return messageStr;

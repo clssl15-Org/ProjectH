@@ -32,7 +32,7 @@ namespace Infrastructure
 
             if (_injectOnAwake)
             {
-                Debug.Log(BlackboxHandle.Of(this).Write(Ctx(
+                Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
                     $"'{nameof(_injectOnAwake)}'이(가) true이므로 Inject를 수행합니다. " +
                     $"GameManager를 사용중이라면 Inject는 GameManager에서만 이루어져야 합니다. " +
                     $"GameManager를 사용하지 않는 것이 의도된 동작인지 확인하세요.")),
@@ -50,7 +50,7 @@ namespace Infrastructure
 
             if (!injection)
             {
-                Debug.LogError(BlackboxHandle.Of(this).Write(Ctx(
+                Debug.LogError(BlackboxHandle.Of(this).WriteMessage(Ctx(
                     $"{nameof(injection)}이(가) 유효하지 않습니다.")),
                     this);
                 return;

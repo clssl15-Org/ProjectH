@@ -44,7 +44,7 @@ namespace Game
         {
             if (_isInitialized)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     Ctx("인스턴스가 중복 생성되었습니다. 현재 생성 중인 인스턴스를 삭제합니다.")),
                     this);
 
@@ -91,7 +91,7 @@ namespace Game
                         if (injector == null)
                             injector = foundInjector;
                         else
-                            Debug.LogWarning(BlackboxHandle.Of(this).Write(Ctx(
+                            Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
                                 $"씬 '{scene.name}'의 '{foundInjector.name}'에서 Injector 컴포넌트가 중복으로 발견되었습니다. " +
                                 $"첫 번째로 발견된 객채 '{injector.name}'의 컴포넌트를 사용합니다.")),
                                 this);

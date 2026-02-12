@@ -33,7 +33,7 @@ namespace Game.Stage
             using var _ = BlackboxHandle.Of(this).WriteScope($"Set Canvas: {canvas}");
 
             if (_canvas != null)
-                Debug.Log(BlackboxHandle.Of(this).Write(Ctx(
+                Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
                     $"캔버스를 교체합니다. '{canvas}' -> '{_canvas}'")));
 
             _canvas = canvas;

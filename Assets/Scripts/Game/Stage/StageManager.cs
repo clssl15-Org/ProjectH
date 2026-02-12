@@ -76,7 +76,7 @@ namespace Game.Stage
                     }
                     else
                     {
-                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             $"씬에서 {nameof(canvas)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
@@ -114,7 +114,7 @@ namespace Game.Stage
                     }
                     else
                     {
-                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             $"씬에서 {nameof(_platformManager)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
@@ -129,7 +129,7 @@ namespace Game.Stage
                     }
                     else
                     {
-                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             $"씬에서 {nameof(_darkScreenUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
@@ -190,7 +190,7 @@ namespace Game.Stage
                 SpawnManager.Instance.OnMonsterCreate(monster => Register(monster));
             }
             else
-                Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     "[StageManager] SpawnManager.Instance이(가) 유효하지 않습니다. " +
                     "새로 스폰되는 몬스터는 매니저에 등록되지 않으며, UI 등이 생성되지 않을 수 있습니다."),
                     this);
@@ -216,7 +216,7 @@ namespace Game.Stage
                     using var _ = BlackboxHandle.Of(this).ExertScope(_settingsUI, "_settingsUI -> RelicsUI 열기 요청 처리");
                     if (!_relicInfoPanelUI)
                     {
-                        Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             "[StageManager] _relicInfoPanelUI가 할당되지 않아 RelicsUI를 열 수 없습니다."), this);
                         return;
                     }
@@ -254,7 +254,7 @@ namespace Game.Stage
                 _playerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
                 if (!_playerUI)
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_playerUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
@@ -264,7 +264,7 @@ namespace Game.Stage
                 _relicAcquisitionUI = FindAnyObjectByType<RelicAcquisitionUI>(FindObjectsInactive.Include);
                 if (!_relicAcquisitionUI)
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_relicAcquisitionUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
@@ -274,7 +274,7 @@ namespace Game.Stage
                 _relicInfoPanelUI = FindAnyObjectByType<RelicInfoPanelUI>(FindObjectsInactive.Include);
                 if (!_relicInfoPanelUI)
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_relicInfoPanelUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
@@ -284,7 +284,7 @@ namespace Game.Stage
                 _playerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
                 if (!_playerUI)
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_playerUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
@@ -294,7 +294,7 @@ namespace Game.Stage
                 _settingsUI = FindAnyObjectByType<SettingsUI>(FindObjectsInactive.Include);
                 if (!_settingsUI)
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_settingsUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
@@ -304,7 +304,7 @@ namespace Game.Stage
                 _dialogueUI = FindAnyObjectByType<DialogueUI>(FindObjectsInactive.Include);
                 if (!_dialogueUI)
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_dialogueUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }

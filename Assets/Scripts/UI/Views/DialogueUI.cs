@@ -25,7 +25,7 @@ namespace UI
         {
             if (_inputHub == null)
             {
-                Debug.LogError(BlackboxHandle.Of(this).Write(
+                Debug.LogError(BlackboxHandle.Of(this).WriteMessage(
                     $"(OnEnabling) '{nameof(_inputHub)}'이(가) 유효하지 않기 때문에 Input 설정을 변경할 수 없습니다."),
                     this);
                 return;
@@ -39,7 +39,7 @@ namespace UI
         {
             if (_inputHub == null)
             {
-                Debug.LogError(BlackboxHandle.Of(this).Write(
+                Debug.LogError(BlackboxHandle.Of(this).WriteMessage(
                     $"(OnEnabling) '{nameof(_inputHub)}'이(가) 유효하지 않기 때문에 Input 설정을 변경할 수 없습니다."),
                     this);
                 return;

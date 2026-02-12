@@ -120,7 +120,7 @@ namespace UI
                 {
                     if (!RelicManager.Instance.TryGetRelicData(relicId, out var relicData))
                     {
-                        Debug.LogWarning(BlackboxHandle.Of(this).Write(Ctx(
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
                             $"{nameof(RelicManager.Instance)}에서 {nameof(relicId)} '{relicId}'을(를) 가지는 렐릭을 찾지 못했습니다. " +
                             $"해당 렐릭은 목록에 표시되지 않습니다.")),
                             this);
@@ -139,7 +139,7 @@ namespace UI
             }
             else
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     Ctx($"{nameof(RelicManager.Instance)}이(가) 유효하지 않습니다. 올바르지 않은 렐릭 목록이 표시될 수 있습니다.")), this);
             }
 

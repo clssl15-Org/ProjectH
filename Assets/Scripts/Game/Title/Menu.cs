@@ -138,7 +138,7 @@ namespace Game.Title
             else
             {
                 Debug.LogWarning(
-                    BlackboxHandle.Of(this).Write(
+                    BlackboxHandle.Of(this).WriteMessage(
                         $"[Menu] {nameof(_settingsUI)}이(가) 유효하지 않기 때문에 ToSettings 메서드를 수행할 수 없습니다."),
                     this);
             }
@@ -158,7 +158,7 @@ namespace Game.Title
             else
             {
                 Debug.LogWarning(
-                    BlackboxHandle.Of(this).Write(
+                    BlackboxHandle.Of(this).WriteMessage(
                         $"[Menu] {nameof(_gameContext)}이(가) 유효하지 않기 때문에 Quit 메서드를 수행할 수 없습니다."),
                     this);
             }

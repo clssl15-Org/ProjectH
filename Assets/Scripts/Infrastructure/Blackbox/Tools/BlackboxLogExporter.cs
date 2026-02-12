@@ -1,9 +1,9 @@
+#if UNITY_5_3_OR_NEWER
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-#if UNITY_5_3_OR_NEWER
 namespace BlackboxSystem
 {
     public class BlackboxLogExporter : MonoBehaviour

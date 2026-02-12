@@ -49,7 +49,7 @@ namespace Game
 
             if (!string.IsNullOrEmpty(_currentScriptTitle))
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     $"이미 스트립트 '{_currentScriptTitle}'이(가) 재생 중이기 때문에 새로운 스크립트 '{title}'을(를) 재생할 수 없습니다."),
                     this);
                 return;

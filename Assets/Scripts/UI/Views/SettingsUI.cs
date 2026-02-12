@@ -176,7 +176,7 @@ namespace UI
                     if(_gameContext)
                         _gameContext.Quit(this);
                     else
-                        Debug.LogWarning(BlackboxHandle.Of(this).Write(Ctx(
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
                             "GameContext가 유효하지 않기 때문에 게임을 종료할 수 없습니다.")), this);
                 });
 
@@ -212,7 +212,7 @@ namespace UI
         {
             if (OpenRelicsUI == null)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).Write(Ctx(
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
                     $"{nameof(OpenRelicsUI)} 이벤트에 등록된 대리자가 없으므로 유물 UI를 열 수 없습니다.")),
                     this);
                 return;

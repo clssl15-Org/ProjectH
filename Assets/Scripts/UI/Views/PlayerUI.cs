@@ -104,7 +104,7 @@ namespace UI
             {
                 if (!RelicManager.Instance.TryGetRelicData(id, out var relicData))
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"[{nameof(PlayerUI)}] Relic ID '{id}'에 해당하는 {nameof(RelicDataSO)}을(를) 찾을 수 없습니다."),
                         this);
                     continue;
@@ -202,7 +202,7 @@ namespace UI
         private void SelectNextSkill()
         {
             if (_player == null)
-                Debug.LogWarning(BlackboxHandle.Of(this).Write(
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     "[PlayerUI] Player가 null이기 때문에 SelectNextSkill 메서드를 실행할 수 없습니다."));
 
             _player.ChangeSkill();
