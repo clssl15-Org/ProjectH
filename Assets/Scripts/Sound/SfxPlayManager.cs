@@ -1,17 +1,17 @@
 namespace Sound
 {
-    public enum SfxType
+    public enum SfxName
     {
         None,
         Click,
         Hover,
     }
 
-    public class SfxPlayManager : AudioPlayManager<SfxType>
+    public class SfxPlayManager : AudioPlayManager<SfxName>
     {
         private void Start()
         {
-            SetVolume(GameContext.SfxVolume / 100f);
+            SetVolume(GameContext.SfxVolume);
             GameContext.SfxChanged += SetVolume;
         }
 

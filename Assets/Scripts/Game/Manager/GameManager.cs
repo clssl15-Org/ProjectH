@@ -18,12 +18,12 @@ namespace Game
     public sealed class GameManager : GameContext
     {
         // Forwardings
-        public override event Action<float> BgmChanged
+        public override event Action<int> BgmChanged
         {
             add => _soundManager.BgmChanged += value;
             remove => _soundManager.BgmChanged -= value;
         }
-        public override event Action<float> SfxChanged
+        public override event Action<int> SfxChanged
         {
             add => _soundManager.SfxChanged += value;
             remove => _soundManager.SfxChanged -= value;
@@ -34,8 +34,11 @@ namespace Game
         // Properties
         private Management.SoundManager _soundManager;
 
+        // Injections
+        [SerializeField] private bool _injectOnSceneLoading = true;
+        [SerializeField] private MonoBehaviour[] _injections;
+
         // Internal
-        [SerializeField] private bool _injectSelfOnSceneLoading = true;
         private static bool _isInitialized = false;
 
 
@@ -67,20 +70,28 @@ namespace Game
 
             using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");
 
+            _soundManager = GetComponentInChildren<Management.SoundManager>();
+            if (_soundManager)
+                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager 등록.");
+            else 
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                    "자식 컴포넌트에서 _soundManager을(를) 찾지 못했습니다."));
+
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-            _soundManager = new Management.SoundManager();
-            BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager를 생성했습니다.");
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode _)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
         {
-            using var __ = BlackboxHandle.Of(this).WriteScope($"씬 '{scene.name}'이(가) 로드되었습니다.");
-            InjectSelf(scene);
+            var message = Ctx($"씬 '{scene.name}'이(가) 로드되었습니다.");
+            using var __ = BlackboxHandle.Of(this).WriteScope(message);
+            Debug.Log(message, this);
+
+            Inject(scene);
+            _soundManager.SetListenerIfPossible();
         }
-        private void InjectSelf(Scene scene)
+        private void Inject(Scene scene)
         {
-            if (_injectSelfOnSceneLoading)
+            if (_injectOnSceneLoading)
             {
                 Injector injector = null;
                 foreach (var root in scene.GetRootGameObjects())
@@ -99,10 +110,15 @@ namespace Game
                 }
 
                 if (!injector)
-                    throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                        Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. injector에 자기 주입을 수행할 수 없습니다.")));
+                    throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                        Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. 주입을 수행할 수 없습니다.")));
 
                 injector.AddInjection(this, typeof(GameContext));
+                foreach (var injection in _injections)
+                {
+                    if (injection)
+                        injector.AddInjection(injection);
+                }
                 injector.Inject();
             }
         }
@@ -134,7 +150,7 @@ namespace Game
             }
             catch (Exception ex)
             {
-                Debug.LogError(BlackboxHandle.Of(this).CrashExport(
+                Debug.LogError(BlackboxHandle.Of(this).WriteError(
                     $"씬 전환에 실패했습니다.\n{ex.ToString()}"));
                 throw;
             }

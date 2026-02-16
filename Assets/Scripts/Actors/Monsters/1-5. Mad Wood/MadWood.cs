@@ -79,7 +79,13 @@ namespace Actors.Monsters
                     .AddComponent(new AttackWithWeapon(
                         monster._defaultAttackWeapon,
                         monster._defaultAttackActiveTiming,
-                        monster._defaultAttackActiveDuration))
+                        monster._defaultAttackActiveDuration,
+                        weapon => weapon.SetKnockbackInfo(() =>
+                        {
+                            if (!monster) return null;
+                            return monster.Direction;
+                        }))
+                    )
                 );
                 AddChild(new MonsterAction(AttackMode.LandAttack.ToString())
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)

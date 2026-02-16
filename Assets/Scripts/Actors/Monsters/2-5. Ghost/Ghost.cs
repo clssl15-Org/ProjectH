@@ -84,7 +84,14 @@ namespace Actors.Monsters
                 );
                 AddChild(new MonsterAction("Attack_1")
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
-                    .AddComponent(new AttackWithWeapon(monster._swordPrefab))
+                    .AddComponent(new AttackWithWeapon(
+                        monster._swordPrefab,
+                        onInstantiate: weapon => weapon.SetKnockbackInfo(() =>
+                        {
+                            if (!monster) return null;
+                            return monster.Direction;
+                        }))
+                    )
                 );
                 AddChild(new MonsterAction("Attack_2")
                     .AddComponent(new GhostExplosiveAttackAction())

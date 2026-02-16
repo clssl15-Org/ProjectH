@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8174283845566580068}
   - component: {fileID: 4159768417768734501}
   - component: {fileID: 6802194416975667077}
+  - component: {fileID: 5362795676492071960}
   m_Layer: 5
   m_Name: TextButton
   m_TagString: Untagged
@@ -179,3 +180,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5362795676492071960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823276930804295843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

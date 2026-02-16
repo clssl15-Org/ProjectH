@@ -1,3 +1,4 @@
+using System;
 using Infrastructure;
 using Rules;
 using UnityEngine;
@@ -11,26 +12,34 @@ namespace Actors.Monsters
         [field: SerializeField] public bool DoKnockback { get; set; } = true;
         public float? KnockbackForce { get; set; } = null;
 
+        private Func<Direction?> _tryGetKnockbackDirection;
         private TriggerContactHandler _contactHandler;
-        private Transform rootTransform;
+
+        public void SetKnockbackInfo(Func<Direction?> tryGetKnockbackDirection)
+        {
+            _tryGetKnockbackDirection = tryGetKnockbackDirection;
+        }
 
         private void Awake()
         {
             _contactHandler = GetComponent<TriggerContactHandler>();
             _contactHandler.TargetTags = new[] { "Player" };
 
-            rootTransform = this.transform.root.GetComponent<Transform>();
-
             _contactHandler.CollisionEntered += c =>
             {
                 if (!c.TryGetComponent<IDamageable>(out var receiver))
                     return;
 
+                var knockbackDir = Direction.Center;
+                if (DoKnockback)
+                {
+                    knockbackDir = _tryGetKnockbackDirection?.Invoke()
+                        ?? (c.transform.position - transform.position).ToDirection();
+                }
+
                 receiver.TakeDamage(
                     AttackPower,
-                    DoKnockback
-                        ? (c.transform.position - (transform.position + rootTransform.position)/2).ToDirection()
-                        : Direction.Center,
+                    knockbackDir,
                     KnockbackForce);
             };
         }

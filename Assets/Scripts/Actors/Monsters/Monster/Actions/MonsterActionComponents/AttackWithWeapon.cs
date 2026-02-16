@@ -14,16 +14,22 @@ namespace Actors.Monsters.Actions
         private Func<bool> _checkCondition;
 
         private IWeapon _weapon;
+        private Action<IWeapon> _onInstantiated;
         private float _elapsedTime;
         private int _phase;
 
 
         // Content
-        public AttackWithWeapon(IWeapon weaponPrefab, float startTime = 0, float duration = -1)
+        public AttackWithWeapon(
+            IWeapon weaponPrefab,
+            float startTime = 0,
+            float duration = -1,
+            Action<IWeapon> onInstantiate = null)
         {
             _weaponPrefab = weaponPrefab;
             _startTime = startTime;
             _duration = duration < 0 ? float.MaxValue : duration;
+            _onInstantiated = onInstantiate;
         }
 
         protected override void OnEnter(object input)
@@ -97,6 +103,7 @@ namespace Actors.Monsters.Actions
             _weapon.transform.SetPositionAndRotation(_weaponPrefab.transform.position, _weapon.transform.rotation);
             _weapon.transform.localScale = _weaponPrefab.transform.localScale;
 
+            _onInstantiated?.Invoke(_weapon);
             _weapon.gameObject.SetActive(true);
 
             if (_getCheckCondition != null)

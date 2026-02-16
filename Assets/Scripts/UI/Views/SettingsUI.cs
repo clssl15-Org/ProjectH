@@ -1,6 +1,7 @@
 using System;
 using BlackboxSystem;
 using Infrastructure;
+using Sound;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace UI
         IInputController,
         IInputControllable,
         IInjectable<GameContext>,
+        IInjectable<SfxPlayManager>,
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Escape;
@@ -33,19 +35,26 @@ namespace UI
         public event Action Destroying;
 
         private GameContext _gameContext;
+        private SfxPlayManager _sfxPlayManager;
         private DarkscreenUI _darkscreenUI;
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
+
+        private const SfxName SampleSfxSound = SfxName.Click;
+        private const float SampleSoundPlayGap = 0.05f;
+        private float _lastSamplePlayTime;
+
         private bool _isInitialized = false;
 
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+            _lastSamplePlayTime = float.MinValue;
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Enable for '{name}'");
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Enable Darkscreen");
                 _darkscreenUI.EnableFor(this, Disable);
             }
 
@@ -54,7 +63,7 @@ namespace UI
                 _bgmScroll.value = _gameContext.BgmVolume / 100f;
                 _sfxScroll.value = _gameContext.SfxVolume / 100f;
 
-                BlackboxHandle.Of(this).Exert(_inputHub, "BlockAll");
+                BlackboxHandle.Of(this).Exert(_inputHub, $"BlockAll InputHub'");
                 _inputHub.BlockExcept(this);
             }
         };
@@ -71,7 +80,7 @@ namespace UI
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "UnblockAll");
+                BlackboxHandle.Of(this).Exert(_inputHub, $"UnblockAll from '{name}'");
                 _inputHub.UnblockAll();
             }
         };
@@ -99,8 +108,10 @@ namespace UI
             else
                 _bgmScroll.onValueChanged.AddListener(val =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_bgmScroll, "Set Bgm Vol");
-                    _gameContext.SetBgmVolume(Mathf.RoundToInt(val * 100), this);
+                    var vol = Mathf.RoundToInt(val * 100);
+                    using var _ = BlackboxHandle.Of(this).ExertedScope(_bgmScroll, $"Set Bgm Vol: {vol}");
+
+                    _gameContext.SetBgmVolume(vol, this);
                 });
 
             if (!_sfxScroll)
@@ -111,8 +122,24 @@ namespace UI
             else
                 _sfxScroll.onValueChanged.AddListener(val =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_sfxScroll, "Set Sfx Vol");
-                    _gameContext.SetSfxVolume(Mathf.RoundToInt(val * 100), this);
+                    var vol = Mathf.RoundToInt(val * 100);
+                    using var _ = BlackboxHandle.Of(this).ExertedScope(_sfxScroll, $"Set Sfx Vol: {vol}");
+
+                    _gameContext.SetSfxVolume(vol, this);
+
+                    if (_sfxPlayManager)
+                    {
+                        var currentTime = Time.unscaledTime;
+                        if (currentTime - _lastSamplePlayTime >= SampleSoundPlayGap)
+                        {
+                            _lastSamplePlayTime = currentTime;
+                            _sfxPlayManager.Play(SampleSfxSound);
+                        }
+                    }
+                    else
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                            $"{nameof(_sfxPlayManager)}이(가) 유효하지 않기 때문에 샘플 사운드를 재생할 수 없습니다."),
+                            this);
                 });
 
             if (!_continueBtn)
@@ -188,6 +215,7 @@ namespace UI
         }
 
         void IInjectable<GameContext>.Inject(GameContext gameContext) => _gameContext = gameContext;
+        void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPalyManager) => _sfxPlayManager = sfxPalyManager;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 

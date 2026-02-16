@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Infrastructure;
 
 namespace Actors.Monsters
 {
@@ -38,6 +40,12 @@ namespace Actors.Monsters
                 foreach (var weapon in _weapons)
                     weapon.KnockbackForce = value;
             }
+        }
+
+        public void SetKnockbackInfo(Func<Direction?> tryGetKnockbackDirection)
+        {
+            foreach (var weapon in _weapons)
+                weapon.SetKnockbackInfo(tryGetKnockbackDirection);
         }
 
 

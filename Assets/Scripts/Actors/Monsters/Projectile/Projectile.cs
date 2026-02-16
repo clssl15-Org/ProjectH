@@ -45,7 +45,7 @@ namespace Actors.Monsters
         {
             if (!_platformManager)
             {
-                Debug.LogError($"[Projectile] {nameof(PlatformManager)}이(가) 없기 때문에 투사체 {name}을(를) 사용할 수 없습니다.", this);
+                Debug.LogError($"[Projectile] {nameof(PlatformManager)}이(가) 없기 때문에 투사체 '{name}'을(를) 사용할 수 없습니다.", this);
                 Destroy(gameObject);
                 return;
             }
@@ -110,8 +110,7 @@ namespace Actors.Monsters
 
         public virtual void OnArrived()
         {
-            if (this)
-                Destroy(gameObject);
+            if (this) Destroy(gameObject);
         }
     }
 }

@@ -87,7 +87,13 @@ namespace Actors.Monsters
                         delayAfterPlay: 0.5f)
                     .AddComponent(new AttackWithWeapon(
                         monster._shockwave,
-                        monster._shockwaveTime))
+                        monster._shockwaveTime,
+                        onInstantiate: weapon => weapon.SetKnockbackInfo(() =>
+                        {
+                            if (!monster) return null;
+                            return monster.Direction;
+                        }))
+                    )
                 );
                 AddChild(new MonsterAction(AttackMode.Roar.ToString())
                     .AddAnimationComponent("Roar")

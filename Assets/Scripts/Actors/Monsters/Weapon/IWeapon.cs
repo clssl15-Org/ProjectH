@@ -1,3 +1,5 @@
+using System;
+using Infrastructure;
 using UnityEngine;
 
 namespace Actors.Monsters
@@ -7,6 +9,8 @@ namespace Actors.Monsters
         int AttackPower { get; set; }
         bool DoKnockback { get; set; }
         float? KnockbackForce { get; set; }
+
+        void SetKnockbackInfo(Func<Direction?> tryGetKnockbackDirection);
 
 #pragma warning disable IDE1006
         GameObject gameObject { get; }

@@ -46,7 +46,15 @@ namespace Actors.Monsters
                 );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
-                    .AddComponent(new AttackWithWeapon(monster._firePrefab, monster._fireAppearTime))
+                    .AddComponent(new AttackWithWeapon(
+                        monster._firePrefab,
+                        monster._fireAppearTime,
+                        onInstantiate: weapon => weapon.SetKnockbackInfo(() =>
+                        {
+                            if (!monster) return null;
+                            return monster.Direction;
+                        }))
+                    )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()

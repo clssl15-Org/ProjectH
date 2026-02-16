@@ -60,7 +60,7 @@ namespace Actors.Monsters
             for (int i = 0; i < _projectiles.Length; i++)
             {
                 if (!_projectiles[i])
-                    throw new InvalidOperationException(Ctx($"인덱스 {i}에 있는 투사체 프리팹이 존재하지 않거나 유효하지 않습니다."));
+                    throw new InvalidOperationException(Ctx($"인덱스 '{i}'에 있는 투사체 프리팹이 존재하지 않거나 유효하지 않습니다."));
 
                 var projectile = Instantiate(_projectiles[i]);
 

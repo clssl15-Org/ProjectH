@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using BlackboxSystem;
 using System.Linq;
-
+using BlackboxSystem;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -23,6 +22,7 @@ namespace Infrastructure
         }
 
         [SerializeField] private List<Injection> _injections;
+        [Tooltip("GameManager가 활성화되어 있지 않을 때 이 항목을 체크하여 Injector를 활성화할 수 있습니다.")]
         [SerializeField] private bool _injectOnAwake = false;
         private bool _isInjected = false;
 
@@ -70,8 +70,9 @@ namespace Infrastructure
 
             if (_isInjected)
             {
-                Debug.LogWarning(
-                    Ctx("이미 Inject가 수행되었습니다. 중복 실행을 방지합니다."), this);
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                    Ctx("이미 Inject가 수행되었습니다. 중복 실행을 방지합니다.")),
+                    this);
                 return;
             }
 
@@ -82,8 +83,8 @@ namespace Infrastructure
             {
                 if (!injection.Item)
                 {
-                    Debug.LogError(
-                        Ctx($"{nameof(_injections)} 배열에 유효하지 않은 항목이 있습니다."),
+                    Debug.LogError(BlackboxHandle.Of(this).WriteError(
+                        Ctx($"{nameof(_injections)} 배열에 유효하지 않은 항목이 있습니다.")),
                         this);
                     continue;
                 }
@@ -98,8 +99,8 @@ namespace Infrastructure
 
             if (!injection.Item)
             {
-                Debug.LogError(
-                    Ctx($"{nameof(injection)}이(가) 유효하지 않습니다."),
+                Debug.LogError(BlackboxHandle.Of(this).WriteError(
+                    Ctx($"{nameof(injection)}이(가) 유효하지 않습니다.")),
                     this);
                 return;
             }
@@ -110,7 +111,7 @@ namespace Infrastructure
             var injectMethod = injectableInterfaceType.GetMethod("Inject");
             if (injectMethod == null)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     Ctx($"IInjectable<{targetType.Name}> 에 Inject 메서드가 없습니다.")));
             }
 

@@ -59,7 +59,12 @@ namespace Actors.Monsters
                     .AddComponent(new AttackWithWeapon(
                         monster._weapon,
                         monster._weaponActiveTiming,
-                        monster._weaponActiveDuration)
+                        monster._weaponActiveDuration,
+                        weapon => weapon.SetKnockbackInfo(() =>
+                        {
+                            if (!monster) return null;
+                            return monster.Direction;
+                        }))
                     )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)

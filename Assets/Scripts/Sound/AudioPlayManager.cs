@@ -7,15 +7,15 @@ using Infrastructure;
 namespace Sound
 {
     [RequireComponent(typeof(AudioSource))]
-    public abstract class AudioPlayManager<TName> : MonoBehaviour,
+    public abstract class AudioPlayManager<TAudioName> : MonoBehaviour,
         IStandaloneInitializable,
         IInjectable<GameContext>
-        where TName : Enum
+        where TAudioName : Enum
     {
         [Serializable]
         public struct AudioData
         {
-            public TName Name;
+            public TAudioName Name;
             public AudioClip AudioClip;
         }
         [SerializeField] private AudioData[] _audios;
@@ -38,7 +38,7 @@ namespace Sound
         void IInjectable<GameContext>.Inject(GameContext gameContext) =>
             GameContext = gameContext;
 
-        public void Play(TName name)
+        public void Play(TAudioName name)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Play: {name}");
 
@@ -54,8 +54,18 @@ namespace Sound
             _audioSource.PlayOneShot(clip.AudioClip);
         }
 
-        public void Stop() => _audioSource.Stop();
+        public void Stop()
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Stop");
+            _audioSource.Stop();
+        }
 
-        public void SetVolume(float volume) => _audioSource.volume = volume / 100f;
+        public void SetVolume(int volume)
+        {
+            volume = Mathf.Clamp(volume, 0, 100);
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Volume to {volume}");
+
+            _audioSource.volume = volume / 100f;
+        }
     }
 }
