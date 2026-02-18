@@ -35,9 +35,9 @@ namespace Actors.Monsters.Actions
             PlayInfo = playInfo;
 
             _work = new Work()
-                .SetExitedAction(() => AnimationPlayer.Stop())
+                .OnExited(() => AnimationPlayer.Stop())
                 .AddChild(new Work("BeforePlay")
-                    .AddUpdatedAction(() =>
+                    .OnUpdated(() =>
                     {
                         if (_elapsedTime >= _currentAnimationPlayInfo.DelayBeforePlay)
                             _work.SetNext("Play");
@@ -45,7 +45,7 @@ namespace Actors.Monsters.Actions
                     primary: true
                 )
                 .AddChild(new Work("Play")
-                    .SetEnteredAction(() => AnimationPlayer.Play(
+                    .OnEntered(() => AnimationPlayer.Play(
                         PlayInfo with { Callback = succeed =>
                         {
                             if (!Active) return;
@@ -64,11 +64,11 @@ namespace Actors.Monsters.Actions
                         }},
                         autoRun: false)
                     )
-                    .AddUpdatedAction(() => AnimationPlayer.Run(_deltaTime))
-                    .SetExitedAction(() => _playingFinishedTime = _elapsedTime)
+                    .OnUpdated(() => AnimationPlayer.Run(_deltaTime))
+                    .OnExited(() => _playingFinishedTime = _elapsedTime)
                 )
                 .AddChild(new Work("AfterPlay")
-                    .AddUpdatedAction(() =>
+                    .OnUpdated(() =>
                     {
                         if (_elapsedTime >= _playingFinishedTime + _currentAnimationPlayInfo.DelayAfterPlay)
                             Interrupt(InterruptType.Completed);

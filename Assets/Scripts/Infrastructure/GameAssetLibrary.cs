@@ -17,7 +17,6 @@ namespace Infrastructure
 
         [Header("Characters / Dialogues")]
         [SerializeField] private CharacterInfoSO[] _characters;
-        [SerializeField] private DialogueScriptLibrary _dialogueScriptLibrary;
 
 
         public GameObject Indicator_PlayerDetection => Instantiate(_playerDetection);
@@ -25,7 +24,6 @@ namespace Infrastructure
         public TextMeshPro Indicator_Text => Instantiate(_text);
 
         public Material Materials_SolidColor => Instantiate(_solidColor);
-        public DialogueScriptLibrary DialogueScriptLibrary => _dialogueScriptLibrary;
 
         public bool TryGetCharacterInfo(Character character, out CharacterInfoSO characterInfo)
         {

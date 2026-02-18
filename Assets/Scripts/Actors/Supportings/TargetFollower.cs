@@ -14,7 +14,7 @@ namespace Actors
         [SerializeField, Min(0f)] private float followStartDistanceX = 3.0f;
         [SerializeField, Min(0f)] private float followStopDistanceX = 2.0f;
 
-        [Header("Follow - Y Axis (stricter)")]
+        [Header("Follow - Y Axis")]
         [SerializeField, Min(0f)] private float followStartDistanceY = 1.2f;
         [SerializeField, Min(0f)] private float followStopDistanceY = 0.8f;
 
@@ -146,6 +146,30 @@ namespace Actors
             }
 
             ApplyHover();
+        }
+
+        /// <summary>
+        /// 원하는 위치로 즉시 이동(텔레포트)하고, 지정한 방향을 바라보도록 설정합니다.
+        /// </summary>
+        public void Teleport(Vector2 targetPosition, bool lookRight)
+        {
+            CacheScaleX();
+
+            // Follow 상태/속도 초기화
+            _followX = false;
+            _followY = false;
+            _followVelocityX = 0f;
+            _followVelocityY = 0f;
+
+            // Base + Transform 동기화
+            _basePosition = new Vector3(targetPosition.x, targetPosition.y, transform.position.z);
+            transform.position = _basePosition;
+
+            // 바라보는 방향 고정
+            SetFacing(lookRight);
+
+            // 텔레포트 직후 hover가 튀지 않도록 현재 시점에서 hover를 0으로 맞춤
+            ZeroHoverAtCurrentTime();
         }
 
         private void HandleEnabledChanged(bool isEnabledNow)

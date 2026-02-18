@@ -1,6 +1,7 @@
 using System.Linq;
 using Actors;
 using BlackboxSystem;
+using Dialogue;
 using Infrastructure;
 using UI;
 using UnityEngine;
@@ -22,8 +23,9 @@ namespace Game.Stage
         [field: SerializeField] protected bool AutoBindSceneMonsters { get; set; } = true;
 
         [Header("Bindings")]
-        [SerializeField] private UILibrary _uILibrary;
+        [SerializeField] private DialogueManager _dialogueManager;
         [SerializeField] private PlatformManager _platformManager;
+        [SerializeField] private UILibrary _uILibrary;
         [SerializeField] private EventSystem _eventSystem;
 
         [Header("Inputs")]
@@ -32,6 +34,7 @@ namespace Game.Stage
 
         [Header("Player")]
         [SerializeField] private GameObject _playerObject;
+        [SerializeField] private GameObject _rubielObject;
 
         [Header("UIs")]
         [SerializeField] private PlayerUI _playerUI;
@@ -41,13 +44,15 @@ namespace Game.Stage
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private DarkscreenUI _darkScreenUI;
 
-        protected IPlayer Player { get; private set; }
-        protected UILibrary UILibrary => _uILibrary;
+        internal IPlayer Player { get; private set; }
+        internal Rubiel Rubiel { get; private set; }
+        internal UILibrary UILibrary => _uILibrary;
 
-        protected InputHub InputHub { get; private set; }
-        protected UIManager UIManager { get; private set; }
-        protected PlayerManager PlayerManager { get; private set; }
-        protected MonsterManager MonsterManager { get; private set; }
+        internal DialogueManager DialogueManager => _dialogueManager;
+        internal InputHub InputHub { get; private set; }
+        internal UIManager UIManager { get; private set; }
+        internal PlayerManager PlayerManager { get; private set; }
+        internal MonsterManager MonsterManager { get; private set; }
 
         private bool _isDestroyed = false;
 
@@ -150,11 +155,19 @@ namespace Game.Stage
                         && playerObj.activeSelf
                         && playerObj.TryGetComponent<IPlayer>(out var player))
                     {
+                        _playerObject = playerObj;
                         Player = player;
-                        Register(player, _playerUI != null);
 
+                        Register(player, _playerUI != null);
                         break;
                     }
+                }
+
+                var rubiel = FindAnyObjectByType<Rubiel>();
+                if (rubiel)
+                {
+                    _rubielObject = rubiel.gameObject;
+                    Rubiel = rubiel;
                 }
             }
             else
@@ -171,6 +184,18 @@ namespace Game.Stage
                     Player = player;
                     Register(Player, _playerUI != null);
                 }
+
+                if (_rubielObject)
+                {
+                    if (!_rubielObject.TryGetComponent<Rubiel>(out var rubiel))
+                    {
+                        throw new System.InvalidOperationException(
+                            BlackboxHandle.Of(this).CrashExport(
+                                $"[{nameof(StageManager)}] {nameof(_rubielObject)}이(가) {nameof(Rubiel)} 컴포넌트를 가지고 있지 않습니다."));
+                    }
+
+                    Rubiel = rubiel;
+                }
             }
 
             if (AutoBindSceneMonsters)
@@ -183,7 +208,7 @@ namespace Game.Stage
                 }
             #endregion
 
-            #region Spawn Manager
+            #region Managers
             if (SpawnManager.Instance)
             {
                 BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Spawner에 Register 대리자 등록");
@@ -194,6 +219,12 @@ namespace Game.Stage
                     "[StageManager] SpawnManager.Instance이(가) 유효하지 않습니다. " +
                     "새로 스폰되는 몬스터는 매니저에 등록되지 않으며, UI 등이 생성되지 않을 수 있습니다."),
                     this);
+
+            if (_dialogueManager)
+            {
+                BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager 초기화");
+                _dialogueManager.Initialize(_dialogueUI);
+            }
             #endregion
 
             #region Input Hub

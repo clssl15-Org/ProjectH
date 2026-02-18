@@ -25,7 +25,7 @@ namespace Game.Stage
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             
             if (!_canvas)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     $"[{nameof(UIManager)}] {nameof(_canvas)} 컴포넌트가 유효하지 않습니다."));
         }
         internal void SetCanvas(RectTransform canvas)
@@ -46,7 +46,7 @@ namespace Game.Stage
             if (viewModel == null)
                 throw new ArgumentNullException(
                     nameof(viewModel),
-                    BlackboxHandle.Of(this).CrashExport(
+                    BlackboxHandle.Of(this).WriteError(
                         Ctx("등록할 인자는 null일 수 없습니다.")));
 
             if (_viewModels.Contains(viewModel))

@@ -45,6 +45,7 @@ namespace Actors
 
         int MaxHP { get; }
         int CurrentPlatform { get; }
+        Direction Direction { get; }
 
         // Skill
         int SelectedSkillIndex { get; }

@@ -201,24 +201,39 @@ namespace Infrastructure.StateMachines.Fsm
             hierarchy.ClearNext();
         }
 
-        public Work SetEnteredAction(Action action)
+        public Work OnEntered(Action action)
         {
             Entered += action;
             return this;
         }
-        public Work SetEnteredAction(Action<object[]> action)
+        public Work OnEntered<T>(Action<T> action) where T : Work
+        {
+            Entered += () => action(this as T);
+            return this;
+        }
+        public Work OnEntered(Action<object[]> action)
         {
             EnteredWith += action;
             return this;
         }
-        public Work AddUpdatedAction(Action action)
+        public Work OnUpdated(Action action)
         {
             Updated += action;
             return this;
         }
-        public Work SetExitedAction(Action action)
+        public Work OnUpdated<T>(Action<T> action) where T : Work
+        {
+            Updated += () => action(this as T);
+            return this;
+        }
+        public Work OnExited(Action action)
         {
             Exited += action;
+            return this;
+        }
+        public Work OnExited<T>(Action<T> action) where T : Work
+        {
+            Exited += () => action(this as T);
             return this;
         }
 

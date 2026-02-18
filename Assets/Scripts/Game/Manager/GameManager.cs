@@ -3,6 +3,8 @@ using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Game.Stage;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -86,6 +88,16 @@ namespace Game
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
 
+            if (TryFindScript<ScenarioManager>(scene, out var scenarioManager))
+            {
+                if (!TryFindScript<StageManager>(scene, out var stageManager))
+                    throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                        Ctx("StageManager 컴포넌트를 찾는 데 실패했기 때문에 ScenarioManager를 초기화할 수 없습니다.")));
+
+                BlackboxHandle.Of(this).Exert(scenarioManager, "Initialize");
+                scenarioManager.Initialize(stageManager);
+            }
+
             Inject(scene);
             _soundManager.SetListenerIfPossible();
         }
@@ -93,23 +105,7 @@ namespace Game
         {
             if (_injectOnSceneLoading)
             {
-                Injector injector = null;
-                foreach (var root in scene.GetRootGameObjects())
-                {
-                    var foundInjectors = root.GetComponentsInChildren<Injector>(true);
-                    foreach (var foundInjector in foundInjectors)
-                    {
-                        if (injector == null)
-                            injector = foundInjector;
-                        else
-                            Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                                $"씬 '{scene.name}'의 '{foundInjector.name}'에서 Injector 컴포넌트가 중복으로 발견되었습니다. " +
-                                $"첫 번째로 발견된 객채 '{injector.name}'의 컴포넌트를 사용합니다.")),
-                                this);
-                    }
-                }
-
-                if (!injector)
+                if (!TryFindScript<Injector>(scene, out var injector))
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                         Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. 주입을 수행할 수 없습니다.")));
 
@@ -166,6 +162,28 @@ namespace Game
 #else
             Application.Quit();
 #endif
+        }
+
+
+        private bool TryFindScript<T>(Scene scene, out T script) where T : MonoBehaviour
+        {
+            script = null;
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                var founds = root.GetComponentsInChildren<T>(true);
+                foreach (var found in founds)
+                {
+                    if (script == null)
+                        script = found;
+                    else
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
+                            $"씬 '{scene.name}'의 '{found.name}'에서 {nameof(T)} 컴포넌트가 중복으로 발견되었습니다. " +
+                            $"첫 번째로 발견된 객채 '{script.name}'의 컴포넌트를 사용합니다.")),
+                            this);
+                }
+            }
+
+            return script != null;
         }
 
         private void OnDestroy()

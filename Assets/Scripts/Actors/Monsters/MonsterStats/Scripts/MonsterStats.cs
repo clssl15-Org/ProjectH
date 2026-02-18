@@ -47,9 +47,9 @@ namespace Actors.Monsters
             protected void SetSpeedProperty(MonsterStats target, List<string> excludings)
             {
                 if (!target._useCustomSpeed)
-                    excludings.Add("_speed");
+                    excludings.Add(nameof(_speed));
                 else
-                    excludings.Add("_moveSpeed");
+                    excludings.Add(nameof(_moveSpeed));
             }
         }
 #endif

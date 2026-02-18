@@ -35,44 +35,44 @@ namespace Actors.Monsters
             public GhostExplosiveAttackAction()
             {
                 _work = new Work()
-                    .SetExitedAction(() => AnimationPlayer.Stop())
+                    .OnExited(() => AnimationPlayer.Stop())
                     .AddChild(new Work(phases[0])
-                        .SetEnteredAction(() => _originalPosition = MonsterAction.Owner.transform.position)
-                        .SetEnteredAction(() => AnimationPlayer.Play(
+                        .OnEntered(() => _originalPosition = MonsterAction.Owner.transform.position)
+                        .OnEntered(() => AnimationPlayer.Play(
                             new MonsterAnimationPlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[1]);
                             }))), true)
                     .AddChild(new Work(phases[1])
-                        .SetEnteredAction(() =>
+                        .OnEntered(() =>
                         {
                             var direction = MonsterAction.Owner.Direction.ToVector3();
                             MonsterAction.Owner.transform.position = _originalPosition + direction * TeleportDistance;
                         })
-                        .SetEnteredAction(() => AnimationPlayer.Play(
+                        .OnEntered(() => AnimationPlayer.Play(
                             new MonsterAnimationPlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[2]);
                             }))))
                     .AddChild(new Work(phases[2])
-                        .SetEnteredAction(() => AnimationPlayer.Play(
+                        .OnEntered(() => AnimationPlayer.Play(
                             new MonsterAnimationPlayInfo("Attack_2", Callback: succeed =>
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[3]);
                             }))))
                     .AddChild(new Work(phases[3])
-                        .SetEnteredAction(() => AnimationPlayer.Play(
+                        .OnEntered(() => AnimationPlayer.Play(
                             new MonsterAnimationPlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[4]);
                             }))))
                     .AddChild(new Work(phases[4])
-                        .SetEnteredAction(() => MonsterAction.Owner.transform.position = _originalPosition)
-                        .SetEnteredAction(() => AnimationPlayer.Play(
+                        .OnEntered(() => MonsterAction.Owner.transform.position = _originalPosition)
+                        .OnEntered(() => AnimationPlayer.Play(
                             new MonsterAnimationPlayInfo("Teleportation", "Teleportation_Out", Callback: succeed =>
                             {
                                 //if (!succeed) throw AnimationFailure;

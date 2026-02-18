@@ -51,9 +51,9 @@ namespace Actors.Monsters
                 _afterPostAction = afterPostAction;
 
                 _work = new Work()
-                    .SetExitedAction(() => AnimationPlayer.Stop())
+                    .OnExited(() => AnimationPlayer.Stop())
                     .AddChild(new Work("PreAction")
-                        .SetEnteredAction(() =>
+                        .OnEntered(() =>
                         {
                             _beforePreAction?.Invoke();
 
@@ -67,7 +67,7 @@ namespace Actors.Monsters
                         primary: true
                     )
                     .AddChild(new Work("MainAction")
-                        .SetEnteredAction(() =>
+                        .OnEntered(() =>
                         {
                             _beforeMainAction?.Invoke();
                             _mainActionEnteredTime = _elapsedTime;
@@ -83,7 +83,7 @@ namespace Actors.Monsters
                             AnimationPlayer.Play(
                                 new MonsterAnimationPlayInfo(_animations[1], Callback: callback));
                         })
-                        .AddUpdatedAction(() =>
+                        .OnUpdated(() =>
                         {
                             if (_whileMainAction == null)
                                 return;
@@ -97,7 +97,7 @@ namespace Actors.Monsters
                         })
                     )
                     .AddChild(new Work("PostAction")
-                        .SetEnteredAction(() =>
+                        .OnEntered(() =>
                         {
                             AnimationPlayer.Play(
                                 new MonsterAnimationPlayInfo(_animations[2], Callback: succeed =>
@@ -108,7 +108,7 @@ namespace Actors.Monsters
 
                             _beforePostAction?.Invoke();
                         })
-                        .SetExitedAction(() => _afterPostAction?.Invoke())
+                        .OnExited(() => _afterPostAction?.Invoke())
                     );
             }
 

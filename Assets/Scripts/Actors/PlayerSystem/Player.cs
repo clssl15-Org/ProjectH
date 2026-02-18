@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure;
 using UnityEngine;
 using World;
 
@@ -37,6 +38,7 @@ namespace Actors.PlayerSystem
 
         public bool canMove { get; set; } = true;
         public int CurrentPlatform { get; private set; } = -1;
+        public Direction Direction => !spriteRenderer.flipX ? Direction.Right : Direction.Left;
 
         public int MaxDashCount => playerStats.maxDashCount;
         public int CurrentDashCount { get; set; }
@@ -77,6 +79,9 @@ namespace Actors.PlayerSystem
         private PlayerHealth playerHealth;
         private SkillManager skillManager;
         private CharacterStateController characterStateController;
+
+        // 추가: 플레이어의 현재 방향을 보기 위함
+        private SpriteRenderer spriteRenderer;
         
         private void Awake()
         {
@@ -88,6 +93,8 @@ namespace Actors.PlayerSystem
             skillManager = GetComponent<SkillManager>();
 
             characterStateController = GetComponentInChildren<CharacterStateController>();
+
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         public void Inject(PlatformManager platformManager)

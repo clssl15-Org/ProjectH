@@ -1,5 +1,6 @@
 using System;
 using BlackboxSystem;
+using Dialogue;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
@@ -81,7 +82,7 @@ namespace UI
             _inputHub = inputHub;
         }
 
-        public void SetContent(DialogueData dialogueData)
+        public void SetContent(DialogueLine dialogueData)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Set Content: {dialogueData.Character}");
             GetData(dialogueData, out var name, out var portrait, out var dialogue);
@@ -92,7 +93,7 @@ namespace UI
         }
 
         private void GetData(
-            DialogueData dialogueData,
+            DialogueLine dialogueData,
             out string name,
             out Sprite portrait,
             out string dialogue)
