@@ -15,8 +15,6 @@ namespace Actors.PlayerSystem
         {
             get => skillManager.SelectedSkillIndex;
         }
-        // 임시
-        public bool CanApplySkillBuff => true;
 
         public PlayerStatsSO originStats;
         public PlayerStats playerStats;
@@ -79,6 +77,7 @@ namespace Actors.PlayerSystem
         private PlayerHealth playerHealth;
         private SkillManager skillManager;
         private CharacterStateController characterStateController;
+        private DamageRoulette damageRoulette;
 
         // 추가: 플레이어의 현재 방향을 보기 위함
         private SpriteRenderer spriteRenderer;
@@ -95,6 +94,7 @@ namespace Actors.PlayerSystem
             characterStateController = GetComponentInChildren<CharacterStateController>();
 
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            damageRoulette = GetComponent<DamageRoulette>();
         }
 
         public void Inject(PlatformManager platformManager)
@@ -133,11 +133,8 @@ namespace Actors.PlayerSystem
         {
             skillManager.ChangeSkill();
         }
-        public void ApplyRandomSkillBuff(float factor)
-        {
-            RouletteDamageMultiplier = 1 + factor / 100f;
-            //print($"스킬 랜덤 배수 적용: {factor}");
-        }
+        public bool TrySkillRoulette(out DamageRoulette.DTO rouletteDTO) =>
+            damageRoulette.TrySkillRoulette(out rouletteDTO);
 
         public void ResetRandomSkillBuff()
         {

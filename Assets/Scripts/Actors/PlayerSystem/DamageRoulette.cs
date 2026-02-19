@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Actors.PlayerSystem;
 using UnityEngine;
 
@@ -22,44 +24,89 @@ public class DamageRoulette : MonoBehaviour
         }
     }
 
+    // --------
+    public class DTO
+    {
+        public float[] Bonuses { get; }
+        public int[] Probabilities { get; }
+
+        private readonly Action<float> _applied;
+
+        public DTO(float[] bonuses, int[] probabilities, Action<float> applied)
+        {
+            Bonuses = bonuses;
+            Probabilities = probabilities;
+            _applied = applied;
+        }
+
+        public void Apply(float bonus) => _applied?.Invoke(bonus);
+    }
+
+    private object _currentRouletteToken;
+    // --------
+
     private void Awake()
     {
         skillManager = this.transform.root.GetComponentInChildren<SkillManager>();
     }
     private void Update()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") == 0) return;
+        //if (Input.GetAxis("Mouse ScrollWheel") == 0) return;
 
-        if (isApplied) return;
+        //if (isApplied) return;
 
-        isApplied = true;
-        float currentBonus = ApplyRoulette();
-        this.transform.root.GetComponentInChildren<Player>().RouletteDamageMultiplier = currentBonus;
-        skillManager.canChangeSkill = false;
-
+        //isApplied = true;
+        //float currentBonus = ApplyRoulette();
+        //this.transform.root.GetComponentInChildren<Player>().RouletteDamageMultiplier = currentBonus;
+        //skillManager.canChangeSkill = false;
     }
 
-    private float ApplyRoulette()
+    public bool TrySkillRoulette(out DTO rouletteDTO)
     {
-        int randomValue = Random.Range(0, 100);
-        int cumulative = 0;
-
-        for (int i = 0; i < probabilities.Length; i++)
+        if (isApplied)
         {
-            cumulative += probabilities[i];
-            if (randomValue < cumulative)
-            {
-                print($"{bonuses[i]} is selected!");
-                return bonuses[i];
-            }
+            rouletteDTO = default;
+            return false;
         }
 
-        return 1; // 기본값
+        isApplied = true;
+
+        var token = _currentRouletteToken = new();
+        rouletteDTO = new DTO(bonuses.ToArray(), probabilities.ToArray(), bonus =>
+        {
+            if (token != _currentRouletteToken)
+                return;
+
+            transform.root.GetComponentInChildren<Player>().RouletteDamageMultiplier = bonus;
+            skillManager.canChangeSkill = false;
+        });
+
+        return true;
     }
+
+    //private float ApplyRoulette()
+    //{
+    //    int randomValue = UnityEngine.Random.Range(0, 100);
+    //    int cumulative = 0;
+
+    //    for (int i = 0; i < probabilities.Length; i++)
+    //    {
+    //        cumulative += probabilities[i];
+    //        if (randomValue < cumulative)
+    //        {
+    //            print($"{bonuses[i]} is selected!");
+    //            return bonuses[i];
+    //        }
+    //    }
+
+    //    return 1; // 기본값
+    //}
 
     // 스킬 사용 후 호출하여 룰렛 상태를 리셋하는 함수
     public void ResetRoulette()
     {
+        _currentRouletteToken = null;
+
         isApplied = false;
         skillManager.canChangeSkill = true;
     }

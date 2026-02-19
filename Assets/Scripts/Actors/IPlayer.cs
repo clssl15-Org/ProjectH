@@ -4,6 +4,7 @@ using Actors.PlayerSystem;
 using Infrastructure;
 using UnityEngine;
 using World;
+using static DamageRoulette;
 
 namespace Actors
 {
@@ -49,7 +50,6 @@ namespace Actors
 
         // Skill
         int SelectedSkillIndex { get; }
-        bool CanApplySkillBuff { get; }
 
 
         // ---------- Methods ----------
@@ -61,8 +61,7 @@ namespace Actors
         void UseSkill();
         void UseUltimate();
         void ChangeSkill();
-        void ApplyRandomSkillBuff(float factor);
-
+        bool TrySkillRoulette(out DTO rouletteDTO);
 
 
         // ---------- MonoBehaviour ----------

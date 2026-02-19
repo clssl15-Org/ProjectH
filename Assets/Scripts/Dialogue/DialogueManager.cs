@@ -53,6 +53,8 @@ namespace Dialogue
             OnPlayStarting();
 
             BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
+
+            _dialogueUI.transform.SetAsLastSibling();
             _dialogueUI.Enable();
 
             int currentIdx = -1;

@@ -54,7 +54,7 @@ namespace UI
         private EnableWithAnimation _skillRouletteEnabler;
         private IDisposable _skillRouletteDeactivateTimer;
 
-        private bool _isSkillRulettelocked = false;
+        private readonly int[] _probTable = new int[] { 0, 10, 25, 50, 75, 100 };
         private bool _isAwaked = false;
 
 
@@ -210,38 +210,16 @@ namespace UI
 
         private void ApplyRandomSkillBuff()
         {
-            if (!_player.CanApplySkillBuff)
-                return;
+            using var _ = BlackboxHandle.Of(this).WriteScope("Apply Random Skill Buff");
+            if (!_player.TrySkillRoulette(out var appliedBouns, out var apply)) return;
 
-            if (_isSkillRulettelocked) return;
-            _isSkillRulettelocked = true;
+            BlackboxHandle.Of(this).Write($"Bouns: {appliedBouns}");
+            appliedBouns -= 1;
 
-            // TODO: 이 부분 PlayerVM으로 옮기기
-            var table = new (float weight, int index, float factor)[]
-            {
-                (22, 0, 0),
-                (30, 1, 10),
-                (25, 2, 25),
-                (15, 3, 50),
-                (6,  4, 75),
-                (2,  5, 100),
-            };
+            var index = _probTable.Count(prob => appliedBouns >= prob) - 1;
+            index = Mathf.Clamp(index, 0, _probTable.Length - 1);
 
-            float selector = UnityEngine.Random.Range(0f, table.Sum(t => t.weight));
-            float criteria = 0f;
-
-            int index = table[^1].index;
-            float factor = table[^1].factor;
-
-            foreach (var item in table)
-            {
-                criteria += item.weight;
-                if (selector < criteria)
-                {
-                    (index, factor) = (item.index, item.factor);
-                    break;
-                }
-            }
+            BlackboxHandle.Of(this).Write($"Index: {index}");
 
             _skillRouletteDeactivateTimer?.Dispose();
             _skillRouletteDeactivateTimer = new Timer(
@@ -252,9 +230,9 @@ namespace UI
                     {
                         _skillRouletteEnabler.Disable();
                         _skillRoulette.clip = null;
-                        _isSkillRulettelocked = false;
 
-                        _player.ApplyRandomSkillBuff(factor);
+                        BlackboxHandle.Of(this).Exert(_player, "Apply Damage");
+                        apply();
                     }
                 });
 

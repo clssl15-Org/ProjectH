@@ -68,7 +68,7 @@ namespace Game.Stage
                 throw new ArgumentNullException(
                     nameof(view),
                     BlackboxHandle.Of(this).CrashExport(
-                        Ctx("등록할 인자는 null일 수 없습니다.")));
+                    Ctx("등록할 인자는 null일 수 없습니다.")));
 
             if (_views.Contains(view))
                 return;

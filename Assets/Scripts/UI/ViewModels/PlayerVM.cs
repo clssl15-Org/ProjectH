@@ -1,8 +1,8 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Actors;
 using Actors.PlayerSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace UI
 {
@@ -32,14 +32,6 @@ namespace UI
             {
                 ThrowIfDisposed();
                 return _player.SelectedSkillType;
-            }
-        }
-        public bool CanApplySkillBuff
-        {
-            get
-            {
-                ThrowIfDisposed();
-                return _player.CanApplySkillBuff;
             }
         }
         public event Action<SkillType> SkillAdded;
@@ -109,12 +101,34 @@ namespace UI
 
             _player.ChangeSkill();
         }
-        public void ApplyRandomSkillBuff(float factor)
+        public bool TrySkillRoulette(out float appliedBouns, out Action apply)
         {
             ThrowIfDisposed();
-            if (_player == null) return;
 
-            _player.ApplyRandomSkillBuff(factor);
+            if (_player == null
+                || !_player.TrySkillRoulette(out var rouletteDTO))
+            {
+                (appliedBouns, apply) = (default, default);
+                return false;
+            }
+
+            float selector = UnityEngine.Random.Range(0f, rouletteDTO.Probabilities.Sum());
+            float criteria = 0f;
+
+            foreach (var (bouns, prob)
+                in rouletteDTO.Bonuses.Zip(rouletteDTO.Probabilities, (bouns, prob) => (bouns, prob)))
+            {
+                criteria += prob;
+                if (selector < criteria)
+                {
+                    appliedBouns = bouns;
+                    apply = () => rouletteDTO.Apply(bouns);
+                    return true;
+                }
+            }
+
+            (appliedBouns, apply) = (default, default);
+            return false;
         }
 
         [Obsolete("현재 Player Input은 Standalone으로 처리됩니다.")]

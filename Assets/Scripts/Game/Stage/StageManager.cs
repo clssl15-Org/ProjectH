@@ -72,12 +72,12 @@ namespace Game.Stage
             {
                 if (!UIManager.HasCanvas)
                 {
-                    var canvas = FindAnyObjectByType<RectTransform>(FindObjectsInactive.Include);
+                    var canvas = FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
 
                     if (canvas)
                     {
                         BlackboxHandle.Of(this).Exert(UIManager, $"Set Canvas: {canvas}");
-                        UIManager.SetCanvas(canvas);
+                        UIManager.SetCanvas(canvas.GetComponent<RectTransform>());
                     }
                     else
                     {
@@ -252,10 +252,10 @@ namespace Game.Stage
                         return;
                     }
 
+                    BlackboxHandle.Of(this).Exert(_relicInfoPanelUI, "RelicsUI 열기");
+
                     // UI를 최상위 창으로 열기
                     _relicInfoPanelUI.transform.SetAsLastSibling();
-
-                    BlackboxHandle.Of(this).Exert(_relicInfoPanelUI, "RelicsUI 열기");
                     _relicInfoPanelUI.Open();
                 };
             }
@@ -343,10 +343,8 @@ namespace Game.Stage
 
         public void Register(IPlayer player, bool connectUI = true)
         {
-            if (_isDestroyed)
-                return;
-
-            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, "PlayerManager에 Player 등록");
+            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, $"PlayerManager에 Player 등록, _isDestroyed: {_isDestroyed}");
+            if (_isDestroyed) return;
 
             if (!PlayerManager.Register(player))
                 return;
