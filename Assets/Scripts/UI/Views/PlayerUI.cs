@@ -214,7 +214,9 @@ namespace UI
             if (!_player.TrySkillRoulette(out var appliedBonus, out var apply)) return;
 
             BlackboxHandle.Of(this).Write($"Bouns: {appliedBonus}");
-            appliedBonus -= 1;
+
+            // _probTable은 0부터 100까지 정수
+            appliedBonus = Mathf.RoundToInt((appliedBonus - 1) * 100);
 
             var index = _probTable.Count(prob => appliedBonus >= prob) - 1;
             index = Mathf.Clamp(index, 0, _probTable.Length - 1);

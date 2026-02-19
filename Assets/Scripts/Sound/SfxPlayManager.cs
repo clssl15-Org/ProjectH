@@ -11,13 +11,13 @@ namespace Sound
     {
         private void Start()
         {
-            SetVolume(gameServices.SfxVolume);
-            gameServices.SfxChanged += SetVolume;
+            SetVolume(GameServices.SfxVolume);
+            GameServices.SfxChanged += SetVolume;
         }
 
         private void OnDestroy()
         {
-            gameServices.SfxChanged -= SetVolume;
+            GameServices.SfxChanged -= SetVolume;
         }
     }
 }

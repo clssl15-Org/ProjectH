@@ -439,6 +439,10 @@ PrefabInstance:
       propertyPath: _exportLog
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3194588562940674162, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: _effectPlayTiming
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4191926667717875254, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -459,6 +463,34 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6318076102053915249, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 6318076102053915249, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 6318076102053915249, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6318076102053915249, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6318076102053915249, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6318076102053915249, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7481420969534253655, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8577567193043061850, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -469,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9158238539528485429, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

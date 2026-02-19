@@ -32,6 +32,7 @@ namespace UI
         private bool _initialized = false;
 
 
+        private void Awake() => EnsureInitialization();
         private void EnsureInitialization()
         {
             if (_initialized) return;
@@ -40,18 +41,11 @@ namespace UI
             _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
         }
-        private void Awake() => EnsureInitialization();
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
-            {
-                if (_clickCallback != null)
-                {
-                    _clickCallback.Invoke();
-                    _clickCallback = null;
-                }
-            }
+                _clickCallback?.Invoke();
         }
 
         public void EnableFor(MonoBehaviour target, Action clickCallback = null)

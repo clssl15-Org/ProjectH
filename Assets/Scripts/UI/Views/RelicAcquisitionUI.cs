@@ -6,15 +6,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
     public class RelicAcquisitionUI : MonoBehaviour,
-        IStandaloneInitializable, IView, IEnablable, IInputController
+        IStandaloneInitializable,
+        IEnablable,
+        IView,
+        IInputController,
+        IInjectable<DarkscreenUI>
     {
         [Header("Main")]
         [SerializeField] private Animation _openAnimation;
@@ -32,28 +33,41 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _coinDescripton;
         [SerializeField] private GameObject _coinImage;
         [SerializeField] private GameObject _coinAnimation;
+        [SerializeField] private GameObject _effectAnimation;
         [SerializeField] private VideoPlayer _coinRawVideoPlayer;
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
+        [SerializeField] private VideoPlayer _coinEffectVideoPlayer;
+        [SerializeField] private VideoPlayer _coinEffectMaskVideoPlayer;
+        [SerializeField] private float _effectPlayTiming = 1f;
 
         public bool EnableInput { get; set; } = true;
         public event Action Destroying;
 
+        public enum VideoType
+        {
+            CoinFront,
+            CoinBack,
+            CoinEffect,
+        }
+
         [Serializable]
         public struct VideoData
         {
-            public bool IsFront;
+            public VideoType VideoType;
             public VideoClip Video;
             public VideoClip AlphaMask;
         }
         [SerializeField] private VideoData[] _videoClips;
 
         private IInputHub _inputHub;
-        private IDisposable _updater, _timer;
+        private DarkscreenUI _darkscreenUI;
+        private IDisposable _updater, _coinTimer, _effectTimer;
         private RelicDataSO _relic;
         private EnableWithAnimation _enabler;
 
         private bool _isInitialized = false;
         private bool _isOperating = false;
+        private bool _isOperated = false;
         private bool _isDestroyed = false;
 
         private readonly bool UseCoinReadyImage = false;
@@ -73,7 +87,6 @@ namespace UI
         Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
         Action IEnablable.OnDisabled => null;
         #endregion
-
 
 
         void IStandaloneInitializable.StandaloneInitialize() => Start();
@@ -96,24 +109,28 @@ namespace UI
                 _coinImage.SetActive(false);
                 _coinAnimation.SetActive(true);
             }
+
+            _coinAnimation.SetActive(false);
         }
 
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         private void OnRelicAcquiring(RelicDataSO relicInfo, string description)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Relic Acquiring: {relicInfo.name}");
+            if (_darkscreenUI) _darkscreenUI.EnableFor(this, () => { if (_isOperated) Close(); });
 
             if (_isOperating)
             {
-                Debug.LogWarning(
-                    $"{nameof(RelicAcquisitionUI)} 이미 선행 작업이 진행 중이므로 새로운 렐릭을 얻을 수 없습니다.",
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                    $"{nameof(RelicAcquisitionUI)} 이미 선행 작업이 진행 중이므로 새로운 렐릭을 얻을 수 없습니다."),
                     this);
-
                 return;
             }
 
             _isOperating = true;
+            _isOperated = false;
             _relic = relicInfo;
 
             Enable();
@@ -124,6 +141,8 @@ namespace UI
 
             _coinRawVideoPlayer.clip = null;
             _coinMaskVideoPlayer.clip = null;
+            _coinEffectVideoPlayer.clip = null;
+            _coinEffectMaskVideoPlayer.clip = null;
         }
 
         private void ToThrowCoin()
@@ -141,25 +160,37 @@ namespace UI
             else
                 _coinAnimation.SetActive(true);
 
+            _effectAnimation.SetActive(false);
+
 
             _coinDescripton.text = $"강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}";
-
             var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
 
-            var clip = _videoClips.FirstOrDefault(v => v.IsFront == reinforced);
-            if (!clip.Video || !clip.AlphaMask)
-                throw new InvalidOperationException(
-                    $"[{nameof(RelicAcquisitionUI)}] {nameof(clip)}이(가) 유효하지 않습니다.");
+            var coinClip = _videoClips.FirstOrDefault(v => v.VideoType
+                == (reinforced ? VideoType.CoinFront : VideoType.CoinBack));
 
             _coinRawVideoPlayer.playbackSpeed = 0f;
             _coinMaskVideoPlayer.playbackSpeed = 0f;
 
-            _coinRawVideoPlayer.clip = clip.Video;
-            _coinMaskVideoPlayer.clip = clip.AlphaMask;
+            _coinRawVideoPlayer.clip = coinClip.Video;
+            _coinMaskVideoPlayer.clip = coinClip.AlphaMask;
 
             _coinRawVideoPlayer.frame = 0;
             _coinMaskVideoPlayer.frame = 0;
 
+            if (reinforced)
+            {
+                var effectClip = _videoClips.FirstOrDefault(v => v.VideoType == VideoType.CoinEffect);
+
+                _coinEffectVideoPlayer.playbackSpeed = 0f;
+                _coinEffectMaskVideoPlayer.playbackSpeed = 0f;
+
+                _coinEffectVideoPlayer.clip = effectClip.Video;
+                _coinEffectMaskVideoPlayer.clip = effectClip.AlphaMask;
+
+                _coinEffectVideoPlayer.frame = 0;
+                _coinEffectMaskVideoPlayer.frame = 0;
+            }
 
             _updater = Loco.Subscribe(() =>
             {
@@ -183,9 +214,18 @@ namespace UI
                 _coinRawVideoPlayer.playbackSpeed = 1f;
                 _coinMaskVideoPlayer.playbackSpeed = 1f;
 
-                _timer = new Timer((float)clip.Video.length, succeeded =>
+                if (reinforced)
+                    _effectTimer = new Timer(_effectPlayTiming, succeeded =>
+                    {
+                        _effectAnimation.SetActive(true);
+                        _coinEffectVideoPlayer.playbackSpeed = 1f;
+                        _coinEffectMaskVideoPlayer.playbackSpeed = 1f;
+                    });
+
+                _coinTimer = new Timer((float)coinClip.Video.length, succeeded =>
                 {
                     using var _ = BlackboxHandle.Of(this).WriteScope("Play Ended");
+                    _isOperated = true;
 
                     if (succeeded)
                     {
@@ -214,15 +254,19 @@ namespace UI
         private void Close()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Close");
+            if (_darkscreenUI) _darkscreenUI.Disable();
 
             _updater?.Dispose();
-            _updater = null;
+            _coinTimer?.Dispose();
+            _effectTimer?.Dispose();
 
-            _timer?.Dispose();
-            _timer = null;
+            _updater = null;
+            _coinTimer = null;
+            _effectTimer = null;
 
             Disable();
             _isOperating = false;
+            _isOperated = false;
         }
 
         public void Enable()
@@ -259,28 +303,10 @@ namespace UI
             Destroying?.Invoke();
 
             _updater?.Dispose();
-            _timer?.Dispose();
+            _coinTimer?.Dispose();
+            _effectTimer?.Dispose();
 
             RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
         }
-
-
-#if UNITY_EDITOR
-        [CustomEditor(typeof(RelicAcquisitionUI))]
-        private class RelicAcquisitionUIEditor : Editor
-        {
-            public override void OnInspectorGUI()
-            {
-                base.OnInspectorGUI();
-
-                if (Application.isPlaying)
-                {
-                    GUILayout.Space(8);
-                    if (GUILayout.Button("Export Log"))
-                        BlackboxHandle.Of(target).Export(openLogOption: OpenLogOption.Open);
-                }
-            }
-        }
-#endif
     }
 }

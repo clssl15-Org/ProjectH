@@ -20,7 +20,7 @@ namespace Sound
         }
         [SerializeField] private AudioData[] _audios;
 
-        protected GameServices gameServices { get; private set; }
+        protected GameServices GameServices { get; private set; }
         private AudioSource _audioSource;
         private bool _isAwaked = false;
 
@@ -36,7 +36,7 @@ namespace Sound
         }
 
         void IInjectable<GameServices>.Inject(GameServices gameServices) =>
-            gameServices = gameServices;
+            GameServices = gameServices;
 
         public void Play(TAudioName name)
         {
