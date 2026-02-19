@@ -13,7 +13,7 @@ namespace UI
         IEnablable,
         IInputController,
         IInputControllable,
-        IInjectable<GameContext>,
+        IInjectable<GameServices>,
         IInjectable<SfxPlayManager>,
         IInjectable<DarkscreenUI>
     {
@@ -34,7 +34,7 @@ namespace UI
         public event Action OpenRelicsUI;
         public event Action Destroying;
 
-        private GameContext _gameContext;
+        private GameServices _gameServices;
         private SfxPlayManager _sfxPlayManager;
         private DarkscreenUI _darkscreenUI;
         private EnableWithAnimation _enabler;
@@ -60,8 +60,8 @@ namespace UI
 
             if (_inputHub != null)
             {
-                _bgmScroll.value = _gameContext.BgmVolume / 100f;
-                _sfxScroll.value = _gameContext.SfxVolume / 100f;
+                _bgmScroll.value = _gameServices.BgmVolume / 100f;
+                _sfxScroll.value = _gameServices.SfxVolume / 100f;
 
                 BlackboxHandle.Of(this).Exert(_inputHub, $"BlockAll InputHub'");
                 _inputHub.BlockExcept(this);
@@ -111,7 +111,7 @@ namespace UI
                     var vol = Mathf.RoundToInt(val * 100);
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_bgmScroll, $"Set Bgm Vol: {vol}");
 
-                    _gameContext.SetBgmVolume(vol, this);
+                    _gameServices.SetBgmVolume(vol, this);
                 });
 
             if (!_sfxScroll)
@@ -125,7 +125,7 @@ namespace UI
                     var vol = Mathf.RoundToInt(val * 100);
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_sfxScroll, $"Set Sfx Vol: {vol}");
 
-                    _gameContext.SetSfxVolume(vol, this);
+                    _gameServices.SetSfxVolume(vol, this);
 
                     if (_sfxPlayManager)
                     {
@@ -200,11 +200,11 @@ namespace UI
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_exitBtn, "게임 종료");
 
-                    if(_gameContext)
-                        _gameContext.Quit(this);
+                    if(_gameServices)
+                        _gameServices.Quit(this);
                     else
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                            "GameContext가 유효하지 않기 때문에 게임을 종료할 수 없습니다.")), this);
+                            "gameServices가 유효하지 않기 때문에 게임을 종료할 수 없습니다.")), this);
                 });
 
 
@@ -214,7 +214,7 @@ namespace UI
             ((IEnablable)this).SetToDisabled();
         }
 
-        void IInjectable<GameContext>.Inject(GameContext gameContext) => _gameContext = gameContext;
+        void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
         void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPalyManager) => _sfxPlayManager = sfxPalyManager;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
         void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;

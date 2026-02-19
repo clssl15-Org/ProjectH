@@ -133,7 +133,7 @@ namespace Actors.PlayerSystem
         {
             skillManager.ChangeSkill();
         }
-        public bool TrySkillRoulette(out DamageRoulette.DTO rouletteDTO) =>
+        public bool TrySkillRoulette(out DamageRoulette.Context rouletteDTO) =>
             damageRoulette.TrySkillRoulette(out rouletteDTO);
 
         public void ResetRandomSkillBuff()

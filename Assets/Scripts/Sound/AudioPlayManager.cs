@@ -9,7 +9,7 @@ namespace Sound
     [RequireComponent(typeof(AudioSource))]
     public abstract class AudioPlayManager<TAudioName> : MonoBehaviour,
         IStandaloneInitializable,
-        IInjectable<GameContext>
+        IInjectable<GameServices>
         where TAudioName : Enum
     {
         [Serializable]
@@ -20,7 +20,7 @@ namespace Sound
         }
         [SerializeField] private AudioData[] _audios;
 
-        protected GameContext GameContext { get; private set; }
+        protected GameServices gameServices { get; private set; }
         private AudioSource _audioSource;
         private bool _isAwaked = false;
 
@@ -35,8 +35,8 @@ namespace Sound
             _audioSource = GetComponent<AudioSource>();
         }
 
-        void IInjectable<GameContext>.Inject(GameContext gameContext) =>
-            GameContext = gameContext;
+        void IInjectable<GameServices>.Inject(GameServices gameServices) =>
+            gameServices = gameServices;
 
         public void Play(TAudioName name)
         {

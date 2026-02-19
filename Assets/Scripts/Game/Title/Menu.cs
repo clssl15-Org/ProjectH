@@ -8,7 +8,7 @@ using BlackboxSystem;
 namespace Game.Title
 {
     public class Menu : MonoBehaviour,
-        IInjectable<GameContext>,
+        IInjectable<GameServices>,
         IEnablable,
         IInputControllable
     {
@@ -27,7 +27,7 @@ namespace Game.Title
         [SerializeField] private SettingsUI _settingsUI;
         [SerializeField] private Animation _animation;
 
-        private GameContext _gameContext;
+        private GameServices _gameServices;
         private EnableWithAnimation _enabler;
 
         [Space]
@@ -46,10 +46,10 @@ namespace Game.Title
                 _darkscreen.SetToDisabled();
         }
 
-        void IInjectable<GameContext>.Inject(GameContext gameContext)
+        void IInjectable<GameServices>.Inject(GameServices gameServices)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("GameContext Injected");
-            _gameContext = gameContext;
+            using var _ = BlackboxHandle.Of(this).WriteScope("gameServices Injected");
+            _gameServices = gameServices;
         }
 
         private void Update()
@@ -153,13 +153,13 @@ namespace Game.Title
                 return;
             }
 
-            if (_gameContext)
-                _gameContext.Quit(this);
+            if (_gameServices)
+                _gameServices.Quit(this);
             else
             {
                 Debug.LogWarning(
                     BlackboxHandle.Of(this).WriteMessage(
-                        $"[Menu] {nameof(_gameContext)}이(가) 유효하지 않기 때문에 Quit 메서드를 수행할 수 없습니다."),
+                        $"[Menu] {nameof(_gameServices)}이(가) 유효하지 않기 때문에 Quit 메서드를 수행할 수 없습니다."),
                     this);
             }
         }

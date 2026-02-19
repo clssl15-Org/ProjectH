@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Infrastructure
 {
-    public abstract class GameContext : MonoBehaviour
+    public abstract class GameServices : MonoBehaviour
     {
         public abstract event Action<int> BgmChanged;
         public abstract event Action<int> SfxChanged;

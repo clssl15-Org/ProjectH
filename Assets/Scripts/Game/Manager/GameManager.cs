@@ -17,7 +17,7 @@ namespace Game
     /// <remarks>
     /// 이 객체는 모든 씬에 걸쳐 존재하는 단일 인스턴스입니다.
     /// </remarks>
-    public sealed class GameManager : GameContext
+    public sealed class GameManager : GameServices
     {
         // Forwardings
         public override event Action<int> BgmChanged
@@ -109,7 +109,7 @@ namespace Game
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                         Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. 주입을 수행할 수 없습니다.")));
 
-                injector.AddInjection(this, typeof(GameContext));
+                injector.AddInjection(this, typeof(GameServices));
                 foreach (var injection in _injections)
                 {
                     if (injection)

@@ -61,7 +61,7 @@ namespace Actors
         void UseSkill();
         void UseUltimate();
         void ChangeSkill();
-        bool TrySkillRoulette(out DTO rouletteDTO);
+        bool TrySkillRoulette(out Context rouletteDTO);
 
 
         // ---------- MonoBehaviour ----------

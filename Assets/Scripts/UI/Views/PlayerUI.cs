@@ -211,12 +211,12 @@ namespace UI
         private void ApplyRandomSkillBuff()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Apply Random Skill Buff");
-            if (!_player.TrySkillRoulette(out var appliedBouns, out var apply)) return;
+            if (!_player.TrySkillRoulette(out var appliedBonus, out var apply)) return;
 
-            BlackboxHandle.Of(this).Write($"Bouns: {appliedBouns}");
-            appliedBouns -= 1;
+            BlackboxHandle.Of(this).Write($"Bouns: {appliedBonus}");
+            appliedBonus -= 1;
 
-            var index = _probTable.Count(prob => appliedBouns >= prob) - 1;
+            var index = _probTable.Count(prob => appliedBonus >= prob) - 1;
             index = Mathf.Clamp(index, 0, _probTable.Length - 1);
 
             BlackboxHandle.Of(this).Write($"Index: {index}");

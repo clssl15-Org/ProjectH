@@ -25,14 +25,14 @@ public class DamageRoulette : MonoBehaviour
     }
 
     // --------
-    public class DTO
+    public class Context
     {
         public float[] Bonuses { get; }
         public int[] Probabilities { get; }
 
         private readonly Action<float> _applied;
 
-        public DTO(float[] bonuses, int[] probabilities, Action<float> applied)
+        public Context(float[] bonuses, int[] probabilities, Action<float> applied)
         {
             Bonuses = bonuses;
             Probabilities = probabilities;
@@ -61,18 +61,18 @@ public class DamageRoulette : MonoBehaviour
         //skillManager.canChangeSkill = false;
     }
 
-    public bool TrySkillRoulette(out DTO rouletteDTO)
+    public bool TrySkillRoulette(out Context context)
     {
         if (isApplied)
         {
-            rouletteDTO = default;
+            context = default;
             return false;
         }
 
         isApplied = true;
 
         var token = _currentRouletteToken = new();
-        rouletteDTO = new DTO(bonuses.ToArray(), probabilities.ToArray(), bonus =>
+        context = new Context(bonuses.ToArray(), probabilities.ToArray(), bonus =>
         {
             if (token != _currentRouletteToken)
                 return;

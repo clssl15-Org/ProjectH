@@ -101,33 +101,33 @@ namespace UI
 
             _player.ChangeSkill();
         }
-        public bool TrySkillRoulette(out float appliedBouns, out Action apply)
+        public bool TrySkillRoulette(out float appliedBonus, out Action apply)
         {
             ThrowIfDisposed();
 
             if (_player == null
-                || !_player.TrySkillRoulette(out var rouletteDTO))
+                || !_player.TrySkillRoulette(out var rouletteCtx))
             {
-                (appliedBouns, apply) = (default, default);
+                (appliedBonus, apply) = (default, default);
                 return false;
             }
 
-            float selector = UnityEngine.Random.Range(0f, rouletteDTO.Probabilities.Sum());
+            float selector = UnityEngine.Random.Range(0f, rouletteCtx.Probabilities.Sum());
             float criteria = 0f;
 
             foreach (var (bouns, prob)
-                in rouletteDTO.Bonuses.Zip(rouletteDTO.Probabilities, (bouns, prob) => (bouns, prob)))
+                in rouletteCtx.Bonuses.Zip(rouletteCtx.Probabilities, (bouns, prob) => (bouns, prob)))
             {
                 criteria += prob;
                 if (selector < criteria)
                 {
-                    appliedBouns = bouns;
-                    apply = () => rouletteDTO.Apply(bouns);
+                    appliedBonus = bouns;
+                    apply = () => rouletteCtx.Apply(bouns);
                     return true;
                 }
             }
 
-            (appliedBouns, apply) = (default, default);
+            (appliedBonus, apply) = (default, default);
             return false;
         }
 
