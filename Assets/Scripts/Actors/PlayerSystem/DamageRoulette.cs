@@ -11,6 +11,8 @@ public class DamageRoulette : MonoBehaviour
 
     private SkillManager skillManager;
 
+    private Player player;
+
     // 룰렛 보너스 수치 정의
     private readonly float[] bonuses = { 1, 1.1f, 1.25f, 1.5f, 1.75f, 2 };
     // 기획서에 명시된 각 보너스별 확률 (%)
@@ -48,6 +50,7 @@ public class DamageRoulette : MonoBehaviour
     private void Awake()
     {
         skillManager = this.transform.root.GetComponentInChildren<SkillManager>();
+        player = this.transform.root.GetComponentInChildren<Player>();
     }
     private void Update()
     {
@@ -63,6 +66,18 @@ public class DamageRoulette : MonoBehaviour
 
     public bool TrySkillRoulette(out Context context)
     {
+        if (skillManager.skills.Count <= 0)
+        {
+            context = default;
+            return false;
+        }
+
+        if (player.CurrentSkillCooldown > 0f)
+        {
+            context = default;
+            return false;
+        }
+
         if (isApplied)
         {
             context = default;

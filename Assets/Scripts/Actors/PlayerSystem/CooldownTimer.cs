@@ -5,7 +5,7 @@ using UnityEngine.iOS;
 
 namespace Actors.PlayerSystem
 {
-    public class CooldownTiemr : MonoBehaviour
+    public class CooldownTimer : MonoBehaviour
     {
         public bool IsOnCooldown
         {

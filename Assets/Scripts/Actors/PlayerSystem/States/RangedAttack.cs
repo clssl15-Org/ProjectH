@@ -40,7 +40,7 @@ namespace Actors.PlayerSystem
         private bool isDone = true;
         private bool isProjectileLaunched = true;
 
-        private CooldownTiemr cooldownTimer;
+        private CooldownTimer cooldownTimer;
         public float BonusMultiplier { get; set; } = 1f;
 
         public override bool CheckEnterTransition(CharacterState fromState)
@@ -58,7 +58,7 @@ namespace Actors.PlayerSystem
         public override void EnterBehaviour(float dt)
         {
             ResetSkill();
-            cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+            cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
 

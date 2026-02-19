@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GaleKnightBoots : Relic
 {
-    private CooldownTiemr cooldownTimer;
+    private CooldownTimer cooldownTimer;
     public override void OnAcquire()
     {
         OnReinforcedAcquire();
@@ -13,7 +13,7 @@ public class GaleKnightBoots : Relic
         RelicManager.Instance.player.playerStats.moveSpeedMultiplier += value;
 
 
-        cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+        cooldownTimer = gameObject.AddComponent<CooldownTimer>();
         cooldownTimer.StartCooldown(value * 60, Time.deltaTime);
     }
     private void Update()

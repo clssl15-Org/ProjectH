@@ -69,7 +69,8 @@ namespace Actors.PlayerSystem
         private float currentSpeedMultiplier = 1f;
 
         //private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
-        private CooldownTiemr cooldownTimer;
+        public CooldownTimer CooldownTimer => cooldownTimer;
+        private CooldownTimer cooldownTimer;
 
         public static Action onEskill;
 
@@ -144,7 +145,7 @@ namespace Actors.PlayerSystem
             }
 
             ResetSkill();
-            cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+            cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
         public override void UpdateBehaviour(float dt)

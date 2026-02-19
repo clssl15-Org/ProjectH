@@ -40,7 +40,7 @@ namespace Actors.PlayerSystem
 
         private float currentSpeedMultiplier = 1f;
 
-        private CooldownTiemr cooldownTimer;
+        private CooldownTimer cooldownTimer;
 
         public override bool CheckEnterTransition(CharacterState fromState)
         {
@@ -93,8 +93,8 @@ namespace Actors.PlayerSystem
             {
                 if (cooldownTimer == null)
                 {
-                    cooldownTimer = GetComponent<CooldownTiemr>();
-                    if (cooldownTimer == null) cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+                    cooldownTimer = GetComponent<CooldownTimer>();
+                    if (cooldownTimer == null) cooldownTimer = gameObject.AddComponent<CooldownTimer>();
                 }
 
                 cooldownTimer.StartCooldown(cooldownDuration, dt);

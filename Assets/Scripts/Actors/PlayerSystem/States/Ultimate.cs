@@ -60,6 +60,7 @@ namespace Actors.PlayerSystem
         [SerializeField]
         private float cooldownRecoveryAmount = 0.02f;
 
+        public float CooldownGauge => cooldownGauge;
         private float cooldownGauge = 1f;
 
         [Header("Gizmos")]

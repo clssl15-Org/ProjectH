@@ -44,6 +44,37 @@ namespace Actors.PlayerSystem
         public int CurrentJumpCount { get; set; }
         public bool AllowInput { get; set; } = true;
 
+        public float CurrentSkillCooldown
+        {
+            get
+            {
+                CooldownTimer cooldownTimer = GetComponentInChildren<CooldownTimer>();
+                if (cooldownTimer != null)
+                {
+                    return cooldownTimer.Progress;
+                }
+                else
+                {
+                    return -1f;
+                }
+            }
+        }
+        public float CurrentUltimateCooldown
+        {
+            get
+            {
+                Ultimate ultimate = GetComponentInChildren<Ultimate>();
+                if (ultimate.enabled)
+                {
+                    return ultimate.CooldownGauge;
+                }
+                else
+                {
+                    return -1f;
+                }
+            }
+        }
+
         public GameObject StatesGO;
 
         public SkillManager SkillManager => skillManager;

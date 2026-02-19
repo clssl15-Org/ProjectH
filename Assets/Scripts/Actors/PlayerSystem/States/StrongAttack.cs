@@ -50,7 +50,7 @@ namespace Actors.PlayerSystem
         private float attackPower => Player.playerStats.attackPower;
         private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 
-        private CooldownTiemr cooldownTimer;
+        private CooldownTimer cooldownTimer;
 
         private float skillCursor = 0f;
 
@@ -128,7 +128,7 @@ namespace Actors.PlayerSystem
 
             ResetSkill();
             UpdateAttackParameters();
-            cooldownTimer = gameObject.AddComponent<CooldownTiemr>();
+            cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
 
