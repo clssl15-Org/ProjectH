@@ -62,10 +62,11 @@ namespace UI
 
         private void Start()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, was: {_isAwaked}");
+
             if (_isAwaked) return;
             _isAwaked = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             _enabler = new EnableWithAnimation(GetComponent<Animation>(), gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
 
@@ -73,14 +74,8 @@ namespace UI
             SetToDisabled();
         }
 
-        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary)
-        {
-            _gameAssetLibrary = gameAssetLibrary;
-        }
-        void IInputController.Initialize(IInputHub inputHub)
-        {
-            _inputHub = inputHub;
-        }
+        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary) => _gameAssetLibrary = gameAssetLibrary;
+        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         public void SetContent(DialogueLine dialogueData)
         {
@@ -98,10 +93,9 @@ namespace UI
             out Sprite portrait,
             out string dialogue)
         {
-#pragma warning disable IDE0029
             if (!_gameAssetLibrary.TryGetCharacterInfo(dialogueData.Character, out var characterInfo))
             {
-                throw new ArgumentException(BlackboxHandle.Of(this).CrashExport(
+                throw new ArgumentException(BlackboxHandle.Of(this).WriteError(
                     $"{nameof(dialogueData)}의 캐릭터 타입 '{dialogueData.Character}'에 해당하는 {nameof(CharacterInfoSO)}을(를) 찾지 못하였습니다."),
                     nameof(dialogueData));
             }
@@ -109,14 +103,12 @@ namespace UI
             name = !string.IsNullOrEmpty(dialogueData.NameOverride) ? dialogueData.NameOverride : characterInfo.Name;
             portrait = dialogueData.PortraitOverride != null ? dialogueData.PortraitOverride : characterInfo.Portrait;
             dialogue = dialogueData.Dialogue;
-#pragma warning restore
         }
 
 
         public void Enable()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabled");
-
             Start();
 
             BlackboxHandle.Of(this).Exert(_enabler, "Enable");

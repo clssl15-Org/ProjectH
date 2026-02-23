@@ -33,6 +33,7 @@ RectTransform:
   m_Children:
   - {fileID: 8025603833693088372}
   - {fileID: 9152811996041903435}
+  - {fileID: 1414441083619404185}
   - {fileID: 6273619703625833611}
   - {fileID: 3769546174986600700}
   - {fileID: 277236184132884998}
@@ -501,7 +502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9158238539528485429, guid: fbe6c3f1985dc7a4c81414020f7c2a26, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -893,6 +894,112 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4317328101694979383, guid: ae7e3401ac9c0c345a514a1e31efadbb, type: 3}
   m_PrefabInstance: {fileID: 4556629679055776860}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8583679827703226858
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 139916322482833733}
+    m_Modifications:
+    - target: {fileID: 213598412114261765, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_Name
+      value: Bubble Dialogue UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 213598412114261765, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+--- !u!224 &1414441083619404185 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7259312186453231731, guid: 6bbda9f26390d7e47aef13cdf4696dfc, type: 3}
+  m_PrefabInstance: {fileID: 8583679827703226858}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8953358425334895443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1012,6 +1119,10 @@ PrefabInstance:
     - target: {fileID: 3015655629577648975, guid: fe091ff7d7ba1504191c9d2d699c5a70, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3271162022300170214, guid: fe091ff7d7ba1504191c9d2d699c5a70, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4172243084510440718, guid: fe091ff7d7ba1504191c9d2d699c5a70, type: 3}
       propertyPath: m_AnchorMax.y

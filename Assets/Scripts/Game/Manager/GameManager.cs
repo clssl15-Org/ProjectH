@@ -4,7 +4,6 @@ using Infrastructure;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Game.Stage;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -32,6 +31,9 @@ namespace Game
         }
         public override int BgmVolume => _soundManager.BgmVolume;
         public override int SfxVolume => _soundManager.SfxVolume;
+
+        // Front
+        [SerializeField] private GameAssetLibrary _gameAssetLibrary;
 
         // Properties
         private Management.SoundManager _soundManager;
@@ -122,22 +124,35 @@ namespace Game
         public override void SetBgmVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Bgm 볼륨을 {volume}으로 설정합니다.", context);
+                $"Bgm 볼륨을 {volume}(으)로 설정합니다.", context);
 
             _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Sfx 볼륨을 {volume}으로 설정합니다.", context);
+                $"Sfx 볼륨을 {volume}(으)로 설정합니다.", context);
 
             _soundManager.SetSfxVolume(volume);
+        }
+
+        public override void SetPlayerName(string playerName, object context = null)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
+                $"플레이어 이름을 '{playerName}'(으)로 설정합니다.", context);
+
+            if (!_gameAssetLibrary)
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(Ctx(
+                    "GameAssetLibrary가 할당되지 않았습니다. 플레이어 이름을 설정할 수 없습니다.")));
+
+            _gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var playerInfo);
+            playerInfo.Name = playerName;
         }
 
         public override void ChangeScene(string sceneName, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"씬을 {sceneName}(으)로 설정합니다.", context);
+                $"씬을 '{sceneName}'(으)로 설정합니다.", context);
 
             try
             {

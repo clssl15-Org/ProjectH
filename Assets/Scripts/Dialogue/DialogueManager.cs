@@ -9,15 +9,17 @@ namespace Dialogue
     public class DialogueManager : MonoBehaviour, IInjectable<DialogueScriptLibrary>
     {
         [SerializeField] private DialogueUI _dialogueUI;
+        [SerializeField] private BubbleDialogueUI _bubbleBialogueUI;
 
         private DialogueScriptLibrary _dialogueScriptLibrary;
         private string _currentScriptTitle = string.Empty;
         private IDisposable _updateHandle;
 
-        public void Initialize(DialogueUI dialogueUI)
+        public void Initialize(DialogueUI dialogueUI, BubbleDialogueUI bubbleDialogueUI)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}, {bubbleDialogueUI}");
             _dialogueUI = dialogueUI;
+            _bubbleBialogueUI = bubbleDialogueUI;
         }
 
         void IInjectable<DialogueScriptLibrary>.Inject(DialogueScriptLibrary dialogueScriptLibrary)
@@ -52,10 +54,17 @@ namespace Dialogue
             _currentScriptTitle = title;
             OnPlayStarting();
 
-            BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
-
-            _dialogueUI.transform.SetAsLastSibling();
-            _dialogueUI.Enable();
+            if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
+            {
+                BlackboxHandle.Of(this).Exert(_bubbleBialogueUI, "Enable");
+                _bubbleBialogueUI.transform.SetAsLastSibling();
+            }
+            else
+            {
+                BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
+                _dialogueUI.transform.SetAsLastSibling();
+                _dialogueUI.Enable();
+            }
 
             int currentIdx = -1;
             PlayDialogue();

@@ -42,6 +42,7 @@ namespace Game.Stage
         [SerializeField] private RelicInfoPanelUI _relicInfoPanelUI;
         [SerializeField] private SettingsUI _settingsUI;
         [SerializeField] private DialogueUI _dialogueUI;
+        [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
         [SerializeField] private DarkscreenUI _darkScreenUI;
 
         internal IPlayer Player { get; private set; }
@@ -223,7 +224,7 @@ namespace Game.Stage
             if (_dialogueManager)
             {
                 BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager 초기화");
-                _dialogueManager.Initialize(_dialogueUI);
+                _dialogueManager.Initialize(_dialogueUI, _bubbleDialogueUI);
             }
             #endregion
 
@@ -337,6 +338,16 @@ namespace Game.Stage
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                         $"씬에서 {nameof(_dialogueUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_bubbleDialogueUI)
+            {
+                _bubbleDialogueUI = FindAnyObjectByType<BubbleDialogueUI>(FindObjectsInactive.Include);
+                if (!_bubbleDialogueUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                        $"씬에서 {nameof(_bubbleDialogueUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
         }
