@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using World;
 
 namespace Actors.PlayerSystem
 {
     public class FallingJump : CharacterState
     {
+        private Tilemap oneWayPlatformTilemap;
+        public override bool CheckEnterTransition(CharacterState fromState)
+        {
+            oneWayPlatformTilemap = Player.GetComponentInChildren<PlatformDetector>().GetPlatformManager().OneWayPlatformTilemap;
+
+            if (oneWayPlatformTilemap != null) return true;
+            else return false;
+        }
         public override void CheckExitTransition()
         {
             CharacterStateController.EnqueueTransition<NormalMovement>();

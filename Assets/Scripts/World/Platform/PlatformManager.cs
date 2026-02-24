@@ -24,7 +24,12 @@ namespace World
         public Bounds Bounds { get; private set; }
         public Tilemap OneWayPlatformTilemap
         {
-            get => _tilemaps[1];
+            get
+            {
+                if (_tilemaps == null || _tilemaps.Length < 2)
+                    return null;
+                else return _tilemaps[1];
+            }
         }
 
         // Property
