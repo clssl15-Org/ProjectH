@@ -8,6 +8,8 @@ public class Box : MonoBehaviour
     public GameObject Fsprite;
 
     private SpriteRenderer spriteRenderer;
+    private bool isPlayerInRange = false;
+    private bool isBoxOpened = false;
 
     private void Awake()
     {
@@ -18,9 +20,9 @@ public class Box : MonoBehaviour
         Fsprite.SetActive(false);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F) && !isBoxOpened)
         {
             OpenBox();
         }
@@ -28,31 +30,45 @@ public class Box : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (isBoxOpened)
+        {
+            return;
+        }
+
         if (!collision.gameObject.CompareTag("Player"))
         {
             return;
         }
 
+        isPlayerInRange = true;
         Fsprite.SetActive(true);
 
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (isBoxOpened)
+        {
+            return;
+        }
+
         if (!collision.gameObject.CompareTag("Player"))
         {
             return;
         }
 
+        isPlayerInRange = false;
         Fsprite.SetActive(false);
     }
     private void OpenBox()
     {
+        isBoxOpened = true;
         spriteRenderer.sprite = openedSprite;
+        Fsprite.SetActive(false);
         StartCoroutine(GenerateUI());
     }
     IEnumerator GenerateUI()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         // UI »ý¼º
         RelicManager.Instance.GetRandomRelicData();
     }
