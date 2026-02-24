@@ -27,6 +27,7 @@ namespace Actors.PlayerSystem
         public Direction RecentKnockback { get; set; }
         public bool IsAlive { get; private set; } = true;
 
+        public event Action OnInitialized;
         public event Action Damaged;
         public event Action Healed;
         public event Action OnSieldBreak;
@@ -42,6 +43,7 @@ namespace Actors.PlayerSystem
         private void Start()
         {
             currentHealth = MaxHealth;
+            OnInitialized?.Invoke();
         }
 
         public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
