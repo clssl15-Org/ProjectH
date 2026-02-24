@@ -11,7 +11,6 @@ namespace UI
         IStandaloneInitializable,
         IStandaloneUpdatable,
         IEnablable,
-        IInputController,
         IInputControllable,
         IInjectable<GameServices>,
         IInjectable<SfxPlayManager>,
@@ -38,7 +37,6 @@ namespace UI
         private SfxPlayManager _sfxPlayManager;
         private DarkscreenUI _darkscreenUI;
         private EnableWithAnimation _enabler;
-        private IInputHub _inputHub;
 
         private const SfxName SampleSfxSound = SfxName.Click;
         private const float SampleSoundPlayGap = 0.05f;
@@ -50,21 +48,15 @@ namespace UI
         Action IEnablable.OnEnabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
-            _lastSamplePlayTime = float.MinValue;
+
+            _lastSamplePlayTime = Time.unscaledTime;
+            _bgmScroll.value = _gameServices.BgmVolume / 100f;
+            _sfxScroll.value = _gameServices.SfxVolume / 100f;
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Enable Darkscreen");
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Enable Darkscreen");
                 _darkscreenUI.EnableFor(this, Disable);
-            }
-
-            if (_inputHub != null)
-            {
-                _bgmScroll.value = _gameServices.BgmVolume / 100f;
-                _sfxScroll.value = _gameServices.SfxVolume / 100f;
-
-                BlackboxHandle.Of(this).Exert(_inputHub, $"BlockAll InputHub'");
-                _inputHub.BlockExcept(this);
             }
         };
         Action IEnablable.OnEnabled => null;
@@ -74,14 +66,8 @@ namespace UI
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Disable from '{name}'");
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Disable Darkscreen");
                 _darkscreenUI.Disable();
-            }
-
-            if (_inputHub != null)
-            {
-                BlackboxHandle.Of(this).Exert(_inputHub, $"UnblockAll from '{name}'");
-                _inputHub.UnblockAll();
             }
         };
         Action IEnablable.OnDisabled => null;
@@ -217,7 +203,6 @@ namespace UI
         void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
         void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPalyManager) => _sfxPlayManager = sfxPalyManager;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
-        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         void IStandaloneUpdatable.StandaloneUpdate()
         {

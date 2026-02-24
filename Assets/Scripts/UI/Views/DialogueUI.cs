@@ -12,8 +12,7 @@ namespace UI
     [RequireComponent(typeof(Animation))]
     public class DialogueUI : MonoBehaviour,
         IInjectable<GameAssetLibrary>,
-        IEnablable,
-        IInputController
+        IEnablable
     {
         [SerializeField] private Image _portraitUI;
         [SerializeField] private TextMeshProUGUI _nametagUI;
@@ -22,50 +21,23 @@ namespace UI
         public event Action Disabling;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => () =>
-        {
-            if (_inputHub == null)
-            {
-                Debug.LogError(BlackboxHandle.Of(this).WriteMessage(
-                    $"(OnEnabling) '{nameof(_inputHub)}'이(가) 유효하지 않기 때문에 Input 설정을 변경할 수 없습니다."),
-                    this);
-                return;
-            }
-
-            BlackboxHandle.Of(this).Exert(_inputHub, "(OnEnabling) Block All Inputs");
-            _inputHub.BlockAll();
-        };
+        Action IEnablable.OnEnabling => null;
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => () =>
-        {
-            if (_inputHub == null)
-            {
-                Debug.LogError(BlackboxHandle.Of(this).WriteMessage(
-                    $"(OnEnabling) '{nameof(_inputHub)}'이(가) 유효하지 않기 때문에 Input 설정을 변경할 수 없습니다."),
-                    this);
-                return;
-            }
-
-            BlackboxHandle.Of(this).Exert(_inputHub, "(OnDisabling) Unblock All Inputs");
-            _inputHub.UnblockAll();
-
-            Disabling?.Invoke();
-        };
+        Action IEnablable.OnDisabling => () => Disabling?.Invoke();
         Action IEnablable.OnDisabled => null;
         #endregion
 
         private GameAssetLibrary _gameAssetLibrary;
-        private IInputHub _inputHub;
         private EnableWithAnimation _enabler;
-        private bool _isAwaked = false;
+        private bool _isAwake = false;
 
 
         private void Start()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, was: {_isAwaked}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, was: {_isAwake}");
 
-            if (_isAwaked) return;
-            _isAwaked = true;
+            if (_isAwake) return;
+            _isAwake = true;
 
             _enabler = new EnableWithAnimation(GetComponent<Animation>(), gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
@@ -75,7 +47,6 @@ namespace UI
         }
 
         void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary) => _gameAssetLibrary = gameAssetLibrary;
-        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         public void SetContent(DialogueLine dialogueData)
         {
@@ -108,7 +79,7 @@ namespace UI
 
         public void Enable()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Enabled");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Enable");
             Start();
 
             BlackboxHandle.Of(this).Exert(_enabler, "Enable");

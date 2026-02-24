@@ -1,5 +1,6 @@
 using System.Linq;
 using Actors;
+using Actors.Monsters.Bosses;
 using BlackboxSystem;
 using Dialogue;
 using Infrastructure;
@@ -36,14 +37,15 @@ namespace Game.Stage
         [SerializeField] private GameObject _playerObject;
         [SerializeField] private GameObject _rubielObject;
 
-        [Header("UIs")]
-        [SerializeField] private PlayerUI _playerUI;
-        [SerializeField] private RelicAcquisitionUI _relicAcquisitionUI;
-        [SerializeField] private RelicInfoPanelUI _relicInfoPanelUI;
-        [SerializeField] private SettingsUI _settingsUI;
-        [SerializeField] private DialogueUI _dialogueUI;
-        [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
-        [SerializeField] private DarkscreenUI _darkScreenUI;
+        [field: Header("UIs")]
+        [field: SerializeField] internal Canvas Canvas { get; private set; }
+        [field: SerializeField] internal PlayerUI PlayerUI { get; private set; }
+        [field: SerializeField] internal RelicAcquisitionUI RelicAcquisitionUI { get; private set; }
+        [field: SerializeField] internal RelicInfoPanelUI RelicInfoPanelUI { get; private set; }
+        [field: SerializeField] internal SettingsUI SettingsUI { get; private set; }
+        [field: SerializeField] internal DialogueUI DialogueUI { get; private set; }
+        [field: SerializeField] internal BubbleDialogueUI BubbleDialogueUI { get; private set; }
+        [field: SerializeField] internal DarkscreenUI DarkScreenUI { get; private set; }
 
         internal IPlayer Player { get; private set; }
         internal Rubiel Rubiel { get; private set; }
@@ -126,17 +128,17 @@ namespace Game.Stage
                 }
                 if (!injector.HasInjection<DarkscreenUI>())
                 {
-                    if (!_darkScreenUI)
-                        _darkScreenUI = FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include);
+                    if (!DarkScreenUI)
+                        DarkScreenUI = FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include);
 
-                    if (_darkScreenUI)
+                    if (DarkScreenUI)
                     {
-                        injector.AddInjection(_darkScreenUI, typeof(DarkscreenUI));
+                        injector.AddInjection(DarkScreenUI, typeof(DarkscreenUI));
                     }
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"씬에서 {nameof(_darkScreenUI)}을(를) 찾는 데 실패했습니다."), this);
+                            $"씬에서 {nameof(DarkScreenUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
             }
@@ -159,7 +161,7 @@ namespace Game.Stage
                         _playerObject = playerObj;
                         Player = player;
 
-                        Register(player, _playerUI != null);
+                        Register(player, PlayerUI != null);
                         break;
                     }
                 }
@@ -183,7 +185,7 @@ namespace Game.Stage
                     }
 
                     Player = player;
-                    Register(Player, _playerUI != null);
+                    Register(Player, PlayerUI != null);
                 }
 
                 if (_rubielObject)
@@ -224,44 +226,52 @@ namespace Game.Stage
             if (_dialogueManager)
             {
                 BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager 초기화");
-                _dialogueManager.Initialize(_dialogueUI, _bubbleDialogueUI);
+                _dialogueManager.Initialize(
+                    DialogueUI,
+                    BubbleDialogueUI,
+                    Canvas.GetComponent<RectTransform>(),
+                    character => character switch
+                    {
+                        Character.Player => Player?.transform,
+                        Character.Rubiel => Rubiel?.transform,
+                        Character.Belia => FindAnyObjectByType<Belia>()?.transform,
+                        Character.DarkTherion => FindAnyObjectByType<DarkTherion>()?.transform,
+                        Character.Werbellion => FindAnyObjectByType<Werbellion>()?.transform,
+
+                        _ => throw new System.InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                                $"[StageManager] 캐릭터 {character}의 타입이 유효하지 않습니다."))
+                    });
             }
             #endregion
 
             #region Input Hub
             if (Player != null)
                 InputHub.Register(Player);
-            if (_playerUI)
-                InputHub.Register(_playerUI);
+            if (PlayerUI)
+                InputHub.Register(PlayerUI);
 
-            if (_relicAcquisitionUI)
-                ((IInputController)_relicAcquisitionUI).Initialize(InputHub);
-            if (_relicInfoPanelUI)
-                ((IInputController)_relicInfoPanelUI).Initialize(InputHub);
-            if (_settingsUI)
+            if (RelicAcquisitionUI)
+                ((IInputController)RelicAcquisitionUI).Initialize(InputHub);
+            if (RelicInfoPanelUI)
+                ((IInputController)RelicInfoPanelUI).Initialize(InputHub);
+            if (SettingsUI)
             {
-                InputHub.Register(_settingsUI);
-                ((IInputController)_settingsUI).Initialize(InputHub);
+                ((IInputController)SettingsUI).Initialize(InputHub);
 
-                _settingsUI.OpenRelicsUI += () =>
+                SettingsUI.OpenRelicsUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(_settingsUI, "_settingsUI -> RelicsUI 열기 요청 처리");
-                    if (!_relicInfoPanelUI)
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "_settingsUI -> RelicsUI 열기 요청 처리");
+                    if (!RelicInfoPanelUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             "[StageManager] _relicInfoPanelUI가 할당되지 않아 RelicsUI를 열 수 없습니다."), this);
                         return;
                     }
 
-                    BlackboxHandle.Of(this).Exert(_relicInfoPanelUI, "RelicsUI 열기");
-
-                    // UI를 최상위 창으로 열기
-                    _relicInfoPanelUI.transform.SetAsLastSibling();
-                    _relicInfoPanelUI.Open();
+                    BlackboxHandle.Of(this).Exert(RelicInfoPanelUI, "RelicsUI 열기");
+                    RelicInfoPanelUI.Open();
                 };
             }
-            if (_dialogueUI)
-                ((IInputController)_dialogueUI).Initialize(InputHub);
 
 
             foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
@@ -281,73 +291,83 @@ namespace Game.Stage
         }
         private void AutoBindDependenciesInScene()
         {
-            if (!_playerUI)
+            if (!Canvas)
             {
-                _playerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
-                if (!_playerUI)
+                Canvas = FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
+                if (!Canvas)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_playerUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(Canvas)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
-            if (!_relicAcquisitionUI)
+            if (!PlayerUI)
             {
-                _relicAcquisitionUI = FindAnyObjectByType<RelicAcquisitionUI>(FindObjectsInactive.Include);
-                if (!_relicAcquisitionUI)
+                PlayerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
+                if (!PlayerUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_relicAcquisitionUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(PlayerUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
-            if (!_relicInfoPanelUI)
+            if (!RelicAcquisitionUI)
             {
-                _relicInfoPanelUI = FindAnyObjectByType<RelicInfoPanelUI>(FindObjectsInactive.Include);
-                if (!_relicInfoPanelUI)
+                RelicAcquisitionUI = FindAnyObjectByType<RelicAcquisitionUI>(FindObjectsInactive.Include);
+                if (!RelicAcquisitionUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_relicInfoPanelUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(RelicAcquisitionUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
-            if (!_playerUI)
+            if (!RelicInfoPanelUI)
             {
-                _playerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
-                if (!_playerUI)
+                RelicInfoPanelUI = FindAnyObjectByType<RelicInfoPanelUI>(FindObjectsInactive.Include);
+                if (!RelicInfoPanelUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_playerUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(RelicInfoPanelUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
-            if (!_settingsUI)
+            if (!PlayerUI)
             {
-                _settingsUI = FindAnyObjectByType<SettingsUI>(FindObjectsInactive.Include);
-                if (!_settingsUI)
+                PlayerUI = FindAnyObjectByType<PlayerUI>(FindObjectsInactive.Include);
+                if (!PlayerUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_settingsUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(PlayerUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
-            if (!_dialogueUI)
+            if (!SettingsUI)
             {
-                _dialogueUI = FindAnyObjectByType<DialogueUI>(FindObjectsInactive.Include);
-                if (!_dialogueUI)
+                SettingsUI = FindAnyObjectByType<SettingsUI>(FindObjectsInactive.Include);
+                if (!SettingsUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_dialogueUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(SettingsUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
-            if (!_bubbleDialogueUI)
+            if (!DialogueUI)
             {
-                _bubbleDialogueUI = FindAnyObjectByType<BubbleDialogueUI>(FindObjectsInactive.Include);
-                if (!_bubbleDialogueUI)
+                DialogueUI = FindAnyObjectByType<DialogueUI>(FindObjectsInactive.Include);
+                if (!DialogueUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_bubbleDialogueUI)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(DialogueUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!BubbleDialogueUI)
+            {
+                BubbleDialogueUI = FindAnyObjectByType<BubbleDialogueUI>(FindObjectsInactive.Include);
+                if (!BubbleDialogueUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                        $"씬에서 {nameof(BubbleDialogueUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
         }
@@ -365,7 +385,7 @@ namespace Game.Stage
                 BlackboxHandle.Of(this).Exert(UIManager, "UIManager에 PlayerUI 등록");
 
                 var vm = new PlayerVM(player);
-                var ui = _playerUI;
+                var ui = PlayerUI;
                 ui.Connect(vm);
 
                 UIManager.RegisterVM(vm);

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Stage
 {
-    public abstract class ScenarioManager : MonoBehaviour, IDisposable
+    public abstract class ScenarioManager : MonoBehaviour, IInputController
     {
         // Internal
         internal StageManager StageManager { get; private set; }
@@ -29,8 +29,8 @@ namespace Game.Stage
         protected bool IsRubielClose =>
             Rubiel && Vector2.Distance(Rubiel.transform.position, Player.transform.position) <= TargetRubielDistance;
 
+        private IInputHub _inputHub;
         private bool _isInitialized = false;
-        private bool _isDisposed = false;
 
         internal class ScenarioMachine : Work
         {
@@ -39,6 +39,7 @@ namespace Game.Stage
             public ScenarioMachine(StageManager stageManager) : base("ScenarioMachine") =>
                 StageManager = stageManager;
         }
+
 
         // Content
         public void Initialize(StageManager stageManager)
@@ -49,6 +50,8 @@ namespace Game.Stage
             _isInitialized = true;
 
             StageManager = stageManager;
+
+            ((IInputController)this).Initialize(stageManager.InputHub);
             Machine = new ScenarioMachine(stageManager);
 
             var isFisrt = true;
@@ -60,7 +63,27 @@ namespace Game.Stage
         }
         internal abstract IEnumerable<Work> GetBlocks();
 
-        private void Start() => Machine?.Enter();
+        void IInputController.Initialize(IInputHub inputHub)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("IInputHub Injected");
+            _inputHub = inputHub;
+        }
+
+        protected void BlockAllInputs(bool exceptSettingsUI = true)
+        {
+            BlackboxHandle.Of(this).Exert(_inputHub,
+                $"Block All, exceptSettingsUI: {exceptSettingsUI}");
+
+            if (exceptSettingsUI) _inputHub.BlockExcept(StageManager.SettingsUI);
+            else _inputHub.BlockAll();
+        }
+        protected void UnblockAllInputs()
+        {
+            BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
+            _inputHub.UnblockAll();
+        }
+
+        protected virtual void Start() => Machine?.Enter();
         private void Update()
         {
             Machine?.Update();
@@ -104,12 +127,9 @@ namespace Game.Stage
             Machine.Exit();
         }
 
-        public void Dispose()
+        private void OnDestroy()
         {
-            BlackboxHandle.Of(this).WriteScope($"Dispose, was: {_isDisposed}");
-
-            if (_isDisposed) return;
-            _isDisposed = true;
+            BlackboxHandle.Of(this).WriteScope("Destroy");
 
             if (Machine != null)
             {

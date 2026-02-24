@@ -14,13 +14,13 @@ namespace UI
         private Func<Vector2> _getPosition;
         private Vector2 _offset;
 
-
-        private void Awake()
+        public interface IContainer
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
-            _transform = GetComponent<RectTransform>();
+            string Text { get; }
+            Func<Vector2> GetPosition { get; }
+            Vector2 Offset { get; }
         }
-
+        public void Show(IContainer container) => Show(container.Text, container.GetPosition, container.Offset);
         public void Show(string text, Func<Vector2> getPosition, Vector2 offset)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Show: {text}");
@@ -28,12 +28,18 @@ namespace UI
             _textUI.text = text;
             _getPosition = getPosition;
             _offset = offset;
+
+            FixedUpdate();
+            gameObject.SetActive(true);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
+            if (!_transform)
+                _transform = GetComponent<RectTransform>();
+
             _transform.anchoredPosition =
-                _getPosition?.Invoke() ?? Vector2.zero + _offset;
+                (_getPosition?.Invoke() ?? Vector2.zero) + _offset;
         }
 
         public void Hide()
@@ -42,11 +48,8 @@ namespace UI
 
             _textUI.text = string.Empty;
             _getPosition = null;
-        }
 
-        private void OnDestroy()
-        {
-            _getPosition = null;
+            gameObject.SetActive(false);
         }
     }
 }

@@ -28,16 +28,17 @@ namespace UI
         Action IEnablable.OnEnabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+            transform.SetAsLastSibling();
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Enable for '{name}'");
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Enable");
                 _darkscreenUI.EnableFor(this, ((IEnablable)this).Disable);
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "BlockAll");
+                BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
                 _inputHub.BlockExcept(this);
             }
         };
@@ -48,13 +49,13 @@ namespace UI
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, $"Disable from '{name}'");
+                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Disable");
                 _darkscreenUI.Disable();
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "UnblockAll");
+                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
                 _inputHub.UnblockAll();
             }
         };

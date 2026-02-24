@@ -92,7 +92,11 @@ namespace Infrastructure.StateMachines.Fsm
                 if (next == CurrentChild?.Name && !restartIfPossible)
                     return;
 
-                if (!ownerWork.Active) return;
+                if (!ownerWork.Active)
+                {
+                    ReservedChild = next;
+                    return;
+                }
 
                 CurrentChild?.Exit();
 

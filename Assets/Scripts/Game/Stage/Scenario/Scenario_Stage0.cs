@@ -7,6 +7,9 @@ namespace Game.Stage
 {
     public class Scenario_Stage0 : ScenarioManager
     {
+        [Header("Scenario_Stage0")]
+        [SerializeField] private bool _isFirstArrival = true;
+
         private enum BlockName
         {
             To_Arrival,
@@ -27,7 +30,9 @@ namespace Game.Stage
                     if (!self.ToNextToken && IsPlayerOnGround && IsRubielClose)
                     {
                         self.ToNextToken = true;
-                        SetRubielToBig(() => To(BlockName.Arrival_First));
+                        BlockAllInputs();
+                        SetRubielToBig(() =>
+                            To(_isFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry));
                     }
                 });
 
@@ -37,9 +42,10 @@ namespace Game.Stage
                 onDialogueEnd: () => To(BlockName.To_FirstSkillAcquire))
                 .OnEntered(() => SetRubielToBig())
                 .OnExited(() =>
-                    SetRubielToSmall(() =>
-                        SetRubielToInvisible())
-                );
+                {
+                    UnblockAllInputs();
+                    SetRubielToSmall(() => SetRubielToInvisible());
+                });
 
             yield return new DialogueBlock(
                 BlockName.Arrival_Reentry,
@@ -47,9 +53,10 @@ namespace Game.Stage
                 onDialogueEnd: () => To(BlockName.To_FirstSkillAcquire))
                 .OnEntered(() => SetRubielToBig())
                 .OnExited(() =>
-                    SetRubielToSmall(() =>
-                        SetRubielToInvisible())
-                );
+                {
+                    UnblockAllInputs();
+                    SetRubielToSmall(() => SetRubielToInvisible());
+                });
 
             yield return new Block(
                 BlockName.To_FirstSkillAcquire)
@@ -58,6 +65,7 @@ namespace Game.Stage
                     if (!self.ToNextToken && Input.GetKey(ProceedKey) && IsPlayerOnGround)
                     {
                         self.ToNextToken = true;
+                        BlockAllInputs();
                         SetRubielToVisible(() => To(BlockName.FirstSkillAcquire));
                     }
                 });
@@ -68,9 +76,10 @@ namespace Game.Stage
                 onDialogueEnd: () => To(BlockName.To_TownPortal))
                 .OnEntered(() => SetRubielToBig())
                 .OnExited(() =>
-                    SetRubielToSmall(() =>
-                        SetRubielToInvisible())
-                );
+                {
+                    UnblockAllInputs();
+                    SetRubielToSmall(() => SetRubielToInvisible());
+                });
 
             yield return new Block(
                 BlockName.To_TownPortal)
@@ -79,6 +88,7 @@ namespace Game.Stage
                     if (!self.ToNextToken && Input.GetKey(ProceedKey) && IsPlayerOnGround)
                     {
                         self.ToNextToken = true;
+                        BlockAllInputs();
                         SetRubielToVisible(() => To(BlockName.TownPortal));
                     }
                 });
@@ -87,7 +97,8 @@ namespace Game.Stage
                 BlockName.TownPortal,
                 dialogueTitle: DialogueTitle.Stage0_TownPortal,
                 onDialogueEnd: () => Exit())
-                .OnEntered(() => SetRubielToBig());
+                .OnEntered(() => SetRubielToBig())
+                .OnExited(UnblockAllInputs);
         }
     }
 }

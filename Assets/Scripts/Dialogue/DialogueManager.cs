@@ -3,23 +3,35 @@ using BlackboxSystem;
 using Infrastructure;
 using UI;
 using UnityEngine;
+using World;
 
 namespace Dialogue
 {
-    public class DialogueManager : MonoBehaviour, IInjectable<DialogueScriptLibrary>
+    public class DialogueManager : MonoBehaviour,
+        IInjectable<DialogueScriptLibrary>
     {
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private BubbleDialogueUI _bubbleBialogueUI;
+        [SerializeField] private RectTransform _canvasTransform;
+        private Func<Character, Transform> _getTransform;
 
         private DialogueScriptLibrary _dialogueScriptLibrary;
         private string _currentScriptTitle = string.Empty;
         private IDisposable _updateHandle;
 
-        public void Initialize(DialogueUI dialogueUI, BubbleDialogueUI bubbleDialogueUI)
+
+        public void Initialize(
+            DialogueUI dialogueUI,
+            BubbleDialogueUI bubbleDialogueUI,
+            RectTransform canvasTrasnform,
+            Func<Character, Transform> getTransform)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}, {bubbleDialogueUI}");
+
             _dialogueUI = dialogueUI;
             _bubbleBialogueUI = bubbleDialogueUI;
+            _canvasTransform = canvasTrasnform;
+            _getTransform = getTransform;
         }
 
         void IInjectable<DialogueScriptLibrary>.Inject(DialogueScriptLibrary dialogueScriptLibrary)
@@ -91,7 +103,18 @@ namespace Dialogue
                 currentIdx++;
                 using var _ = BlackboxHandle.Of(this).WriteScope($"Play Dialogue: {currentIdx}");
 
-                _dialogueUI.SetContent(script[currentIdx]);
+                if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
+                {
+                    var line = script[currentIdx];
+                    var characterTransform = _getTransform(line.Character);
+
+                    _bubbleBialogueUI.Show(new BubbleContainer(_canvasTransform)
+                        .With(line.Dialogue, characterTransform));
+                }
+                else
+                {
+                    _dialogueUI.SetContent(script[currentIdx]);
+                }
             }
         }
         protected virtual void OnPlayStarting() { }
@@ -108,6 +131,8 @@ namespace Dialogue
                 OnPlayStopping();
 
             if (_dialogueUI) _dialogueUI.Disable();
+            if (_bubbleBialogueUI) _bubbleBialogueUI.Hide();
+
             _currentScriptTitle = string.Empty;
         }
 

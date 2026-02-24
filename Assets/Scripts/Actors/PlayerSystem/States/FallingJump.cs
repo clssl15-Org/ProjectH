@@ -18,7 +18,8 @@ namespace Actors.PlayerSystem
 
         private IEnumerator LeavePlatform()
         {
-            Collider2D oneWayPlatformCollider = Player.GetComponentInChildren<PlatformDetector>().GetPlatformManager().OneWayPlatformTilemap.GetComponent<Collider2D>();
+            Collider2D oneWayPlatformCollider = Player.GetComponentInChildren<PlatformDetector>().GetPlatformManager().OneWayPlatformTilemap?.GetComponent<Collider2D>();
+            if (!oneWayPlatformCollider) yield break; // 플랫폼을 얻지 못했으면 종료
 
             // 플레이어와 해당 플랫폼 사이의 총돌만 무시합니다.
             Physics2D.IgnoreCollision(CharacterActor.Collider, oneWayPlatformCollider, true);

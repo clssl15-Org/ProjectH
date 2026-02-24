@@ -158,7 +158,7 @@ namespace Actors.Monsters.Actions
         public void Stop()
         {
             ClearBindings();
-            Animator.enabled = false;
+            if (Animator) Animator.enabled = false;
         }
 
         private void ClearBindings()
@@ -169,7 +169,6 @@ namespace Actors.Monsters.Actions
             _timer?.Dispose();
             _timer = null;
         }
-
 
         public void Dispose() => ClearBindings();
 
