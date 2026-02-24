@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Stage
 {
-    public abstract class ScenarioManager : MonoBehaviour, IInputController
+    public abstract class ScenarioManager : MonoBehaviour, IInputLayerController
     {
         // Internal
         internal StageManager StageManager { get; private set; }
@@ -29,7 +29,8 @@ namespace Game.Stage
         protected bool IsRubielClose =>
             Rubiel && Vector2.Distance(Rubiel.transform.position, Player.transform.position) <= TargetRubielDistance;
 
-        private IInputHub _inputHub;
+        private IInputLayerHub _inputHub;
+        private EmptyLayerSubject _blocker;
         private bool _isInitialized = false;
 
         internal class ScenarioMachine : Work
@@ -51,7 +52,7 @@ namespace Game.Stage
 
             StageManager = stageManager;
 
-            ((IInputController)this).Initialize(stageManager.InputHub);
+            ((IInputLayerController)this).Initialize(stageManager.InputHub);
             Machine = new ScenarioMachine(stageManager);
 
             var isFisrt = true;
@@ -63,24 +64,25 @@ namespace Game.Stage
         }
         internal abstract IEnumerable<Work> GetBlocks();
 
-        void IInputController.Initialize(IInputHub inputHub)
+        void IInputLayerController.Initialize(IInputLayerHub inputHub)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("IInputHub Injected");
             _inputHub = inputHub;
         }
 
-        protected void BlockAllInputs(bool exceptSettingsUI = true)
+        protected void BlockInputs()
         {
-            BlackboxHandle.Of(this).Exert(_inputHub,
-                $"Block All, exceptSettingsUI: {exceptSettingsUI}");
+            BlackboxHandle.Of(this).Exert(_inputHub, "Block");
 
-            if (exceptSettingsUI) _inputHub.BlockExcept(StageManager.SettingsUI);
-            else _inputHub.BlockAll();
+            _blocker?.Dispose();
+            _blocker = new();
+
+            _inputHub.AddTo("Dialogue", _blocker);
         }
-        protected void UnblockAllInputs()
+        protected void UnblockInputs()
         {
             BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
-            _inputHub.UnblockAll();
+            _inputHub.Remove(_blocker, forceUnblock: true);
         }
 
         protected virtual void Start() => Machine?.Enter();

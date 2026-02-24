@@ -14,7 +14,7 @@ namespace UI
         IStandaloneInitializable,
         IEnablable,
         IView,
-        IInputController,
+        IInputLayerController,
         IInjectable<DarkscreenUI>
     {
         [Header("Main")]
@@ -59,7 +59,7 @@ namespace UI
         }
         [SerializeField] private VideoData[] _videoClips;
 
-        private IInputHub _inputHub;
+        private IInputLayerHub _inputHub;
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _effectTimer;
         private RelicDataSO _relic;
@@ -81,10 +81,10 @@ namespace UI
             _toThrowCoinBtn.gameObject.SetActive(true);
             _closeBtn.gameObject.SetActive(false);
 
-            _inputHub?.BlockAll();
+            _inputHub?.Block(this);
         };
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
+        Action IEnablable.OnDisabling => () => _inputHub?.Unblock(this);
         Action IEnablable.OnDisabled => null;
         #endregion
 
@@ -113,7 +113,7 @@ namespace UI
             _coinAnimation.SetActive(false);
         }
 
-        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void IInputLayerController.Initialize(IInputLayerHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         private void OnRelicAcquiring(RelicDataSO relicInfo, string description)

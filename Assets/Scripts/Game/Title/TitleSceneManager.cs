@@ -16,10 +16,10 @@ namespace Game.Title
         {
             var inputHub = GetComponent<InputHub>();
 
-            inputHub.Register(_settingsUI);
-            inputHub.Register(_menu);
+            inputHub.Add(_settingsUI);
+            inputHub.Add(_menu);
 
-            ((IInputController)_settingsUI).Initialize(inputHub);
+            ((IInputLayerController)_settingsUI).Initialize(inputHub);
         }
 
         private void Start()

@@ -53,6 +53,9 @@ namespace Actors.Monsters.Actions
         {
             try
             {
+                if (!Animator)
+                    return;
+
                 // √ ±‚»≠
                 _autoRun = autoRun;
                 Animator.enabled = true;

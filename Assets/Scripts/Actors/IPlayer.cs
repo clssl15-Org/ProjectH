@@ -30,7 +30,7 @@ namespace Actors
     }
 
 
-    public interface IPlayer : IInjectable<PlatformManager>, IInputControllable
+    public interface IPlayer : IInjectable<PlatformManager>, IInputLayerSubject
     {
         // ---------- Properties ----------
         int HP { get; }

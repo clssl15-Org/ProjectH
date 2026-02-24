@@ -246,17 +246,29 @@ namespace Game.Stage
 
             #region Input Hub
             if (Player != null)
-                InputHub.Register(Player);
+            {
+                BlackboxHandle.Of(this).Exert(InputHub, "Add Player");
+                InputHub.AddTo("Player", Player, blockBelows: false);
+            }
             if (PlayerUI)
-                InputHub.Register(PlayerUI);
+            {
+                BlackboxHandle.Of(this).Exert(InputHub, "Add PlayerUI");
+                InputHub.AddTo("Player", PlayerUI, blockBelows: false);
+            }
+            if (_dialogueManager)
+            {
+                BlackboxHandle.Of(this).Exert(InputHub, "Add DialogueManager");
+                InputHub.AddTo("Dialogue", _dialogueManager, blockBelows: false);
+            }
 
             if (RelicAcquisitionUI)
-                ((IInputController)RelicAcquisitionUI).Initialize(InputHub);
+                ((IInputLayerController)RelicAcquisitionUI).Initialize(InputHub);
             if (RelicInfoPanelUI)
-                ((IInputController)RelicInfoPanelUI).Initialize(InputHub);
+                ((IInputLayerController)RelicInfoPanelUI).Initialize(InputHub);
             if (SettingsUI)
             {
-                ((IInputController)SettingsUI).Initialize(InputHub);
+                BlackboxHandle.Of(this).Exert(InputHub, "Add SettingsUI");
+                ((IInputLayerController)SettingsUI).Initialize(InputHub);
 
                 SettingsUI.OpenRelicsUI += () =>
                 {
@@ -276,12 +288,12 @@ namespace Game.Stage
 
             foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
             {
-                if (controlObj is IInputControllable controllable)
+                if (controlObj is IInputLayerSubject controllable)
                 {
                     BlackboxHandle.Of(this).Exert(controllable, $"등록: {controlObj.name}");
-                    InputHub.Register(controllable);
+                    InputHub.Add(controllable);
                 }
-                if (controlObj is IInputController controller)
+                if (controlObj is IInputLayerController controller)
                 {
                     BlackboxHandle.Of(this).Exert(controller, $"초기화: {controlObj.name}");
                     controller.Initialize(InputHub);

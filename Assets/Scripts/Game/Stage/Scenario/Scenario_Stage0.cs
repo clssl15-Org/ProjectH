@@ -30,7 +30,7 @@ namespace Game.Stage
                     if (!self.ToNextToken && IsPlayerOnGround && IsRubielClose)
                     {
                         self.ToNextToken = true;
-                        BlockAllInputs();
+                        BlockInputs();
                         SetRubielToBig(() =>
                             To(_isFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry));
                     }
@@ -43,7 +43,7 @@ namespace Game.Stage
                 .OnEntered(() => SetRubielToBig())
                 .OnExited(() =>
                 {
-                    UnblockAllInputs();
+                    UnblockInputs();
                     SetRubielToSmall(() => SetRubielToInvisible());
                 });
 
@@ -54,7 +54,7 @@ namespace Game.Stage
                 .OnEntered(() => SetRubielToBig())
                 .OnExited(() =>
                 {
-                    UnblockAllInputs();
+                    UnblockInputs();
                     SetRubielToSmall(() => SetRubielToInvisible());
                 });
 
@@ -65,7 +65,7 @@ namespace Game.Stage
                     if (!self.ToNextToken && Input.GetKey(ProceedKey) && IsPlayerOnGround)
                     {
                         self.ToNextToken = true;
-                        BlockAllInputs();
+                        BlockInputs();
                         SetRubielToVisible(() => To(BlockName.FirstSkillAcquire));
                     }
                 });
@@ -77,7 +77,7 @@ namespace Game.Stage
                 .OnEntered(() => SetRubielToBig())
                 .OnExited(() =>
                 {
-                    UnblockAllInputs();
+                    UnblockInputs();
                     SetRubielToSmall(() => SetRubielToInvisible());
                 });
 
@@ -88,7 +88,7 @@ namespace Game.Stage
                     if (!self.ToNextToken && Input.GetKey(ProceedKey) && IsPlayerOnGround)
                     {
                         self.ToNextToken = true;
-                        BlockAllInputs();
+                        BlockInputs();
                         SetRubielToVisible(() => To(BlockName.TownPortal));
                     }
                 });
@@ -98,7 +98,7 @@ namespace Game.Stage
                 dialogueTitle: DialogueTitle.Stage0_TownPortal,
                 onDialogueEnd: () => Exit())
                 .OnEntered(() => SetRubielToBig())
-                .OnExited(UnblockAllInputs);
+                .OnExited(UnblockInputs);
         }
     }
 }

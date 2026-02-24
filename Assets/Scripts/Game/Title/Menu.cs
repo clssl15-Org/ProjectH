@@ -10,7 +10,7 @@ namespace Game.Title
     public class Menu : MonoBehaviour,
         IInjectable<GameServices>,
         IEnablable,
-        IInputControllable
+        IInputLayerSubject
     {
         public event Action Enabling;
         public event Action Disabling;

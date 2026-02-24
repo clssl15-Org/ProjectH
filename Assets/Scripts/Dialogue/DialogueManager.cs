@@ -8,8 +8,12 @@ using World;
 namespace Dialogue
 {
     public class DialogueManager : MonoBehaviour,
-        IInjectable<DialogueScriptLibrary>
+        IInjectable<DialogueScriptLibrary>,
+        IInputLayerSubject
     {
+        public bool AllowInput { get; set; } = true;
+        public event Action Destroying;
+
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private BubbleDialogueUI _bubbleBialogueUI;
         [SerializeField] private RectTransform _canvasTransform;
@@ -18,7 +22,6 @@ namespace Dialogue
         private DialogueScriptLibrary _dialogueScriptLibrary;
         private string _currentScriptTitle = string.Empty;
         private IDisposable _updateHandle;
-
 
         public void Initialize(
             DialogueUI dialogueUI,
@@ -83,7 +86,7 @@ namespace Dialogue
 
             _updateHandle = Loco.Subscribe(() =>
             {
-                if (Input.GetMouseButtonDown(0))
+                if (AllowInput && Input.GetMouseButtonDown(0))
                 {
                     if (currentIdx >= script.Count - 1)
                     {
@@ -139,7 +142,9 @@ namespace Dialogue
         private void OnDestroy()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
+
             Stop();
+            Destroying?.Invoke();
         }
     }
 }

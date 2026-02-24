@@ -7100,6 +7100,30 @@ MonoBehaviour:
   <TargetRubielDistance>k__BackingField: 3
   _display: 
   _isFirstArrival: 1
+--- !u!114 &1122733456 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6596080452792019245, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
+  m_PrefabInstance: {fileID: 1149284817}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122733439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19052516c81045b4eabe50cd59783529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1122733460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122733439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 1122733456}
 --- !u!1001 &1149284817
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7163,6 +7187,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
       insertIndex: 9
       addedObject: {fileID: 1122733449}
+    - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
+      insertIndex: 10
+      addedObject: {fileID: 1122733460}
   m_SourcePrefab: {fileID: 100100000, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
 --- !u!1001 &1181912278
 PrefabInstance:

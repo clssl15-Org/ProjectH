@@ -10,8 +10,8 @@ namespace UI
     public class RelicInfoPanelUI : MonoBehaviour,
         IStandaloneUpdatable,
         IEnablable,
-        IInputController,
-        IInputControllable,
+        IInputLayerController,
+        IInputLayerSubject,
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
@@ -39,7 +39,7 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
-                _inputHub.BlockExcept(this);
+                _inputHub.Add(this);
             }
         };
         Action IEnablable.OnEnabled => null;
@@ -56,14 +56,14 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
-                _inputHub.UnblockAll();
+                _inputHub.Remove(this);
             }
         };
         Action IEnablable.OnDisabled => null;
         #endregion
 
         private EnableWithAnimation _enabler;
-        private IInputHub _inputHub;
+        private IInputLayerHub _inputHub;
         private DarkscreenUI _darkscreenUI;
         private bool _isInitialized = false;
 
@@ -104,7 +104,7 @@ namespace UI
             ((IEnablable)this).SetToDisabled();
         }
 
-        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void IInputLayerController.Initialize(IInputLayerHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         public void Open()

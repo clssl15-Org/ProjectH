@@ -15,7 +15,7 @@ namespace UI
     public class PlayerUI : MonoBehaviour,
         IView,
         IEnablable,
-        IInputControllable
+        IInputLayerSubject
     {
         // Front
         public bool AllowInput { get; set; } = true;

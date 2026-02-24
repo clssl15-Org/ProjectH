@@ -11,7 +11,8 @@ namespace UI
         IStandaloneInitializable,
         IStandaloneUpdatable,
         IEnablable,
-        IInputControllable,
+        IInputLayerSubject,
+        IInputLayerController,
         IInjectable<GameServices>,
         IInjectable<SfxPlayManager>,
         IInjectable<DarkscreenUI>
@@ -42,6 +43,7 @@ namespace UI
         private const float SampleSoundPlayGap = 0.05f;
         private float _lastSamplePlayTime;
 
+        private IInputLayerHub _inputHub;
         private bool _isInitialized = false;
 
         #region Interfaces
@@ -52,6 +54,14 @@ namespace UI
             _lastSamplePlayTime = Time.unscaledTime;
             _bgmScroll.value = _gameServices.BgmVolume / 100f;
             _sfxScroll.value = _gameServices.SfxVolume / 100f;
+
+            transform.SetAsLastSibling();
+
+            if (_inputHub != null)
+            {
+                BlackboxHandle.Of(this).Exert(_inputHub, "Block");
+                _inputHub.Add(this);
+            }
 
             if (_darkscreenUI)
             {
@@ -68,6 +78,12 @@ namespace UI
             {
                 BlackboxHandle.Of(this).Exert(_darkscreenUI, "Disable Darkscreen");
                 _darkscreenUI.Disable();
+            }
+
+            if (_inputHub != null)
+            {
+                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock");
+                _inputHub.Remove(this);
             }
         };
         Action IEnablable.OnDisabled => null;
@@ -199,6 +215,8 @@ namespace UI
 
             ((IEnablable)this).SetToDisabled();
         }
+
+        void IInputLayerController.Initialize(IInputLayerHub inputHub) => _inputHub = inputHub;
 
         void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
         void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPalyManager) => _sfxPlayManager = sfxPalyManager;
