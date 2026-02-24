@@ -31,6 +31,7 @@ namespace World
                 else return _tilemaps[1];
             }
         }
+        public List<int> OneWayPlatformIds => _oneWayPlatformIds;
 
         // Property
         [SerializeField] private bool _autoAssignTilemaps = true;
@@ -43,6 +44,7 @@ namespace World
         private Dictionary<Vector3Int, int> _platforms;
         private BoundsInt _cellBounds;
         private bool _initialized = false;
+        private List<int> _oneWayPlatformIds = new();
 
         private readonly Dictionary<int, Color> _debuggerColormap = new();
 
@@ -100,6 +102,7 @@ namespace World
 
             int id = 1;
             bool isFirst = true;
+            int index = 0;
 
             foreach (var tilemap in _tilemaps)
             {
@@ -133,8 +136,13 @@ namespace World
                     foreach (var platformCell in platformCells)
                         _platforms.Add(platformCell, id);
 
+                    if (index == 1)
+                        _oneWayPlatformIds.Add(id);
+
                     id++;
                 }
+
+                index++;
             }
 
             _platformCount = id - 1;
