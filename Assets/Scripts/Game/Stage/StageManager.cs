@@ -45,6 +45,7 @@ namespace Game.Stage
         [field: SerializeField] internal SettingsUI SettingsUI { get; private set; }
         [field: SerializeField] internal DialogueUI DialogueUI { get; private set; }
         [field: SerializeField] internal BubbleDialogueUI BubbleDialogueUI { get; private set; }
+        [field: SerializeField] internal GuideAndWorldRecordsUI GuideAndWorldRecordsUI { get; private set; }
         [field: SerializeField] internal DarkscreenUI DarkScreenUI { get; private set; }
 
         internal IPlayer Player { get; private set; }
@@ -245,38 +246,45 @@ namespace Game.Stage
             #endregion
 
             #region Input Hub
+            // Add Subjects
             if (Player != null)
             {
                 BlackboxHandle.Of(this).Exert(InputHub, "Add Player");
-                InputHub.AddTo("Player", Player, blockBelows: false);
+                InputHub.Add(Player);
             }
             if (PlayerUI)
             {
                 BlackboxHandle.Of(this).Exert(InputHub, "Add PlayerUI");
-                InputHub.AddTo("Player", PlayerUI, blockBelows: false);
+                InputHub.Add(PlayerUI);
             }
-            if (_dialogueManager)
+            if (SettingsUI)
             {
-                BlackboxHandle.Of(this).Exert(InputHub, "Add DialogueManager");
-                InputHub.AddTo("Dialogue", _dialogueManager, blockBelows: false);
+                BlackboxHandle.Of(this).Exert(InputHub, "Add SettingsUI (Opener)");
+                InputHub.Add(SettingsUI.GetOpenerSubject());
+            }
+            if (RelicInfoPanelUI)
+            {
+                BlackboxHandle.Of(this).Exert(InputHub, "Add RelicInfoPanelUI");
+                InputHub.Add(RelicInfoPanelUI.GetOpenerSubject());
             }
 
+
+            // Add Controllers
             if (RelicAcquisitionUI)
                 ((IInputLayerController)RelicAcquisitionUI).Initialize(InputHub);
             if (RelicInfoPanelUI)
                 ((IInputLayerController)RelicInfoPanelUI).Initialize(InputHub);
             if (SettingsUI)
             {
-                BlackboxHandle.Of(this).Exert(InputHub, "Add SettingsUI");
                 ((IInputLayerController)SettingsUI).Initialize(InputHub);
 
                 SettingsUI.OpenRelicsUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "_settingsUI -> RelicsUI 열기 요청 처리");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> RelicsUI 열기 요청 처리");
                     if (!RelicInfoPanelUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "[StageManager] _relicInfoPanelUI가 할당되지 않아 RelicsUI를 열 수 없습니다."), this);
+                            "[StageManager] RelicInfoPanelUI가 할당되지 않아 RelicsUI를 열 수 없습니다."), this);
                         return;
                     }
 
@@ -284,14 +292,15 @@ namespace Game.Stage
                     RelicInfoPanelUI.Open();
                 };
             }
-
+            if (GuideAndWorldRecordsUI)
+                ((IInputLayerController)GuideAndWorldRecordsUI).Initialize(InputHub);
 
             foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
             {
-                if (controlObj is IInputLayerSubject controllable)
+                if (controlObj is IInputLayerSubject subject)
                 {
-                    BlackboxHandle.Of(this).Exert(controllable, $"등록: {controlObj.name}");
-                    InputHub.Add(controllable);
+                    BlackboxHandle.Of(this).Exert(subject, $"등록: {controlObj.name}");
+                    InputHub.Add(subject);
                 }
                 if (controlObj is IInputLayerController controller)
                 {
@@ -382,6 +391,16 @@ namespace Game.Stage
                         $"씬에서 {nameof(BubbleDialogueUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
+
+            if (!GuideAndWorldRecordsUI)
+            {
+                GuideAndWorldRecordsUI = FindAnyObjectByType<GuideAndWorldRecordsUI>(FindObjectsInactive.Include);
+                if (!GuideAndWorldRecordsUI)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                        $"씬에서 {nameof(GuideAndWorldRecordsUI)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
         }
 
         public void Register(IPlayer player, bool connectUI = true)
@@ -427,20 +446,6 @@ namespace Game.Stage
                 UIManager.RegisterView(ui);
             }
         }
-
-#if BLACKBOX
-        private bool _logExported = false;
-        private void Update()
-        {
-            if (!_logExported
-                && Input.GetKey(KeyCode.LeftControl)
-                && Input.GetKey(KeyCode.RightAlt))
-            {
-                _logExported = true;
-                BlackboxHandle.Of(this).Export(openLogOption: OpenLogOption.Open);
-            }
-        }
-#endif
 
         protected virtual void OnDestroy()
         {

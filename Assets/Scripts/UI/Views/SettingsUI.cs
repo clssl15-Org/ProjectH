@@ -3,6 +3,7 @@ using BlackboxSystem;
 using Infrastructure;
 using Sound;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI
@@ -11,16 +12,16 @@ namespace UI
         IStandaloneInitializable,
         IStandaloneUpdatable,
         IEnablable,
-        IInputLayerSubject,
         IInputLayerController,
         IInjectable<GameServices>,
         IInjectable<SfxPlayManager>,
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Escape;
-        [field: SerializeField] public bool AllowKeyOnlyWhenOpen { get; set; } = false;
+        [field: SerializeField] public KeyCode CloseKey { get; set; } = KeyCode.Escape;
         [Space]
         [SerializeField] private Animation _animation;
+        [SerializeField] private SfxName _sampleSfxSound = SfxName.Hover;
         [Header("Controllers")]
         [SerializeField] private Scrollbar _bgmScroll;
         [SerializeField] private Scrollbar _sfxScroll;
@@ -30,7 +31,6 @@ namespace UI
         [SerializeField] private Button _relicsBtn;
         [SerializeField] private Button _exitBtn;
 
-        public bool AllowInput { get; set; } = true;
         public event Action OpenRelicsUI;
         public event Action Destroying;
 
@@ -39,17 +39,18 @@ namespace UI
         private DarkscreenUI _darkscreenUI;
         private EnableWithAnimation _enabler;
 
-        private const SfxName SampleSfxSound = SfxName.Click;
         private const float SampleSoundPlayGap = 0.05f;
         private float _lastSamplePlayTime;
 
-        private IInputLayerHub _inputHub;
+        private IInputHub _inputHub;
+        private EmptyInputSubject _openerSubject;
         private bool _isInitialized = false;
 
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+            Time.timeScale = 0f;
 
             _lastSamplePlayTime = Time.unscaledTime;
             _bgmScroll.value = _gameServices.BgmVolume / 100f;
@@ -60,7 +61,7 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "Block");
-                _inputHub.Add(this);
+                _inputHub.Block(this);
             }
 
             if (_darkscreenUI)
@@ -73,6 +74,7 @@ namespace UI
         Action IEnablable.OnDisabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
+            Time.timeScale = 1f;
 
             if (_darkscreenUI)
             {
@@ -83,7 +85,7 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "Unblock");
-                _inputHub.Remove(this);
+                _inputHub.Unblock(this);
             }
         };
         Action IEnablable.OnDisabled => null;
@@ -93,10 +95,10 @@ namespace UI
         private void Awake() => ((IStandaloneInitializable)this).StandaloneInitialize();
         void IStandaloneInitializable.StandaloneInitialize()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
+
             if (_isInitialized) return;
             _isInitialized = true;
-
-            using var _ = BlackboxHandle.Of(this).WriteScope("Initialize");
 
             if (!_animation)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
@@ -135,7 +137,7 @@ namespace UI
                         if (currentTime - _lastSamplePlayTime >= SampleSoundPlayGap)
                         {
                             _lastSamplePlayTime = currentTime;
-                            _sfxPlayManager.Play(SampleSfxSound);
+                            _sfxPlayManager.Play(_sampleSfxSound);
                         }
                     }
                     else
@@ -153,6 +155,7 @@ namespace UI
                 _continueBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_continueBtn, "Continue");
+                    EventSystem.current.SetSelectedGameObject(null);
                     ((IEnablable)this).Disable();
                 });
 
@@ -165,6 +168,7 @@ namespace UI
                 _restartBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_restartBtn, "Restart");
+                    EventSystem.current.SetSelectedGameObject(null);
                     print("재시작");
                 });
 
@@ -177,6 +181,7 @@ namespace UI
                 _guideBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_guideBtn, "Show Guide");
+                    EventSystem.current.SetSelectedGameObject(null);
                     print("가이드 열기");
                 });
 
@@ -189,6 +194,7 @@ namespace UI
                 _relicsBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_relicsBtn, "Show Relics");
+                    EventSystem.current.SetSelectedGameObject(null);
                     OnOpenRelicsUI();
                 });
 
@@ -210,13 +216,20 @@ namespace UI
                 });
 
 
+            _openerSubject = new EmptyInputSubject(nameof(SettingsUI), true);
+
             _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
 
             ((IEnablable)this).SetToDisabled();
         }
 
-        void IInputLayerController.Initialize(IInputLayerHub inputHub) => _inputHub = inputHub;
+        public EmptyInputSubject GetOpenerSubject()
+        {
+            ((IStandaloneInitializable)this).StandaloneInitialize();
+            return _openerSubject;
+        }
+        void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
 
         void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
         void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPalyManager) => _sfxPlayManager = sfxPalyManager;
@@ -224,17 +237,14 @@ namespace UI
 
         void IStandaloneUpdatable.StandaloneUpdate()
         {
-            if (!AllowInput)
-                return;
-
-            if (Input.GetKeyDown(OpenKey))
+            if (!_enabler.IsEnabled)
             {
-                if (!_enabler.IsEnabled)
-                {
-                    if (!AllowKeyOnlyWhenOpen)
-                        Enable();
-                }
-                else
+                if (_openerSubject.AllowInput && Input.GetKeyDown(OpenKey))
+                    Enable();
+            }
+            else
+            {
+                if (Input.GetKeyDown(CloseKey))
                     Disable();
             }
         }
@@ -263,6 +273,7 @@ namespace UI
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             Destroying?.Invoke();
+            _openerSubject?.Dispose();
             _enabler?.Dispose();
         }
 

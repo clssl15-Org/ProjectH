@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Actors.PlayerSystem;
 using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
@@ -19,6 +18,8 @@ namespace UI
     {
         // Front
         public bool AllowInput { get; set; } = true;
+        bool IInputLayerSubject.IsTrigger { get; } = true;
+
         public event Action Destroying;
 
         // Internal

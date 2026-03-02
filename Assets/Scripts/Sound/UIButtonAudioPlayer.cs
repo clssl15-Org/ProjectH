@@ -8,10 +8,13 @@ namespace Sound
         IPointerEnterHandler,
         IPointerClickHandler
     {
+        [field: SerializeField] public SfxName HoverSound { get; set; } = SfxName.Hover;
+        [field: SerializeField] public SfxName ClickSound { get; set; } = SfxName.Click;
+
         public void OnPointerEnter(PointerEventData _)
         {
             if (AudioPlayManager)
-                AudioPlayManager.Play(SfxName.Hover);
+                AudioPlayManager.Play(HoverSound);
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     "AudioPlayManager가 유효하지 않기 떄문에 Hover 소리를 재생할 수 없습니다."),
@@ -21,7 +24,7 @@ namespace Sound
         public void OnPointerClick(PointerEventData _)
         {
             if (AudioPlayManager)
-                AudioPlayManager.Play(SfxName.Click);
+                AudioPlayManager.Play(ClickSound);
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                     "AudioPlayManager가 유효하지 않기 떄문에 Click 소리를 재생할 수 없습니다."),

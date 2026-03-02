@@ -59,7 +59,7 @@ namespace UI
         }
         [SerializeField] private VideoData[] _videoClips;
 
-        private IInputLayerHub _inputHub;
+        private IInputHub _inputHub;
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _effectTimer;
         private RelicDataSO _relic;
@@ -113,7 +113,7 @@ namespace UI
             _coinAnimation.SetActive(false);
         }
 
-        void IInputLayerController.Initialize(IInputLayerHub inputHub) => _inputHub = inputHub;
+        void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         private void OnRelicAcquiring(RelicDataSO relicInfo, string description)

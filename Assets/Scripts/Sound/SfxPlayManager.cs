@@ -5,6 +5,7 @@ namespace Sound
         None,
         Click,
         Hover,
+        Esc,
     }
 
     public class SfxPlayManager : AudioPlayManager<SfxName>

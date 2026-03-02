@@ -1,4 +1,5 @@
 using UnityEngine;
+using Infrastructure;
 
 namespace Tests.Seungmin
 {
@@ -10,6 +11,9 @@ namespace Tests.Seungmin
 
         private void Update()
         {
+            if (!DebugTools.IsDebugMode)
+                return;
+
             if (DirectAcquire && Input.GetKey(AcquireKey))
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))

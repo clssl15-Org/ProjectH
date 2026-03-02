@@ -1,6 +1,7 @@
 using System.Linq;
 using Actors.PlayerSystem;
 using UnityEngine;
+using Infrastructure;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -23,12 +24,18 @@ namespace Tests.Seungmin
 
         private void Start()
         {
+            if (!DebugTools.IsDebugMode)
+                return;
+
             foreach (var skillType in _skillsToAddOnStart)
                 AddSkill(skillType);
         }
 
         private void AddSkill(SkillType targetSkillType)
         {
+            if (!DebugTools.IsDebugMode)
+                return;
+
             if (!_player)
             {
                 Debug.LogWarning("Player가 null입니다.", this);

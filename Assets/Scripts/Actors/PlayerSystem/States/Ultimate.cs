@@ -107,7 +107,7 @@ namespace Actors.PlayerSystem
                 return false;
             }
 
-            //cooldownGauge = 0f;
+            cooldownGauge = 0f;
             return true;
         }
         public override void CheckExitTransition()

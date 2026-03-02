@@ -18,9 +18,10 @@ namespace Infrastructure
         public bool IsEnabled => _enabled;
 
         // Internal
-        private Animation _animation;
+        private AnimationPlayer _player;
         private readonly Dictionary<EnableEventType, Action> _events = new();
 
+        private bool _useAbsoluteTime;
         private bool _enabled;
         private IDisposable _timer;
 
@@ -28,9 +29,9 @@ namespace Infrastructure
 
 
         // Content
-        public EnableWithAnimation(Animation animation, bool isEnabled)
+        public EnableWithAnimation(Animation animation, bool isEnabled, bool useAbsoluteTime = true)
         {
-            _animation = animation;
+            _player = new(animation, useAbsoluteTime);
             _enabled = isEnabled;
 
             foreach (EnableEventType eventType in Enum.GetValues(typeof(EnableEventType)))
@@ -58,34 +59,16 @@ namespace Infrastructure
 
             _timer?.Dispose();
 
-            var state = _animation[_animation.clip.name];
-            state.speed = 1f;
-
-            if (state.time >= state.length)
-                state.time = 0f;
+            _player.Speed = 1f;
+            if (_player.Time >= _player.Length) _player.Time = 0f;
 
             _events[EnableEventType.Enabling]?.Invoke();
 
-            _animation.Play();
-            _timer = new Timer(state.length - state.time, succeed =>
+            _player.Play();
+            _timer = new Timer(_player.Length - _player.Time, succeed =>
             {
-                if (succeed)
-                    _events[EnableEventType.Enabled]?.Invoke();
+                if (succeed) _events[EnableEventType.Enabled]?.Invoke();
             });
-        }
-
-        public void SetToEnabled()
-        {
-            if (_enabled) return;
-            _enabled = true;
-
-            _timer?.Dispose();
-
-            var state = _animation[_animation.clip.name];
-            state.time = state.length;
-
-            _events[EnableEventType.Enabling]?.Invoke();
-            _events[EnableEventType.Enabled]?.Invoke();
         }
 
         public void Disable()
@@ -97,21 +80,31 @@ namespace Infrastructure
             _enabled = false;
 
             _timer?.Dispose();
-
-            var state = _animation[_animation.clip.name];
-            state.speed = -1f;
-
-            if (state.time <= 0f)
-                state.time = state.length;
-
             _events[EnableEventType.Disabling]?.Invoke();
 
-            _animation.Play();
-            _timer = new Timer(state.time, succeed =>
+            _player.Speed = -1f;
+            if (_player.Time <= 0f) _player.Time = _player.Length;
+
+            _player.Play();
+            _timer = new Timer(_player.Time, succeed =>
             {
-                if (succeed)
-                    _events[EnableEventType.Disabled]?.Invoke();
+                if (succeed) _events[EnableEventType.Disabled]?.Invoke();
             });
+        }
+
+        public void SetToEnabled()
+        {
+            if (_isDisposed)
+                throw new ObjectDisposedException(GetType().FullName);
+
+            if (_enabled) return;
+            _enabled = true;
+
+            _timer?.Dispose();
+            _player.Time = _player.Length;
+
+            _events[EnableEventType.Enabling]?.Invoke();
+            _events[EnableEventType.Enabled]?.Invoke();
         }
 
         public void SetToDisabled()
@@ -120,9 +113,7 @@ namespace Infrastructure
             _enabled = false;
 
             _timer?.Dispose();
-
-            var state = _animation[_animation.clip.name];
-            state.time = 0f;
+            _player.Time = 0f;
 
             _events[EnableEventType.Disabling]?.Invoke();
             _events[EnableEventType.Disabled]?.Invoke();
@@ -134,6 +125,7 @@ namespace Infrastructure
             _isDisposed = true;
 
             _timer?.Dispose();
+            _player.Dispose();
             _events.Clear();
         }
     }

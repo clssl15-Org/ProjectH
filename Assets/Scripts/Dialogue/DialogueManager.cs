@@ -11,11 +11,16 @@ namespace Dialogue
         IInjectable<DialogueScriptLibrary>,
         IInputLayerSubject
     {
+        [field: SerializeField] public Vector2 BubbleOffset { get; set; } = new(0, 100);
+
         public bool AllowInput { get; set; } = true;
+        bool IInputLayerSubject.IsTrigger { get; } = false;
+
+        public event Action<bool> InputAwakeStateChanged;
         public event Action Destroying;
 
         [SerializeField] private DialogueUI _dialogueUI;
-        [SerializeField] private BubbleDialogueUI _bubbleBialogueUI;
+        [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
         [SerializeField] private RectTransform _canvasTransform;
         private Func<Character, Transform> _getTransform;
 
@@ -32,7 +37,7 @@ namespace Dialogue
             using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}, {bubbleDialogueUI}");
 
             _dialogueUI = dialogueUI;
-            _bubbleBialogueUI = bubbleDialogueUI;
+            _bubbleDialogueUI = bubbleDialogueUI;
             _canvasTransform = canvasTrasnform;
             _getTransform = getTransform;
         }
@@ -71,8 +76,8 @@ namespace Dialogue
 
             if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
             {
-                BlackboxHandle.Of(this).Exert(_bubbleBialogueUI, "Enable");
-                _bubbleBialogueUI.transform.SetAsLastSibling();
+                BlackboxHandle.Of(this).Exert(_bubbleDialogueUI, "Enable");
+                _bubbleDialogueUI.transform.SetAsLastSibling();
             }
             else
             {
@@ -111,8 +116,8 @@ namespace Dialogue
                     var line = script[currentIdx];
                     var characterTransform = _getTransform(line.Character);
 
-                    _bubbleBialogueUI.Show(new BubbleContainer(_canvasTransform)
-                        .With(line.Dialogue, characterTransform));
+                    _bubbleDialogueUI.Show(new BubbleContainer(_canvasTransform)
+                        .With(line.Dialogue, characterTransform, BubbleOffset));
                 }
                 else
                 {
@@ -134,7 +139,7 @@ namespace Dialogue
                 OnPlayStopping();
 
             if (_dialogueUI) _dialogueUI.Disable();
-            if (_bubbleBialogueUI) _bubbleBialogueUI.Hide();
+            if (_bubbleDialogueUI) _bubbleDialogueUI.Hide();
 
             _currentScriptTitle = string.Empty;
         }

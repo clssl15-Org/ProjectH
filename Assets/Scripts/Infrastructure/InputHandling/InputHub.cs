@@ -1,125 +1,92 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BlackboxSystem;
 using UnityEngine;
 
 namespace Infrastructure
 {
-    public partial class InputHub : MonoBehaviour, IInputLayerHub
+    public partial class InputHub : MonoBehaviour, IInputHub
     {
-        private readonly List<Layer> _layers = new();
-        private readonly Dictionary<IInputLayerSubject, (Layer layer, Action destroyCallback)> _subjects = new();
-        private readonly Dictionary<object, EmptyLayerSubject> _blockers = new();
+        private readonly List<IInputLayerSubject> _subjects = new();
+        private readonly Dictionary<IInputLayerSubject, (bool isAwake, Action<bool> awakeChanged, Action onDestroy)> _subjectData = new();
+        private readonly Dictionary<object, EmptyInputSubject> _blockers = new();
 
-        public void Add(IInputLayerSubject subject, bool blockBelows = true) => AddTo(string.Empty, subject, blockBelows);
-        public void Add(IEnumerable<IInputLayerSubject> subjects, bool blockBelows = true) => AddTo(string.Empty, subjects, blockBelows);
-        public void AddTo(string targetLayer, IInputLayerSubject subject, bool blockBelows = true) => AddTo(targetLayer, Enumerable.Repeat(subject, 1), blockBelows);
-        public void AddTo(string targetLayer, IEnumerable<IInputLayerSubject> subjects, bool blockBelows = true)
+        public void Add(IInputLayerSubject subject) => AddAfter(null, subject);
+        public void AddAfter(IInputLayerSubject target, IInputLayerSubject subject)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Add, targetLayer: {targetLayer}");
-            if (subjects == null) throw new ArgumentNullException(nameof(subjects));
-            if (!subjects.Any()) return;
+            using var _ = BlackboxHandle.Of(this).WriteScope("Add");
+            if (subject == null) throw new ArgumentNullException(nameof(subject));
 
-            foreach (var subject in subjects)
+            if (_subjects.Contains(subject))
             {
-                if (_subjects.ContainsKey(subject))
-                    RemoveInternal(subject, IInputLayerHub.RemoveOption.RemoveIfEmpty, out var __);
+                _subjects.Remove(subject);
+                _subjectData.Remove(subject);
             }
 
-            var layer = !string.IsNullOrEmpty(targetLayer)
-                ? _layers.FirstOrDefault(l => l.Name == targetLayer)
-                : null;
+            BlackboxHandle.Of(this).Exert(subject, $"Add, after: {target}");
 
-            if (layer == null)
+            var idx = _subjects.Contains(target) ? _subjects.IndexOf(target) + 1 : _subjects.Count;
+            _subjects.Insert(idx, subject);
+
+            if (subject is IAwakableInputLayerSubject aSubject)
             {
-                var layerName = !string.IsNullOrEmpty(targetLayer)
-                    ? $"레이어 '{targetLayer}'"
-                    : "빈 레이어";
-                BlackboxHandle.Of(this).Write($"{layerName}을(를) 생성합니다.");
-
-                layer = new Layer(targetLayer);
-                _layers.Add(layer);
+                _subjectData[subject] = (true, aw => SetAwake(subject, aw), () => Remove(subject));
+                aSubject.InputAwakeStateChanged += _subjectData[subject].awakeChanged;
             }
+            else
+                _subjectData[subject] = (true, null, () => Remove(subject));
 
-            if (blockBelows)
-                layer.BlocksBelow = true;
-
-            foreach (var subject in subjects)
-            {
-                BlackboxHandle.Of(this).Exert(subject, "Add");
-
-                layer.Add(subject);
-                _subjects[subject] = (layer, () => Remove(subject));
-                subject.Destroying += _subjects[subject].destroyCallback;
-            }
+            subject.Destroying += _subjectData[subject].onDestroy;
 
             EvaluateInputState();   
         }
 
-        public void Remove(
-            IInputLayerSubject subject,
-            IInputLayerHub.RemoveOption removeOption = IInputLayerHub.RemoveOption.RemoveIfEmpty,
-            bool forceUnblock = false)
+        private void SetAwake(IInputLayerSubject subject, bool awake)
         {
-            RemoveInternal(subject, removeOption, out var layer);
+            using var _ = BlackboxHandle.Of(this).WriteScope("Set Awake");
 
-            if (forceUnblock)
-            {
-                BlackboxHandle.Of(this).Exert(layer, "Force Unblock");
-                layer.Unblock();
-                layer.BlocksBelow = false;
-            }
+            if (subject == null)
+                throw new ArgumentNullException(nameof(subject));
+            if (!_subjects.Contains(subject))
+                throw new ArgumentException(
+                    BlackboxHandle.Of(this).WriteError("존재하지 않는 subject를 WakeUp하려고 시도했습니다."));
+
+            var (wasAwake, awakeChanged, onDestroy) = _subjectData[subject];
+            BlackboxHandle.Of(this).Exert(subject, $"Set Sleep, {wasAwake} -> {awake}");
+
+            _subjectData[subject] = (awake, awakeChanged, onDestroy);
+            EvaluateInputState();
+        }
+
+        public void Remove(IInputLayerSubject subject)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Remove");
+            if (!_subjects.Contains(subject)) return;
+
+            BlackboxHandle.Of(this).Exert(subject, "Remove");
+
+            if (subject is IAwakableInputLayerSubject aSubject)
+                aSubject.InputAwakeStateChanged -= _subjectData[subject].awakeChanged;
+
+            subject.Destroying -= _subjectData[subject].onDestroy;
+            _subjectData.Remove(subject);
+            _subjects.Remove(subject);
 
             EvaluateInputState();
         }
-        private void RemoveInternal(
-            IInputLayerSubject subject,
-            IInputLayerHub.RemoveOption removeOption,
-            out Layer layer)
-        {
-            using var _ = BlackboxHandle.Of(this).ExertScope(subject, "Remove");
-            if (!_subjects.TryGetValue(subject, out var subjectData))
-            {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(subject)} {subject}을(를) 가지고 있지 않기 때문에 Remove를 취소합니다.");
-                layer = default;
-                return;
-            }
 
-            var targetLayer = subjectData.layer;
-            layer = targetLayer;
-            Remove(subject, true);
-
-            if ((removeOption == IInputLayerHub.RemoveOption.RemoveIfEmpty && targetLayer.IsEmpty)
-                || removeOption == IInputLayerHub.RemoveOption.Forced)
-            {
-                foreach (var layerSubject in targetLayer.Subjects)
-                    Remove(layerSubject, false);
-
-                _layers.Remove(targetLayer);
-            }
-
-            void Remove(IInputLayerSubject subject, bool removeFromLayer)
-            {
-                subject.Destroying -= _subjects[subject].destroyCallback;
-                _subjects.Remove(subject);
-
-                if (removeFromLayer) targetLayer.Remove(subject);
-                subject.AllowInput = true;
-            }
-        }
 
         public void Block(object requester)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Block: {requester}");
             if (requester == null || _blockers.ContainsKey(requester))
             {
-                BlackboxHandle.Of(this).Write($"{nameof(requester)} {requester}은(는) 유효하지 않거나 이미 Block 상태입니다.");
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(requester)} '{requester}'은(는) 유효하지 않거나 이미 Block 상태입니다.");
                 return;
             }
 
-            _blockers[requester] = new EmptyLayerSubject();
+            _blockers[requester] = new EmptyInputSubject(requester.ToString());
             Add(_blockers[requester]);
         }
 
@@ -128,7 +95,8 @@ namespace Infrastructure
             using var _ = BlackboxHandle.Of(this).WriteScope($"Unblock: {requester}");
             if (requester == null || !_blockers.ContainsKey(requester))
             {
-                BlackboxHandle.Of(this).Write($"{nameof(requester)} {requester}은(는) 유효하지 않거나 Block 상태가 아닙니다.");
+                BlackboxHandle.Of(this).Write(
+                    $"{nameof(requester)} '{requester}'은(는) 유효하지 않거나 Block 상태가 아닙니다.");
                 return;
             }
 
@@ -139,34 +107,44 @@ namespace Infrastructure
         private void EvaluateInputState()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Evaluate Input State");
-            var block = false;
+            bool doBlock = false;
 
-            for (int i = _layers.Count - 1; i >= 0; i--)
+            for (int i = _subjects.Count - 1; i >= 0; i--)
             {
-                var layer = _layers[i];
+                var subject = _subjects[i];
+                if (!_subjectData[subject].isAwake) continue;
 
-                if (block)
+                if (doBlock)
                 {
-                    BlackboxHandle.Of(this).Exert(layer, "Block");
-                    layer.Block();
+                    BlackboxHandle.Of(this).Exert(subject, "Block");
+                    subject.AllowInput = false;
                 }
                 else
                 {
-                    BlackboxHandle.Of(this).Exert(layer, "Unblock");
-                    layer.Unblock();
+                    BlackboxHandle.Of(this).Exert(subject, "Unblock");
+                    subject.AllowInput = true;
                 }
 
-                if (layer.BlocksBelow)
-                    block = true;
+                if (!subject.IsTrigger) doBlock = true;
             }
         }
+
 
         private void OnDestroy()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
-            foreach (var (subject, (_, callback)) in _subjects)
-                subject.Destroying -= callback;
+            foreach (var (subject, (_, awakeChanged, onDestroy)) in _subjectData)
+            {
+                if (subject is IAwakableInputLayerSubject aSubject)
+                    aSubject.InputAwakeStateChanged -= awakeChanged;
+
+                subject.Destroying -= onDestroy;
+            }
+
+            _subjects.Clear();
+            _subjectData.Clear();
+            _blockers.Clear();
         }
     }
 }

@@ -11,17 +11,16 @@ namespace UI
         IStandaloneUpdatable,
         IEnablable,
         IInputLayerController,
-        IInputLayerSubject,
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
+        [field: SerializeField] public KeyCode CloseKey { get; set; } = KeyCode.Escape;
         [Space]
         [SerializeField] private Button _closeBtn;
         [SerializeField] private RectTransform _relicListParent;
         [SerializeField] private RelicInfoUI _relicInfoPrefab;
         [SerializeField] private Animation _animation;
 
-        public bool AllowInput { get; set; } = true;
         public event Action Destroying;
 
         #region Interfaces
@@ -39,7 +38,7 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
-                _inputHub.Add(this);
+                _inputHub.Block(this);
             }
         };
         Action IEnablable.OnEnabled => null;
@@ -56,44 +55,48 @@ namespace UI
             if (_inputHub != null)
             {
                 BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
-                _inputHub.Remove(this);
+                _inputHub.Unblock(this);
             }
         };
         Action IEnablable.OnDisabled => null;
         #endregion
 
         private EnableWithAnimation _enabler;
-        private IInputLayerHub _inputHub;
+        private IInputHub _inputHub;
+        private EmptyInputSubject _openerSubject;
         private DarkscreenUI _darkscreenUI;
         private bool _isInitialized = false;
 
 
+        // Content
         private void Awake() => Initialize();
         public void Initialize()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
+
             if (_isInitialized) return;
             _isInitialized = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Initialize");
-
             if (!_closeBtn)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     Ctx($"{nameof(_closeBtn)} 컴포넌트가 유효하지 않습니다.")));
 
             if (!_relicListParent)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     Ctx($"{nameof(_relicListParent)} 컴포넌트가 유효하지 않습니다.")));
 
             if (!_relicInfoPrefab)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     Ctx($"{nameof(_relicInfoPrefab)} 컴포넌트가 유효하지 않습니다.")));
 
             if (!_animation)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     Ctx($"{nameof(_animation)} 컴포넌트가 유효하지 않습니다.")));
 
 
             _relicInfoPrefab.gameObject.SetActive(false);
+
+            _openerSubject = new EmptyInputSubject(nameof(RelicInfoPanelUI), true);
 
             _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
@@ -104,7 +107,13 @@ namespace UI
             ((IEnablable)this).SetToDisabled();
         }
 
-        void IInputLayerController.Initialize(IInputLayerHub inputHub) => _inputHub = inputHub;
+        public EmptyInputSubject GetOpenerSubject()
+        {
+            Initialize();
+            return _openerSubject;
+        }
+
+        void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         public void Open()
@@ -154,13 +163,16 @@ namespace UI
 
         void IStandaloneUpdatable.StandaloneUpdate()
         {
-            if (!AllowInput)
-                return;
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-                Close();
-            else if (Input.GetKeyDown(OpenKey))
-                Open();
+            if (!_enabler.IsEnabled)
+            {
+                if (_openerSubject.AllowInput && Input.GetKeyDown(OpenKey))
+                    Open();
+            }
+            else
+            {
+                if (Input.GetKeyDown(CloseKey))
+                    Close();
+            }
         }
 
         void IEnablable.Enable()
@@ -184,12 +196,12 @@ namespace UI
             _enabler.SetToDisabled();
         }
 
-        private string Ctx(string message) => $"[{nameof(RelicInfoPanelUI)}] {message}";
-
         private void OnDestroy()
         {
             Destroying?.Invoke();
             _enabler?.Dispose();
         }
+
+        private string Ctx(string message) => $"[{nameof(RelicInfoPanelUI)}] {message}";
     }
 }

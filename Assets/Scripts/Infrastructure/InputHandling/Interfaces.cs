@@ -1,22 +1,12 @@
 using System;
-using System.Collections.Generic;
 
 namespace Infrastructure
 {
-    public interface IInputLayerHub
+    public interface IInputHub
     {
-        enum RemoveOption
-        {
-            None,
-            RemoveIfEmpty,
-            Forced,
-        }
-
-        void Add(IInputLayerSubject subject, bool blockBelows = true);
-        void Add(IEnumerable<IInputLayerSubject> subjects, bool blockBelows = true);
-        void AddTo(string targetLayer, IInputLayerSubject subject, bool blockBelows = true);
-        void AddTo(string targetLayer, IEnumerable<IInputLayerSubject> subjects, bool blockBelows = true);
-        void Remove(IInputLayerSubject subject, RemoveOption remveOption = RemoveOption.RemoveIfEmpty, bool forceUnblock = false);
+        void Add(IInputLayerSubject subject);
+        void AddAfter(IInputLayerSubject target, IInputLayerSubject subject);
+        void Remove(IInputLayerSubject subject);
 
         void Block(object requester);
         void Unblock(object requester);
@@ -24,12 +14,18 @@ namespace Infrastructure
 
     public interface IInputLayerController
     {
-        void Initialize(IInputLayerHub inputHub);
+        void Initialize(IInputHub inputHub);
     }
 
     public interface IInputLayerSubject
     {
         bool AllowInput { get; set; }
+        bool IsTrigger { get; }
+
         event Action Destroying;
+    }
+    public interface IAwakableInputLayerSubject : IInputLayerSubject
+    {
+        event Action<bool> InputAwakeStateChanged;
     }
 }

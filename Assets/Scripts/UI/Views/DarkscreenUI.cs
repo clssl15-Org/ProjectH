@@ -29,14 +29,14 @@ namespace UI
         private MonoBehaviour _recentTarget;
         private Action _clickCallback;
 
-        private bool _initialized = false;
+        private bool _isInitialized = false;
 
 
         private void Awake() => EnsureInitialization();
         private void EnsureInitialization()
         {
-            if (_initialized) return;
-            _initialized = true;
+            if (_isInitialized) return;
+            _isInitialized = true;
 
             _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
@@ -88,6 +88,7 @@ namespace UI
                 transform.SetSiblingIndex(targetIndex);
             }
         }
+
         public void Enable()
         {
             EnsureInitialization();
