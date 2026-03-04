@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     private int exploreIndex = 0;
     private int maxExploreCount = 4;
     private int exploreCount = 0;
+    public int ExploreCount => exploreCount;
 
     private void Awake()
     {
@@ -31,6 +32,8 @@ public class LevelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         _spawnManager = GetComponent<SpawnManager>();
+
+        ShuffleAndPick();
     }
     public void MoveNextLevel(bool stageChange)
     {
@@ -50,8 +53,8 @@ public class LevelManager : MonoBehaviour
             }
             else
             {
-                nextScene = $"Stage{CurrentStage} {exploreIndex}";
                 exploreIndex = (exploreIndex + 1) % numbers.Count;
+                nextScene = $"Stage{CurrentStage} {numbers[exploreIndex]}";
             }
         }
 

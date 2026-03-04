@@ -14,6 +14,14 @@ namespace Actors
 
         private Action<IMonster> monsterCreated;
 
+        private void Start()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        private void OnDisable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
         // 외부에서 스포너를 추가할 수 있는 메서드
         public void AddSpawner(MonsterSpawner spawner)
         {
@@ -53,13 +61,20 @@ namespace Actors
             clearObject.SetActive(true);
         }
 
-    /// <summary>
-    /// 맵이 바뀌기 전에 이 메서드를 호출하여 MonsterSpawner 리스트를 초기화합니다.
-    /// </summary>
-    public void Clear()
+        /// <summary>
+        /// 맵이 바뀌기 전에 이 메서드를 호출하여 MonsterSpawner 리스트를 초기화합니다.
+        /// </summary>
+        public void Clear()
         {
             monsterCreated = null;
             SpawnerList.Clear();
+        }
+
+        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            clearObject = GameObject.Find("ClearObjects");
+            if (LevelManager.Instance.ExploreCount > 0)
+                clearObject.SetActive(false);
         }
     }
 }
