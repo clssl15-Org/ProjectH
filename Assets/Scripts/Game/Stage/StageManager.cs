@@ -209,10 +209,10 @@ namespace Game.Stage
             #endregion
 
             #region Managers
-            if (SpawnManager.Instance)
+            if (LevelManager.Instance.SpawnManager)
             {
-                BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Spawner에 Register 대리자 등록");
-                SpawnManager.Instance.OnMonsterCreate(monster => Register(monster));
+                BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Spawner에 Register 대리자 등록");
+                LevelManager.Instance.SpawnManager.OnMonsterCreate(monster => Register(monster));
             }
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
@@ -403,10 +403,10 @@ namespace Game.Stage
         {
             _isDestroyed = true;
 
-            if (SpawnManager.Instance)
+            if (LevelManager.Instance.SpawnManager)
             {
-                BlackboxHandle.Of(this).Exert(SpawnManager.Instance, "Clear");
-                SpawnManager.Instance.Clear();
+                BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Clear");
+                LevelManager.Instance.SpawnManager.Clear();
             }
 
             if (UIManager)

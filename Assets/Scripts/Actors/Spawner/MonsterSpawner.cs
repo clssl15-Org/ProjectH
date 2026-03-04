@@ -29,6 +29,8 @@ namespace Actors
         public PlatformManager platformManager;
         public Configuration configuration;
 
+        public bool IsAllPhasesComplete { get; private set; } = false;
+
         private int currentPhaseIndex = -1; // 현재 진행 중인 페이즈의 인덱스
         private bool isSpawning = false; // 스포너가 현재 작동 중인지 여부
 
@@ -59,7 +61,7 @@ namespace Actors
         {
             if (SpawnManager.Instance != null)
             {
-                SpawnManager.Instance.AddSpawner(this.gameObject);
+                SpawnManager.Instance.AddSpawner(this);
             }
         }
 
@@ -147,6 +149,13 @@ namespace Actors
         {
             Debug.Log($"*** [{gameObject.name}] 모든 스폰 페이즈를 완료했습니다. ***");
             isSpawning = false;
+
+            IsAllPhasesComplete = true;
+            if (LevelManager.Instance.SpawnManager != null)
+            {
+                LevelManager.Instance.SpawnManager.CheckAllSpawnersComplete();
+            }
+
         }
 
         /// <summary>
