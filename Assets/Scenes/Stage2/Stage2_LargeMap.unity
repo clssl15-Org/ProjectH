@@ -2460,6 +2460,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 886641976797934404, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.67
+      objectReference: {fileID: 0}
     - target: {fileID: 1924733141305253533, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 4
@@ -2523,6 +2527,14 @@ PrefabInstance:
     - target: {fileID: 4831682683386955444, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534254959118389266, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534254959118389266, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.37
       objectReference: {fileID: 0}
     - target: {fileID: 7535452033118798473, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: stageChange
