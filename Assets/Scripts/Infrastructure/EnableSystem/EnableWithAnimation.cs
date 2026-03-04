@@ -15,14 +15,14 @@ namespace Infrastructure
     public class EnableWithAnimation : IDisposable
     {
         // Front
-        public bool IsEnabled => _enabled;
+        public bool IsEnabled => _isEnabled;
 
         // Internal
         private AnimationPlayer _player;
         private readonly Dictionary<EnableEventType, Action> _events = new();
 
         private bool _useAbsoluteTime;
-        private bool _enabled;
+        private bool _isEnabled;
         private IDisposable _timer;
 
         private bool _isDisposed = false;
@@ -32,7 +32,7 @@ namespace Infrastructure
         public EnableWithAnimation(Animation animation, bool isEnabled, bool useAbsoluteTime = true)
         {
             _player = new(animation, useAbsoluteTime);
-            _enabled = isEnabled;
+            _isEnabled = isEnabled;
 
             foreach (EnableEventType eventType in Enum.GetValues(typeof(EnableEventType)))
                 _events[eventType] = null;
@@ -54,8 +54,8 @@ namespace Infrastructure
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().FullName);
 
-            if (_enabled) return;
-            _enabled = true;
+            if (_isEnabled) return;
+            _isEnabled = true;
 
             _timer?.Dispose();
 
@@ -76,8 +76,8 @@ namespace Infrastructure
             if (_isDisposed)
                 return;
 
-            if (!_enabled) return;
-            _enabled = false;
+            if (!_isEnabled) return;
+            _isEnabled = false;
 
             _timer?.Dispose();
             _events[EnableEventType.Disabling]?.Invoke();
@@ -97,8 +97,8 @@ namespace Infrastructure
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().FullName);
 
-            if (_enabled) return;
-            _enabled = true;
+            if (_isEnabled) return;
+            _isEnabled = true;
 
             _timer?.Dispose();
             _player.Time = _player.Length;
@@ -109,8 +109,8 @@ namespace Infrastructure
 
         public void SetToDisabled()
         {
-            if (!_enabled) return;
-            _enabled = false;
+            if (!_isEnabled) return;
+            _isEnabled = false;
 
             _timer?.Dispose();
             _player.Time = 0f;

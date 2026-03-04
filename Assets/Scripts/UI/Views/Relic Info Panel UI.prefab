@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 6102389977471404125}
   - component: {fileID: 1211822472328427176}
   m_Layer: 5
-  m_Name: Relic Info Panel
+  m_Name: Relic Info Panel UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -642,6 +642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <OpenKey>k__BackingField: 9
+  <CloseKey>k__BackingField: 27
   _closeBtn: {fileID: 2551660268137255990}
   _relicListParent: {fileID: 3554552723969534572}
   _relicInfoPrefab: {fileID: 8783996122224119249}
@@ -725,7 +726,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 20
+  m_ScrollSensitivity: 35
   m_Viewport: {fileID: 3474289875474071051}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 7583788053754095772}
@@ -1259,7 +1260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -35.00001, y: -2.5}
+  m_AnchoredPosition: {x: -35, y: -2.5}
   m_SizeDelta: {x: -130.00003, y: -95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4824351289932626872
@@ -1398,8 +1399,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: 0.00000047683716, y: 0}
+  m_SizeDelta: {x: 40, y: 5.9999943}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7620617670642909964
 CanvasRenderer:

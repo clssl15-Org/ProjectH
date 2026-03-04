@@ -11,6 +11,7 @@ namespace Infrastructure
         public float Factor { get; set; } = 1f;
 
         // Internal
+        bool _useAbsoluteTime;
         float _remainingTime;
         Action _updated;
         Action<bool> _callback;
@@ -20,12 +21,13 @@ namespace Infrastructure
 
 
         // Content
-        public Timer(float time, Action<bool> callback = null, Action updated = null)
+        public Timer(float time, Action<bool> callback = null, Action updated = null, bool useAbsoluteTime = false)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(
                     nameof(time), time, $"{nameof(time)}은(는) 0 이상이어야 합니다.");
 
+            _useAbsoluteTime = useAbsoluteTime;
             _remainingTime = time;
             _updated = updated;
             _callback = callback;
@@ -34,7 +36,9 @@ namespace Infrastructure
 
         private void Update()
         {
-            _remainingTime -= Time.deltaTime * Factor;
+            var deltaTime = !_useAbsoluteTime ? Time.deltaTime : Time.unscaledDeltaTime;
+            _remainingTime -= deltaTime * Factor;
+
             _updated?.Invoke();
 
             if (_remainingTime > 0f) return;

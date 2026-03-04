@@ -20,6 +20,34 @@ namespace UI
             Func<Vector2> GetPosition { get; }
             Vector2 Offset { get; }
         }
+
+        private void Awake()
+        {
+            _transform = GetComponent<RectTransform>();
+        }
+
+        public Vector2 GetPreferredValues(string text, float maxWidth)
+        {
+            var originalSize = _textUI.GetPreferredValues(text);
+
+            if (originalSize.x <= maxWidth)
+                return originalSize;
+
+            var height = _textUI.GetPreferredValues(text, maxWidth, float.PositiveInfinity).y;
+            return new Vector2(maxWidth, height);
+        }
+
+        public Vector2 GetPreferredTextSize(string text)
+        {
+            return _textUI.GetPreferredValues(text);
+        }
+
+        public void SetPanelSize(Vector2 size)
+        {
+            if (!_transform) _transform = GetComponent<RectTransform>();
+            _transform.sizeDelta = size;
+        }
+
         public void Show(IContainer container) => Show(container.Text, container.GetPosition, container.Offset);
         public void Show(string text, Func<Vector2> getPosition, Vector2 offset)
         {

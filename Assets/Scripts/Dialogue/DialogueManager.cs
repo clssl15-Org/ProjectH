@@ -11,7 +11,10 @@ namespace Dialogue
         IInjectable<DialogueScriptLibrary>,
         IInputLayerSubject
     {
+        [field: Header("Bubble Settings")]
         [field: SerializeField] public Vector2 BubbleOffset { get; set; } = new(0, 100);
+        [field: SerializeField, Min(10)] private int MaxBubbleWidth { get; set; } = 300;
+        [field: SerializeField] private Vector2 BubblePadding { get; set; } = new(50, 100);
 
         public bool AllowInput { get; set; } = true;
         bool IInputLayerSubject.IsTrigger { get; } = false;
@@ -19,6 +22,7 @@ namespace Dialogue
         public event Action<bool> InputAwakeStateChanged;
         public event Action Destroying;
 
+        [Header("Bindings")]
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
         [SerializeField] private RectTransform _canvasTransform;
@@ -76,6 +80,8 @@ namespace Dialogue
 
             if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
             {
+                CalculateAndSetBubbleSize(script);
+
                 BlackboxHandle.Of(this).Exert(_bubbleDialogueUI, "Enable");
                 _bubbleDialogueUI.transform.SetAsLastSibling();
             }
@@ -116,7 +122,8 @@ namespace Dialogue
                     var line = script[currentIdx];
                     var characterTransform = _getTransform(line.Character);
 
-                    _bubbleDialogueUI.Show(new BubbleContainer(_canvasTransform)
+                    _bubbleDialogueUI
+                        .Show(new BubbleContainer(_canvasTransform)
                         .With(line.Dialogue, characterTransform, BubbleOffset));
                 }
                 else
@@ -125,6 +132,28 @@ namespace Dialogue
                 }
             }
         }
+
+        private void CalculateAndSetBubbleSize(DialogueScriptSO script)
+        {
+            float targetWidth = 0;
+            float targetHeight = 0;
+
+            float maxTextWidth = MaxBubbleWidth - BubblePadding.x;
+
+            for (int i = 0; i < script.Count; i++)
+            {
+                var text = script[i].Dialogue;
+                var textSize = _bubbleDialogueUI.GetPreferredValues(text, maxTextWidth);
+
+                if (textSize.x > targetWidth) targetWidth = textSize.x;
+                if (textSize.y > targetHeight) targetHeight = textSize.y;
+            }
+
+            _bubbleDialogueUI.SetPanelSize(new(
+                x: Mathf.Min(targetWidth + BubblePadding.x, MaxBubbleWidth),
+                y: targetHeight + BubblePadding.y));
+        }
+
         protected virtual void OnPlayStarting() { }
         protected virtual void OnPlayStopping() { }
 

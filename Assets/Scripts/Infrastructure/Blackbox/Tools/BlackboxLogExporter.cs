@@ -9,6 +9,7 @@ namespace BlackboxSystem
     public class BlackboxLogExporter : MonoBehaviour
     {
         [SerializeField] private Object _target;
+        [SerializeField] private bool _quitOnExport = true;
 
 #if UNITY_EDITOR
         [CustomEditor(typeof(BlackboxLogExporter))]
@@ -17,11 +18,12 @@ namespace BlackboxSystem
             public override void OnInspectorGUI()
             {
                 base.OnInspectorGUI();
-                var target = ((BlackboxLogExporter)base.target)._target;
+                var target = (BlackboxLogExporter)base.target;
+                var subject = target._target;
 
                 GUILayout.Space(8);
 
-                if (target == null)
+                if (subject == null)
                 {
                     EditorGUILayout.HelpBox("Target must be assigned to enable Log Exporter", MessageType.Warning);
                     return;
@@ -30,7 +32,10 @@ namespace BlackboxSystem
                 if (Application.isPlaying)
                 {
                     if (GUILayout.Button("Export Logs"))
-                        BlackboxHandle.Of(target).Export();
+                    {
+                        BlackboxHandle.Of(subject).Export();
+                        if (target._quitOnExport) EditorApplication.ExitPlaymode();
+                    }
                 }
                 else
                     GUILayout.Label("Enter play mode to export logs", EditorStyles.centeredGreyMiniLabel);

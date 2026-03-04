@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BlackboxSystem;
 using Infrastructure;
 using UI.RelicInfoPanelView;
@@ -14,7 +15,7 @@ namespace UI
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
-        [field: SerializeField] public KeyCode CloseKey { get; set; } = KeyCode.Escape;
+        [field: SerializeField] public KeyCode[] CloseKeys { get; set; } = new[] { KeyCode.Escape, KeyCode.Tab };
         [Space]
         [SerializeField] private Button _closeBtn;
         [SerializeField] private RectTransform _relicListParent;
@@ -27,6 +28,8 @@ namespace UI
         Action IEnablable.OnEnabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+
+            Time.timeScale = 0f;
             transform.SetAsLastSibling();
 
             if (_darkscreenUI)
@@ -45,6 +48,7 @@ namespace UI
         Action IEnablable.OnDisabling => () =>
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
+            Time.timeScale = 1f;
 
             if (_darkscreenUI)
             {
@@ -170,7 +174,7 @@ namespace UI
             }
             else
             {
-                if (Input.GetKeyDown(CloseKey))
+                if (CloseKeys.Any(Input.GetKeyDown))
                     Close();
             }
         }
