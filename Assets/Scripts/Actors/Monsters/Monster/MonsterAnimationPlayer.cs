@@ -127,6 +127,8 @@ namespace Actors.Monsters.Actions
 
         private void RunInternal(float deltaTime)
         {
+            if (!Animator) return;
+
             if (_isPaused || Time.deltaTime <= 0f)
                 return;
 
