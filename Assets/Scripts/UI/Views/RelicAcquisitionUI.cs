@@ -14,7 +14,7 @@ namespace UI
         IStandaloneInitializable,
         IEnablable,
         IView,
-        IInputController,
+        IInputLayerController,
         IInjectable<DarkscreenUI>
     {
         [Header("Main")]
@@ -30,6 +30,7 @@ namespace UI
 
         [Header("Throw Coin")]
         [SerializeField] private GameObject _coinPage;
+        [SerializeField] private GameObject _coinThrowMessage;
         [SerializeField] private TextMeshProUGUI _coinDescripton;
         [SerializeField] private GameObject _coinImage;
         [SerializeField] private GameObject _coinAnimation;
@@ -38,9 +39,8 @@ namespace UI
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectMaskVideoPlayer;
-        [SerializeField] private float _effectPlayTiming = 1f;
+        [SerializeField] private float _effectPlayTiming = 5f;
 
-        public bool EnableInput { get; set; } = true;
         public event Action Destroying;
 
         public enum VideoType
@@ -63,6 +63,7 @@ namespace UI
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _effectTimer;
         private RelicDataSO _relic;
+        private bool _forceSuccess = false;
         private EnableWithAnimation _enabler;
 
         private bool _isInitialized = false;
@@ -75,16 +76,33 @@ namespace UI
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
+            Time.timeScale = 0f;
+
             _relicPage.SetActive(true);
             _coinPage.SetActive(false);
 
             _toThrowCoinBtn.gameObject.SetActive(true);
             _closeBtn.gameObject.SetActive(false);
 
-            _inputHub?.BlockAll();
+            if (_inputHub != null)
+            {
+                BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
+                _inputHub.Block(this);
+            }
         };
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => () => _inputHub?.UnblockAll();
+        Action IEnablable.OnDisabling => () =>
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
+            Time.timeScale = 1f;
+
+            if (_inputHub != null)
+            {
+                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
+                _inputHub.Unblock(this);
+            }
+        };
         Action IEnablable.OnDisabled => null;
         #endregion
 
@@ -113,10 +131,10 @@ namespace UI
             _coinAnimation.SetActive(false);
         }
 
-        void IInputController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
-        private void OnRelicAcquiring(RelicDataSO relicInfo, string description)
+        private void OnRelicAcquiring(RelicDataSO relicInfo, string description, bool forceSuccess = false)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Relic Acquiring: {relicInfo.name}");
             if (_darkscreenUI) _darkscreenUI.EnableFor(this, () => { if (_isOperated) Close(); });
@@ -132,6 +150,7 @@ namespace UI
             _isOperating = true;
             _isOperated = false;
             _relic = relicInfo;
+            _forceSuccess = forceSuccess;
 
             Enable();
 
@@ -160,11 +179,12 @@ namespace UI
             else
                 _coinAnimation.SetActive(true);
 
+            _coinThrowMessage.SetActive(true);
             _effectAnimation.SetActive(false);
 
 
             _coinDescripton.text = $"강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}";
-            var reinforced = RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
+            var reinforced = _forceSuccess || RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
 
             var coinClip = _videoClips.FirstOrDefault(v => v.VideoType
                 == (reinforced ? VideoType.CoinFront : VideoType.CoinBack));
@@ -194,10 +214,12 @@ namespace UI
 
             _updater = Loco.Subscribe(() =>
             {
-                if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) <= 0.0001f)
+                if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) <= 0.001f)
                     return;
 
+                _coinThrowMessage.SetActive(false);
                 ThrowCoin();
+
                 _updater.Dispose();
             });
 
@@ -217,14 +239,17 @@ namespace UI
                 if (reinforced)
                     _effectTimer = new Timer(_effectPlayTiming, succeeded =>
                     {
+                        BlackboxHandle.Of(this).Write($"Effect Ended, succeeded: {succeeded}");
+
                         _effectAnimation.SetActive(true);
                         _coinEffectVideoPlayer.playbackSpeed = 1f;
                         _coinEffectMaskVideoPlayer.playbackSpeed = 1f;
-                    });
+                    },
+                    useAbsoluteTime: true);
 
                 _coinTimer = new Timer((float)coinClip.Video.length, succeeded =>
                 {
-                    using var _ = BlackboxHandle.Of(this).WriteScope("Play Ended");
+                    using var _ = BlackboxHandle.Of(this).WriteScope($"Play Ended, succeeded: {succeeded}");
                     _isOperated = true;
 
                     if (succeeded)
@@ -246,8 +271,11 @@ namespace UI
                         _relicPage.SetActive(true);
                     }
                     else
-                        BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Play Failed");
-                });
+                        Debug.LogWarning(BlackboxHandle.Of(this).ExertMessage(
+                            RelicManager.Instance,
+                            "Play Failed"));
+                },
+                useAbsoluteTime: true);
             }
         }
 

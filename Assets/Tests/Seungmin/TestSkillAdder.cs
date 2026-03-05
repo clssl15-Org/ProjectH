@@ -1,6 +1,7 @@
 using System.Linq;
 using Actors.PlayerSystem;
 using UnityEngine;
+using Infrastructure;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -9,36 +10,49 @@ namespace Tests.Seungmin
 {
     public class TestSkillAdder : MonoBehaviour
     {
-        [field: SerializeField] public Player Player { get; set; }
-        [field: SerializeField] public SkillType TargetSkillType { get; set; }
+        [SerializeField] private Player _player;
+        [SerializeField] private SkillType[] _skillsToAddOnStart;
+        [Space]
+        [SerializeField] private SkillType _skillToAdd;
 
 
         private void Awake()
         {
-            if (!Player)
-                Player = GetComponent<Player>();
+            if (!_player)
+                _player = GetComponent<Player>();
         }
 
-        private void AddSkill()
+        private void Start()
         {
-            if (!Player)
+            if (!DebugTools.IsDebugMode)
+                return;
+
+            foreach (var skillType in _skillsToAddOnStart)
+                AddSkill(skillType);
+        }
+
+        private void AddSkill(SkillType targetSkillType)
+        {
+            if (!DebugTools.IsDebugMode)
+                return;
+
+            if (!_player)
             {
                 Debug.LogWarning("Player가 null입니다.", this);
                 return;
             }
 
-            if (!Player.TryGetComponent<SkillManager>(out var skillManager))
+            if (!_player.TryGetComponent<SkillManager>(out var skillManager))
             {
                 Debug.LogWarning("Player에서 SkillManager를 찾지 못하였습니다.", this);
                 return;
             }
 
-
-            var targetSkill = Player.GetComponentsInChildren<CharacterState>()
-                .FirstOrDefault(skill => skill.SkillType == TargetSkillType);
+            var targetSkill = _player.GetComponentsInChildren<CharacterState>()
+                .FirstOrDefault(skill => skill.SkillType == targetSkillType);
             if (targetSkill == null)
             {
-                Debug.LogWarning($"Player에서 Skill '{TargetSkillType}'을(를) 찾지 못하였습니다.", this);
+                Debug.LogWarning($"Player에서 Skill '{targetSkillType}'을(를) 찾지 못하였습니다.", this);
                 return;
             }
 
@@ -57,8 +71,10 @@ namespace Tests.Seungmin
 
                 if (Application.isPlaying)
                 {
+                    var target = (TestSkillAdder)base.target;
+
                     if (GUILayout.Button("Add Skill"))
-                        ((TestSkillAdder)target).AddSkill();
+                        target.AddSkill(target._skillToAdd);
                 }
                 else
                     GUILayout.Label("Enter play mode to add skill", EditorStyles.centeredGreyMiniLabel);

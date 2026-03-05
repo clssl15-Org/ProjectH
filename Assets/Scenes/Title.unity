@@ -282,6 +282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1001 &368611854
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -306,6 +308,18 @@ PrefabInstance:
       propertyPath: _injector
       value: 
       objectReference: {fileID: 2008743082}
+    - target: {fileID: 6389749565562484621, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _injections.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6389749565562484621, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _injections.Array.data[0]
+      value: 
+      objectReference: {fileID: 1868067032}
+    - target: {fileID: 6389749565562484621, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _injections.Array.data[1]
+      value: 
+      objectReference: {fileID: 817202419}
     - target: {fileID: 7670028620784252606, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -787,6 +801,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 799991751}
   m_CullTransparentMesh: 1
+--- !u!114 &817202419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6867746828967838783, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+  m_PrefabInstance: {fileID: 368611854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de967ae631d4cdd4b8f878ce5fcf2d1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &858166567
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,6 +1458,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1 &1356889271
 GameObject:
   m_ObjectHideFlags: 0
@@ -1593,6 +1620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1 &1571976513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1760,6 +1789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1 &1639069488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,6 +1859,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2008743081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1868067032 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+  m_PrefabInstance: {fileID: 368611854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb697b879b3a6eb47a8a8242ab131ecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1896177159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2155,6 +2197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1 &2007383319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2219,9 +2263,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2007383319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f8890955b1d8cc4daad52e5f465f30a, type: 3}
+  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _target: {fileID: 2007383321}
 --- !u!1 &2008743079
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,7 +2334,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _injections:
   - Item: {fileID: 946717463}
-  - Item: {fileID: 0}
   _injectOnAwake: 0
 --- !u!114 &2008743083
 MonoBehaviour:
@@ -2640,6 +2684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1001 &4571073049309619981
 PrefabInstance:
   m_ObjectHideFlags: 0

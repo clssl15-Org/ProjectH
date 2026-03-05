@@ -41,10 +41,9 @@ namespace Infrastructure.StateMachines.Fsm
 
 
         // Content
-        public Work(string name = null)
+        public Work(object name = null)
         {
-            Name = name ?? GetName(GetType());
-
+            Name = GetName(name ?? GetType());
             hierarchy = new(this);
 #if UNIENGINE
             stream = new(this);
@@ -250,12 +249,12 @@ namespace Infrastructure.StateMachines.Fsm
         /// and returns the attached child.
         /// </summary>
         /// <param name="work">The existing child instance to attach.</param>
-        /// <param name="primary">Indicates whether this child is considered primary.</param>
+        /// <param name="isPrimary">Indicates whether this child is considered primary.</param>
         /// <returns>The attached child of type <typeparamref name="T"/>.</returns>
-        public Work AddChild<T>(T work, bool primary = false) where T : Work
+        public Work AddChild<T>(T work, bool isPrimary = false) where T : Work
         {
             ThrowIfDisposed();
-            hierarchy.AddChild(work.Name, work, primary);
+            hierarchy.AddChild(work.Name, work, isPrimary);
             return this;
         }
 

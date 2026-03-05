@@ -64,7 +64,7 @@ namespace Actors.Monsters
                                     _work.SetNext("MainAction");
                                 }));
                         }),
-                        primary: true
+                        isPrimary: true
                     )
                     .AddChild(new Work("MainAction")
                         .OnEntered(() =>

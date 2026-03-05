@@ -4,7 +4,6 @@ using Actors.PlayerSystem;
 using Infrastructure;
 using UnityEngine;
 using World;
-using static DamageRoulette;
 
 namespace Actors
 {
@@ -31,18 +30,13 @@ namespace Actors
     }
 
 
-    public interface IPlayer : IInjectable<PlatformManager>, IInputControllable
+    public interface IPlayer : IInjectable<PlatformManager>, IInputLayerSubject
     {
         // ---------- Properties ----------
         int HP { get; }
         bool IsAlive { get; }
 
-        IEnumerable<SkillType> HavingSkills { get; }
-        SkillType SelectedSkillType { get; }
-
         event Action<PlayerCondition> ConditionChanged;
-        event Action<SkillType> SkillAdded;
-        event Action<SkillType> SkillChanged;
 
         int MaxHP { get; }
         int CurrentPlatform { get; }
@@ -50,6 +44,14 @@ namespace Actors
 
         // Skill
         int SelectedSkillIndex { get; }
+        SkillType SelectedSkillType { get; }
+        IEnumerable<SkillType> HavingSkills { get; }
+
+        event Action<SkillType> SkillAdded;
+        event Action<SkillType> SkillChanged;
+
+        float CurrentSkillCooldown { get; }
+        float CurrentUltimateCooldown { get; }
 
 
         // ---------- Methods ----------
@@ -61,7 +63,7 @@ namespace Actors
         void UseSkill();
         void UseUltimate();
         void ChangeSkill();
-        bool TrySkillRoulette(out Context rouletteDTO);
+        bool TrySkillRoulette(out DamageRoulette.Context context);
 
 
         // ---------- MonoBehaviour ----------

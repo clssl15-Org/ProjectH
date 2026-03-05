@@ -8,14 +8,16 @@ using UnityEngine;
 
 namespace Game.Stage
 {
-    public abstract class ScenarioManager : MonoBehaviour, IDisposable
+    public abstract class ScenarioManager : MonoBehaviour,
+        IInputLayerSubject,
+        IInputLayerController
     {
         // Internal
         internal StageManager StageManager { get; private set; }
         internal ScenarioMachine Machine { get; private set; }
 
-        [field: Tooltip("디버그용 스토리 진행 버튼")]
-        [field: SerializeField] protected KeyCode ProceedKey { get; private set; } = KeyCode.Alpha0;
+        [Tooltip("디버그용 스토리 진행 버튼")]
+        [SerializeField] private KeyCode _proceedKey = KeyCode.Alpha0;
         [field: SerializeField] protected float TargetRubielDistance { get; private set; } = 3f;
 
         [Space]
@@ -23,32 +25,40 @@ namespace Game.Stage
 
         protected IPlayer Player => StageManager.Player;
         protected Rubiel Rubiel => StageManager.Rubiel;
+        protected KeyCode ProceedKey => _proceedKey.Resolve();
+
+        public bool AllowInput { get;set; } = true;
+        bool IInputLayerSubject.IsTrigger => false;
+
+        public event Action Destroying;
 
         protected bool IsPlayerOnGround =>
             Player != null && Player.CurrentPlatform >= 0;
         protected bool IsRubielClose =>
             Rubiel && Vector2.Distance(Rubiel.transform.position, Player.transform.position) <= TargetRubielDistance;
 
+        private IInputHub _inputHub;
         private bool _isInitialized = false;
-        private bool _isDisposed = false;
 
         internal class ScenarioMachine : Work
         {
             internal StageManager StageManager { get; private set; }
-
             public ScenarioMachine(StageManager stageManager) : base("ScenarioMachine") =>
                 StageManager = stageManager;
         }
 
+
         // Content
         public void Initialize(StageManager stageManager)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, was: {_isInitialized}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
 
             if (_isInitialized) return;
             _isInitialized = true;
 
             StageManager = stageManager;
+
+            ((IInputLayerController)this).Initialize(stageManager.InputHub);
             Machine = new ScenarioMachine(stageManager);
 
             var isFisrt = true;
@@ -60,7 +70,34 @@ namespace Game.Stage
         }
         internal abstract IEnumerable<Work> GetBlocks();
 
-        private void Start() => Machine?.Enter();
+        void IInputLayerController.Initialize(IInputHub inputHub)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("InputHub Injected");
+            _inputHub = inputHub;
+        }
+
+        protected void BlockInputs()
+        {
+            BlackboxHandle.Of(this).Exert(_inputHub, "Block");
+
+            if (StageManager.PlayerUI != null)
+                _inputHub.AddAfter(StageManager.PlayerUI, this);
+            else if (StageManager.Player != null)
+                _inputHub.AddAfter(StageManager.Player, this);
+            else
+                _inputHub.Add(this);
+
+            _inputHub.AddAfter(this, StageManager.DialogueManager);
+        }
+        protected void UnblockInputs()
+        {
+            BlackboxHandle.Of(this).Exert(_inputHub, "Unblock");
+
+            _inputHub.Remove(StageManager.DialogueManager);
+            _inputHub.Remove(this);
+        }
+
+        protected virtual void Start() => Machine?.Enter();
         private void Update()
         {
             Machine?.Update();
@@ -100,16 +137,15 @@ namespace Game.Stage
         }
         public void Exit()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Stop");
+            using var _ = BlackboxHandle.Of(this).WriteScope("Exit");
             Machine.Exit();
         }
 
-        public void Dispose()
+        private void OnDestroy()
         {
-            BlackboxHandle.Of(this).WriteScope($"Dispose, was: {_isDisposed}");
+            BlackboxHandle.Of(this).WriteScope("Destroy");
 
-            if (_isDisposed) return;
-            _isDisposed = true;
+            Destroying?.Invoke();
 
             if (Machine != null)
             {

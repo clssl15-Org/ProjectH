@@ -770,7 +770,7 @@ GameObject:
   - component: {fileID: 8250124566021023083}
   - component: {fileID: 39664853635922490}
   m_Layer: 5
-  m_Name: Description
+  m_Name: Throw Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -904,6 +904,7 @@ GameObject:
   - component: {fileID: 7196604928749223526}
   - component: {fileID: 374795713085237247}
   - component: {fileID: 423331054033561738}
+  - component: {fileID: 8577209532052809299}
   - component: {fileID: 1098245312964968908}
   m_Layer: 5
   m_Name: Button B
@@ -1013,6 +1014,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8577209532052809299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191926667717875254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c964c504dae45724d8bed71910de3aa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enabled: 1
 --- !u!114 &1098245312964968908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,6 +1039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 3
 --- !u!1 &4771494858378069126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8300805450032259015
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1519,6 +1535,7 @@ GameObject:
   - component: {fileID: 6224990195609136836}
   - component: {fileID: 8324335142715389493}
   - component: {fileID: 1057240237092153659}
+  - component: {fileID: 5365520065796679604}
   - component: {fileID: 7576786797017395582}
   m_Layer: 5
   m_Name: Button A
@@ -1628,6 +1645,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5365520065796679604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8072029083669701538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c964c504dae45724d8bed71910de3aa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enabled: 1
 --- !u!114 &7576786797017395582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1640,6 +1670,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0846c97ff53b6c544a75c98a3509c08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HoverSound>k__BackingField: 2
+  <ClickSound>k__BackingField: 1
 --- !u!1 &8577567193043061850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,7 +1689,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &979585437989795669
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1906,6 +1938,7 @@ MonoBehaviour:
   _toThrowCoinBtn: {fileID: 1057240237092153659}
   _closeBtn: {fileID: 423331054033561738}
   _coinPage: {fileID: 6012487259278628800}
+  _coinThrowMessage: {fileID: 3987720386189250005}
   _coinDescripton: {fileID: 4924947053915159809}
   _coinImage: {fileID: 2687988657651133121}
   _coinAnimation: {fileID: 4771494858378069126}
@@ -1938,3 +1971,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 3194588562940674162}
+  _quitOnExport: 1

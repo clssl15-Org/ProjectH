@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Actors;
 using Actors.PlayerSystem;
+using Infrastructure;
 
 namespace UI
 {
@@ -37,11 +38,34 @@ namespace UI
         public event Action<SkillType> SkillAdded;
         public event Action<SkillType> SkillChanged;
 
+        public float CurrentSkillCooldown
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _player.CurrentSkillCooldown;
+            }
+        }
+        public float CurrentUltimateCooldown
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _player.CurrentUltimateCooldown;
+            }
+        }
+
+        public event Action<Func<float>> CooltimeEnabled;
+        public event Action CooltimeDisabled;
+
         public event Action Disposed;
         public bool IsDisposed { get; private set; } = false;
 
         // Internal
         private IPlayer _player;
+
+        private IDisposable _updater;
+        private bool? _isSkillCooltime = null;
 
 
         // Content
@@ -53,11 +77,13 @@ namespace UI
                     Ctx("입력 인자는 null일 수 없습니다."));
 
             _player = player;
-
+   
             _player.ConditionChanged += OnHealthUpdated;
             _player.SkillAdded += OnSkillAdded;
             _player.SkillChanged += OnSkillChanged;
             _player.Destroying += Dispose;
+
+            _updater = Loco.Subscribe(Update);
         }
 
         private void OnHealthUpdated(PlayerCondition condition)
@@ -131,6 +157,21 @@ namespace UI
             return false;
         }
 
+        private void Update()
+        {
+            if (_player == null) return;
+
+            var isSkillCooltime = _player.CurrentSkillCooldown >= 0;
+            if (isSkillCooltime == _isSkillCooltime) return;
+
+            _isSkillCooltime = isSkillCooltime;
+
+            if (isSkillCooltime)
+                CooltimeEnabled?.Invoke(() => _player.CurrentSkillCooldown);
+            else
+                CooltimeDisabled?.Invoke();
+        }
+
         [Obsolete("현재 Player Input은 Standalone으로 처리됩니다.")]
         public void UseSkill()
         {
@@ -162,6 +203,9 @@ namespace UI
             if (IsDisposed) return;
             IsDisposed = true;
 
+            _updater?.Dispose();
+            _updater = null;
+
             if (_player != null)
             {
                 _player.ConditionChanged -= OnHealthUpdated;
@@ -171,8 +215,6 @@ namespace UI
 
                 _player = null;
             }
-
-            HealthRateChanged = null;
 
             Disposed?.Invoke();
             Disposed = null;

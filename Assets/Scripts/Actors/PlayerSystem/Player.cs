@@ -42,7 +42,9 @@ namespace Actors.PlayerSystem
         public int CurrentDashCount { get; set; }
         public int MaxJumpCount => playerStats.maxJumpCount;
         public int CurrentJumpCount { get; set; }
+
         public bool AllowInput { get; set; } = true;
+        bool IInputLayerSubject.IsTrigger { get; } = true;
 
         public float CurrentSkillCooldown
         {
@@ -59,10 +61,17 @@ namespace Actors.PlayerSystem
                 }
             }
         }
+
+        [SerializeField] private bool useDebugUltimateGauge = false;
+        [SerializeField, Range(0, 1)] private float debugUltimateGauge = 0f;
+
         public float CurrentUltimateCooldown
         {
             get
             {
+                if (useDebugUltimateGauge)
+                    return debugUltimateGauge;
+
                 Ultimate ultimate = GetComponentInChildren<Ultimate>();
                 if (ultimate.enabled)
                 {
@@ -131,8 +140,7 @@ namespace Actors.PlayerSystem
 
         public void Inject(PlatformManager platformManager)
         {
-            GetComponent<PlatformDetector>()
-                .SetPlatformManager(platformManager);
+            GetComponent<PlatformDetector>().SetPlatformManager(platformManager);
         }
 
         public void Start()
@@ -165,8 +173,10 @@ namespace Actors.PlayerSystem
         {
             skillManager.ChangeSkill();
         }
-        public bool TrySkillRoulette(out DamageRoulette.Context rouletteDTO) =>
-            damageRoulette.TrySkillRoulette(out rouletteDTO);
+        public bool TrySkillRoulette(out DamageRoulette.Context context)
+        {
+            return damageRoulette.TrySkillRoulette(out context);
+        }
 
         public void ResetRandomSkillBuff()
         {

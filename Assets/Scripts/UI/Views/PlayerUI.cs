@@ -14,19 +14,22 @@ namespace UI
     public class PlayerUI : MonoBehaviour,
         IView,
         IEnablable,
-        IInputControllable
+        IInputLayerSubject
     {
         // Front
         public bool AllowInput { get; set; } = true;
+        bool IInputLayerSubject.IsTrigger { get; } = true;
+
         public event Action Destroying;
 
         // Internal
-        [SerializeField] private PlayerView.SkillManager _skillManager;
+        [SerializeField] private PlayerView.SkillUI _skillUI;
         [SerializeField] private Button _skillBtn;
         [SerializeField] private Animation _skillRouletteBackground;
-        [SerializeField] private VideoPlayer _skillRoulette;
+        [SerializeField] private VideoPlayer _skillRouletteVideoPlayer;
         [SerializeField] private Button _defaultAttackBtn;
         [SerializeField] private Button _rangedAttackBtn;
+        [SerializeField] private PlayerView.UltimateUI _ultimateUI;
         [SerializeField] private Button _ultimateBtn;
         [Space]
         [SerializeField] private HealthBarUI _healthBar;
@@ -72,7 +75,7 @@ namespace UI
                 .InitializeWithIEnablable(this, false);
             _skillRouletteEnabler.SetToDisabled();
 
-            _skillRoulette.clip = null;
+            _skillRouletteVideoPlayer.clip = null;
         }
 
         public void Connect(PlayerVM player)
@@ -80,10 +83,14 @@ namespace UI
             using var _ = BlackboxHandle.Of(this).ExertScope(player, $"Connect: {player}");
             _player = player;
 
-            _skillManager.Initialize(player.HavingSkills.ToArray());
-            player.SkillAdded += _skillManager.AddSkill;
-            player.SkillChanged += _skillManager.OnSkillChanged;
+            _skillUI.InitializeSkills(player.HavingSkills.ToArray());
+            player.SkillAdded += _skillUI.AddSkill;
+            player.SkillChanged += _skillUI.OnSkillChanged;
 
+            player.CooltimeEnabled += _skillUI.EnableCooltime;
+            player.CooltimeDisabled += _skillUI.DisableCooltime;
+
+            _ultimateUI.Initialize(() => player.CurrentUltimateCooldown);
             _skillBtn.onClick.AddListener(ApplyRandomSkillBuff);
 
             // TODO: Player Input 배선 작업
@@ -131,8 +138,10 @@ namespace UI
             {
                 BlackboxHandle.Of(this).Exert(_player, "Disconnect");
 
-                _player.SkillAdded -= _skillManager.AddSkill;
-                _player.SkillChanged -= _skillManager.OnSkillChanged;
+                _player.SkillAdded -= _skillUI.AddSkill;
+                _player.SkillChanged -= _skillUI.OnSkillChanged;
+                _player.CooltimeEnabled -= _skillUI.EnableCooltime;
+                _player.CooltimeDisabled -= _skillUI.DisableCooltime;
                 _player = null;
             }
 
@@ -231,7 +240,7 @@ namespace UI
                     if (succeeded)
                     {
                         _skillRouletteEnabler.Disable();
-                        _skillRoulette.clip = null;
+                        _skillRouletteVideoPlayer.clip = null;
 
                         BlackboxHandle.Of(this).Exert(_player, "Apply Damage");
                         apply();
@@ -239,8 +248,8 @@ namespace UI
                 });
 
             _skillRouletteEnabler.Enable();
-            _skillRoulette.clip = _skillRouletteVideos[index];
-            _skillRoulette.Play();
+            _skillRouletteVideoPlayer.clip = _skillRouletteVideos[index];
+            _skillRouletteVideoPlayer.Play();
         }
 
 

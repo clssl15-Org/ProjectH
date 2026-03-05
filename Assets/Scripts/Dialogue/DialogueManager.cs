@@ -3,21 +3,47 @@ using BlackboxSystem;
 using Infrastructure;
 using UI;
 using UnityEngine;
+using World;
 
 namespace Dialogue
 {
-    public class DialogueManager : MonoBehaviour, IInjectable<DialogueScriptLibrary>
+    public class DialogueManager : MonoBehaviour,
+        IInjectable<DialogueScriptLibrary>,
+        IInputLayerSubject
     {
+        [field: Header("Bubble Settings")]
+        [field: SerializeField] public Vector2 BubbleOffset { get; set; } = new(0, 100);
+        [field: SerializeField, Min(10)] private int MaxBubbleWidth { get; set; } = 300;
+        [field: SerializeField] private Vector2 BubblePadding { get; set; } = new(50, 100);
+
+        public bool AllowInput { get; set; } = true;
+        bool IInputLayerSubject.IsTrigger { get; } = false;
+
+        public event Action<bool> InputAwakeStateChanged;
+        public event Action Destroying;
+
+        [Header("Bindings")]
         [SerializeField] private DialogueUI _dialogueUI;
+        [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
+        [SerializeField] private RectTransform _canvasTransform;
+        private Func<Character, Transform> _getTransform;
 
         private DialogueScriptLibrary _dialogueScriptLibrary;
         private string _currentScriptTitle = string.Empty;
         private IDisposable _updateHandle;
 
-        public void Initialize(DialogueUI dialogueUI)
+        public void Initialize(
+            DialogueUI dialogueUI,
+            BubbleDialogueUI bubbleDialogueUI,
+            RectTransform canvasTrasnform,
+            Func<Character, Transform> getTransform)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}, {bubbleDialogueUI}");
+
             _dialogueUI = dialogueUI;
+            _bubbleDialogueUI = bubbleDialogueUI;
+            _canvasTransform = canvasTrasnform;
+            _getTransform = getTransform;
         }
 
         void IInjectable<DialogueScriptLibrary>.Inject(DialogueScriptLibrary dialogueScriptLibrary)
@@ -52,17 +78,26 @@ namespace Dialogue
             _currentScriptTitle = title;
             OnPlayStarting();
 
-            BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
+            if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
+            {
+                CalculateAndSetBubbleSize(script);
 
-            _dialogueUI.transform.SetAsLastSibling();
-            _dialogueUI.Enable();
+                BlackboxHandle.Of(this).Exert(_bubbleDialogueUI, "Enable");
+                _bubbleDialogueUI.transform.SetAsLastSibling();
+            }
+            else
+            {
+                BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
+                _dialogueUI.transform.SetAsLastSibling();
+                _dialogueUI.Enable();
+            }
 
             int currentIdx = -1;
             PlayDialogue();
 
             _updateHandle = Loco.Subscribe(() =>
             {
-                if (Input.GetMouseButtonDown(0))
+                if (AllowInput && Input.GetMouseButtonDown(0))
                 {
                     if (currentIdx >= script.Count - 1)
                     {
@@ -82,9 +117,43 @@ namespace Dialogue
                 currentIdx++;
                 using var _ = BlackboxHandle.Of(this).WriteScope($"Play Dialogue: {currentIdx}");
 
-                _dialogueUI.SetContent(script[currentIdx]);
+                if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
+                {
+                    var line = script[currentIdx];
+                    var characterTransform = _getTransform(line.Character);
+
+                    _bubbleDialogueUI
+                        .Show(new BubbleContainer(_canvasTransform)
+                        .With(line.Dialogue, characterTransform, BubbleOffset));
+                }
+                else
+                {
+                    _dialogueUI.SetContent(script[currentIdx]);
+                }
             }
         }
+
+        private void CalculateAndSetBubbleSize(DialogueScriptSO script)
+        {
+            float targetWidth = 0;
+            float targetHeight = 0;
+
+            float maxTextWidth = MaxBubbleWidth - BubblePadding.x;
+
+            for (int i = 0; i < script.Count; i++)
+            {
+                var text = script[i].Dialogue;
+                var textSize = _bubbleDialogueUI.GetPreferredValues(text, maxTextWidth);
+
+                if (textSize.x > targetWidth) targetWidth = textSize.x;
+                if (textSize.y > targetHeight) targetHeight = textSize.y;
+            }
+
+            _bubbleDialogueUI.SetPanelSize(new(
+                x: Mathf.Min(targetWidth + BubblePadding.x, MaxBubbleWidth),
+                y: targetHeight + BubblePadding.y));
+        }
+
         protected virtual void OnPlayStarting() { }
         protected virtual void OnPlayStopping() { }
 
@@ -99,13 +168,17 @@ namespace Dialogue
                 OnPlayStopping();
 
             if (_dialogueUI) _dialogueUI.Disable();
+            if (_bubbleDialogueUI) _bubbleDialogueUI.Hide();
+
             _currentScriptTitle = string.Empty;
         }
 
         private void OnDestroy()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
+
             Stop();
+            Destroying?.Invoke();
         }
     }
 }

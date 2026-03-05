@@ -66,23 +66,11 @@ public class DamageRoulette : MonoBehaviour
 
     public bool TrySkillRoulette(out Context context)
     {
-        if (skillManager.skills.Count <= 0)
-        {
-            context = default;
-            return false;
-        }
+        context = default;
 
-        if (player.CurrentSkillCooldown > 0f)
-        {
-            context = default;
-            return false;
-        }
-
-        if (isApplied)
-        {
-            context = default;
-            return false;
-        }
+        if (skillManager.skills.Count <= 0) return false;
+        if (player.CurrentSkillCooldown > 0f) return false;
+        if (isApplied) return false;
 
         isApplied = true;
 

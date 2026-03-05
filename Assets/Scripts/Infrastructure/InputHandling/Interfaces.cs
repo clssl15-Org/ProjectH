@@ -4,19 +4,28 @@ namespace Infrastructure
 {
     public interface IInputHub
     {
-        void BlockAll();
-        void BlockExcept(params IInputControllable[] controllables);
-        void UnblockAll(bool delayFrame = true);
+        void Add(IInputLayerSubject subject);
+        void AddAfter(IInputLayerSubject target, IInputLayerSubject subject);
+        void Remove(IInputLayerSubject subject);
+
+        void Block(object requester);
+        void Unblock(object requester);
     }
 
-    public interface IInputController
+    public interface IInputLayerController
     {
         void Initialize(IInputHub inputHub);
     }
 
-    public interface IInputControllable
+    public interface IInputLayerSubject
     {
         bool AllowInput { get; set; }
+        bool IsTrigger { get; }
+
         event Action Destroying;
+    }
+    public interface IAwakableInputLayerSubject : IInputLayerSubject
+    {
+        event Action<bool> InputAwakeStateChanged;
     }
 }

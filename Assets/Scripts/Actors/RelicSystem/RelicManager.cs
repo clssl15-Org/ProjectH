@@ -14,7 +14,8 @@ public class RelicManager : MonoBehaviour
     // 모든 유물 프리팹을 인스펙터에서 등록합니다.
     [SerializeField] private List<GameObject> relicPrefabs;
 
-    public event Action<RelicDataSO, string> RelicAcquiring;
+    // relicData, description, forceSuccess
+    public event Action<RelicDataSO, string, bool> RelicAcquiring;
     public event Action<RelicDataSO, string> RelicAcquired;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
@@ -56,7 +57,7 @@ public class RelicManager : MonoBehaviour
         return relicData != null;
     }
 
-    public void GetRandomRelicData()
+    public void GetRandomRelicData(bool forceSuccess = false)
     {
         int currentSkillCount = GetSkillRelicCount();
         int stateIndex = Mathf.Clamp(currentSkillCount, 0, 3);
@@ -126,7 +127,23 @@ public class RelicManager : MonoBehaviour
 
         string description = selectedData.Description + "\n" + selectedData.NomalEffect + "\n" + selectedData.UpgradeEffect;
 
-        RelicAcquiring?.Invoke(selectedData, description);
+        RelicAcquiring?.Invoke(selectedData, description, forceSuccess);
+    }
+    // (디버그용) 선택한 렐릭 강제 추가
+    public void GetRelicData(int key, bool forceSuccess = false)
+    {
+        var targetData = relicPrefabs
+            .Select(relicObj => relicObj.GetComponent<Relic>().Data)
+            .FirstOrDefault(relicData => relicData.RelicNumber == key);
+
+        if (targetData == null)
+        {
+            Debug.LogWarning($"GetRelicData 실패: Key '{key}'에 해당하는 프리팹 없음.");
+            return;
+        }
+
+        string description = targetData.Description + "\n" + targetData.NomalEffect + "\n" + targetData.UpgradeEffect;
+        RelicAcquiring?.Invoke(targetData, description, forceSuccess);
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -154,7 +171,8 @@ public class RelicManager : MonoBehaviour
 
         if (prefab == null)
         {
-            Debug.LogWarning($"AddRelic 실패: Key {key}에 해당하는 프리팹 없음.");
+            description = $"AddRelic 실패: Key '{key}'에 해당하는 프리팹 없음.";
+            Debug.LogWarning(description);
             return;
         }
 
@@ -170,7 +188,8 @@ public class RelicManager : MonoBehaviour
         // 최대 중첩 수 초과 시 추가 중단
         if (currentCount >= data.MaxStackCount)
         {
-            Debug.LogWarning($"유물 '{data.RelicName}'(Key:{key})은 최대 중첩 수({data.MaxStackCount})에 도달하여 더 이상 추가할 수 없습니다.");
+            description = $"유물 '{data.RelicName}'(Key:{key})은 최대 중첩 수({data.MaxStackCount})에 도달하여 더 이상 추가할 수 없습니다.";
+            Debug.LogWarning(description);
             return;
         }
 

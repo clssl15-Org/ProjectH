@@ -29,9 +29,10 @@ namespace Actors.PlayerSystem
 
         private IEnumerator LeavePlatform()
         {
-            Collider2D oneWayPlatformCollider = platformManager.OneWayPlatformTilemap.GetComponent<Collider2D>();
+            Collider2D oneWayPlatformCollider = Player.GetComponentInChildren<PlatformDetector>().GetPlatformManager().OneWayPlatformTilemap?.GetComponent<Collider2D>();
+            if (!oneWayPlatformCollider) yield break; // ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            // ÇÃ·¹ÀÌ¾î¿Í ÇØ´ç ÇÃ·§Æû »çÀÌÀÇ ÃÑµ¹¸¸ ¹«½ÃÇÕ´Ï´Ù.
+            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
             Physics2D.IgnoreCollision(CharacterActor.Collider, oneWayPlatformCollider, true);
 
             yield return new WaitForSeconds(0.2f);

@@ -10,7 +10,7 @@ namespace Game.Title
     public class Menu : MonoBehaviour,
         IInjectable<GameServices>,
         IEnablable,
-        IInputControllable
+        IInputLayerSubject
     {
         public event Action Enabling;
         public event Action Disabling;
@@ -22,6 +22,7 @@ namespace Game.Title
         Action IEnablable.OnDisabled => null;
 
         public bool AllowInput { get; set; } = true;
+        bool IInputLayerSubject.IsTrigger { get; } = false;
 
         [SerializeField] private DarkscreenUI _darkscreen;
         [SerializeField] private SettingsUI _settingsUI;
@@ -59,7 +60,7 @@ namespace Game.Title
                 using var _ = BlackboxHandle.Of(this).WriteScope("Esc");
                 if (!AllowInput)
                 {
-                    BlackboxHandle.Of(this).Write("Input Blocked");
+                    BlackboxHandle.Of(this).Write("Input has been blocked");
                     return;
                 }
 

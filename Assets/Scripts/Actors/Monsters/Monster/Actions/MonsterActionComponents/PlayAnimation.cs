@@ -42,7 +42,7 @@ namespace Actors.Monsters.Actions
                         if (_elapsedTime >= _currentAnimationPlayInfo.DelayBeforePlay)
                             _work.SetNext("Play");
                     }),
-                    primary: true
+                    isPrimary: true
                 )
                 .AddChild(new Work("Play")
                     .OnEntered(() => AnimationPlayer.Play(

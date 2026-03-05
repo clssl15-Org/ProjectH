@@ -340,7 +340,12 @@ namespace BlackboxSystem
         private void ExportInternal(int recursionDepth, bool isCrash, ExportFormat format, FullExportOption fullExportOption, OpenLogOption openLogOption)
         {
             if (Blackbox == null)
+            {
+                Infrastructure.Log(FormatLogMessage(
+                    $"Cannot export because the handle is invalid."),
+                    LogLevel.Warning);
                 return;
+            }
 
             if (!Infrastructure.TryMarkPrinted())
             {

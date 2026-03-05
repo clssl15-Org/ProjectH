@@ -57,9 +57,9 @@ namespace Actors
 
         private void Update()
         {
-            if (Input.GetKeyDown(_changeShapeKey))
+            if (Input.GetKeyDown(_changeShapeKey.Resolve()))
                 ChangeShape();
-            if (Input.GetKeyDown(_changeVisibilityKey))
+            if (Input.GetKeyDown(_changeVisibilityKey.Resolve()))
                 ChangeVisibility();
         }
 
