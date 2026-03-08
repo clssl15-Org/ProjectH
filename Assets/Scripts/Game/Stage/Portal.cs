@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Game.Stage;
 using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
+    public event Action<Action> MoveToNextLevel;
+
     [SerializeField]
     private GameObject Fsprite;
     [SerializeField]
@@ -30,7 +32,10 @@ public class Portal : MonoBehaviour
     }
     private void MoveNextLevel()
     {
-        LevelManager.Instance.MoveNextLevel(stageChange);
+        if (MoveToNextLevel != null)
+            MoveToNextLevel(() => LevelManager.Instance.MoveNextLevel(stageChange));
+        else
+            LevelManager.Instance.MoveNextLevel(stageChange);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

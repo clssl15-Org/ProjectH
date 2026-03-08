@@ -680,6 +680,7 @@ MonoBehaviour:
   _portraitUI: {fileID: 8185993656156951199}
   _nametagUI: {fileID: 4313493550177781126}
   _dialogueUI: {fileID: 665646787475707627}
+  _typingSpeed: 0.1
 --- !u!114 &2374745376589761337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,3 +694,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 1469731473334030968}
+  _quitOnExport: 1

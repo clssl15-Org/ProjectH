@@ -19,7 +19,6 @@ namespace Dialogue
         public bool AllowInput { get; set; } = true;
         bool IInputLayerSubject.IsTrigger { get; } = false;
 
-        public event Action<bool> InputAwakeStateChanged;
         public event Action Destroying;
 
         [Header("Bindings")]

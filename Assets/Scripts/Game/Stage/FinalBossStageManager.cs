@@ -194,7 +194,7 @@ namespace Game.Stage
 
                 _werbellion.ConditionChanged += c =>
                 {
-                    if (c.Is(MonsterCondition.Die))
+                    if (c.Is(MonsterCondition.Dying))
                         StageCleared();
                 };
 

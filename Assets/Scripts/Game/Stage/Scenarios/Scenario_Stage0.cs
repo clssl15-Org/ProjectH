@@ -44,7 +44,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall(() => SetRubielToInvisible());
+                    SetRubielToSmall(/* () => SetRubielToInvisible() */);
                 });
 
             yield return new DialogueBlock(
@@ -55,7 +55,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall(() => SetRubielToInvisible());
+                    SetRubielToSmall(/* () => SetRubielToInvisible() */);
                 });
 
             yield return new Block(
@@ -66,7 +66,7 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
                         BlockInputs();
-                        SetRubielToVisible(() => To(BlockName.FirstSkillAcquire));
+                        SetRubielToVisible(true, () => To(BlockName.FirstSkillAcquire));
                     }
                 });
 
@@ -78,7 +78,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall(() => SetRubielToInvisible());
+                    SetRubielToSmall(/* () => SetRubielToInvisible() */);
                 });
 
             yield return new Block(
@@ -89,7 +89,7 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
                         BlockInputs();
-                        SetRubielToVisible(() => To(BlockName.TownPortal));
+                        SetRubielToVisible(true, () => To(BlockName.TownPortal));
                     }
                 });
 

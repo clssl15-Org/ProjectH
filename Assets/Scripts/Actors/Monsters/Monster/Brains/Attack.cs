@@ -36,15 +36,18 @@ namespace Actors.Monsters.Brains
                 return;
             }
 
-            Blackboard.Committing = true;
+            Blackboard.IsCommitting = true;
 
-            _notification = new MonsterConditionData(MonsterCondition.Attack, _isRangedAttack);
+            _notification = new MonsterConditionData(
+                MonsterCondition.Attack,
+                new MonsterAttackData(Name, _isRangedAttack));
+
             Owner.NotifyCondition(_notification);
         }
 
         protected override void OnHalt(DetailedNodeStatus _)
         {
-            Blackboard.Committing = false;
+            Blackboard.IsCommitting = false;
 
             _notification?.Complete();
             _notification = null;

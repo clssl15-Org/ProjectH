@@ -4,6 +4,7 @@ using Actors.Monsters.Bosses;
 using BlackboxSystem;
 using Dialogue;
 using Infrastructure;
+using Sound;
 using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -27,15 +28,18 @@ namespace Game.Stage
         [SerializeField] private DialogueManager _dialogueManager;
         [SerializeField] private PlatformManager _platformManager;
         [SerializeField] private UILibrary _uILibrary;
+        [SerializeField] private BgmPlayManager _bgmPlayManager;
+        [SerializeField] private SfxPlayManager _sfxPlayManager;
         [SerializeField] private EventSystem _eventSystem;
 
         [Header("Inputs")]
         [SerializeField] private MonoBehaviour[] _additionalInputControllers;
         [SerializeField] private MonoBehaviour[] _additionalInputControllables;
 
-        [Header("Player")]
+        [Header("World")]
         [SerializeField] private GameObject _playerObject;
         [SerializeField] private GameObject _rubielObject;
+        [SerializeField] private Portal _portal;
 
         [field: Header("UIs")]
         [field: SerializeField] internal Canvas Canvas { get; private set; }
@@ -46,7 +50,7 @@ namespace Game.Stage
         [field: SerializeField] internal DialogueUI DialogueUI { get; private set; }
         [field: SerializeField] internal BubbleDialogueUI BubbleDialogueUI { get; private set; }
         [field: SerializeField] internal GuideAndWorldRecordsUI GuideAndWorldRecordsUI { get; private set; }
-        [field: SerializeField] internal DarkscreenUI DarkScreenUI { get; private set; }
+        [field: SerializeField] internal DarkscreenUI DarkscreenUI { get; private set; }
 
         internal IPlayer Player { get; private set; }
         internal Rubiel Rubiel { get; private set; }
@@ -111,6 +115,25 @@ namespace Game.Stage
                     }
                 }
 
+                if (!_bgmPlayManager)
+                {
+                    _bgmPlayManager = FindAnyObjectByType<BgmPlayManager>(FindObjectsInactive.Include);
+                    if (!_bgmPlayManager)
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                            $"씬에서 {nameof(_bgmPlayManager)}을(를) 찾는 데 실패했습니다."), this);
+                    }
+                }
+                if (!_sfxPlayManager)
+                {
+                    _sfxPlayManager = FindAnyObjectByType<SfxPlayManager>(FindObjectsInactive.Include);
+                    if (!_sfxPlayManager)
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                            $"씬에서 {nameof(_sfxPlayManager)}을(를) 찾는 데 실패했습니다."), this);
+                    }
+                }
+
                 var injector = GetComponent<Injector>();
                 if (!injector.HasInjection<PlatformManager>())
                 {
@@ -129,17 +152,17 @@ namespace Game.Stage
                 }
                 if (!injector.HasInjection<DarkscreenUI>())
                 {
-                    if (!DarkScreenUI)
-                        DarkScreenUI = FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include);
+                    if (!DarkscreenUI)
+                        DarkscreenUI = FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include);
 
-                    if (DarkScreenUI)
+                    if (DarkscreenUI)
                     {
-                        injector.AddInjection(DarkScreenUI, typeof(DarkscreenUI));
+                        injector.AddInjection(DarkscreenUI, typeof(DarkscreenUI));
                     }
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"씬에서 {nameof(DarkScreenUI)}을(를) 찾는 데 실패했습니다."), this);
+                            $"씬에서 {nameof(DarkscreenUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
             }
@@ -151,8 +174,21 @@ namespace Game.Stage
             if (AutoBindDependencies) AutoBindDependenciesInScene();
 
             #region Player / Monsters
-            if (AutoBindScenePlayer)
+            if (_playerObject)
             {
+                if (!_playerObject.TryGetComponent<IPlayer>(out var player))
+                {
+                    throw new System.InvalidOperationException(
+                        BlackboxHandle.Of(this).WriteError(
+                            $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
+                }
+
+                Player = player;
+                Register(Player, PlayerUI != null);
+            }
+            else if (AutoBindScenePlayer)
+            {
+                var found = false;
                 foreach (var playerObj in GameObject.FindGameObjectsWithTag("Player"))
                 {
                     if (playerObj
@@ -163,43 +199,32 @@ namespace Game.Stage
                         Player = player;
 
                         Register(player, PlayerUI != null);
+
+                        found = true;
                         break;
                     }
                 }
 
-                var rubiel = FindAnyObjectByType<Rubiel>();
-                if (rubiel)
-                {
-                    _rubielObject = rubiel.gameObject;
-                    Rubiel = rubiel;
-                }
+                if (!found)
+                    throw new System.InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                        $"[{nameof(StageManager)}] {nameof(Player)}을(를) 찾는 데 실패했습니다."));
             }
             else
             {
-                if (_playerObject)
-                {
-                    if (!_playerObject.TryGetComponent<IPlayer>(out var player))
-                    {
-                        throw new System.InvalidOperationException(
-                            BlackboxHandle.Of(this).CrashExport(
-                                $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
-                    }
+                throw new System.InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                    $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) 유효하지 않습니다."));
+            }
 
-                    Player = player;
-                    Register(Player, PlayerUI != null);
+            if (_rubielObject)
+            {
+                if (!_rubielObject.TryGetComponent<Rubiel>(out var rubiel))
+                {
+                    throw new System.InvalidOperationException(
+                        BlackboxHandle.Of(this).WriteError(
+                            $"[{nameof(StageManager)}] {nameof(_rubielObject)}이(가) {nameof(Rubiel)} 컴포넌트를 가지고 있지 않습니다."));
                 }
 
-                if (_rubielObject)
-                {
-                    if (!_rubielObject.TryGetComponent<Rubiel>(out var rubiel))
-                    {
-                        throw new System.InvalidOperationException(
-                            BlackboxHandle.Of(this).CrashExport(
-                                $"[{nameof(StageManager)}] {nameof(_rubielObject)}이(가) {nameof(Rubiel)} 컴포넌트를 가지고 있지 않습니다."));
-                    }
-
-                    Rubiel = rubiel;
-                }
+                Rubiel = rubiel;
             }
 
             if (AutoBindSceneMonsters)
@@ -245,8 +270,7 @@ namespace Game.Stage
             }
             #endregion
 
-            #region Input Hub
-            // Add Subjects
+            // Add Input Subjects
             if (Player != null)
             {
                 BlackboxHandle.Of(this).Exert(InputHub, "Add Player");
@@ -269,9 +293,21 @@ namespace Game.Stage
             }
 
 
-            // Add Controllers
+            if (DialogueUI)
+            {
+                if (_sfxPlayManager)
+                    DialogueUI.OnTextTyped += () => _sfxPlayManager.Play(SfxName.Text);
+            }
             if (RelicAcquisitionUI)
+            {
+                if (_sfxPlayManager)
+                {
+                    RelicAcquisitionUI.CoinThrown += () => _sfxPlayManager.Play(SfxName.CoinThrow);
+                    RelicAcquisitionUI.CoinDropped += () => _sfxPlayManager.Play(SfxName.CoinDrop);
+                }
+
                 ((IInputLayerController)RelicAcquisitionUI).Initialize(InputHub);
+            }
             if (RelicInfoPanelUI)
                 ((IInputLayerController)RelicInfoPanelUI).Initialize(InputHub);
             if (SettingsUI)
@@ -309,6 +345,7 @@ namespace Game.Stage
             if (GuideAndWorldRecordsUI)
                 ((IInputLayerController)GuideAndWorldRecordsUI).Initialize(InputHub);
 
+
             foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
             {
                 if (controlObj is IInputLayerSubject subject)
@@ -322,10 +359,39 @@ namespace Game.Stage
                     controller.Initialize(InputHub);
                 }
             }
-            #endregion
+
+
+            if (_portal)
+                _portal.MoveToNextLevel += callback =>
+                {
+                    BlackboxHandle.Of(this).Exert(InputHub, "Block (_portal.MoveToNextLevel)");
+                    InputHub.Block(this);
+
+                    DarkscreenUI.CloseScreen(callback);
+                };
         }
         private void AutoBindDependenciesInScene()
         {
+            if (!_rubielObject)
+            {
+                _rubielObject = FindAnyObjectByType<Rubiel>(FindObjectsInactive.Include)?.gameObject;
+                if (!_rubielObject)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                        $"씬에서 {nameof(Rubiel)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
+            if (!_portal)
+            {
+                _portal = FindAnyObjectByType<Portal>();
+                if (!_portal)
+                {
+                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                        $"씬에서 {nameof(_portal)}을(를) 찾는 데 실패했습니다."), this);
+                }
+            }
+
             if (!Canvas)
             {
                 Canvas = FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);

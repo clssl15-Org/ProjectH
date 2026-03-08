@@ -10,7 +10,8 @@ namespace Actors
         Heal,
         Attack,
         Damaged,
-        Die,
+        Dying,
+        Died,
     }
 
     public interface IMonsterConditionData
@@ -20,7 +21,7 @@ namespace Actors
         /// 인자 종류
         /// <list type="bullet">
         ///   <item><description>Damaged: <see cref="DamageInfo"/></description></item>
-        ///   <item><description>Attack: IsRangedAttack (<see cref="bool"/>)</description></item>
+        ///   <item><description>Attack: <see cref="Monsters.MonsterAttackData"/></description></item>
         /// </list>
         /// </summary>
         object Payload { get; }

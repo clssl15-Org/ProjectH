@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using BlackboxSystem;
 using Dialogue;
 using Infrastructure;
@@ -14,10 +15,17 @@ namespace UI
         IInjectable<GameAssetLibrary>,
         IEnablable
     {
+        [Header("UI Components")]
         [SerializeField] private Image _portraitUI;
         [SerializeField] private TextMeshProUGUI _nametagUI;
         [SerializeField] private TextMeshProUGUI _dialogueUI;
 
+        [Header("Settings")]
+        [SerializeField, Min(0)] private float _typingSpeed = 0.1f;
+
+        public bool IsTotallyTyped => _typingCoroutine == null;
+
+        public event Action OnTextTyped;
         public event Action Disabling;
 
         #region Interfaces
@@ -29,12 +37,12 @@ namespace UI
 
         private GameAssetLibrary _gameAssetLibrary;
         private EnableWithAnimation _enabler;
+        private Coroutine _typingCoroutine;
         private bool _isAwake = false;
-
 
         private void Start()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, was: {_isAwake}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, wasAwake: {_isAwake}");
 
             if (_isAwake) return;
             _isAwake = true;
@@ -55,7 +63,63 @@ namespace UI
 
             _nametagUI.text = name;
             _portraitUI.sprite = portrait;
-            _dialogueUI.text = dialogue;
+
+            if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
+            _typingCoroutine = StartCoroutine(TypeDialogue(dialogue));
+
+            IEnumerator TypeDialogue(string textContent)
+            {
+                _dialogueUI.text = textContent;
+                _dialogueUI.ForceMeshUpdate();
+
+                var textInfo = _dialogueUI.textInfo;
+                var totalVisibleCharacterCount = textInfo.characterCount;
+
+                if (totalVisibleCharacterCount == 0)
+                {
+                    _typingCoroutine = null;
+                    yield break;
+                }
+
+                int counter = 1;
+
+                _dialogueUI.maxVisibleCharacters = counter;
+                if (IsVisibleCharacter(0)) OnTextTyped?.Invoke();
+
+                while (counter < totalVisibleCharacterCount)
+                {
+                    yield return new WaitForSeconds(_typingSpeed);
+
+                    counter++;
+                    _dialogueUI.maxVisibleCharacters = counter;
+
+                    if (IsVisibleCharacter(counter - 1))
+                        OnTextTyped?.Invoke();
+                }
+
+                _typingCoroutine = null;
+
+
+                bool IsVisibleCharacter(int index)
+                {
+                    if (index >= textInfo.characterInfo.Length)
+                        return false;
+
+                    var info = textInfo.characterInfo[index];
+                    return char.IsLetterOrDigit(info.character);
+                }
+            }
+        }
+
+        public void SkipTyping()
+        {
+            if (_typingCoroutine != null)
+            {
+                StopCoroutine(_typingCoroutine);
+                _typingCoroutine = null;
+            }
+
+            _dialogueUI.maxVisibleCharacters = int.MaxValue;
         }
 
         private void GetData(
@@ -76,7 +140,6 @@ namespace UI
             dialogue = dialogueData.Dialogue;
         }
 
-
         public void Enable()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enable");
@@ -89,6 +152,12 @@ namespace UI
         {
             Start();
             _enabler.Disable();
+
+            if (_typingCoroutine != null)
+            {
+                StopCoroutine(_typingCoroutine);
+                _typingCoroutine = null;
+            }
         }
         public void SetToEnabled()
         {

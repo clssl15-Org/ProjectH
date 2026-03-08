@@ -17,15 +17,10 @@ namespace Actors
         public enum Visibility { None, Visible, Invisible }
         public Visibility CurrentVisibility { get; private set; } = Visibility.None;
         [field: SerializeField] public float VisibleSpeed { get; set; } = 1f;
-        public bool IsTotallyInvisible
-        {
-            get
-            {
-                if (!_spriteRenderer) return false;
-                return _spriteRenderer.material.color.a <= 0f;
-            }
-        }
-        
+
+        public bool IsTotallyVisible => _spriteRenderer.material.color.a >= 1f;
+        public bool IsTotallyInvisible => _spriteRenderer.material.color.a <= 0f;
+
         [SerializeField] private Transform _player;
         [SerializeField] private KeyCode _changeShapeKey = KeyCode.None;
         [SerializeField] private KeyCode _changeVisibilityKey = KeyCode.None;

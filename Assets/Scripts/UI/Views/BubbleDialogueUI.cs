@@ -66,8 +66,7 @@ namespace UI
             if (!_transform)
                 _transform = GetComponent<RectTransform>();
 
-            _transform.anchoredPosition =
-                (_getPosition?.Invoke() ?? Vector2.zero) + _offset;
+            _transform.anchoredPosition = (_getPosition?.Invoke() ?? Vector2.zero) + _offset;
         }
 
         public void Hide()

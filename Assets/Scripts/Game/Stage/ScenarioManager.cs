@@ -38,6 +38,7 @@ namespace Game.Stage
             Rubiel && Vector2.Distance(Rubiel.transform.position, Player.transform.position) <= TargetRubielDistance;
 
         private IInputHub _inputHub;
+        private IDisposable _rubielVisibleHandle;
         private bool _isInitialized = false;
 
         internal class ScenarioMachine : Work
@@ -113,16 +114,64 @@ namespace Game.Stage
 #endif
         }
 
-        protected void SetRubielToBig(Action callback = null) => StageManager.Rubiel.ToBig(callback);
-        protected void SetRubielToSmall(Action callback = null) => StageManager.Rubiel.ToSmall(callback);
-        protected void SetRubielToVisible(Action callback = null)
+        protected void SetRubielToBig(Action callback = null)
         {
-            if (Rubiel.IsTotallyInvisible)
-                TransferRubielNearToPlayer();
-
-            StageManager.Rubiel.ToVisible(callback);
+            _rubielVisibleHandle?.Dispose();
+            Rubiel.ToBig(callback);
         }
-        protected void SetRubielToInvisible(Action callback = null) => StageManager.Rubiel.ToInvisible(callback);
+        protected void SetRubielToSmall(Action callback = null)
+        {
+            _rubielVisibleHandle?.Dispose();
+            Rubiel.ToSmall(callback);
+        }
+        protected void SetRubielToVisible(bool shouldNearToPlayer, Action callback = null)
+        {
+            _rubielVisibleHandle?.Dispose();
+
+            bool isClose = IsRubielClose;
+            bool isVisible = Rubiel.IsTotallyVisible;
+
+            if (shouldNearToPlayer
+                && !IsRubielClose
+                && Rubiel.IsTotallyInvisible)
+            {
+                TransferRubielNearToPlayer();
+                isClose = true;
+            }
+
+            if (!isVisible)
+                Rubiel.ToVisible();
+
+            if (isClose && isVisible)
+                callback?.Invoke();
+            else
+            {
+                IDisposable handle = null;
+                _rubielVisibleHandle = Loco.Subscribe(() =>
+                {
+                    if (!Rubiel || handle != _rubielVisibleHandle)
+                    {
+                        handle.Dispose();
+                        return;
+                    }
+
+                    if (IsRubielClose && Rubiel.IsTotallyVisible)
+                    {
+                        handle.Dispose();
+                        _rubielVisibleHandle = null;
+
+                        callback?.Invoke();
+                    }
+                });
+
+                handle = _rubielVisibleHandle;
+            }
+        }
+        protected void SetRubielToInvisible(Action callback = null)
+        {
+            _rubielVisibleHandle?.Dispose();
+            Rubiel.ToInvisible(callback);
+        }
         protected void TransferRubielNearToPlayer()
         {
             Rubiel.Teleport(
@@ -145,6 +194,7 @@ namespace Game.Stage
         {
             BlackboxHandle.Of(this).WriteScope("Destroy");
 
+            _rubielVisibleHandle?.Dispose();
             Destroying?.Invoke();
 
             if (Machine != null)

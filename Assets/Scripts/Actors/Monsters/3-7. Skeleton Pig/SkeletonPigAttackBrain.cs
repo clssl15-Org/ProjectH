@@ -43,7 +43,7 @@ namespace Actors.Monsters
                     return;
                 }
 
-                Blackboard.Committing = true;
+                Blackboard.IsCommitting = true;
 
                 if (mode == AttackMode.Roar)
                 {
@@ -60,7 +60,7 @@ namespace Actors.Monsters
 
             protected override void OnHalt(DetailedNodeStatus _)
             {
-                Blackboard.Committing = false;
+                Blackboard.IsCommitting = false;
 
                 _notification?.Complete();
                 _notification = null;

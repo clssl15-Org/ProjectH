@@ -70,7 +70,7 @@ namespace UI
 
             if (condition.Is(MonsterCondition.Heal, MonsterCondition.Damaged))
                 HealthRateChanged?.Invoke(HealthRate);
-            if (condition.Is(MonsterCondition.Die))
+            if (condition.Is(MonsterCondition.Dying))
                 Dead?.Invoke();
         }
 

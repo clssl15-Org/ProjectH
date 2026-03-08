@@ -35,7 +35,6 @@ namespace Game.Title
 
         [Space]
         [SerializeField] private string _gameSceneName;
-        [SerializeField] private string _bossSceneName;
 
 
         private void Awake()
@@ -46,7 +45,10 @@ namespace Game.Title
                 .InitializeWithIEnablable(this);
 
             if (_darkscreen)
+            {
+                BlackboxHandle.Of(this).Exert(_darkscreen, "Set To Disable");
                 _darkscreen.SetToDisabled();
+            }
         }
 
         void IInjectable<GameServices>.Inject(GameServices gameServices)
@@ -81,14 +83,14 @@ namespace Game.Title
             using var _ = BlackboxHandle.Of(this).WriteScope("To Play");
             if (!AllowInput)
             {
-                BlackboxHandle.Of(this).Write("Input Blocked");
+                BlackboxHandle.Of(this).Write("Input has been blocked");
                 return;
             }
 
             if (_darkscreen)
             {
-                _darkscreen.Enabled += () => SceneManager.LoadScene(_gameSceneName);
-                _darkscreen.Enable();
+                BlackboxHandle.Of(this).Exert(_darkscreen, "Close Screen");
+                _darkscreen.CloseScreen(() => SceneManager.LoadScene(_gameSceneName));
             }
             else
                 SceneManager.LoadScene(_gameSceneName);
@@ -106,30 +108,12 @@ namespace Game.Title
             OpenGuide?.Invoke();
         }
 
-        public void ToBoss()
-        {
-            using var _ = BlackboxHandle.Of(this).WriteScope("To Boss");
-            if (!AllowInput)
-            {
-                BlackboxHandle.Of(this).Write("Input Blocked");
-                return;
-            }
-
-            if (_darkscreen)
-            {
-                _darkscreen.Enabled += () => SceneManager.LoadScene(_bossSceneName);
-                _darkscreen.Enable();
-            }
-            else
-                SceneManager.LoadScene(_bossSceneName);
-        }
-
         public void ToSettings()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("To Settings");
             if (!AllowInput)
             {
-                BlackboxHandle.Of(this).Write("Input Blocked");
+                BlackboxHandle.Of(this).Write("Input has been blocked");
                 return;
             }
 
@@ -140,9 +124,8 @@ namespace Game.Title
             }
             else
             {
-                Debug.LogWarning(
-                    BlackboxHandle.Of(this).WriteMessage(
-                        $"[Menu] {nameof(_settingsUI)}이(가) 유효하지 않기 때문에 ToSettings 메서드를 수행할 수 없습니다."),
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                    $"[Menu] {nameof(_settingsUI)}이(가) 유효하지 않기 때문에 ToSettings 메서드를 수행할 수 없습니다."),
                     this);
             }
         }
