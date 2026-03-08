@@ -59,10 +59,18 @@ namespace Actors
         /// </summary>
         public void RegisterToSpawnManager()
         {
-            if (LevelManager.Instance.SpawnManager != null)
+            if (LevelManager.Instance == null)
             {
-                LevelManager.Instance.SpawnManager.AddSpawner(this);
+                Debug.LogError("LevelManager.Instance가 null이기 때문에 MonsterSpawner를 등록할 수 없습니다.", this);
+                return;
             }
+            if (LevelManager.Instance.SpawnManager == null)
+            {
+                Debug.LogError("SpawnManager가 null이기 때문에 MonsterSpawner를 등록할 수 없습니다.", this);
+                return;
+            }
+
+            LevelManager.Instance.SpawnManager.AddSpawner(this);
         }
 
         public void OnMonsterCreate(Action<IMonster> monsterCreated)

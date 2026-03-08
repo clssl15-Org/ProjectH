@@ -3,7 +3,6 @@ using BlackboxSystem;
 using Infrastructure;
 using Sound;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI
@@ -32,6 +31,7 @@ namespace UI
         [SerializeField] private Button _exitBtn;
 
         public event Action OpenRelicsUI;
+        public event Action OpenGuideUI;
         public event Action Destroying;
 
         private GameServices _gameServices;
@@ -155,7 +155,6 @@ namespace UI
                 _continueBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_continueBtn, "Continue");
-                    EventSystem.current.SetSelectedGameObject(null);
                     ((IEnablable)this).Disable();
                 });
 
@@ -168,8 +167,7 @@ namespace UI
                 _restartBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_restartBtn, "Restart");
-                    EventSystem.current.SetSelectedGameObject(null);
-                    print("재시작");
+                    print("재시작"); // TODO: 재시작 구현
                 });
 
             if (!_guideBtn)
@@ -181,8 +179,7 @@ namespace UI
                 _guideBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_guideBtn, "Show Guide");
-                    EventSystem.current.SetSelectedGameObject(null);
-                    print("가이드 열기");
+                    OnOpenGuideUI();
                 });
 
             if (!_relicsBtn)
@@ -194,7 +191,6 @@ namespace UI
                 _relicsBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_relicsBtn, "Show Relics");
-                    EventSystem.current.SetSelectedGameObject(null);
                     OnOpenRelicsUI();
                 });
 
@@ -261,6 +257,19 @@ namespace UI
 
             Disable();
             OpenRelicsUI.Invoke();
+        }
+        private void OnOpenGuideUI()
+        {
+            if (OpenGuideUI == null)
+            {
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
+                    $"{nameof(OpenGuideUI)} 이벤트에 등록된 대리자가 없으므로 가이드 UI를 열 수 없습니다.")),
+                    this);
+                return;
+            }
+
+            Disable();
+            OpenGuideUI.Invoke();
         }
 
         public void Enable() => _enabler.Enable();

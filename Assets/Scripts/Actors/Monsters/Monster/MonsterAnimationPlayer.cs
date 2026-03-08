@@ -130,7 +130,11 @@ namespace Actors.Monsters.Actions
 
         private void RunInternal(float deltaTime)
         {
-            if (!Animator) return;
+            if (!Animator)
+            {
+                Dispose();
+                return;
+            }
 
             if (_isPaused || Time.deltaTime <= 0f)
                 return;

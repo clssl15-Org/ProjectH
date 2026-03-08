@@ -6,6 +6,7 @@ using Infrastructure;
 using UnityEngine;
 using World;
 using Rules;
+using Game;
 
 namespace Actors.Monsters
 {
@@ -81,7 +82,17 @@ namespace Actors.Monsters
         [SerializeField] private bool _useDebugStatsInfo = false;
         [SerializeField] private TStats _statsInfo;
         [SerializeField] private TStats _debugStatsInfo;
-        public TStats StatsInfo => _useDebugStatsInfo ? _debugStatsInfo : _statsInfo;
+        public TStats StatsInfo
+        {
+            get
+            {
+#if DEBUG_MODE
+                return _useDebugStatsInfo? _debugStatsInfo : _statsInfo;
+#else
+                return _statsInfo;
+#endif
+            }
+        }
 
         [Header("Image Settings")]
         [SerializeField] protected bool RandomizeStartDirection = true;
@@ -414,7 +425,7 @@ namespace Actors.Monsters
             _sb.AppendLine("----------------");
             _sb.AppendLine($"Is Alive: {IsAlive}");
             if (StandaloneHitBrain != null) _sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");
-            _sb.AppendLine($"Is Committing: {Brain.Blackboard.Committing}");
+            _sb.AppendLine($"Is Committing: {Brain?.Blackboard?.Committing.ToString() ?? "Unknown"}");
             _sb.AppendLine($"Current Action: {(TryGetCurrentAction(out var action) ? action : "None")}");
 
             if (Brain != null)

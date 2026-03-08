@@ -213,14 +213,14 @@ namespace Game.Stage
             #endregion
 
             #region Managers
-            if (LevelManager.Instance.SpawnManager)
+            if (LevelManager.Instance?.SpawnManager)
             {
                 BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Spawner에 Register 대리자 등록");
                 LevelManager.Instance.SpawnManager.OnMonsterCreate(monster => Register(monster));
             }
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "[StageManager] SpawnManager.Instance이(가) 유효하지 않습니다. " +
+                    "[StageManager] LevelManager.Instance.SpawnManager가 유효하지 않습니다. " +
                     "새로 스폰되는 몬스터는 매니저에 등록되지 않으며, UI 등이 생성되지 않을 수 있습니다."),
                     this);
 
@@ -280,16 +280,30 @@ namespace Game.Stage
 
                 SettingsUI.OpenRelicsUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> RelicsUI 열기 요청 처리");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenRelicsUI 요청 처리");
                     if (!RelicInfoPanelUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "[StageManager] RelicInfoPanelUI가 할당되지 않아 RelicsUI를 열 수 없습니다."), this);
+                            "[StageManager] RelicInfoPanelUI가 할당되지 않아 해당 창을 열 수 없습니다."), this);
                         return;
                     }
 
                     BlackboxHandle.Of(this).Exert(RelicInfoPanelUI, "RelicsUI 열기");
                     RelicInfoPanelUI.Open();
+                };
+
+                SettingsUI.OpenGuideUI += () =>
+                {
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenGuideUI 요청 처리");
+                    if (!GuideAndWorldRecordsUI)
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                            "[StageManager] GuideAndWorldRecordsUI가 할당되지 않아 해당 창을 열 수 없습니다."), this);
+                        return;
+                    }
+
+                    BlackboxHandle.Of(this).Exert(GuideAndWorldRecordsUI, "GuideUI 열기");
+                    GuideAndWorldRecordsUI.Open();
                 };
             }
             if (GuideAndWorldRecordsUI)
@@ -451,7 +465,7 @@ namespace Game.Stage
         {
             _isDestroyed = true;
 
-            if (LevelManager.Instance.SpawnManager)
+            if (LevelManager.Instance?.SpawnManager)
             {
                 BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Clear");
                 LevelManager.Instance.SpawnManager.Clear();

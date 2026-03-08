@@ -24,6 +24,8 @@ namespace Game.Title
         public bool AllowInput { get; set; } = true;
         bool IInputLayerSubject.IsTrigger { get; } = false;
 
+        public event Action OpenGuide;
+
         [SerializeField] private DarkscreenUI _darkscreen;
         [SerializeField] private SettingsUI _settingsUI;
         [SerializeField] private Animation _animation;
@@ -101,7 +103,7 @@ namespace Game.Title
                 return;
             }
 
-            Debug.LogWarning($"'[Menu] '{nameof(ToGuide)}'은(는) 아직 구현되지 않았습니다.", this);
+            OpenGuide?.Invoke();
         }
 
         public void ToBoss()

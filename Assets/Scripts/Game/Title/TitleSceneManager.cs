@@ -12,6 +12,7 @@ namespace Game.Title
         [SerializeField] private Menu _menu;
         [Space]
         [SerializeField] private SettingsUI _settingsUI;
+        [SerializeField] private GuideAndWorldRecordsUI _guideUI;
 
         private BgmPlayManager _bgmPlayer;
 
@@ -23,6 +24,10 @@ namespace Game.Title
             inputHub.Add(_menu);
 
             ((IInputLayerController)_settingsUI).Initialize(inputHub);
+            ((IInputLayerController)_guideUI).Initialize(inputHub);
+
+            _settingsUI.OpenGuideUI += _guideUI.Open;
+            _menu.OpenGuide += _guideUI.Open;
         }
 
         void IInjectable<BgmPlayManager>.Inject(BgmPlayManager bgmPlayer) =>

@@ -8,7 +8,7 @@ namespace Dialogue
     public struct DialogueLine
     {
         public Character Character;
-        public string Dialogue;
+        [TextArea] public string Dialogue;
         [SerializeField] private DialogueOverrides _overrides;
 
         public readonly string NameOverride => _overrides.Name;

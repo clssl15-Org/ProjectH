@@ -13,8 +13,8 @@ namespace Dialogue
     {
         [field: Header("Bubble Settings")]
         [field: SerializeField] public Vector2 BubbleOffset { get; set; } = new(0, 100);
-        [field: SerializeField, Min(10)] private int MaxBubbleWidth { get; set; } = 300;
-        [field: SerializeField] private Vector2 BubblePadding { get; set; } = new(50, 100);
+        [field: SerializeField, Min(100)] private int MaxBubbleWidth { get; set; } = 500;
+        [field: SerializeField] private Vector2 BubblePadding { get; set; } = new(100, 100);
 
         public bool AllowInput { get; set; } = true;
         bool IInputLayerSubject.IsTrigger { get; } = false;
@@ -149,9 +149,11 @@ namespace Dialogue
                 if (textSize.y > targetHeight) targetHeight = textSize.y;
             }
 
-            _bubbleDialogueUI.SetPanelSize(new(
-                x: Mathf.Min(targetWidth + BubblePadding.x, MaxBubbleWidth),
-                y: targetHeight + BubblePadding.y));
+            _bubbleDialogueUI.SetPanelSize(new()
+            {
+                x = Mathf.Min(targetWidth + BubblePadding.x, MaxBubbleWidth),
+                y = targetHeight + BubblePadding.y
+            });
         }
 
         protected virtual void OnPlayStarting() { }

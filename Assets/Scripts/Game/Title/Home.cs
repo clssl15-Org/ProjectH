@@ -25,9 +25,7 @@ namespace Game.Title
 
         private void Update()
         {
-            if (_enabler.IsEnabled
-                && Input.anyKeyDown
-                && !Input.GetKey(KeyCode.Escape))
+            if (_enabler.IsEnabled && Input.anyKeyDown)
                 Disable();
         }
 

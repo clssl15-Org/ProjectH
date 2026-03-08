@@ -201,7 +201,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f00d251753a86f04a91121d3ee45598e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <BubbleOffset>k__BackingField: {x: 0, y: 130}
+  <BubbleOffset>k__BackingField: {x: 0, y: 80}
+  <MaxBubbleWidth>k__BackingField: 500
+  <BubblePadding>k__BackingField: {x: 100, y: 100}
   _dialogueUI: {fileID: 0}
   _bubbleDialogueUI: {fileID: 0}
   _canvasTransform: {fileID: 0}
@@ -250,3 +252,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 3632647419853842006}
+  _quitOnExport: 1
