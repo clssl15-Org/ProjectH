@@ -88,6 +88,8 @@ namespace Actors.PlayerSystem
         {
             ResetAttack();
             UpdateAttackParameters();
+
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Attack3);
         }
 
         public override void UpdateBehaviour(float dt)

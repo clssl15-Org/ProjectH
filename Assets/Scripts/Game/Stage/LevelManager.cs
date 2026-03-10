@@ -9,7 +9,9 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get; private set; }
     private static bool _isInitialized = false;
     public SpawnManager SpawnManager => _spawnManager;
+    public SoundManager SoundManager => _soundManager;
     private SpawnManager _spawnManager;
+    private SoundManager _soundManager;
 
     public int CurrentStage { get; private set; } = 0;
 
@@ -32,6 +34,7 @@ public class LevelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         _spawnManager = GetComponent<SpawnManager>();
+        _soundManager = GetComponent<SoundManager>();
 
         ShuffleAndPick();
     }

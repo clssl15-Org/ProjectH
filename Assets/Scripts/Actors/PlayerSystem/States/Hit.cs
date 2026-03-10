@@ -27,6 +27,8 @@ namespace Actors.PlayerSystem
         {
             ResetHit();
             TakeKnockback();
+
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Hit);
         }
 
         private void TakeKnockback()

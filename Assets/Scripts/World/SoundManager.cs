@@ -1,46 +1,118 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum PlayerAction
+{
+    Run,
+    Dash,
+    Jump,
+    Drop,
+    Attack1,
+    Attack2,
+    Attack3,
+    Hit,
+    RangedAttack,
+    Skill1,
+    Skill2,
+    Skill3,
+    UltimateCharge,
+    UltimateRelease
+}
+
+[System.Serializable]
+public struct ActionSound
+{
+    public PlayerAction action;
+    public AudioClip clip;
+    [Range(0f, 1f)] public float volume;
+}
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager instance;
+    [Header("Audio Sources")]
+    [Tooltip("효과음을 재생할 오디오 소스")]
+    public AudioSource sfxSource;
+    public AudioSource loopSfxSource;
 
-    [SerializeField]
-    private SoundLibrary sfxLibrary;
+    [Header("Sound Clips")]
+    public ActionSound[] actionSounds;
 
-    [SerializeField]
-    private AudioSource sfx2DSource;
-    private void Awake()
+    private Coroutine fadeOutCoroutine;
+
+    // 외부에서 사운드를 재생할 때 호출하는 함수
+    public void PlayActionSound(PlayerAction action)
     {
-        if (instance == null)
+        foreach (var sound in actionSounds)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (sound.action == action && sound.clip != null)
+            {
+                float volume = sound.volume > 0 ? sound.volume : 1f;
+                sfxSource.PlayOneShot(sound.clip, volume);
+                return;
+            }
         }
-        else
+        Debug.LogWarning($"[SoundManager] {action}에 해당하는 사운드 클립이 없습니다!");
+    }
+    // 반복 소리 재생 시작
+    public void PlayLoopSound(PlayerAction action)
+    {
+        foreach (var sound in actionSounds)
         {
-            Destroy(gameObject);
-            return;
+            if (sound.action == action && sound.clip != null)
+            {
+                // 이미 같은 소리가 재생 중이면 무시
+                if (loopSfxSource.clip == sound.clip && loopSfxSource.isPlaying) return;
+
+                loopSfxSource.clip = sound.clip;
+                loopSfxSource.volume = sound.volume > 0 ? sound.volume : 1f;
+                loopSfxSource.loop = true;
+                loopSfxSource.Play();
+                return;
+            }
         }
     }
-    public void PlaySound3D(AudioClip clip, Vector3 pos)
+    public void ResetLoopSound()
     {
-        if (clip == null) return;
-
-        AudioSource.PlayClipAtPoint(clip, pos);
+        if (loopSfxSource.isPlaying)
+        {
+            if (fadeOutCoroutine != null)
+            {
+                StopCoroutine(fadeOutCoroutine);
+            }
+            loopSfxSource.Stop();
+            loopSfxSource.clip = null;
+        }
     }
-    public void PlaySound3D(string soundName, Vector3 pos)
+    public void StopLoopSound()
     {
-        AudioClip clip = sfxLibrary.GetClipFromName(soundName);
-        PlaySound3D(clip, pos);
+        if (loopSfxSource.isPlaying)
+        {
+            if (fadeOutCoroutine != null)
+            {
+                StopCoroutine(fadeOutCoroutine);
+            }
+            // 부드럽게 종료하기
+            fadeOutCoroutine = StartCoroutine(FadeOutRoutine(0.1f));
+        }
     }
-    public void PlaySound2D(string soundName)
+    private IEnumerator FadeOutRoutine(float duration)
     {
-        AudioClip clip = sfxLibrary.GetClipFromName(soundName);
+        float startVolume = loopSfxSource.volume;
+        float timer = 0f;
 
-        if (clip == null) return;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
 
-        sfx2DSource.PlayOneShot(clip);
+            loopSfxSource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
+
+            yield return null;
+        }
+
+        loopSfxSource.Stop();
+        loopSfxSource.clip = null;
+
+        loopSfxSource.volume = startVolume;
+        fadeOutCoroutine = null;
     }
 }

@@ -107,7 +107,6 @@ namespace Actors.PlayerSystem
                 return false;
             }
 
-            cooldownGauge = 0f;
             return true;
         }
         public override void CheckExitTransition()
@@ -141,6 +140,8 @@ namespace Actors.PlayerSystem
             }
 
             auraEffect = Instantiate(auraEffectPrefab, CharacterActor.Position, CharacterActor.Rotation);
+            LevelManager.Instance.SoundManager.ResetLoopSound();
+            LevelManager.Instance.SoundManager.PlayLoopSound(PlayerAction.UltimateCharge);
 
             ResetSkill();
         }
@@ -178,9 +179,12 @@ namespace Actors.PlayerSystem
                 }
 
                 Destroy(auraEffect);
+                cooldownGauge = 0f;
                 isProjectileLaunched = true;
                 Player.Invincible = true;
                 CharacterActor.Animator.runtimeAnimatorController = nextRuntimeAnimatorController;
+                LevelManager.Instance.SoundManager.StopLoopSound();
+                LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.UltimateRelease);
             }
 
             if (isProjectileLaunched)

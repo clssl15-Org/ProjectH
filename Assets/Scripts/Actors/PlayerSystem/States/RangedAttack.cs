@@ -60,6 +60,8 @@ namespace Actors.PlayerSystem
             ResetSkill();
             cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
+
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.RangedAttack);
         }
 
         public override void UpdateBehaviour(float dt)
