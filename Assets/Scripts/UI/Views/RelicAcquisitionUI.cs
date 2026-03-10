@@ -4,6 +4,7 @@ using BlackboxSystem;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -40,7 +41,10 @@ namespace UI
         [SerializeField] private VideoPlayer _coinEffectVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectMaskVideoPlayer;
         [SerializeField] private float _effectPlayTiming = 5f;
+        [SerializeField, Max(0f)] private float _dropEventNotifyTiming = -1f;
 
+        public event Action CoinThrown;
+        public event Action CoinDropped;
         public event Action Destroying;
 
         public enum VideoType
@@ -61,7 +65,7 @@ namespace UI
 
         private IInputHub _inputHub;
         private DarkscreenUI _darkscreenUI;
-        private IDisposable _updater, _coinTimer, _effectTimer;
+        private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer;
         private RelicDataSO _relic;
         private bool _forceSuccess = false;
         private EnableWithAnimation _enabler;
@@ -212,6 +216,7 @@ namespace UI
                 _coinEffectMaskVideoPlayer.frame = 0;
             }
 
+            _updater?.Dispose();
             _updater = Loco.Subscribe(() =>
             {
                 if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) <= 0.001f)
@@ -236,8 +241,11 @@ namespace UI
                 _coinRawVideoPlayer.playbackSpeed = 1f;
                 _coinMaskVideoPlayer.playbackSpeed = 1f;
 
-                if (reinforced)
-                    _effectTimer = new Timer(_effectPlayTiming, succeeded =>
+                CoinThrown?.Invoke();
+
+                _effectTimer?.Dispose();
+                _effectTimer = reinforced ?
+                    new Timer(_effectPlayTiming, succeeded =>
                     {
                         BlackboxHandle.Of(this).Write($"Effect Ended, succeeded: {succeeded}");
 
@@ -245,8 +253,10 @@ namespace UI
                         _coinEffectVideoPlayer.playbackSpeed = 1f;
                         _coinEffectMaskVideoPlayer.playbackSpeed = 1f;
                     },
-                    useAbsoluteTime: true);
+                    useAbsoluteTime: true)
+                    : null;
 
+                _coinTimer?.Dispose();
                 _coinTimer = new Timer((float)coinClip.Video.length, succeeded =>
                 {
                     using var _ = BlackboxHandle.Of(this).WriteScope($"Play Ended, succeeded: {succeeded}");
@@ -276,6 +286,18 @@ namespace UI
                             "Play Failed"));
                 },
                 useAbsoluteTime: true);
+
+                _coinDropTimer?.Dispose();
+
+                var dropNotifyTimimg = (float)coinClip.Video.length + _dropEventNotifyTiming;
+                _coinDropTimer = dropNotifyTimimg > 0
+                    ? new Timer(dropNotifyTimimg, succeeded =>
+                    {
+                        if (succeeded)
+                            CoinDropped?.Invoke();
+                    },
+                    useAbsoluteTime: true)
+                    : null;
             }
         }
 
@@ -286,10 +308,12 @@ namespace UI
 
             _updater?.Dispose();
             _coinTimer?.Dispose();
+            _coinDropTimer?.Dispose();
             _effectTimer?.Dispose();
 
             _updater = null;
             _coinTimer = null;
+            _coinDropTimer = null;
             _effectTimer = null;
 
             Disable();
@@ -332,6 +356,7 @@ namespace UI
 
             _updater?.Dispose();
             _coinTimer?.Dispose();
+            _coinDropTimer?.Dispose();
             _effectTimer?.Dispose();
 
             RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;

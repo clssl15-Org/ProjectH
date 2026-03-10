@@ -19,12 +19,12 @@ namespace Infrastructure
         public static KeyCode Resolve(this KeyCode keyCode) =>
             Resolve(keyCode, KeyCode.None);
 
-        public static T Resolve<T>(this T target, T onReleased)
+        public static T Resolve<T>(this T target, T onRelease)
         {
 #if DEBUG_MODE
             return target;
 #else
-            return onReleased;
+            return onRelease;
 #endif
         }
     }

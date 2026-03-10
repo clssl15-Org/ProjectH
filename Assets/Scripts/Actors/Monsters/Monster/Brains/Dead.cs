@@ -25,8 +25,7 @@ namespace Actors.Monsters.Brains
             _opening = opening;
         }
 
-        public override bool CheckCondition() =>
-            Owner.IsAlive;
+        public override bool CheckCondition() => Owner.IsAlive;
 
         protected override void OnOpen(object[] _)
         {
@@ -35,7 +34,7 @@ namespace Actors.Monsters.Brains
 
             _opening?.Invoke();
 
-            _notification = new MonsterConditionData(MonsterCondition.Die);
+            _notification = new MonsterConditionData(MonsterCondition.Dying);
             Owner.NotifyCondition(_notification);
 
             if (!Owner.TryDoAction(new(

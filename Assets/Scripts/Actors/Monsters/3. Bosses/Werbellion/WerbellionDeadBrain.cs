@@ -36,7 +36,7 @@ namespace Actors.Monsters.Bosses
                 Owner.IsAlive = false;
                 Owner.IgnorePlayerInteraction = true;
 
-                _notification = new MonsterConditionData(MonsterCondition.Die);
+                _notification = new MonsterConditionData(MonsterCondition.Dying);
                 Owner.NotifyCondition(_notification);
 
                 string actionToDo;

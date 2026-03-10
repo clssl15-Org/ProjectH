@@ -56,7 +56,7 @@ public class SkillManager : MonoBehaviour
 
     public void UseSkill()
     {
-        if (skills.Count <= 0)
+        if (skills.Count <= 0 || !damageRoulette.canUseSkill)
         {
             return;
         }

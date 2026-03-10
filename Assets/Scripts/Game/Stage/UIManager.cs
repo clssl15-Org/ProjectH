@@ -11,7 +11,9 @@ namespace Game.Stage
     {
         // Bindings
         [SerializeField] internal RectTransform _canvas;
+        [SerializeField] internal RectTransform _worldUI;
         public bool HasCanvas => _canvas != null;
+        public bool HasWorldUI => _worldUI != null;
 
         // Internal
         private readonly HashSet<IViewModel> _viewModels = new();
@@ -30,13 +32,21 @@ namespace Game.Stage
         }
         internal void SetCanvas(RectTransform canvas)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Canvas: {canvas}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"SetCanvas: {canvas}");
 
             if (_canvas != null)
                 Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"캔버스를 교체합니다. '{canvas}' -> '{_canvas}'")));
-
+                    $"캔버스를 교체합니다. '{_canvas}' -> '{canvas}'")));
             _canvas = canvas;
+        }
+        internal void SetWorldUI(RectTransform worldUI)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"SetWorldUI: {worldUI}");
+
+            if (_worldUI != null)
+                Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
+                    $"WorldUI를 교체합니다. '{_worldUI}' -> '{worldUI}'")));
+            _worldUI = worldUI;
         }
 
         public void RegisterVM(IViewModel viewModel)
@@ -60,7 +70,7 @@ namespace Game.Stage
             };
         }
 
-        public void RegisterView(IView view)
+        public void RegisterView(IView view, bool worldUIParent = false)
         {
             using var _ = BlackboxHandle.Of(this).ExertScope(view, "RegisterView");
 
@@ -76,7 +86,7 @@ namespace Game.Stage
             _views.Add(view);
             view.Destroying += () => _views.Remove(view);
 
-            view.SetParent(_canvas);
+            view.SetParent(worldUIParent ? _worldUI : _canvas);
         }
 
         private void OnDestroy() => Destroy();

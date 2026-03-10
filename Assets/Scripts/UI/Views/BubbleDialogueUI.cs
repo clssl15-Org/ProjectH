@@ -1,16 +1,18 @@
 using System;
 using BlackboxSystem;
-using TMPro;
 using UnityEngine;
 
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
-    public class BubbleDialogueUI : MonoBehaviour
+    public class BubbleDialogueUI : MonoBehaviour, IDialogueUI
     {
-        private RectTransform _transform;
-        [SerializeField] private TextMeshProUGUI _textUI;
+        [SerializeField] private TMPTypeHandler _typeHandler;
 
+        public event Action TextTyped;
+        public bool IsTotallyTyped => _typeHandler.IsTotallyTyped;
+
+        private RectTransform _transform;
         private Func<Vector2> _getPosition;
         private Vector2 _offset;
 
@@ -21,25 +23,23 @@ namespace UI
             Vector2 Offset { get; }
         }
 
-        private void Awake()
-        {
-            _transform = GetComponent<RectTransform>();
-        }
+        private void Awake() => _transform = GetComponent<RectTransform>();
+        private void Start() => _typeHandler.TextTyped += () => TextTyped?.Invoke();
 
         public Vector2 GetPreferredValues(string text, float maxWidth)
         {
-            var originalSize = _textUI.GetPreferredValues(text);
+            var originalSize = _typeHandler.GetPreferredValues(text);
 
             if (originalSize.x <= maxWidth)
                 return originalSize;
 
-            var height = _textUI.GetPreferredValues(text, maxWidth, float.PositiveInfinity).y;
+            var height = _typeHandler.GetPreferredValues(text, maxWidth, float.PositiveInfinity).y;
             return new Vector2(maxWidth, height);
         }
 
         public Vector2 GetPreferredTextSize(string text)
         {
-            return _textUI.GetPreferredValues(text);
+            return _typeHandler.GetPreferredValues(text);
         }
 
         public void SetPanelSize(Vector2 size)
@@ -53,28 +53,30 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Show: {text}");
 
-            _textUI.text = text;
             _getPosition = getPosition;
             _offset = offset;
 
             FixedUpdate();
             gameObject.SetActive(true);
+
+            _typeHandler.TypeDialogue(text);
         }
+
+        public void SkipTyping() => _typeHandler.SkipTyping();
 
         private void FixedUpdate()
         {
             if (!_transform)
                 _transform = GetComponent<RectTransform>();
 
-            _transform.anchoredPosition =
-                (_getPosition?.Invoke() ?? Vector2.zero) + _offset;
+            _transform.anchoredPosition = (_getPosition?.Invoke() ?? Vector2.zero) + _offset;
         }
 
         public void Hide()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Hide");
 
-            _textUI.text = string.Empty;
+            _typeHandler.ClearText();
             _getPosition = null;
 
             gameObject.SetActive(false);

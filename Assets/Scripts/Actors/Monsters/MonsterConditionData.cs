@@ -28,4 +28,10 @@ namespace Actors.Monsters
             Callback = null;
         }
     }
+
+    public readonly record struct MonsterAttackData
+    (
+        string Name,
+        bool IsRangedAttack
+    );
 }

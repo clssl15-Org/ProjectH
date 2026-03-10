@@ -31,12 +31,12 @@ namespace Actors.Monsters
                 }
 
                 owner._previousAttackMode = currentAttackMode;
-                Blackboard.Committing = true;
+                Blackboard.IsCommitting = true;
             }
 
             protected override void OnHalt(DetailedNodeStatus _)
             {
-                Blackboard.Committing = false;
+                Blackboard.IsCommitting = false;
             }
         }
     }

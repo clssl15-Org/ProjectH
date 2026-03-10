@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Box : MonoBehaviour
 {
+    public Action Opening;
+
     public Sprite openedSprite;
     public GameObject Fsprite;
 
@@ -41,8 +44,9 @@ public class Box : MonoBehaviour
         }
 
         isPlayerInRange = true;
-        Fsprite.SetActive(true);
 
+        Opening?.Invoke();
+        Fsprite.SetActive(true);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
