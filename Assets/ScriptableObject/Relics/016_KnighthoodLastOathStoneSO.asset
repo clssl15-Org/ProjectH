@@ -20,8 +20,9 @@ MonoBehaviour:
     \uB354\uC6B1 \uAC15\uD574\uC9C0\uB294 \uACB0\uC758\uB97C \uBD80\uC5EC\uD55C\uB2E4.\r"
   nomalEffect: "- \uAE30\uBCF8 : \uCCB4\uB825 20% \uC774\uD558\uC77C \uB54C \uACF5\uACA9\uB825
     \uC99D\uAC00"
-  upgradeEffect: "- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uCCB4\uB825 30%(+10%)
+  upgradeEffect: "- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uCCB4\uB825 30%(<color=#76ffff>+10%</color>)
     \uC774\uD558\uC77C \uB54C \uACF5\uACA9\uB825 \uC99D\uAC00"
   baseValue: 0.2
   coinFlipValue: 0.3
   canStack: 1
+  maxStackCount: 1
