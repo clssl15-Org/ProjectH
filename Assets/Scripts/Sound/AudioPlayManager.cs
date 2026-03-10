@@ -38,15 +38,16 @@ namespace Sound
             using var _ = BlackboxHandle.Of(this).WriteScope($"Play: {name}");
 
             var clip = _audios.FirstOrDefault(a => a.Name.Equals(name));
-            if (clip.Name == null)
+            if (clip.Name == null || clip.AudioClip == null)
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteError(
-                    $"'{name}' 오디오 파일을 찾는 데 실패했습니다."),
+                    $"'{name}' 오디오 파일을 가져오는 데 실패했습니다."),
                     this);
                 return;
             }
 
-            _audioSource.PlayOneShot(clip.AudioClip);
+            if (_audioSource)
+                _audioSource.PlayOneShot(clip.AudioClip);
         }
 
         public void Stop()
