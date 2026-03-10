@@ -114,15 +114,29 @@ namespace Game.Stage
 #endif
         }
 
-        protected void SetRubielToBig(Action callback = null)
+        protected void SetRubielToBig(Action callback = null, bool instantSet = false)
         {
             _rubielVisibleHandle?.Dispose();
-            Rubiel.ToBig(callback);
+
+            if (instantSet)
+            {
+                Rubiel.SetToBig();
+                callback?.Invoke();
+            }
+            else
+                Rubiel.ToBig(callback);
         }
-        protected void SetRubielToSmall(Action callback = null)
+        protected void SetRubielToSmall(Action callback = null, bool instantSet = false)
         {
             _rubielVisibleHandle?.Dispose();
-            Rubiel.ToSmall(callback);
+
+            if (instantSet)
+            {
+                Rubiel.SetToSmall();
+                callback?.Invoke();
+            }
+            else
+                Rubiel.ToSmall(callback);
         }
         protected void SetRubielToVisible(bool shouldNearToPlayer, Action callback = null)
         {

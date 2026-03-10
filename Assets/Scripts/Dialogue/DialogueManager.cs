@@ -25,9 +25,11 @@ namespace Dialogue
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
         [SerializeField] private RectTransform _canvasTransform;
-        private Func<Character, Transform> _getTransform;
 
+        private Func<Character, Transform> _getTransform;
         private DialogueScriptLibrary _dialogueScriptLibrary;
+
+        private IDialogueUI _currentUI;
         private string _currentScriptTitle = string.Empty;
         private IDisposable _updateHandle;
 
@@ -83,14 +85,18 @@ namespace Dialogue
 
                 BlackboxHandle.Of(this).Exert(_bubbleDialogueUI, "Enable");
                 _bubbleDialogueUI.transform.SetAsLastSibling();
+
+                _currentUI = _bubbleDialogueUI;
             }
             else
             {
                 BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
                 _dialogueUI.transform.SetAsLastSibling();
                 _dialogueUI.Enable();
-            }
 
+                _currentUI = _dialogueUI;
+            }
+            
             int currentIdx = -1;
             PlayDialogue();
 
@@ -98,6 +104,12 @@ namespace Dialogue
             {
                 if (AllowInput && Input.GetMouseButtonDown(0))
                 {
+                    if (!_currentUI.IsTotallyTyped)
+                    {
+                        _currentUI.SkipTyping();
+                        return;
+                    }
+
                     if (currentIdx >= script.Count - 1)
                     {
                         using var _ = BlackboxHandle.Of(this).WriteScope($"Stopping: {currentIdx}");
@@ -171,6 +183,7 @@ namespace Dialogue
             if (_dialogueUI) _dialogueUI.Disable();
             if (_bubbleDialogueUI) _bubbleDialogueUI.Hide();
 
+            _currentUI = null;
             _currentScriptTitle = string.Empty;
         }
 

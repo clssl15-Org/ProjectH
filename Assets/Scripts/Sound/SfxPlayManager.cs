@@ -9,6 +9,7 @@ namespace Sound
         Hover,
         Esc,
         Text,
+        Revive,
         CoinThrow,
         CoinDrop,
     }

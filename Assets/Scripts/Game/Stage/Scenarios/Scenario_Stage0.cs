@@ -25,14 +25,14 @@ namespace Game.Stage
         {
             yield return new Block(
                 BlockName.To_Arrival)
+                .OnEntered(() => SetRubielToBig(instantSet: true))
                 .OnUpdated<Block>(self =>
                 {
                     if (!self.ToNextToken && IsPlayerOnGround && IsRubielClose)
                     {
                         self.ToNextToken = true;
                         BlockInputs();
-                        SetRubielToBig(() =>
-                            To(_isFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry));
+                        To(_isFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry);
                     }
                 });
 

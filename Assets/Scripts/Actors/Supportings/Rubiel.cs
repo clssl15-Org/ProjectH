@@ -113,6 +113,28 @@ namespace Actors
             ValidateSpriteSize();
         }
 
+        public void SetToBig()
+        {
+            if (CurrentShape == Shape.Big) return;
+            CurrentShape = Shape.Big;
+
+            _targetFollower.IsEnabled = false;
+
+            _animPlayer.Play(new("Big"));
+            ValidateSpriteSize();
+        }
+        public void SetToSmall()
+        {
+            if (CurrentShape == Shape.Small) return;
+            CurrentShape = Shape.Small;
+
+            _targetFollower.IsEnabled = true;
+
+            _animPlayer.Play(new("Small"));
+            ValidateSpriteSize();
+        }
+
+
         public void ToVisible(Action callback = null)
         {
             _visibilityChanger?.Dispose();
@@ -148,23 +170,6 @@ namespace Actors
                 _spriteRenderer.material.color = _spriteRenderer.material.color.WithAlpha(
                     _spriteRenderer.material.color.a - VisibleSpeed * Time.deltaTime);
             });
-        }
-
-        public void SetToBig()
-        {
-            if (CurrentShape == Shape.Big) return;
-            CurrentShape = Shape.Big;
-
-            _animPlayer.Play(new("Big"));
-            ValidateSpriteSize();
-        }
-        public void SetToSmall()
-        {
-            if (CurrentShape == Shape.Small) return;
-            CurrentShape = Shape.Small;
-
-            _animPlayer.Play(new("Small"));
-            ValidateSpriteSize();
         }
 
         public void SetToVisible()

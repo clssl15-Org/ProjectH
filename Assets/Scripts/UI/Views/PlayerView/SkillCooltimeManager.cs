@@ -24,7 +24,7 @@ namespace UI.PlayerView
 
         private bool? _isEnabled = null;
         private IDisposable _enableTimer;
-        private Func<float> _getProgress;
+        private Func<float> _getCooltimeRate;
 
 
         // Content
@@ -41,10 +41,10 @@ namespace UI.PlayerView
                     .OnEntered(() => SetEnable(true))
                     .OnUpdated(() =>
                     {
-                        if (_getProgress == null)
+                        if (_getCooltimeRate == null)
                         {
                             Debug.LogWarning(BlackboxHandle.Of(this).WriteError(
-                                $"[SkillCooltimeManager] {nameof(_getProgress)} 이벤트가 null이기 때문에 " +
+                                $"[SkillCooltimeManager] {nameof(_getCooltimeRate)} 이벤트가 null이기 때문에 " +
                                 $"{nameof(State.Cooltime)} 모드로 진입할 수 없습니다."));
 
                             _image.fillAmount = 0f;
@@ -52,17 +52,17 @@ namespace UI.PlayerView
                             return;
                         }
 
-                        var progress = _getProgress();
-                        if (progress >= 1f)
+                        var progress = _getCooltimeRate();
+                        if (progress < 0f)
                         {
-                            _image.fillAmount = 1f;
+                            _image.fillAmount = 0f;
                             _work.SetNext(State.Idle);
                             return;
                         }
 
-                        _image.fillAmount = 1 - progress;
+                        _image.fillAmount = progress;
                     })
-                    .OnExited(() => _getProgress = null)
+                    .OnExited(() => _getCooltimeRate = null)
                 );
 
             SetEnable(false);
@@ -74,9 +74,9 @@ namespace UI.PlayerView
             _work?.Enter();
         }
 
-        public void Enable(Func<float> getProgress)
+        public void Enable(Func<float> getCooltime)
         {
-            _getProgress = getProgress;
+            _getCooltimeRate = getCooltime;
             _work?.SetNext(State.Cooltime);
         }
         public void Disable() => _work?.SetNext(State.Idle);
@@ -122,7 +122,7 @@ namespace UI.PlayerView
             _image.enabled = true;
 
             _enableTimer = new Infrastructure.Timer(
-                time: _enableTime * (1f - progress),
+                time:    _enableTime * (1f - progress),
                 updated: () => UpdateImage());
         }
 

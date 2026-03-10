@@ -1,28 +1,19 @@
-using UnityEngine;
 using System;
 using Sound;
-using Infrastructure;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace Actors.Monsters
 {
-    public class MonsterAudioPlayer : AudioSourceController,
-        IInjectable<GameServices>
+    public class MonsterAudioPlayer : SfxAudioController
     {
-        [SerializeField] private bool _overrideSpacialBlend = false;
-        [SerializeField, Range(0, 1)] private float _spacialBlend = 0.7f;
+        [SerializeField] private bool _overrideSpatialBlend = false;
+        [SerializeField, Range(0, 1)] private float _spatialBlend = 0.7f;
+
         [SerializeField] private string _dieClipName = "Die";
-
         private IMonsterInternal _monster;
-        private GameServices _gameServices;
-
-        void IInjectable<GameServices>.Inject(GameServices gameServices)
-        {
-            _gameServices = gameServices;
-            SetVolume(_gameServices.SfxVolume);
-        }
 
         private void Start()
         {
@@ -30,9 +21,7 @@ namespace Actors.Monsters
                 throw new InvalidOperationException(Ctx(
                     $"{nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
 
-            SpatialBlend = _overrideSpacialBlend
-                ? _spacialBlend
-                : _monster.Configuration.SfxSpatialBlend;
+            ApplySettings();
 
             _monster.ConditionChanged += conditionData =>
             {
@@ -54,6 +43,14 @@ namespace Actors.Monsters
             };
         }
 
+        protected override void ApplySettings()
+        {
+            base.ApplySettings();
+
+            if (_overrideSpatialBlend) SpatialBlend = _spatialBlend;
+            else if (_monster != null) SpatialBlend = _monster.Configuration.SfxSpatialBlend;
+        }
+
         private string Ctx(string message) => $"[{nameof(MonsterAudioPlayer)}: {name}] {message}";
 
 
@@ -66,10 +63,10 @@ namespace Actors.Monsters
                 serializedObject.Update();
                 var target = (MonsterAudioPlayer)base.target;
 
-                if (target._overrideSpacialBlend)
+                if (target._overrideSpatialBlend)
                     DrawDefaultInspector();
                 else
-                    DrawPropertiesExcluding(serializedObject, nameof(target._spacialBlend));
+                    DrawPropertiesExcluding(serializedObject, nameof(target._spatialBlend));
 
                 serializedObject.ApplyModifiedProperties();
             }

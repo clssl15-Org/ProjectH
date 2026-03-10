@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using BlackboxSystem;
 using Dialogue;
 using Infrastructure;
@@ -12,20 +11,18 @@ namespace UI
 {
     [RequireComponent(typeof(Animation))]
     public class DialogueUI : MonoBehaviour,
+        IDialogueUI,
         IInjectable<GameAssetLibrary>,
         IEnablable
     {
         [Header("UI Components")]
         [SerializeField] private Image _portraitUI;
         [SerializeField] private TextMeshProUGUI _nametagUI;
-        [SerializeField] private TextMeshProUGUI _dialogueUI;
+        [SerializeField] private TMPTypeHandler _typeHandler;
 
-        [Header("Settings")]
-        [SerializeField, Min(0)] private float _typingSpeed = 0.1f;
+        public bool IsTotallyTyped => _typeHandler.IsTotallyTyped;
 
-        public bool IsTotallyTyped => _typingCoroutine == null;
-
-        public event Action OnTextTyped;
+        public event Action TextTyped;
         public event Action Disabling;
 
         #region Interfaces
@@ -37,7 +34,6 @@ namespace UI
 
         private GameAssetLibrary _gameAssetLibrary;
         private EnableWithAnimation _enabler;
-        private Coroutine _typingCoroutine;
         private bool _isAwake = false;
 
         private void Start()
@@ -49,6 +45,8 @@ namespace UI
 
             _enabler = new EnableWithAnimation(GetComponent<Animation>(), gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
+
+            _typeHandler.TextTyped += () => TextTyped?.Invoke();
 
             BlackboxHandle.Of(this).Write("Set To Disabled");
             SetToDisabled();
@@ -64,63 +62,10 @@ namespace UI
             _nametagUI.text = name;
             _portraitUI.sprite = portrait;
 
-            if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
-            _typingCoroutine = StartCoroutine(TypeDialogue(dialogue));
-
-            IEnumerator TypeDialogue(string textContent)
-            {
-                _dialogueUI.text = textContent;
-                _dialogueUI.ForceMeshUpdate();
-
-                var textInfo = _dialogueUI.textInfo;
-                var totalVisibleCharacterCount = textInfo.characterCount;
-
-                if (totalVisibleCharacterCount == 0)
-                {
-                    _typingCoroutine = null;
-                    yield break;
-                }
-
-                int counter = 1;
-
-                _dialogueUI.maxVisibleCharacters = counter;
-                if (IsVisibleCharacter(0)) OnTextTyped?.Invoke();
-
-                while (counter < totalVisibleCharacterCount)
-                {
-                    yield return new WaitForSeconds(_typingSpeed);
-
-                    counter++;
-                    _dialogueUI.maxVisibleCharacters = counter;
-
-                    if (IsVisibleCharacter(counter - 1))
-                        OnTextTyped?.Invoke();
-                }
-
-                _typingCoroutine = null;
-
-
-                bool IsVisibleCharacter(int index)
-                {
-                    if (index >= textInfo.characterInfo.Length)
-                        return false;
-
-                    var info = textInfo.characterInfo[index];
-                    return char.IsLetterOrDigit(info.character);
-                }
-            }
+            _typeHandler.TypeDialogue(dialogue);
         }
 
-        public void SkipTyping()
-        {
-            if (_typingCoroutine != null)
-            {
-                StopCoroutine(_typingCoroutine);
-                _typingCoroutine = null;
-            }
-
-            _dialogueUI.maxVisibleCharacters = int.MaxValue;
-        }
+        public void SkipTyping() => _typeHandler.SkipTyping();
 
         private void GetData(
             DialogueLine dialogueData,
@@ -148,22 +93,21 @@ namespace UI
             BlackboxHandle.Of(this).Exert(_enabler, "Enable");
             _enabler.Enable();
         }
+
         public void Disable()
         {
             Start();
             _enabler.Disable();
 
-            if (_typingCoroutine != null)
-            {
-                StopCoroutine(_typingCoroutine);
-                _typingCoroutine = null;
-            }
+            _typeHandler.SkipTyping();
         }
+
         public void SetToEnabled()
         {
             Start();
             _enabler.SetToEnabled();
         }
+
         public void SetToDisabled()
         {
             Start();

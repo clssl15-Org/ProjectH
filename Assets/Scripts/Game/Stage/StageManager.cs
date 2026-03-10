@@ -39,6 +39,7 @@ namespace Game.Stage
         [Header("World")]
         [SerializeField] private GameObject _playerObject;
         [SerializeField] private GameObject _rubielObject;
+        [SerializeField] private Box _box;
         [SerializeField] private Portal _portal;
 
         [field: Header("UIs")]
@@ -81,7 +82,6 @@ namespace Game.Stage
                 if (!UIManager.HasCanvas)
                 {
                     var canvas = FindAnyObjectByType<Canvas>(FindObjectsInactive.Include);
-
                     if (canvas)
                     {
                         BlackboxHandle.Of(this).Exert(UIManager, $"Set Canvas: {canvas}");
@@ -91,6 +91,20 @@ namespace Game.Stage
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             $"씬에서 {nameof(canvas)}을(를) 찾는 데 실패했습니다."), this);
+                    }
+                }
+                if (!UIManager.HasWorldUI)
+                {
+                    var worldUI = GameObject.FindWithTag("WorldUI")?.GetComponent<RectTransform>();
+                    if (worldUI)
+                    {
+                        BlackboxHandle.Of(this).Exert(UIManager, $"Set WorldUI: {worldUI}");
+                        UIManager.SetWorldUI(worldUI);
+                    }
+                    else
+                    {
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                            $"씬에서 {nameof(worldUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
 
@@ -292,11 +306,24 @@ namespace Game.Stage
                 InputHub.Add(RelicInfoPanelUI.GetOpenerSubject());
             }
 
+            if (_portal)
+                _portal.MoveToNextLevel += callback =>
+                {
+                    BlackboxHandle.Of(this).Exert(InputHub, "Block (_portal.MoveToNextLevel)");
+                    InputHub.Block(this);
+
+                    DarkscreenUI.CloseScreen(callback);
+                };
 
             if (DialogueUI)
             {
                 if (_sfxPlayManager)
-                    DialogueUI.OnTextTyped += () => _sfxPlayManager.Play(SfxName.Text);
+                    DialogueUI.TextTyped += () => _sfxPlayManager.Play(SfxName.Text);
+            }
+            if (BubbleDialogueUI)
+            {
+                if (_sfxPlayManager)
+                    BubbleDialogueUI.TextTyped += () => _sfxPlayManager.Play(SfxName.Text);
             }
             if (RelicAcquisitionUI)
             {
@@ -359,16 +386,6 @@ namespace Game.Stage
                     controller.Initialize(InputHub);
                 }
             }
-
-
-            if (_portal)
-                _portal.MoveToNextLevel += callback =>
-                {
-                    BlackboxHandle.Of(this).Exert(InputHub, "Block (_portal.MoveToNextLevel)");
-                    InputHub.Block(this);
-
-                    DarkscreenUI.CloseScreen(callback);
-                };
         }
         private void AutoBindDependenciesInScene()
         {
@@ -388,7 +405,7 @@ namespace Game.Stage
                 if (!_portal)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"씬에서 {nameof(_portal)}을(를) 찾는 데 실패했습니다."), this);
+                        $"씬에서 {nameof(Portal)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -523,7 +540,7 @@ namespace Game.Stage
                 ui.Connect(vm);
 
                 UIManager.RegisterVM(vm);
-                UIManager.RegisterView(ui);
+                UIManager.RegisterView(ui, true);
             }
         }
 

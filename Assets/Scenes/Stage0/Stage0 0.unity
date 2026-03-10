@@ -7103,7 +7103,7 @@ MonoBehaviour:
   _proceedKey: 48
   <TargetRubielDistance>k__BackingField: 3
   _display: 
-  _isFirstArrival: 1
+  _isFirstArrival: 0
 --- !u!114 &519420034 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8903199737679934583, guid: 49d1f0c0bb687204088a27396459c2e7, type: 3}
@@ -7244,6 +7244,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7142417417623824347, guid: 8c6fe15bd16169f41ad03a1997b6a6bc, type: 3}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7259,11 +7263,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 91577296399339880, guid: dc5dbbeb444399b4fa02f7b162f338d2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.14
+      value: -13.95
       objectReference: {fileID: 0}
     - target: {fileID: 91577296399339880, guid: dc5dbbeb444399b4fa02f7b162f338d2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.98
+      value: -4.59
       objectReference: {fileID: 0}
     - target: {fileID: 91577296399339880, guid: dc5dbbeb444399b4fa02f7b162f338d2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7488,7 +7492,7 @@ Transform:
   m_GameObject: {fileID: 1863001243}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

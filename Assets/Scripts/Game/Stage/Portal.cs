@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
+    public event Action Opening;
+    public event Action Closing;
     public event Action<Action> MoveToNextLevel;
 
     [SerializeField]
@@ -21,12 +23,14 @@ public class Portal : MonoBehaviour
     }
     private void OnEnable()
     {
+        Opening?.Invoke();
         StartCoroutine(MoveMaskUp());
     }
     private void Update()
     {
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
         {
+            Closing?.Invoke();
             MoveNextLevel();
         }
     }
@@ -39,7 +43,6 @@ public class Portal : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (!collision.gameObject.CompareTag("Player"))
         {
             return;
@@ -47,7 +50,6 @@ public class Portal : MonoBehaviour
 
         isPlayerInRange = true;
         Fsprite.SetActive(true);
-
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

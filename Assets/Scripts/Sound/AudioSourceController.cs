@@ -16,6 +16,20 @@ namespace Sound
         }
         [SerializeField] private AudioData[] _audios;
 
+        public int Volume
+        {
+            get
+            {
+                EnsureInitialization();
+                return Mathf.RoundToInt(_audioSource.volume * 100);
+            }
+            set
+            {
+                EnsureInitialization();
+                _audioSource.volume = Mathf.Clamp(value, 0, 100) / 100f;
+            }
+        }
+
         public float SpatialBlend
         {
             get
@@ -55,7 +69,7 @@ namespace Sound
             using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, independent: {playIndependently}");
             EnsureInitialization();
 
-            var clip = _audios.FirstOrDefault(a => string.Equals(a.Name, name, StringComparison.Ordinal));
+            var clip = _audios.FirstOrDefault(a => string.Equals(a.Name, name, StringComparison.OrdinalIgnoreCase));
             if (clip.Name == null || !clip.AudioClip) return false;
 
             if (playIndependently)
@@ -72,15 +86,6 @@ namespace Sound
             EnsureInitialization();
 
             _audioSource.Stop();
-        }
-
-        public void SetVolume(int volume)
-        {
-            volume = Mathf.Clamp(volume, 0, 100);
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Volume to {volume}");
-
-            EnsureInitialization();
-            _audioSource.volume = volume / 100f;
         }
     }
 }
