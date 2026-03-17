@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 1290625262348654174}
   - component: {fileID: 1958973966598934199}
   - component: {fileID: 7846583036095939805}
+  - component: {fileID: 2350927466165652424}
+  - component: {fileID: 2842604027965187889}
   m_Layer: 8
   m_Name: Mad Wood
   m_TagString: Monster
@@ -260,7 +262,127 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
+  <ConfigurationOverride>k__BackingField: {fileID: 0}
+--- !u!82 &2350927466165652424
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4561756133556997342}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &2842604027965187889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4561756133556997342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f510102a097d104a9790f0ce4f0d479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audios:
+  - Name: DefaultAttack
+    AudioClip: {fileID: 8300000, guid: bcac3586cf3f55d4697f79b895b903bb, type: 3}
+  - Name: LandAttack
+    AudioClip: {fileID: 8300000, guid: ddf4c29401a967049b8ad0320eb27bff, type: 3}
+  - Name: Die
+    AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+  _volumeRate: 1
+  _hitSoundPlayTiming: 1
+  _dieClipName: Die
+  _overrideSpatialBlend: 0
+  _spatialBlend: 0.7
 --- !u!1 &4827113395710727473
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -86,7 +87,7 @@ namespace Actors.Monsters
         // Content
         protected override void Awake()
         {
-            if (_revive && !_secondPhasePrefab)
+            if (_revive.Resolve(true) && !_secondPhasePrefab)
                 Debug.LogWarning(FormatLogMessage(
                     $"{nameof(_secondPhasePrefab)}이(가) 유효하지 않기 때문에 사망 후 두 번째 페이즈의 몬스터가 생성되지 않습니다."));
 

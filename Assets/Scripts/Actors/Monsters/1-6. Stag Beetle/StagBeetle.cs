@@ -166,12 +166,7 @@ namespace Actors.Monsters
             if (!_spikeLauncher) throw new InvalidOperationException(
                 FormatLogMessage($"{nameof(StagBeetle)}은(는) {nameof(_spikeLauncher)} 컴포넌트를 가지고 있어야 합니다."));
 
-            _spikeLauncher
-                .Initialize(this, PlatformManager, "Player", "Ground")
-                .SetProjectileInitializer(
-                    p => p.GetComponent<SpriteSizeHandler>().Initialize(_spikeScaleFactor, true),
-                    p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);
-
+            InitializeSpikeLauncher();
 
             if (!_rollingAttackWeapon) throw new InvalidOperationException(
                 FormatLogMessage($"{nameof(StagBeetle)}은(는) {nameof(_rollingAttackWeapon)} 컴포넌트를 가지고 있어야 합니다."));
@@ -182,6 +177,7 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+            InitializeSpikeLauncher();
 
             if (!_roarIndicator)
                 Debug.LogWarning(
@@ -197,11 +193,20 @@ namespace Actors.Monsters
             StandaloneHitBrain.DoKnockback = false;
 
             // ------- Debug -------
-            if (_autoAwake)
+            if (_autoAwake.Resolve(false))
                 Commence();
         }
 
         public void Commence() => Brain.Blackboard.Properties[IsAwake] = true;
+        
+        private void InitializeSpikeLauncher()
+        {
+            _spikeLauncher
+                .Initialize(this, PlatformManager, "Player", "Ground")
+                .SetProjectileInitializer(
+                    p => p.GetComponent<SpriteSizeHandler>().Initialize(_spikeScaleFactor, true),
+                    p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);
+        }
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {

@@ -47,6 +47,11 @@ namespace Actors.Monsters
             foreach (var weapon in _weapons)
                 weapon.SetKnockbackInfo(tryGetKnockbackDirection);
         }
+        public void SetHitPlayerCallback(Action hitPlayer)
+        {
+            foreach (var weapon in _weapons)
+                weapon.SetHitPlayerCallback(hitPlayer);
+        }
 
 
         [SerializeField] private Weapon[] _weapons;

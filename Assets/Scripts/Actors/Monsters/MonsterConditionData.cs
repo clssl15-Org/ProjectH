@@ -9,11 +9,8 @@ namespace Actors.Monsters
         public object Payload { get; init; } = null;
         public event Action Callback;
 
-
         public MonsterConditionData() { }
-        public MonsterConditionData(
-            MonsterCondition condition,
-            object payload = null)
+        public MonsterConditionData(MonsterCondition condition, object payload = null)
         {
             Condition = condition;
             Payload = payload;
@@ -28,10 +25,4 @@ namespace Actors.Monsters
             Callback = null;
         }
     }
-
-    public readonly record struct MonsterAttackData
-    (
-        string Name,
-        bool IsRangedAttack
-    );
 }

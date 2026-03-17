@@ -381,7 +381,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -483,9 +483,11 @@ MonoBehaviour:
     AudioClip: {fileID: 8300000, guid: 7332dfc7d9601fe4eaead69d71ef41da, type: 3}
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
-  _overrideSpacialBlend: 0
-  _spacialBlend: 0.7
+  _volumeRate: 1
+  _hitSoundPlayTiming: 1
   _dieClipName: Die
+  _overrideSpatialBlend: 0
+  _spatialBlend: 0.7
 --- !u!1001 &5531710459335882150
 PrefabInstance:
   m_ObjectHideFlags: 0

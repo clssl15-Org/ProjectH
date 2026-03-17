@@ -469,7 +469,11 @@ MonoBehaviour:
     AudioClip: {fileID: 8300000, guid: 524ec87f159dbf0498b4eb883d8896af, type: 3}
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+  _volumeRate: 1
+  _hitSoundPlayTiming: 2
   _dieClipName: Die
+  _overrideSpatialBlend: 0
+  _spatialBlend: 0.7
 --- !u!1001 &2159831523194760979
 PrefabInstance:
   m_ObjectHideFlags: 0

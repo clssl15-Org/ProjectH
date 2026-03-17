@@ -140,9 +140,9 @@ Transform:
   - {fileID: 731451864013149021}
   - {fileID: 2601573839189960848}
   - {fileID: 5709146450124479466}
+  - {fileID: 4715311486475940043}
   - {fileID: 2922599424930124858}
   - {fileID: 4471871972771388436}
-  - {fileID: 4715311486475940043}
   m_Father: {fileID: 1615027706562084379}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &297619171244860234
@@ -921,10 +921,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2242202585856480588, guid: 58251a8e84eb2ef45b7cd7b3ac3fecdf, type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8496999144708250242, guid: 58251a8e84eb2ef45b7cd7b3ac3fecdf, type: 3}
-      propertyPath: _attackMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8496999144708250242, guid: 58251a8e84eb2ef45b7cd7b3ac3fecdf, type: 3}

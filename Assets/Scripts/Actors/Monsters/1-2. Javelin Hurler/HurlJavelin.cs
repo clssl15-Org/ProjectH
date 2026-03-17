@@ -1,5 +1,7 @@
+using System;
 using Actors.Monsters.Actions;
 using UnityEngine;
+using static Actors.Monsters.Actions.AttackWithWeapon;
 
 namespace Actors.Monsters
 {
@@ -15,13 +17,22 @@ namespace Actors.Monsters
             private bool _isJavelinThrown;
 
 
-
             // Content
             public HurlJavelin(int attackPower) =>
                 _attackPower = attackPower;
 
-            protected override void OnEnter(object _)
+            protected override void OnEnter(object input)
             {
+                if (input != null)
+                {
+                    if (input is not Payload payload)
+                        throw new ArgumentException(
+                            $"{nameof(input)}은(는) null이거나 {nameof(Payload)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다.",
+                            nameof(input));
+
+                    ((MonsterAttackData)payload.MonsterConditionData.Payload).OnExecuting();
+                }
+
                 _elapsedTime = 0f;
                 _isJavelinThrown = false;
             }

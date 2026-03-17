@@ -23,9 +23,18 @@ namespace Actors.Monsters.Brains
 
         protected override void OnOpen(object[] _)
         {
+            _notification = new MonsterConditionData(
+                MonsterCondition.Attack,
+                new MonsterAttackData(Name, _isRangedAttack));
+
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
-                Callback: result => Complete(result)),
+                Callback: result => Complete(result),
+                Inputs: new[]
+                {
+                    null, // AnimationComponent Input
+                    new AttackWithWeapon.Payload(MonsterConditionData: _notification) // AttackWithWeapon Input
+                }), 
                 out var reason,
                 allowRestart: true))
             {
@@ -35,13 +44,8 @@ namespace Actors.Monsters.Brains
                 Complete(false);
                 return;
             }
-
+            
             Blackboard.IsCommitting = true;
-
-            _notification = new MonsterConditionData(
-                MonsterCondition.Attack,
-                new MonsterAttackData(Name, _isRangedAttack));
-
             Owner.NotifyCondition(_notification);
         }
 

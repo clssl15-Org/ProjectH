@@ -13,12 +13,13 @@ namespace Actors.Monsters
         public float? KnockbackForce { get; set; } = null;
 
         private Func<Direction?> _tryGetKnockbackDirection;
+        private Action _hitPlayer;
         private TriggerContactHandler _contactHandler;
 
-        public void SetKnockbackInfo(Func<Direction?> tryGetKnockbackDirection)
-        {
+        public void SetKnockbackInfo(Func<Direction?> tryGetKnockbackDirection) =>
             _tryGetKnockbackDirection = tryGetKnockbackDirection;
-        }
+        public void SetHitPlayerCallback(Action hitPlayer) =>
+            _hitPlayer = hitPlayer;
 
         private void Awake()
         {
@@ -41,6 +42,8 @@ namespace Actors.Monsters
                     AttackPower,
                     knockbackDir,
                     KnockbackForce);
+
+                _hitPlayer?.Invoke();
             };
         }
     }

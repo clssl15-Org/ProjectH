@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using BlackboxSystem;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
@@ -109,7 +107,7 @@ namespace UI.PlayerView
                     return;
                 }
 
-                elapsedTime += Time.deltaTime;
+                elapsedTime += Time.unscaledTime;
 
                 // 0.0 ~ 1.0 사이의 시간 진행도
                 float t = Mathf.Clamp01(elapsedTime / _gaugeDealyRate);

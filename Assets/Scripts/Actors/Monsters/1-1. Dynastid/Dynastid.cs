@@ -23,11 +23,11 @@ namespace Actors.Monsters
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged(
-                                    Engaged.RangeType.Ranged,
-                                    Mathf.Abs((
-                                        owner._weapon?.transform.localPosition.x
-                                        ?? Engaged.DefaultTargetAttackRange)
-                                        * owner.transform.lossyScale.z)
+                                Engaged.RangeType.Ranged,
+                                Mathf.Abs((
+                                    owner._weapon?.transform.localPosition.x
+                                    ?? Engaged.DefaultTargetAttackRange)
+                                    * owner.transform.lossyScale.z)
                                 )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
@@ -85,7 +85,7 @@ namespace Actors.Monsters
             }
         }
 
-        
+
         // Content
         protected override void Start()
         {

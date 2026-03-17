@@ -11,6 +11,7 @@ namespace Actors.Monsters
         float? KnockbackForce { get; set; }
 
         void SetKnockbackInfo(Func<Direction?> tryGetKnockbackDirection);
+        void SetHitPlayerCallback(Action hitPlayer);
 
 #pragma warning disable IDE1006
         GameObject gameObject { get; }

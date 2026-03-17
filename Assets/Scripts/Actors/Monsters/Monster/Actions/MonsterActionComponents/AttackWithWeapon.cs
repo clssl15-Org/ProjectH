@@ -10,7 +10,7 @@ namespace Actors.Monsters.Actions
         private float _startTime;
         private float _duration;
 
-        private Func<IWeapon, Func<bool>> _getCheckCondition;
+        private Payload _payload;
         private Func<bool> _checkCondition;
 
         private IWeapon _weapon;
@@ -32,19 +32,24 @@ namespace Actors.Monsters.Actions
             _onInstantiated = onInstantiate;
         }
 
+        public record Payload
+        (
+            Func<IWeapon, Func<bool>> GetCheckCondition = null,
+            MonsterConditionData MonsterConditionData = null
+        );
         protected override void OnEnter(object input)
         {
             if (input != null)
             {
-                if (input is not Func<IWeapon, Func<bool>> getCheckCondition)
+                if (input is not Payload payload)
                     throw new ArgumentException(
-                        Ctx($"{nameof(input)}은(는) null이거나 Func<IWeapon, Func<bool>> 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다."),
+                        Ctx($"{nameof(input)}은(는) null이거나 {nameof(Payload)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다."),
                         nameof(input));
 
-                _getCheckCondition = getCheckCondition;
+                _payload = payload;
             }
             else
-                _getCheckCondition = null;
+                _payload = null;
 
             if (_weaponPrefab == null)
             {
@@ -106,8 +111,19 @@ namespace Actors.Monsters.Actions
             _onInstantiated?.Invoke(_weapon);
             _weapon.gameObject.SetActive(true);
 
-            if (_getCheckCondition != null)
-                _checkCondition = _getCheckCondition(_weapon);
+            if (_payload != null)
+            {
+                if (_payload.MonsterConditionData != null)
+                {
+                    var attackData = (MonsterAttackData)_payload.MonsterConditionData.Payload;
+
+                    attackData.OnExecuting();
+                    _weapon.SetHitPlayerCallback(attackData.OnHit);
+                }
+
+                if (_payload.GetCheckCondition != null)
+                    _checkCondition = _payload.GetCheckCondition(_weapon);
+            }
         }
 
         private void UnsetWeapon()
