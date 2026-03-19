@@ -165,6 +165,18 @@ PrefabInstance:
       propertyPath: _useDebugStatsInfo
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2842604027965187889, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842604027965187889, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842604027965187889, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
+      propertyPath: _audios.Array.data[2].PlayOption
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4561756133556997342, guid: 3186afe87fcd9f948a3aac1dcb05d441, type: 3}
       propertyPath: m_Name
       value: Mad Wood
@@ -1103,6 +1115,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2605902937077154857, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605902937077154857, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3947083424288608783, guid: 4a11b11ad6e5776408f3bf75dc048492, type: 3}
       propertyPath: m_Name
       value: Melee Skeleton
@@ -1184,6 +1204,14 @@ PrefabInstance:
     - target: {fileID: 4893479898040678792, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_Size.y
       value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357770701999662479, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7357770701999662479, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8618085740521409954, guid: c78db41c06394ed48b2483a72da2c4a6, type: 3}
       propertyPath: m_Name
@@ -1597,6 +1625,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5146086913184374165, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5146086913184374165, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6533744710052237920, guid: 67585b26b39ca0e429f6e7e85f2c263b, type: 3}
       propertyPath: _firePrefab
       value: 
@@ -1808,6 +1844,14 @@ PrefabInstance:
       propertyPath: _weaponActiveDuration
       value: 0.04166667
       objectReference: {fileID: 0}
+    - target: {fileID: 4222382824932298364, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222382824932298364, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4673020632242265911, guid: 44805c03594f47640a33f71b47d905dd, type: 3}
       propertyPath: m_Size.x
       value: 10
@@ -1909,6 +1953,14 @@ PrefabInstance:
     - target: {fileID: 5740464834060776038, guid: 228de37e450778a43bbd581943d40677, type: 3}
       propertyPath: m_Size.y
       value: 2.8799999
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270168611439407234, guid: 228de37e450778a43bbd581943d40677, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270168611439407234, guid: 228de37e450778a43bbd581943d40677, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

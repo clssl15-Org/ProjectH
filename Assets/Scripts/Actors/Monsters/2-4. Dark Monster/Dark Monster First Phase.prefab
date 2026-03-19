@@ -372,10 +372,13 @@ MonoBehaviour:
   _audios:
   - Name: Attack
     AudioClip: {fileID: 8300000, guid: 0ba0d3802852faa40ad7fb1063410e6e, type: 3}
+    PlayOption: 1
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+    PlayOption: 3
   _volumeRate: 1
-  _defaultHitSoundPlayTiming: 1
+  <StandaloneMode>k__BackingField: 0
+  _defaultHitSoundPlayTiming: 2
   _hitSoundPlayTimings: []
   _dieClipName: Die
   _overrideSpatialBlend: 0
@@ -398,7 +401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3167387557650392270
 Transform:
   m_ObjectHideFlags: 0

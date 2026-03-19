@@ -536,18 +536,22 @@ MonoBehaviour:
   _audios:
   - Name: DashAttack
     AudioClip: {fileID: 8300000, guid: a2cb4b232296e444bb410292a5b9d351, type: 3}
+    PlayOption: 1
   - Name: StampAttack
     AudioClip: {fileID: 8300000, guid: 754b7259d8d53cd498a4a12d3556f9ce, type: 3}
+    PlayOption: 1
   - Name: Roar
     AudioClip: {fileID: 8300000, guid: 9ceac6a2cd86b7046bdc3a0e511f8d03, type: 3}
+    PlayOption: 1
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+    PlayOption: 3
   _volumeRate: 1
+  <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings:
   - Name: DashAttack
     Timing: 2
-    Loop: 0
   _dieClipName: Die
   _overrideSpatialBlend: 0
   _spatialBlend: 0.7

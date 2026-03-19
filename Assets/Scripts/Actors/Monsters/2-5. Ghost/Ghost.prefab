@@ -456,13 +456,19 @@ MonoBehaviour:
   _audios:
   - Name: Attack_1
     AudioClip: {fileID: 8300000, guid: b43fc41eaedaf7a40b92f263e2bf7105, type: 3}
+    PlayOption: 1
   - Name: Attack_2
     AudioClip: {fileID: 8300000, guid: f1108b0f59fbb594489a4049d10b8e94, type: 3}
+    PlayOption: 1
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+    PlayOption: 3
   _volumeRate: 1
+  <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
-  _hitSoundPlayTimings: []
+  _hitSoundPlayTimings:
+  - Name: Attack_1
+    Timing: 2
   _dieClipName: Die
   _overrideSpatialBlend: 0
   _spatialBlend: 0.7
