@@ -90,7 +90,7 @@ namespace Sound
                 playOption = clip.PlayOption != PlayOption.None
                     ? clip.PlayOption
                     : throw new ArgumentException(
-                        $"{nameof(playOption)}은(는) {PlayOption.None}일 수 없습니다. name: {name}");
+                        $"[{gameObject.name}] {nameof(playOption)}은(는) {PlayOption.None}일 수 없습니다. name: {name}");
 
             switch (playOption)
             {

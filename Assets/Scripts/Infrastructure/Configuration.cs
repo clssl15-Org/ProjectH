@@ -10,6 +10,7 @@ namespace Infrastructure
         // PixelScaleFactor must be '0.03f'
         public float PixelScaleFactor { get; } = 0.03f;
         [field: SerializeField, Range(0, 1)] public float SfxSpatialBlend { get; set; } = 0.7f;
+        [field: SerializeField, Min(0)] public float MonsterVolumeRate { get; set; } = 1f;
 
         [field: Header("Indicator")]
         [field: SerializeField] public IndicatorConfiguration IndicatorConfiguration { get; set; }

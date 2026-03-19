@@ -2,13 +2,15 @@
 using System.Linq;
 using Sound;
 using UnityEngine;
+using Infrastructure;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace Actors.Monsters
 {
-    public class MonsterAudioPlayer : SfxAudioController
+    public class MonsterAudioPlayer : SfxAudioController,
+        IInjectable<Configuration>
     {
         [field: Header("Monster Audio Player")]
         [field: SerializeField] public bool StandaloneMode { get; set; } = false;
@@ -27,6 +29,7 @@ namespace Actors.Monsters
         [SerializeField] private bool _overrideSpatialBlend = false;
         [SerializeField, Range(0, 1)] private float _spatialBlend = 0.7f;
 
+        private Configuration _configuration;
         private IMonsterInternal _monster;
 
 
@@ -35,9 +38,14 @@ namespace Actors.Monsters
         /// </summary>
         internal void SetMonseter(IMonsterInternal monster) => _monster = monster;
 
+        void IInjectable<Configuration>.Inject(Configuration configuration)
+        {
+            _configuration = configuration;
+            ApplySettings();
+        }
+
         private void Start()
         {
-            ApplySettings();
             object playToken = null;
 
             if (!StandaloneMode)
@@ -45,6 +53,8 @@ namespace Actors.Monsters
                 if (!TryGetComponent(out _monster))
                     throw new InvalidOperationException(Ctx(
                         $"{nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
+
+                _configuration = _monster.Configuration;
 
                 _monster.ConditionChanged += conditionData =>
                 {
@@ -93,21 +103,27 @@ namespace Actors.Monsters
                     }
                 };
             }
+
+            ApplySettings();
         }
 
         protected override void ApplySettings()
         {
-            base.ApplySettings();
+            // VolumeRate
+            if (_configuration) VolumeRate = _configuration.MonsterVolumeRate;
 
+            // SpatialBlend
             if (_overrideSpatialBlend) SpatialBlend = _spatialBlend;
-            else if (_monster != null) SpatialBlend = _monster.Configuration.SfxSpatialBlend;
+            else if (_configuration) SpatialBlend = _configuration.SfxSpatialBlend;
+
+            base.ApplySettings();
         }
 
         private string Ctx(string message) => $"[{nameof(MonsterAudioPlayer)}: {name}] {message}";
 
 
 #if UNITY_EDITOR
-        [CustomEditor(typeof(MonsterAudioPlayer)), CanEditMultipleObjects]
+        [CustomEditor(typeof(MonsterAudioPlayer))]
         protected class MonsterAudioPlayerEditor : Editor
         {
             public override void OnInspectorGUI()
