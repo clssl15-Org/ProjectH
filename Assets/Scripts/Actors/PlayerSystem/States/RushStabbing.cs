@@ -144,6 +144,8 @@ namespace Actors.PlayerSystem
                 }
             }
 
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Skill1);
+
             ResetSkill();
             cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);

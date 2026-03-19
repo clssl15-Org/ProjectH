@@ -83,6 +83,7 @@ namespace Actors.PlayerSystem
             ResetDash();
 
             Player.CurrentDashCount--;
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Dash);
 
             if (Player.playerStats.canJumpAfterDash)
             {
