@@ -22,8 +22,6 @@ namespace Actors.Monsters.Brains
         /// <summary>
         /// 몬스터가 목표 거리 대역을 유지하도록 조정합니다.
         /// </summary>
-        /// <param name="monsterAction">진입 시 시도할 몬스터 액션</param>
-        /// <param name="rangeType"><see cref="RangeType.Contact"/> 또는 <see cref="RangeType.Ranged"/></param>
         /// <param name="range">
         /// <list type="bullet">
         ///   <item>
@@ -48,7 +46,7 @@ namespace Actors.Monsters.Brains
         {
             if (range.HasValue && range.Value < 0)
                 throw new ArgumentOutOfRangeException(
-                    $"{nameof(range)}는 0 이상의 값을 가져야 하지만 '{range.Value}'이(가) 입력되었습니다.");
+                    $"{nameof(range)}은(는) 0 이상의 값을 가져야 하지만 '{range.Value}'이(가) 입력되었습니다.");
 
             if (rangeType == RangeType.Contact)
             {

@@ -1,6 +1,7 @@
-using System;
+Ôªøusing System;
 using System.Linq;
 using BlackboxSystem;
+using Infrastructure;
 using UnityEngine;
 
 namespace Sound
@@ -48,6 +49,8 @@ namespace Sound
         private AudioSource _audioSource;
         private bool _isInitialized = false;
 
+        private const bool PrintSound = true;
+
 
         protected virtual void Awake() => EnsureInitialization();
         private void EnsureInitialization()
@@ -66,14 +69,14 @@ namespace Sound
             Loop,
             Independently,
         }
-        public void Play(string name, PlayOption playOption = PlayOption.None)
+        public void Play(string name, PlayOption playOption = PlayOption.None, float? independentPlayTime = null)
         {
-            if (!TryPlay(name, playOption))
+            if (!TryPlay(name, playOption, independentPlayTime))
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"'{name}' ø¿µø¿∏¶ ¿Áª˝«œ¥¬ µ• Ω«∆–«ﬂΩ¿¥œ¥Ÿ. " +
-                    $"ø¿µø¿ ∏Ò∑œ: {(_audios?.Length > 0 ? ("\n" + string.Join(", ", _audios.Select(a => a.Name))) : "None")}"));
+                    $"'{name}' Ïò§ÎîîÏò§Î•º Ïû¨ÏÉùÌïòÎäî Îç∞ Ïã§Ìå®ÌñàÏäµÎãàÎã§. " +
+                    $"Ïò§ÎîîÏò§ Î™©Î°ù: {(_audios?.Length > 0 ? ("\n" + string.Join(", ", _audios.Select(a => a.Name))) : "None")}"));
         }
-        public bool TryPlay(string name, PlayOption playOption = PlayOption.None)
+        public bool TryPlay(string name, PlayOption playOption = PlayOption.None, float? independentPlayTime = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, playOption: {playOption}");
             EnsureInitialization();
@@ -87,7 +90,7 @@ namespace Sound
                 playOption = clip.PlayOption != PlayOption.None
                     ? clip.PlayOption
                     : throw new ArgumentException(
-                        $"{nameof(playOption)}¿∫(¥¬) {PlayOption.None}¿œ ºˆ æ¯Ω¿¥œ¥Ÿ.");
+                        $"{nameof(playOption)}ÏùÄ(Îäî) {PlayOption.None}Ïùº Ïàò ÏóÜÏäµÎãàÎã§. name: {name}");
 
             switch (playOption)
             {
@@ -98,7 +101,24 @@ namespace Sound
                     break;
 
                 case PlayOption.Independently:
-                    AudioSource.PlayClipAtPoint(clip.AudioClip, transform.position, _audioSource.volume);
+                    var go = new GameObject($"[{name}] OneShot: {clip.AudioClip.name}");
+                    go.transform.position = transform.position;
+
+                    var source = go.AddComponent<AudioSource>();
+                    source.clip = clip.AudioClip;
+                    source.volume = _audioSource.volume;
+                    source.pitch = _audioSource.pitch;
+                    source.outputAudioMixerGroup = _audioSource.outputAudioMixerGroup;
+                    source.spatialBlend = _audioSource.spatialBlend;
+                    source.minDistance = _audioSource.minDistance;
+                    source.maxDistance = _audioSource.maxDistance;
+                    source.rolloffMode = _audioSource.rolloffMode;
+                    source.priority = _audioSource.priority;
+                    source.panStereo = _audioSource.panStereo;
+                    source.loop = true;
+
+                    source.Play();
+                    Destroy(go, independentPlayTime ?? clip.AudioClip.length);
                     break;
 
                 default:
@@ -106,6 +126,7 @@ namespace Sound
                     break;
             }
 
+            if (PrintSound.Resolve(false)) print($"<<[‚ô™] {gameObject.name}: {name}>>");
             return true;
         }
 

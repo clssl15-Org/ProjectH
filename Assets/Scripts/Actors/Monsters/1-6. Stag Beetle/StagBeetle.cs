@@ -34,6 +34,9 @@ namespace Actors.Monsters
             SpikeAttack,
             Roar
         }
+
+        public MonsterAudioPlayer AudioPlayer => throw new NotImplementedException();
+
         private const string IsAwake = nameof(IsAwake);
         private KinematicProjectileLauncher _spikeLauncher;
 

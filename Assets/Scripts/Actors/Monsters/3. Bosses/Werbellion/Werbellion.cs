@@ -9,10 +9,9 @@ using World;
 using UnityEditor;
 #endif
 
-
 namespace Actors.Monsters.Bosses
 {
-    [RequireComponent(typeof(StandaloneHitAction))]
+    [RequireComponent(typeof(StandaloneHitAction), typeof(MonsterAudioPlayer))]
     public partial class Werbellion : Monster<WerbellionStats>, IBoss, IPlayerInitializable
     {
         // Front
@@ -59,8 +58,9 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private GameObject _targetPlayer;
         [Space]
         [SerializeField] private bool _autoAwake = false;
-        [Tooltip("2 키를 누르면 해당 페이즈를 자동으로 넘어갑니다.")]
-        [SerializeField] private bool _forceClear_2 = false;
+        [SerializeField] private KeyCode _forceClearKey = KeyCode.Alpha2;
+
+        public MonsterAudioPlayer AudioPlayer { get; private set; }
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
         internal override PlatformDetector PlatformDetector => throw new InvalidOperationException(
@@ -96,6 +96,9 @@ namespace Actors.Monsters.Bosses
             {
                 AddChild(new MonsterAction("Spawn")
                     .AddAnimationComponent(out var spawn)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("Spawn"))
+                    )
                     .AddAnimationComponent("Idle", after: new(spawn))
                 );
                 AddChild(new MonsterAction(MonsterActionType.Idle)
@@ -103,8 +106,15 @@ namespace Actors.Monsters.Bosses
                 );
                 AddChild(new MonsterAction("Teleport")
                     .AddAnimationComponent("TeleportIn", out var teleportIn)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("TeleportIn"))
+                    )
                     .AddComponent(new WerbellionTeleportComponent(), after: new(teleportIn))
                     .AddAnimationComponent("TeleportOut", after: new(teleportIn), interruptPriority: InterruptPriority.High)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("TeleportOut")),
+                        after: new(teleportIn)
+                    )
                 );
 
                 #region Attacks
@@ -114,7 +124,8 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new AttackWithWeapon(
                         monster._punchAttackWeapon,
                         monster._punchActiveTiming,
-                        monster._punchActiveDuration))
+                        monster._punchActiveDuration)
+                    )
                 );
 
                 AddChild(new MonsterAction("StraightAreaAttack")
@@ -122,7 +133,11 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new Empty())
                     .AddComponent(new AttackWithWeapon(
                         monster._straightAreaAttackPrefab,
-                        monster._straightAreaAttackTiming))
+                        monster._straightAreaAttackTiming)
+                    )
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("StraightAreaAttack"))
+                    )
                     .AddDelay(1f, interruptPriority: InterruptPriority.High)
                 );
 
@@ -161,8 +176,15 @@ namespace Actors.Monsters.Bosses
                 AddChild(new MonsterAction("PortalAttack")
                     // 공중으로 텔레포트
                     .AddAnimationComponent("TeleportIn", out var portal_teleportIn_a)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("TeleportIn"))
+                    )
                     .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_a))
                     .AddAnimationComponent("TeleportOut", out var portal_teleportOut_a, after: new(portal_teleportIn_a))
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("TeleportOut")),
+                        after: new(portal_teleportIn_a)
+                    )
 
                     // 공격
                     .AddAnimationComponent(after: new(portal_teleportOut_a))
@@ -173,12 +195,21 @@ namespace Actors.Monsters.Bosses
                             () => monster._player.transform.position
                         ),
                         out var portal_attacked,
-                        after: new(portal_teleportOut_a))
+                        after: new(portal_teleportOut_a)
+                    )
 
                     // 지상으로 텔레포트
                     .AddAnimationComponent("TeleportIn", out var portal_teleportIn_b, after: new(portal_attacked))
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("TeleportIn")),
+                        after: new(portal_attacked)
+                    )
                     .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_b))
                     .AddAnimationComponent("TeleportOut", after: new(portal_teleportIn_b), interruptPriority: InterruptPriority.High)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("TeleportOut")),
+                        after: new(portal_teleportIn_b)
+                    )
                 );
 
                 AddChild(new MonsterAction("StunAttack")
@@ -187,10 +218,15 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new AttackWithWeapon(
                         monster._stunAttackweapon,
                         monster._stunAttackActiveTiming,
-                        monster._stunAttackActiveDuration))
+                        monster._stunAttackActiveDuration)
+                    )
                     .AddAnimationComponent(
                         "StunAttack",
-                        interruptPriority: InterruptPriority.High)
+                        interruptPriority: InterruptPriority.High
+                    )
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("StunAttack"))
+                    )
                 );
                 #endregion
 
@@ -204,10 +240,16 @@ namespace Actors.Monsters.Bosses
                     .AddAnimationComponent("TeleportOut", out var dead_teleportOut, after: new(dead_teleportIn))
                     .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f), after: new(dead_teleportOut))
                     .AddAnimationComponent("Dead", after: new(dead_teleportOut), interruptPriority: InterruptPriority.High)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("Exhausted"))
+                    )
                 );
                 AddChild(new MonsterAction("DeadGround")
                     .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f))
                     .AddAnimationComponent("Dead")
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("Exhausted"))
+                    )
                 );
             }
         }
@@ -223,6 +265,7 @@ namespace Actors.Monsters.Bosses
                     $"{nameof(Werbellion)}은(는) '{nameof(_spikePrefab)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
+            AudioPlayer = GetComponent<MonsterAudioPlayer>();
         }
 
         public void InitializePlayer(IPlayer player)
@@ -280,7 +323,7 @@ namespace Actors.Monsters.Bosses
                 && _targetPlayer.TryGetComponent<IPlayer>(out var player))
                 InitializePlayer(player);
 
-            if (_autoAwake)
+            if (_autoAwake.Resolve(false))
                 Commence();
         }
 
@@ -292,7 +335,7 @@ namespace Actors.Monsters.Bosses
 
         protected override void Update()
         {
-            if (_forceClear_2 && Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(_forceClearKey.Resolve()))
             {
                 OnDamaged(new DamageInfo(int.MaxValue) { HasKnockback = false });
                 return;

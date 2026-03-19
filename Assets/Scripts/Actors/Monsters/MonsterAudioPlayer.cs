@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using Sound;
 using UnityEngine;
@@ -29,6 +29,12 @@ namespace Actors.Monsters
 
         private IMonsterInternal _monster;
 
+
+        /// <summary>
+        /// Standalone ëª¨ë“œ ì‚¬ìš© ì‹œ Monster ì£¼ì… ì°½êµ¬
+        /// </summary>
+        internal void SetMonseter(IMonsterInternal monster) => _monster = monster;
+
         private void Start()
         {
             ApplySettings();
@@ -38,7 +44,7 @@ namespace Actors.Monsters
             {
                 if (!TryGetComponent(out _monster))
                     throw new InvalidOperationException(Ctx(
-                        $"{nameof(IMonsterInternal)} ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿À´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."));
+                        $"{nameof(IMonsterInternal)} ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."));
 
                 _monster.ConditionChanged += conditionData =>
                 {
@@ -82,7 +88,7 @@ namespace Actors.Monsters
                     {
                         if (!TryPlay(_dieClipName))
                             Debug.LogWarning(
-                                Ctx($"¸ó½ºÅÍ°¡ »ç¸ÁÇÏ¿´Áö¸¸ '{_dieClipName}' ¿Àµğ¿À¸¦ Àç»ıÇÏÁö ¸øÇß½À´Ï´Ù."),
+                                Ctx($"ëª¬ìŠ¤í„°ê°€ ì‚¬ë§í•˜ì˜€ì§€ë§Œ '{_dieClipName}' ì˜¤ë””ì˜¤ë¥¼ ì¬ìƒí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤."),
                                 this);
                     }
                 };

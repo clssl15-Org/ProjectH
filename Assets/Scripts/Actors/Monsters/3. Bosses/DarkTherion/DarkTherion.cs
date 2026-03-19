@@ -11,7 +11,7 @@ using UnityEditor;
 
 namespace Actors.Monsters.Bosses
 {
-    [RequireComponent(typeof(StandaloneHitAction))]
+    [RequireComponent(typeof(StandaloneHitAction), typeof(MonsterAudioPlayer))]
     public partial class DarkTherion : Monster<DarkTherionStats>, ITwinBoss
     {
         // Front
@@ -53,8 +53,10 @@ namespace Actors.Monsters.Bosses
                 _isExhausted = value;
                 IgnorePlayerInteraction = value;
             }
-        } bool _isExhausted = false;
-
+        }
+        
+        private bool _isExhausted;
+        public MonsterAudioPlayer AudioPlayer { get; private set; }
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
 
@@ -112,6 +114,9 @@ namespace Actors.Monsters.Bosses
                             p => p
                                 .GetComponent<Weapon>()
                                 .AttackPower = monster.StatsInfo.BulletAttackPower))
+                    .AddComponent(new Do(false)
+                        .OnOpening(() => monster.AudioPlayer.Play("BulletAttack", independentPlayTime: 7f))
+                    )
                 );
                 AddChild(new MonsterAction("SpikeAttack")
                     .AddAnimationComponent()
@@ -143,7 +148,11 @@ namespace Actors.Monsters.Bosses
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent()
                     .AddComponent(new Do(true)
-                        .OnOpening(() => monster.Rigidbody.gravityScale = 2f)
+                        .OnOpening(() =>
+                        {
+                            monster.Rigidbody.gravityScale = 2f;
+                            monster.AudioPlayer.Play("Exhausted");
+                        })
                     )
                 );
             }
@@ -169,6 +178,7 @@ namespace Actors.Monsters.Bosses
                     $"{nameof(DarkTherion)}은(는) '{nameof(_spikePrefab)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
+            AudioPlayer = GetComponent<MonsterAudioPlayer>();
         }
 
         protected override void Start()
@@ -187,7 +197,7 @@ namespace Actors.Monsters.Bosses
                 && _targetPlayer.TryGetComponent<IPlayer>(out var player))
                 InitializePlayer(player);
 
-            if (_autoAwake)
+            if (_autoAwake.Resolve(false))
                 Commence();
         }
 

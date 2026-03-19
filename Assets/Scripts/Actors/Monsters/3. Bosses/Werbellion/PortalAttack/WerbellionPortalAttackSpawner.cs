@@ -5,6 +5,7 @@ using World;
 
 namespace Actors.Monsters.Bosses
 {
+    [RequireComponent(typeof(MonsterAudioPlayer))]
     public class WerbellionPortalAttackSpawner : MonoBehaviour
     {
         [SerializeField] private GameObject _effect;
@@ -17,6 +18,8 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private Configuration _configuration;
         [SerializeField] private PlatformManager _platformManager;
 
+        private MonsterAudioPlayer _audioPlayer;
+
         private Action<KinematicProjectile>[] _initializers;
         private Func<Vector2> _getTargetPosition;
         private int _firedCount;
@@ -25,6 +28,8 @@ namespace Actors.Monsters.Bosses
         [Header("Debug")]
         [SerializeField] private Transform _target;
 
+
+        private void Awake() => _audioPlayer = GetComponent<MonsterAudioPlayer>();
 
         public WerbellionPortalAttackSpawner Initialize(
             PlatformManager platformManager,
@@ -105,6 +110,7 @@ namespace Actors.Monsters.Bosses
             projectile.transform.rotation = Quaternion.Euler(0, 0, targetAngle);
 
             projectile.Launch(dir, _projectileSpeed);
+            _audioPlayer.Play("PortalAttack");
         }
 
         public void RequestStop() => _firedCount = int.MaxValue;

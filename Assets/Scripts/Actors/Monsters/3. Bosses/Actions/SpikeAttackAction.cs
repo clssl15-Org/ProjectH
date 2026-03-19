@@ -52,6 +52,7 @@ namespace Actors.Monsters.Bosses
                             projectileSpeed)
                         .Fire();
 
+                        ((IBoss)Owner).AudioPlayer.Play("SpikeAttack");
                         self.Stop();
                     });
 

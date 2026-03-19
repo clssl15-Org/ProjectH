@@ -5,7 +5,6 @@ using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 using Infrastructure;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -67,7 +66,7 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
-        private MonsterAudioPlayer _audioPlayer;
+        public MonsterAudioPlayer AudioPlayer { get; private set; }
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
         private const string IsAwake = nameof(IsAwake);
@@ -115,32 +114,47 @@ namespace Actors.Monsters.Bosses
                         .FirstOrDefault(ats => ats.AnimationName == "BiteAttack")
                             ?.TimeScale ?? 1f)
                     )
-                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
+                    .AddAnimationComponent(
+                        out var biteAttack_anim,
+                        interruptPriority: InterruptPriority.High
+                    )
                     .AddComponent(new AttackWithWeapon(
                         monster._biteWeapon,
                         monster._biteWeaponActiveTiming,
                         monster._biteWeaponActiveDuration
                     ))
+                    .AddDelay(0.35f, out var biteAttack_soundDelay) // HACK: 사운드 타이밍
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("BiteAttack")),
+                        after: new(biteAttack_soundDelay)
+                    )
 
-                    //.AddDelay(0.5f, out var bite_delay)
-                    //.AddComponent(new Do(true, () =>
-                    //{
-                    //    var effect = Instantiate(cerberus._roarEffect);
-                    //    effect.transform.position = cerberus._roarEffect.transform.position;
-                    //    effect.SetActive(true);
+                //.AddDelay(0.5f, out var bite_delay)
+                //.AddComponent(new Do(true, () =>
+                //{
+                //    var effect = Instantiate(cerberus._roarEffect);
+                //    effect.transform.position = cerberus._roarEffect.transform.position;
+                //    effect.SetActive(true);
 
-                    //    Destroy(effect, 5f);
-                    //}), after: new(bite_delay))
-                    //.AddDelay(0.5f, after: new(bite_delay))
+                //    Destroy(effect, 5f);
+                //}), after: new(bite_delay))
+                //.AddDelay(0.5f, after: new(bite_delay))
                 );
 
                 AddChild(new MonsterAction("DropAttack")
                     .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "DropAttack")
-                        ?.TimeScale ?? 1f)
+                            ?.TimeScale ?? 1f)
                     )
                     .AddAnimationComponent("Roar", out var dropAttack_roar)
+                    .AddDelay(
+                        1.5f, // HACK: 사운드 타이밍
+                        out var dropAttack_soundDelay)
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("Roar")),
+                        after: new(dropAttack_soundDelay)
+                    )
                     .AddDelay(1.5f, out var drop_delay)
                     .AddComponent(new Do(true, () =>
                         {
@@ -178,7 +192,8 @@ namespace Actors.Monsters.Bosses
                         out var ambushIntro_anim
                     )
                     .AddComponent(new Do(true)
-                        .OnOpening(() => monster._audioPlayer.Play("AmbushAttack_In")))
+                        .OnOpening(() => monster.AudioPlayer.Play("AmbushAttack_In"))
+                    )
                     .AddDelay(
                         0.4f,
                         out var ambushIntro_attack
@@ -208,7 +223,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "AmbushAttack")
-                        ?.TimeScale ?? 1f)
+                            ?.TimeScale ?? 1f)
                     )
                     .AddComponent(new Do(true, () => monster._ambushAttackManager.ShowIndicator()))
                     .AddDelay(
@@ -221,6 +236,14 @@ namespace Actors.Monsters.Bosses
                         after: new(ambush_showIndicator)
                     )
                     .AddDelay(
+                        0.0f, // HACK: 사운드 타이밍
+                        out var ambush_attack_animOut_soundDelay,
+                        after: new(ambush_showIndicator))
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("AmbushAttack_Out")),
+                        after: new(ambush_attack_animOut_soundDelay)
+                    )
+                    .AddDelay(
                         monster._ambushReadyTime,
                         out var ambush_attack_await,
                         after: new(ambush_attack_animOut)
@@ -229,6 +252,14 @@ namespace Actors.Monsters.Bosses
                         "AmbushAttackIn",
                         out var ambush_attack_animIn,
                         after: new(ambush_attack_await)
+                    )
+                    .AddDelay(
+                        0.0f, // HACK: 사운드 타이밍
+                        out var ambush_attack_animIn_soundDelay,
+                        after: new(ambush_attack_await))
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("AmbushAttack_In")),
+                        after: new(ambush_attack_animIn_soundDelay)
                     )
                     .AddDelay(
                         0.4f,
@@ -258,7 +289,11 @@ namespace Actors.Monsters.Bosses
                 #endregion
 
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("Die"))
+                    )
+                );
             }
         }
 
@@ -289,8 +324,9 @@ namespace Actors.Monsters.Bosses
                 throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_dropAttack_roarEffectPosition)}'을(를) 가지고 있어야 합니다.");
 
-            _audioPlayer = GetComponent<MonsterAudioPlayer>();
-            _audioPlayer.StandaloneMode = true;
+            AudioPlayer = GetComponent<MonsterAudioPlayer>();
+            AudioPlayer.StandaloneMode = true;
+            AudioPlayer.SetMonseter(this);
 
             base.Awake();
         }
