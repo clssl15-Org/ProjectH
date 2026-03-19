@@ -130,6 +130,8 @@ namespace Actors.PlayerSystem
             UpdateAttackParameters();
             cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
+
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Skill2);
         }
 
         public override void UpdateBehaviour(float dt)

@@ -6,15 +6,16 @@ using Infrastructure;
 using UnityEngine;
 using World;
 using Rules;
-using Game;
 
 namespace Actors.Monsters
 {
     [RequireComponent(typeof(SpriteRenderer), typeof(SpriteSizeHandler), typeof(Animator))]
     [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlatformDetector))]
-    public abstract partial class Monster<TStats>
-        : MonoBehaviour, IMonster, IMonsterInternal where TStats : MonsterStats
+    public abstract partial class Monster<TStats> : MonoBehaviour,
+        IMonster,
+        IMonsterInternal
+        where TStats : MonsterStats
     {
         // Front
         public int HP
@@ -348,7 +349,7 @@ namespace Actors.Monsters
         internal virtual void Die() => Die(true);
         protected void Die(bool destroySelf)
         {
-            var notification = new MonsterConditionData(MonsterCondition.Die);
+            var notification = new MonsterConditionData(MonsterCondition.Died);
             ConditionChanged?.Invoke(notification);
             notification.Complete();
 
@@ -425,7 +426,7 @@ namespace Actors.Monsters
             _sb.AppendLine("----------------");
             _sb.AppendLine($"Is Alive: {IsAlive}");
             if (StandaloneHitBrain != null) _sb.AppendLine($"Is Damaging (SA): {StandaloneHitBrain.IsDamaging}");
-            _sb.AppendLine($"Is Committing: {Brain?.Blackboard?.Committing.ToString() ?? "Unknown"}");
+            _sb.AppendLine($"Is Committing: {Brain?.Blackboard?.IsCommitting.ToString() ?? "Unknown"}");
             _sb.AppendLine($"Current Action: {(TryGetCurrentAction(out var action) ? action : "None")}");
 
             if (Brain != null)

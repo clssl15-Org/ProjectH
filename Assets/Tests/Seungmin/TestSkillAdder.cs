@@ -2,6 +2,8 @@ using System.Linq;
 using Actors.PlayerSystem;
 using UnityEngine;
 using Infrastructure;
+using System;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -27,7 +29,7 @@ namespace Tests.Seungmin
             if (!DebugTools.IsDebugMode)
                 return;
 
-            foreach (var skillType in _skillsToAddOnStart)
+            foreach (var skillType in _skillsToAddOnStart ?? Array.Empty<SkillType>())
                 AddSkill(skillType);
         }
 

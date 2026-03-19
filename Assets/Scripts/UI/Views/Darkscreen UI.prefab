@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4317328101694979383}
   - component: {fileID: 1444503277995755298}
   - component: {fileID: 1408308832282900648}
-  - component: {fileID: 8123917644082833053}
   - component: {fileID: 3009635468448868238}
+  - component: {fileID: 8786556166384211809}
   m_Layer: 5
   m_Name: Darkscreen UI
   m_TagString: Untagged
@@ -77,22 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!111 &8123917644082833053
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7126907802751240440}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 0458dd0b08c0e3b49a6b67a750ff31af, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 0458dd0b08c0e3b49a6b67a750ff31af, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &3009635468448868238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,4 +89,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387deb394566e18458bee4a58b7e272d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animation: {fileID: 8123917644082833053}
+  _enabledAlpha: 0.7
+  _closedAlpha: 1
+  _enableDuration: 0.5
+  _disableDuration: 0.5
+  _closeDuration: 1
+--- !u!225 &8786556166384211809
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7126907802751240440}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <BubbleOffset>k__BackingField: {x: 0, y: 80}
   <MaxBubbleWidth>k__BackingField: 500
-  <BubblePadding>k__BackingField: {x: 100, y: 100}
+  <BubblePadding>k__BackingField: {x: 100, y: 70}
   _dialogueUI: {fileID: 0}
   _bubbleDialogueUI: {fileID: 0}
   _canvasTransform: {fileID: 0}
@@ -225,11 +225,14 @@ MonoBehaviour:
   _dialogueManager: {fileID: 7889603405413448161}
   _platformManager: {fileID: 0}
   _uILibrary: {fileID: 4445242400318062758, guid: a39913bc4f304a64b9dbb5519eeaf460, type: 3}
+  _bgmPlayManager: {fileID: 0}
+  _sfxPlayManager: {fileID: 0}
   _eventSystem: {fileID: 911937369077231003}
   _additionalInputControllers: []
   _additionalInputControllables: []
   _playerObject: {fileID: 0}
   _rubielObject: {fileID: 0}
+  _portal: {fileID: 0}
   <Canvas>k__BackingField: {fileID: 0}
   <PlayerUI>k__BackingField: {fileID: 0}
   <RelicAcquisitionUI>k__BackingField: {fileID: 0}
@@ -238,7 +241,7 @@ MonoBehaviour:
   <DialogueUI>k__BackingField: {fileID: 0}
   <BubbleDialogueUI>k__BackingField: {fileID: 0}
   <GuideAndWorldRecordsUI>k__BackingField: {fileID: 0}
-  <DarkScreenUI>k__BackingField: {fileID: 0}
+  <DarkscreenUI>k__BackingField: {fileID: 0}
 --- !u!114 &4000332937720792618
 MonoBehaviour:
   m_ObjectHideFlags: 0

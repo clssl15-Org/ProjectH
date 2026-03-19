@@ -38,7 +38,7 @@ namespace Actors.Monsters.Brains
 
         protected override void OnTick()
         {
-            if (Blackboard.Moved)
+            if (Blackboard.IsMoved)
             {
                 Complete(false);
                 return;

@@ -79,12 +79,12 @@ namespace Actors.Monsters.Brains
             var rangeDelta = posDelta - TargetAttackRange;
             if (rangeDelta < -LowerRangeTolerance)
             {
-                Blackboard.Moved = Owner.TryMove(Owner.Direction.Flip());
+                Blackboard.IsMoved = Owner.TryMove(Owner.Direction.Flip());
                 return;
             }
             if (rangeDelta > UpperRangeTolerance)
             {
-                Blackboard.Moved = Owner.TryMove();
+                Blackboard.IsMoved = Owner.TryMove();
                 return;
             }
             

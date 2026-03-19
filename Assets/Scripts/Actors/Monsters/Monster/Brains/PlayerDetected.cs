@@ -15,7 +15,7 @@ namespace Actors.Monsters.Brains
 
         public override bool CheckCondition()
         {
-            if (Blackboard.Committing)
+            if (Blackboard.IsCommitting)
                 return true;
 
             var player = Owner.DetectedPlayer;

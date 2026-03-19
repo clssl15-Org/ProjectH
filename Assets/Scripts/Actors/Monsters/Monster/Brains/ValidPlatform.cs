@@ -14,7 +14,7 @@ namespace Actors.Monsters.Brains
 
         public override bool CheckCondition()
         {
-            if (Blackboard.Committing)
+            if (Blackboard.IsCommitting)
                 return true;
 
             return Owner.PlatformDetector.CheckPlatform(

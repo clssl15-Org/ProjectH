@@ -5,8 +5,8 @@ namespace Actors.Monsters.Brains
     public class MonsterBlackboard
     {
         // Front
-        public bool Committing { get; set; } = false;
-        public bool Moved { get; set; }
+        public bool IsCommitting { get; set; } = false;
+        public bool IsMoved { get; set; }
         public Dictionary<object, object> Properties { get; } = new();
     }
 }

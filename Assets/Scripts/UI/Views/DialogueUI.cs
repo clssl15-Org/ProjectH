@@ -11,13 +11,18 @@ namespace UI
 {
     [RequireComponent(typeof(Animation))]
     public class DialogueUI : MonoBehaviour,
+        IDialogueUI,
         IInjectable<GameAssetLibrary>,
         IEnablable
     {
+        [Header("UI Components")]
         [SerializeField] private Image _portraitUI;
         [SerializeField] private TextMeshProUGUI _nametagUI;
-        [SerializeField] private TextMeshProUGUI _dialogueUI;
+        [SerializeField] private TMPTypeHandler _typeHandler;
 
+        public bool IsTotallyTyped => _typeHandler.IsTotallyTyped;
+
+        public event Action TextTyped;
         public event Action Disabling;
 
         #region Interfaces
@@ -31,16 +36,17 @@ namespace UI
         private EnableWithAnimation _enabler;
         private bool _isAwake = false;
 
-
         private void Start()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, was: {_isAwake}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, wasAwake: {_isAwake}");
 
             if (_isAwake) return;
             _isAwake = true;
 
             _enabler = new EnableWithAnimation(GetComponent<Animation>(), gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
+
+            _typeHandler.TextTyped += () => TextTyped?.Invoke();
 
             BlackboxHandle.Of(this).Write("Set To Disabled");
             SetToDisabled();
@@ -55,8 +61,11 @@ namespace UI
 
             _nametagUI.text = name;
             _portraitUI.sprite = portrait;
-            _dialogueUI.text = dialogue;
+
+            _typeHandler.TypeDialogue(dialogue);
         }
+
+        public void SkipTyping() => _typeHandler.SkipTyping();
 
         private void GetData(
             DialogueLine dialogueData,
@@ -76,7 +85,6 @@ namespace UI
             dialogue = dialogueData.Dialogue;
         }
 
-
         public void Enable()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Enable");
@@ -85,16 +93,21 @@ namespace UI
             BlackboxHandle.Of(this).Exert(_enabler, "Enable");
             _enabler.Enable();
         }
+
         public void Disable()
         {
             Start();
             _enabler.Disable();
+
+            _typeHandler.SkipTyping();
         }
+
         public void SetToEnabled()
         {
             Start();
             _enabler.SetToEnabled();
         }
+
         public void SetToDisabled()
         {
             Start();

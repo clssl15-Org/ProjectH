@@ -335,7 +335,7 @@ namespace Actors.Monsters.Bosses
         public void Commence()
         {
             Brain.Blackboard.Properties[IsAwake] = true;
-            Brain.Blackboard.Committing = true;
+            Brain.Blackboard.IsCommitting = true;
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

@@ -144,7 +144,7 @@ namespace Actors.Monsters
             StandaloneHitBrain.TryTakeDamage(new DamageInfo
             {
                 Damage = damageInfo.Damage,
-                HasKnockback = !Brain.Blackboard.Committing && damageInfo.HasKnockback,
+                HasKnockback = !Brain.Blackboard.IsCommitting && damageInfo.HasKnockback,
                 Direction = damageInfo.Direction,
                 KnockbackForce = damageInfo.KnockbackForce,
             });

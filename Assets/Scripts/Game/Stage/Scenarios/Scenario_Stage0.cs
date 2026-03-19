@@ -25,14 +25,14 @@ namespace Game.Stage
         {
             yield return new Block(
                 BlockName.To_Arrival)
+                .OnEntered(() => SetRubielToBig(instantSet: true))
                 .OnUpdated<Block>(self =>
                 {
                     if (!self.ToNextToken && IsPlayerOnGround && IsRubielClose)
                     {
                         self.ToNextToken = true;
                         BlockInputs();
-                        SetRubielToBig(() =>
-                            To(_isFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry));
+                        To(_isFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry);
                     }
                 });
 
@@ -44,7 +44,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall(() => SetRubielToInvisible());
+                    SetRubielToSmall(/* () => SetRubielToInvisible() */);
                 });
 
             yield return new DialogueBlock(
@@ -55,7 +55,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall(() => SetRubielToInvisible());
+                    SetRubielToSmall(/* () => SetRubielToInvisible() */);
                 });
 
             yield return new Block(
@@ -66,7 +66,7 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
                         BlockInputs();
-                        SetRubielToVisible(() => To(BlockName.FirstSkillAcquire));
+                        SetRubielToVisible(true, () => To(BlockName.FirstSkillAcquire));
                     }
                 });
 
@@ -78,7 +78,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall(() => SetRubielToInvisible());
+                    SetRubielToSmall(/* () => SetRubielToInvisible() */);
                 });
 
             yield return new Block(
@@ -89,7 +89,7 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
                         BlockInputs();
-                        SetRubielToVisible(() => To(BlockName.TownPortal));
+                        SetRubielToVisible(true, () => To(BlockName.TownPortal));
                     }
                 });
 

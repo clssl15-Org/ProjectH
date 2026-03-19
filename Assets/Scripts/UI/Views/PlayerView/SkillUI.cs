@@ -29,7 +29,7 @@ namespace UI.PlayerView
         public void AddSkill(SkillType targetSkill) => _skillSelectionManager.AddSkill(targetSkill);
 
         // Skill Cooltime Manager
-        public void EnableCooltime(Func<float> getProgress) => _skillCooltimeManager.Enable(getProgress);
+        public void EnableCooltime(Func<float> getCooltimeRate) => _skillCooltimeManager.Enable(getCooltimeRate);
         public void DisableCooltime() => _skillCooltimeManager.Disable();
     }
 }

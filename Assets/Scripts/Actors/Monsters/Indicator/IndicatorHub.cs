@@ -1,5 +1,4 @@
 using System;
-using Infrastructure;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,7 +14,6 @@ namespace Actors.Monsters
         private IMonsterInternal _monster;
         private IndicatorConfigurationView _config;
 
-
         private void Start()
         {
             if (!TryGetComponent(out _monster))
@@ -27,17 +25,17 @@ namespace Actors.Monsters
                     $"{nameof(_monster.Configuration)}이(가) 유효하지 않습니다."));
             _config = new(configuraton, ConfigurationOverride);
 
-            _monster.ConditionChanged += cd =>
+            _monster.ConditionChanged += conditionData =>
             {
-                if (cd.Is(MonsterCondition.PlayerDetected) && _config.ShowPlayerDetection)
+                if (conditionData.Is(MonsterCondition.PlayerDetected) && _config.ShowPlayerDetection)
                     ShowPlayerDetectionIndicator();
 
-                if (cd.Is(MonsterCondition.Attack) && _config.ShowExclamationMark)
+                if (conditionData.Is(MonsterCondition.Attack) && _config.ShowExclamationMark)
                 {
-                    if (cd.Payload is not bool isRanged)
+                    if (conditionData.Payload is not bool isRanged)
                     {
                         Debug.LogWarning(
-                            Ctx($"Attack 이벤트의 Payload는 bool 형식이어야 하지만 '{cd.Payload?.GetType().Name ?? "null"}'이(가) 감지되었습니다."),
+                            Ctx($"Attack 이벤트의 Payload는 bool 형식이어야 하지만 '{conditionData.Payload?.GetType().Name ?? "null"}'이(가) 감지되었습니다."),
                             this);
                         return;
                     }
@@ -48,12 +46,12 @@ namespace Actors.Monsters
                     ShowExclamationMarkIndicator();
                 }
 
-                if (cd.Is(MonsterCondition.Damaged) && _config.ShowDamageText)
+                if (conditionData.Is(MonsterCondition.Damaged) && _config.ShowDamageText)
                 {
-                    if (cd.Payload is not DamageInfo damageInfo)
+                    if (conditionData.Payload is not DamageInfo damageInfo)
                     {
                         Debug.LogWarning(
-                            Ctx($"Damaged 이벤트의 Payload는 {nameof(DamageInfo)} 형식이어야 하지만 '{cd.Payload?.GetType().Name ?? "null"}'이(가) 감지되었습니다."),
+                            Ctx($"Damaged 이벤트의 Payload는 {nameof(DamageInfo)} 형식이어야 하지만 '{conditionData.Payload?.GetType().Name ?? "null"}'이(가) 감지되었습니다."),
                             this);
                         return;
                     }
@@ -136,11 +134,7 @@ namespace Actors.Monsters
                         target.ShowDamageTextIndicator(1);
                 }
                 else
-                {
-                    EditorGUILayout.HelpBox(
-                        "Indicator 테스트는 플레이 모드에서만 사용할 수 있습니다.",
-                        MessageType.Info);
-                }
+                    GUILayout.Label("Indicator 테스트는 플레이 모드에서만 사용할 수 있습니다.", EditorStyles.centeredGreyMiniLabel);
             }
         }
 #endif

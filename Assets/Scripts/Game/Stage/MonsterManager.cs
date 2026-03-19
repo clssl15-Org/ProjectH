@@ -21,7 +21,7 @@ namespace Game.Stage
 
             if (!monster.IsValid())
                 throw new ArgumentException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx("유효하지 않은 인자가 입력되었습니다.")),
+                    Ctx("유효하지 않은 monster 인자가 입력되었습니다.")),
                     nameof(monster));
 
             if (_monsters.Contains(monster))
@@ -36,10 +36,10 @@ namespace Game.Stage
         private void OnDestroy() => Destroy();
         internal void Destroy()
         {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Destroy, wasDestroyed: {_isDestroyed}");
+
             if (_isDestroyed) return;
             _isDestroyed = true;
-
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _monsters.ToList().ForEach(m =>
             {

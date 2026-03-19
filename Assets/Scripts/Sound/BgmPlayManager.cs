@@ -1,3 +1,5 @@
+using Infrastructure;
+
 namespace Sound
 {
     public enum BgmName
@@ -13,17 +15,24 @@ namespace Sound
         Final_Boss,
     }
 
-    public class BgmPlayManager : AudioPlayManager<BgmName>
+    public class BgmPlayManager : AudioPlayManager<BgmName>,
+        IInjectable<GameServices>
     {
+        private GameServices _gameServices;
+
+        void IInjectable<GameServices>.Inject(GameServices gameServices) =>
+            _gameServices = gameServices;
+
+
         private void Start()
         {
-            SetVolume(GameServices.BgmVolume);
-            GameServices.BgmChanged += SetVolume;
+            SetVolume(_gameServices.BgmVolume);
+            _gameServices.BgmChanged += SetVolume;
         }
 
         private void OnDestroy()
         {
-            GameServices.BgmChanged -= SetVolume;
+            _gameServices.BgmChanged -= SetVolume;
         }
     }
 }

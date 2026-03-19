@@ -80,6 +80,7 @@ namespace Actors.PlayerSystem
             //CharacterActor.Velocity = new Vector2(CharacterActor.Velocity.x, jumpForce);
             //extraJumpCount--;
             //subsequentJumpForce = jumpForce * subsequentJumpMultiplier;
+            LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Jump);
         }
         public override void UpdateBehaviour(float dt)
         {

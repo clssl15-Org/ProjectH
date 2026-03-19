@@ -85,7 +85,7 @@ namespace Actors.Monsters
                     return;
                 }
 
-                Blackboard.Committing = true;
+                Blackboard.IsCommitting = true;
 
                 _notification = new MonsterConditionData(MonsterCondition.Attack, isRanged);
                 Owner.NotifyCondition(_notification);
@@ -94,7 +94,7 @@ namespace Actors.Monsters
             protected override void OnHalt(DetailedNodeStatus _)
             {
                 Owner.IgnorePlayerInteraction = false;
-                Blackboard.Committing = false;
+                Blackboard.IsCommitting = false;
 
                 _notification?.Complete();
                 _notification = null;

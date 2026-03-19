@@ -266,7 +266,7 @@ namespace Actors
             // 2. 스폰된 몬스터의 Monster 스크립트에서 사망 이벤트를 가져옴
             monsterScript.ConditionChanged += cond =>
             {
-                if (cond.Condition == Actors.MonsterCondition.Die)
+                if (cond.Condition == Actors.MonsterCondition.Dying)
                 {
                     // 죽었을 때 처리
                     OnMonsterDied(monsterInstance);

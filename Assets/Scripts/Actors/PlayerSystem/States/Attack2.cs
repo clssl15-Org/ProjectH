@@ -110,6 +110,20 @@ namespace Actors.PlayerSystem
         {
             ResetAttack();
             UpdateAttackParameters();
+
+            Collider2D[] hitColliders = Physics2D.OverlapBoxAll(
+                attackPoint,
+                scaledSize,
+                attackAngle
+            );
+            PlayerAction action = PlayerAction.Attack2;
+            foreach (Collider2D hitCollider in hitColliders)
+            {
+                if (hitCollider.gameObject.TryGetComponent<IDamageable>(out var damageableObject) && !hitCollider.CompareTag("Player"))
+                    action = PlayerAction.AttackHit2;
+            }
+
+            LevelManager.Instance.SoundManager.PlayActionSound(action);
         }
 
         public override void UpdateBehaviour(float dt)

@@ -8,6 +8,7 @@ using UnityEngine;
 public class DamageRoulette : MonoBehaviour
 {
     public bool isApplied = false;
+    public bool canUseSkill = true;
 
     private SkillManager skillManager;
 
@@ -73,6 +74,7 @@ public class DamageRoulette : MonoBehaviour
         if (isApplied) return false;
 
         isApplied = true;
+        canUseSkill = false;
 
         var token = _currentRouletteToken = new();
         context = new Context(bonuses.ToArray(), probabilities.ToArray(), bonus =>
@@ -82,6 +84,7 @@ public class DamageRoulette : MonoBehaviour
 
             transform.root.GetComponentInChildren<Player>().RouletteDamageMultiplier = bonus;
             skillManager.canChangeSkill = false;
+            canUseSkill = true;
         });
 
         return true;

@@ -71,6 +71,19 @@ namespace Actors.PlayerSystem
                 Player.CurrentDashCount = Player.MaxDashCount;
                 Player.CurrentJumpCount = Player.MaxJumpCount;
             }
+
+            if (CharacterActor.IsGrounded && CharacterActor.Velocity.magnitude !=0)
+            {
+                LevelManager.Instance.SoundManager.PlayLoopSound(PlayerAction.Run);
+            }
+            else
+            {
+                LevelManager.Instance.SoundManager.StopLoopSound();
+            }
+        }
+        public override void ExitBehaviour(float dt)
+        {
+            LevelManager.Instance.SoundManager.StopLoopSound();
         }
 
         private void ProcessVelocity(float dt)
