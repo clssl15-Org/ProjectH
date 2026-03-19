@@ -19,7 +19,8 @@ public enum PlayerAction
     Skill2,
     Skill3,
     UltimateCharge,
-    UltimateRelease
+    UltimateRelease,
+    PotionUse,
 }
 
 [System.Serializable]
