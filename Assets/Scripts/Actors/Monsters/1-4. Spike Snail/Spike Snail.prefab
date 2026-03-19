@@ -1561,9 +1561,12 @@ MonoBehaviour:
   _audios:
   - Name: Attack
     AudioClip: {fileID: 8300000, guid: 9ba77672e1be2054a8fd5e723c2082fe, type: 3}
+    PlayOption: 1
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+    PlayOption: 3
   _volumeRate: 1
+  <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
   _dieClipName: Die
