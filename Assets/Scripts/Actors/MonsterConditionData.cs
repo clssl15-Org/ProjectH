@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Actors
 {
@@ -14,9 +15,9 @@ namespace Actors
         Died,
     }
 
-    public interface IMonsterConditionData
+    public class MonsterConditionData
     {
-        MonsterCondition Condition { get; }
+        public MonsterCondition Condition { get; init; }
         /// <summary>
         /// 인자 종류
         /// <list type="bullet">
@@ -24,22 +25,43 @@ namespace Actors
         ///   <item><description>Attack: <see cref="MonsterAttackData"/></description></item>
         /// </list>
         /// </summary>
-        object Payload { get; }
-        event Action Callback;
+        public object Payload { get; init; } = null;
+        public event Action Callback;
 
-        bool Is(params MonsterCondition[] conditions);
+        public MonsterConditionData() { }
+        public MonsterConditionData(MonsterCondition condition, object payload = null)
+        {
+            Condition = condition;
+            Payload = payload;
+        }
+
+        public bool Is(params MonsterCondition[] conditions) =>
+            conditions.Contains(Condition);
+
         /// <summary>
         /// 이 메서드는 발행자만 호출할 수 있습니다.
         /// </summary>
-        void Complete();
+        public void Complete()
+        {
+            Callback?.Invoke();
+            Callback = null;
+        }
+    }
+
+
+    public enum AttackEvent
+    {
+        None,
+        Started,
+        HitPlayer,
+        Finished,
     }
 
     public class MonsterAttackData
     {
         public string Name { get; }
         public bool IsRangedAttack { get; }
-        public event Action Executing;
-        public event Action HitPlayer;
+        public event Action<AttackEvent> EventOccurred;
 
         public MonsterAttackData(string name, bool isRangedAttack)
         {
@@ -47,7 +69,6 @@ namespace Actors
             IsRangedAttack = isRangedAttack;
         }
 
-        public void OnExecuting() => Executing?.Invoke();
-        public void OnHit() => HitPlayer?.Invoke();
+        public void NotifyEvent(AttackEvent phase) => EventOccurred?.Invoke(phase);
     }
 }

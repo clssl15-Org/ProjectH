@@ -1,8 +1,7 @@
 using System;
+using System.Linq;
 using Sound;
 using UnityEngine;
-using System.Linq;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,13 +10,15 @@ namespace Actors.Monsters
 {
     public class MonsterAudioPlayer : SfxAudioController
     {
-        [Header(nameof(MonsterAudioPlayer))]
-        [SerializeField] private AttackPhase _defaultHitSoundPlayTiming = AttackPhase.Executing;
+        [field: Header("Monster Audio Player")]
+        [field: SerializeField] public bool StandaloneMode { get; set; } = false;
+        [Space]
+        [SerializeField] private AttackEvent _defaultHitSoundPlayTiming = AttackEvent.Started;
         [Serializable]
         public struct HitSoundPlayTimingOptions
         {
             public string Name;
-            public AttackPhase Timing;
+            public AttackEvent Timing;
         }
         [SerializeField] private HitSoundPlayTimingOptions[] _hitSoundPlayTimings;
 
@@ -30,60 +31,62 @@ namespace Actors.Monsters
 
         private void Start()
         {
-            if (!TryGetComponent(out _monster))
-                throw new InvalidOperationException(Ctx(
-                    $"{nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
-
             ApplySettings();
+            object playToken = null;
 
-            _monster.ConditionChanged += conditionData =>
+            if (!StandaloneMode)
             {
-                if (_defaultHitSoundPlayTiming != AttackPhase.None
-                    && conditionData.Is(MonsterCondition.Attack, MonsterCondition.Heal))
+                if (!TryGetComponent(out _monster))
+                    throw new InvalidOperationException(Ctx(
+                        $"{nameof(IMonsterInternal)} 컴포넌트를 가져오는 데 실패했습니다."));
+
+                _monster.ConditionChanged += conditionData =>
                 {
-                    if (conditionData.Payload is not MonsterAttackData attackData)
-                        return;
-
-                    var timing = _defaultHitSoundPlayTiming;
-                    var target = _hitSoundPlayTimings.FirstOrDefault(t => t.Name == attackData.Name);
-                    if (!string.IsNullOrEmpty(target.Name)) timing = target.Timing;
-
-                    switch (timing)
+                    if (_defaultHitSoundPlayTiming != AttackEvent.None)
                     {
-                        case AttackPhase.Executing:
-                            attackData.Executing += () => TryPlay(attackData.Name);
-                            break;
+                        if (conditionData.Is(MonsterCondition.Attack, MonsterCondition.Heal))
+                        {
+                            if (conditionData.Payload is not MonsterAttackData attackData)
+                                return;
 
-                        case AttackPhase.HitPlayer:
-                            attackData.HitPlayer += () => TryPlay(attackData.Name);
-                            break;
+                            var targetEventType = _defaultHitSoundPlayTiming;
+                            var targetOption = _hitSoundPlayTimings.FirstOrDefault(t => t.Name == attackData.Name);
+                            if (!string.IsNullOrEmpty(targetOption.Name)) targetEventType = targetOption.Timing;
 
-                        default:
-                            throw new ArgumentOutOfRangeException(
-                                nameof(_defaultHitSoundPlayTiming),
-                                Ctx($"알 수 없는 공격 재생 타이밍 '{_defaultHitSoundPlayTiming}'이(가) 입력되었습니다."));
+                            var token = playToken = new();
+                            attackData.EventOccurred += attackEvent =>
+                            {
+                                if (attackEvent == targetEventType)
+                                    TryPlay(attackData.Name);
+                            };
+
+                            if (TryGetAudioData(attackData.Name, out var clip)
+                                && clip.PlayOption == PlayOption.Loop)
+                            {
+                                attackData.EventOccurred += attackEvent =>
+                                {
+                                    if (playToken == token && attackEvent == AttackEvent.Finished)
+                                    {
+                                        Stop();
+
+                                        var finalizerName = attackData.Name + "_Finish";
+                                        if (TryGetAudioData(finalizerName, out var clip))
+                                            TryPlay(finalizerName);
+                                    }
+                                };
+                            }
+                        }
                     }
-                }
 
-                if (conditionData.Is(MonsterCondition.Dying))
-                {
-                    if (!TryPlay(_dieClipName, false))
-                        Debug.LogWarning(
-                            $"몬스터가 사망하였지만 '{_dieClipName}' 오디오를 재생하지 못했습니다.",
-                            this);
-                }
-            };
-
-            _monster.ConditionChanged += conditionData =>
-            {
-                if (conditionData.Is(MonsterCondition.Dying))
-                {
-                    if (!TryPlay(_dieClipName, false))
-                        Debug.LogWarning(
-                            $"몬스터가 사망하였지만 '{_dieClipName}' 오디오를 재생하지 못했습니다.",
-                            this);
-                }
-            };
+                    if (conditionData.Is(MonsterCondition.Dying))
+                    {
+                        if (!TryPlay(_dieClipName))
+                            Debug.LogWarning(
+                                Ctx($"몬스터가 사망하였지만 '{_dieClipName}' 오디오를 재생하지 못했습니다."),
+                                this);
+                    }
+                };
+            }
         }
 
         protected override void ApplySettings()

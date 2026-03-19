@@ -422,7 +422,6 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
-  - component: {fileID: 519420029}
   - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
@@ -431,14 +430,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &519420029
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -502,7 +493,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1244402922}
   m_Father: {fileID: 733599824}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &519420033
@@ -1127,6 +1119,46 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+--- !u!1 &1244402921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1244402922}
+  - component: {fileID: 1244402923}
+  m_Layer: 0
+  m_Name: Audio Listener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1244402922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244402921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 519420032}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1244402923
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244402921}
+  m_Enabled: 1
 --- !u!1 &1309707465
 GameObject:
   m_ObjectHideFlags: 0
@@ -5144,6 +5176,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1166622135}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1529458333 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5944037012842129890, guid: 2e290ceb88cdd6e41bfaf9492b1dd6c5, type: 3}
+  m_PrefabInstance: {fileID: 94094722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1610938402
 GameObject:
   m_ObjectHideFlags: 0
@@ -5275,36 +5312,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 572942001}
     m_Modifications:
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _autoAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _attackMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: _targetPlayer
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _useTargetPlayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _useDebugStatsInfo
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _ambushWeaponActiveDuration
-      value: 0.1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1529458333}
     - target: {fileID: 3235194340515565401, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_Name
       value: Cerberus Package
       objectReference: {fileID: 0}
     - target: {fileID: 3235194340515565401, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4515591590893851459, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5346,6 +5363,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.data[0].Name
+      value: AmbushAttack_In
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.data[1].Name
+      value: Die
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: <StandaloneMode>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.data[0].AudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 165f30fca3d45e84aaad270b0843e3f3, type: 3}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.data[1].AudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 231a5fd2a1210e7478592d1d2e0a2b8e, type: 3}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.data[0].PlayOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269289693782172788, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _audios.Array.data[1].PlayOption
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5365,7 +5414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 58172870204027201, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 64642556491935713, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
       propertyPath: m_Size.y
@@ -5415,22 +5464,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6677787720349256673, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
-      propertyPath: Loop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8388829476722659737, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
-      propertyPath: _audios.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8388829476722659737, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
-      propertyPath: _audios.Array.data[1].Name
-      value: Die
-      objectReference: {fileID: 0}
-    - target: {fileID: 8388829476722659737, guid: 1c75d9e3825c2a9478be6bd8d862fe1a, type: 3}
-      propertyPath: _audios.Array.data[1].AudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 7126d4abda80f5042bde3a239cfd72d7, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

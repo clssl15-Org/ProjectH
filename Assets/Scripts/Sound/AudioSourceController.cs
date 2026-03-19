@@ -13,6 +13,7 @@ namespace Sound
         {
             public string Name;
             public AudioClip AudioClip;
+            public PlayOption PlayOption;
         }
         [SerializeField] private AudioData[] _audios;
 
@@ -58,26 +59,60 @@ namespace Sound
             _audioSource = GetComponent<AudioSource>();
         }
 
-        public void Play(string name, bool playIndependently = false)
+        public enum PlayOption
         {
-            if (!TryPlay(name, playIndependently))
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"'{name}' 오디오를 재생하는 데 실패했습니다."));
+            None,
+            OneShot,
+            Loop,
+            Independently,
         }
-        public bool TryPlay(string name, bool playIndependently = false)
+        public void Play(string name, PlayOption playOption = PlayOption.None)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, independent: {playIndependently}");
+            if (!TryPlay(name, playOption))
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                    $"'{name}' 오디오를 재생하는 데 실패했습니다. " +
+                    $"오디오 목록: {(_audios?.Length > 0 ? ("\n" + string.Join(", ", _audios.Select(a => a.Name))) : "None")}"));
+        }
+        public bool TryPlay(string name, PlayOption playOption = PlayOption.None)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, playOption: {playOption}");
             EnsureInitialization();
 
-            var clip = _audios.FirstOrDefault(a => string.Equals(a.Name, name, StringComparison.OrdinalIgnoreCase));
-            if (clip.Name == null || !clip.AudioClip) return false;
+            if (!TryGetAudioData(name, out var clip))
+                return false;
 
-            if (playIndependently)
-                AudioSource.PlayClipAtPoint(clip.AudioClip, transform.position, _audioSource.volume);
-            else
-                _audioSource.PlayOneShot(clip.AudioClip);
+            _audioSource.loop = false;
+
+            if (playOption == PlayOption.None)
+                playOption = clip.PlayOption != PlayOption.None
+                    ? clip.PlayOption
+                    : throw new ArgumentException(
+                        $"{nameof(playOption)}은(는) {PlayOption.None}일 수 없습니다.");
+
+            switch (playOption)
+            {
+                case PlayOption.Loop:
+                    _audioSource.clip = clip.AudioClip;
+                    _audioSource.loop = true;
+                    _audioSource.Play();
+                    break;
+
+                case PlayOption.Independently:
+                    AudioSource.PlayClipAtPoint(clip.AudioClip, transform.position, _audioSource.volume);
+                    break;
+
+                default:
+                    _audioSource.PlayOneShot(clip.AudioClip);
+                    break;
+            }
 
             return true;
+        }
+
+        protected bool TryGetAudioData(string name, out AudioData audioData)
+        {
+            audioData = _audios.FirstOrDefault(a => string.Equals(a.Name, name, StringComparison.OrdinalIgnoreCase));
+            return audioData.Name != null && audioData.AudioClip;
         }
 
         public void Stop()
@@ -86,6 +121,8 @@ namespace Sound
             EnsureInitialization();
 
             _audioSource.Stop();
+            _audioSource.loop = false;
+            _audioSource.clip = null;
         }
     }
 }

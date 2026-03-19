@@ -42,7 +42,7 @@ namespace Actors.Monsters.Actions
                         $"{nameof(input)}은(는) null이거나 {nameof(Payload)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다.",
                         nameof(input));
 
-                ((MonsterAttackData)payload.MonsterConditionData.Payload).OnExecuting();
+                ((MonsterAttackData)payload.MonsterConditionData.Payload).NotifyEvent(AttackEvent.Started);
             }
 
             _currentLaunchInfo = _getLaunchInfo();

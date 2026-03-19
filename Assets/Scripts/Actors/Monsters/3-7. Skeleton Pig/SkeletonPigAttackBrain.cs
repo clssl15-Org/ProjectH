@@ -33,9 +33,15 @@ namespace Actors.Monsters
                             nameof(mode), i, Owner.FormatLogMessage($"공격 패턴의 범위는 0 이상 2 이하여야 합니다."))
                     };
 
-                _notification = new(
-                    mode != AttackMode.Roar ? MonsterCondition.Attack : MonsterCondition.Heal,
-                    new MonsterAttackData(mode.ToString(), mode == AttackMode.DashAttack));
+                if (mode != AttackMode.Roar)
+                    _notification = new(
+                        MonsterCondition.Attack,
+                        new MonsterAttackData(mode.ToString(), mode == AttackMode.DashAttack));
+                else
+                    _notification = new(
+                        MonsterCondition.Heal,
+                        new MonsterAttackData(mode.ToString(), false)); // HACK: Heal도 MonsterAttackData를 사용합니다.
+
 
                 if (!Owner.TryDoAction(new MonsterActionPlayInfo(
                      Name: mode.ToString(),
@@ -61,7 +67,7 @@ namespace Actors.Monsters
                     Owner.HP += Mathf.FloorToInt(Owner.StatsInfo.MaxHP * owner.StatsInfo.RoarHealingRate);
                     Owner.NotifyCondition(_notification);
 
-                    ((MonsterAttackData)_notification.Payload).OnExecuting();
+                    ((MonsterAttackData)_notification.Payload).NotifyEvent(AttackEvent.Started);
                     _notification.Complete();
                 }
                 else

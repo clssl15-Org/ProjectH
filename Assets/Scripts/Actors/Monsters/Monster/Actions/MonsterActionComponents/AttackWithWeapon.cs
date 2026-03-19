@@ -117,8 +117,8 @@ namespace Actors.Monsters.Actions
                 {
                     var attackData = (MonsterAttackData)_payload.MonsterConditionData.Payload;
 
-                    attackData.OnExecuting();
-                    _weapon.SetHitPlayerCallback(attackData.OnHit);
+                    attackData.NotifyEvent(AttackEvent.Started);
+                    _weapon.SetHitPlayerCallback(() => attackData.NotifyEvent(AttackEvent.HitPlayer));
                 }
 
                 if (_payload.GetCheckCondition != null)
@@ -132,6 +132,7 @@ namespace Actors.Monsters.Actions
                 UnityEngine.Object.Destroy(_weapon.gameObject);
 
             _weapon = null;
+            _payload = null;
         }
         
         protected override void OnInterrupt(InterruptType _)

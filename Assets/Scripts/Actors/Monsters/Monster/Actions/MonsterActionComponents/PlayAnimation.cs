@@ -78,11 +78,6 @@ namespace Actors.Monsters.Actions
 
         protected override void OnEnter(object input)
         {
-            if (input != null && input is not AnimationPlayInfo animationPlayInfo)
-                throw new ArgumentException(MonsterAction.Owner.FormatLogMessage(
-                    $"{nameof(input)}은(는) null이거나 {nameof(AnimationPlayInfo)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다."),
-                    nameof(input));
-
             _currentAnimationPlayInfo
                 = input as AnimationPlayInfo
                 ?? new(DelayBeforePlay, DelayAfterPlay);

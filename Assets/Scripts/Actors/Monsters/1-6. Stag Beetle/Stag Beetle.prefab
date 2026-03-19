@@ -263,7 +263,7 @@ MonoBehaviour:
   _rollingAttackWeapon: {fileID: 5738857686286728426}
   _rollingTime: 3
   _rollingSpeed: 5
-  _spikeSpeed: 10
+  _spikeSpeed: 20
   _spikeScaleFactor: 0.03
   _waitTimeAfterLaunch: 0.1
   _roarIndicator: {fileID: 5562771688442936536}
@@ -390,8 +390,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audios:
+  - Name: RollAttack
+    AudioClip: {fileID: 8300000, guid: edb48fb83fe0f4a4c87fec3c716c7f22, type: 3}
+    PlayOption: 2
+  - Name: RollAttack_Finish
+    AudioClip: {fileID: 8300000, guid: adb0487934633ad459b92d78b8535349, type: 3}
+    PlayOption: 1
+  - Name: SpikeAttack
+    AudioClip: {fileID: 8300000, guid: a01954eaadc293742b67d09f7257f8a7, type: 3}
+    PlayOption: 1
+  - Name: Roar
+    AudioClip: {fileID: 8300000, guid: 30027ec1a61e87c43b59a9538a8293db, type: 3}
+    PlayOption: 1
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 7126d4abda80f5042bde3a239cfd72d7, type: 3}
+    PlayOption: 3
   _volumeRate: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []

@@ -467,10 +467,13 @@ MonoBehaviour:
   _audios:
   - Name: Attack
     AudioClip: {fileID: 8300000, guid: 524ec87f159dbf0498b4eb883d8896af, type: 3}
+    PlayOption: 1
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+    PlayOption: 3
   _volumeRate: 1
-  _hitSoundPlayTiming: 2
+  _defaultHitSoundPlayTiming: 2
+  _hitSoundPlayTimings: []
   _dieClipName: Die
   _overrideSpatialBlend: 0
   _spatialBlend: 0.7

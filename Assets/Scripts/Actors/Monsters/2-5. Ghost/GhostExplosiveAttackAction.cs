@@ -76,7 +76,7 @@ namespace Actors.Monsters
                             soundTimer = new Timer(AttackSoundTiming, succeeded =>
                             {
                                 if (succeeded && _payload != null)
-                                    ((MonsterAttackData)_payload.MonsterConditionData.Payload).OnExecuting();
+                                    ((MonsterAttackData)_payload.MonsterConditionData.Payload).NotifyEvent(AttackEvent.Started);
                             });
 
                             AnimationPlayer.Play(

@@ -14,7 +14,7 @@ namespace Actors
         Direction Direction { get; }
         bool IsAlive { get; }
 
-        event Action<IMonsterConditionData> ConditionChanged;
+        event Action<MonsterConditionData> ConditionChanged;
         event Action Destroyed;
 
         int MaxHP { get; }

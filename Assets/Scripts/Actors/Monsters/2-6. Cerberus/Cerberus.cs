@@ -4,13 +4,15 @@ using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
+using Infrastructure;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace Actors.Monsters.Bosses
 {
-    [RequireComponent(typeof(StandaloneHitAction))]
+    [RequireComponent(typeof(StandaloneHitAction), typeof(MonsterAudioPlayer))]
     public partial class Cerberus : Monster<CerberusStats>, IBoss, IPlayerInitializable
     {
         // Front
@@ -65,6 +67,8 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
+        private MonsterAudioPlayer _audioPlayer;
+
         internal override GameObject DetectedPlayer => _player?.gameObject;
         private const string IsAwake = nameof(IsAwake);
 
@@ -109,7 +113,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "BiteAttack")
-                        ?.TimeScale ?? 1f)
+                            ?.TimeScale ?? 1f)
                     )
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new AttackWithWeapon(
@@ -167,12 +171,14 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new SetTimeScale(monster
                         ._animationTimeScales
                         .FirstOrDefault(ats => ats.AnimationName == "AmbushAttack")
-                        ?.TimeScale ?? 1f)
+                            ?.TimeScale ?? 1f)
                     )
                     .AddAnimationComponent(
                         "AmbushAttackIn",
                         out var ambushIntro_anim
                     )
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster._audioPlayer.Play("AmbushAttack_In")))
                     .AddDelay(
                         0.4f,
                         out var ambushIntro_attack
@@ -283,6 +289,9 @@ namespace Actors.Monsters.Bosses
                 throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_dropAttack_roarEffectPosition)}'을(를) 가지고 있어야 합니다.");
 
+            _audioPlayer = GetComponent<MonsterAudioPlayer>();
+            _audioPlayer.StandaloneMode = true;
+
             base.Awake();
         }
 
@@ -328,7 +337,7 @@ namespace Actors.Monsters.Bosses
                 && _targetPlayer.TryGetComponent<IPlayer>(out var player))
                 InitializePlayer(player);
 
-            if (_autoAwake)
+            if (_autoAwake.Resolve(false))
                 Commence();
         }
 
