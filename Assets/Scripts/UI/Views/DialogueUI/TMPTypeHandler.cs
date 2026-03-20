@@ -16,7 +16,7 @@ namespace UI
         private TextMeshProUGUI _textUI;
         private Coroutine _typingCoroutine;
 
-        private bool _isAwake = false;
+        private bool _isAwake;
 
         private void Awake() => EnsureInitialization();
         private void EnsureInitialization()

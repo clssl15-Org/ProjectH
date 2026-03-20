@@ -19,6 +19,24 @@ namespace UI
         [SerializeField] private Image _portraitUI;
         [SerializeField] private TextMeshProUGUI _nametagUI;
         [SerializeField] private TMPTypeHandler _typeHandler;
+        [SerializeField] private TMP_InputField _inputField;
+
+        public bool IsInputMode
+        {
+            get => _isInputMode;
+            set
+            {
+                if (value == _isInputMode) return;
+                _isInputMode = value;
+
+                if (_inputField)
+                    _inputField.text = string.Empty;
+
+                _typeHandler.gameObject.SetActive(!value);
+                _inputField.gameObject.SetActive(value);
+            }
+        }
+        public string InputText => _inputField.text;
 
         public bool IsTotallyTyped => _typeHandler.IsTotallyTyped;
 
@@ -34,7 +52,8 @@ namespace UI
 
         private GameAssetLibrary _gameAssetLibrary;
         private EnableWithAnimation _enabler;
-        private bool _isAwake = false;
+        private bool _isInputMode;
+        private bool _isAwake;
 
         private void Start()
         {
@@ -57,12 +76,18 @@ namespace UI
         public void SetContent(DialogueLine dialogueData)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Set Content: {dialogueData.Character}");
-            GetData(dialogueData, out var name, out var portrait, out var dialogue);
+            GetData(dialogueData, out var name, out var portrait, out var dialogueText);
 
             _nametagUI.text = name;
             _portraitUI.sprite = portrait;
 
-            _typeHandler.TypeDialogue(dialogue);
+            if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
+                dialogueText = dialogueText.Replace("{player}", playerInfo.Name, StringComparison.OrdinalIgnoreCase);
+            else
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                    "Player 정보를 가져오지 못했기 때문에 {player} 문자열을 치환하지 못했습니다."));
+
+            _typeHandler.TypeDialogue(dialogueText);
         }
 
         public void SkipTyping() => _typeHandler.SkipTyping();

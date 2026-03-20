@@ -38,11 +38,11 @@ namespace Actors.Monsters
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged(
-                                    Engaged.RangeType.Ranged,
-                                    Mathf.Abs((
-                                        owner._landAttackWeapon?.transform.localPosition.x
-                                        ?? Engaged.DefaultTargetAttackRange)
-                                        * owner.transform.lossyScale.z)
+                                Engaged.RangeType.Ranged,
+                                Mathf.Abs((
+                                    owner._landAttackWeapon?.transform.localPosition.x
+                                    ?? Engaged.DefaultTargetAttackRange)
+                                    * owner.transform.lossyScale.z)
                                 )
                                 .AddChild(new Adjusting())
                                 .AddChild(new DeadEnd())
@@ -92,7 +92,8 @@ namespace Actors.Monsters
                     .AddComponent(new AttackWithWeapon(
                         monster._landAttackWeapon,
                         monster._landAttackActiveTiming,
-                        monster._landAttackActiveDuration))
+                        monster._landAttackActiveDuration)
+                    )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()

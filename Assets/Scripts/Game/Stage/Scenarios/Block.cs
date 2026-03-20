@@ -12,6 +12,9 @@ namespace Game.Stage
 
     internal class DialogueBlock : Block
     {
+        public bool OpenDialogue { get; init; } = true;
+        public bool CloseDialogue { get; init; } = true;
+
         private DialogueManager DialogueManager => Parent.StageManager.DialogueManager;
         private string _dialogueTitle;
         private Action _onDialogueEnd;
@@ -24,13 +27,14 @@ namespace Game.Stage
 
         protected override void OnEnter(params object[] _)
         {
-            DialogueManager.Play(_dialogueTitle, _onDialogueEnd);
+            DialogueManager.Play(_dialogueTitle, OpenDialogue, CloseDialogue, _onDialogueEnd);
         }
 
         protected override void OnExit()
         {
             if (DialogueManager)
-                DialogueManager.Stop();
+                DialogueManager.Stop(CloseDialogue);
         }
     }
 }
+ 

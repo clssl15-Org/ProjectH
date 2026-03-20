@@ -80,6 +80,7 @@ namespace Actors.Monsters.Bosses
                         posDelta,
                         DarkTherion.StatsInfo.ProjectileSpeed);
 
+                    DarkTherion.AudioPlayer.Play("ProjectileAttack");
                     _fireCount++;
                 }
             }

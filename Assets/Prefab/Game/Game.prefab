@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 0}
+  _worldUI: {fileID: 0}
 --- !u!114 &2614023883349732603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,6 +233,7 @@ MonoBehaviour:
   _additionalInputControllables: []
   _playerObject: {fileID: 0}
   _rubielObject: {fileID: 0}
+  _box: {fileID: 0}
   _portal: {fileID: 0}
   <Canvas>k__BackingField: {fileID: 0}
   <PlayerUI>k__BackingField: {fileID: 0}
@@ -242,6 +244,8 @@ MonoBehaviour:
   <BubbleDialogueUI>k__BackingField: {fileID: 0}
   <GuideAndWorldRecordsUI>k__BackingField: {fileID: 0}
   <DarkscreenUI>k__BackingField: {fileID: 0}
+  _fadeInOnStart: 1
+  _bgm: 0
 --- !u!114 &4000332937720792618
 MonoBehaviour:
   m_ObjectHideFlags: 0

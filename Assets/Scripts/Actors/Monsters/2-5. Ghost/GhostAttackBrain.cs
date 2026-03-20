@@ -19,12 +19,12 @@ namespace Actors.Monsters
             // Content
             public GhostAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
-            protected override void OnOpen(params object[] _)
+            protected override void OnOpen(object[] _)
             {
-                var ower = (Ghost)Owner;
-                AttackMode mode;
+                var owner = (Ghost)Owner;
+                AttackMode mode = owner._attackMode.Resolve(AttackMode.Any);
 
-                if (ower._attackMode == AttackMode.Any)
+                if (mode == AttackMode.Any)
                     mode = UnityEngine.Random.Range(0f, 1f) switch
                     {
                         var i when 0f <= i && i < 0.75f => AttackMode.RangedAttack,
@@ -32,8 +32,6 @@ namespace Actors.Monsters
                         var i => throw new ArgumentOutOfRangeException(
                             nameof(i), i, Owner.FormatLogMessage($"공격 패턴의 범위는 0 이상 1 이하여야 합니다."))
                     };
-                else
-                    mode = ower._attackMode;
 
                 // 폭발 공격 중에는 플레이어 상호작용 없음
                 if (mode == AttackMode.ExplosiveAttack)
@@ -48,28 +46,45 @@ namespace Actors.Monsters
                 {
                     case AttackMode.RangedAttack:
                         action = "Attack_1";
+                        isRanged = true;
+
+                        _notification = new MonsterConditionData(
+                            MonsterCondition.Attack,
+                            new MonsterAttackData(action, isRanged));
+
                         inputs = new object[]
                         {
                             null,
-                            (Func<IWeapon, Func<bool>>)(weapon =>
+                            new AttackWithWeapon.Payload
                             {
-                                if (!weapon.gameObject.TryGetComponent<TriggerContactHandler>(out var contactHandler))
-                                    throw new ArgumentException(
-                                        Owner.FormatLogMessage($"{nameof(weapon)}은(는) '{nameof(TriggerContactHandler)}' 컴포넌트를 가지고 있어야 합니다."),
-                                        nameof(weapon));
+                                GetCheckCondition = weapon =>
+                                {
+                                    if (!weapon.gameObject.TryGetComponent<TriggerContactHandler>(out var contactHandler))
+                                        throw new ArgumentException(
+                                            Owner.FormatLogMessage($"{nameof(weapon)}은(는) '{nameof(TriggerContactHandler)}' 컴포넌트를 가지고 있어야 합니다."),
+                                            nameof(weapon));
 
-                                return () => !contactHandler.Collisions.Any();
-                            })
+                                    return () => !contactHandler.Collisions.Any();
+                                },
+                                MonsterConditionData = _notification
+                            }
                         };
-                        isRanged = true;
-                        break;
 
+                        break;
 
                     case AttackMode.ExplosiveAttack:
                         action = "Attack_2";
                         isRanged = false;
-                        break;
 
+                        _notification = new MonsterConditionData(
+                            MonsterCondition.Attack,
+                            new MonsterAttackData(action, isRanged));
+
+                        inputs = new object[]
+                        {
+                            new AttackWithWeapon.Payload(MonsterConditionData: _notification)
+                        };
+                        break;
 
                     default:
                         throw new ArgumentOutOfRangeException(
@@ -85,9 +100,8 @@ namespace Actors.Monsters
                     return;
                 }
 
-                Blackboard.IsCommitting = true;
 
-                _notification = new MonsterConditionData(MonsterCondition.Attack, isRanged);
+                Blackboard.IsCommitting = true;
                 Owner.NotifyCondition(_notification);
             }
 

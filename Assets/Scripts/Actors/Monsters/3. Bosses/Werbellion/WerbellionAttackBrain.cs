@@ -60,7 +60,7 @@ namespace Actors.Monsters.Bosses
                     return false;
                 }
 
-                var attackmode = Werbellion._attackMode;
+                var attackmode = Werbellion._attackMode.Resolve(AttackMode.Any);
                 if (attackmode == AttackMode.Any)
                 {
                     do
@@ -75,7 +75,6 @@ namespace Actors.Monsters.Bosses
 
 
                 var attackName = attackmode.ToString() + "Attack";
-
                 if (attackmode == AttackMode.Portal)
                 {
                     _avoidNext.Add(attackmode);
@@ -89,9 +88,11 @@ namespace Actors.Monsters.Bosses
                     || attackmode == AttackMode.StraightArea
                     || attackmode == AttackMode.Stun;
 
-                _notification = new MonsterConditionData(MonsterCondition.Attack, isRangedAttack);
-                Owner.NotifyCondition(_notification);
+                _notification = new MonsterConditionData(
+                    MonsterCondition.Attack,
+                    new MonsterAttackData(attackName, isRangedAttack));
 
+                Owner.NotifyCondition(_notification);
                 return true;
             }
 
@@ -119,7 +120,7 @@ namespace Actors.Monsters.Bosses
                     allowRestart: true))
                 {
                     Debug.LogWarning(Owner.FormatLogMessage(
-                        $"{name} 행동에 실패하였기 때문에 {Name} 상태로 진입할 수 없습니다.\n{reason}"));
+                        $"{name} 행동에 실패하였기 때문에 '{Name}' 상태로 진입할 수 없습니다.\n{reason}"));
 
                     Complete(false);
                 }
@@ -136,7 +137,9 @@ namespace Actors.Monsters.Bosses
                     {
                         // Teleport In
                         null,
+                        null,
                         airPos,
+                        null,
                         null,
 
                         // Attack
@@ -145,7 +148,9 @@ namespace Actors.Monsters.Bosses
 
                         // Teleport Out
                         null,
+                        null,
                         groundPos,
+                        null,
                         null,
                     },
                     Callback: result =>

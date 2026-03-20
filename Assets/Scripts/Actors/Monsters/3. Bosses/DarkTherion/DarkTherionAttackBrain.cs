@@ -1,5 +1,6 @@
 using System;
 using Actors.Monsters.Actions;
+using Infrastructure;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace Actors.Monsters.Bosses
             protected override void OnOpen(params object[] _)
             {
                 var owner = (DarkTherion)Owner;
-                AttackMode mode;
+                var mode = owner._attackMode.Resolve(AttackMode.Any);
 
                 if (owner._attackMode == AttackMode.Any)
                     mode = UnityEngine.Random.Range(0, 3) switch
@@ -30,8 +31,6 @@ namespace Actors.Monsters.Bosses
                         var i => throw new ArgumentOutOfRangeException(
                             nameof(mode), i, Owner.FormatLogMessage("공격 패턴의 범위는 0 이상 2 이하여야 합니다."))
                     };
-                else
-                    mode = owner._attackMode;
 
 
                 if (!Owner.TryDoAction(new(

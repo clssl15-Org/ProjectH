@@ -10,11 +10,18 @@ namespace Game.Stage
 {
     public abstract class ScenarioManager : MonoBehaviour,
         IInputLayerSubject,
-        IInputLayerController
+        IInputLayerController,
+        IInjectable<GameServices>
     {
         // Internal
         internal StageManager StageManager { get; private set; }
         internal ScenarioMachine Machine { get; private set; }
+
+        [SerializeField] private bool _overrideFirstArrival;
+        [SerializeField] private bool _isFirstArrival = true;
+
+        protected bool IsFirstArrival => !_overrideFirstArrival.Resolve(false)
+            ? !GameServices.PlayerHasDied : _isFirstArrival;
 
         [Tooltip("디버그용 스토리 진행 버튼")]
         [SerializeField] private KeyCode _proceedKey = KeyCode.Alpha0;
@@ -26,6 +33,7 @@ namespace Game.Stage
         protected IPlayer Player => StageManager.Player;
         protected Rubiel Rubiel => StageManager.Rubiel;
         protected KeyCode ProceedKey => _proceedKey.Resolve();
+        protected GameServices GameServices { get; private set; }
 
         public bool AllowInput { get;set; } = true;
         bool IInputLayerSubject.IsTrigger => false;
@@ -70,6 +78,9 @@ namespace Game.Stage
             }
         }
         internal abstract IEnumerable<Work> GetBlocks();
+
+        void IInjectable<GameServices>.Inject(GameServices gameServices) =>
+            GameServices = gameServices;
 
         void IInputLayerController.Initialize(IInputHub inputHub)
         {

@@ -4,14 +4,13 @@ using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
 using Infrastructure;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace Actors.Monsters.Bosses
 {
-    [RequireComponent(typeof(StandaloneHitAction))]
+    [RequireComponent(typeof(StandaloneHitAction), typeof(MonsterAudioPlayer))]
     public partial class Belia : Monster<BeliaStats>, ITwinBoss
     {
         // Front
@@ -61,8 +60,10 @@ namespace Actors.Monsters.Bosses
                 _isExhausted = value;
                 IgnorePlayerInteraction = value;
             }
-        } bool _isExhausted = false;
-
+        }
+        
+        private bool _isExhausted;
+        public MonsterAudioPlayer AudioPlayer { get; private set; }
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
 
@@ -76,7 +77,7 @@ namespace Actors.Monsters.Bosses
                 AddChild(new Alive()
                     .AddChild(new Idle(ITwinBoss.IsAwake))
                     .AddChild(new Awaken(ITwinBoss.IsAwake)
-                        .AddChild(new ValidPlatform() { HierarchyMode = HierarchyMode.Sequence }
+                        .AddChild(new ValidPlatform(false) { HierarchyMode = HierarchyMode.Sequence }
                             .AddChild(new Engaged()
                                 {
                                     TargetAttackRange = owner._targetPlayerRange,
@@ -112,6 +113,11 @@ namespace Actors.Monsters.Bosses
                         monster._slashWeapon,
                         monster._slashActiveTiming,
                         monster._slashActiveDuration))
+                    .AddDelay(0f, out var slashAttack_soundDelay) // HACK: 사운드 타이밍
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("SlashAttack")),
+                        after: new(slashAttack_soundDelay)
+                    )
                 );
                 AddChild(new MonsterAction("CurvedAreaAttack")
                     .AddAnimationComponent(
@@ -122,8 +128,16 @@ namespace Actors.Monsters.Bosses
                             monster._curveEffectPrefab,
                             monster._curveEffectWorldPosition,
                             monster._curveEffectLength)
-                            { InterruptPriority = InterruptPriority.High },
+                    { InterruptPriority = InterruptPriority.High },
                         after: new(curvedAreaAttackEnter)
+                    )
+                    .AddDelay(
+                        0f, // HACK: 사운드 타이밍
+                        out var curvedAreaAttack_soundDelay,
+                        after: new(curvedAreaAttackEnter))
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("CurvedAreaAttack")),
+                        after: new(curvedAreaAttack_soundDelay)
                     )
                     .AddAnimationComponent(
                         "CurvedAreaAttackEnd",
@@ -139,12 +153,12 @@ namespace Actors.Monsters.Bosses
                 );
                 AddChild(new MonsterAction("DashAttack")
                     .AddAnimationComponent(interruptPriority: InterruptPriority.High)
-                    .AddDelay(monster._dashStartTime, out var delay)
+                    .AddDelay(monster._dashStartTime, out var dashAttack_delay)
                     .AddComponent(new AttackWithWeapon(
                         monster._dashWeapon,
                         0f,
                         monster._dashWeaponActiveDuration),
-                        after: new(delay)
+                        after: new(dashAttack_delay)
                     )
                     .AddComponent(new Do(false)
                         .OnOpening(() =>
@@ -158,11 +172,19 @@ namespace Actors.Monsters.Bosses
                             monster.Rigidbody.drag = monster._defaultDrag;
                         })
                         .SetInterruptPriotiy(InterruptPriority.Low),
-                        after: new(delay)
+                        after: new(dashAttack_delay)
                     )
                     .AddComponent(new BeliaDashAttackAction(
                         monster._dashForce),
-                        after: new(delay)
+                        after: new(dashAttack_delay)
+                    )
+                    .AddDelay(
+                        0f, // HACK: 사운드 타이밍
+                        out var dashAttack_soundDelay,
+                        after: new(dashAttack_delay))
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("DashAttack")),
+                        after: new(dashAttack_soundDelay)
                     )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
@@ -171,6 +193,9 @@ namespace Actors.Monsters.Bosses
                 );
                 AddChild(new MonsterAction("Exhausted")
                     .AddAnimationComponent()
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("Exhausted"))
+                    )
                 );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
                     .AddAnimationComponent()
@@ -194,6 +219,7 @@ namespace Actors.Monsters.Bosses
                     $"{nameof(Belia)}은(는) '{nameof(_curveEffectPrefab)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
+            AudioPlayer = GetComponent<MonsterAudioPlayer>();
 
             _defaultMass = Rigidbody.mass;
             _defaultDrag = Rigidbody.drag;
@@ -238,7 +264,7 @@ namespace Actors.Monsters.Bosses
                 && _targetPlayer.TryGetComponent<IPlayer>(out var player))
                 InitializePlayer(player);
 
-            if (_autoAwake)
+            if (_autoAwake.Resolve(false))
                 Commence();
         }
 

@@ -10,45 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
-  m_Name: 2. Stage0_Arrival_Reentry
+  m_Name: 1-2. Stage0_Arrival_First_2
   m_EditorClassIdentifier: 
-  _dialogueTitle: 3
-  _title: 
-  _targetDialogueStyle: 2
+  _title: Stage0_Arrival_First_2
+  _targetStyle: 1
   _lines:
   - Character: 2
-    Dialogue: "\uC774\uBC88\uC5D4 \uB8E8\uBA58\uBCA8 \uCABD\uC73C\uB85C \uB354 \uAC14\uC5C8\uC9C0?\n\u2026\uC870\uC2EC\uD574."
+    Dialogue: "\uADF8\uB798. \uC54C\uC558\uC5B4. {player}"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "\uAE30\uC0AC\uB2E8\uC740? \uBE5B\uC758 \uC218\uD638\uC790\uB294?"
     _overrides:
       Name: 
       Portrait: {fileID: 0}
   - Character: 2
-    Dialogue: "\uC544\u2026 \uC544\uC9C1 \uAE30\uC5B5 \uBABB \uD558\uB294\uAD6C\uB098.\n\uAD1C\uCC2E\uC544.\n\uB2E4\uC2DC
-      \uC2DC\uC791\uD558\uBA74 \uB3FC."
+    Dialogue: "\uB2E4 \uC124\uBA85\uD558\uB824\uBA74 \uB108\uBB34 \uAE38\uC5B4."
     _overrides:
       Name: 
       Portrait: {fileID: 0}
   - Character: 2
-    Dialogue: "\uBC8C\uC368 \uC801\uC751\uD588\uB124."
+    Dialogue: "\uC9C0\uAE08 \uC911\uC694\uD55C \uAC74 \uD558\uB098\uC57C."
     _overrides:
       Name: 
       Portrait: {fileID: 0}
   - Character: 2
-    Dialogue: "\uC774\uBC88\uC5D4 \uC880 \uB354 \uBE68\uB77C\uC84C\uC5B4."
+    Dialogue: "\uC138\uC0C1\uC740 \uC774\uBBF8 \uD55C \uBC88, \uB05D\uB0AC\uC5B4."
     _overrides:
       Name: 
       Portrait: {fileID: 0}
   - Character: 2
-    Dialogue: "\uB108\u2026 \uC8FD\uB294 \uAC70, \uC774\uC81C \uC775\uC219\uD574\uC84C\uC9C0?"
-    _overrides:
-      Name: 
-      Portrait: {fileID: 0}
-  - Character: 2
-    Dialogue: "\uC774\uC81C \uB0B4\uAC00 \uB9D0 \uC548 \uD574\uB3C4 \uC54C\uACA0\uC9C0."
-    _overrides:
-      Name: 
-      Portrait: {fileID: 0}
-  - Character: 2
-    Dialogue: ...
+    Dialogue: "\uC6D0\uC778\uC740 \uC804\uBD80\u2026 \uB8E8\uBA58\uBCA8 \uC131\uC5D0
+      \uC788\uC5B4. "
     _overrides:
       Name: 
       Portrait: {fileID: 0}

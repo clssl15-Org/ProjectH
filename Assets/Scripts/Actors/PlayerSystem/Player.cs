@@ -69,7 +69,7 @@ namespace Actors.PlayerSystem
         {
             get
             {
-                if (useDebugUltimateGauge)
+                if (useDebugUltimateGauge.Resolve(false))
                     return debugUltimateGauge;
 
                 Ultimate ultimate = GetComponentInChildren<Ultimate>();
@@ -191,6 +191,9 @@ namespace Actors.PlayerSystem
         {
             skillManager.UseUltimate();
         }
+
+        public void NotifyCondition(PlayerCondition condition) =>
+            ConditionChanged?.Invoke(condition);
 
         void OnDestroy()
         {

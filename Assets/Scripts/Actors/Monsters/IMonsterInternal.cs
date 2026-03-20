@@ -12,7 +12,7 @@ namespace Actors.Monsters
         Direction Direction { get; set; }
         bool IsAlive { get; set; }
 
-        event Action<IMonsterConditionData> ConditionChanged;
+        event Action<Actors.MonsterConditionData> ConditionChanged;
         event Action Destroyed;
 
         int CurrentPlatform { get; set; }
@@ -39,8 +39,8 @@ namespace Actors.Monsters
         void StopMoving();
         
         void Knockback(Direction direction, float? knockbackForce = null);
-        void NotifyCondition(IMonsterConditionData data);
-        void NotifyConditionImmediately(IMonsterConditionData data);
+        void NotifyCondition(Actors.MonsterConditionData data);
+        void NotifyConditionImmediately(Actors.MonsterConditionData data);
 
         void Die();
         #endregion

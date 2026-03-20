@@ -1,14 +1,16 @@
 using System;
+using BlackboxSystem;
 using Infrastructure;
+using Sound;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UI;
-using BlackboxSystem;
 
 namespace Game.Title
 {
     public class Menu : MonoBehaviour,
         IInjectable<GameServices>,
+        IInjectable<BgmPlayManager>,
         IEnablable,
         IInputLayerSubject
     {
@@ -31,6 +33,7 @@ namespace Game.Title
         [SerializeField] private Animation _animation;
 
         private GameServices _gameServices;
+        private BgmPlayManager _bgmPlayManager;
         private EnableWithAnimation _enabler;
 
         [Space]
@@ -55,6 +58,11 @@ namespace Game.Title
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("gameServices Injected");
             _gameServices = gameServices;
+        }
+        void IInjectable<BgmPlayManager>.Inject(BgmPlayManager bgmPlayManager)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("bgmPlayManager Injected");
+            _bgmPlayManager = bgmPlayManager;
         }
 
         private void Update()
@@ -90,6 +98,8 @@ namespace Game.Title
             if (_darkscreen)
             {
                 BlackboxHandle.Of(this).Exert(_darkscreen, "Close Screen");
+
+                _bgmPlayManager.Stop();
                 _darkscreen.CloseScreen(() => SceneManager.LoadScene(_gameSceneName));
             }
             else

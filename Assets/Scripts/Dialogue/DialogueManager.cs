@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BlackboxSystem;
 using Infrastructure;
 using UI;
@@ -8,6 +9,7 @@ using World;
 namespace Dialogue
 {
     public class DialogueManager : MonoBehaviour,
+        IInjectable<GameAssetLibrary>,
         IInjectable<DialogueScriptLibrary>,
         IInputLayerSubject
     {
@@ -27,6 +29,7 @@ namespace Dialogue
         [SerializeField] private RectTransform _canvasTransform;
 
         private Func<Character, Transform> _getTransform;
+        private GameAssetLibrary _gameAssetLibrary;
         private DialogueScriptLibrary _dialogueScriptLibrary;
 
         private IDialogueUI _currentUI;
@@ -47,13 +50,19 @@ namespace Dialogue
             _getTransform = getTransform;
         }
 
+
+        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameAssetLibrary Injected");
+            _gameAssetLibrary = gameAssetLibrary;
+        }
         void IInjectable<DialogueScriptLibrary>.Inject(DialogueScriptLibrary dialogueScriptLibrary)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("DialogueScriptLibrary Injected");
             _dialogueScriptLibrary = dialogueScriptLibrary;
         }
 
-        public void Play(string title, Action callback = null)
+        public void Play(string title, bool openDialogue = true, bool closeDialogue = true, Action callback = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Play: {title}");
 
@@ -67,11 +76,11 @@ namespace Dialogue
 
             if (!_dialogueScriptLibrary.TryGetDialogueScript(title, out var script))
             {
-                var currentScriptsList = string.Join(", ", _dialogueScriptLibrary.AllScriptTitles);
+                var currentScriptList = string.Join(", ", _dialogueScriptLibrary.AllScriptTitles);
 
                 Debug.LogError(BlackboxHandle.Of(this).WriteError(
                     $"'{title}'을(를) 제목으로 가지는 대화를 {nameof(_dialogueScriptLibrary)}에서 찾는 데 실패했습니다.\n" +
-                    $"전체 대화 목록: {currentScriptsList}"),
+                    $"전체 대화 목록: {currentScriptList}"),
                     this);
                 return;
             }
@@ -79,7 +88,7 @@ namespace Dialogue
             _currentScriptTitle = title;
             OnPlayStarting();
 
-            if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
+            if (script.TargetStyle == DialogueStyle.ChatBubble)
             {
                 CalculateAndSetBubbleSize(script);
 
@@ -92,11 +101,11 @@ namespace Dialogue
             {
                 BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
                 _dialogueUI.transform.SetAsLastSibling();
-                _dialogueUI.Enable();
+                if (openDialogue) _dialogueUI.Enable();
 
                 _currentUI = _dialogueUI;
             }
-            
+
             int currentIdx = -1;
             PlayDialogue();
 
@@ -110,11 +119,11 @@ namespace Dialogue
                         return;
                     }
 
-                    if (currentIdx >= script.Count - 1)
+                    if (script.ShowOneRandomLine || currentIdx >= script.Count - 1)
                     {
                         using var _ = BlackboxHandle.Of(this).WriteScope($"Stopping: {currentIdx}");
 
-                        Stop();
+                        Stop(closeDialogue);
                         callback?.Invoke();
                         return;
                     }
@@ -125,17 +134,29 @@ namespace Dialogue
 
             void PlayDialogue()
             {
-                currentIdx++;
+                if (script.ShowOneRandomLine && script.Count > 0)
+                    currentIdx = UnityEngine.Random.Range(0, script.Count);
+                else
+                    currentIdx++;
+
                 using var _ = BlackboxHandle.Of(this).WriteScope($"Play Dialogue: {currentIdx}");
 
-                if (script.TargetDialogueStyle == DialogueStyle.ChatBubble)
+                if (script.TargetStyle == DialogueStyle.ChatBubble)
                 {
                     var line = script[currentIdx];
+                    var dialogueText = line.Dialogue;
+
+                    if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
+                        dialogueText = dialogueText.Replace("{player}", playerInfo.Name, StringComparison.OrdinalIgnoreCase);
+                    else
+                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                            "Player 정보를 가져오지 못했기 때문에 {player} 문자열을 치환하지 못했습니다."));
+
                     var characterTransform = _getTransform(line.Character);
 
                     _bubbleDialogueUI
                         .Show(new BubbleContainer(_canvasTransform)
-                        .With(line.Dialogue, characterTransform, BubbleOffset));
+                        .With(dialogueText, characterTransform, BubbleOffset));
                 }
                 else
                 {
@@ -170,7 +191,7 @@ namespace Dialogue
         protected virtual void OnPlayStarting() { }
         protected virtual void OnPlayStopping() { }
 
-        public void Stop()
+        public void Stop(bool closeDialogue = true)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Stop");
 
@@ -180,8 +201,11 @@ namespace Dialogue
             if (!string.IsNullOrEmpty(_currentScriptTitle))
                 OnPlayStopping();
 
-            if (_dialogueUI) _dialogueUI.Disable();
-            if (_bubbleDialogueUI) _bubbleDialogueUI.Hide();
+            if (closeDialogue)
+            {
+                if (_dialogueUI) _dialogueUI.Disable();
+                if (_bubbleDialogueUI) _bubbleDialogueUI.Hide();
+            }
 
             _currentUI = null;
             _currentScriptTitle = string.Empty;
