@@ -37,7 +37,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.67, y: 1.67, z: 1.67}
+  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7284846906618727611}
@@ -375,7 +375,7 @@ MonoBehaviour:
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []

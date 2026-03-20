@@ -390,9 +390,9 @@ MonoBehaviour:
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 0
-  _defaultHitSoundPlayTiming: 2
+  _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
   _dieClipName: Die
   _overrideSpatialBlend: 0

@@ -262,7 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _effect: {fileID: 284054073553280053}
   _projectilePrefab: {fileID: 9094433196951466629, guid: 45f23d05bfd341b41894ade8e1540982, type: 3}
-  _projectileSpeed: 30
+  _projectileSpeed: 20
   _targetFireCount: 3
   _projectileFireGap: 1
   _configuration: {fileID: 0}
@@ -380,7 +380,7 @@ MonoBehaviour:
   - Name: PortalAttack
     AudioClip: {fileID: 8300000, guid: 9674881306ca8984f8b4c73d4391675a, type: 3}
     PlayOption: 1
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []

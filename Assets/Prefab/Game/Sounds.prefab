@@ -204,15 +204,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb697b879b3a6eb47a8a8242ab131ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audios:
+  _bgms:
   - Name: 1
     AudioClip: {fileID: 8300000, guid: 519e90f0eb7de9c4381481ba4ae9a6b1, type: 3}
+  - Name: 2
+    AudioClip: {fileID: 8300000, guid: 45ba9e75d689b5b4fa70f5f47b1d389f, type: 3}
   - Name: 3
     AudioClip: {fileID: 8300000, guid: 16e011a58858b1e4c9c6a0d375cd1cb9, type: 3}
   - Name: 4
     AudioClip: {fileID: 8300000, guid: ab550f9361cccd148b4be3e86f93319c, type: 3}
   - Name: 5
-    AudioClip: {fileID: 8300000, guid: ddd66a8cb3225cb4ca87513da5b44d3e, type: 3}
+    AudioClip: {fileID: 8300000, guid: c27585b67d2164f409e78507748607fc, type: 3}
+  - Name: 6
+    AudioClip: {fileID: 8300000, guid: d8be144149563294fab1ff07e4a34e28, type: 3}
+  - Name: 7
+    AudioClip: {fileID: 8300000, guid: 9a6fcb46ab2f26c4896dd17fd4a25960, type: 3}
+  - Name: 8
+    AudioClip: {fileID: 8300000, guid: b05710976e29e6043b13d2667f9c3d2b, type: 3}
+  _fadeDuration: 0.7
 --- !u!114 &6920663794310494529
 MonoBehaviour:
   m_ObjectHideFlags: 0

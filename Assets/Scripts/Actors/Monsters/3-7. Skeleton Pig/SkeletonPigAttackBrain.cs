@@ -23,7 +23,7 @@ namespace Actors.Monsters
                 var owner = (SkeletonPig)Owner;
                 var mode = owner._attackMode.Resolve(AttackMode.Any);
 
-                if (owner._attackMode == AttackMode.Any)
+                if (mode == AttackMode.Any)
                     mode = UnityEngine.Random.Range(0, Owner.HP < Owner.StatsInfo.MaxHP ? 3 : 2) switch
                     {
                         0 => AttackMode.DashAttack,

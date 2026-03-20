@@ -262,8 +262,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.3}
-  m_Size: {x: 1, y: 1.6}
+  m_Offset: {x: 0, y: -0.196748}
+  m_Size: {x: 0.99999976, y: 1.393496}
   m_Direction: 0
 --- !u!50 &4909378014403421725
 Rigidbody2D:
@@ -463,12 +463,10 @@ MonoBehaviour:
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
-  _hitSoundPlayTimings:
-  - Name: Attack_1
-    Timing: 2
+  _hitSoundPlayTimings: []
   _dieClipName: Die
   _overrideSpatialBlend: 0
   _spatialBlend: 0.7

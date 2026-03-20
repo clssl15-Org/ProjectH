@@ -14,5 +14,8 @@ namespace Infrastructure
 
         [field: Header("Indicator")]
         [field: SerializeField] public IndicatorConfiguration IndicatorConfiguration { get; set; }
+
+        [field: Header("Game")]
+        [field: SerializeField] public string InitialPlayerName { get; private set; }
     }
 }
