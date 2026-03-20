@@ -8189,6 +8189,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49d1f0c0bb687204088a27396459c2e7, type: 3}
+--- !u!114 &1715333702 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8903199737679934583, guid: 49d1f0c0bb687204088a27396459c2e7, type: 3}
+  m_PrefabInstance: {fileID: 1699363753}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5140f8cc95c796244899712242e0a3a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1829980914
 GameObject:
   m_ObjectHideFlags: 0
@@ -8347,7 +8358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34ad4b6a69b2ba549ba44e409d6c212a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxCamera: {fileID: 0}
+  parallaxCamera: {fileID: 1715333702}
 --- !u!4 &1996547687
 Transform:
   m_ObjectHideFlags: 0
