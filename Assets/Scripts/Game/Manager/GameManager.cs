@@ -47,23 +47,20 @@ namespace Game
         [SerializeField] private MonoBehaviour[] _injections;
 
         // Internal
-        private static bool _isInitialized = false;
+        private static GameManager _instance;
+        private static bool _isStarted;
 
 
         // Content
         private void Awake()
         {
-            if (_isInitialized)
+            if (_instance && _instance != this)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    Ctx("인스턴스가 중복 생성되었습니다. 현재 생성 중인 인스턴스를 삭제합니다.")),
-                    this);
-
                 Destroy(gameObject);
                 return;
             }
 
-            _isInitialized = true;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
 
             BlackboxHandle.Configure(
@@ -90,6 +87,9 @@ namespace Game
 
         private void Start()
         {
+            if (_isStarted) return;
+            _isStarted = true;
+
             // 게임 최초 시작 시
             if (_gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var player))
                 player.Name = _configuration.InitialPlayerName;

@@ -1831,7 +1831,7 @@ MonoBehaviour:
   _dashDrag: 3
   _useTargetPlayer: 1
   _targetPlayer: {fileID: 0}
-  _autoAwake: 1
+  _autoAwake: 0
 --- !u!114 &1862625504292106988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1966,7 +1966,7 @@ MonoBehaviour:
   - Name: Exhausted
     AudioClip: {fileID: 8300000, guid: 355106fea0192a7459f47af9df4635da, type: 3}
     PlayOption: 1
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
@@ -2601,7 +2601,7 @@ MonoBehaviour:
   - {fileID: 8925528449332656683}
   _useTargetPlayer: 1
   _targetPlayer: {fileID: 0}
-  _autoAwake: 1
+  _autoAwake: 0
 --- !u!114 &6138016247118311145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2736,7 +2736,7 @@ MonoBehaviour:
   - Name: Exhausted
     AudioClip: {fileID: 8300000, guid: 1d855c4f643cd7742865e2e9e804532f, type: 3}
     PlayOption: 1
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []

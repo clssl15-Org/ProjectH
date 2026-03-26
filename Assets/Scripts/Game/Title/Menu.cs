@@ -99,7 +99,7 @@ namespace Game.Title
             {
                 BlackboxHandle.Of(this).Exert(_darkscreen, "Close Screen");
 
-                _bgmPlayManager.Stop();
+                BgmPlayManager.Stop();
                 _darkscreen.CloseScreen(() => SceneManager.LoadScene(_gameSceneName));
             }
             else

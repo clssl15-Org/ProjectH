@@ -12,7 +12,7 @@ namespace Actors.Monsters
         Direction Direction { get; set; }
         bool IsAlive { get; set; }
 
-        event Action<Actors.MonsterConditionData> ConditionChanged;
+        event Action<MonsterConditionData> ConditionChanged;
         event Action Destroyed;
 
         int CurrentPlatform { get; set; }

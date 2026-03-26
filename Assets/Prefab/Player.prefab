@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 5175911527829833112}
   - component: {fileID: 4268322827769223230}
   - component: {fileID: 5996600878902521526}
+  - component: {fileID: 7887825929820749776}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -258,6 +259,8 @@ MonoBehaviour:
     skillPowerMultiplier: 0
     skillCooldownMultiplier: 0
     ultimateCooldownMultiplier: 0
+  useDebugUltimateGauge: 0
+  debugUltimateGauge: 0
   StatesGO: {fileID: 7853671354700595129}
 --- !u!114 &8290243547340287660
 MonoBehaviour:
@@ -271,6 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e72ea11c3785f5478951b00e4ea9e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInvincivble: 0
 --- !u!114 &8379120966633090368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,6 +350,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isApplied: 0
+  canUseSkill: 1
+--- !u!114 &7887825929820749776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944037012842129890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e825e6644f6bbb4d9067c84476c3fdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _damage: 10000
 --- !u!1 &6801821047128880367
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,6 +858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0d8a05f3765c0d4a9b7f7e362ec075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <SkillType>k__BackingField: 1
   runtimeAnimatorController: {fileID: 9100000, guid: be38303f23a0f794e9f66c014a5aaa7d, type: 2}
 --- !u!1 &9172967021588867564
 GameObject:

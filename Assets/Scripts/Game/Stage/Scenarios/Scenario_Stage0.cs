@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
+using Sound;
 using UnityEngine;
 
 namespace Game.Stage
 {
-    public class Scenario_Stage0 : ScenarioManager
+    public class Scenario_Stage0 : ScenarioManager, IInjectable<SfxPlayManager>
     {
         private enum BlockName
         {
@@ -19,18 +21,43 @@ namespace Game.Stage
             Arrival_Reentry_ChangeName_2,
         }
 
+        private SfxPlayManager _sfxPlayManager;
+
+        void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPlayManager) =>
+            _sfxPlayManager = sfxPlayManager;
+
         internal override IEnumerable<Work> GetBlocks()
         {
             yield return new Block(
                 BlockName.To_Arrival)
-                .OnEntered(() => SetRubielToBig(instantSet: true))
+                .OnEntered(() =>
+                {
+                    if (!IsFirstArrival)
+                        _sfxPlayManager.Play(SfxName.Revive);
+
+                    SetRubielToBig(instantSet: true);
+                })
                 .OnUpdated<Block>(self =>
                 {
                     if (!self.ToNextToken && IsPlayerOnGround && IsRubielClose)
                     {
                         self.ToNextToken = true;
-                        BlockInputs();
-                        To(IsFirstArrival ? BlockName.Arrival_First_1 : BlockName.Arrival_Reentry);
+
+                        if (IsFirstArrival)
+                        {
+                            BlockInputs();
+                            To(BlockName.Arrival_First_1);
+                        }
+                        else
+                        {
+                            if (Random.Range(0, 8) != 0)
+                            {
+                                BlockInputs();
+                                To(BlockName.Arrival_Reentry);
+                            }
+                            else
+                                To(BlockName.Arrival_Reentry_PendingForNameChange);
+                        }
                     }
                 });
 

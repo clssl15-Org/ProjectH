@@ -278,7 +278,7 @@ MonoBehaviour:
   - Name: Fall
     AudioClip: {fileID: 8300000, guid: f6f4703793381744b981fc4b0984dc06, type: 3}
     PlayOption: 1
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
@@ -649,7 +649,6 @@ MonoBehaviour:
   _fallingStoneManager: {fileID: 5656509333287018457}
   _ambushAttackManager: {fileID: 1363524184539036133}
   _roarEffect: {fileID: 5456083230515189412}
-  _dropAttack_roarEffectPosition: {fileID: 5248885615722147474}
   _ambushWeapon: {fileID: 7536443909710348846}
   _ambushWeaponActiveDuration: 0.1
   _ambushReadyTime: 0.5
@@ -800,7 +799,7 @@ MonoBehaviour:
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 231a5fd2a1210e7478592d1d2e0a2b8e, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
@@ -1490,11 +1489,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4110857782266795260, guid: fa1a0e7a89d5a9044b932abd3a7c7d7b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.84
+      value: -3.4
       objectReference: {fileID: 0}
     - target: {fileID: 4110857782266795260, guid: fa1a0e7a89d5a9044b932abd3a7c7d7b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.59
+      value: 7.9
       objectReference: {fileID: 0}
     - target: {fileID: 4110857782266795260, guid: fa1a0e7a89d5a9044b932abd3a7c7d7b, type: 3}
       propertyPath: m_LocalPosition.z

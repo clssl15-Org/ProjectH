@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
 using BlackboxSystem;
+using Sound;
 using UnityEngine;
 
 namespace UI.PlayerView
 {
+    [RequireComponent(typeof(SfxAudioController))]
     internal class SkillSelectionManager : MonoBehaviour
     {
         [Header("References")]
@@ -31,9 +33,12 @@ namespace UI.PlayerView
         private float _targetPosX = 0f;     // 목표 X 좌표
         private bool _needsTeleport = false; // 이동 완료 후 순간이동 필요 여부
 
+        private SfxAudioController _sfxAudioController;
+
         private void Awake()
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
+            _sfxAudioController = GetComponent<SfxAudioController>();
 
             // O(1) 검색을 위한 캐싱
             _configMap = _iconConfigs.ToDictionary(x => x.SkillType, x => x.IconPrefab);
@@ -137,6 +142,8 @@ namespace UI.PlayerView
             // 3. 만약 목표가 '더미(마지막)'라면 이동 후 텔레포트 예약
             _needsTeleport = (targetIndex == dummyIndex);
 
+            // 사운드 재생
+            _sfxAudioController.Play("PlayerSkillChange", AudioSourceController.PlayOption.Independently);
             BlackboxHandle.Of(this).Write($"Moving to index {_targetIndex} (TargetX: {_targetPosX})");
         }
 

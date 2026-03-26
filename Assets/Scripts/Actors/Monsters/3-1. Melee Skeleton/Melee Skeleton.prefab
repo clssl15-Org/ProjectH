@@ -508,7 +508,10 @@ MonoBehaviour:
   <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
-  _hitSoundPlayTimings: []
+  _hitSoundPlayTimings:
+  - Name: Attack
+    TimingOverride: 0
+    Delay: 0.3
   _dieClipName: Die
   _overrideSpatialBlend: 0
   _spatialBlend: 0.7

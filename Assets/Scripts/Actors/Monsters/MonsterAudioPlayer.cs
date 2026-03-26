@@ -20,7 +20,8 @@ namespace Actors.Monsters
         public struct HitSoundPlayTimingOptions
         {
             public string Name;
-            public AttackEvent Timing;
+            public AttackEvent TimingOverride;
+            public float Delay;
         }
         [SerializeField] private HitSoundPlayTimingOptions[] _hitSoundPlayTimings;
 
@@ -67,13 +68,27 @@ namespace Actors.Monsters
 
                             var targetEventType = _defaultHitSoundPlayTiming;
                             var targetOption = _hitSoundPlayTimings.FirstOrDefault(t => t.Name == attackData.Name);
-                            if (!string.IsNullOrEmpty(targetOption.Name)) targetEventType = targetOption.Timing;
+
+                            if (!string.IsNullOrEmpty(targetOption.Name)
+                                && targetOption.TimingOverride != AttackEvent.None)
+                            {
+                                targetEventType = targetOption.TimingOverride;
+                            }
 
                             var token = playToken = new();
                             attackData.EventOccurred += attackEvent =>
                             {
                                 if (attackEvent == targetEventType)
-                                    TryPlay(attackData.Name);
+                                {
+                                    if (targetOption.Delay <= 0f)
+                                        TryPlay(attackData.Name);
+                                    else
+                                        new Timer(targetOption.Delay, _ =>
+                                        {
+                                            if (playToken != token) return;
+                                            TryPlay(attackData.Name);
+                                        });
+                                }
                             };
 
                             if (TryGetAudioData(attackData.Name, out var clip)

@@ -7410,6 +7410,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 6867746828967838783, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _audios.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867746828967838783, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _audios.Array.data[7].Name
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867746828967838783, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _audios.Array.data[7].AudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: eada842a96b2a7f40961e4f17d66b27f, type: 3}
     - target: {fileID: 7670028620784252606, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7451,7 +7463,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _bgms.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
       propertyPath: _audios.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _bgms.Array.data[8].Name
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
@@ -7482,6 +7502,10 @@ PrefabInstance:
       propertyPath: _audios.Array.data[7].Name
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
+      propertyPath: _bgms.Array.data[8].AudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b05710976e29e6043b13d2667f9c3d2b, type: 3}
     - target: {fileID: 8773247551325665989, guid: 2afb7ddf701578d4e8f3501b4092f06b, type: 3}
       propertyPath: _audios.Array.data[1].AudioClip
       value: 

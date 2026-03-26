@@ -4878,10 +4878,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4755052946746460908, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
-      propertyPath: _attackMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4755052946746460908, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
       propertyPath: _targetPlayer
       value: 
       objectReference: {fileID: 1529458333}
@@ -5320,10 +5316,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 572942001}
     m_Modifications:
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _attackMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: _targetPlayer
       value: 
       objectReference: {fileID: 1529458333}
@@ -5373,6 +5365,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4515591590893851459, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456083230515189412, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5721,37 +5717,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8323278961922721415, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
-      propertyPath: _autoAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8323278961922721415, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
-      propertyPath: _attackMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8323278961922721415, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _targetPlayer
       value: 
       objectReference: {fileID: 1529458333}
-    - target: {fileID: 8501207023298667451, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
-      propertyPath: _audios.Array.data[7].Name
-      value: Exhausted
-      objectReference: {fileID: 0}
     - target: {fileID: 8501207023298667451, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _audios.Array.data[8].Name
       value: Exhausted
       objectReference: {fileID: 0}
     - target: {fileID: 8501207023298667451, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
-      propertyPath: _audios.Array.data[7].AudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: b9aec28aa52cdc14eaa2877cd91a106f, type: 3}
-    - target: {fileID: 8501207023298667451, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _audios.Array.data[8].AudioClip
       value: 
       objectReference: {fileID: 8300000, guid: b9aec28aa52cdc14eaa2877cd91a106f, type: 3}
-    - target: {fileID: 8501207023298667451, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
-      propertyPath: _audios.Array.data[7].PlayOption
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8501207023298667451, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: _audios.Array.data[8].PlayOption
       value: 3
