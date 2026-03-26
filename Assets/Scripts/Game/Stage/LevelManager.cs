@@ -4,6 +4,13 @@ using Actors;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum LevelType
+{
+    None,
+    Normal,
+    BossMap,
+    NextStage,
+}
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
@@ -38,27 +45,34 @@ public class LevelManager : MonoBehaviour
 
         ShuffleAndPick();
     }
-    public void MoveNextLevel(bool stageChange)
+    public void MoveNextLevel(LevelType nextLevelType)
     {
         string nextScene = default;
-        if (stageChange)
+        switch (nextLevelType)
         {
-            CurrentStage += 1;
-            exploreCount = 0;
-            nextScene = $"Stage{CurrentStage} 0";
-        }
-        else
-        {
-            exploreCount += 1;
-            if (exploreCount >= maxExploreCount)
-            {
-                nextScene = $"Stage{CurrentStage}_LargeMap";
-            }
-            else
-            {
-                exploreIndex = (exploreIndex + 1) % numbers.Count;
-                nextScene = $"Stage{CurrentStage} {numbers[exploreIndex]}";
-            }
+            case LevelType.Normal:
+                exploreCount += 1;
+                if (exploreCount >= maxExploreCount)
+                {
+                    nextScene = $"Stage{CurrentStage}_LargeMap";
+                }
+                else
+                {
+                    exploreIndex = (exploreIndex + 1) % numbers.Count;
+                    nextScene = $"Stage{CurrentStage} {numbers[exploreIndex]}";
+                }
+                break;
+            case LevelType.BossMap:
+                nextScene = $"Stage{CurrentStage}Boss";
+                break;
+            case LevelType.NextStage:
+                CurrentStage += 1;
+                exploreCount = 0;
+                nextScene = $"Stage{CurrentStage} 0";
+                break;
+            default:
+                Debug.LogError("Invalid level type");
+                return;
         }
 
         LoadNextScene(nextScene);
