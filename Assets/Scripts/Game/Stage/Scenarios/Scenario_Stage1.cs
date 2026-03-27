@@ -22,8 +22,17 @@ namespace Game.Stage
                     if (!self.ToNextToken && IsPlayerOnGround && IsRubielClose)
                     {
                         self.ToNextToken = true;
-                        BlockInputs();
-                        To(IsFirstArrival ? BlockName.Arrival_First : BlockName.Arrival_Reentry);
+
+                        if (IsFirstArrival)
+                        {
+                            BlockInputs();
+                            To(BlockName.Arrival_First);
+                        }
+                        else if (UnityEngine.Random.Range(0, 6) != 0)
+                        {
+                            BlockInputs();
+                            To(BlockName.Arrival_Reentry);
+                        }
                     }
                 });
 

@@ -29,7 +29,6 @@ namespace Game.Stage
         [SerializeField] private DialogueManager _dialogueManager;
         [SerializeField] private PlatformManager _platformManager;
         [SerializeField] private UILibrary _uILibrary;
-        [SerializeField] private BgmPlayManager _bgmPlayManager;
         [SerializeField] private SfxPlayManager _sfxPlayManager;
         [SerializeField] private EventSystem _eventSystem;
 
@@ -136,15 +135,6 @@ namespace Game.Stage
                     }
                 }
 
-                if (!_bgmPlayManager)
-                {
-                    _bgmPlayManager = FindAnyObjectByType<BgmPlayManager>(FindObjectsInactive.Include);
-                    if (!_bgmPlayManager)
-                    {
-                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"씬에서 {nameof(_bgmPlayManager)}을(를) 찾는 데 실패했습니다."), this);
-                    }
-                }
                 if (!_sfxPlayManager)
                 {
                     _sfxPlayManager = FindAnyObjectByType<SfxPlayManager>(FindObjectsInactive.Include);
@@ -233,7 +223,7 @@ namespace Game.Stage
                     {
                         new Timer(
                             0.3f,
-                            _ => _bgmPlayManager.Stop());
+                            _ => BgmPlayManager.Stop());
 
                         new Timer(
                             1.3f,
@@ -411,7 +401,7 @@ namespace Game.Stage
                 DarkscreenUI.OpenScreen();
 
             if (_bgm != BgmName.None)
-                _bgmPlayManager.Play(_bgm);
+                BgmPlayManager.Play(_bgm);
         }
         private void AutoBindDependenciesInScene()
         {

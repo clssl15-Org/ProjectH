@@ -6,15 +6,13 @@ using UnityEngine;
 namespace Game.Title
 {
     [RequireComponent(typeof(InputHub))]
-    public class TitleSceneManager : MonoBehaviour, IInjectable<BgmPlayManager>
+    public class TitleSceneManager : MonoBehaviour
     {
         [SerializeField] private Home _home;
         [SerializeField] private Menu _menu;
         [Space]
         [SerializeField] private SettingsUI _settingsUI;
         [SerializeField] private GuideAndWorldRecordsUI _guideUI;
-
-        private BgmPlayManager _bgmPlayer;
 
         private void Awake()
         {
@@ -30,9 +28,6 @@ namespace Game.Title
             _menu.OpenGuide += _guideUI.Open;
         }
 
-        void IInjectable<BgmPlayManager>.Inject(BgmPlayManager bgmPlayer) =>
-            _bgmPlayer = bgmPlayer;
-
         private void Start()
         {
             _home.SetToEnabled();
@@ -44,12 +39,12 @@ namespace Game.Title
             _menu.Enabling += _home.Disable;
             _menu.Disabling += _home.Enable;
 
-            _bgmPlayer.Play(BgmName.Title);
+            BgmPlayManager.Play(BgmName.Title);
         }
 
         private void OnDestroy()
         {
-            if (_bgmPlayer) _bgmPlayer.Stop();
+            BgmPlayManager.Stop();
         }
     }
 }

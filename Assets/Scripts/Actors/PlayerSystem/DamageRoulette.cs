@@ -70,7 +70,13 @@ public class DamageRoulette : MonoBehaviour
         context = default;
 
         if (skillManager.skills.Count <= 0) return false;
-        if (player.CurrentSkillCooldown > 0f) return false;
+        if (player.CurrentSkillCooldown > 0f)
+        {
+            Debug.Log(
+                $"[Player] 쿨다임 시간이므로 스킬 룰렛을 돌릴 수 없습니다. " +
+                $"남은 시간: {player.CurrentSkillCooldown:f2}초");
+            return false;
+        }
         if (isApplied) return false;
 
         isApplied = true;

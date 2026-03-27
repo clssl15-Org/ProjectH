@@ -79,7 +79,7 @@ namespace Dialogue
                 var currentScriptList = string.Join(", ", _dialogueScriptLibrary.AllScriptTitles);
 
                 Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                    $"'{title}'을(를) 제목으로 가지는 대화를 {nameof(_dialogueScriptLibrary)}에서 찾는 데 실패했습니다.\n" +
+                    $"'{title}'을(를) 제목으로 가지는 대화를 {nameof(DialogueScriptLibrary)}에서 찾는 데 실패했습니다.\n" +
                     $"전체 대화 목록: {currentScriptList}"),
                     this);
                 return;

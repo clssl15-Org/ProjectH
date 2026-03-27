@@ -33,7 +33,6 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private FallingStoneManager _fallingStoneManager;
         [SerializeField] private AmbushAttackManager _ambushAttackManager;
         [SerializeField] private GameObject _roarEffect;
-        [SerializeField] private Transform _dropAttack_roarEffectPosition;
         [Space]
         [SerializeField] private Weapon _ambushWeapon;
         [SerializeField] private float _ambushWeaponActiveDuration;
@@ -159,7 +158,9 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new Do(true, () =>
                         {
                             var effect = Instantiate(monster._roarEffect);
-                            effect.transform.position = monster._dropAttack_roarEffectPosition.position;
+                            effect.transform.SetParent(monster.transform);
+                            effect.transform.position = monster._roarEffect.transform.position;
+                            effect.transform.localScale = monster._roarEffect.transform.localScale;
                             effect.SetActive(true);
 
                             Destroy(effect, 5f);
@@ -319,10 +320,6 @@ namespace Actors.Monsters.Bosses
             if (!_roarEffect)
                 throw new InvalidOperationException(
                     $"{nameof(Cerberus)}은(는) '{nameof(_roarEffect)}'을(를) 가지고 있어야 합니다.");
-
-            if (!_dropAttack_roarEffectPosition)
-                throw new InvalidOperationException(
-                    $"{nameof(Cerberus)}은(는) '{nameof(_dropAttack_roarEffectPosition)}'을(를) 가지고 있어야 합니다.");
 
             AudioPlayer = GetComponent<MonsterAudioPlayer>();
             AudioPlayer.StandaloneMode = true;

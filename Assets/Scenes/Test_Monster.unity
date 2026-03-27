@@ -5079,13 +5079,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 481325997859409118, guid: 2505552e717ac1748a0048785dc5accc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1081455980342215609, guid: 2505552e717ac1748a0048785dc5accc, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2469785539388808158, guid: 2505552e717ac1748a0048785dc5accc, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4443658037186095211, guid: 2505552e717ac1748a0048785dc5accc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5469,7 +5473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7643035566162602346, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7936637963701139278, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: _attackMode

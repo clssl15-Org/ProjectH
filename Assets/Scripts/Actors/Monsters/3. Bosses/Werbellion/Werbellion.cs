@@ -126,6 +126,9 @@ namespace Actors.Monsters.Bosses
                         monster._punchActiveTiming,
                         monster._punchActiveDuration)
                     )
+                    .AddComponent(new Do(true)
+                        .OnOpening(() => monster.AudioPlayer.Play("PunchAttack"))
+                    )
                 );
 
                 AddChild(new MonsterAction("StraightAreaAttack")

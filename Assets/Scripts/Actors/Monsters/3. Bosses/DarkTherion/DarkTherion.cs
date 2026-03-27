@@ -115,7 +115,11 @@ namespace Actors.Monsters.Bosses
                                 .GetComponent<Weapon>()
                                 .AttackPower = monster.StatsInfo.BulletAttackPower))
                     .AddComponent(new Do(false)
-                        .OnOpening(() => monster.AudioPlayer.Play("BulletAttack", independentPlayTime: 7f))
+                        .OnOpening(() => monster.AudioPlayer.Play(
+                            "BulletAttack",
+                            independentPlayTime: 7f,
+                            fadingDuration: 3f)
+                        )
                     )
                 );
                 AddChild(new MonsterAction("SpikeAttack")
@@ -160,7 +164,7 @@ namespace Actors.Monsters.Bosses
 
         private IPlayer _player;
 
-            
+        
         // Content
         public void InitializePlayer(IPlayer player)
         {

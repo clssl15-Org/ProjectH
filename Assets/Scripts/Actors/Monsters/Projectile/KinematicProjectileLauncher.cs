@@ -64,7 +64,13 @@ namespace Actors.Monsters
 
                 var projectile = Instantiate(_projectiles[i]);
 
-                projectile.transform.localScale = _projectiles[i].transform.lossyScale;
+                var originalScale = _projectiles[i].transform.lossyScale;
+                projectile.transform.localScale = new Vector3(
+                    Mathf.Abs(originalScale.x),
+                    Mathf.Abs(originalScale.y),
+                    Mathf.Abs(originalScale.z)
+                );
+
                 projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 

@@ -1577,7 +1577,7 @@ MonoBehaviour:
   _stunAttackTimeScale: 0.7
   _useTargetPlayer: 1
   _targetPlayer: {fileID: 0}
-  _autoAwake: 1
+  _autoAwake: 0
   _forceClearKey: 50
 --- !u!114 &4840282038045051522
 MonoBehaviour:
@@ -1710,6 +1710,9 @@ MonoBehaviour:
   - Name: TeleportOut
     AudioClip: {fileID: 8300000, guid: 2e6bc852b3642f74190405943d2b8037, type: 3}
     PlayOption: 1
+  - Name: PunchAttack
+    AudioClip: {fileID: 8300000, guid: 813d4a8339a9ada43ad7a83aed74ede7, type: 3}
+    PlayOption: 1
   - Name: StraightAreaAttack
     AudioClip: {fileID: 8300000, guid: da4c2c5d1b5f29d43aa4ae53d4ac62ad, type: 3}
     PlayOption: 1
@@ -1722,7 +1725,7 @@ MonoBehaviour:
   - Name: Exhausted
     AudioClip: {fileID: 8300000, guid: b9aec28aa52cdc14eaa2877cd91a106f, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
@@ -2427,7 +2430,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6324870543868202378}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84aa8264d613da543846b766b4505b43, type: 3}
   m_Name: 
@@ -2436,7 +2439,7 @@ MonoBehaviour:
   - Name: PunchAttack
     AudioClip: {fileID: 8300000, guid: 813d4a8339a9ada43ad7a83aed74ede7, type: 3}
     PlayOption: 1
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 1
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
