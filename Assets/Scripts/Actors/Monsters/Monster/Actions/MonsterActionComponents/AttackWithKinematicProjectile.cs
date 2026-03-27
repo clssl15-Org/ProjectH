@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static Actors.Monsters.Actions.AttackWithWeapon;
 
 namespace Actors.Monsters.Actions
 {
@@ -32,8 +33,18 @@ namespace Actors.Monsters.Actions
             _getDirections = getDirections;
         }
 
-        protected override void OnEnter(object _)
+        protected override void OnEnter(object input)
         {
+            if (input != null)
+            {
+                if (input is not Payload payload)
+                    throw new ArgumentException(
+                        $"{nameof(input)}은(는) null이거나 {nameof(Payload)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다.",
+                        nameof(input));
+
+                ((MonsterAttackData)payload.MonsterConditionData.Payload).NotifyEvent(AttackEvent.Started);
+            }
+
             _currentLaunchInfo = _getLaunchInfo();
             _elapsedTime = 0f;
             _launched = false;

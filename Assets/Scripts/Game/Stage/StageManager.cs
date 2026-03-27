@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Actors;
 using Actors.Monsters.Bosses;
@@ -28,7 +29,6 @@ namespace Game.Stage
         [SerializeField] private DialogueManager _dialogueManager;
         [SerializeField] private PlatformManager _platformManager;
         [SerializeField] private UILibrary _uILibrary;
-        [SerializeField] private BgmPlayManager _bgmPlayManager;
         [SerializeField] private SfxPlayManager _sfxPlayManager;
         [SerializeField] private EventSystem _eventSystem;
 
@@ -52,6 +52,12 @@ namespace Game.Stage
         [field: SerializeField] internal BubbleDialogueUI BubbleDialogueUI { get; private set; }
         [field: SerializeField] internal GuideAndWorldRecordsUI GuideAndWorldRecordsUI { get; private set; }
         [field: SerializeField] internal DarkscreenUI DarkscreenUI { get; private set; }
+
+        [field: Header("Settings")]
+        [field: SerializeField] private bool _fadeInOnStart = true;
+        [field: SerializeField] private BgmName _bgm = BgmName.None;
+
+        public Action PlayerDied;
 
         internal IPlayer Player { get; private set; }
         internal Rubiel Rubiel { get; private set; }
@@ -129,15 +135,6 @@ namespace Game.Stage
                     }
                 }
 
-                if (!_bgmPlayManager)
-                {
-                    _bgmPlayManager = FindAnyObjectByType<BgmPlayManager>(FindObjectsInactive.Include);
-                    if (!_bgmPlayManager)
-                    {
-                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"씬에서 {nameof(_bgmPlayManager)}을(를) 찾는 데 실패했습니다."), this);
-                    }
-                }
                 if (!_sfxPlayManager)
                 {
                     _sfxPlayManager = FindAnyObjectByType<SfxPlayManager>(FindObjectsInactive.Include);
@@ -188,19 +185,7 @@ namespace Game.Stage
             if (AutoBindDependencies) AutoBindDependenciesInScene();
 
             #region Player / Monsters
-            if (_playerObject)
-            {
-                if (!_playerObject.TryGetComponent<IPlayer>(out var player))
-                {
-                    throw new System.InvalidOperationException(
-                        BlackboxHandle.Of(this).WriteError(
-                            $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
-                }
-
-                Player = player;
-                Register(Player, PlayerUI != null);
-            }
-            else if (AutoBindScenePlayer)
+            if (AutoBindScenePlayer)
             {
                 var found = false;
                 foreach (var playerObj in GameObject.FindGameObjectsWithTag("Player"))
@@ -210,22 +195,45 @@ namespace Game.Stage
                         && playerObj.TryGetComponent<IPlayer>(out var player))
                     {
                         _playerObject = playerObj;
-                        Player = player;
-
-                        Register(player, PlayerUI != null);
-
                         found = true;
                         break;
                     }
                 }
 
                 if (!found)
-                    throw new System.InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                    throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                         $"[{nameof(StageManager)}] {nameof(Player)}을(를) 찾는 데 실패했습니다."));
+            }
+
+            if (_playerObject)
+            {
+                if (!_playerObject.TryGetComponent<IPlayer>(out var player))
+                {
+                    throw new InvalidOperationException(
+                        BlackboxHandle.Of(this).WriteError(
+                            $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
+                }
+
+                Player = player;
+                Register(Player, PlayerUI != null);
+
+                Player.ConditionChanged += cond =>
+                {
+                    if (cond == PlayerCondition.Die)
+                    {
+                        new Timer(
+                            0.3f,
+                            _ => BgmPlayManager.Stop());
+
+                        new Timer(
+                            1.3f,
+                            _ => DarkscreenUI.CloseScreen(() => PlayerDied?.Invoke()));
+                    }
+                };
             }
             else
             {
-                throw new System.InvalidOperationException(BlackboxHandle.Of(this).WriteError(
+                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) 유효하지 않습니다."));
             }
 
@@ -233,7 +241,7 @@ namespace Game.Stage
             {
                 if (!_rubielObject.TryGetComponent<Rubiel>(out var rubiel))
                 {
-                    throw new System.InvalidOperationException(
+                    throw new InvalidOperationException(
                         BlackboxHandle.Of(this).WriteError(
                             $"[{nameof(StageManager)}] {nameof(_rubielObject)}이(가) {nameof(Rubiel)} 컴포넌트를 가지고 있지 않습니다."));
                 }
@@ -386,6 +394,14 @@ namespace Game.Stage
                     controller.Initialize(InputHub);
                 }
             }
+
+
+            // Setups
+            if (_fadeInOnStart)
+                DarkscreenUI.OpenScreen();
+
+            if (_bgm != BgmName.None)
+                BgmPlayManager.Play(_bgm);
         }
         private void AutoBindDependenciesInScene()
         {

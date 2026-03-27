@@ -9,11 +9,13 @@ namespace Actors.PlayerSystem
 {
     public class PlayerHealth : MonoBehaviour, IDamageable
     {
+        public bool isInvincivble = false;
+
         public Player Player { get; private set; }
         public CharacterStateController CharacterStateController { get; private set; }
         public int MaxHealth
         {
-            get =>(int) ((Player.playerStats.maxHealth + Player.playerStats.additionalMaxHealth) * Player.playerStats.maxHeathMultiplier);
+            get => (int)((Player.playerStats.maxHealth + Player.playerStats.additionalMaxHealth) * Player.playerStats.maxHeathMultiplier);
         }
         public int CurrentHealth
         {
@@ -64,8 +66,11 @@ namespace Actors.PlayerSystem
                 return;
             }
 
-            currentHealth -= damage;
-            currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+            if (!isInvincivble.Resolve(false))
+            {
+                currentHealth -= damage;
+                currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+            }
 
             RecentKnockback = direction;
 
@@ -108,6 +113,8 @@ namespace Actors.PlayerSystem
             IsAlive = false;
             Player.AllowInput = false;
             CharacterStateController.EnqueueTransition<Die>();
+
+            Player.NotifyCondition(PlayerCondition.Die);
         }
 
         public void Stun()

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Actors.Monsters.Actions;
-using Infrastructure;
 using Infrastructure.StateMachines.Scp;
 using UnityEngine;
 using World;
@@ -16,17 +15,17 @@ namespace Actors.Monsters.Bosses
             private Sequence _sequence;
             private float _elapsedTime;
 
-
             public WerbellionPortalAttackAction(
-                PlatformManager platformManager,
+                PlatformManager _,
                 GameObject spawnersParent,
                 IEnumerable<WerbellionPortalAttackSpawner> spawners,
-                Func<Vector2> getTargetPosition,
+                Func<Vector2> __,
                 float spawnGap = 0.7f)
             {
                 spawnersParent.SetActive(true);
 
-                _sequence = new(stopped: succeeded =>
+                _sequence = new(
+                    stopped: succeeded =>
                     {
                         if (succeeded)
                             Interrupt(InterruptType.Completed);
@@ -81,8 +80,10 @@ namespace Actors.Monsters.Bosses
                 _sequence.Update(deltaTime);
             }
 
-            protected override void OnInterrupt(InterruptType _) =>
+            protected override void OnInterrupt(InterruptType _)
+            {
                 _sequence.Stop();
+            }
         }
     }
 }

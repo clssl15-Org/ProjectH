@@ -1,6 +1,7 @@
 using System;
 using Actors.Monsters.Actions;
 using Infrastructure.StateMachines.Fsm;
+using static Actors.Monsters.Actions.AttackWithWeapon;
 
 namespace Actors.Monsters
 {
@@ -21,6 +22,8 @@ namespace Actors.Monsters
             private Func<float, float, bool> _whileMainAction;
             private Action _beforePostAction;
             private Action _afterPostAction;
+
+            private Payload _payload;
 
             //private readonly Exception AnimationFailure
             //    = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
@@ -70,6 +73,10 @@ namespace Actors.Monsters
                         .OnEntered(() =>
                         {
                             _beforeMainAction?.Invoke();
+
+                            var attackData = (MonsterAttackData)_payload.MonsterConditionData.Payload;
+                            attackData.NotifyEvent(AttackEvent.Started);
+
                             _mainActionEnteredTime = _elapsedTime;
 
                             Action<bool> callback = _whileMainAction == null
@@ -95,6 +102,11 @@ namespace Actors.Monsters
                             if (!play)
                                 _work.SetNext("PostAction");
                         })
+                        .OnExited(() =>
+                        {
+                            var attackData = (MonsterAttackData)_payload.MonsterConditionData.Payload;
+                            attackData.NotifyEvent(AttackEvent.Finished);
+                        })
                     )
                     .AddChild(new Work("PostAction")
                         .OnEntered(() =>
@@ -112,8 +124,20 @@ namespace Actors.Monsters
                     );
             }
 
-            protected override void OnEnter(object _)
+            protected override void OnEnter(object input)
             {
+                if (input != null)
+                {
+                    if (input is not Payload payload)
+                        throw new ArgumentException(
+                            $"{nameof(input)}은(는) null이거나 {nameof(Payload)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다.",
+                            nameof(input));
+
+                    _payload = payload;
+                }
+                else
+                    _payload = null;
+
                 _elapsedTime = 0f;
                 _work.Enter();
             }
@@ -127,6 +151,7 @@ namespace Actors.Monsters
             protected override void OnInterrupt(InterruptType reason)
             {
                 _work.Exit();
+                _payload = null;
             }
         }
     }

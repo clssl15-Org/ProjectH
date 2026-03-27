@@ -16,6 +16,9 @@ namespace Actors.Monsters
         [SerializeField, Min(0)] private float _weaponActiveTiming;
         [SerializeField] private float _weaponActiveDuration;
 
+        [Header("HACK: Register to Manager")]
+        [SerializeField] private bool _registerToManager;
+
 
         // States
         private class EyeballMonsterSecondPhaseBrain : MonsterBrain
@@ -103,6 +106,13 @@ namespace Actors.Monsters
             ActionController.Enter();
 
             Brain = new EyeballMonsterSecondPhaseBrain(this);
+
+            // HACK: 재생성 시 매니저 등록
+            if (_registerToManager)
+            {
+                var manager = FindObjectOfType<Game.Stage.StageManager>();
+                if (manager) manager.Register(this);
+            }
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

@@ -32,8 +32,12 @@ namespace Game
         public override int BgmVolume => _soundManager.BgmVolume;
         public override int SfxVolume => _soundManager.SfxVolume;
 
+        public override bool PlayerHasDied => LevelManager.Instance.PlayerHasDied;
+
         // Front
+        [SerializeField] private Configuration _configuration;
         [SerializeField] private GameAssetLibrary _gameAssetLibrary;
+        [SerializeField] private string _firstSceneName = "Stage0 0";
 
         // Properties
         private Management.SoundManager _soundManager;
@@ -43,23 +47,20 @@ namespace Game
         [SerializeField] private MonoBehaviour[] _injections;
 
         // Internal
-        private static bool _isInitialized = false;
+        private static GameManager _instance;
+        private static bool _isStarted;
 
 
         // Content
         private void Awake()
         {
-            if (_isInitialized)
+            if (_instance && _instance != this)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    Ctx("인스턴스가 중복 생성되었습니다. 현재 생성 중인 인스턴스를 삭제합니다.")),
-                    this);
-
                 Destroy(gameObject);
                 return;
             }
 
-            _isInitialized = true;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
 
             BlackboxHandle.Configure(
@@ -84,15 +85,42 @@ namespace Game
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
+        private void Start()
+        {
+            if (_isStarted) return;
+            _isStarted = true;
+
+            // 게임 최초 시작 시
+            if (_gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var player))
+                player.Name = _configuration.InitialPlayerName;
+            else
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteError(Ctx(
+                    $"{nameof(_gameAssetLibrary)}에서 {World.Character.Player}을(를) 찾지 못했기 때문에 " +
+                    $"플레이어 이름을 '{_configuration.InitialPlayerName}'(으)로 변경할 수 없습니다.")));
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
         {
             var message = Ctx($"씬 '{scene.name}'이(가) 로드되었습니다.");
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
 
+            if (TryFindScript<StageManager>(scene, out var stageManager))
+            {
+                stageManager.PlayerDied += () =>
+                {
+                    using var _ = BlackboxHandle.Of(this).WriteScope("플레이어 사망");
+
+                    LevelManager.Instance.ResetState();
+                    LevelManager.Instance.PlayerHasDied = true;
+
+                    ChangeScene(_firstSceneName, this);
+                };
+            }
+
             if (TryFindScript<ScenarioManager>(scene, out var scenarioManager))
             {
-                if (!TryFindScript<StageManager>(scene, out var stageManager))
+                if (!stageManager)
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                         Ctx("StageManager 컴포넌트를 찾는 데 실패했기 때문에 ScenarioManager를 초기화할 수 없습니다.")));
 

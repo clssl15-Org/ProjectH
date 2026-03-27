@@ -75,7 +75,7 @@ namespace Actors.Monsters
         public int MaxHP => StatsInfo.MaxHP;
         public bool IsAlive { get; internal set; } = true;
 
-        public event Action<IMonsterConditionData> ConditionChanged;
+        public event Action<Actors.MonsterConditionData> ConditionChanged;
         public event Action Destroyed;
 
         // Property 
@@ -364,14 +364,14 @@ namespace Actors.Monsters
         }
         void IMonsterInternal.Die() => Die();
 
-        protected void NotifyCondition(IMonsterConditionData data) => ConditionChanged?.Invoke(data);
-        protected void NotifyConditionImmediately(IMonsterConditionData data)
+        protected void NotifyCondition(Actors.MonsterConditionData data) => ConditionChanged?.Invoke(data);
+        protected void NotifyConditionImmediately(Actors.MonsterConditionData data)
         {
             ((IMonsterInternal)this).NotifyCondition(data);
             data.Complete();
         }
-        void IMonsterInternal.NotifyCondition(IMonsterConditionData data) => NotifyCondition(data);
-        void IMonsterInternal.NotifyConditionImmediately(IMonsterConditionData data) => NotifyConditionImmediately(data);
+        void IMonsterInternal.NotifyCondition(Actors.MonsterConditionData data) => NotifyCondition(data);
+        void IMonsterInternal.NotifyConditionImmediately(Actors.MonsterConditionData data) => NotifyConditionImmediately(data);
 
         void IMonsterInternal.Knockback(Direction direction, float? knockbackForce) => Knockback(direction, knockbackForce);
         #endregion

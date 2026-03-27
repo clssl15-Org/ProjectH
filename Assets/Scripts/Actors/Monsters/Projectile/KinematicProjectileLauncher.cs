@@ -64,7 +64,13 @@ namespace Actors.Monsters
 
                 var projectile = Instantiate(_projectiles[i]);
 
-                projectile.transform.localScale = _projectiles[i].transform.lossyScale;
+                var originalScale = _projectiles[i].transform.lossyScale;
+                projectile.transform.localScale = new Vector3(
+                    Mathf.Abs(originalScale.x),
+                    Mathf.Abs(originalScale.y),
+                    Mathf.Abs(originalScale.z)
+                );
+
                 projectile.transform.position = _owner.transform.position + _projectilePositions[i];
                 projectile.SetActive(true);
 
@@ -107,18 +113,29 @@ namespace Actors.Monsters
         public void LaunchWithDirections(float speed, params Vector2[] directions)
         {
             ThrowIfNotValidState();
+            var facingDir = Mathf.Sign(_owner.transform.localScale.x);
 
             for (int i = 0; i < _projectiles.Length; i++)
             {
                 var projectile = Instantiate(_projectiles[i]);
 
-                projectile.transform.localScale = _projectiles[i].transform.lossyScale;
-                projectile.transform.position = _owner.transform.position + _projectilePositions[i];
+                var projScale = _projectiles[i].transform.lossyScale;
+                // projScale.x *= facingDir; // 투사체 이미지도 같이 뒤집어야 한다면 이 주석을 해제하세요.
+                projectile.transform.localScale = projScale;
+
+                var offset = _projectilePositions[i];
+                offset.x *= facingDir;
+                projectile.transform.position = _owner.transform.position + offset;
+
                 projectile.SetActive(true);
 
                 var component = projectile.GetComponent<KinematicProjectile>();
                 InitializeProjectile(component);
-                component.Launch(directions[i], speed);
+
+                var launchDir = directions[i];
+                launchDir.x *= facingDir;
+
+                component.Launch(launchDir, speed);
             }
         }
 

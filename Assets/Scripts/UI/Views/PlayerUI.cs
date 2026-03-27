@@ -6,14 +6,12 @@ using Infrastructure;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace UI
 {
     [RequireComponent(typeof(RectTransform))]
     public class PlayerUI : MonoBehaviour,
         IView,
-        IEnablable,
         IInputLayerSubject
     {
         // Front
@@ -25,8 +23,7 @@ namespace UI
         // Internal
         [SerializeField] private PlayerView.SkillUI _skillUI;
         [SerializeField] private Button _skillBtn;
-        [SerializeField] private Animation _skillRouletteBackground;
-        [SerializeField] private VideoPlayer _skillRouletteVideoPlayer;
+
         [SerializeField] private Button _defaultAttackBtn;
         [SerializeField] private Button _rangedAttackBtn;
         [SerializeField] private PlayerView.UltimateUI _ultimateUI;
@@ -35,27 +32,12 @@ namespace UI
         [SerializeField] private HealthBarUI _healthBar;
         [SerializeField] private PlayerView.RelicManager _relicManager;
 
-        [Header("Resources")]
-        [SerializeField, Min(0)] private float _skillRouletteVideoPlaytime = 3.5f;
-        [SerializeField] private VideoClip[] _skillRouletteVideos;
-
-        #region Interfaces
-        Action IEnablable.OnEnabling => 
-            () => _skillRouletteBackground.gameObject.SetActive(true);
-        Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => null;
-        Action IEnablable.OnDisabled =>
-            () => _skillRouletteBackground.gameObject.SetActive(false);
-        #endregion
-
         private RectTransform _transform;
         private PlayerVM _player;
 
         private readonly HashSet<Button> _currentSelectedButtons = new();
         private readonly HashSet<Button> _selectedButtons = new();
 
-        private EnableWithAnimation _skillRouletteEnabler;
-        private IDisposable _skillRouletteDeactivateTimer;
 
         private readonly int[] _probTable = new int[] { 0, 10, 25, 50, 75, 100 };
         private bool _isAwaked = false;
@@ -70,12 +52,6 @@ namespace UI
             _isAwaked = true;
 
             _transform = GetComponent<RectTransform>();
-
-            _skillRouletteEnabler = new EnableWithAnimation(_skillRouletteBackground, false)
-                .InitializeWithIEnablable(this, false);
-            _skillRouletteEnabler.SetToDisabled();
-
-            _skillRouletteVideoPlayer.clip = null;
         }
 
         public void Connect(PlayerVM player)
@@ -231,25 +207,11 @@ namespace UI
             index = Mathf.Clamp(index, 0, _probTable.Length - 1);
 
             BlackboxHandle.Of(this).Write($"Index: {index}");
-
-            _skillRouletteDeactivateTimer?.Dispose();
-            _skillRouletteDeactivateTimer = new Timer(
-                _skillRouletteVideoPlaytime,
-                succeeded =>
-                {
-                    if (succeeded)
-                    {
-                        _skillRouletteEnabler.Disable();
-                        _skillRouletteVideoPlayer.clip = null;
-
-                        BlackboxHandle.Of(this).Exert(_player, "Apply Damage");
-                        apply();
-                    }
-                });
-
-            _skillRouletteEnabler.Enable();
-            _skillRouletteVideoPlayer.clip = _skillRouletteVideos[index];
-            _skillRouletteVideoPlayer.Play();
+            _skillUI.EnableRoulette(index, () =>
+            {
+                BlackboxHandle.Of(this).Exert(_player, "Apply Damage");
+                apply();
+            });
         }
 
 
@@ -269,14 +231,5 @@ namespace UI
             if (this && gameObject)
                 Destroy(gameObject);
         }
-
-        void IEnablable.Enable() =>
-            throw new NotImplementedException();
-        void IEnablable.Disable() =>
-            throw new NotImplementedException();
-        void IEnablable.SetToEnabled() =>
-            throw new NotImplementedException();
-        void IEnablable.SetToDisabled() =>
-            throw new NotImplementedException();
     }
 }

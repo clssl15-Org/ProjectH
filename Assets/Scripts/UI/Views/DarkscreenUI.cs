@@ -58,7 +58,7 @@ namespace UI
             if (_canvasGroup == null)
                 _canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
-            bool active = gameObject.activeSelf;
+            var active = gameObject.activeSelf;
             _isEnabled = active;
 
             _canvasGroup.alpha = active ? _enabledAlpha : 0f;
@@ -116,6 +116,23 @@ namespace UI
                     _canvasGroup.interactable = true;
                 },
                 onComplete: callback);
+        }
+        public void OpenScreen(Action callback = null)
+        {
+            EnsureInitialization();
+
+            _isClosed = false;
+            _canvasGroup.alpha = 1f;
+            gameObject.SetActive(true);
+
+            StartTransition(
+                0f,
+                _closeDuration,
+                onComplete: () =>
+                {
+                    callback?.Invoke();
+                    SetToDisabled();
+                });
         }
 
         public void Enable()

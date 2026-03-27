@@ -1,7 +1,9 @@
+using System;
 using Actors.Monsters.Actions;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
+using static Actors.Monsters.Actions.AttackWithWeapon;
 
 namespace Actors.Monsters
 {
@@ -17,6 +19,7 @@ namespace Actors.Monsters
 
             private Work _work;
             private Vector3 _originalPosition;
+            private Payload _payload;
 
             private readonly string[] phases = new[]
             {
@@ -27,6 +30,9 @@ namespace Actors.Monsters
                 "Retreated"
             };
 
+            // HACK: Magic Value for Sound Sync
+            private readonly float AttackSoundTiming = 0.35f;
+
             //private readonly Exception AnimationFailure
             //    = new InvalidOperationException("애니메이션 재생 중 오류가 발생했습니다.");
 
@@ -34,6 +40,8 @@ namespace Actors.Monsters
             // Content
             public GhostExplosiveAttackAction()
             {
+                IDisposable soundTimer = null;
+
                 _work = new Work()
                     .OnExited(() => AnimationPlayer.Stop())
                     .AddChild(new Work(phases[0])
@@ -43,7 +51,10 @@ namespace Actors.Monsters
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[1]);
-                            }))), true)
+                            }))
+                        ),
+                        isPrimary: true
+                    )
                     .AddChild(new Work(phases[1])
                         .OnEntered(() =>
                         {
@@ -55,21 +66,37 @@ namespace Actors.Monsters
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[2]);
-                            }))))
+                            }))
+                        )
+                    )
                     .AddChild(new Work(phases[2])
-                        .OnEntered(() => AnimationPlayer.Play(
-                            new MonsterAnimationPlayInfo("Attack_2", Callback: succeed =>
+                        .OnEntered(() =>
+                        {
+                            soundTimer?.Dispose();
+                            soundTimer = new Timer(AttackSoundTiming, succeeded =>
                             {
-                                //if (!succeed) throw AnimationFailure;
-                                _work.SetNext(phases[3]);
-                            }))))
+                                if (succeeded && _payload != null)
+                                    ((MonsterAttackData)_payload.MonsterConditionData.Payload).NotifyEvent(AttackEvent.Started);
+                            });
+
+                            AnimationPlayer.Play(
+                                new MonsterAnimationPlayInfo("Attack_2", Callback: succeed =>
+                                {
+                                    //if (!succeed) throw AnimationFailure;
+                                    _work.SetNext(phases[3]);
+                                }));
+                        })
+                        .OnExited(() => soundTimer?.Dispose())
+                    )
                     .AddChild(new Work(phases[3])
                         .OnEntered(() => AnimationPlayer.Play(
                             new MonsterAnimationPlayInfo("Teleportation", "Teleportation_In", Callback: succeed =>
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 _work.SetNext(phases[4]);
-                            }))))
+                            }))
+                        )
+                    )
                     .AddChild(new Work(phases[4])
                         .OnEntered(() => MonsterAction.Owner.transform.position = _originalPosition)
                         .OnEntered(() => AnimationPlayer.Play(
@@ -77,11 +104,23 @@ namespace Actors.Monsters
                             {
                                 //if (!succeed) throw AnimationFailure;
                                 Interrupt(InterruptType.Completed);
-                            }))));
+                            }))
+                        )
+                    );
             }
 
-            protected override void OnEnter(object _)
+            protected override void OnEnter(object input)
             {
+                if (input != null)
+                {
+                    if (input is not Payload payload)
+                        throw new ArgumentException(
+                            $"{nameof(input)}은(는) null이거나 {nameof(Payload)} 형식이어야 하지만 '{input.GetType().Name}' 형식이 입력되었습니다.",
+                            nameof(input));
+
+                    _payload = payload;
+                }
+
                 _work.Enter();
             }
 
@@ -92,6 +131,7 @@ namespace Actors.Monsters
 
             protected override void OnInterrupt(InterruptType reason)
             {
+                _payload = null;
                 _work.Exit();
             }
         }

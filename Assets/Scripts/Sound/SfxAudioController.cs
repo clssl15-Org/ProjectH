@@ -6,7 +6,7 @@ namespace Sound
     public class SfxAudioController : AudioSourceController,
         IInjectable<GameServices>
     {
-        [SerializeField, Min(0)] private float _volumeRate = 1;
+        [field: SerializeField, Min(0)] public float VolumeRate { get; set; } = 1;
         private GameServices _gameServices;
 
         void IInjectable<GameServices>.Inject(GameServices gameServices)
@@ -15,13 +15,13 @@ namespace Sound
             ApplySettings();
         }
 
-#if UNITY_EDITOR
+#if DEBUG_MODE
         private void Update() => ApplySettings();
 #endif
         protected virtual void ApplySettings()
         {
             Volume = Mathf.RoundToInt(
-                _volumeRate * (_gameServices?.SfxVolume ?? 100));
+                VolumeRate * (_gameServices?.SfxVolume ?? 100));
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using Actors.Monsters.Actions;
-using Actors.Monsters.Bosses;
 using Actors.Monsters.Brains;
 using Infrastructure;
 using Infrastructure.StateMachines.BT;

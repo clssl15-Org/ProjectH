@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 8111680448376255157}
   - component: {fileID: 7246786767152220795}
   - component: {fileID: 6633816817213553370}
+  - component: {fileID: 8507789958582734624}
+  - component: {fileID: 4345405800163700213}
   m_Layer: 8
   m_Name: Eyeball Monster Second Phase
   m_TagString: Monster
@@ -260,6 +262,7 @@ MonoBehaviour:
   _weapon: {fileID: 6010522310993064704}
   _weaponActiveTiming: 0.4166667
   _weaponActiveDuration: 0.08333334
+  _registerToManager: 1
 --- !u!114 &6633816817213553370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,7 +275,129 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f920a736278a8604da499fc730ef2ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IndicatorConfigurationOverride>k__BackingField: {fileID: 0}
+  <ConfigurationOverride>k__BackingField: {fileID: 0}
+--- !u!82 &8507789958582734624
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2433133080368807008}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &4345405800163700213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2433133080368807008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f510102a097d104a9790f0ce4f0d479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audios:
+  - Name: Attack
+    AudioClip: {fileID: 8300000, guid: b2088d8128f56f5478dde060cbe196cb, type: 3}
+    PlayOption: 1
+  - Name: Die
+    AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
+    PlayOption: 3
+  <VolumeRate>k__BackingField: 1
+  <StandaloneMode>k__BackingField: 0
+  _defaultHitSoundPlayTiming: 1
+  _hitSoundPlayTimings: []
+  _dieClipName: Die
+  _overrideSpatialBlend: 0
+  _spatialBlend: 0.7
 --- !u!1 &7436663969907029119
 GameObject:
   m_ObjectHideFlags: 0

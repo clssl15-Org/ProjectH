@@ -3,9 +3,6 @@ using Actors.PlayerSystem;
 using Dialogue;
 using UnityEngine;
 using BlackboxSystem;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Game
 {
@@ -15,26 +12,24 @@ namespace Game
         [SerializeField] private Rubiel _rubiel;
         [SerializeField] private CharacterStateController _playerStateController;
         [Space]
-        [SerializeField] private DialogueTitle _dialogueTitle = DialogueTitle.None;
-        [SerializeField] private string _title = string.Empty;
+        [SerializeField] private string _dialogueTitle = string.Empty;
         [SerializeField] private KeyCode _startDialogue = KeyCode.C;
 
-        private string Title => _dialogueTitle != DialogueTitle.Undefined
-            ? _dialogueTitle.ToString() : _title;
+        private string DialogueTitle => _dialogueTitle;
 
         private void Update()
         {
             if (Input.GetKeyDown(_startDialogue))
             {
-                if (string.IsNullOrWhiteSpace(Title))
+                if (string.IsNullOrWhiteSpace(DialogueTitle))
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"{nameof(Title)}이(가) 유효하지 않기 떄문에 대화를 재생할 수 없습니다."),
+                        $"{nameof(DialogueTitle)}이(가) 유효하지 않기 떄문에 대화를 재생할 수 없습니다."),
                         this);
                     return;
                 }
 
-                Play(Title);
+                Play(DialogueTitle);
             }
         }
 
@@ -49,26 +44,5 @@ namespace Game
             _rubiel.ToSmall();
             _playerStateController.EnqueueTransition<NormalMovement>();
         }
-
-#if UNITY_EDITOR
-#if UNITY_EDITOR
-        [CustomEditor(typeof(RubielDialogueManager)), CanEditMultipleObjects]
-        protected class RubielDialogueManagerEditor : Editor
-        {
-            public override void OnInspectorGUI()
-            {
-                serializedObject.Update();
-                var target = (RubielDialogueManager)base.target;
-
-                if (target._dialogueTitle != DialogueTitle.Undefined)
-                    DrawPropertiesExcluding(serializedObject, nameof(_title));
-                else
-                    DrawDefaultInspector();
-
-                serializedObject.ApplyModifiedProperties();
-            }
-        }
-#endif
-#endif
     }
 }

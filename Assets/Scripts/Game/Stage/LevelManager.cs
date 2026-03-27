@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
     private SpawnManager _spawnManager;
     private SoundManager _soundManager;
 
+    public bool PlayerHasDied { get; internal set; }
     public int CurrentStage { get; private set; } = 0;
 
     private List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -42,6 +43,17 @@ public class LevelManager : MonoBehaviour
 
         _spawnManager = GetComponent<SpawnManager>();
         _soundManager = GetComponent<SoundManager>();
+
+        ResetState();
+    }
+
+    public void ResetState()
+    {
+        CurrentStage = 0;
+
+        exploreIndex = 0;
+        maxExploreCount = 4;
+        exploreCount = 0;
 
         ShuffleAndPick();
     }
@@ -81,6 +93,7 @@ public class LevelManager : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
     void ShuffleAndPick()
     {
         for (int i = numbers.Count - 1; i > 0; i--)

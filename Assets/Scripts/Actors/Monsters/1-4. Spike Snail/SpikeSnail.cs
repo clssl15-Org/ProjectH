@@ -52,25 +52,33 @@ namespace Actors.Monsters
             public SpikeSnailActionController(SpikeSnail monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, StartTime: 0.33f, EndTime: 2.08f)));
+                    .AddAnimationComponent(new MonsterAnimationPlayInfo(MonsterActionType.Idle, StartTime: 0.33f, EndTime: 2.08f))
+                );
                 AddChild(new MonsterAction(MonsterActionType.Alert)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Run)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent()
                     .AddComponent(new AttackWithKinematicProjectile(
                         launcher: monster._spikeLauncher,
                         getLaunchInfo: () => new(monster._launchTime, monster._spikeSpeed),
                         launchType: KinematicProjectileLaunchType.Directions,
-                        getDirections: () => (new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }))));
+                        getDirections: () => (new Vector2[] { new(1, 0), new(1, 1), new(0, 1), new(-1, 1), new(-1, 0) }))
+                    )
+                );
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddComponent(new HitFlash()));
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 
@@ -116,6 +124,7 @@ namespace Actors.Monsters
         protected override void Start()
         {
             base.Start();
+            InitializeComponents();
 
             ActionController = new SpikeSnailActionController(this);
             ActionController.Enter();

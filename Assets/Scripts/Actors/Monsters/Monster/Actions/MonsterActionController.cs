@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Actors.Monsters.Actions
 {
     public record MonsterActionPlayInfo(
-    string Name,
-    Action<ActionResult> Callback = null,
-    object[] Inputs = null)
+        string Name,
+        Action<ActionResult> Callback = null,
+        object[] Inputs = null)
     {
         public MonsterActionPlayInfo(
             MonsterActionType ActionType,

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 3-1. Stage2_Arrival_First
+  m_EditorClassIdentifier: 
+  _title: Stage2_Arrival_First
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 2
+    Dialogue: "\uB8E8\uBA58\uBCA8 \uC131\uC73C\uB85C \uC774\uC5B4\uC9C0\uB294 \uAE38\uC774\uC57C."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uC5EC\uAE30\uBD80\uD130\uB294 \uB3CC\uC544\uAC08 \uC218 \uC5C6\uC5B4."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}

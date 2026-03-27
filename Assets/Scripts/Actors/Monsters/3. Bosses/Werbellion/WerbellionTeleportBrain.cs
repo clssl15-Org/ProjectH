@@ -41,7 +41,7 @@ namespace Actors.Monsters.Bosses
                 if (!Owner.TryDoAction(new(
                     Name,
                     Callback: result => Complete(result),
-                    Inputs: new object[] { null, teleportPosition }),
+                    Inputs: new object[] { null, null, teleportPosition }),
                     out var reason,
                     allowRestart: true))
                 {

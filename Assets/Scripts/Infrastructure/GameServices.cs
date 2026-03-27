@@ -12,6 +12,7 @@ namespace Infrastructure
         public abstract void SetBgmVolume(int volume, object context = null);
         public abstract void SetSfxVolume(int volume, object context = null);
 
+        public abstract bool PlayerHasDied { get; }
         public abstract void SetPlayerName(string playerName, object context = null);
 
         public abstract void ChangeScene(string sceneName, object context = null);

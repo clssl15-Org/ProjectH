@@ -1,3 +1,4 @@
+using System;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
 using Infrastructure.StateMachines.BT;
@@ -7,6 +8,9 @@ namespace Actors.Monsters.Bosses
 {
     internal class TwinBossExhaustedBrain : BTNode<IMonsterInternal, MonsterBlackboard>
     {
+        // Front
+        public event Action Opened;
+
         // Internal
         private readonly string _monsterAction;
         private MonsterConditionData _notification;
@@ -44,6 +48,14 @@ namespace Actors.Monsters.Bosses
 
                 Complete(false);
             }
+
+            Opened?.Invoke();
+        }
+
+        public TwinBossExhaustedBrain OnOpened(Action opened)
+        {
+            Opened += opened;
+            return this;
         }
 
         protected override void OnHalt(DetailedNodeStatus _)

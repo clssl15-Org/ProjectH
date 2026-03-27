@@ -8,6 +8,7 @@ using UnityEditor;
 
 namespace Actors.Monsters.Bosses
 {
+    [RequireComponent(typeof(MonsterAudioPlayer))]
     public class FallingStoneManager : MonoBehaviour
     {
         public float TimeInterval
@@ -40,13 +41,15 @@ namespace Actors.Monsters.Bosses
 
         private Action<FallingStone>[] _initializers;
         private Action<bool> _callback;
+        private MonsterAudioPlayer _audioPlayer;
 
         private int _counter;
         private float _timer;
         private float _beforeX;
-        private bool _succeeded;
+        private bool _isSucceeded;
 
 
+        private void Awake() => _audioPlayer = GetComponent<MonsterAudioPlayer>();
         public FallingStoneManager Initialize(Configuration configuration, PlatformManager platformManager)
         {
             _configuration = configuration;
@@ -71,7 +74,7 @@ namespace Actors.Monsters.Bosses
             _counter = 0;
             _timer = 0;
 
-            _succeeded = false;
+            _isSucceeded = false;
             _beforeX = float.MaxValue;
 
             gameObject.SetActive(true);
@@ -88,7 +91,7 @@ namespace Actors.Monsters.Bosses
             // 마지막 Fall 이후 한 단계만큼 기다린 후 종료
             if (_counter >= _stoneCount)
             {
-                _succeeded = true;
+                _isSucceeded = true;
                 Done();
                 return;
             }
@@ -139,6 +142,8 @@ namespace Actors.Monsters.Bosses
                     .GetComponent<FallingStone>()
                     .Initialize(_configuration, _platformManager, _gravityScale);
 
+                stone.GroundReached += () => _audioPlayer.Play("Fall");;
+
                 if (_initializers != null)
                 {
                     foreach (var initializer in _initializers)
@@ -175,7 +180,7 @@ namespace Actors.Monsters.Bosses
 
             var callback = _callback;
             _callback = null;
-            callback?.Invoke(_succeeded);
+            callback?.Invoke(_isSucceeded);
         }
 
 

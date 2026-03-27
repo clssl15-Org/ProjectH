@@ -108,6 +108,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2219789193542946922}
   - component: {fileID: 5656509333287018457}
+  - component: {fileID: 4138502841543990891}
+  - component: {fileID: 5416825396247257225}
   m_Layer: 0
   m_Name: Falling Stone Manager
   m_TagString: Untagged
@@ -164,6 +166,125 @@ MonoBehaviour:
   _gravityScale: 3
   _configuration: {fileID: 0}
   _platformManager: {fileID: 0}
+--- !u!82 &4138502841543990891
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585045005118620710}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &5416825396247257225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585045005118620710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f510102a097d104a9790f0ce4f0d479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audios:
+  - Name: Fall
+    AudioClip: {fileID: 8300000, guid: f6f4703793381744b981fc4b0984dc06, type: 3}
+    PlayOption: 1
+  <VolumeRate>k__BackingField: 1
+  <StandaloneMode>k__BackingField: 1
+  _defaultHitSoundPlayTiming: 1
+  _hitSoundPlayTimings: []
+  _dieClipName: Die
+  _overrideSpatialBlend: 0
+  _spatialBlend: 0.7
 --- !u!1 &853344053440798069
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +402,8 @@ GameObject:
   - component: {fileID: 2278534776424126504}
   - component: {fileID: 2234362322493022801}
   - component: {fileID: 2968631141178121180}
+  - component: {fileID: 5219164043060102010}
+  - component: {fileID: 6269289693782172788}
   m_Layer: 8
   m_Name: Cerberus
   m_TagString: Monster
@@ -510,7 +633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df06598b65b4c943a9edaa0969c4f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDebugStatsInfo: 0
+  _useDebugStatsInfo: 1
   _statsInfo: {fileID: 11400000, guid: ece864270861abf49ba30baa0c3aadc8, type: 2}
   _debugStatsInfo: {fileID: 11400000, guid: f589f9b2a8002014aa9fe583a184acce, type: 2}
   RandomizeStartDirection: 0
@@ -526,9 +649,8 @@ MonoBehaviour:
   _fallingStoneManager: {fileID: 5656509333287018457}
   _ambushAttackManager: {fileID: 1363524184539036133}
   _roarEffect: {fileID: 5456083230515189412}
-  _dropAttack_roarEffectPosition: {fileID: 5248885615722147474}
   _ambushWeapon: {fileID: 7536443909710348846}
-  _ambushWeaponActiveDuration: 0.083333336
+  _ambushWeaponActiveDuration: 0.1
   _ambushReadyTime: 0.5
   _animationTimeScales:
   - AnimationName: BiteAttack
@@ -537,9 +659,9 @@ MonoBehaviour:
     TimeScale: 1
   - AnimationName: AmbushAttack
     TimeScale: 0.7
-  _useTargetPlayer: 0
+  _useTargetPlayer: 1
   _targetPlayer: {fileID: 0}
-  _autoAwake: 0
+  _autoAwake: 1
 --- !u!114 &2968631141178121180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,6 +675,137 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ConfigurationOverride>k__BackingField: {fileID: 11400000, guid: b7055f1334ba4dc44b2a84fbd33ff5a5, type: 2}
+--- !u!82 &5219164043060102010
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503213507356515197}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6269289693782172788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503213507356515197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f510102a097d104a9790f0ce4f0d479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audios:
+  - Name: BiteAttack
+    AudioClip: {fileID: 8300000, guid: 49ccc7e53f4ab464b95e594fa1a4d6a4, type: 3}
+    PlayOption: 1
+  - Name: Roar
+    AudioClip: {fileID: 8300000, guid: dea2c8dc5e861cb4195bdecca6bfd702, type: 3}
+    PlayOption: 1
+  - Name: AmbushAttack_Out
+    AudioClip: {fileID: 8300000, guid: d5113e620253a614d87645e1c10e1ab4, type: 3}
+    PlayOption: 1
+  - Name: AmbushAttack_In
+    AudioClip: {fileID: 8300000, guid: 165f30fca3d45e84aaad270b0843e3f3, type: 3}
+    PlayOption: 1
+  - Name: Die
+    AudioClip: {fileID: 8300000, guid: 231a5fd2a1210e7478592d1d2e0a2b8e, type: 3}
+    PlayOption: 3
+  <VolumeRate>k__BackingField: 1
+  <StandaloneMode>k__BackingField: 1
+  _defaultHitSoundPlayTiming: 1
+  _hitSoundPlayTimings: []
+  _dieClipName: 
+  _overrideSpatialBlend: 0
+  _spatialBlend: 0.7
 --- !u!1 &1959403698851331986
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,11 +1489,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4110857782266795260, guid: fa1a0e7a89d5a9044b932abd3a7c7d7b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.84
+      value: -3.4
       objectReference: {fileID: 0}
     - target: {fileID: 4110857782266795260, guid: fa1a0e7a89d5a9044b932abd3a7c7d7b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.59
+      value: 7.9
       objectReference: {fileID: 0}
     - target: {fileID: 4110857782266795260, guid: fa1a0e7a89d5a9044b932abd3a7c7d7b, type: 3}
       propertyPath: m_LocalPosition.z

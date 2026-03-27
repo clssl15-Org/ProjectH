@@ -5,16 +5,20 @@ namespace Actors.Monsters.Brains
 {
     internal class ValidPlatform : BTNode<IMonsterInternal, MonsterBlackboard>
     {
-        public ValidPlatform()
+        private bool _bypassIfCommitting;
+
+        public ValidPlatform(bool bypassIfCommitting = true)
         {
             AbortPolicies = AbortPolicies.Self;
             HierarchyMode = HierarchyMode.Selector;
             LoopType = LoopType.Forced;
+
+            _bypassIfCommitting = bypassIfCommitting;
         }
 
         public override bool CheckCondition()
         {
-            if (Blackboard.IsCommitting)
+            if (_bypassIfCommitting && Blackboard.IsCommitting)
                 return true;
 
             return Owner.PlatformDetector.CheckPlatform(

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Infrastructure;
 using UnityEngine;
 
 namespace Actors.Monsters.Bosses
@@ -43,7 +44,7 @@ namespace Actors.Monsters.Bosses
 
         private void Update()
         {
-            if (Input.GetKeyDown(_forceClearKey))
+            if (Input.GetKeyDown(_forceClearKey.Resolve()))
             {
                 TwinBossClear();
                 return;

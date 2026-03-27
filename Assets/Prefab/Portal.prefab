@@ -345,9 +345,11 @@ MonoBehaviour:
   _audios:
   - Name: Open
     AudioClip: {fileID: 8300000, guid: 704245c97673a0e4c985eeb86bac3409, type: 3}
+    PlayOption: 1
   - Name: Move
     AudioClip: {fileID: 8300000, guid: 754f3eaf597d1c244a541ddb5a3aa49b, type: 3}
-  _volumeRate: 1
+    PlayOption: 1
+  <VolumeRate>k__BackingField: 1
 --- !u!1 &7929536846086165765
 GameObject:
   m_ObjectHideFlags: 0

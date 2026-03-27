@@ -64,7 +64,7 @@ namespace UI
             _monster.Destroyed += Dispose;
         }
 
-        private void Update(IMonsterConditionData condition)
+        private void Update(MonsterConditionData condition)
         {
             ThrowIfDisposed();
 

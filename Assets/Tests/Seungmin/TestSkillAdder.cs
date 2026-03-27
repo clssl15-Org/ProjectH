@@ -1,9 +1,8 @@
+using System;
 using System.Linq;
 using Actors.PlayerSystem;
-using UnityEngine;
 using Infrastructure;
-using System;
-
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

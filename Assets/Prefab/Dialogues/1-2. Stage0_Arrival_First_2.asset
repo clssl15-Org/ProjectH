@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 1-2. Stage0_Arrival_First_2
+  m_EditorClassIdentifier: 
+  _title: Stage0_Arrival_First_2
+  _targetStyle: 1
+  _lines:
+  - Character: 2
+    Dialogue: "\uADF8\uB798. \uC54C\uC558\uC5B4. {player}"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "\uAE30\uC0AC\uB2E8\uC740? \uBE5B\uC758 \uC218\uD638\uC790\uB294?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uB2E4 \uC124\uBA85\uD558\uB824\uBA74 \uB108\uBB34 \uAE38\uC5B4."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uC9C0\uAE08 \uC911\uC694\uD55C \uAC74 \uD558\uB098\uC57C."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uC138\uC0C1\uC740 \uC774\uBBF8 \uD55C \uBC88, \uB05D\uB0AC\uC5B4."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uC6D0\uC778\uC740 \uC804\uBD80\u2026 \uB8E8\uBA58\uBCA8 \uC131\uC5D0
+      \uC788\uC5B4. "
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}

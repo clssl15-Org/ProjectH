@@ -39,13 +39,18 @@ namespace Actors.Monsters
                                     LowerRangeTolerance = tolerance,
                                 }
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
-                                .AddChild(new DeadEnd()))
+                                .AddChild(new DeadEnd())
+                            )
                             .AddChild(new Attack(true))
-                            .AddChild(new Cooldown()))
+                            .AddChild(new Cooldown())
+                        )
                         .AddChild(new PlayerNotDetected()
                             .AddChild(new Rest())
-                            .AddChild(new Patrol())))
-                    .AddChild(new NotValidPlatform()));
+                            .AddChild(new Patrol())
+                        )
+                    )
+                    .AddChild(new NotValidPlatform())
+                );
                 AddChild(new Dead());
             }
         }
@@ -55,21 +60,27 @@ namespace Actors.Monsters
             public RangedkeletonActionController(RangedSkeleton monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Walk)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
                 AddChild(new MonsterAction(MonsterActionType.Attack)
                     .AddAnimationComponent(new MonsterAnimationPlayInfo("throw"))
                     .AddComponent(new AttackWithKinematicProjectile(
                         launcher: monster._projectileLauncher,
                         getLaunchInfo: () => new(monster._launchTime, monster._projectileSpeed),
                         launchType: KinematicProjectileLaunchType.Directions,
-                        getDirections: () => (new[] { monster.Direction.ToVector2() }))));
+                        getDirections: () => new[] { Vector2.left }) // HACK: 왜 왼쪽? 작동하니 두기
+                    )
+                ); 
                 AddChild(new MonsterAction(MonsterActionType.Hit)
                     .AddDelay()
-                    .AddComponent(new HitFlash()));
+                    .AddComponent(new HitFlash())
+                );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent());
+                    .AddAnimationComponent()
+                );
             }
         }
 

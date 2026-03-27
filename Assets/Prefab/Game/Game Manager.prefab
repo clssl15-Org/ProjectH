@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3edbf9afa75c54294084fa067aa760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _configuration: {fileID: 6792339628583010934, guid: 4b06ce2ffc1a2674798737979ea2d34c, type: 3}
+  _gameAssetLibrary: {fileID: 8708658426037089991, guid: f61e406118a84934fb2ce4dba15b83e1, type: 3}
+  _firstSceneName: Stage0 0
   _injectOnSceneLoading: 1
   _injections:
   - {fileID: 6867746828967838783}
@@ -63,6 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 6389749565562484621}
+  _quitOnExport: 1
 --- !u!1001 &4561315107522992136
 PrefabInstance:
   m_ObjectHideFlags: 0
