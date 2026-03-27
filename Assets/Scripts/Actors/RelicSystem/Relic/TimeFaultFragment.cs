@@ -8,10 +8,10 @@ public class TimeFaultFragment : Relic
     {
         OnReinforcedAcquire();
 
-        RelicManager.Instance.player.playerStats.skillCooldownMultiplier += value;
+        RelicManager.Instance.player.playerStats.skillCooldownMultiplier += value * 0.01f;
     }
     public override void OnLose()
     {
-        RelicManager.Instance.player.playerStats.skillCooldownMultiplier -= value;
+        RelicManager.Instance.player.playerStats.skillCooldownMultiplier -= value * 0.01f;
     }
 }

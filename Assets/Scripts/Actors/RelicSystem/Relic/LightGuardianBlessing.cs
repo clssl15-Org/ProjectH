@@ -22,6 +22,6 @@ public class LightGuardianBlessing : Relic
 
     public void OnPlayerHeal()
     {
-        playerHealth.HealByPercent(value);
+        playerHealth.HealByPercent(value * 0.01f);
     }
 }

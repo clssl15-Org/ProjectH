@@ -11,7 +11,7 @@ public class OathBannerFragment : Relic
 
         Player player = RelicManager.Instance.player;
         Skill3 firstSkill = player.StatesGO.GetComponent<Skill3>();
-        firstSkill.BonusMultiplier += value;
+        firstSkill.BonusMultiplier += value * 0.01f;
         player.SkillManager.AddSkill(firstSkill);
     }
     public override void OnLose()

@@ -8,10 +8,10 @@ public class TrainedSwordsmanshipManual : Relic
     {
         OnReinforcedAcquire();
 
-        RelicManager.Instance.player.playerStats.attackPowerMultiplier += value;
+        RelicManager.Instance.player.playerStats.attackPowerMultiplier += value * 0.01f ;
     }
     public override void OnLose()
     {
-        RelicManager.Instance.player.playerStats.attackPowerMultiplier -= value;
+        RelicManager.Instance.player.playerStats.attackPowerMultiplier -= value * 0.01f;
     }
 }

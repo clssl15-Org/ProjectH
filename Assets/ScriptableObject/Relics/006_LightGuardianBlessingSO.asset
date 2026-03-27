@@ -15,14 +15,12 @@ MonoBehaviour:
   relicNumber: 6
   icon: {fileID: 21300000, guid: 729cbdbf9502d06438f1fe067e0b3e65, type: 3}
   relicName: "\uBE5B\uC758 \uC218\uD638\uC790\uC758 \uCD95\uBCF5 "
-  description: "- \uBE5B\uC758 \uC218\uD638\uC790\uAC00 \uB0A8\uAE34 \uCD95\uBCF5\uC758
+  description: "\uBE5B\uC758 \uC218\uD638\uC790\uAC00 \uB0A8\uAE34 \uCD95\uBCF5\uC758
     \uD754\uC801. \uC804\uD22C \uC18D\uC5D0\uC11C\uB3C4 \uC0DD\uBA85\uC774 \uB418\uC0B4\uC544\uB098\uB294
     \uAE30\uC801\uC744 \uBD80\uC5EC\uD55C\uB2E4.\r"
-  nomalEffect: "- \uAE30\uBCF8 : \uBAAC\uC2A4\uD130 \uCC98\uCE58 \uC2DC \uCCB4\uB825
-    2% \uD68C\uBCF5\r"
-  upgradeEffect: "- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uBAAC\uC2A4\uD130 \uCC98\uCE58
-    \uC2DC \uCCB4\uB825 4%(<color=#76ffff>+2%</color>)\uD68C\uBCF5"
-  baseValue: 0.02
-  coinFlipValue: 0.04
+  nomalEffect: "\uBAAC\uC2A4\uD130 \uCC98\uCE58 \uC2DC \uCCB4\uB825 @%<color=#76ffff>$</color>
+    \uD68C\uBCF5\r"
+  baseValue: 2
+  coinFlipValue: 4
   canStack: 1
   maxStackCount: 1

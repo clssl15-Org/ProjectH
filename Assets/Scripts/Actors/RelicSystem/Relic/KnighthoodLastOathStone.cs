@@ -31,7 +31,7 @@ public class KnighthoodLastOathStone : Relic
     {
         if (!isActivated)
         {
-            if (playerHealth.CurrentHealth <= playerHealth.MaxHealth * value)
+            if (playerHealth.CurrentHealth <= playerHealth.MaxHealth * value * 0.01f)
             {
                 isActivated = true;
                 RelicManager.Instance.player.playerStats.attackPowerMultiplier *= 2;
@@ -39,7 +39,7 @@ public class KnighthoodLastOathStone : Relic
         }
         else if (isActivated)
         {
-            if (playerHealth.CurrentHealth > playerHealth.MaxHealth * value)
+            if (playerHealth.CurrentHealth > playerHealth.MaxHealth * value * 0.01f)
             {
                 isActivated = false;
                 RelicManager.Instance.player.playerStats.attackPowerMultiplier /= 2;

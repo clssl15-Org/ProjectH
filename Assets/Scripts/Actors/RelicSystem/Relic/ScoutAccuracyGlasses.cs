@@ -11,10 +11,10 @@ public class ScoutAccuracyGlasses : Relic
 
         Player player = RelicManager.Instance.player;
         RangedAttack skill = player.StatesGO.GetComponent<RangedAttack>();
-        skill.BonusMultiplier += value;
+        skill.BonusMultiplier += value * 0.01f;
     }
     public override void OnLose()
     {
-        RelicManager.Instance.player.StatesGO.GetComponent<RangedAttack>().BonusMultiplier -= value;
+        RelicManager.Instance.player.StatesGO.GetComponent<RangedAttack>().BonusMultiplier -= value * 0.01f;
     }
 }

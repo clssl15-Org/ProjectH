@@ -8,10 +8,10 @@ public class GuardianEngravedPunishmentRune : Relic
     {
         OnReinforcedAcquire();
 
-        RelicManager.Instance.player.playerStats.skillPowerMultiplier += value;
+        RelicManager.Instance.player.playerStats.skillPowerMultiplier += value * 0.01f;
     }
     public override void OnLose()
     {
-        RelicManager.Instance.player.playerStats.skillPowerMultiplier -= value;
+        RelicManager.Instance.player.playerStats.skillPowerMultiplier -= value * 0.01f;
     }
 }
