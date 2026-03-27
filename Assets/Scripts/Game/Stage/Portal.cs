@@ -14,7 +14,7 @@ public class Portal : MonoBehaviour
     [SerializeField]
     private GameObject mask;
     [SerializeField]
-    private bool stageChange;
+    private LevelType levelType;
 
     private bool isPlayerInRange = false;
     private void Start()
@@ -37,9 +37,9 @@ public class Portal : MonoBehaviour
     private void MoveNextLevel()
     {
         if (MoveToNextLevel != null)
-            MoveToNextLevel(() => LevelManager.Instance.MoveNextLevel(stageChange));
+            MoveToNextLevel(() => LevelManager.Instance.MoveNextLevel(levelType));
         else
-            LevelManager.Instance.MoveNextLevel(stageChange);
+            LevelManager.Instance.MoveNextLevel(levelType);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
