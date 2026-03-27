@@ -15,12 +15,10 @@ MonoBehaviour:
   relicNumber: 4
   icon: {fileID: 21300000, guid: a50cf9c97707e2b4fb9f560bd2c184e3, type: 3}
   relicName: "\uAE30\uC0AC \uCE58\uC720\uB2E8\uC758 \uD3EC\uC158"
-  description: "- \uC804\uC7A5\uC744 \uB204\uBE44\uB358 *\uAE30\uC0AC \uCE58\uC720\uB2E8*\uC774
+  description: "\uC804\uC7A5\uC744 \uB204\uBE44\uB358 \uAE30\uC0AC \uCE58\uC720\uB2E8\uC774
     \uC0AC\uC6A9\uD558\uB358 \uC751\uAE09 \uD3EC\uC158.\r"
-  nomalEffect: "- \uAE30\uBCF8 : \uCCB4\uB825 20% \uD68C\uBCF5\r"
-  upgradeEffect: "- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uCCB4\uB825 40%(<color=#76ffff>+20%</color>)
-    \uD68C\uBCF5"
-  baseValue: 0.2
-  coinFlipValue: 0.4
+  nomalEffect: "\uCCB4\uB825 @% \uD68C\uBCF5\r"
+  baseValue: 20
+  coinFlipValue: 40
   canStack: 1
   maxStackCount: 1

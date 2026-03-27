@@ -8,11 +8,11 @@ public class SacredProtectionMark : Relic
     {
         OnReinforcedAcquire();
 
-        RelicManager.Instance.player.playerStats.maxHeathMultiplier += value;
+        RelicManager.Instance.player.playerStats.maxHeathMultiplier += value * 0.01f;
         RelicManager.Instance.player.PlayerHealth.ChangeMaxHealth();
     }
     public override void OnLose()
     {
-        RelicManager.Instance.player.playerStats.maxHeathMultiplier -= value;
+        RelicManager.Instance.player.playerStats.maxHeathMultiplier -= value * 0.01f;
     }
 }

@@ -8,10 +8,10 @@ public class RadiantHeartstone : Relic
     {
         OnReinforcedAcquire();
 
-        RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier += value;
+        RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier += value * 0.01f;
     }
     public override void OnLose()
     {
-        RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier -= value;
+        RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier -= value * 0.01f;
     }
 }

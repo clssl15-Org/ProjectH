@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
 using System;
+using UnityEditor.Experimental.GraphView;
+using Unity.VisualScripting;
 
 public class RelicManager : MonoBehaviour
 {
@@ -55,6 +57,25 @@ public class RelicManager : MonoBehaviour
             .FirstOrDefault(rd => rd.RelicNumber == id);
 
         return relicData != null;
+    }
+
+    public float GetValueSum(int id)
+    {
+        float sum = 0;
+
+        if (!ownedRelics.ContainsKey(id) || ownedRelics[id].Count == 0)
+        {
+            return sum;
+        }
+
+        foreach (var relicObj in ownedRelics[id])
+        {
+            if (relicObj.TryGetComponent<Relic>(out var relicScript))
+            {
+                sum += relicScript.Value;
+            }
+        }
+        return sum;
     }
 
     public void GetRandomRelicData(bool forceSuccess = false)
@@ -125,8 +146,10 @@ public class RelicManager : MonoBehaviour
 
         if (selectedData == null) selectedData = candidates.Last().Key;
 
-        string description = selectedData.Description + "\n" + selectedData.NomalEffect + "\n" + selectedData.UpgradeEffect;
-
+        string description = selectedData.Description + "\n" + "\n";
+        string effectDesc = selectedData.NomalEffect.Replace("@", selectedData.BaseValue.ToString());
+        effectDesc = effectDesc.Replace("$", "");
+        description += effectDesc;
         RelicAcquiring?.Invoke(selectedData, description, forceSuccess);
     }
     // (디버그용) 선택한 렐릭 강제 추가
@@ -142,7 +165,11 @@ public class RelicManager : MonoBehaviour
             return;
         }
 
-        string description = targetData.Description + "\n" + targetData.NomalEffect + "\n" + targetData.UpgradeEffect;
+        string description = targetData.Description + "\n" + "\n";
+        string effectDesc = targetData.NomalEffect.Replace("@", targetData.BaseValue.ToString());
+        effectDesc = effectDesc.Replace("$", "");
+        description += effectDesc;
+
         RelicAcquiring?.Invoke(targetData, description, forceSuccess);
     }
 
@@ -206,8 +233,20 @@ public class RelicManager : MonoBehaviour
             relicScript.OnAcquire();
         }
 
-        description = data.Description + "\n";
-        description += relicScript.isReinforced ? data.UpgradeEffect : data.NomalEffect;
+        description = data.Description + "\n" + "\n";
+        float valueSum = GetValueSum(key);
+        string effectDesc = data.NomalEffect.Replace("@", valueSum.ToString());
+        float added = valueSum - data.BaseValue;
+
+        if (added > 0)
+        {
+            effectDesc = effectDesc.Replace("$", $"(+{added}%)");
+        }
+        else
+        {
+            effectDesc = effectDesc.Replace("$", "");
+        }
+        description += effectDesc;
 
         RelicAcquired?.Invoke(data, description);
     }
