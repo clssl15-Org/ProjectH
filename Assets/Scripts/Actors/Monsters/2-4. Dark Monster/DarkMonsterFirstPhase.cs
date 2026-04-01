@@ -46,7 +46,7 @@ namespace Actors.Monsters
                     )
                     .AddChild(new NotValidPlatform())
                 );
-                AddChild(new Dead());
+                AddChild(new Dead() { GetChildren = owner.GetChildren });
             }
         }
 
@@ -111,20 +111,17 @@ namespace Actors.Monsters
             Brain = new DarkMonsterFirstPhaseBrain(this);
         }
 
-        internal override void Die()
+        private IMonster[] GetChildren()
         {
-            if (_revive && _secondPhasePrefab)
-            {
-                var second = Instantiate(_secondPhasePrefab);
+            if (!_revive)
+                return null;
 
-                second
-                    .GetComponent<DarkMonsterSecondPhase>()
-                    .Initialize(GameAssetsLibrary, Configuration, PlatformManager);
+            var second = Instantiate(_secondPhasePrefab);
+            var child = second.GetComponent<DarkMonsterSecondPhase>();
+            child.Initialize(GameAssetsLibrary, Configuration, PlatformManager);
 
-                second.transform.position = transform.position;
-            }
-
-            base.Die();
+            second.transform.position = transform.position;
+            return new[] { child };
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

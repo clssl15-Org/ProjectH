@@ -28,11 +28,11 @@ namespace Actors.Monsters
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
                             .AddChild(new Engaged(
-                                    Engaged.RangeType.Ranged,
-                                    Mathf.Abs((
-                                        owner._weapon?.transform.localPosition.x
-                                        ?? Engaged.DefaultTargetAttackRange)
-                                        * owner.transform.lossyScale.z)
+                                Engaged.RangeType.Ranged,
+                                Mathf.Abs((
+                                    owner._weapon?.transform.localPosition.x
+                                    ?? Engaged.DefaultTargetAttackRange)
+                                    * owner.transform.lossyScale.z)
                                 )
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
@@ -47,7 +47,7 @@ namespace Actors.Monsters
                     )
                     .AddChild(new NotValidPlatform())
                 );
-                AddChild(new Dead());
+                AddChild(new Dead() { GetChildren = owner.GetChildren });
             }
         }
 
@@ -103,31 +103,33 @@ namespace Actors.Monsters
             Brain = new EyeballMonsterFirstPhaseBrain(this);
         }
 
-        internal override void Die()
+        private IMonster[] GetChildren()
         {
-            if (_revive)
+            if (!_revive)
+                return null;
+
+            var children = new IMonster[_secondPhasePrefabs.Length];
+
+            for (int i = 0; i < _secondPhasePrefabs.Length; i++)
             {
-                foreach (var secondPrefab in _secondPhasePrefabs)
+                var secondPrefab = _secondPhasePrefabs[i];
+                if (!secondPrefab)
                 {
-                    if (!secondPrefab)
-                    {
-                        Debug.LogWarning(FormatLogMessage(
-                            $"{nameof(secondPrefab)}이(가) 유효하지 않기 때문에 등록된 몬스터 중 일부가 생성되지 않습니다."));
+                    Debug.LogWarning(FormatLogMessage(
+                        $"{nameof(secondPrefab)}이(가) 유효하지 않기 때문에 등록된 몬스터 중 일부가 생성되지 않습니다."));
 
-                        continue;
-                    }
-
-                    var second = Instantiate(secondPrefab);
-                    second
-                        .GetComponent<EyeballMonsterSecondPhase>()
-                        .Initialize(GameAssetsLibrary, Configuration, PlatformManager);
-
-                    second.transform.position = transform.position;
-                    second.SetActive(true);
+                    continue;
                 }
+
+                var second = Instantiate(secondPrefab);
+                children[i] = second.GetComponent< EyeballMonsterSecondPhase>();
+                children[i].Initialize(GameAssetsLibrary, Configuration, PlatformManager);
+
+                second.transform.position = transform.position;
+                second.SetActive(true);
             }
 
-            base.Die();
+            return children;
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)
