@@ -349,10 +349,6 @@ namespace Actors.Monsters
         internal virtual void Die() => Die(true);
         protected void Die(bool destroySelf)
         {
-            var notification = new MonsterConditionData(MonsterCondition.Died);
-            ConditionChanged?.Invoke(notification);
-            notification.Complete();
-
             Destroyed?.Invoke();
             GameEvents.OnMonsterDied?.Invoke();
 
