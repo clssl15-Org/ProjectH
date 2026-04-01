@@ -15,14 +15,12 @@ MonoBehaviour:
   relicNumber: 13
   icon: {fileID: 21300000, guid: 8c4fc70b6eeff814392d828b3dbd1a00, type: 3}
   relicName: "\uAD11\uD718\uC758 \uC2EC\uC7A5\uC11D"
-  description: "- \uAD11\uD718 \uC218\uD638\uC790\uC758 \uC911\uC2EC\uC5D0\uC11C
-    \uB5A8\uC5B4\uC838 \uB098\uC628 \uC2EC\uC7A5\uD575 \uC870\uAC01. \uC601\uAD11\uC758
-    \uD798\uC774 \uD544\uC0B4\uAE30\uB97C \uB418\uC0B4\uB9B0\uB2E4.\r"
-  nomalEffect: "- \uAE30\uBCF8 : \uD544\uC0B4\uAE30 \uAC8C\uC774\uC9C0 \uCDA9\uC804\uC18D\uB3C4
-    25% \uC99D\uAC00"
-  upgradeEffect: "- \uB3D9\uC804\uC55E\uBA74\uBC84\uD504 : \uD544\uC0B4\uAE30 \uAC8C\uC774\uC9C0
-    \uCDA9\uC804\uC18D\uB3C4 50%(<color=#76ffff>+25%</color>) \uC99D\uAC00"
-  baseValue: 0.25
-  coinFlipValue: 0.5
+  description: "\uAD11\uD718 \uC218\uD638\uC790\uC758 \uC911\uC2EC\uC5D0\uC11C \uB5A8\uC5B4\uC838
+    \uB098\uC628 \uC2EC\uC7A5\uD575 \uC870\uAC01. \uC601\uAD11\uC758 \uD798\uC774
+    \uD544\uC0B4\uAE30\uB97C \uB418\uC0B4\uB9B0\uB2E4.\r"
+  nomalEffect: "\uD544\uC0B4\uAE30 \uAC8C\uC774\uC9C0 \uCDA9\uC804\uC18D\uB3C4 @%<color=#76ffff>$</color>
+    \uC99D\uAC00"
+  baseValue: 25
+  coinFlipValue: 50
   canStack: 1
   maxStackCount: 1

@@ -203,6 +203,7 @@ namespace Actors.PlayerSystem
         public override void ExitBehaviour(float dt)
         {
             Player.Invincible = false;
+            Destroy(auraEffect);
         }
 
         private void ResetSkill()

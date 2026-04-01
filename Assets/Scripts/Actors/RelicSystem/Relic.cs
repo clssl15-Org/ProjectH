@@ -4,6 +4,7 @@ public abstract class Relic : MonoBehaviour
 {
     [SerializeField] protected RelicDataSO data;
     public RelicDataSO Data => data;
+    public float Value => value;
 
     public bool isReinforced;
     protected float value;

@@ -11,7 +11,7 @@ public class VanguardWindow : Relic
 
         Player player = RelicManager.Instance.player;
         RushStabbing firstSkill = player.StatesGO.GetComponent<RushStabbing>();
-        firstSkill.BonusMultiplier += value;
+        firstSkill.BonusMultiplier += value * 0.01f;
         player.SkillManager.AddSkill(firstSkill);
     }
     public override void OnLose()

@@ -303,7 +303,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2645848787326272074, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_SortingLayer
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3081893152640507319, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_Name
@@ -352,6 +352,10 @@ PrefabInstance:
     - target: {fileID: 4831682683386955444, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535452033118798473, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+      propertyPath: levelType
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7535452033118798473, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: stageChange
