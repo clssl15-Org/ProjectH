@@ -60,6 +60,12 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private bool _autoAwake = false;
         [SerializeField] private KeyCode _forceClearKey = KeyCode.Alpha2;
 
+        public bool IsInvincible
+        {
+            get => IgnorePlayerInteraction;
+            set => IgnorePlayerInteraction = value;
+        }
+
         public MonsterAudioPlayer AudioPlayer { get; private set; }
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
@@ -154,7 +160,8 @@ namespace Actors.Monsters.Bosses
                         monster._spikeSpawnPoints.Select(point => point.transform),
                         SpikeAttackAction.SpawnPointType.World,
                         monster.StatsInfo.SpikeSpeed,
-                        monster.StatsInfo.SpikeFireGap)
+                        monster.StatsInfo.SpikeFireGap,
+                        standalone: true)
                         .SetInitializer(
                             p => p
                                 .GetComponent<SpriteSizeHandler>()
@@ -349,6 +356,7 @@ namespace Actors.Monsters.Bosses
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
+            if (!(bool)Brain.Blackboard.Properties[IsAwake]) return;
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
 
@@ -362,6 +370,7 @@ namespace Actors.Monsters.Bosses
             return message;
         }
 
+        //internal override void Die() => Die(false);
 
 #if UNITY_EDITOR
         [CustomEditor(typeof(Werbellion))]

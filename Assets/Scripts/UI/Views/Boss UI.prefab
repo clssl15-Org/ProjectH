@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 2852165654164880993}
   - component: {fileID: 5571312569754213390}
   - component: {fileID: 2064393131316274526}
-  - component: {fileID: 3359757513939374320}
+  - component: {fileID: 2956358612471795155}
   m_Layer: 5
   m_Name: Gauge
   m_TagString: Untagged
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3359757513939374320
+--- !u!114 &2956358612471795155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7415000207642530987}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ed4d82feacc5ec4f80fe98baae2a1bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e77cd215295d7e4ba7b9b000bb54fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mask: {fileID: 17792805638952250}
@@ -456,5 +456,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dcaa18f05d3c8e4c9f910d10cd72502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthBar: {fileID: 3359757513939374320}
+  <DestoyOnMonsterDead>k__BackingField: 1
+  _healthBar: {fileID: 2956358612471795155}
   _animation: {fileID: 6984043492814872211}

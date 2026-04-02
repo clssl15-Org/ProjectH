@@ -65,6 +65,12 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
+        public bool IsInvincible
+        {
+            get => IgnorePlayerInteraction;
+            set => IgnorePlayerInteraction = value;
+        }
+
         public MonsterAudioPlayer AudioPlayer { get; private set; }
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
@@ -382,9 +388,11 @@ namespace Actors.Monsters.Bosses
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
+            if (!(bool)Brain.Blackboard.Properties[IsAwake]) return;
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
 
+        // 사망 후 삭제 방지
         internal override void Die() => Die(false);
 
         protected override string GetDisplayContent()

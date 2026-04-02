@@ -32,10 +32,10 @@ namespace Game.Stage
                 BlockName.To_Arrival)
                 .OnEntered(() =>
                 {
-                    if (!IsFirstArrival)
+                    if (IsFirstArrival)
+                        SetRubielToBig(instantSet: true);
+                    else
                         _sfxPlayManager.Play(SfxName.Revive);
-
-                    SetRubielToBig(instantSet: true);
                 })
                 .OnUpdated<Block>(self =>
                 {
@@ -98,7 +98,6 @@ namespace Game.Stage
                 BlockName.Arrival_Reentry,
                 dialogueTitle: "Stage0_Arrival_Reentry",
                 onDialogueEnd: () => To(BlockName.Arrival_Reentry_PendingForNameChange))
-                .OnEntered(() => SetRubielToBig())
                 .OnExited(UnblockInputs);
 
             yield return new Block(

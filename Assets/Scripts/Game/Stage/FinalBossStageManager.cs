@@ -11,7 +11,7 @@ using UnityEditor;
 
 namespace Game.Stage
 {
-    public class FinalBossStageManager : StageManager
+    public class FinalBossStageManager : StageManager, IInjectable<GameServices>
     {
         [Header("Twin Boss")]
         [SerializeField] private TwinBossManager _twinBossManager;
@@ -31,12 +31,14 @@ namespace Game.Stage
         private string _stateDisplay = string.Empty;
         private readonly StringBuilder _sb = new();
 
+        public Phase CurrentPhase => _phase;
+
         // Internal
         private IBoss _belia;
         private IBoss _darkTherion;
         private IBoss _werbellion;
 
-        private enum Phase
+        public enum Phase
         {
             TwinBossReady,
             TwinBoss,
@@ -45,6 +47,8 @@ namespace Game.Stage
             FinalBoss,
             StageCompleted
         }
+
+        private GameServices _gameServices;
         private Phase _phase;
 
 
@@ -99,10 +103,15 @@ namespace Game.Stage
                     Ctx($"{nameof(_werbellionUI)}이(가) 유효하지 않습니다.'"));
         }
 
+        void IInjectable<GameServices>.Inject(GameServices gameServices)
+            => _gameServices = gameServices;
+
         protected override void Start()
         {
             base.Start();
             StartInitial();
+
+            _gameServices.IsStage3Reached = true;
         }
 
         private void RegisterBoss(IBoss boss, BossUI ui, bool createUI = true)
@@ -230,13 +239,13 @@ namespace Game.Stage
 
 
 #if UNITY_EDITOR
-        [CustomEditor(typeof(SingleBossStageManager)), CanEditMultipleObjects]
-        protected class BossStageManagerEditor : Editor
+        [CustomEditor(typeof(FinalBossStageManager)), CanEditMultipleObjects]
+        protected class FinalBossStageManagerEditor : Editor
         {
             public override void OnInspectorGUI()
             {
                 serializedObject.Update();
-                DrawPropertiesExcluding(serializedObject, "AutoBindSceneMonsters");
+                DrawPropertiesExcluding(serializedObject, nameof(AutoBindSceneMonsters));
 
                 if (GUILayout.Button("Commence"))
                     ((SingleBossStageManager)target).Commence();

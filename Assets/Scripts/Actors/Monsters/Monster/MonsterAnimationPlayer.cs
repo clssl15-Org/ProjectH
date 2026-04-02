@@ -106,7 +106,6 @@ namespace Actors.Monsters.Actions
                 else
                     CurrentAnimationLength = null;
 
-
                 if (autoRun)
                     _autoRunner = Loco.Subscribe(() => RunInternal(Time.deltaTime));
 

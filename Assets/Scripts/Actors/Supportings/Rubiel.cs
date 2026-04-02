@@ -24,6 +24,8 @@ namespace Actors
             set => _targetFollower.enabled = value;
         }
 
+        public Vector2 AnchorPos => _targetFollower.AnchorPos;
+
         public bool IsTotallyVisible => _spriteRenderer.material.color.a >= 1f;
         public bool IsTotallyInvisible => _spriteRenderer.material.color.a <= 0f;
 
@@ -52,6 +54,8 @@ namespace Actors
 
             _targetFollower = GetComponent<TargetFollower>();
             _targetFollower.Initialize(_player);
+
+            _spriteRenderer.material = Instantiate(_spriteRenderer.material);
         }
 
         private void Start() => SetToSmall();
@@ -105,9 +109,13 @@ namespace Actors
         }
         public void ToSmall(Action callback = null)
         {
-            if (CurrentShape == Shape.Small) return;
-            CurrentShape = Shape.Small;
+            if (CurrentShape == Shape.Small)
+            {
+                callback?.Invoke();
+                return;
+            }
 
+            CurrentShape = Shape.Small;
             _targetFollower.IsEnabled = true;
 
             _animPlayer.Play(new("BigToSmall", Callback: _ =>
@@ -115,7 +123,10 @@ namespace Actors
                 _animPlayer.Play(new("Small"));
                 ValidateSpriteSize();
                 callback?.Invoke();
+
+                print("OVER");
             }));
+
             ValidateSpriteSize();
         }
 

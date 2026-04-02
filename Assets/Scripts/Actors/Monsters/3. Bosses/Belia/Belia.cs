@@ -52,6 +52,12 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
+        public bool IsInvincible
+        {
+            get => IgnorePlayerInteraction;
+            set => IgnorePlayerInteraction = value;
+        }
+
         public bool IsExhausted
         {
             get => _isExhausted;
@@ -61,7 +67,7 @@ namespace Actors.Monsters.Bosses
                 IgnorePlayerInteraction = value;
             }
         }
-        
+
         private bool _isExhausted;
         public MonsterAudioPlayer AudioPlayer { get; private set; }
         internal override GameObject DetectedPlayer => _player?.gameObject;
@@ -276,6 +282,9 @@ namespace Actors.Monsters.Bosses
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
+            if (!(bool)Brain.Blackboard.Properties[ITwinBoss.IsAwake]) return;
+            if (IsExhausted) return;
+
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
 

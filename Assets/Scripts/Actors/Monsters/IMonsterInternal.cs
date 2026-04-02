@@ -39,8 +39,8 @@ namespace Actors.Monsters
         void StopMoving();
         
         void Knockback(Direction direction, float? knockbackForce = null);
-        void NotifyCondition(Actors.MonsterConditionData data);
-        void NotifyConditionImmediately(Actors.MonsterConditionData data);
+        void NotifyCondition(MonsterConditionData data);
+        void NotifyConditionImmediately(MonsterConditionData data);
 
         void Die();
         #endregion

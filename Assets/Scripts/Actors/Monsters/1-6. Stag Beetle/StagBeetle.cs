@@ -27,6 +27,12 @@ namespace Actors.Monsters
         [Header("Debug")]
         [SerializeField] private bool _autoAwake = false;
 
+        public bool IsInvincible
+        {
+            get => IgnorePlayerInteraction;
+            set => IgnorePlayerInteraction = value;
+        }
+
         public enum AttackMode
         {
             Any,
@@ -213,6 +219,7 @@ namespace Actors.Monsters
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
+            if (!(bool)Brain.Blackboard.Properties[IsAwake]) return;
             StandaloneHitBrain.TryTakeDamage(damageInfo);
 
             //if (Brain.Blackboard.Committing)
@@ -228,6 +235,9 @@ namespace Actors.Monsters
             //    });
             //}
         }
+
+        // 사망 후 삭제 방지
+        internal override void Die() => Die(false);
 
         protected override string GetDisplayContent()
         {

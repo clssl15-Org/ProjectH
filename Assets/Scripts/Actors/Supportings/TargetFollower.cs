@@ -34,6 +34,8 @@ namespace Actors
         [SerializeField, Min(0f)] private float hoverFrequency = 1.2f;
         [SerializeField] private bool randomizeHoverPhase = true;
 
+        public Vector2 AnchorPos => _basePosition;
+
         private Transform _targetTransform;
         private bool _isInitialized;
 

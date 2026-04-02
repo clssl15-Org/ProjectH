@@ -24,7 +24,6 @@ namespace Actors.Monsters.Brains
             if (!_owner.IsAlive) return false;
 
             IsDamaging = true;
-
             _owner.HP -= damageInfo.Damage;
 
             _notification = new MonsterConditionData(MonsterCondition.Damaged, damageInfo);
