@@ -79,8 +79,8 @@ namespace Game.Stage
         }
         internal abstract IEnumerable<Work> GetBlocks();
 
-        void IInjectable<GameServices>.Inject(GameServices gameServices) =>
-            GameServices = gameServices;
+        void IInjectable<GameServices>.Inject(GameServices gameServices)
+            => GameServices = gameServices;
 
         void IInputLayerController.Initialize(IInputHub inputHub)
         {

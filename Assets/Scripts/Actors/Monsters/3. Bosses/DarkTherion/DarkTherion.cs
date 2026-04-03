@@ -45,6 +45,12 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private bool _autoAwake = false;
 
+        public bool IsInvincible
+        {
+            get => IgnorePlayerInteraction;
+            set => IgnorePlayerInteraction = value;
+        }
+
         public bool IsExhausted
         {
             get => _isExhausted;
@@ -54,8 +60,10 @@ namespace Actors.Monsters.Bosses
                 IgnorePlayerInteraction = value;
             }
         }
-        
+
         private bool _isExhausted;
+        private IDisposable _dieDelayTimer;
+
         public MonsterAudioPlayer AudioPlayer { get; private set; }
         internal override GameObject DetectedPlayer => _player?.gameObject;
 
@@ -129,7 +137,8 @@ namespace Actors.Monsters.Bosses
                         monster._spikeSpawnPoints.Select(p => p.transform),
                         SpikeAttackAction.SpawnPointType.Local,
                         monster.StatsInfo.ProjectileSpeed,
-                        monster.StatsInfo.ProjectileFireGap)
+                        monster.StatsInfo.ProjectileFireGap,
+                        standalone: true)
                         .SetInitializer(
                             p => p
                                 .GetComponent<SpriteSizeHandler>()
@@ -150,7 +159,7 @@ namespace Actors.Monsters.Bosses
                     .AddAnimationComponent()
                 );
                 AddChild(new MonsterAction(MonsterActionType.Dead)
-                    .AddAnimationComponent()
+                    .AddAnimationComponent(interruptPriority: InterruptPriority.High)
                     .AddComponent(new Do(true)
                         .OnOpening(() =>
                         {
@@ -213,6 +222,9 @@ namespace Actors.Monsters.Bosses
 
         protected override void OnDamaged(DamageInfo damageInfo)
         {
+            if (!(bool)Brain.Blackboard.Properties[ITwinBoss.IsAwake]) return;
+            if (IsExhausted) return;
+
             StandaloneHitBrain.TryTakeDamage(damageInfo);
         }
 
@@ -229,6 +241,14 @@ namespace Actors.Monsters.Bosses
                 new(true),
                 new(nameof(Dead), null, EntryPolicy.Unconditional, RerunPolicy.Restart)
             });
+        }
+
+        internal override void Die()
+        {
+            if (_dieDelayTimer != null) return;
+
+            // HACK: 스파이크 소리 재생 완료까지 사망 딜레이
+            _dieDelayTimer = new Timer(6, _ => Die(true));
         }
 
         protected override string GetDisplayContent()

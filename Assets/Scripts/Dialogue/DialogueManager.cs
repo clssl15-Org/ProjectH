@@ -28,7 +28,7 @@ namespace Dialogue
         [SerializeField] private BubbleDialogueUI _bubbleDialogueUI;
         [SerializeField] private RectTransform _canvasTransform;
 
-        private Func<Character, Transform> _getTransform;
+        private Func<Character, Func<Vector2>> _getTransform;
         private GameAssetLibrary _gameAssetLibrary;
         private DialogueScriptLibrary _dialogueScriptLibrary;
 
@@ -40,7 +40,7 @@ namespace Dialogue
             DialogueUI dialogueUI,
             BubbleDialogueUI bubbleDialogueUI,
             RectTransform canvasTrasnform,
-            Func<Character, Transform> getTransform)
+            Func<Character, Func<Vector2>> getTransform)
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}, {bubbleDialogueUI}");
 
@@ -152,11 +152,11 @@ namespace Dialogue
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
                             "Player 정보를 가져오지 못했기 때문에 {player} 문자열을 치환하지 못했습니다."));
 
-                    var characterTransform = _getTransform(line.Character);
+                    var characterPosition = _getTransform(line.Character);
 
                     _bubbleDialogueUI
                         .Show(new BubbleContainer(_canvasTransform)
-                        .With(dialogueText, characterTransform, BubbleOffset));
+                        .With(dialogueText, characterPosition, BubbleOffset));
                 }
                 else
                 {

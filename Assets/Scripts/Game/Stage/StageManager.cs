@@ -21,7 +21,7 @@ namespace Game.Stage
         [field: SerializeField] protected bool AutoBindDependencies { get; set; } = true;
         [field: Space]
         [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 플레이어를 자동으로 등록합니다")]
-        [field: SerializeField] protected bool AutoBindScenePlayer { get; set; } = false;
+        [field: SerializeField] protected bool AutoBindScenePlayer { get; set; } = true;
         [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 몬스터들을 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindSceneMonsters { get; set; } = true;
 
@@ -62,6 +62,9 @@ namespace Game.Stage
         internal IPlayer Player { get; private set; }
         internal Rubiel Rubiel { get; private set; }
         internal UILibrary UILibrary => _uILibrary;
+
+        public Box Box => _box;
+        public Portal Portal => _portal;
 
         internal DialogueManager DialogueManager => _dialogueManager;
         internal InputHub InputHub { get; private set; }
@@ -278,15 +281,15 @@ namespace Game.Stage
                     DialogueUI,
                     BubbleDialogueUI,
                     Canvas.GetComponent<RectTransform>(),
-                    character => character switch
+                    character => () => character switch
                     {
-                        Character.Player => Player?.transform,
-                        Character.Rubiel => Rubiel?.transform,
-                        Character.Belia => FindAnyObjectByType<Belia>()?.transform,
-                        Character.DarkTherion => FindAnyObjectByType<DarkTherion>()?.transform,
-                        Character.Werbellion => FindAnyObjectByType<Werbellion>()?.transform,
+                        Character.Player => Player?.transform.position ?? default,
+                        Character.Rubiel => Rubiel?.AnchorPos ?? default,
+                        Character.Belia => FindAnyObjectByType<Belia>()?.transform.position ?? default,
+                        Character.DarkTherion => FindAnyObjectByType<DarkTherion>()?.transform.position ?? default,
+                        Character.Werbellion => FindAnyObjectByType<Werbellion>()?.transform.position ?? default,
 
-                        _ => throw new System.InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
+                        _ => throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
                                 $"[StageManager] 캐릭터 {character}의 타입이 유효하지 않습니다."))
                     });
             }

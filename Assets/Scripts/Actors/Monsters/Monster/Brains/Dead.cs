@@ -42,6 +42,8 @@ namespace Actors.Monsters.Brains
 
             Owner.NotifyCondition(_notification);
 
+            Debug.Log(Owner.FormatLogMessage("»ç¸Á"));
+
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,
                 Callback: result => Complete(result),

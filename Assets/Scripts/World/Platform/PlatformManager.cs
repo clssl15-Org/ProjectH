@@ -52,6 +52,9 @@ namespace World
         // Content
         private void Awake()
         {
+            if (!gameObject.activeSelf)
+                return;
+
             _platforms = new();
             Platforms = new ReadOnlyDictionary<Vector3Int, int>(_platforms);
 
@@ -98,7 +101,6 @@ namespace World
             }
 
             CellSize = cellSize;
-
 
             int id = 1;
             bool isFirst = true;

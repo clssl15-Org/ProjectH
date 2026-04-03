@@ -32,6 +32,8 @@ namespace Game
         public override int BgmVolume => _soundManager.BgmVolume;
         public override int SfxVolume => _soundManager.SfxVolume;
 
+        public override bool IsStage3Reached { get; set; }
+        public override bool IsGameCleared { get; set; }
         public override bool PlayerHasDied => LevelManager.Instance.PlayerHasDied;
 
         // Front
@@ -104,6 +106,10 @@ namespace Game
             var message = Ctx($"씬 '{scene.name}'이(가) 로드되었습니다.");
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
+
+            // HACK: 엔딩 씬은 초기회 제외
+            if (scene.name == "EndingScene")
+                return;
 
             if (TryFindScript<StageManager>(scene, out var stageManager))
             {

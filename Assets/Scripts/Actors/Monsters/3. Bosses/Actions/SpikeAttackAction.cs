@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.Monsters.Actions;
+using Infrastructure;
 using Infrastructure.StateMachines.Scp;
 using UnityEngine;
 using Scp = Infrastructure.StateMachines.Scp;
@@ -19,7 +20,9 @@ namespace Actors.Monsters.Bosses
         private Transform[] _spikeSpawnPositions;
         private SpawnPointType _spawnPointType;
         private KinematicProjectile[] _spikes;
+        private bool _standalone;
 
+        private IDisposable _standaloneUpdateHandle;
 
         // Content
         public enum SpawnPointType { World, Local }
@@ -29,10 +32,12 @@ namespace Actors.Monsters.Bosses
             IEnumerable<Transform> spikeSpawnPoints,
             SpawnPointType spawnPointType,
             float projectileSpeed,
-            float projectileFireGap)
+            float projectileFireGap,
+            bool standalone = false)
         {
             _spikeSpawnPositions = spikeSpawnPoints.ToArray();
             _spawnPointType = spawnPointType;
+            _standalone = standalone;
 
             _spikePrefab = spikePrefab;
             _spikes = new KinematicProjectile[_spikeSpawnPositions.Length];
@@ -129,24 +134,64 @@ namespace Actors.Monsters.Bosses
 
             _getTargetPoint = getTargetPoint;
             _sequence.Start();
+
+            if (_standalone)
+                _standaloneUpdateHandle = Loco.Subscribe(StandaloneUpdate);
         }
 
         protected override void OnUpdate(float deltaTime)
         {
+            if (_standalone) return;
+
             if (!_sequence.Update(deltaTime, out var succeeded))
             {
                 Interrupt(succeeded
                     ? InterruptType.Completed
                     : InterruptType.Interrupted);
+
+                for (int i = 0; i < _spikes.Length; i++)
+                    _spikes[i] = null;
+            }
+        }
+
+        private void StandaloneUpdate()
+        {
+            if (!_sequence.Update(Time.deltaTime, out var succeeded))
+            {
+                // 스탠드얼론 모드에서 시퀀스가 끝까지 실행(발사) 완료되면
+                // 여기서 자체적으로 루프 핸들을 해제하여 고아(Orphan) 루프를 방지합니다.
+                _standaloneUpdateHandle?.Dispose();
+                _standaloneUpdateHandle = null;
+
+                Interrupt(succeeded
+                    ? InterruptType.Completed
+                    : InterruptType.Interrupted);
+
+                for (int i = 0; i < _spikes.Length; i++)
+                    _spikes[i] = null;
             }
         }
 
         protected override void OnInterrupt(InterruptType _)
         {
-            for (int i = 0; i < _spikes.Length; i++)
-                _spikes[i] = null;
+            // 일반 모드(!_standalone)일 때만 루프를 해제하고 시퀀스를 강제 종료합니다.
+            // 스탠드얼론 모드라면 외부에서 인터럽트가 걸려도 아무 작업도 하지 않고 StandaloneUpdate가 계속 돌도록 내버려 둡니다.
+            if (!_standalone)
+            {
+                _standaloneUpdateHandle?.Dispose();
+                _standaloneUpdateHandle = null;
 
-            _sequence.Stop();
+                _sequence.Stop();
+
+                // 일반 모드에서는 인터럽트 시 미발사 투사체를 파괴하는 로직을 이곳에 추가하는 것이 좋습니다.
+                for (int i = 0; i < _spikes.Length; i++)
+                {
+                    if (_spikes[i] != null)
+                    {
+                        UnityEngine.Object.Destroy(_spikes[i].gameObject);
+                    }
+                }
+            }
         }
     }
 }

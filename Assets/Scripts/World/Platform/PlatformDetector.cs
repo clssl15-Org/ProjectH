@@ -29,7 +29,7 @@ namespace World
         /// <summary>
         /// 객체의 기준 위치입니다.
         /// </summary>
-        public Vector3 Bottom => new Vector3
+        public Vector3 Bottom =>  new Vector3
         {
             x = transform.position.x,
             y = SelfCollider.bounds.min.y,
