@@ -5,10 +5,20 @@ using System;
 
 namespace Actors
 {
+    [Serializable]
+    public struct WaveData
+    {
+        public MonsterSpawner spawner;
+        public GameObject waveObject;
+    }
+
     public class SpawnManager : MonoBehaviour
     {
         [SerializeField]
         private GameObject clearObject;
+
+        [SerializeField]
+        public List<WaveData> waveDataList = new List<WaveData>();
 
         public List<MonsterSpawner> SpawnerList { get; private set; } = new List<MonsterSpawner>();
 
@@ -58,7 +68,19 @@ namespace Actors
 
         private void OnAllMonstersCleared()
         {
-            clearObject.SetActive(true);
+            if (clearObject != null)
+                clearObject.SetActive(true);
+        }
+        public void WaveComplete(MonsterSpawner spawner)
+        {
+            foreach (var waveData in waveDataList)
+            {
+                if (waveData.spawner == spawner)
+                {
+                    waveData.waveObject.SetActive(true);
+                    break;
+                }
+            }
         }
 
         /// <summary>
