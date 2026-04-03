@@ -123,8 +123,6 @@ namespace Actors
                 _animPlayer.Play(new("Small"));
                 ValidateSpriteSize();
                 callback?.Invoke();
-
-                print("OVER");
             }));
 
             ValidateSpriteSize();

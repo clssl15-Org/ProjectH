@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
+using Sound;
 
 namespace Game.Stage
 {
@@ -29,7 +30,7 @@ namespace Game.Stage
                         BlockInputs();
 
                         if (IsFirstArrival)
-                            To(BlockName.Battle_TwinBoss);
+                            To(BlockName.Contact_TwinBoss_First);
                         else
                             To(BlockName.Contact_TwinBoss_Reentry);
                     }
@@ -77,7 +78,8 @@ namespace Game.Stage
                 {
                     UnblockInputs();
                     To(BlockName.Battle_FinalBoss);
-                });
+                })
+                .OnEntered(() => BgmPlayManager.Play(BgmName.Final_Boss));
 
             yield return new Block(
                 BlockName.Battle_FinalBoss)
