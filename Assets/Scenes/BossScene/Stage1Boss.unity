@@ -12269,6 +12269,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5130674225142572043, guid: 8c6fe15bd16169f41ad03a1997b6a6bc, type: 3}
+      propertyPath: _iconConfigs.Array.data[1].SkillType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130674225142572043, guid: 8c6fe15bd16169f41ad03a1997b6a6bc, type: 3}
+      propertyPath: _iconConfigs.Array.data[2].SkillType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130674225142572043, guid: 8c6fe15bd16169f41ad03a1997b6a6bc, type: 3}
+      propertyPath: _iconConfigs.Array.data[1].IconPrefab
+      value: 
+      objectReference: {fileID: 5053185919864504623, guid: 92849d50adb781a4bb749b3afe032d63, type: 3}
+    - target: {fileID: 5130674225142572043, guid: 8c6fe15bd16169f41ad03a1997b6a6bc, type: 3}
+      propertyPath: _iconConfigs.Array.data[2].IconPrefab
+      value: 
+      objectReference: {fileID: 975533645258755245, guid: cb6699e01e25f3c418bc540a59de820f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
