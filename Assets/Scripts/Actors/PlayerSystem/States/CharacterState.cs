@@ -11,6 +11,7 @@ namespace Actors.PlayerSystem
         RushStabbing,
         RangedAttack,
         StrongAttack,
+        Skill3,
     }
 
     public abstract class CharacterState : MonoBehaviour
