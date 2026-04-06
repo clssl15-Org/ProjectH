@@ -48,7 +48,8 @@ namespace Actors.PlayerSystem
         }
         public void AddThirdSkill()
         {
-            Skill3 thirdSkill = player.StatesGO.GetComponent<Skill3>();
+            //Skill3 thirdSkill = player.StatesGO.GetComponent<Skill3>(); // FIX
+            RangedAttack thirdSkill = player.StatesGO.GetComponent<RangedAttack>();
             player.SkillManager.AddSkill(thirdSkill);
         }
         public void StunPlayer()

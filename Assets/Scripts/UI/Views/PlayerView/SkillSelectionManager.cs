@@ -17,7 +17,7 @@ namespace UI.PlayerView
         [Header("Settings")]
         [SerializeField] private float _iconWidth = 100f;   // 아이콘 간격 (이동 단위)
         [SerializeField] private float _moveSpeed = 10f;    // 이동 속도 (Lerp Speed)
-        
+
         [Serializable]
         private struct IconInfo
         {
@@ -26,9 +26,16 @@ namespace UI.PlayerView
         }
         [SerializeField] private IconInfo[] _iconConfigs;
 
-        private readonly List<IconInfo> _icons = new();
+        // [수정] Inspector 설정용(IconInfo)과 런타임 생성용(RuntimeIcon)을 분리하여 관리
+        private class RuntimeIcon
+        {
+            public SkillType SkillType;
+            public RectTransform RectTransform;
+        }
+
+        private readonly List<RuntimeIcon> _icons = new();
         private Dictionary<SkillType, GameObject> _configMap;
-        
+
         private int _targetIndex = 0;       // 목표 인덱스
         private float _targetPosX = 0f;     // 목표 X 좌표
         private bool _needsTeleport = false; // 이동 완료 후 순간이동 필요 여부
@@ -46,7 +53,6 @@ namespace UI.PlayerView
 
         private void Update()
         {
-            // 현재 위치와 목표 위치가 다르면 부드럽게 이동 (코루틴 대체)
             if (Mathf.Abs(_iconGroup.anchoredPosition.x - _targetPosX) > 0.1f)
             {
                 float newX = Mathf.Lerp(_iconGroup.anchoredPosition.x, _targetPosX, Time.deltaTime * _moveSpeed);
@@ -54,10 +60,8 @@ namespace UI.PlayerView
             }
             else
             {
-                // 목표 지점 거의 도착 시
                 _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
 
-                // [무한 스크롤 핵심] 더미(A')에 도착했다면? -> 진짜(A) 위치로 순간이동
                 if (_needsTeleport)
                 {
                     _needsTeleport = false;
@@ -77,22 +81,29 @@ namespace UI.PlayerView
 
             if (skills.Length == 0) return;
 
-            // 2. 더미 데이터 포함하여 생성 (A, B, C -> A, B, C, A')
-            IEnumerable<SkillType> skillsToCreate = skills.Length > 1 
-                ? skills.Append(skills[0]) 
-                : skills;
+            // [수정] LINQ 지연 평가 오류를 막기 위해 명시적 List 복사 후 더미 추가
+            List<SkillType> skillsToCreate = skills.ToList();
+            if (skillsToCreate.Count > 1)
+            {
+                skillsToCreate.Add(skillsToCreate[0]);
+            }
 
             foreach (var skill in skillsToCreate)
             {
-                if (!_configMap.TryGetValue(skill, out var prefab) || !prefab) continue;
+                if (!_configMap.TryGetValue(skill, out var prefab) || prefab == null)
+                {
+                    // [핵심] Inspector에 프리팹이 등록되지 않아 조용히 무시되는 버그를 잡기 위한 에러 로그
+                    Debug.LogError($"[SkillSelectionManager] {skill} 프리팹이 _iconConfigs에 누락되었습니다! UI에 표시되지 않습니다.");
+                    continue;
+                }
 
                 var instance = Instantiate(prefab, _iconGroup, false);
                 instance.SetActive(true);
 
-                _icons.Add(new IconInfo { SkillType = skill, IconPrefab = instance }); // Prefab 필드에 인스턴스 저장 (편의상)
+                _icons.Add(new RuntimeIcon { SkillType = skill, RectTransform = instance.GetComponent<RectTransform>() });
             }
 
-            // 3. 아이콘들을 가로로 쭉 배치 (Horizontal Layout Group 대신 수동 배치 추천)
+            // 3. 아이콘들을 가로로 쭉 배치
             ArrangeIconsHorizontally();
 
             // 초기 상태 설정
@@ -101,14 +112,12 @@ namespace UI.PlayerView
             _iconGroup.anchoredPosition = Vector2.zero;
         }
 
-        // 아이콘들을 _iconWidth 간격으로 가로 배치
         private void ArrangeIconsHorizontally()
         {
             for (int i = 0; i < _icons.Count; i++)
             {
-                var rect = _icons[i].IconPrefab.GetComponent<RectTransform>();
-                // 인덱스가 커질수록 오른쪽(+)으로 배치
-                rect.anchoredPosition = new Vector2(i * _iconWidth, 0);
+                // [수정] GetComponent 오버헤드 제거 (RuntimeIcon 생성 시 미리 캐싱함)
+                _icons[i].RectTransform.anchoredPosition = new Vector2(i * _iconWidth, 0);
             }
         }
 
@@ -119,30 +128,18 @@ namespace UI.PlayerView
             int dummyIndex = _icons.Count - 1;
             if (_targetIndex == dummyIndex)
             {
-                // 현재 더미(A')를 향해 가고 있었다면?
-                // 1. 시각적으로 즉시 더미 위치로 이동 (애니메이션 스킵)
                 _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
-
-                // 2. 논리적으로 0번(A) 위치로 리셋 (A'와 A는 모습이 같으므로 티가 안 남)
                 ForceResetToStartIndex();
-
-                BlackboxHandle.Of(this).Write("Input received during loop. Forced reset to start.");
             }
 
-            // 1. 목표 인덱스 계산
             int targetIndex = FindSmartTargetIndex(targetSkill);
 
-            // 현재 위치와 같거나, 찾을 수 없으면 무시
             if (targetIndex == -1 || targetIndex == _targetIndex) return;
 
-            // 2. 이동 목표 설정
             _targetIndex = targetIndex;
             _targetPosX = -1 * (_targetIndex * _iconWidth);
-
-            // 3. 만약 목표가 '더미(마지막)'라면 이동 후 텔레포트 예약
             _needsTeleport = (targetIndex == dummyIndex);
 
-            // 사운드 재생
             _sfxAudioController.Play("PlayerSkillChange", AudioSourceController.PlayOption.Independently);
             BlackboxHandle.Of(this).Write($"Moving to index {_targetIndex} (TargetX: {_targetPosX})");
         }
@@ -151,69 +148,66 @@ namespace UI.PlayerView
         {
             using var _ = BlackboxHandle.Of(this).WriteScope($"Add Skill: {targetSkill}");
 
-            // 1. 아이콘 생성
-            var newIcon = CreateIconInstance(targetSkill);
+            var newIcon = CreateRuntimeIconInstance(targetSkill);
 
-            // 2. 리스트 상태에 따른 삽입 로직 분기
             if (_icons.Count == 0)
             {
-                // Case A: 0개 -> 1개 [A]
                 _icons.Add(newIcon);
             }
             else if (_icons.Count == 1)
             {
-                // Case B: 1개 -> 2개 [A] => [A, B, A'] (무한 루프 구조 생성)
-                // 원래 있던 1개를 '더미'로 쓸 것이므로 복제본을 하나 더 만듦
                 var firstSkillType = _icons[0].SkillType;
-                var dummyIcon = CreateIconInstance(firstSkillType);
+                var dummyIcon = CreateRuntimeIconInstance(firstSkillType);
 
-                _icons.Add(newIcon);   // B 추가
-                _icons.Add(dummyIcon); // A' (더미) 추가
+                _icons.Add(newIcon);
+                _icons.Add(dummyIcon);
             }
             else
             {
-                // Case C: 이미 더미가 있는 상태 [A, B, A'] -> [A, B, C, A']
-                // 맨 뒤(더미) 바로 앞에 삽입해야 함
                 int insertIndex = _icons.Count - 1;
-
-                // 논리적 리스트 삽입
                 _icons.Insert(insertIndex, newIcon);
+                newIcon.RectTransform.SetSiblingIndex(insertIndex);
 
-                // 시각적(Hierarchy) 순서 맞춤 (더미 앞으로 이동)
-                newIcon.IconPrefab.transform.SetSiblingIndex(insertIndex);
+                // [수정] 런타임에 스킬 추가 시, 현재 타겟이 더미 쪽에 있었다면 타겟 인덱스도 밀어주어야 위치가 튀지 않음
+                if (_targetIndex >= insertIndex)
+                {
+                    _targetIndex++;
+                    _targetPosX = -1 * (_targetIndex * _iconWidth);
+                    _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
+                }
             }
 
-            // 3. 위치 재정렬 (X 좌표 갱신)
             ArrangeIconsHorizontally();
-
             BlackboxHandle.Of(this).Write($"Skill Added. Total Count: {_icons.Count}");
         }
 
-        // 아이콘 생성 및 초기화 헬퍼 메서드
-        private IconInfo CreateIconInstance(SkillType skill)
+        private RuntimeIcon CreateRuntimeIconInstance(SkillType skill)
         {
-            if (!_configMap.TryGetValue(skill, out var prefab) || !prefab)
+            if (!_configMap.TryGetValue(skill, out var prefab) || prefab == null)
+            {
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"[SkillManager] Prefab not found for {skill}"));
+                    $"[SkillManager] Prefab not found for {skill}. Inspector를 확인하세요."));
+            }
 
             var instance = Instantiate(prefab, _iconGroup, false);
             instance.SetActive(true);
 
-            return new IconInfo { SkillType = skill, IconPrefab = instance };
+            return new RuntimeIcon { SkillType = skill, RectTransform = instance.GetComponent<RectTransform>() };
         }
 
-        // 현재 위치에서 가장 자연스러운 목표 인덱스를 찾는 로직
         private int FindSmartTargetIndex(SkillType targetSkill)
         {
-            // 원본 데이터 구간(0 ~ N-1)에서 찾기
-            int basicIndex = _icons.FindIndex(x => x.SkillType == targetSkill);
+            // [수정] 역방향으로 튕기는 것을 막기 위해 '현재 인덱스 이후'에서 먼저 탐색하여 정방향 진행 유도
+            int forwardIndex = _icons.FindIndex(_targetIndex, x => x.SkillType == targetSkill);
+
+            // 현재 위치 이후에 없다면 처음부터 다시 탐색
+            int basicIndex = forwardIndex != -1 ? forwardIndex : _icons.FindIndex(x => x.SkillType == targetSkill);
+
             if (basicIndex == -1) return -1;
 
-            int lastRealIndex = _icons.Count - 2; // C (원본 마지막)
-            int dummyIndex = _icons.Count - 1;    // A' (가짜 마지막)
+            int lastRealIndex = _icons.Count - 2;
+            int dummyIndex = _icons.Count - 1;
 
-            // [상황] 현재 'C'를 보고 있는데, 목표가 'A'다.
-            // -> 앞으로 돌아가지 말고, 바로 옆에 있는 'A'(더미)로 가야 함.
             if (_targetIndex == lastRealIndex && basicIndex == 0)
             {
                 return dummyIndex;
@@ -222,15 +216,13 @@ namespace UI.PlayerView
             return basicIndex;
         }
 
-        // 더미(A')에서 진짜(A)로 좌표 리셋
         private void ForceResetToStartIndex()
         {
             _targetIndex = 0;
-            _targetPosX = 0; // 0번 위치 (X = 0)
-            
-            // 애니메이션 없이 즉시 좌표 변경
+            _targetPosX = 0;
+
             _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
-            
+
             BlackboxHandle.Of(this).Write("Teleported logic applied (Infinite Scroll)");
         }
     }
