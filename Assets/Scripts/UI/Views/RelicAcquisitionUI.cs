@@ -68,15 +68,15 @@ namespace UI
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer;
         private RelicDataSO _relic;
-        private bool _forceSuccess = false;
+        private bool _forceSuccess;
         private EnableWithAnimation _enabler;
 
-        private bool _isInitialized = false;
-        private bool _isOperating = false;
-        private bool _isOperated = false;
-        private bool _isDestroyed = false;
+        private bool _isInitialized;
+        private bool _isOperating;
+        private bool _isOperated ;
+        private bool _isDestroyed;
 
-        private readonly bool UseCoinReadyImage = false;
+        private readonly bool UseCoinReadyImage;
 
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
@@ -143,6 +143,13 @@ namespace UI
 
         private void OnRelicAcquiring(RelicDataSO relicInfo, string description, bool forceSuccess = false)
         {
+            if (!this)
+            {
+                // 정상적으로 구독 해제되지 않은 UI 처리
+                Destroy();
+                return;
+            }
+
             using var _ = BlackboxHandle.Of(this).WriteScope($"Relic Acquiring: {relicInfo.name}");
             if (_darkscreenUI) _darkscreenUI.EnableFor(this, () => { if (_isOperated) Close(); });
 
@@ -351,6 +358,8 @@ namespace UI
         private void OnDestroy() => Destroy();
         public void Destroy()
         {
+            print("Destroy, " + _isDestroyed);
+
             if (_isDestroyed) return;
             _isDestroyed = true;
 
