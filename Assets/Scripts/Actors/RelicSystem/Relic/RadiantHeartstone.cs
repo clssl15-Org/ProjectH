@@ -10,7 +10,7 @@ public class RadiantHeartstone : Relic
 
         RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier += value * 0.01f;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier -= value * 0.01f;
     }

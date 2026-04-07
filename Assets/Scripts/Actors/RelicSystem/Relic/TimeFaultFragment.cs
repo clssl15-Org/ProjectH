@@ -10,7 +10,7 @@ public class TimeFaultFragment : Relic
 
         RelicManager.Instance.player.playerStats.skillCooldownMultiplier += value * 0.01f;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.skillCooldownMultiplier -= value * 0.01f;
     }

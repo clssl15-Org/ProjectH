@@ -24,7 +24,7 @@ public class GaleKnightBoots : Relic
         }
     }
 
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.moveSpeedMultiplier -= value;
     }

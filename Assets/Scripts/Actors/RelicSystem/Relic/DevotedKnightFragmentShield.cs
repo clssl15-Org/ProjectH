@@ -12,8 +12,8 @@ public class DevotedKnightFragmentShield : Relic
         RelicManager.Instance.player.PlayerHealth.OnSieldBreak += OnLose;
     }
 
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
-        // 가지고 있는 렐릭 리스트에서 제거
+        RelicManager.Instance.player.PlayerHealth.OnSieldBreak -= OnLose;
     }
 }

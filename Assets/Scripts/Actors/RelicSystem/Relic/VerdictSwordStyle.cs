@@ -14,7 +14,7 @@ public class VerdictSwordStyle : Relic
         skill.BonusMultiplier += value * 0.01f;
         player.SkillManager.AddSkill(skill);
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
 
     }

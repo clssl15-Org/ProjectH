@@ -10,7 +10,7 @@ public class TrainedSwordsmanshipManual : Relic
 
         RelicManager.Instance.player.playerStats.attackPowerMultiplier += value * 0.01f ;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.attackPowerMultiplier -= value * 0.01f;
     }

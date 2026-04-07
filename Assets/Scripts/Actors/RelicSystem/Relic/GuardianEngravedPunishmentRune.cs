@@ -10,7 +10,7 @@ public class GuardianEngravedPunishmentRune : Relic
 
         RelicManager.Instance.player.playerStats.skillPowerMultiplier += value * 0.01f;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.skillPowerMultiplier -= value * 0.01f;
     }
