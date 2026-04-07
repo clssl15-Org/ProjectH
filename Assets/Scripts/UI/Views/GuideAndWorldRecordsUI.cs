@@ -12,9 +12,11 @@ namespace UI
     public class GuideAndWorldRecordsUI : MonoBehaviour,
         IEnablable,
         IInputLayerController,
+        IInjectable<GameServices>,
         IInjectable<DarkscreenUI>
     {
-        [SerializeField] private bool _multiDisplayMode = false;
+        [SerializeField] private bool _overrideMultiDisplayMode;
+        [SerializeField] private bool _multiDisplayMode;
         [Space]
         [SerializeField] private Button _backBtn;
         [SerializeField] private Animation _animation;
@@ -65,9 +67,13 @@ namespace UI
         };
         Action IEnablable.OnDisabled => null;
         #endregion
-        
+
+        private bool MultiDisplayMode => !_overrideMultiDisplayMode
+            ? _gameServices.IsStage3Reached : _multiDisplayMode;
+
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
+        private GameServices _gameServices;
         private DarkscreenUI _darkscreenUI;
         private bool _isInitialized = false;
 
@@ -104,18 +110,14 @@ namespace UI
 
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
+        void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
 
 
-        public void Open(bool multiDisplayMode)
-        {
-            _multiDisplayMode = multiDisplayMode;
-            Open();
-        }
         public void Open()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Open, mode: {_multiDisplayMode}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Open, mode: {MultiDisplayMode}");
 
-            if (!_multiDisplayMode)
+            if (!MultiDisplayMode)
             {
                 _singleGuide.SetActive(true);
                 _multiGuide.SetActive(false);

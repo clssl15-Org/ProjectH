@@ -100,9 +100,9 @@ namespace UI
         {
             ThrowIfDisposed();
 
-            if (skillType == SkillType.RangedAttack
+            if (skillType == SkillType.RushStabbing
                 || skillType == SkillType.StrongAttack
-                || skillType == SkillType.RushStabbing)
+                || skillType == SkillType.Skill3)
             {
                 SkillChanged?.Invoke(skillType);
             }
@@ -111,9 +111,9 @@ namespace UI
         {
             ThrowIfDisposed();
 
-            if (skillType == SkillType.RangedAttack
+            if (skillType == SkillType.RushStabbing
                 || skillType == SkillType.StrongAttack
-                || skillType == SkillType.RushStabbing)
+                || skillType == SkillType.Skill3)
             {
                 SkillAdded?.Invoke(skillType);
             }

@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 2168851036350252161}
   - component: {fileID: 3712498382608920582}
   - component: {fileID: 7789143737686628675}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: States
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -793,7 +793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb15a9cc3f4a4a42b2f2c56e77eb289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SkillType>k__BackingField: 1
+  <SkillType>k__BackingField: 5
   runtimeAnimatorController: {fileID: 9100000, guid: 4e527cb0ee0374747b069e8393eda8f5, type: 2}
   motionDuration: 0.5
   launchDelay: 0.8

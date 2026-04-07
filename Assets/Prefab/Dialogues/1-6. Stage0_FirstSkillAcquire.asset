@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 1-6. Stage0_FirstSkillAcquire
+  m_EditorClassIdentifier: 
+  _title: Stage0_FirstSkillAcquire
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 2
+    Dialogue: "\uC774\uAC74 \uB124\uAC00 \uC4F0\uB358 \uD798\uC774\uC57C."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "[E]\uD0A4\uB97C \uB20C\uB7EC \uD798\uC758 \uD615\uD0DC\uB97C \uBC14\uAFB8\uACE0,\n[\uB9C8\uC6B0\uC2A4
+      \uD720]\uC744 \uB20C\uB7EC \uD574\uBC29\uD574\uBD10."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uD720\uC744 \uB3CC\uB9AC\uBA74 \uBD88\uC548\uC815\uD55C \uB9C8\uB825\uC774
+      \uB8F0\uB81B\uCC98\uB7FC \uC694\uB3D9\uCE60 \uAC70\uC57C.\n\uC6B4\uC774 \uC88B\uC73C\uBA74
+      \uB354 \uAC15\uB825\uD55C \uD53C\uD574\uB97C \uC904 \uC218\uB3C4 \uC788\uC5B4."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "\uBD88\uC548\uC815\uD55C \uB9C8\uB825 \uB54C\uBB38\uC5D0 \uBC1C\uC0DD\uD558\uB294
+      \uD604\uC0C1\uC774\uC9C0\uB9CC,\n\uC9C0\uAE08\uC740 \uC774 \uD798\uC774 \uD544\uC694\uD574."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}

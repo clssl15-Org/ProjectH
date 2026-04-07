@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Actors.Monsters.Actions;
 using Infrastructure.StateMachines.BT;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Actors.Monsters.Brains
     {
         // Front
         public float StayTimeAfterFinised { get; set; } = 0f;
+        public Func<IEnumerable<IMonster>> GetChildren { get; set; }
 
         // Internal
         private readonly string _monsterAction;
@@ -34,8 +36,13 @@ namespace Actors.Monsters.Brains
 
             _opening?.Invoke();
 
-            _notification = new MonsterConditionData(MonsterCondition.Dying);
+            _notification = new MonsterConditionData(
+                condition: MonsterCondition.Dying,
+                payload: GetChildren?.Invoke());
+
             Owner.NotifyCondition(_notification);
+
+            Debug.Log(Owner.FormatLogMessage("»ç¸Á"));
 
             if (!Owner.TryDoAction(new(
                 Name: _monsterAction,

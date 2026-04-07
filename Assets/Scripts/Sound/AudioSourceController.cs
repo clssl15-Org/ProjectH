@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
+using System.Linq;
 using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
@@ -63,7 +63,6 @@ namespace Sound
             _audioSource = GetComponent<AudioSource>();
         }
 
-
         public enum PlayOption
         {
             None,
@@ -90,7 +89,7 @@ namespace Sound
             float? independentPlayTime = null,
             float fadingDuration = 0)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, playOption: {playOption}, fadingDuration: {fadingDuration}, validGO: {gameObject != null}");
+            using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, playOption: {playOption}, fadingDuration: {fadingDuration}");
             if (!gameObject) return false;
 
             EnsureInitialization();

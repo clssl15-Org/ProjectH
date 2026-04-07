@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Box : MonoBehaviour
 {
     public Action Opening;
+    public bool IsLocked;
 
     public Sprite openedSprite;
     public GameObject Fsprite;
@@ -25,6 +25,9 @@ public class Box : MonoBehaviour
 
     private void Update()
     {
+        if (IsLocked)
+            return;
+
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.F) && !isBoxOpened)
         {
             OpenBox();
@@ -44,8 +47,6 @@ public class Box : MonoBehaviour
         }
 
         isPlayerInRange = true;
-
-        Opening?.Invoke();
         Fsprite.SetActive(true);
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -65,6 +66,8 @@ public class Box : MonoBehaviour
     }
     private void OpenBox()
     {
+        Opening?.Invoke();
+
         isBoxOpened = true;
         spriteRenderer.sprite = openedSprite;
         Fsprite.SetActive(false);

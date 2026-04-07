@@ -15,9 +15,13 @@ namespace Game.Stage
         [SerializeField] private GameObject _bossObject;
         [SerializeField] private BossUI _bossUI;
 
+        // Front
+        public IBoss Boss => _boss;
+        public bool IsCleared { get; private set; }
+
         // Internal
         private IBoss _boss;
-        private bool _commenced = false;
+        private bool _isCommenced;
 
 
         // Front
@@ -50,6 +54,15 @@ namespace Game.Stage
             if (!MonsterManager.Register(boss))
                 return;
 
+            boss.ConditionChanged += cond =>
+            {
+                if (cond.Is(MonsterCondition.Dying))
+                {
+                    IsCleared = true;
+                    _bossUI.Disable();
+                }
+            };
+
             if (boss is IPlayerInitializable playerInitializable)
             {
                 if (Player != null)
@@ -72,8 +85,8 @@ namespace Game.Stage
 
         public void Commence()
         {
-            if (_commenced) return;
-            _commenced = true;
+            if (_isCommenced) return;
+            _isCommenced = true;
 
             RegisterBoss(_boss);
 
@@ -98,7 +111,7 @@ namespace Game.Stage
             public override void OnInspectorGUI()
             {
                 serializedObject.Update();
-                DrawPropertiesExcluding(serializedObject, "AutoBindSceneMonsters");
+                DrawPropertiesExcluding(serializedObject, nameof(AutoBindSceneMonsters));
 
                 if (GUILayout.Button("Commence"))
                     ((SingleBossStageManager)target).Commence();

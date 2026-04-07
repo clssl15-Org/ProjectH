@@ -45,6 +45,7 @@ namespace UI
 
         public event Action CoinThrown;
         public event Action CoinDropped;
+        public event Action Disabling;
         public event Action Destroying;
 
         public enum VideoType
@@ -106,6 +107,8 @@ namespace UI
                 BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
                 _inputHub.Unblock(this);
             }
+
+            Disabling?.Invoke();
         };
         Action IEnablable.OnDisabled => null;
         #endregion

@@ -23,6 +23,7 @@ namespace Actors
         /// <list type="bullet">
         ///   <item><description>Damaged: <see cref="DamageInfo"/></description></item>
         ///   <item><description>Attack: <see cref="MonsterAttackData"/></description></item>
+        ///   <item><description>Dying: children (<see cref="IMonster"/>[])</description></item>
         /// </list>
         /// </summary>
         public object Payload { get; init; } = null;

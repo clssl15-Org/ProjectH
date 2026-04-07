@@ -270,14 +270,28 @@ namespace Actors
             activeMonsters.Add(monsterInstance);
 
             // 2. 스폰된 몬스터의 Monster 스크립트에서 사망 이벤트를 가져옴
-            monsterScript.ConditionChanged += cond =>
+            RegisterRemoval(monsterScript);
+            void RegisterRemoval(IMonster monster)
             {
-                if (cond.Condition == Actors.MonsterCondition.Dying)
+                monster.ConditionChanged += cond =>
                 {
-                    // 죽었을 때 처리
-                    OnMonsterDied(monsterInstance);
-                }
-            };
+                    if (cond.Condition == MonsterCondition.Dying)
+                    {
+                        // 자식 몬스터가 있다면, 이들도 활성 몬스터 리스트에 추가하여 추적 시작
+                        if (cond.Payload is IEnumerable<IMonster> children)
+                        {
+                            foreach (var child in children)
+                            {
+                                activeMonsters.Add(child.gameObject);
+                                RegisterRemoval(child);
+                            }
+                        }
+
+                        // 죽었을 때 처리
+                        OnMonsterDied(monster.gameObject);
+                    }
+                };
+            }
 
             // 스폰 인디케이터 표시
             if (monsterSpawnIndicator != null && currentPhaseIndex != 0)

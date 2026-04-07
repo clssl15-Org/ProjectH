@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc4e5a213e6a27144b73553e6bc014a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDebugStatsInfo: 1
+  _useDebugStatsInfo: 0
   _statsInfo: {fileID: 11400000, guid: f5c672d8f38fe534b848fb9e5bbd1832, type: 2}
   _debugStatsInfo: {fileID: 11400000, guid: b7dc360f313c7744ca8918291a3966fa, type: 2}
   RandomizeStartDirection: 0
@@ -267,7 +267,7 @@ MonoBehaviour:
   _spikeScaleFactor: 0.03
   _waitTimeAfterLaunch: 0.1
   _roarIndicator: {fileID: 5562771688442936536}
-  _autoAwake: 1
+  _autoAwake: 0
 --- !u!114 &8611228509469499680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,7 +405,8 @@ MonoBehaviour:
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 7126d4abda80f5042bde3a239cfd72d7, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
+  <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
   _dieClipName: Die
