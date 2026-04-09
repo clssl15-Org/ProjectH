@@ -16,7 +16,7 @@ public class KnighthoodLastOathStone : Relic
         playerHealth.Damaged += Activate;
         playerHealth.Healed += Activate;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         playerHealth.Damaged -= Activate;
         playerHealth.Healed -= Activate;

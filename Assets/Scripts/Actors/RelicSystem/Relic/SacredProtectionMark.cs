@@ -11,7 +11,7 @@ public class SacredProtectionMark : Relic
         RelicManager.Instance.player.playerStats.maxHeathMultiplier += value * 0.01f;
         RelicManager.Instance.player.PlayerHealth.ChangeMaxHealth();
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.maxHeathMultiplier -= value * 0.01f;
     }

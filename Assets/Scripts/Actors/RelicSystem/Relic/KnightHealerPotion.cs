@@ -37,7 +37,7 @@ public class KnightHealerPotion : Relic
             rb.AddTorque(randomTorque, ForceMode2D.Impulse);
         }
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         
     }

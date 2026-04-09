@@ -14,7 +14,7 @@ public class VanguardWindow : Relic
         firstSkill.BonusMultiplier += value * 0.01f;
         player.SkillManager.AddSkill(firstSkill);
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
 
     }

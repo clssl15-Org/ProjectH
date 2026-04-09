@@ -21,7 +21,7 @@ public class BrassGearOfFate : Relic
 
         RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities = newProb;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities = originProb;
     }

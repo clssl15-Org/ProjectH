@@ -16,7 +16,7 @@ public class LightGuardianFeather : Relic
         }
     }
 
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         RelicManager.Instance.player.playerStats.maxDashCount -= 1;
 

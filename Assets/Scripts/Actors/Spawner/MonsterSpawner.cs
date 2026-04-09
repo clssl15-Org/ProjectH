@@ -19,6 +19,8 @@ namespace Actors
 
         [Header("페이즈 설정")]
         [SerializeField]
+        private bool isLargeMapWave = false;
+        [SerializeField]
         private List<SpawnPhase> phases = new List<SpawnPhase>();
 
         [Header("인디케이터 설정")]
@@ -164,6 +166,10 @@ namespace Actors
                 LevelManager.Instance.SpawnManager.CheckAllSpawnersComplete();
             }
 
+            if (isLargeMapWave)
+            {
+                LevelManager.Instance.SpawnManager.WaveComplete(this);
+            }
         }
 
         /// <summary>

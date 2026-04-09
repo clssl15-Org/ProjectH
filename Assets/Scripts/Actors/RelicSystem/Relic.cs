@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Relic : MonoBehaviour
@@ -8,9 +9,15 @@ public abstract class Relic : MonoBehaviour
 
     public bool isReinforced;
     protected float value;
+    public event Action OnRelicLose;
 
     public abstract void OnAcquire();
-    public abstract void OnLose();
+    public void OnLose()
+    {
+        OnLoseCore();
+        OnRelicLose?.Invoke();
+    }
+    protected abstract void OnLoseCore();
     public virtual void OnReinforcedAcquire()
     {
         if (isReinforced)

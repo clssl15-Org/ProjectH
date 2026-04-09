@@ -15,7 +15,7 @@ public class LightGuardianBlessing : Relic
         playerHealth = RelicManager.Instance.player.GetComponent<PlayerHealth>();
         GameEvents.OnMonsterDied += OnPlayerHeal;
     }
-    public override void OnLose()
+    protected override void OnLoseCore()
     {
         GameEvents.OnMonsterDied -= OnPlayerHeal;
     }

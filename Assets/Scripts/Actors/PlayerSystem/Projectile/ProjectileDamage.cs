@@ -17,6 +17,9 @@ namespace Actors.PlayerSystem
 
         public static Action onRangedAttack;
 
+        [SerializeField]
+        private bool destroyOnHit = true;
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageableObject))
@@ -28,7 +31,8 @@ namespace Actors.PlayerSystem
             damageableObject.TakeDamage(damage);
             onRangedAttack?.Invoke();
 
-            Destroy(gameObject);
+            if (destroyOnHit)
+                Destroy(gameObject);
         }
     }
 }

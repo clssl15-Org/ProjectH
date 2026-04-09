@@ -151,7 +151,18 @@ public class RelicManager : MonoBehaviour
         string effectDesc = selectedData.NomalEffect.Replace("@", selectedData.BaseValue.ToString());
         effectDesc = effectDesc.Replace("$", "");
         description += effectDesc;
-        RelicAcquiring?.Invoke(selectedData, description, forceSuccess);
+
+        foreach (Action<RelicDataSO, string, bool> callback in RelicAcquiring.GetInvocationList())
+        {
+            try
+            {
+                callback.Invoke(selectedData, description, forceSuccess);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"RelicAcquiring 콜백 실패: {ex}", this);
+            }
+        }
     }
     // (디버그용) 선택한 렐릭 강제 추가
     public void GetRelicData(int key, bool forceSuccess = false)
