@@ -111,7 +111,8 @@ namespace Dialogue
 
             _updateHandle = Loco.Subscribe(() =>
             {
-                if (AllowInput && Input.GetMouseButtonDown(0))
+                var isPressed = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.F);
+                if (AllowInput && isPressed)
                 {
                     if (!_currentUI.IsTotallyTyped)
                     {

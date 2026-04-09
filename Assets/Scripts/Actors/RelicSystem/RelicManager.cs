@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
 using System;
-using UnityEditor.Experimental.GraphView;
-using Unity.VisualScripting;
 
 public class RelicManager : MonoBehaviour
 {
     public static RelicManager Instance { get; private set; }
+    
+    // 런타임 렐릭 설명 저장소
+    public readonly static Dictionary<int, string> RelicDescriptionRegistry = new();
 
     public Player player;
 
@@ -49,7 +50,7 @@ public class RelicManager : MonoBehaviour
         }
     }
 
-    // --- Id로 유물 데이터 가져오기 ---
+    // --- ID로 유물 데이터 가져오기 ---
     public bool TryGetRelicData(int id, out RelicDataSO relicData)
     {
         relicData = relicPrefabs
@@ -248,6 +249,7 @@ public class RelicManager : MonoBehaviour
         }
         description += effectDesc;
 
+        RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
     }
 
