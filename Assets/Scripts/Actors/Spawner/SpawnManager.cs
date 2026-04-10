@@ -23,15 +23,6 @@ namespace Actors
         public List<MonsterSpawner> SpawnerList { get; private set; } = new List<MonsterSpawner>();
 
         private Action<IMonster> monsterCreated;
-
-        private void Start()
-        {
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-        private void OnDisable()
-        {
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
         // 외부에서 스포너를 추가할 수 있는 메서드
         public void AddSpawner(MonsterSpawner spawner)
         {
@@ -92,10 +83,20 @@ namespace Actors
             SpawnerList.Clear();
         }
 
-        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        /// <summary>
+        /// LevelManager가 씬 로드 후 활성 SpawnManager로 리바인딩할 때 호출합니다.
+        /// (DDOL 매니저만 sceneLoaded를 구독하면 씬 쪽 인스턴스의 clearObject는 갱신되지 않음)
+        /// </summary>
+        public void RefreshClearObjectForLoadedScene()
         {
-            clearObject = GameObject.Find("ClearObjects");
-            if (LevelManager.Instance.ExploreCount > 0)
+            var found = GameObject.Find("ClearObjects");
+            if (found != null)
+                clearObject = found;
+
+            if (clearObject == null)
+                return;
+
+            if (LevelManager.Instance != null && LevelManager.Instance.ExploreCount > 0)
                 clearObject.SetActive(false);
         }
     }

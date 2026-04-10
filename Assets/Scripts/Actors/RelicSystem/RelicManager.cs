@@ -314,6 +314,6 @@ public class RelicManager : MonoBehaviour
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
         // 씬이 바뀌면 새로운 플레이어 오브젝트를 자동으로 할당
-        //player = FindObjectOfType<Player>();
+        player = FindObjectOfType<Player>();
     }
 }
