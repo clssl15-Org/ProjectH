@@ -57,8 +57,8 @@ namespace UI.PlayerView
             if (relicUI == default)
             {
                 Debug.LogWarning(
-                    $"[UI.{nameof(RelicManager)}] 입력 ID '{id}'와(과) 같은 식별자를 가지는 {nameof(RelicUI)}을(를) 찾지 못했습니다.");
-                
+                    $"[UI.{nameof(RelicManager)}] 입력 ID '{id}'와(과) 같은 식별자를 가지는 {nameof(RelicUI)}을(를) 찾지 못했습니다.",
+                    this);
                 return;
             }
 

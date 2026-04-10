@@ -97,6 +97,7 @@ namespace UI
             }
 
             RelicManager.Instance.RelicAcquired += OnRelicAcquired;
+            RelicManager.Instance.RelicLost += OnRelicLost;
             #endregion
         }
 
@@ -105,6 +106,12 @@ namespace UI
             using var __ = BlackboxHandle.Of(this).ExertScope(_relicManager, $"Relic Acquired: {relicSO.name}");
             _relicManager.AddRelic(relicSO);
         }
+        private void OnRelicLost(RelicDataSO relicSO)
+        {
+            using var __ = BlackboxHandle.Of(this).ExertScope(_relicManager, $"Relic Lost: {relicSO.name}");
+            _relicManager.RemoveRelic(relicSO.RelicNumber);
+        }
+
 
         public void Disconnect()
         {
@@ -132,6 +139,7 @@ namespace UI
             {
                 BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Disconnect");
                 RelicManager.Instance.RelicAcquired -= OnRelicAcquired;
+                RelicManager.Instance.RelicLost -= OnRelicLost;
             }
         }
 

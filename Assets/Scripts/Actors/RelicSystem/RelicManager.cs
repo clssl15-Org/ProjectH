@@ -1,8 +1,8 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
-using System;
+using UnityEngine;
 
 public class RelicManager : MonoBehaviour
 {
@@ -20,6 +20,7 @@ public class RelicManager : MonoBehaviour
     // relicData, description, forceSuccess
     public event Action<RelicDataSO, string, bool> RelicAcquiring;
     public event Action<RelicDataSO, string> RelicAcquired;
+    public event Action<RelicDataSO> RelicLost;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
