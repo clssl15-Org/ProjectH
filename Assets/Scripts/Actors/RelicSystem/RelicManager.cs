@@ -1,12 +1,15 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
-using System;
+using UnityEngine;
 
 public class RelicManager : MonoBehaviour
 {
     public static RelicManager Instance { get; private set; }
+    
+    // 런타임 렐릭 설명 저장소
+    public readonly static Dictionary<int, string> RelicDescriptionRegistry = new();
 
     public Player player;
 
@@ -17,6 +20,7 @@ public class RelicManager : MonoBehaviour
     // relicData, description, forceSuccess
     public event Action<RelicDataSO, string, bool> RelicAcquiring;
     public event Action<RelicDataSO, string> RelicAcquired;
+    public event Action<RelicDataSO> RelicLost;
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
@@ -47,7 +51,7 @@ public class RelicManager : MonoBehaviour
         }
     }
 
-    // --- Id로 유물 데이터 가져오기 ---
+    // --- ID로 유물 데이터 가져오기 ---
     public bool TryGetRelicData(int id, out RelicDataSO relicData)
     {
         relicData = relicPrefabs
@@ -257,6 +261,7 @@ public class RelicManager : MonoBehaviour
         }
         description += effectDesc;
 
+        RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
     }
 

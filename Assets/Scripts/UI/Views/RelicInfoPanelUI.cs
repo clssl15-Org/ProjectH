@@ -145,7 +145,13 @@ namespace UI
                     var relicInfo = Instantiate(_relicInfoPrefab);
                     BlackboxHandle.Of(this).Write($"Add: {relicData.RelicName}");
 
-                    relicInfo.Initialize(relicData.Icon, relicData.RelicName, relicData.Description);
+                    // 런타임 설명으로 가져오기
+                    var description = RelicManager.RelicDescriptionRegistry.TryGetValue(relicId, out var desc)
+                        ? desc
+                        : relicData.Description;
+
+                    relicInfo.Initialize(relicData.Icon, relicData.RelicName, description);
+
                     relicInfo.GetComponent<RectTransform>().SetParent(_relicListParent, false);
                     relicInfo.name = _relicInfoPrefab.name + $" {relicData.RelicName}";
                     relicInfo.gameObject.SetActive(true);

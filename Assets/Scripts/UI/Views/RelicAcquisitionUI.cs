@@ -73,7 +73,7 @@ namespace UI
 
         private bool _isInitialized;
         private bool _isOperating;
-        private bool _isOperated ;
+        private bool _isOperated;
         private bool _isDestroyed;
 
         private readonly bool UseCoinReadyImage;

@@ -9,6 +9,7 @@ namespace Game.Stage
 {
     public class Scenario_Stage0 : ScenarioManager, IInjectable<SfxPlayManager>
     {
+        [SerializeField] private BoxDetector _boxDetector;
         [SerializeField] private PortalDetector _portalDetector;
 
         private enum BlockName
@@ -150,7 +151,9 @@ namespace Game.Stage
                 BlockName.Arrival_Idle)
                 .OnUpdated<Block>(self =>
                 {
-                    if (IsRubielClose && Input.GetKeyDown(KeyCode.F))
+                    if (!_boxDetector.IsDetected
+                        && IsRubielClose
+                        && Input.GetKeyDown(KeyCode.F))
                     {
                         BlockInputs();
                         To(BlockName.Arrival_Reentry_ChangeName_1);
@@ -187,6 +190,7 @@ namespace Game.Stage
                 {
                     _nameChanged = true;
                     UnblockInputs();
+                    SetRubielToSmall();
                 });
             #endregion
 
