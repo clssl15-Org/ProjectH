@@ -5,7 +5,6 @@ using UnityEditor;
 
 namespace Infrastructure
 {
-    [CanEditMultipleObjects]
     [RequireComponent(typeof(SpriteRenderer))]
     public class SpriteSizeHandler : MonoBehaviour
     {

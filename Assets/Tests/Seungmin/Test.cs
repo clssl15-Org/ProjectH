@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Tests.Seungmin
@@ -21,7 +23,8 @@ namespace Tests.Seungmin
             
         }
 
-        
+
+#if UNITY_EDITOR
         [CustomEditor(typeof(Test))]
         private class TestEditor : Editor
         {
@@ -36,5 +39,6 @@ namespace Tests.Seungmin
                 }
             }
         }
+#endif
     }
 }

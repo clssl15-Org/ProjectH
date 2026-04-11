@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Actors.PlayerSystem;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Actors.PlayerSystem
@@ -66,6 +68,7 @@ namespace Actors.PlayerSystem
         }
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(PlayerDebug))]
     public class DebugButton : Editor
     {
@@ -104,4 +107,5 @@ namespace Actors.PlayerSystem
             }
         }
     }
+#endif
 }

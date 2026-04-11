@@ -190,7 +190,7 @@ namespace UI
                 else
                     GUILayout.Label("Enter play mode to open UI", EditorStyles.centeredGreyMiniLabel);
             }
-#endif
         }
+#endif
     }
 }

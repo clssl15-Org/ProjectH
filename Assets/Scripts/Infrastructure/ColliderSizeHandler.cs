@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Infrastructure
@@ -32,7 +34,7 @@ namespace Infrastructure
             col.size = sr.bounds.size;
         }
 
-
+#if UNITY_EDITOR
         [CustomEditor(typeof(ColliderSizeHandler))]
         private class CubeGenerateButton : Editor
         {
@@ -44,5 +46,6 @@ namespace Infrastructure
                     ((ColliderSizeHandler)target).SetColliderSize();
             }
         }
+#endif
     }
 }
