@@ -33,6 +33,8 @@ namespace World
         }
         public List<int> OneWayPlatformIds => _oneWayPlatformIds;
 
+        public static PlatformManager Instance { get; private set; }
+
         // Property
         [SerializeField] private bool _autoAssignTilemaps = true;
         [SerializeField] private Tilemap[] _tilemaps;
@@ -54,6 +56,8 @@ namespace World
         {
             if (!gameObject.activeSelf)
                 return;
+
+            Instance = this;
 
             _platforms = new();
             Platforms = new ReadOnlyDictionary<Vector3Int, int>(_platforms);

@@ -43,6 +43,7 @@ namespace Actors.Monsters
 
         protected virtual void Update()
         {
+            if (!_platformManager) _platformManager = PlatformManager.Instance;
             if (!_platformManager)
             {
                 Debug.LogError($"[Projectile] {nameof(PlatformManager)}이(가) 없기 때문에 투사체 '{name}'을(를) 사용할 수 없습니다.", this);
