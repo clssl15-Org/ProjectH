@@ -355,8 +355,8 @@ MonoBehaviour:
   PlatformManager: {fileID: 0}
   _stateDisplay: 
   _weapon: {fileID: 388868708847913025}
-  _weaponActiveTiming: 0.8333333
-  _weaponActiveDuration: 0.1666667
+  _weaponActiveTiming: 0.45
+  _weaponActiveDuration: 0.04
 --- !u!114 &5851064693307262152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,7 +485,7 @@ MonoBehaviour:
   - Name: Die
     AudioClip: {fileID: 8300000, guid: 8d9562cc3a34f5443b8dd9edc60e235e, type: 3}
     PlayOption: 3
-  _volumeRate: 1
+  <VolumeRate>k__BackingField: 1
   <StandaloneMode>k__BackingField: 0
   _defaultHitSoundPlayTiming: 1
   _hitSoundPlayTimings: []
