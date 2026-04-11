@@ -25,11 +25,24 @@ public class SkillManager : MonoBehaviour
     public event Action<SkillType> SkillAdded;
     public event Action<SkillType> SkillChanged;
 
+    private static List<Type> _oldStats;
+
     private DamageRoulette damageRoulette;
     private int selectedIndex = 0;
 
     private void Awake()
     {
+        if (_oldStats != null)
+            foreach (var oldSkillType in _oldStats)
+            {
+                var responding = gameObject.GetComponentInChildren(oldSkillType);
+                if (responding)
+                {
+                    print("추가");
+                    AddSkill(responding as CharacterState);
+                }
+            }
+
         CharacterStateController = this.transform.root.GetComponentInChildren<CharacterStateController>();
         characterActions = this.transform.root.GetComponentInChildren<CharacterBrain>().CharacterActions;
         damageRoulette = this.transform.root.GetComponentInChildren<DamageRoulette>();
@@ -90,5 +103,10 @@ public class SkillManager : MonoBehaviour
         ultimateSkill = skill;
 
         SkillAdded?.Invoke(skill.SkillType);
+    }
+
+    private void OnDestroy()
+    {
+        _oldStats = skills.Select(s => s.GetType()).ToList();
     }
 }
