@@ -94,8 +94,8 @@ namespace Actors.PlayerSystem
             {
                 if (cooldownTimer == null)
                 {
-                    cooldownTimer = GetComponent<CooldownTimer>();
-                    if (cooldownTimer == null) cooldownTimer = gameObject.AddComponent<CooldownTimer>();
+                    cooldownTimer = gameObject.AddComponent<CooldownTimer>();
+                    cooldownTimer.CooldownType = CooldownType.Dash;
                 }
 
                 cooldownTimer.StartCooldown(cooldownDuration, dt);

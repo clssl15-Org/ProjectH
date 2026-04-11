@@ -68,6 +68,7 @@ namespace Actors.PlayerSystem
             ResetSkill();
             cooldownTimer = gameObject.AddComponent<CooldownTimer>();
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
+            cooldownTimer.CooldownType = CooldownType.Skill;
             LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.Skill3);
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Infrastructure;
 using UnityEngine;
 using World;
@@ -50,10 +51,11 @@ namespace Actors.PlayerSystem
         {
             get
             {
-                CooldownTimer cooldownTimer = GetComponentInChildren<CooldownTimer>();
+                ISkillCoolDownTimer cooldownTimer = GetComponentsInChildren<ISkillCoolDownTimer>().Where(c => c.CooldownType == CooldownType.Skill).FirstOrDefault();
+                
                 if (cooldownTimer != null)
                 {
-                    return cooldownTimer.Progress;
+                    return (cooldownTimer as CooldownTimer).Progress;
                 }
                 else
                 {
@@ -119,7 +121,7 @@ namespace Actors.PlayerSystem
         private CharacterStateController characterStateController;
         private DamageRoulette damageRoulette;
 
-        // Ãß°¡: ÇÃ·¹ÀÌ¾îÀÇ ÇöÀç ¹æÇâÀ» º¸±â À§ÇÔ
+        // ï¿½ß°ï¿½: ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         private SpriteRenderer spriteRenderer;
         
         private void Awake()

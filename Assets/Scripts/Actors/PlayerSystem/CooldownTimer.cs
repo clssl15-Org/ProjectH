@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Actors.PlayerSystem
 {
-    public class CooldownTimer : MonoBehaviour
+    public class CooldownTimer : MonoBehaviour, ISkillCoolDownTimer
     {
+        public CooldownType CooldownType { get; set; } = CooldownType.None;
         public bool IsOnCooldown
         {
             get => timeRemaining > 0;
