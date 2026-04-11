@@ -45,7 +45,13 @@ namespace Actors.Monsters.Bosses
             protected override void OnUpdate(float deltaTime)
             {
                 _effectRemainingTime -= deltaTime;
-                _effectMat.color = _effectMat.color.WithAlpha(_effectRemainingTime / EffectLength);
+
+                var c = new Color(
+                    _effectMat.color.r,
+                    _effectMat.color.g,
+                    _effectMat.color.b,
+                    _effectRemainingTime / EffectLength);
+                _effectMat.color = c;
 
                 if (_effectRemainingTime <= 0)
                     Interrupt(InterruptType.Completed);

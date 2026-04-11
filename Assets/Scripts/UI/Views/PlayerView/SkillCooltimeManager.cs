@@ -1,7 +1,6 @@
 using System;
 using BlackboxSystem;
 using Infrastructure.StateMachines.Fsm;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -92,11 +91,20 @@ namespace UI.PlayerView
             _enableTimer = null;
 
             if (!_image.enabled && _image.color.a > 0f)
-                _image.color = _image.color.WithAlpha(0f);
+            {
+                var c = new Color(_image.color.r, _image.color.g, _image.color.b, 0f);
+                _image.color = c;
+            }
 
             if (_enableTime <= 0f || _defaultAlpha <= 0f)
             {
-                _image.color = _image.color.WithAlpha(enable ? _defaultAlpha : 0f);
+                var c = new Color(
+                    _image.color.r,
+                    _image.color.g,
+                    _image.color.b,
+                    enable ? _defaultAlpha : 0f);
+
+                _image.color = c;
                 _image.enabled = enable;
                 return;
             }
@@ -107,7 +115,13 @@ namespace UI.PlayerView
             bool UpdateImage()
             {
                 progress = Mathf.Clamp01(progress + Time.deltaTime / _enableTime);
-                _image.color = _image.color.WithAlpha(_defaultAlpha * (enable ? progress : 1f - progress));
+
+                var c = new Color(
+                    _image.color.r,
+                    _image.color.g,
+                    _image.color.b,
+                    _defaultAlpha * (enable ? progress : 1f - progress));
+                _image.color = c;
 
                 if (progress >= 1f)
                 {

@@ -74,7 +74,7 @@ namespace Actors.Monsters
 
             if (!parentTransform)
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(MonsterPlayerDetectorEditor)}의 부모가 유효하지 않은 상태입니다."));
+                    Ctx($"{nameof(MonsterPlayerDetector)}의 부모가 유효하지 않은 상태입니다."));
 
             if (!parentTransform.TryGetComponent<Collider2D>(out var parentCollider))
                 throw new InvalidOperationException(

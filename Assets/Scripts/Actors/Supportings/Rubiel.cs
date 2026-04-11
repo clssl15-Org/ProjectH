@@ -164,8 +164,12 @@ namespace Actors
                     return;
                 }
 
-                _spriteRenderer.material.color = _spriteRenderer.material.color.WithAlpha(
+                var c = new Color(
+                    _spriteRenderer.material.color.r,
+                    _spriteRenderer.material.color.g,
+                    _spriteRenderer.material.color.b,
                     _spriteRenderer.material.color.a + VisibleSpeed * Time.deltaTime);
+                _spriteRenderer.material.color = c;
             });
         }
         public void ToInvisible(Action callback = null)
@@ -182,18 +186,33 @@ namespace Actors
                     return;
                 }
 
-                _spriteRenderer.material.color = _spriteRenderer.material.color.WithAlpha(
+                var c = new Color(
+                    _spriteRenderer.material.color.r,
+                    _spriteRenderer.material.color.g,
+                    _spriteRenderer.material.color.b,
                     _spriteRenderer.material.color.a - VisibleSpeed * Time.deltaTime);
+                _spriteRenderer.material.color = c;
             });
         }
 
         public void SetToVisible()
         {
-            _spriteRenderer.material.color = _spriteRenderer.material.color.WithAlpha(1f);
+            var c = new Color(
+                _spriteRenderer.material.color.r,
+                _spriteRenderer.material.color.g,
+                _spriteRenderer.material.color.b,
+                1);
+
+            _spriteRenderer.material.color = c;
         }
         public void SetToInvisible()
         {
-            _spriteRenderer.material.color = _spriteRenderer.material.color.WithAlpha(0f);
+            var c = new Color(
+                _spriteRenderer.material.color.r,
+                _spriteRenderer.material.color.g,
+                _spriteRenderer.material.color.b,
+                0f);
+            _spriteRenderer.material.color = c;
         }
 
         private void ValidateSpriteSize() => _ssh.RequestApplyScaleFactor();
