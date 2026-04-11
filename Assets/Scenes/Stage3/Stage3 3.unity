@@ -756,8 +756,16 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.spawnCount
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.data[0]

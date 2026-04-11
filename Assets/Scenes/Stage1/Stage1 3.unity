@@ -441,8 +441,16 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].fixedMonsterPool.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.spawnCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
+      propertyPath: phases.Array.data[1].randomMonsterPool.spawnCount
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -6384,6 +6392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clearObject: {fileID: 0}
+  waveDataList: []
 --- !u!4 &1921294637
 Transform:
   m_ObjectHideFlags: 0

@@ -12223,6 +12223,11 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
+--- !u!1 &1715548403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3081893152640507319, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+  m_PrefabInstance: {fileID: 2123329948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1769513454
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12520,7 +12525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4389d2db4a34f4597c2cc224b8a1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearObject: {fileID: 0}
+  clearObject: {fileID: 1715548403}
+  waveDataList: []
 --- !u!4 &1921294637
 Transform:
   m_ObjectHideFlags: 0
