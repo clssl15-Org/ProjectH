@@ -305,6 +305,7 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+  _detectionStep: 0.1
 --- !u!114 &4268322827769223230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -802,7 +803,7 @@ MonoBehaviour:
   isSizeSynced: 1
   offset: {x: 2, y: 0}
   damageMultiplier: 10
-  cooldownDuration: 1
+  cooldownDuration: 10
   invincibleStartTime: 0
   invincibleEndTime: 1
 --- !u!114 &2168851036350252161
@@ -875,6 +876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SkillType>k__BackingField: 1
   runtimeAnimatorController: {fileID: 9100000, guid: 62cd06337b3ea3a4b8b419b5b29640c2, type: 2}
+  spawnDuration: 1.5
 --- !u!1 &9172967021588867564
 GameObject:
   m_ObjectHideFlags: 0
