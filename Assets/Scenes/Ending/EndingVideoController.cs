@@ -114,7 +114,6 @@ public class EndingVideoController : MonoBehaviour, IInjectable<GameServices>
         while (elapsedTime < duration)
         {
             float speedMultiplier = Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space) ? 5f : 1f;
-            videoPlayer.playbackSpeed = videoSpeed * speedMultiplier;
 
             elapsedTime += Time.deltaTime * speedMultiplier;
 
