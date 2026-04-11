@@ -69,7 +69,7 @@ public class DamageRoulette : MonoBehaviour
     {
         context = default;
 
-        if (SkillManager.skills.Count <= 0) return false;
+        if (skillManager.skills.Count <= 0) return false;
         if (player.CurrentSkillCooldown > 0f)
         {
             Debug.Log(

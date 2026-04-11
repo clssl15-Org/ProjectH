@@ -8,7 +8,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     public int SelectedSkillIndex => selectedIndex;
-    public static List<CharacterState> skills = new List<CharacterState>();
+    public List<CharacterState> skills = new List<CharacterState>();
     public bool canChangeSkill = true;
 
     public CharacterState ultimateSkill;
