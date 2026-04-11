@@ -19,7 +19,7 @@ namespace Actors.PlayerSystem
 
         [Header("Attack Stats")]
         [SerializeField]
-        private float damageMultiplier = 1.0f;
+        private float damageRatio = 1.0f;
 
         [Header("Attack Range")]
         [SerializeField]
@@ -78,7 +78,7 @@ namespace Actors.PlayerSystem
                 if (hitCollider.CompareTag("Player"))
                     continue;
 
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier); ;
+                int amount = Player.CalculateDamage(damageRatio * BonusMultiplier * skillPowerMultiflier); ;
                 damageableObject.TakeDamage(amount);
             }
         }

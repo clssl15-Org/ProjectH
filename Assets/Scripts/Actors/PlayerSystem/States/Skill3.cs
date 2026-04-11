@@ -26,7 +26,7 @@ namespace Actors.PlayerSystem
 
         [Header("Attack Stats")]
         [SerializeField]
-        private float damageMultiplier = 3f;
+        private float damageRatio = 3f;
 
         [Header("Cooldown Settings")]
         [SerializeField]
@@ -98,7 +98,7 @@ namespace Actors.PlayerSystem
 
                 GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                 newProjectile.GetComponent<Skill3ProjectileMovement>().ResetProjectile(dt, direction);
-                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier));
+                newProjectile.GetComponent<ProjectileDamage>().Damage = Player.CalculateDamage((int)(damageRatio * BonusMultiplier * skillPowerMultiflier));
                 newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
                 if (isSizeSynced)
                     newProjectile.transform.localScale = CharacterActor.transform.localScale;

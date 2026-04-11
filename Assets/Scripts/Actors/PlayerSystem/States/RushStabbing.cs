@@ -31,7 +31,7 @@ namespace Actors.PlayerSystem
 
         [Header("Attack Stats")]
         [SerializeField]
-        private float damageMultiplier = 5.0f;
+        private float damageRatio = 5.0f;
 
         [Header("Attack Range")]
         [SerializeField]
@@ -96,7 +96,7 @@ namespace Actors.PlayerSystem
                 //    continue;
 
                 //hitEnemies.Add(damageableObject);
-                int amount = Player.CalculateDamage(attackPower * damageMultiplier * BonusMultiplier * skillPowerMultiflier);
+                int amount = Player.CalculateDamage(damageRatio * BonusMultiplier * skillPowerMultiflier);
                 damageableObject.TakeDamage(amount);
                 print(amount);
                 onEskill?.Invoke();

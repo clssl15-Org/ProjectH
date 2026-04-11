@@ -35,7 +35,7 @@ namespace Actors.PlayerSystem
 
         [Header("Attack Stats")]
         [SerializeField]
-        private float damageMultiplier = 1.0f;
+        private float damageRatio = 1.0f;
 
         [Header("Attack Range")]
         [SerializeField]
@@ -173,7 +173,7 @@ namespace Actors.PlayerSystem
                     GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                     newProjectile.GetComponent<UltimateProjectileMovement>().ResetProjectile(dt, direction);
                     newProjectile.GetComponent<UltimateProjectileMovement>().GrowRadius(targetRadius);
-                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(attackPower * damageMultiplier * skillPowerMultiflier);
+                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(damageRatio * skillPowerMultiflier);
                     newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
 
                 }

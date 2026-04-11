@@ -318,7 +318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a125aff6e5669ad408c2400814ee769b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skills: []
   canChangeSkill: 1
   ultimateSkill: {fileID: 2168851036350252161}
   characterActions:
@@ -688,7 +687,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   directionMode: 1
-  damageMultiplier: 5
+  damageRatio: 75
   attackSize: {x: 3, y: 1}
   attackPointOffset: {x: 1, y: 0}
   invincibleStartTime: 0
@@ -732,7 +731,7 @@ MonoBehaviour:
   skillDuration: 0.77
   damageApplyTime: 0.5
   directionMode: 1
-  damageMultiplier: 20
+  damageRatio: 150
   attackSize: {x: 3.8, y: 3}
   attackPointOffset: {x: 0.8, y: 0.5}
   invincibleStartTime: 0
@@ -802,7 +801,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 1593081316257219599, guid: b8b4e3d86b932914492642bd89243e7d, type: 3}
   isSizeSynced: 1
   offset: {x: 2, y: 0}
-  damageMultiplier: 10
+  damageRatio: 100
   cooldownDuration: 10
   invincibleStartTime: 0
   invincibleEndTime: 1
@@ -828,7 +827,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 1611088545178221253, guid: c65d8d0525c3aa847b65f93a12605006, type: 3}
   targetRadius: 12
   directionMode: 1
-  damageMultiplier: 50
+  damageRatio: 747.6
   attackSize: {x: 1, y: 1}
   attackPointOffset: {x: 3, y: 0}
   invincibleStartTime: 0

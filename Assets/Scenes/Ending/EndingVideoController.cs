@@ -26,6 +26,9 @@ public class EndingVideoController : MonoBehaviour, IInjectable<GameServices>
     [SerializeField]
     private TextMeshProUGUI txt;
 
+    [SerializeField]
+    private AudioSource endingAudioSource;
+
     private bool isEnd = false;
 
     private GameServices gameServices;
@@ -54,12 +57,18 @@ public class EndingVideoController : MonoBehaviour, IInjectable<GameServices>
         videoPlayer.Play();
         videoPlayer.playbackSpeed = videoSpeed;
 
+        if (endingAudioSource != null)
+            endingAudioSource.Play();
+
         yield return StartCoroutine(MoveY(txt.rectTransform, -700f, 822f, 25f));
 
         isEnd = true;
     }
     IEnumerator GoThanks()
     {
+        if (endingAudioSource != null)
+            endingAudioSource.Stop();
+
         yield return StartCoroutine(Fade(videoFade, 0f, 1f, 3f));
 
         thanksPannel.SetActive(true);
