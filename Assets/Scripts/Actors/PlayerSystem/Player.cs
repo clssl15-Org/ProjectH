@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Infrastructure;
 using UnityEngine;
 using World;
@@ -50,17 +51,24 @@ namespace Actors.PlayerSystem
         {
             get
             {
-                CooldownTimer cooldownTimer = GetComponentInChildren<CooldownTimer>();
-                if (cooldownTimer != null)
-                {
-                    return cooldownTimer.Progress;
-                }
-                else
-                {
+                var cooldownType = CooldownTypeForSelectedSkill(SelectedSkillType);
+                if (cooldownType == CooldownType.None)
                     return -1f;
-                }
+
+                CooldownTimer cooldownTimer = GetComponentsInChildren<CooldownTimer>()
+                    .FirstOrDefault(c => c.CooldownType == cooldownType);
+                return cooldownTimer != null ? cooldownTimer.Progress : -1f;
             }
         }
+
+        static CooldownType CooldownTypeForSelectedSkill(SkillType skill) =>
+            skill switch
+            {
+                SkillType.RushStabbing => CooldownType.RushStabbing,
+                SkillType.StrongAttack => CooldownType.StrongAttack,
+                SkillType.Skill3 => CooldownType.Skill3,
+                _ => CooldownType.None,
+            };
 
         [SerializeField] private bool useDebugUltimateGauge = false;
         [SerializeField, Range(0, 1)] private float debugUltimateGauge = 0f;
@@ -119,7 +127,7 @@ namespace Actors.PlayerSystem
         private CharacterStateController characterStateController;
         private DamageRoulette damageRoulette;
 
-        // Ãß°¡: ÇÃ·¹ÀÌ¾îÀÇ ÇöÀç ¹æÇâÀ» º¸±â À§ÇÔ
+        // ï¿½ß°ï¿½: ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         private SpriteRenderer spriteRenderer;
         
         private void Awake()
