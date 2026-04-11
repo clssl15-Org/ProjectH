@@ -146,6 +146,11 @@ namespace Actors.PlayerSystem
         public void Start()
         {
             ConditionChanged += cond => print($"Player: {cond}");
+
+            if (LevelManager.Instance.PlayerHasDied)
+            {
+                characterStateController.EnqueueTransition<Spawn>();
+            }
         }
 
         public void DefaultAttack()

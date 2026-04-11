@@ -281,10 +281,7 @@ public class RelicManager : MonoBehaviour
 
         // 3. 유물 효과 해제 호출
         Relic relicScript = relicToRemove.GetComponent<Relic>();
-        if (relicScript != null)
-        {
-            relicScript.OnLose();
-        }
+        RelicDataSO lostData = relicScript != null ? relicScript.Data : null;
 
         // 4. 리스트에서 제거 및 실제 객체 파괴
         relicList.RemoveAt(relicList.Count - 1);
@@ -296,6 +293,10 @@ public class RelicManager : MonoBehaviour
             ownedRelics.Remove(key);
         }
 
+        if (lostData != null)
+        {
+            RelicLost?.Invoke(lostData);
+        }
         Debug.Log($"유물(Key: {key}) 제거 완료.");
     }
 
@@ -313,6 +314,6 @@ public class RelicManager : MonoBehaviour
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
         // 씬이 바뀌면 새로운 플레이어 오브젝트를 자동으로 할당
-        //player = FindObjectOfType<Player>();
+        player = FindObjectOfType<Player>();
     }
 }

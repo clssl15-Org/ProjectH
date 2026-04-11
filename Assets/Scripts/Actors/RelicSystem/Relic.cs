@@ -9,13 +9,12 @@ public abstract class Relic : MonoBehaviour
 
     public bool isReinforced;
     protected float value;
-    public event Action OnRelicLose;
 
     public abstract void OnAcquire();
     public void OnLose()
     {
         OnLoseCore();
-        OnRelicLose?.Invoke();
+        RelicManager.Instance.RemoveRelic(data.RelicNumber);
     }
     protected abstract void OnLoseCore();
     public virtual void OnReinforcedAcquire()
