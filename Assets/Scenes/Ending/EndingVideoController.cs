@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Infrastructure;
 
-public class EndingVideoController : MonoBehaviour
+public class EndingVideoController : MonoBehaviour, IInjectable<GameServices>
 {
     [SerializeField]
     private VideoPlayer videoPlayer;
@@ -26,6 +27,11 @@ public class EndingVideoController : MonoBehaviour
     private TextMeshProUGUI txt;
 
     private bool isEnd = false;
+
+    private GameServices gameServices;
+
+    void IInjectable<GameServices>.Inject(GameServices gameServices)
+        => this.gameServices = gameServices;
 
     private void Start()
     {
@@ -65,7 +71,8 @@ public class EndingVideoController : MonoBehaviour
 
         yield return StartCoroutine(Fade(thanksFade, 0f, 1f, 3f));
 
-        SceneManager.LoadScene("Title");
+        //SceneManager.LoadScene("Title");
+        gameServices.ChangeScene("Record_Unlocked", this);
     }
 
 

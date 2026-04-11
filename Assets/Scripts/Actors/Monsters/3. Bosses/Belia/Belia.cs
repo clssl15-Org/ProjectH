@@ -83,7 +83,7 @@ namespace Actors.Monsters.Bosses
                 AddChild(new Alive()
                     .AddChild(new Idle(ITwinBoss.IsAwake))
                     .AddChild(new Awaken(ITwinBoss.IsAwake)
-                        .AddChild(new ValidPlatform(false) { HierarchyMode = HierarchyMode.Sequence }
+                        .AddChild(new ValidPlatform(true) { HierarchyMode = HierarchyMode.Sequence }
                             .AddChild(new Engaged()
                                 {
                                     TargetAttackRange = owner._targetPlayerRange,

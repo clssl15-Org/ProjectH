@@ -16,7 +16,7 @@ namespace Game.Stage
             To_Arrival,
             Arrival_First,
             Arrival_Reentry,
-            Ending,
+            //Ending,
         }
 
         protected override void Start()
@@ -43,12 +43,7 @@ namespace Game.Stage
                 {
                     if (IsPlayerOnGround && IsRubielClose)
                     {
-                        if (GameServices.IsGameCleared)
-                        {
-                            BlockInputs();
-                            To(BlockName.Ending);
-                        }
-                        else if (IsFirstArrival)
+                        if (IsFirstArrival)
                         {
                             BlockInputs();
                             To(BlockName.Arrival_First);
@@ -79,15 +74,6 @@ namespace Game.Stage
                 {
                     UnblockInputs();
                     SetRubielToSmall();
-                });
-
-            yield return new DialogueBlock(
-                BlockName.Ending,
-                dialogueTitle: "Ending_Arrival",
-                onDialogueEnd: () =>
-                {
-                    StageManager.DarkscreenUI.CloseScreen(
-                        () => GameServices.ChangeScene("EndingScene"));
 
                     Exit();
                 });
