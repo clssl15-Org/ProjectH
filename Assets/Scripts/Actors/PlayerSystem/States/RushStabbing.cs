@@ -148,14 +148,6 @@ namespace Actors.PlayerSystem
 
             ResetSkill();
             cooldownTimer = gameObject.AddComponent<CooldownTimer>();
-            cooldownTimer.CooldownType = CooldownType.RushStabbing;
-            cooldownTimer.OnCooldownStart += () => {
-                print("OnCooldownStart");
-            };
-            cooldownTimer.OnCooldownComplete += () =>
-            {
-                print("OnCooldownComplete");
-            };
             cooldownTimer.StartCooldown(cooldownDuration * SkillCooldownMultiplier, dt);
         }
         public override void UpdateBehaviour(float dt)
