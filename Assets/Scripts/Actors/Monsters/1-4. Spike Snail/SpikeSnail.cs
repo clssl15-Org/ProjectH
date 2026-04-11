@@ -130,6 +130,12 @@ namespace Actors.Monsters
             ActionController.Enter();
 
             Brain = new SpikeSnailBrain(this);
+
+            new Timer(0.1f, _ =>
+            {
+                if (this)
+                    InitializeComponents();
+            });
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)
