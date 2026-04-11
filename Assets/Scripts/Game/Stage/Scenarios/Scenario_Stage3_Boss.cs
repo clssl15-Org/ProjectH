@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Actors;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
 using Sound;
@@ -17,6 +18,8 @@ namespace Game.Stage
             Battle_TwinBoss,
             Contact_FinalBoss,
             Battle_FinalBoss,
+            To_Ending,
+            Ending,
         }
 
         internal override IEnumerable<Work> GetBlocks()
@@ -63,11 +66,14 @@ namespace Game.Stage
                 })
                 .OnUpdated<Block>(self =>
                 {
-                    if (StageManager.CurrentPhase == FinalBossStageManager.Phase.FinalBossReady
+                    if (!self.ToNextToken
+                        && StageManager.CurrentPhase == FinalBossStageManager.Phase.FinalBossReady
                         && IsPlayerOnGround)
                     {
+                        self.ToNextToken = true;
+
                         BlockInputs();
-                        To(BlockName.Contact_FinalBoss);
+                        new Timer(2f, _ => To(BlockName.Contact_FinalBoss));
                     }
                 });
 
@@ -90,13 +96,36 @@ namespace Game.Stage
                         && IsPlayerOnGround)
                     {
                         SetRubielToVisible(true);
+                        Rubiel.transform.position = new(-3.15f, -5.9f, 0);
+                        Rubiel.GetComponent<TargetFollower>().IsEnabled = false;
 
                         StageManager.Box.gameObject.SetActive(true);
                         StageManager.Portal.gameObject.SetActive(true);
 
                         if (GameServices) GameServices.IsGameCleared = true;
-                        Exit();
+                        To(BlockName.To_Ending);
                     }
+                });
+
+            yield return new Block(
+                BlockName.To_Ending)
+                .OnUpdated<Block>(self =>
+                {
+                    if (IsPlayerOnGround && IsRubielClose)
+                    {
+                        SetRubielToBig();
+                        BlockInputs();
+                        To(BlockName.Ending);
+                    }
+                });
+
+            yield return new DialogueBlock(
+                BlockName.Ending,
+                dialogueTitle: "Ending_Arrival",
+                onDialogueEnd: () =>
+                {
+                    UnblockInputs();
+                    Exit();
                 });
         }
     }

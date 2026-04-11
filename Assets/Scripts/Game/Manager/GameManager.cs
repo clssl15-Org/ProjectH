@@ -40,6 +40,8 @@ namespace Game
         [SerializeField] private Configuration _configuration;
         [SerializeField] private GameAssetLibrary _gameAssetLibrary;
         [SerializeField] private string _firstSceneName = "Stage0 0";
+        [SerializeField] private string _unlockSceneName = "Record_Unlocked";
+        [SerializeField] private string _bossSceneName = "Stage3Boss";
 
         // Properties
         private Management.SoundManager _soundManager;
@@ -107,10 +109,6 @@ namespace Game
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
 
-            // HACK: 엔딩 씬은 초기회 제외
-            if (scene.name == "EndingScene")
-                return;
-
             if (TryFindScript<StageManager>(scene, out var stageManager))
             {
                 stageManager.PlayerDied += () =>
@@ -119,8 +117,11 @@ namespace Game
 
                     LevelManager.Instance.ResetState();
                     LevelManager.Instance.PlayerHasDied = true;
-
-                    ChangeScene(_firstSceneName, this);
+                    
+                    if (scene.name == _bossSceneName)
+                        ChangeScene(_unlockSceneName);
+                    else
+                        ChangeScene(_firstSceneName);
                 };
             }
 
@@ -183,6 +184,7 @@ namespace Game
             playerInfo.Name = playerName;
         }
 
+        public override void ToFirstScene(object context = null) => ChangeScene(_firstSceneName, context);
         public override void ChangeScene(string sceneName, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(

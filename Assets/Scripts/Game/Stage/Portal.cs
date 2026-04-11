@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure;
+using UI;
 using UnityEngine;
 
-public class Portal : MonoBehaviour
+public class Portal : MonoBehaviour, IInjectable<GameServices>  
 {
     public event Action Opening;
     public event Action Closing;
@@ -16,7 +18,17 @@ public class Portal : MonoBehaviour
     [SerializeField]
     private LevelType levelType;
 
+    [SerializeField]
+    private bool toDesignatedLevel;
+    [SerializeField]
+    private string designatedLevelName;
+    private GameServices gameServices;
+
     private bool isPlayerInRange = false;
+
+    void IInjectable<GameServices>.Inject(GameServices gameServices) =>
+        this.gameServices = gameServices;
+
     private void Start()
     {
         Fsprite.SetActive(false);
@@ -36,6 +48,13 @@ public class Portal : MonoBehaviour
     }
     private void MoveNextLevel()
     {
+        if (toDesignatedLevel)
+        {
+            FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include).CloseScreen(() =>
+                gameServices.ChangeScene(designatedLevelName, this));
+            return;
+        }
+
         if (MoveToNextLevel != null)
             MoveToNextLevel(() => LevelManager.Instance.MoveNextLevel(levelType));
         else

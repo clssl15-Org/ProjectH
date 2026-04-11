@@ -1074,6 +1074,14 @@ PrefabInstance:
       propertyPath: levelType
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7535452033118798473, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+      propertyPath: toDesignatedLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535452033118798473, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
+      propertyPath: designatedLevelName
+      value: EndingScene
+      objectReference: {fileID: 0}
     - target: {fileID: 8221930841844602569, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_IsActive
       value: 0

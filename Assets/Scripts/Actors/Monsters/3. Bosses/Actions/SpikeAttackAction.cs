@@ -45,6 +45,7 @@ namespace Actors.Monsters.Bosses
             _sequence = new Sequence();
             IClip before = null;
 
+            bool errorOccurred = false;
             for (int i = 0; i < _spikeSpawnPositions.Length; i++)
             {
                 var index = i;
@@ -57,9 +58,20 @@ namespace Actors.Monsters.Bosses
                             projectileSpeed)
                         .Fire();
 
-                        ((IBoss)Owner).AudioPlayer.Play("SpikeAttack");
+                        try
+                        {
+                            ((IBoss)Owner).AudioPlayer.Play("SpikeAttack");
+                        }
+                        catch
+                        {
+                            errorOccurred = true;
+                        }
+
                         self.Stop();
                     });
+
+                // ¾À ÀüÈ¯ µî
+                if (errorOccurred) break;
 
                 if (i == 0)
                 {
