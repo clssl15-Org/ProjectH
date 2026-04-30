@@ -47,7 +47,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall();
+                    SetRubielToSmall(() => SetRubielToInvisible());
                 });
 
             yield return new DialogueBlock(
@@ -57,7 +57,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     UnblockInputs();
-                    SetRubielToSmall();
+                    SetRubielToSmall(() => SetRubielToInvisible());
                 });
         }
     }

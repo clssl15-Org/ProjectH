@@ -110,7 +110,7 @@ namespace Game.Stage
         }
 
         protected virtual void Start() => Machine?.Enter();
-        private void Update()
+        protected virtual void Update()
         {
             Machine?.Update();
 

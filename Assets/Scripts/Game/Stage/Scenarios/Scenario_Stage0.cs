@@ -39,6 +39,7 @@ namespace Game.Stage
         protected override void Start()
         {
             base.Start();
+            StageManager.Portal.IsInteractable = false;
 
             if (IsFirstArrival)
             {
@@ -117,7 +118,11 @@ namespace Game.Stage
                 {
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
-                        GameServices.SetPlayerName(StageManager.DialogueUI.InputText.Trim());
+                        var name = StageManager.DialogueUI.InputText.Trim();
+                        if (string.IsNullOrWhiteSpace(name))
+                            return;
+
+                        GameServices.SetPlayerName(name);
                         StageManager.DialogueUI.IsInputMode = false;
 
                         To(BlockName.Arrival_First_2);
@@ -174,7 +179,11 @@ namespace Game.Stage
                 {
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
-                        GameServices.SetPlayerName(StageManager.DialogueUI.InputText.Trim());
+                        var name = StageManager.DialogueUI.InputText.Trim();
+                        if (string.IsNullOrWhiteSpace(name))
+                            return;
+
+                        GameServices.SetPlayerName(name);
                         StageManager.DialogueUI.IsInputMode = false;
 
                         To(BlockName.Arrival_Reentry_ChangeName_2);
@@ -203,6 +212,8 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     _skillAcquired = true;
+                    StageManager.Portal.IsInteractable = true;
+
                     UnblockInputs();
                 });
 
@@ -211,8 +222,6 @@ namespace Game.Stage
                 .OnEntered(() => StageManager.GuideAndWorldRecordsUI.Open())
                 .OnExited(() =>
                 {
-                    _skillAcquired = true;
-
                     UnblockInputs();
                     To(BlockName.Arrival_Idle);
                 });

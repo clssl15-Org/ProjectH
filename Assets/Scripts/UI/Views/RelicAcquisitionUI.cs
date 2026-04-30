@@ -40,8 +40,8 @@ namespace UI
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectMaskVideoPlayer;
-        [SerializeField] private float _effectPlayTiming = 5f;
-        [SerializeField, Max(0f)] private float _dropEventNotifyTiming = -1f;
+        [SerializeField] private float _effectPlayTiming = 1f;
+        [SerializeField, Max(0f)] private float _dropEventNotifyTiming = -2.6f;
 
         public event Action CoinThrown;
         public event Action CoinDropped;

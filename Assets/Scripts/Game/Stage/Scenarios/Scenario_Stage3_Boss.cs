@@ -3,11 +3,20 @@ using Actors;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
 using Sound;
+using UnityEngine;
+using UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Game.Stage
 {
     public class Scenario_Stage3_Boss : ScenarioManager
     {
+        [Space]
+        [SerializeField] private string NextSceneName = "EndingScene";
+        [SerializeField] private KeyCode ToEndingKey;
+
         private new FinalBossStageManager StageManager => (FinalBossStageManager)base.StageManager;
 
         private enum BlockName
@@ -20,6 +29,14 @@ namespace Game.Stage
             Battle_FinalBoss,
             To_Ending,
             Ending,
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (Input.GetKeyDown(ToEndingKey.Resolve()))
+                ToEnding();
         }
 
         internal override IEnumerable<Work> GetBlocks()
@@ -124,9 +141,40 @@ namespace Game.Stage
                 dialogueTitle: "Ending_Arrival",
                 onDialogueEnd: () =>
                 {
-                    UnblockInputs();
+                    if (GameServices)
+                    {
+                        GameServices.IsGameCleared = true;
+
+                        FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include).CloseScreen(() =>
+                            GameServices.ChangeScene(NextSceneName, this));
+                    }
+
                     Exit();
                 });
         }
+
+        private void ToEnding()
+        {
+            if (!DebugTools.IsDebugMode)
+                return;
+
+            BlockInputs();
+            To(BlockName.Ending);
+        }
+
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(Scenario_Stage3_Boss))]
+        protected class Scenario_Stage3_BossEditor : Editor
+        {
+            public override void OnInspectorGUI()
+            {
+                base.OnInspectorGUI();
+
+                if (GUILayout.Button("To Ending"))
+                    ((Scenario_Stage3_Boss)target).ToEnding();
+            }
+        }
+#endif
     }
 }
