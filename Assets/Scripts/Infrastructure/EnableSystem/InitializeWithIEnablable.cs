@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Infrastructure
 {
     public static class EnableSystemExtensions
@@ -19,6 +21,9 @@ namespace Infrastructure
                 .SetAction(EnableEventType.Disabling, () => component.OnDisabling?.Invoke())
                 .SetAction(EnableEventType.Disabled, () =>
                 {
+                    if (component == null || !component.gameObject)
+                        return;
+
                     if (setGameObjectActive)
                         component.gameObject.SetActive(false);
 

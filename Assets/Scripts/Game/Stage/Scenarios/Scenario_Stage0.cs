@@ -45,26 +45,26 @@ namespace Game.Stage
             {
                 // 미리 상자 여는 것 방지
                 StageManager.Box.IsLocked = true;
-
-                // 스킬 얻을 때 이동
-                StageManager.RelicAcquisitionUI.Disabling += () =>
-                {
-                    if (_nameChanged)
-                        To(BlockName.FirstSkillAcquire_Dialogue);
-                };
-
-                // 포탈 대화
-                _portalDetector.PlayerDetected += () =>
-                {
-                    if (_skillAcquired)
-                    {
-                        if (_portalReached) return;
-                        _portalReached = true;
-
-                        To(BlockName.TownPortal);
-                    }
-                };
             }
+
+            // 스킬 얻을 때 이동
+            StageManager.RelicAcquisitionUI.Disabling += () =>
+            {
+                if (!IsFirstArrival || _nameChanged)
+                    To(BlockName.FirstSkillAcquire_Dialogue);
+            };
+
+            // 포탈 대화
+            _portalDetector.PlayerDetected += () =>
+            {
+                if (_skillAcquired)
+                {
+                    if (_portalReached) return;
+                    _portalReached = true;
+
+                    To(BlockName.TownPortal);
+                }
+            };
         }
 
         internal override IEnumerable<Work> GetBlocks()
@@ -157,6 +157,7 @@ namespace Game.Stage
                 .OnUpdated<Block>(self =>
                 {
                     if (!_boxDetector.IsDetected
+                        && !_portalDetector.IsDetected
                         && IsRubielClose
                         && Input.GetKeyDown(KeyCode.F))
                     {
@@ -212,8 +213,6 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     _skillAcquired = true;
-                    StageManager.Portal.IsInteractable = true;
-
                     UnblockInputs();
                 });
 
@@ -231,7 +230,11 @@ namespace Game.Stage
                 dialogueTitle: "Stage0_TownPortal",
                 onDialogueEnd: Exit)
                 .OnEntered(BlockInputs)
-                .OnExited(UnblockInputs);
+                .OnExited(() =>
+                {
+                    StageManager.Portal.IsInteractable = true;
+                    UnblockInputs();
+                });
         }
     }
 }

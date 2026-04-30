@@ -30,6 +30,7 @@ namespace UI
         [SerializeField] private Button _relicsBtn;
         [SerializeField] private Button _exitBtn;
 
+        public event Action RestartUI;
         public event Action OpenRelicsUI;
         public event Action OpenGuideUI;
         public event Action Destroying;
@@ -167,7 +168,7 @@ namespace UI
                 _restartBtn.onClick.AddListener(() =>
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_restartBtn, "Restart");
-                    print("재시작"); // TODO: 재시작 구현
+                    OnRestart();
                 });
 
             if (!_guideBtn)
@@ -245,18 +246,18 @@ namespace UI
             }
         }
 
-        private void OnOpenRelicsUI()
+        private void OnRestart()
         {
-            if (OpenRelicsUI == null)
+            if (RestartUI == null)
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"{nameof(OpenRelicsUI)} 이벤트에 등록된 대리자가 없으므로 유물 UI를 열 수 없습니다.")),
+                    $"{nameof(RestartUI)} 이벤트에 등록된 대리자가 없으므로 가이드 UI를 열 수 없습니다.")),
                     this);
                 return;
             }
 
             Disable();
-            OpenRelicsUI.Invoke();
+            RestartUI.Invoke();
         }
         private void OnOpenGuideUI()
         {
@@ -270,6 +271,19 @@ namespace UI
 
             Disable();
             OpenGuideUI.Invoke();
+        }
+        private void OnOpenRelicsUI()
+        {
+            if (OpenRelicsUI == null)
+            {
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
+                    $"{nameof(OpenRelicsUI)} 이벤트에 등록된 대리자가 없으므로 유물 UI를 열 수 없습니다.")),
+                    this);
+                return;
+            }
+
+            Disable();
+            OpenRelicsUI.Invoke();
         }
 
         public void Enable() => _enabler.Enable();
