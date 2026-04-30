@@ -162,19 +162,10 @@ namespace Actors
             }
 
             BuildTierCandidates();
-
-            SpawnPhase sourcePhase = enhancedSpawnPhaseTemplate != null
-                ? enhancedSpawnPhaseTemplate
-                : phases[phases.Count - 1];
-            SpawnPhase phaseToAppend = ClonePhase(sourcePhase);
-            if (phaseToAppend == null)
+            for (int i = 0; i < runtimePhases.Count; i++)
             {
-                Debug.LogWarning($"[{gameObject.name}] 마지막 소형맵 강화 스폰용 원본 페이즈를 찾을 수 없습니다.", this);
-                return;
+                ApplyTierUpgradeMappings(runtimePhases[i]);
             }
-
-            ApplyTierUpgradeMappings(phaseToAppend);
-            runtimePhases.Add(phaseToAppend);
         }
 
         private void BuildTierCandidates()
@@ -535,7 +526,7 @@ namespace Actors
         /// </summary>
         private void ProcessFixedPool(List<GameObject> pool)
         {
-            if (pool.Count == 0) return;
+            if (pool == null || pool.Count == 0) return;
 
             // 대형맵의 특정 몬스터 풀을 위함
             if (pool[0].TryGetComponent<monsterBundle>(out monsterBundle mb))
@@ -601,6 +592,28 @@ namespace Actors
         /// </summary>
         private void SpawnMonster(GameObject prefab)
         {
+            if (prefab == null)
+            {
+                return;
+            }
+
+            if (spawnPoint == null || spawnPoint.Count == 0)
+            {
+                Debug.LogWarning($"[{gameObject.name}] 스폰 포인트가 없어 몬스터를 생성할 수 없습니다.", this);
+                return;
+            }
+
+            if (tmpSpawnPoint.Count == 0)
+            {
+                tmpSpawnPoint = new List<Transform>(spawnPoint);
+            }
+
+            if (tmpSpawnPoint.Count == 0)
+            {
+                Debug.LogWarning($"[{gameObject.name}] 유효한 임시 스폰 포인트가 없어 몬스터를 생성할 수 없습니다.", this);
+                return;
+            }
+
             // 스폰 위치 무작위 선택 및 제거
             Transform spawnTransform = tmpSpawnPoint[UnityEngine.Random.Range(0, tmpSpawnPoint.Count)];
             tmpSpawnPoint.Remove(spawnTransform);
