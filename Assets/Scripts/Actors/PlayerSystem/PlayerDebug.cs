@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Actors.Monsters;
 using Actors.PlayerSystem;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -34,10 +35,38 @@ namespace Actors.PlayerSystem
             //AddThirdSkill();
             //AddUltimate();
         }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                KillAllEnemiesInStage();
+            }
+        }
+
         public void DamageToPlayer()
         {
             playerHealth.TakeDamage(damageAmount);
         }
+
+        public void KillAllEnemiesInStage()
+        {
+            MonsterDamageReceiver[] monsters = FindObjectsByType<MonsterDamageReceiver>(FindObjectsSortMode.None);
+            int killedCount = 0;
+            const int instantKillDamage = 999999;
+
+            foreach (MonsterDamageReceiver monster in monsters)
+            {
+                if (monster == null || !monster.Interactable)
+                    continue;
+
+                monster.TakeDamage(instantKillDamage);
+                killedCount++;
+            }
+
+            Debug.Log($"[PlayerDebug] L key kill-all triggered. Monsters hit: {killedCount}", this);
+        }
+
         public void AddFirstSkill()
         {
             RushStabbing firstSkill = player.StatesGO.GetComponent<RushStabbing>();

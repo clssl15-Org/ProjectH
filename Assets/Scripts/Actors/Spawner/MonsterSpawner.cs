@@ -23,6 +23,16 @@ namespace Actors
         [SerializeField]
         private List<SpawnPhase> phases = new List<SpawnPhase>();
 
+        [Header("마지막 소형맵 강화 스폰 설정")]
+        [SerializeField]
+        private bool enableEnhancedFinalSmallMapPhase = true;
+        [SerializeField]
+        private int enhancedExploreOrder = 5;
+        [SerializeField]
+        private SpawnPhase enhancedSpawnPhaseTemplate;
+        [SerializeField]
+        private List<MonsterTierUpgradeMapping> enhancedTierUpgradeMappings = new List<MonsterTierUpgradeMapping>();
+
         [Header("인디케이터 설정")]
         [SerializeField]
         private GameObject monsterSpawnIndicator;
@@ -38,8 +48,20 @@ namespace Actors
 
         private List<GameObject> activeMonsters = new List<GameObject>();
         private List<Transform> tmpSpawnPoint = new List<Transform>();
+        private List<SpawnPhase> runtimePhases = new List<SpawnPhase>();
+        private Dictionary<MonsterTier, List<GameObject>> tierCandidates = new Dictionary<MonsterTier, List<GameObject>>();
 
         private Action<IMonster> monsterCreated;
+
+        private enum MonsterTier
+        {
+            Unknown,
+            BaseMelee,
+            BaseRanged,
+            SpecialMelee,
+            SpecialRanged,
+            SpecialStrong
+        }
 
         private void Start()
         {
@@ -97,6 +119,13 @@ namespace Actors
                 return;
             }
 
+            BuildRuntimePhases();
+            if (runtimePhases.Count == 0)
+            {
+                Debug.LogError($"[{gameObject.name}] 실행 가능한 스폰 페이즈가 없습니다.", this);
+                return;
+            }
+
             isSpawning = true;
             currentPhaseIndex = -1; // StartNextPhase에서 0으로 증가하여 시작
             StartNextPhase();
@@ -110,13 +139,342 @@ namespace Actors
             currentPhaseIndex++;
 
             // 모든 페이즈가 완료되었는지 확인
-            if (currentPhaseIndex >= phases.Count)
+            if (currentPhaseIndex >= runtimePhases.Count)
             {
                 OnAllPhasesComplete();
                 return;
             }
 
-            StartPhase(phases[currentPhaseIndex]);
+            StartPhase(runtimePhases[currentPhaseIndex]);
+        }
+
+        private void BuildRuntimePhases()
+        {
+            runtimePhases.Clear();
+            foreach (SpawnPhase phase in phases)
+            {
+                runtimePhases.Add(ClonePhase(phase));
+            }
+
+            if (!ShouldUseEnhancedFinalSmallMapPhase())
+            {
+                return;
+            }
+
+            BuildTierCandidates();
+
+            SpawnPhase sourcePhase = enhancedSpawnPhaseTemplate != null
+                ? enhancedSpawnPhaseTemplate
+                : phases[phases.Count - 1];
+            SpawnPhase phaseToAppend = ClonePhase(sourcePhase);
+            if (phaseToAppend == null)
+            {
+                Debug.LogWarning($"[{gameObject.name}] 마지막 소형맵 강화 스폰용 원본 페이즈를 찾을 수 없습니다.", this);
+                return;
+            }
+
+            ApplyTierUpgradeMappings(phaseToAppend);
+            runtimePhases.Add(phaseToAppend);
+        }
+
+        private void BuildTierCandidates()
+        {
+            tierCandidates.Clear();
+            for (int i = 0; i < runtimePhases.Count; i++)
+            {
+                AddTierCandidatesFromPhase(runtimePhases[i]);
+            }
+        }
+
+        private void AddTierCandidatesFromPhase(SpawnPhase phase)
+        {
+            if (phase == null)
+            {
+                return;
+            }
+
+            if (phase.fixedMonsterPool != null)
+            {
+                for (int i = 0; i < phase.fixedMonsterPool.Count; i++)
+                {
+                    TryAddTierCandidate(phase.fixedMonsterPool[i]);
+                }
+            }
+
+            if (phase.randomMonsterPool?.monsterPrefabs != null)
+            {
+                for (int i = 0; i < phase.randomMonsterPool.monsterPrefabs.Count; i++)
+                {
+                    TryAddTierCandidate(phase.randomMonsterPool.monsterPrefabs[i]);
+                }
+            }
+        }
+
+        private void TryAddTierCandidate(GameObject prefab)
+        {
+            if (prefab == null)
+            {
+                return;
+            }
+
+            if (!TryResolveTier(prefab, out MonsterTier tier) || tier == MonsterTier.Unknown)
+            {
+                return;
+            }
+
+            if (!tierCandidates.TryGetValue(tier, out List<GameObject> list))
+            {
+                list = new List<GameObject>();
+                tierCandidates.Add(tier, list);
+            }
+
+            if (!list.Contains(prefab))
+            {
+                list.Add(prefab);
+            }
+        }
+
+        private bool ShouldUseEnhancedFinalSmallMapPhase()
+        {
+            if (!enableEnhancedFinalSmallMapPhase || isLargeMapWave)
+            {
+                return false;
+            }
+
+            if (LevelManager.Instance == null)
+            {
+                return false;
+            }
+
+            return LevelManager.Instance.ExploreCount == enhancedExploreOrder;
+        }
+
+        private SpawnPhase ClonePhase(SpawnPhase source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            SpawnPhase clone = new SpawnPhase
+            {
+                phaseNumber = source.phaseNumber,
+                fixedMonsterPool = source.fixedMonsterPool != null
+                    ? new List<GameObject>(source.fixedMonsterPool)
+                    : new List<GameObject>(),
+                randomMonsterPool = CloneRandomPool(source.randomMonsterPool)
+            };
+            return clone;
+        }
+
+        private RandomPoolSettings CloneRandomPool(RandomPoolSettings source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            RandomPoolSettings clone = new RandomPoolSettings
+            {
+                spawnCount = source.spawnCount,
+                canDuplicate = source.canDuplicate,
+                monsterPrefabs = source.monsterPrefabs != null
+                    ? new List<GameObject>(source.monsterPrefabs)
+                    : new List<GameObject>()
+            };
+            return clone;
+        }
+
+        private void ApplyTierUpgradeMappings(SpawnPhase phase)
+        {
+            if (phase == null)
+            {
+                return;
+            }
+
+            if (phase.fixedMonsterPool != null)
+            {
+                for (int i = 0; i < phase.fixedMonsterPool.Count; i++)
+                {
+                    phase.fixedMonsterPool[i] = GetUpgradedPrefab(phase.fixedMonsterPool[i]);
+                }
+            }
+
+            if (phase.randomMonsterPool?.monsterPrefabs != null)
+            {
+                for (int i = 0; i < phase.randomMonsterPool.monsterPrefabs.Count; i++)
+                {
+                    phase.randomMonsterPool.monsterPrefabs[i] = GetUpgradedPrefab(phase.randomMonsterPool.monsterPrefabs[i]);
+                }
+            }
+        }
+
+        private GameObject GetUpgradedPrefab(GameObject original)
+        {
+            if (original == null)
+            {
+                return null;
+            }
+
+            if (enhancedTierUpgradeMappings != null)
+            {
+                for (int i = 0; i < enhancedTierUpgradeMappings.Count; i++)
+                {
+                    MonsterTierUpgradeMapping map = enhancedTierUpgradeMappings[i];
+                    if (map == null || map.fromPrefab == null || map.toPrefab == null)
+                    {
+                        continue;
+                    }
+
+                    if (map.fromPrefab == original)
+                    {
+                        return map.toPrefab;
+                    }
+                }
+            }
+
+            if (!TryResolveTier(original, out MonsterTier sourceTier))
+            {
+                return original;
+            }
+
+            MonsterTier targetTier = sourceTier switch
+            {
+                MonsterTier.BaseMelee => MonsterTier.SpecialMelee,
+                MonsterTier.BaseRanged => MonsterTier.SpecialRanged,
+                MonsterTier.SpecialMelee => MonsterTier.SpecialStrong,
+                MonsterTier.SpecialRanged => MonsterTier.SpecialStrong,
+                _ => MonsterTier.Unknown
+            };
+
+            if (targetTier == MonsterTier.Unknown)
+            {
+                return original;
+            }
+
+            if (!tierCandidates.TryGetValue(targetTier, out List<GameObject> candidates) || candidates.Count == 0)
+            {
+                return original;
+            }
+
+            int randomIndex = UnityEngine.Random.Range(0, candidates.Count);
+            return candidates[randomIndex] != null ? candidates[randomIndex] : original;
+        }
+
+        private bool TryResolveTier(GameObject prefab, out MonsterTier tier)
+        {
+            tier = MonsterTier.Unknown;
+            if (prefab == null)
+            {
+                return false;
+            }
+
+            int stage = LevelManager.Instance != null ? LevelManager.Instance.CurrentStage : -1;
+            if (stage <= 0)
+            {
+                return false;
+            }
+
+            string name = prefab.name.ToLowerInvariant();
+            if (stage == 1)
+            {
+                if (ContainsAny(name, "dynastid", "stag beetle"))
+                {
+                    tier = MonsterTier.BaseMelee;
+                    return true;
+                }
+                if (ContainsAny(name, "javelin hurler"))
+                {
+                    tier = MonsterTier.BaseRanged;
+                    return true;
+                }
+                if (ContainsAny(name, "snail") && !ContainsAny(name, "spike"))
+                {
+                    tier = MonsterTier.SpecialMelee;
+                    return true;
+                }
+                if (ContainsAny(name, "spike snail"))
+                {
+                    tier = MonsterTier.SpecialRanged;
+                    return true;
+                }
+                if (ContainsAny(name, "mad wood"))
+                {
+                    tier = MonsterTier.SpecialStrong;
+                    return true;
+                }
+            }
+            else if (stage == 2)
+            {
+                if (ContainsAny(name, "blue monster"))
+                {
+                    tier = MonsterTier.BaseMelee;
+                    return true;
+                }
+                if (ContainsAny(name, "crow"))
+                {
+                    tier = MonsterTier.BaseRanged;
+                    return true;
+                }
+                if (ContainsAny(name, "fire imp"))
+                {
+                    tier = MonsterTier.SpecialMelee;
+                    return true;
+                }
+                if (ContainsAny(name, "ghost"))
+                {
+                    tier = MonsterTier.SpecialRanged;
+                    return true;
+                }
+                if (ContainsAny(name, "dark monster"))
+                {
+                    tier = MonsterTier.SpecialStrong;
+                    return true;
+                }
+            }
+            else if (stage == 3)
+            {
+                if (ContainsAny(name, "melee skeleton"))
+                {
+                    tier = MonsterTier.BaseMelee;
+                    return true;
+                }
+                if (ContainsAny(name, "ranged skeleton"))
+                {
+                    tier = MonsterTier.BaseRanged;
+                    return true;
+                }
+                if (ContainsAny(name, "eyeball"))
+                {
+                    tier = MonsterTier.SpecialMelee;
+                    return true;
+                }
+                if (ContainsAny(name, "dokkaebi"))
+                {
+                    tier = MonsterTier.SpecialRanged;
+                    return true;
+                }
+                if (ContainsAny(name, "fire monster", "dark monster", "skeleton pig"))
+                {
+                    tier = MonsterTier.SpecialStrong;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ContainsAny(string source, params string[] tokens)
+        {
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                if (source.Contains(tokens[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

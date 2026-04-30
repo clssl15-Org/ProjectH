@@ -30,3 +30,10 @@ public class RandomPoolSettings
 
     public List<GameObject> monsterPrefabs;
 }
+
+[System.Serializable]
+public class MonsterTierUpgradeMapping
+{
+    public GameObject fromPrefab;
+    public GameObject toPrefab;
+}
