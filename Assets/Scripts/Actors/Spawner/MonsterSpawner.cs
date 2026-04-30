@@ -646,21 +646,23 @@ namespace Actors
             {
                 monster.ConditionChanged += cond =>
                 {
-                    if (cond.Condition == MonsterCondition.Dying)
+                    if (!cond.Is(MonsterCondition.Dying, MonsterCondition.Died))
                     {
-                        // 자식 몬스터가 있다면, 이들도 활성 몬스터 리스트에 추가하여 추적 시작
-                        if (cond.Payload is IEnumerable<IMonster> children)
-                        {
-                            foreach (var child in children)
-                            {
-                                activeMonsters.Add(child.gameObject);
-                                RegisterRemoval(child);
-                            }
-                        }
-
-                        // 죽었을 때 처리
-                        OnMonsterDied(monster.gameObject);
+                        return;
                     }
+
+                    // 분열/소환형 몬스터는 Dying 이벤트 payload로 자식을 전달합니다.
+                    if (cond.Payload is IEnumerable<IMonster> children)
+                    {
+                        foreach (var child in children)
+                        {
+                            activeMonsters.Add(child.gameObject);
+                            RegisterRemoval(child);
+                        }
+                    }
+
+                    // Dying 또는 Died 중 어느 이벤트를 발행하든 동일하게 사망 처리
+                    OnMonsterDied(monster.gameObject);
                 };
             }
 

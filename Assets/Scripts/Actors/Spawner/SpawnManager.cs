@@ -23,7 +23,6 @@ namespace Actors
         public List<MonsterSpawner> SpawnerList { get; private set; } = new List<MonsterSpawner>();
 
         private Action<IMonster> monsterCreated;
-        // 외부에서 스포너를 추가할 수 있는 메서드
         public void AddSpawner(MonsterSpawner spawner)
         {
             if (spawner != null && !SpawnerList.Contains(spawner))
@@ -47,7 +46,6 @@ namespace Actors
 
             foreach (var spawner in SpawnerList)
             {
-                // 아직 완료되지 않은 스포너가 하나라도 있다면 함수 종료
                 if (!spawner.IsAllPhasesComplete)
                 {
                     return;
@@ -64,29 +62,66 @@ namespace Actors
         }
         public void WaveComplete(MonsterSpawner spawner)
         {
+            if (spawner == null)
+            {
+                Debug.LogWarning("WaveComplete called with null spawner.", this);
+                return;
+            }
+
+            bool matchedByReference = false;
             foreach (var waveData in waveDataList)
             {
                 if (waveData.spawner == spawner)
                 {
-                    waveData.waveObject.SetActive(true);
-                    break;
+                    matchedByReference = true;
+                    if (waveData.waveObject != null)
+                    {
+                        waveData.waveObject.SetActive(true);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Wave object is null for spawner: {spawner.name}", this);
+                    }
+                    return;
                 }
             }
+
+            for (int i = 0; i < waveDataList.Count; i++)
+            {
+                var waveData = waveDataList[i];
+                if (waveData.spawner == null || waveData.waveObject == null)
+                    continue;
+
+                if (waveData.spawner.name == spawner.name)
+                {
+                    waveData.waveObject.SetActive(true);
+                    Debug.LogWarning($"WaveData reference mismatch. Used name fallback for spawner: {spawner.name}", this);
+                    return;
+                }
+            }
+
+            int spawnerIndex = SpawnerList.IndexOf(spawner);
+            if (spawnerIndex >= 0 && spawnerIndex < waveDataList.Count)
+            {
+                var fallbackData = waveDataList[spawnerIndex];
+                if (fallbackData.waveObject != null)
+                {
+                    fallbackData.waveObject.SetActive(true);
+                    Debug.LogWarning($"WaveData reference mismatch. Used index fallback for spawner: {spawner.name} (index: {spawnerIndex})", this);
+                    return;
+                }
+            }
+
+            if (!matchedByReference)
+                Debug.LogWarning($"WaveComplete match failed for spawner: {spawner.name}. Check waveDataList mapping.", this);
         }
 
-        /// <summary>
-        /// 맵이 바뀌기 전에 이 메서드를 호출하여 MonsterSpawner 리스트를 초기화합니다.
-        /// </summary>
         public void Clear()
         {
             monsterCreated = null;
             SpawnerList.Clear();
         }
 
-        /// <summary>
-        /// LevelManager가 씬 로드 후 활성 SpawnManager로 리바인딩할 때 호출합니다.
-        /// (DDOL 매니저만 sceneLoaded를 구독하면 씬 쪽 인스턴스의 clearObject는 갱신되지 않음)
-        /// </summary>
         public void RefreshClearObjectForLoadedScene()
         {
             var found = GameObject.Find("ClearObjects");
