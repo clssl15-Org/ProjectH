@@ -6967,10 +6967,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.phaseNumber
-      value: 99
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -7023,34 +7019,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 959046992594254200, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.randomMonsterPool.spawnCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[2]
-      value: 
-      objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[3]
-      value: 
-      objectReference: {fileID: 2406509105776385268, guid: 6b692a83a05472942bf621105de1e712, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[4]
-      value: 
-      objectReference: {fileID: 2406509105776385268, guid: 6b692a83a05472942bf621105de1e712, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
@@ -7074,14 +7042,6 @@ PrefabInstance:
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
       value: 
       objectReference: {fileID: 2406509105776385268, guid: 6b692a83a05472942bf621105de1e712, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.randomMonsterPool.monsterPrefabs.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.randomMonsterPool.monsterPrefabs.Array.data[0]
-      value: 
-      objectReference: {fileID: 5325678930059050358, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7621,10 +7581,6 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.phaseNumber
-      value: 99
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].fixedMonsterPool.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -7653,26 +7609,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 959046992594254200, guid: 0e0a847930429ed4496c1d154ace7c2d, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.randomMonsterPool.spawnCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.fixedMonsterPool.Array.data[2]
-      value: 
-      objectReference: {fileID: 2406509105776385268, guid: 6b692a83a05472942bf621105de1e712, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[0].randomMonsterPool.monsterPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 1830251996255800210, guid: 228de37e450778a43bbd581943d40677, type: 3}
@@ -7694,14 +7630,6 @@ PrefabInstance:
       objectReference: {fileID: 2406509105776385268, guid: 6b692a83a05472942bf621105de1e712, type: 3}
     - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
       propertyPath: phases.Array.data[1].randomMonsterPool.monsterPrefabs.Array.data[2]
-      value: 
-      objectReference: {fileID: 5325678930059050358, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.randomMonsterPool.monsterPrefabs.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6922339559901694938, guid: bac41125f5a7afb47afddb02e48a4016, type: 3}
-      propertyPath: enhancedSpawnPhaseTemplate.randomMonsterPool.monsterPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 5325678930059050358, guid: e0e416877d89c5e4cbf5eda86dee7403, type: 3}
     m_RemovedComponents: []
