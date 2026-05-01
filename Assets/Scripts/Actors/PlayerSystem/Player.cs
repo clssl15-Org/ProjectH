@@ -21,7 +21,7 @@ namespace Actors.PlayerSystem
         public PlayerStats playerStats;
         public bool Invincible
         {
-            get => invincible;
+            get => invincible || invincibleOverrideSources.Count > 0;
             set => invincible = value;
         }
 
@@ -119,6 +119,7 @@ namespace Actors.PlayerSystem
         private CharacterStateController characterStateController;
         private DamageRoulette damageRoulette;
         private Ultimate ultimate;
+        private readonly HashSet<object> invincibleOverrideSources = new();
 
         private static PersistedPlayerState persistedPlayerState;
         private static bool hasPersistedPlayerState;
@@ -240,6 +241,17 @@ namespace Actors.PlayerSystem
 
         public void NotifyCondition(PlayerCondition condition) =>
             ConditionChanged?.Invoke(condition);
+
+        public void SetInvincibleOverride(object source, bool enabled)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if (enabled)
+                invincibleOverrideSources.Add(source);
+            else
+                invincibleOverrideSources.Remove(source);
+        }
 
         private void OnSkillRouletteApplied(float bonus) =>
             SkillRouletteApplied?.Invoke(bonus);

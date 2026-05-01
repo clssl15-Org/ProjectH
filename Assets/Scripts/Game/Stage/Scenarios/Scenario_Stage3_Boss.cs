@@ -18,6 +18,7 @@ namespace Game.Stage
         [SerializeField] private KeyCode ToEndingKey;
 
         private new FinalBossStageManager StageManager => (FinalBossStageManager)base.StageManager;
+        private readonly object _finalBossTransitionInvincibleSource = new();
 
         private enum BlockName
         {
@@ -89,6 +90,7 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
 
+                        SetFinalBossTransitionInvincible(true);
                         BlockInputs();
                         new Timer(2f, _ => To(BlockName.Contact_FinalBoss));
                     }
@@ -106,7 +108,11 @@ namespace Game.Stage
 
             yield return new Block(
                 BlockName.Battle_FinalBoss)
-                .OnEntered(StageManager.Commence)
+                .OnEntered(() =>
+                {
+                    SetFinalBossTransitionInvincible(false);
+                    StageManager.Commence();
+                })
                 .OnUpdated<Block>(self =>
                 {
                     if (!self.ToNextToken
@@ -164,8 +170,19 @@ namespace Game.Stage
             if (!DebugTools.IsDebugMode)
                 return;
 
+            SetFinalBossTransitionInvincible(false);
             BlockInputs();
             To(BlockName.Ending);
+        }
+
+        private void SetFinalBossTransitionInvincible(bool invincible)
+        {
+            StageManager?.Player?.SetInvincibleOverride(_finalBossTransitionInvincibleSource, invincible);
+        }
+
+        private void OnDisable()
+        {
+            SetFinalBossTransitionInvincible(false);
         }
 
 

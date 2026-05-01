@@ -35,6 +35,7 @@ namespace Actors
         // ---------- Properties ----------
         int HP { get; }
         bool IsAlive { get; }
+        bool Invincible { get; }
 
         event Action<PlayerCondition> ConditionChanged;
 
@@ -66,6 +67,7 @@ namespace Actors
         void UseUltimate();
         void ChangeSkill();
         bool TrySkillRoulette(out DamageRoulette.Context context);
+        void SetInvincibleOverride(object source, bool enabled);
 
 
         // ---------- MonoBehaviour ----------
