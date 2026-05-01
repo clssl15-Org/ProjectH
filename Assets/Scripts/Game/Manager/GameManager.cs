@@ -119,7 +119,7 @@ namespace Game
                     using var _ = BlackboxHandle.Of(this).WriteScope("플레이어 사망");
 
                     LevelManager.Instance.ResetState();
-                    LevelManager.Instance.PlayerHasDied = true;
+                    LevelManager.Instance.MarkPlayerDied();
                     
                     if (scene.name == _bossSceneName)
                         ChangeScene(_unlockSceneName);

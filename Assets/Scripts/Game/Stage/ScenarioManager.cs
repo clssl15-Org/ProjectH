@@ -149,14 +149,26 @@ namespace Game.Stage
             else
                 Rubiel.ToSmall(callback);
         }
-        protected void SetRubielToVisible(bool shouldNearToPlayer, Action callback = null)
+
+        public enum RubielVisibilityMode
+        {
+            KeepPosition,
+            NearToPlayer,
+            TeleportNearToPlayer,
+        }
+        protected void SetRubielToVisible(RubielVisibilityMode visibilityMode = RubielVisibilityMode.KeepPosition, Action callback = null)
         {
             _rubielVisibleHandle?.Dispose();
 
             bool isClose = IsRubielClose;
             bool isVisible = Rubiel.IsTotallyVisible;
 
-            if (shouldNearToPlayer
+            if (visibilityMode == RubielVisibilityMode.TeleportNearToPlayer)
+            {
+                TransferRubielNearToPlayer(3f);
+                isClose = true;
+            }
+            else if (visibilityMode == RubielVisibilityMode.NearToPlayer
                 && !IsRubielClose
                 && Rubiel.IsTotallyInvisible)
             {
@@ -197,11 +209,38 @@ namespace Game.Stage
             _rubielVisibleHandle?.Dispose();
             Rubiel.ToInvisible(callback);
         }
-        protected void TransferRubielNearToPlayer()
+        protected void TransferRubielNearToPlayer(float distance = -1f)
         {
+            if (distance < 0f)
+                distance = TargetRubielDistance;
+
+            Direction direction = Player.Direction;
+            Vector2 position = GetRubielNearPlayerPosition(direction, distance);
+
+            if (!IsInMainCameraView(position))
+            {
+                direction = direction.Flip();
+                position = GetRubielNearPlayerPosition(direction, distance);
+            }
+
             Rubiel.Teleport(
-                position: (Vector2)Player.transform.position + Player.Direction.ToVector2() * TargetRubielDistance, 
-                lookRight: Player.Direction.Flip().ToVector2().x > 0);
+                position: position,
+                lookRight: direction.Flip().ToVector2().x > 0);
+        }
+
+        private Vector2 GetRubielNearPlayerPosition(Direction direction, float distance) =>
+            (Vector2)Player.transform.position + direction.ToVector2() * distance;
+
+        private bool IsInMainCameraView(Vector2 position)
+        {
+            Camera mainCamera = Camera.main;
+            if (!mainCamera)
+                return true;
+
+            Vector3 viewportPoint = mainCamera.WorldToViewportPoint(position);
+            return viewportPoint.z >= 0f
+                && viewportPoint.x >= 0f && viewportPoint.x <= 1f
+                && viewportPoint.y >= 0f && viewportPoint.y <= 1f;
         }
 
         public void To(object blockName)

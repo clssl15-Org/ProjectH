@@ -21,7 +21,8 @@ public class LevelManager : MonoBehaviour
     private SpawnManager _spawnManagerOnLevelRoot;
     private SoundManager _soundManager;
 
-    public bool PlayerHasDied { get; internal set; }
+    public bool PlayerHasDied { get; private set; }
+    public bool IsPlayerDeathRestartPending { get; private set; }
     public int CurrentStage { get; private set; } = 0;
 
     private List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -116,6 +117,19 @@ public class LevelManager : MonoBehaviour
         exploreCount = 0;
 
         ShuffleAndPick();
+    }
+    public void MarkPlayerDied()
+    {
+        PlayerHasDied = true;
+        IsPlayerDeathRestartPending = true;
+    }
+    public bool ConsumePlayerDeathRestart()
+    {
+        if (!IsPlayerDeathRestartPending)
+            return false;
+
+        IsPlayerDeathRestartPending = false;
+        return true;
     }
     public void MoveNextLevel(LevelType nextLevelType)
     {

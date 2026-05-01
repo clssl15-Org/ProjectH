@@ -124,7 +124,7 @@ public class SkillManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.PlayerHasDied)
+        if (LevelManager.Instance != null && LevelManager.Instance.IsPlayerDeathRestartPending)
         {
             _oldStats = null;
             return;

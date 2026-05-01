@@ -51,7 +51,7 @@ namespace Game.Stage
                         self.ToNextToken = true;
 
                         BlockInputs();
-                        SetRubielToVisible(true, () => To(BlockName.Passed));
+                        SetRubielToVisible(RubielVisibilityMode.NearToPlayer, () => To(BlockName.Passed));
                     }
                 });
 

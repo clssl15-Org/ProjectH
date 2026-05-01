@@ -109,16 +109,24 @@ namespace Game.Stage
                 .OnEntered(StageManager.Commence)
                 .OnUpdated<Block>(self =>
                 {
-                    if (StageManager.CurrentPhase == FinalBossStageManager.Phase.StageCompleted
+                    if (!self.ToNextToken
+                        && StageManager.CurrentPhase == FinalBossStageManager.Phase.StageCompleted
                         && IsPlayerOnGround)
                     {
-                        SetRubielToVisible(true);
-                        Rubiel.GetComponent<TargetFollower>().IsEnabled = false;
+                        self.ToNextToken = true;
+                        new Timer(3f, succeeded =>
+                        {
+                            if (!succeeded)
+                                return;
 
-                        BgmPlayManager.Stop();
+                            SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer);
+                            Rubiel.GetComponent<TargetFollower>().IsEnabled = false;
 
-                        if (GameServices) GameServices.IsGameCleared = true;
-                        To(BlockName.To_Ending);
+                            BgmPlayManager.Stop();
+
+                            if (GameServices) GameServices.IsGameCleared = true;
+                            To(BlockName.To_Ending);
+                        });
                     }
                 });
 

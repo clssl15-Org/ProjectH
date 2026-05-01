@@ -21,8 +21,16 @@ namespace Infrastructure
                 .SetAction(EnableEventType.Disabling, () => component.OnDisabling?.Invoke())
                 .SetAction(EnableEventType.Disabled, () =>
                 {
-                    if (component == null || !component.gameObject)
+                    try
+                    {
+                        if (component == null || !component.gameObject)
+                            return;
+                    }
+                    catch (MissingReferenceException)
+                    {
+                        // Ignore the exception if the component or its GameObject has been destroyed
                         return;
+                    }
 
                     if (setGameObjectActive)
                         component.gameObject.SetActive(false);
