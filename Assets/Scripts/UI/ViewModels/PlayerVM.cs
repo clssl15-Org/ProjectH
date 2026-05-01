@@ -37,8 +37,6 @@ namespace UI
         }
         public event Action<SkillType> SkillAdded;
         public event Action<SkillType> SkillChanged;
-        public event Action<float> SkillRouletteApplied;
-        public event Action SkillRouletteCleared;
 
         public float CurrentSkillCooldown
         {
@@ -83,8 +81,6 @@ namespace UI
             _player.ConditionChanged += OnHealthUpdated;
             _player.SkillAdded += OnSkillAdded;
             _player.SkillChanged += OnSkillChanged;
-            _player.SkillRouletteApplied += OnSkillRouletteApplied;
-            _player.SkillRouletteCleared += OnSkillRouletteCleared;
             _player.Destroying += Dispose;
 
             _updater = Loco.Subscribe(Update);
@@ -123,17 +119,6 @@ namespace UI
             }
         }
 
-        private void OnSkillRouletteApplied(float bonus)
-        {
-            ThrowIfDisposed();
-            SkillRouletteApplied?.Invoke(bonus);
-        }
-
-        private void OnSkillRouletteCleared()
-        {
-            ThrowIfDisposed();
-            SkillRouletteCleared?.Invoke();
-        }
 
         #region Skill Inputs
         public void ChangeSkill()
@@ -227,8 +212,6 @@ namespace UI
                 _player.ConditionChanged -= OnHealthUpdated;
                 _player.SkillAdded -= OnSkillAdded;
                 _player.SkillChanged -= OnSkillChanged;
-                _player.SkillRouletteApplied -= OnSkillRouletteApplied;
-                _player.SkillRouletteCleared -= OnSkillRouletteCleared;
                 _player.Destroying -= Dispose;
 
                 _player = null;

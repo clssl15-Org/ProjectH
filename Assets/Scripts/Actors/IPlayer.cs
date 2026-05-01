@@ -49,8 +49,6 @@ namespace Actors
 
         event Action<SkillType> SkillAdded;
         event Action<SkillType> SkillChanged;
-        event Action<float> SkillRouletteApplied;
-        event Action SkillRouletteCleared;
 
         float CurrentSkillCooldown { get; }
         float CurrentUltimateCooldown { get; }

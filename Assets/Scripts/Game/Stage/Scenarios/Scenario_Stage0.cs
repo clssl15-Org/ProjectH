@@ -40,6 +40,7 @@ namespace Game.Stage
         {
             base.Start();
             StageManager.Portal.IsInteractable = false;
+            _portalDetector.CanNotifyPlayerDetected = false;
 
             if (IsFirstArrival)
             {
@@ -213,6 +214,7 @@ namespace Game.Stage
                 .OnExited(() =>
                 {
                     _skillAcquired = true;
+                    _portalDetector.CanNotifyPlayerDetected = true;
                     UnblockInputs();
                 });
 
