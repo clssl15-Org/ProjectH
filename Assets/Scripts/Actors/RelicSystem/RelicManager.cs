@@ -300,6 +300,29 @@ public class RelicManager : MonoBehaviour
         Debug.Log($"유물(Key: {key}) 제거 완료.");
     }
 
+    /// <summary>
+    /// 보유 유물을 모두 제거하고 <see cref="OnLoseCore"/>로 적용된 효과를 되돌립니다. (사망 후 재시작 등)
+    /// </summary>
+    public void ClearAllOwnedRelics()
+    {
+        RelicDescriptionRegistry.Clear();
+
+        if (ownedRelics.Count == 0)
+            return;
+
+        var keys = ownedRelics.Keys.ToList();
+        foreach (int key in keys)
+        {
+            while (ownedRelics.TryGetValue(key, out var list) && list != null && list.Count > 0)
+            {
+                GameObject go = list[list.Count - 1];
+                if (go != null && go.TryGetComponent<Relic>(out var relic))
+                    relic.OnLose();
+                else
+                    RemoveRelic(key);
+            }
+        }
+    }
 
     private void OnEnable()
     {

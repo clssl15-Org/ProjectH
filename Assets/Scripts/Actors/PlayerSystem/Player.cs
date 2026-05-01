@@ -149,9 +149,10 @@ namespace Actors.PlayerSystem
         {
             ConditionChanged += cond => print($"Player: {cond}");
 
-            if (LevelManager.Instance.PlayerHasDied)
+            if (LevelManager.Instance != null && LevelManager.Instance.PlayerHasDied)
             {
                 characterStateController.EnqueueTransition<Spawn>();
+                LevelManager.Instance.PlayerHasDied = false;
             }
         }
 

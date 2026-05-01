@@ -104,6 +104,11 @@ public class LevelManager : MonoBehaviour
 
     public void ResetState()
     {
+        if (RelicManager.Instance != null)
+            RelicManager.Instance.ClearAllOwnedRelics();
+
+        SkillManager.ClearPersistedSkillLoadout();
+
         CurrentStage = 0;
 
         exploreIndex = 0;

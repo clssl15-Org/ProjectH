@@ -27,6 +27,11 @@ public class SkillManager : MonoBehaviour
 
     private static List<Type> _oldStats;
 
+    /// <summary>
+    /// 씬 전환 시 복원되는 스킬 목록(정적). 사망 후 런 리셋 시 비워야 합니다.
+    /// </summary>
+    public static void ClearPersistedSkillLoadout() => _oldStats = null;
+
     private DamageRoulette damageRoulette;
     private int selectedIndex = 0;
 
@@ -107,6 +112,12 @@ public class SkillManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (LevelManager.Instance != null && LevelManager.Instance.PlayerHasDied)
+        {
+            _oldStats = null;
+            return;
+        }
+
         _oldStats = skills.Select(s => s.GetType()).ToList();
     }
 }
