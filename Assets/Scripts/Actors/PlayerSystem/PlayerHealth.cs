@@ -24,7 +24,7 @@ namespace Actors.PlayerSystem
         private int currentHealth;
 
         /// <summary>
-        /// ÀÓ½Ã ¹æÆí
+        /// ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public Direction RecentKnockback { get; set; }
         public bool IsAlive { get; private set; } = true;
@@ -47,7 +47,11 @@ namespace Actors.PlayerSystem
             currentHealth = MaxHealth;
             OnInitialized?.Invoke();
         }
-
+        public void TakeStunDamage(int damage)
+        {
+            TakeDamage(damage);
+            CharacterStateController.EnqueueTransition<Stun>();
+        }
         public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
         public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
         {
@@ -100,8 +104,8 @@ namespace Actors.PlayerSystem
         }
 
         /// <summary>
-        /// ÃÖ´ëÃ¼·ÂÀ» º¯°æÇßÀ» ¶§ È£Ãâ
-        /// ÇöÀç´Â ÃÖ´ëÃ¼·ÂÀº ÇÁ·ÎÆÛÆ¼¿¡¼­ °è»êµÇ¹Ç·Î ÀÌº¥Æ®¸¸ ¹ß»ý
+        /// ï¿½Ö´ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¹Ç·ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ß»ï¿½
         /// </summary>
         public void ChangeMaxHealth()
         {
