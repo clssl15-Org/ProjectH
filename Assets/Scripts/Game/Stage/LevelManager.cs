@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour
 
     private List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     private int exploreIndex = 0;
-    private int maxExploreCount = 4;
+    private int maxExploreCount = 5;
     private int exploreCount = 0;
     public int ExploreCount => exploreCount;
 
@@ -107,7 +107,7 @@ public class LevelManager : MonoBehaviour
         CurrentStage = 0;
 
         exploreIndex = 0;
-        maxExploreCount = 4;
+        maxExploreCount = 5;
         exploreCount = 0;
 
         ShuffleAndPick();
