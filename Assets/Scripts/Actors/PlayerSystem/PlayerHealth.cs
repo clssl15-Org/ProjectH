@@ -49,16 +49,21 @@ namespace Actors.PlayerSystem
         }
         public void TakeStunDamage(int damage)
         {
-            TakeDamage(damage);
-            CharacterStateController.EnqueueTransition<Stun>();
-
-            print("Player Stunned! Health: " + currentHealth + "/" + MaxHealth);
+            if (ApplyDamage(damage, Direction.Center, null, DamageReaction.Stun))
+            {
+                print("Player Stunned! Health: " + currentHealth + "/" + MaxHealth);
+            }
         }
         public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
         public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
         {
+            ApplyDamage(damage, direction, knockbackForce, DamageReaction.Hit);
+        }
+
+        private bool ApplyDamage(int damage, Direction direction, float? knockbackForce, DamageReaction damageReaction)
+        {
             if (Player.Invincible)
-                return;
+                return false;
 
             if (Player.sieldCount > 0)
             {
@@ -69,7 +74,7 @@ namespace Actors.PlayerSystem
                 {
                     OnSieldBreak?.Invoke();
                 }
-                return;
+                return false;
             }
 
             if (!isInvincivble.Resolve(false))
@@ -85,10 +90,25 @@ namespace Actors.PlayerSystem
             if (currentHealth <= 0)
             {
                 Die();
+                return false;
             }
             else
             {
-                CharacterStateController.EnqueueTransition<Hit>();
+                EnqueueDamageReaction(damageReaction);
+                return true;
+            }
+        }
+
+        private void EnqueueDamageReaction(DamageReaction damageReaction)
+        {
+            switch (damageReaction)
+            {
+                case DamageReaction.Stun:
+                    CharacterStateController.EnqueueTransition<Stun>();
+                    break;
+                default:
+                    CharacterStateController.EnqueueTransition<Hit>();
+                    break;
             }
         }
 
@@ -126,6 +146,12 @@ namespace Actors.PlayerSystem
         public void Stun()
         {
             CharacterStateController.EnqueueTransition<Stun>();
+        }
+
+        private enum DamageReaction
+        {
+            Hit,
+            Stun,
         }
     }
 }
