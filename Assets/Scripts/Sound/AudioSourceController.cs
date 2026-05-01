@@ -77,6 +77,9 @@ namespace Sound
             float? independentPlayTime = null,
             float fadingDuration = 0)
         {
+            if (!gameObject)
+                return;
+
             if (!TryPlay(name, playOption, independentPlayTime, fadingDuration))
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
                     $"'{name}' 오디오를 재생하는 데 실패했습니다. " +

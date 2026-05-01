@@ -92,7 +92,7 @@ namespace UI.PlayerView
             if (isGoodBouns)
                 _effectTimer = new Timer(_effectPlayTiming, succeeded =>
                 {
-                    if (!succeeded) return;
+                    if (!gameObject || !succeeded) return;
 
                     _effectVideoPlayer.gameObject.SetActive(true);
 
