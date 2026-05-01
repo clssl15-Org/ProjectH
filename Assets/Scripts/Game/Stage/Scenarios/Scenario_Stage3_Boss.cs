@@ -115,6 +115,8 @@ namespace Game.Stage
                         SetRubielToVisible(true);
                         Rubiel.GetComponent<TargetFollower>().IsEnabled = false;
 
+                        BgmPlayManager.Stop();
+
                         if (GameServices) GameServices.IsGameCleared = true;
                         To(BlockName.To_Ending);
                     }
