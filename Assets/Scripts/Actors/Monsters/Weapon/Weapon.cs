@@ -21,7 +21,7 @@ namespace Actors.Monsters
         public void SetHitPlayerCallback(Action hitPlayer) =>
             _hitPlayer = hitPlayer;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _contactHandler = GetComponent<TriggerContactHandler>();
             _contactHandler.TargetTags = new[] { "Player" };
