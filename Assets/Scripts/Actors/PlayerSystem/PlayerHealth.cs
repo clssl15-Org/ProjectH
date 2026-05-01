@@ -22,6 +22,7 @@ namespace Actors.PlayerSystem
             get => currentHealth;
         }
         private int currentHealth;
+        private int? initialHealthOverride;
 
         /// <summary>
         /// �ӽ� ����
@@ -44,8 +45,15 @@ namespace Actors.PlayerSystem
 
         private void Start()
         {
-            currentHealth = MaxHealth;
+            currentHealth = initialHealthOverride.HasValue
+                ? Mathf.Clamp(initialHealthOverride.Value, 0, MaxHealth)
+                : MaxHealth;
             OnInitialized?.Invoke();
+        }
+
+        public void SetInitialHealth(int health)
+        {
+            initialHealthOverride = health;
         }
         public void TakeStunDamage(int damage)
         {

@@ -63,6 +63,11 @@ namespace Actors.PlayerSystem
         public float CooldownGauge => cooldownGauge;
         private float cooldownGauge = 1f;
 
+        public void SetCooldownGauge(float value)
+        {
+            cooldownGauge = Mathf.Clamp01(value);
+        }
+
         [Header("Gizmos")]
         private bool isHitBoxEnabled = false;
 
