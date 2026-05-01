@@ -90,7 +90,7 @@ public class DamageRoulette : MonoBehaviour
                 return;
 
             transform.root.GetComponentInChildren<Player>().RouletteDamageMultiplier = bonus;
-            skillManager.canChangeSkill = true;
+            skillManager.canChangeSkill = false;
             canUseSkill = true;
         });
 

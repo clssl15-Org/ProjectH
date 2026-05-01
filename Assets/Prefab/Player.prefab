@@ -318,6 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a125aff6e5669ad408c2400814ee769b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skills: []
   canChangeSkill: 1
   ultimateSkill: {fileID: 2168851036350252161}
   characterActions:
@@ -781,7 +782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SkillType>k__BackingField: 1
   runtimeAnimatorController: {fileID: 9100000, guid: ef27b7fe692147f409a887df2a2e0f0a, type: 2}
-  stunDuration: 1
+  stunDuration: 1.5
 --- !u!114 &2397189881599282200
 MonoBehaviour:
   m_ObjectHideFlags: 0
