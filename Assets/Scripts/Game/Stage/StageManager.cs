@@ -17,12 +17,12 @@ namespace Game.Stage
     [RequireComponent(typeof(PlayerManager), typeof(MonsterManager))]
     public class StageManager : MonoBehaviour
     {
-        [field: Tooltip("������ ���۵� �� �ʿ��� ���� ��ҵ��� ������ ã�� �ڵ����� ����մϴ�")]
+        [field: Tooltip("게임이 시작될 때 필요한 구성 요소들을 씬에서 찾아 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindDependencies { get; set; } = true;
         [field: Space]
-        [field: Tooltip("������ ���۵� �� ���� �����ϴ� Active ������ �÷��̾ �ڵ����� ����մϴ�")]
+        [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 플레이어를 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindScenePlayer { get; set; } = true;
-        [field: Tooltip("������ ���۵� �� ���� �����ϴ� Active ������ ���͵��� �ڵ����� ����մϴ�")]
+        [field: Tooltip("게임이 시작될 때 씬에 존재하는 Active 상태의 몬스터들을 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindSceneMonsters { get; set; } = true;
 
         [Header("Bindings")]
@@ -99,7 +99,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"������ {nameof(canvas)}��(��) ã�� �� �����߽��ϴ�."), this);
+                            $"씬에서 {nameof(canvas)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
                 if (!UIManager.HasWorldUI)
@@ -113,7 +113,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"������ {nameof(worldUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                            $"씬에서 {nameof(worldUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
 
@@ -129,11 +129,11 @@ namespace Game.Stage
 
                         if (!isHeaderLogged)
                         {
-                            BlackboxHandle.Of(this).Write("���� �� �̻��� �̺�Ʈ �ý����� �����մϴ�.");
+                            BlackboxHandle.Of(this).Write("씬에 둘 이상의 이벤트 시스템이 존재합니다.");
                             isHeaderLogged = true;
                         }
 
-                        BlackboxHandle.Of(this).Write($"�̺�Ʈ �ý��� ����: {es.name}");
+                        BlackboxHandle.Of(this).Write($"이벤트 시스템 삭제: {es.name}");
                         Destroy(es.gameObject);
                     }
                 }
@@ -144,7 +144,7 @@ namespace Game.Stage
                     if (!_sfxPlayManager)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"������ {nameof(_sfxPlayManager)}��(��) ã�� �� �����߽��ϴ�."), this);
+                            $"씬에서 {nameof(_sfxPlayManager)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
 
@@ -161,7 +161,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"������ {nameof(_platformManager)}��(��) ã�� �� �����߽��ϴ�."), this);
+                            $"씬에서 {nameof(_platformManager)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
                 if (!injector.HasInjection<DarkscreenUI>())
@@ -176,7 +176,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"������ {nameof(DarkscreenUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                            $"씬에서 {nameof(DarkscreenUI)}을(를) 찾는 데 실패했습니다."), this);
                     }
                 }
             }
@@ -205,7 +205,7 @@ namespace Game.Stage
 
                 if (!found)
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        $"[{nameof(StageManager)}] {nameof(Player)}��(��) ã�� �� �����߽��ϴ�."));
+                        $"[{nameof(StageManager)}] {nameof(Player)}을(를) 찾는 데 실패했습니다."));
             }
 
             if (_playerObject)
@@ -214,7 +214,7 @@ namespace Game.Stage
                 {
                     throw new InvalidOperationException(
                         BlackboxHandle.Of(this).WriteError(
-                            $"[{nameof(StageManager)}] {nameof(_playerObject)}��(��) {nameof(IPlayer)} ������Ʈ�� ������ ���� �ʽ��ϴ�."));
+                            $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) {nameof(IPlayer)} 컴포넌트를 가지고 있지 않습니다."));
                 }
 
                 Player = player;
@@ -237,7 +237,7 @@ namespace Game.Stage
             else
             {
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"[{nameof(StageManager)}] {nameof(_playerObject)}��(��) ��ȿ���� �ʽ��ϴ�."));
+                    $"[{nameof(StageManager)}] {nameof(_playerObject)}이(가) 유효하지 않습니다."));
             }
 
             if (_rubielObject)
@@ -246,7 +246,7 @@ namespace Game.Stage
                 {
                     throw new InvalidOperationException(
                         BlackboxHandle.Of(this).WriteError(
-                            $"[{nameof(StageManager)}] {nameof(_rubielObject)}��(��) {nameof(Rubiel)} ������Ʈ�� ������ ���� �ʽ��ϴ�."));
+                            $"[{nameof(StageManager)}] {nameof(_rubielObject)}이(가) {nameof(Rubiel)} 컴포넌트를 가지고 있지 않습니다."));
                 }
 
                 Rubiel = rubiel;
@@ -265,18 +265,18 @@ namespace Game.Stage
             #region Managers
             if (LevelManager.Instance?.SpawnManager)
             {
-                BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Spawner�� Register �븮�� ���");
+                BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Spawner에 Register 대리자 등록");
                 LevelManager.Instance.SpawnManager.OnMonsterCreate(monster => Register(monster));
             }
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "[StageManager] LevelManager.Instance.SpawnManager�� ��ȿ���� �ʽ��ϴ�. " +
-                    "���� �����Ǵ� ���ʹ� �Ŵ����� ��ϵ��� ������, UI ���� �������� ���� �� �ֽ��ϴ�."),
+                    "[StageManager] LevelManager.Instance.SpawnManager가 유효하지 않습니다. " +
+                    "새로 스폰되는 몬스터는 매니저에 등록되지 않으며, UI 등이 생성되지 않을 수 있습니다."),
                     this);
 
             if (_dialogueManager)
             {
-                BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager �ʱ�ȭ");
+                BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager 초기화");
                 _dialogueManager.Initialize(
                     DialogueUI,
                     BubbleDialogueUI,
@@ -290,7 +290,7 @@ namespace Game.Stage
                         Character.Werbellion => FindAnyObjectByType<Werbellion>()?.transform.position ?? default,
 
                         _ => throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                                $"[StageManager] ĳ���� {character}�� Ÿ���� ��ȿ���� �ʽ��ϴ�."))
+                                $"[StageManager] 캐릭터 {character}의 타입이 유효하지 않습니다."))
                     });
             }
             #endregion
@@ -354,7 +354,7 @@ namespace Game.Stage
 
                 SettingsUI.RestartUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> RestartUI ��û ó��");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> RestartUI 요청 처리");
 
                     BgmPlayManager.Stop();
                     DarkscreenUI.CloseScreen(() => PlayerDied?.Invoke());
@@ -362,29 +362,29 @@ namespace Game.Stage
 
                 SettingsUI.OpenRelicsUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenRelicsUI ��û ó��");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenRelicsUI 요청 처리");
                     if (!RelicInfoPanelUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "[StageManager] RelicInfoPanelUI�� �Ҵ���� �ʾ� �ش� â�� �� �� �����ϴ�."), this);
+                            "[StageManager] RelicInfoPanelUI가 할당되지 않아 해당 창을 열 수 없습니다."), this);
                         return;
                     }
 
-                    BlackboxHandle.Of(this).Exert(RelicInfoPanelUI, "RelicsUI ����");
+                    BlackboxHandle.Of(this).Exert(RelicInfoPanelUI, "RelicsUI 열기");
                     RelicInfoPanelUI.Open();
                 };
 
                 SettingsUI.OpenGuideUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenGuideUI ��û ó��");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenGuideUI 요청 처리");
                     if (!GuideAndWorldRecordsUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "[StageManager] GuideAndWorldRecordsUI�� �Ҵ���� �ʾ� �ش� â�� �� �� �����ϴ�."), this);
+                            "[StageManager] GuideAndWorldRecordsUI가 할당되지 않아 해당 창을 열 수 없습니다."), this);
                         return;
                     }
 
-                    BlackboxHandle.Of(this).Exert(GuideAndWorldRecordsUI, "GuideUI ����");
+                    BlackboxHandle.Of(this).Exert(GuideAndWorldRecordsUI, "GuideUI 열기");
                     GuideAndWorldRecordsUI.Open();
                 };
             }
@@ -396,12 +396,12 @@ namespace Game.Stage
             {
                 if (controlObj is IInputLayerSubject subject)
                 {
-                    BlackboxHandle.Of(this).Exert(subject, $"���: {controlObj.name}");
+                    BlackboxHandle.Of(this).Exert(subject, $"등록: {controlObj.name}");
                     InputHub.Add(subject);
                 }
                 if (controlObj is IInputLayerController controller)
                 {
-                    BlackboxHandle.Of(this).Exert(controller, $"�ʱ�ȭ: {controlObj.name}");
+                    BlackboxHandle.Of(this).Exert(controller, $"초기화: {controlObj.name}");
                     controller.Initialize(InputHub);
                 }
             }
@@ -422,7 +422,7 @@ namespace Game.Stage
                 if (!_rubielObject)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(Rubiel)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(Rubiel)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -432,7 +432,7 @@ namespace Game.Stage
                 if (!_portal)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(Portal)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(Portal)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -442,7 +442,7 @@ namespace Game.Stage
                 if (!Canvas)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(Canvas)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(Canvas)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -452,7 +452,7 @@ namespace Game.Stage
                 if (!PlayerUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(PlayerUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(PlayerUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -462,7 +462,7 @@ namespace Game.Stage
                 if (!RelicAcquisitionUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(RelicAcquisitionUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(RelicAcquisitionUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -472,7 +472,7 @@ namespace Game.Stage
                 if (!RelicInfoPanelUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(RelicInfoPanelUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(RelicInfoPanelUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -482,7 +482,7 @@ namespace Game.Stage
                 if (!PlayerUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(PlayerUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(PlayerUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -492,7 +492,7 @@ namespace Game.Stage
                 if (!SettingsUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(SettingsUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(SettingsUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -502,7 +502,7 @@ namespace Game.Stage
                 if (!DialogueUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(DialogueUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(DialogueUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -512,7 +512,7 @@ namespace Game.Stage
                 if (!BubbleDialogueUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(BubbleDialogueUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(BubbleDialogueUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
 
@@ -522,14 +522,14 @@ namespace Game.Stage
                 if (!GuideAndWorldRecordsUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"������ {nameof(GuideAndWorldRecordsUI)}��(��) ã�� �� �����߽��ϴ�."), this);
+                        $"씬에서 {nameof(GuideAndWorldRecordsUI)}을(를) 찾는 데 실패했습니다."), this);
                 }
             }
         }
 
         public void Register(IPlayer player, bool connectUI = true)
         {
-            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, $"PlayerManager�� Player ���, _isDestroyed: {_isDestroyed}");
+            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, $"PlayerManager에 Player 등록, _isDestroyed: {_isDestroyed}");
             if (_isDestroyed) return;
 
             if (!PlayerManager.Register(player))
@@ -537,7 +537,7 @@ namespace Game.Stage
 
             if (connectUI)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "UIManager�� PlayerUI ���");
+                BlackboxHandle.Of(this).Exert(UIManager, "UIManager에 PlayerUI 등록");
 
                 var vm = new PlayerVM(player);
                 var ui = PlayerUI;
@@ -553,14 +553,14 @@ namespace Game.Stage
             if (_isDestroyed)
                 return;
 
-            using var _ = BlackboxHandle.Of(this).ExertScope(monster, "MonsterManager�� Monster ���");
+            using var _ = BlackboxHandle.Of(this).ExertScope(monster, "MonsterManager에 Monster 등록");
 
             if (!MonsterManager.Register(monster))
                 return;
 
             if (createUI)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "UIManager�� MonsterUI ���");
+                BlackboxHandle.Of(this).Exert(UIManager, "UIManager에 MonsterUI 등록");
 
                 var vm = new MonsterVM(monster);
                 var ui = UILibrary.HealthBar;

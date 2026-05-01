@@ -46,6 +46,7 @@ namespace Actors.Monsters.Bosses
                     return;
                 }
 
+                Blackboard.IsCommitting = true;
                 _notification = new MonsterConditionData(
                     MonsterCondition.Attack,
                     mode == AttackMode.Slash || mode == AttackMode.Dash);
@@ -54,6 +55,8 @@ namespace Actors.Monsters.Bosses
 
             protected override void OnHalt(DetailedNodeStatus _)
             {
+                Blackboard.IsCommitting = false;
+
                 _notification?.Complete();
                 _notification = null;
             }

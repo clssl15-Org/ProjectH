@@ -113,11 +113,7 @@ namespace Game.Stage
                         && IsPlayerOnGround)
                     {
                         SetRubielToVisible(true);
-                        Rubiel.transform.position = new(-3.15f, -5.9f, 0);
                         Rubiel.GetComponent<TargetFollower>().IsEnabled = false;
-
-                        StageManager.Box.gameObject.SetActive(true);
-                        StageManager.Portal.gameObject.SetActive(true);
 
                         if (GameServices) GameServices.IsGameCleared = true;
                         To(BlockName.To_Ending);
@@ -128,7 +124,7 @@ namespace Game.Stage
                 BlockName.To_Ending)
                 .OnUpdated<Block>(self =>
                 {
-                    if (IsPlayerOnGround && IsRubielClose)
+                    if (IsPlayerOnGround)
                     {
                         SetRubielToBig();
                         BlockInputs();
