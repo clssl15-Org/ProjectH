@@ -60,7 +60,7 @@ public class EndingVideoController : MonoBehaviour, IInjectable<GameServices>
         if (endingAudioSource != null)
             endingAudioSource.Play();
 
-        yield return StartCoroutine(MoveY(txt.rectTransform, -700f, 822f, 25f));
+        yield return StartCoroutine(MoveY(txt.rectTransform, -400f, 822f, 25f));
 
         isEnd = true;
     }
