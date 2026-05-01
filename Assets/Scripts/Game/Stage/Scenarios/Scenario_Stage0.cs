@@ -39,31 +39,32 @@ namespace Game.Stage
         protected override void Start()
         {
             base.Start();
+            StageManager.Portal.IsInteractable = false;
 
             if (IsFirstArrival)
             {
                 // 미리 상자 여는 것 방지
                 StageManager.Box.IsLocked = true;
-
-                // 스킬 얻을 때 이동
-                StageManager.RelicAcquisitionUI.Disabling += () =>
-                {
-                    if (_nameChanged)
-                        To(BlockName.FirstSkillAcquire_Dialogue);
-                };
-
-                // 포탈 대화
-                _portalDetector.PlayerDetected += () =>
-                {
-                    if (_skillAcquired)
-                    {
-                        if (_portalReached) return;
-                        _portalReached = true;
-
-                        To(BlockName.TownPortal);
-                    }
-                };
             }
+
+            // 스킬 얻을 때 이동
+            StageManager.RelicAcquisitionUI.Disabling += () =>
+            {
+                if (!IsFirstArrival || _nameChanged)
+                    To(BlockName.FirstSkillAcquire_Dialogue);
+            };
+
+            // 포탈 대화
+            _portalDetector.PlayerDetected += () =>
+            {
+                if (_skillAcquired)
+                {
+                    if (_portalReached) return;
+                    _portalReached = true;
+
+                    To(BlockName.TownPortal);
+                }
+            };
         }
 
         internal override IEnumerable<Work> GetBlocks()
@@ -117,7 +118,11 @@ namespace Game.Stage
                 {
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
-                        GameServices.SetPlayerName(StageManager.DialogueUI.InputText.Trim());
+                        var name = StageManager.DialogueUI.InputText.Trim();
+                        if (string.IsNullOrWhiteSpace(name))
+                            return;
+
+                        GameServices.SetPlayerName(name);
                         StageManager.DialogueUI.IsInputMode = false;
 
                         To(BlockName.Arrival_First_2);
@@ -152,6 +157,7 @@ namespace Game.Stage
                 .OnUpdated<Block>(self =>
                 {
                     if (!_boxDetector.IsDetected
+                        && !_portalDetector.IsDetected
                         && IsRubielClose
                         && Input.GetKeyDown(KeyCode.F))
                     {
@@ -174,7 +180,11 @@ namespace Game.Stage
                 {
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
-                        GameServices.SetPlayerName(StageManager.DialogueUI.InputText.Trim());
+                        var name = StageManager.DialogueUI.InputText.Trim();
+                        if (string.IsNullOrWhiteSpace(name))
+                            return;
+
+                        GameServices.SetPlayerName(name);
                         StageManager.DialogueUI.IsInputMode = false;
 
                         To(BlockName.Arrival_Reentry_ChangeName_2);
@@ -211,8 +221,6 @@ namespace Game.Stage
                 .OnEntered(() => StageManager.GuideAndWorldRecordsUI.Open())
                 .OnExited(() =>
                 {
-                    _skillAcquired = true;
-
                     UnblockInputs();
                     To(BlockName.Arrival_Idle);
                 });
@@ -222,7 +230,11 @@ namespace Game.Stage
                 dialogueTitle: "Stage0_TownPortal",
                 onDialogueEnd: Exit)
                 .OnEntered(BlockInputs)
-                .OnExited(UnblockInputs);
+                .OnExited(() =>
+                {
+                    StageManager.Portal.IsInteractable = true;
+                    UnblockInputs();
+                });
         }
     }
 }

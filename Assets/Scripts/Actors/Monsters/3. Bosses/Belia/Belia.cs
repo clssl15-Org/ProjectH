@@ -70,7 +70,7 @@ namespace Actors.Monsters.Bosses
 
         private bool _isExhausted;
         public MonsterAudioPlayer AudioPlayer { get; private set; }
-        internal override GameObject DetectedPlayer => _player?.gameObject;
+        internal override GameObject DetectedPlayer => _player?.gameObject ?? base.DetectedPlayer;
 
 
         // Internal
@@ -83,6 +83,10 @@ namespace Actors.Monsters.Bosses
                 AddChild(new Alive()
                     .AddChild(new Idle(ITwinBoss.IsAwake))
                     .AddChild(new Awaken(ITwinBoss.IsAwake)
+                    {
+                        HierarchyMode = HierarchyMode.Selector,
+                        LoopType = LoopType.Forced,
+                    }
                         .AddChild(new ValidPlatform(true) { HierarchyMode = HierarchyMode.Sequence }
                             .AddChild(new Engaged()
                                 {
@@ -131,9 +135,9 @@ namespace Actors.Monsters.Bosses
                         out var curvedAreaAttackEnter
                     )
                     .AddComponent(new BeliaCurvedAreaAttackAction(
-                            monster._curveEffectPrefab,
-                            monster._curveEffectWorldPosition,
-                            monster._curveEffectLength)
+                        monster._curveEffectPrefab,
+                        monster._curveEffectWorldPosition,
+                        monster._curveEffectLength)
                     { InterruptPriority = InterruptPriority.High },
                         after: new(curvedAreaAttackEnter)
                     )
@@ -277,7 +281,6 @@ namespace Actors.Monsters.Bosses
         public void Commence()
         {
             Brain.Blackboard.Properties[ITwinBoss.IsAwake] = true;
-            Brain.Blackboard.IsCommitting = true;
         }
 
         protected override void OnDamaged(DamageInfo damageInfo)

@@ -21,7 +21,7 @@ namespace Actors.Monsters
         public void SetHitPlayerCallback(Action hitPlayer) =>
             _hitPlayer = hitPlayer;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _contactHandler = GetComponent<TriggerContactHandler>();
             _contactHandler.TargetTags = new[] { "Player" };
@@ -38,13 +38,18 @@ namespace Actors.Monsters
                         ?? (c.transform.position - transform.position).ToDirection();
                 }
 
-                receiver.TakeDamage(
-                    AttackPower,
-                    knockbackDir,
-                    KnockbackForce);
+                ApplyDamage(c, receiver, knockbackDir);
 
                 _hitPlayer?.Invoke();
             };
+        }
+
+        protected virtual void ApplyDamage(Collider2D collider, IDamageable receiver, Direction knockbackDir)
+        {
+            receiver.TakeDamage(
+                AttackPower,
+                knockbackDir,
+                KnockbackForce);
         }
     }
 }

@@ -1496,6 +1496,7 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+  _detectionStep: 0.1
 --- !u!114 &2192606457739127451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1553,7 +1554,7 @@ MonoBehaviour:
   - {fileID: 4985116261293502814}
   - {fileID: 8048754840949572098}
   - {fileID: 1977527276103407323}
-  _attackMode: 0
+  _attackMode: 5
   _punchAttackWeapon: {fileID: 3796500828974225351}
   _punchActiveTiming: 0.33333334
   _punchActiveDuration: 0.5833333
@@ -1571,7 +1572,7 @@ MonoBehaviour:
   - {fileID: 8184615430014425550}
   - {fileID: 8521001946034653157}
   - {fileID: 8515500360476394688}
-  _stunAttackweapon: {fileID: 1145842195459386434}
+  _stunAttackweapon: {fileID: 8342574464072529673}
   _stunAttackActiveTiming: 0.16666667
   _stunAttackActiveDuration: 0.5833333
   _stunAttackTimeScale: 0.7
@@ -1877,7 +1878,7 @@ GameObject:
   - component: {fileID: 2717571494929254827}
   - component: {fileID: 7259942266412793238}
   - component: {fileID: 1690783099554521750}
-  - component: {fileID: 1145842195459386434}
+  - component: {fileID: 8342574464072529673}
   m_Layer: 10
   m_Name: Stun Attack Weapon
   m_TagString: MonsterAttack
@@ -1986,7 +1987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
   <TargetTags>k__BackingField: []
---- !u!114 &1145842195459386434
+--- !u!114 &8342574464072529673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1995,11 +1996,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4873368943793332279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4a2f6b224dbee74f8966112d3b2c784, type: 3}
+  m_Script: {fileID: 11500000, guid: a24d36097a9743c468c7a54a798c2e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <AttackPower>k__BackingField: 1
-  <DoKnockback>k__BackingField: 1
+  <DoKnockback>k__BackingField: 0
 --- !u!1 &5983773257208676438
 GameObject:
   m_ObjectHideFlags: 0

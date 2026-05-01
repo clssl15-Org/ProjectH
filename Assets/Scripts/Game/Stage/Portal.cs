@@ -11,6 +11,9 @@ public class Portal : MonoBehaviour, IInjectable<GameServices>
     public event Action Closing;
     public event Action<Action> MoveToNextLevel;
 
+    [field: SerializeField]
+    public bool IsInteractable { get; set; } = true;
+
     [SerializeField]
     private GameObject Fsprite;
     [SerializeField]
@@ -40,7 +43,9 @@ public class Portal : MonoBehaviour, IInjectable<GameServices>
     }
     private void Update()
     {
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
+        if (IsInteractable
+            && isPlayerInRange
+            && Input.GetKeyDown(KeyCode.F))
         {
             Closing?.Invoke();
             MoveNextLevel();
@@ -62,7 +67,7 @@ public class Portal : MonoBehaviour, IInjectable<GameServices>
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.gameObject.CompareTag("Player"))
+        if (!IsInteractable || !collision.gameObject.CompareTag("Player"))
         {
             return;
         }

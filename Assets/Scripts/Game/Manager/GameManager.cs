@@ -101,6 +101,9 @@ namespace Game
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteError(Ctx(
                     $"{nameof(_gameAssetLibrary)}에서 {World.Character.Player}을(를) 찾지 못했기 때문에 " +
                     $"플레이어 이름을 '{_configuration.InitialPlayerName}'(으)로 변경할 수 없습니다.")));
+
+            IsStage3Reached = false;
+            IsGameCleared = false;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)

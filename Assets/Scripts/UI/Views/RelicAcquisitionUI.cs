@@ -40,8 +40,9 @@ namespace UI
         [SerializeField] private VideoPlayer _coinMaskVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectVideoPlayer;
         [SerializeField] private VideoPlayer _coinEffectMaskVideoPlayer;
-        [SerializeField] private float _effectPlayTiming = 5f;
-        [SerializeField, Max(0f)] private float _dropEventNotifyTiming = -1f;
+        [SerializeField, Range(MinCoinAnimationPlaySpeed, MaxCoinAnimationPlaySpeed)] private float _coinAnimationPlaySpeed = 1f;
+        [SerializeField] private float _effectPlayTiming = 1f;
+        [SerializeField, Max(0f)] private float _dropEventNotifyTiming = -2.6f;
 
         public event Action CoinThrown;
         public event Action CoinDropped;
@@ -63,6 +64,9 @@ namespace UI
             public VideoClip AlphaMask;
         }
         [SerializeField] private VideoData[] _videoClips;
+
+        private const float MinCoinAnimationPlaySpeed = 0.1f;
+        private const float MaxCoinAnimationPlaySpeed = 10f;
 
         private IInputHub _inputHub;
         private DarkscreenUI _darkscreenUI;
@@ -113,6 +117,8 @@ namespace UI
         Action IEnablable.OnDisabled => null;
         #endregion
 
+        private float CoinAnimationPlaySpeed =>
+            Mathf.Clamp(_coinAnimationPlaySpeed, MinCoinAnimationPlaySpeed, MaxCoinAnimationPlaySpeed);
 
         void IStandaloneInitializable.StandaloneInitialize() => Start();
         private void Start()
@@ -241,6 +247,7 @@ namespace UI
             void ThrowCoin()
             {
                 using var _ = BlackboxHandle.Of(this).WriteScope("Throw Coin");
+                var coinAnimationPlaySpeed = CoinAnimationPlaySpeed;
 
                 if (UseCoinReadyImage)
                 {
@@ -248,14 +255,14 @@ namespace UI
                     _coinAnimation.SetActive(true);
                 }
 
-                _coinRawVideoPlayer.playbackSpeed = 1f;
-                _coinMaskVideoPlayer.playbackSpeed = 1f;
+                _coinRawVideoPlayer.playbackSpeed = coinAnimationPlaySpeed;
+                _coinMaskVideoPlayer.playbackSpeed = coinAnimationPlaySpeed;
 
                 CoinThrown?.Invoke();
 
                 _effectTimer?.Dispose();
                 _effectTimer = reinforced ?
-                    new Timer(_effectPlayTiming, succeeded =>
+                    new Timer(_effectPlayTiming / coinAnimationPlaySpeed, succeeded =>
                     {
                         BlackboxHandle.Of(this).Write($"Effect Ended, succeeded: {succeeded}");
 
@@ -267,7 +274,7 @@ namespace UI
                     : null;
 
                 _coinTimer?.Dispose();
-                _coinTimer = new Timer((float)coinClip.Video.length, succeeded =>
+                _coinTimer = new Timer((float)coinClip.Video.length / coinAnimationPlaySpeed, succeeded =>
                 {
                     using var _ = BlackboxHandle.Of(this).WriteScope($"Play Ended, succeeded: {succeeded}");
                     _isOperated = true;
@@ -299,7 +306,7 @@ namespace UI
 
                 _coinDropTimer?.Dispose();
 
-                var dropNotifyTimimg = (float)coinClip.Video.length + _dropEventNotifyTiming;
+                var dropNotifyTimimg = ((float)coinClip.Video.length + _dropEventNotifyTiming) / coinAnimationPlaySpeed;
                 _coinDropTimer = dropNotifyTimimg > 0
                     ? new Timer(dropNotifyTimimg, succeeded =>
                     {

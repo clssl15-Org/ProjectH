@@ -17,12 +17,12 @@ namespace Game.Stage
     [RequireComponent(typeof(PlayerManager), typeof(MonsterManager))]
     public class StageManager : MonoBehaviour
     {
-        [field: Tooltip("°ÔÀÓÀÌ ½ÃÀÛµÉ ¶§ ÇÊ¿äÇÑ ±¸¼º ¿ä¼ÒµéÀ» ¾À¿¡¼­ Ã£¾Æ ÀÚµ¿À¸·Î µî·ÏÇÕ´Ï´Ù")]
+        [field: Tooltip("ê²Œì„ì´ ì‹œì‘ë  ë•Œ í•„ìš”í•œ êµ¬ì„± ìš”ì†Œë“¤ì„ ì”¬ì—ì„œ ì°¾ì•„ ìë™ìœ¼ë¡œ ë“±ë¡í•©ë‹ˆë‹¤")]
         [field: SerializeField] protected bool AutoBindDependencies { get; set; } = true;
         [field: Space]
-        [field: Tooltip("°ÔÀÓÀÌ ½ÃÀÛµÉ ¶§ ¾À¿¡ Á¸ÀçÇÏ´Â Active »óÅÂÀÇ ÇÃ·¹ÀÌ¾î¸¦ ÀÚµ¿À¸·Î µî·ÏÇÕ´Ï´Ù")]
+        [field: Tooltip("ê²Œì„ì´ ì‹œì‘ë  ë•Œ ì”¬ì— ì¡´ì¬í•˜ëŠ” Active ìƒíƒœì˜ í”Œë ˆì´ì–´ë¥¼ ìë™ìœ¼ë¡œ ë“±ë¡í•©ë‹ˆë‹¤")]
         [field: SerializeField] protected bool AutoBindScenePlayer { get; set; } = true;
-        [field: Tooltip("°ÔÀÓÀÌ ½ÃÀÛµÉ ¶§ ¾À¿¡ Á¸ÀçÇÏ´Â Active »óÅÂÀÇ ¸ó½ºÅÍµéÀ» ÀÚµ¿À¸·Î µî·ÏÇÕ´Ï´Ù")]
+        [field: Tooltip("ê²Œì„ì´ ì‹œì‘ë  ë•Œ ì”¬ì— ì¡´ì¬í•˜ëŠ” Active ìƒíƒœì˜ ëª¬ìŠ¤í„°ë“¤ì„ ìë™ìœ¼ë¡œ ë“±ë¡í•©ë‹ˆë‹¤")]
         [field: SerializeField] protected bool AutoBindSceneMonsters { get; set; } = true;
 
         [Header("Bindings")]
@@ -99,7 +99,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"¾À¿¡¼­ {nameof(canvas)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                            $"ì”¬ì—ì„œ {nameof(canvas)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                     }
                 }
                 if (!UIManager.HasWorldUI)
@@ -113,7 +113,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"¾À¿¡¼­ {nameof(worldUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                            $"ì”¬ì—ì„œ {nameof(worldUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                     }
                 }
 
@@ -129,11 +129,11 @@ namespace Game.Stage
 
                         if (!isHeaderLogged)
                         {
-                            BlackboxHandle.Of(this).Write("¾À¿¡ µÑ ÀÌ»óÀÇ ÀÌº¥Æ® ½Ã½ºÅÛÀÌ Á¸ÀçÇÕ´Ï´Ù.");
+                            BlackboxHandle.Of(this).Write("ì”¬ì— ë‘˜ ì´ìƒì˜ ì´ë²¤íŠ¸ ì‹œìŠ¤í…œì´ ì¡´ì¬í•©ë‹ˆë‹¤.");
                             isHeaderLogged = true;
                         }
 
-                        BlackboxHandle.Of(this).Write($"ÀÌº¥Æ® ½Ã½ºÅÛ »èÁ¦: {es.name}");
+                        BlackboxHandle.Of(this).Write($"ì´ë²¤íŠ¸ ì‹œìŠ¤í…œ ì‚­ì œ: {es.name}");
                         Destroy(es.gameObject);
                     }
                 }
@@ -144,7 +144,7 @@ namespace Game.Stage
                     if (!_sfxPlayManager)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"¾À¿¡¼­ {nameof(_sfxPlayManager)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                            $"ì”¬ì—ì„œ {nameof(_sfxPlayManager)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                     }
                 }
 
@@ -161,7 +161,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"¾À¿¡¼­ {nameof(_platformManager)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                            $"ì”¬ì—ì„œ {nameof(_platformManager)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                     }
                 }
                 if (!injector.HasInjection<DarkscreenUI>())
@@ -176,7 +176,7 @@ namespace Game.Stage
                     else
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"¾À¿¡¼­ {nameof(DarkscreenUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                            $"ì”¬ì—ì„œ {nameof(DarkscreenUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                     }
                 }
             }
@@ -205,7 +205,7 @@ namespace Game.Stage
 
                 if (!found)
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        $"[{nameof(StageManager)}] {nameof(Player)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."));
+                        $"[{nameof(StageManager)}] {nameof(Player)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."));
             }
 
             if (_playerObject)
@@ -214,7 +214,7 @@ namespace Game.Stage
                 {
                     throw new InvalidOperationException(
                         BlackboxHandle.Of(this).WriteError(
-                            $"[{nameof(StageManager)}] {nameof(_playerObject)}ÀÌ(°¡) {nameof(IPlayer)} ÄÄÆ÷³ÍÆ®¸¦ °¡Áö°í ÀÖÁö ¾Ê½À´Ï´Ù."));
+                            $"[{nameof(StageManager)}] {nameof(_playerObject)}ì´(ê°€) {nameof(IPlayer)} ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§€ê³  ìˆì§€ ì•ŠìŠµë‹ˆë‹¤."));
                 }
 
                 Player = player;
@@ -237,7 +237,7 @@ namespace Game.Stage
             else
             {
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"[{nameof(StageManager)}] {nameof(_playerObject)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù."));
+                    $"[{nameof(StageManager)}] {nameof(_playerObject)}ì´(ê°€) ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤."));
             }
 
             if (_rubielObject)
@@ -246,7 +246,7 @@ namespace Game.Stage
                 {
                     throw new InvalidOperationException(
                         BlackboxHandle.Of(this).WriteError(
-                            $"[{nameof(StageManager)}] {nameof(_rubielObject)}ÀÌ(°¡) {nameof(Rubiel)} ÄÄÆ÷³ÍÆ®¸¦ °¡Áö°í ÀÖÁö ¾Ê½À´Ï´Ù."));
+                            $"[{nameof(StageManager)}] {nameof(_rubielObject)}ì´(ê°€) {nameof(Rubiel)} ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§€ê³  ìˆì§€ ì•ŠìŠµë‹ˆë‹¤."));
                 }
 
                 Rubiel = rubiel;
@@ -265,18 +265,18 @@ namespace Game.Stage
             #region Managers
             if (LevelManager.Instance?.SpawnManager)
             {
-                BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Spawner¿¡ Register ´ë¸®ÀÚ µî·Ï");
+                BlackboxHandle.Of(this).Exert(LevelManager.Instance.SpawnManager, "Spawnerì— Register ëŒ€ë¦¬ì ë“±ë¡");
                 LevelManager.Instance.SpawnManager.OnMonsterCreate(monster => Register(monster));
             }
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "[StageManager] LevelManager.Instance.SpawnManager°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù. " +
-                    "»õ·Î ½ºÆùµÇ´Â ¸ó½ºÅÍ´Â ¸Å´ÏÀú¿¡ µî·ÏµÇÁö ¾ÊÀ¸¸ç, UI µîÀÌ »ı¼ºµÇÁö ¾ÊÀ» ¼ö ÀÖ½À´Ï´Ù."),
+                    "[StageManager] LevelManager.Instance.SpawnManagerê°€ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. " +
+                    "ìƒˆë¡œ ìŠ¤í°ë˜ëŠ” ëª¬ìŠ¤í„°ëŠ” ë§¤ë‹ˆì €ì— ë“±ë¡ë˜ì§€ ì•Šìœ¼ë©°, UI ë“±ì´ ìƒì„±ë˜ì§€ ì•Šì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤."),
                     this);
 
             if (_dialogueManager)
             {
-                BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager ÃÊ±âÈ­");
+                BlackboxHandle.Of(this).Exert(_dialogueManager, "DialogueManager ì´ˆê¸°í™”");
                 _dialogueManager.Initialize(
                     DialogueUI,
                     BubbleDialogueUI,
@@ -290,7 +290,7 @@ namespace Game.Stage
                         Character.Werbellion => FindAnyObjectByType<Werbellion>()?.transform.position ?? default,
 
                         _ => throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                                $"[StageManager] Ä³¸¯ÅÍ {character}ÀÇ Å¸ÀÔÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù."))
+                                $"[StageManager] ìºë¦­í„° {character}ì˜ íƒ€ì…ì´ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤."))
                     });
             }
             #endregion
@@ -352,31 +352,39 @@ namespace Game.Stage
             {
                 ((IInputLayerController)SettingsUI).Initialize(InputHub);
 
+                SettingsUI.RestartUI += () =>
+                {
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> RestartUI ìš”ì²­ ì²˜ë¦¬");
+
+                    BgmPlayManager.Stop();
+                    DarkscreenUI.CloseScreen(() => PlayerDied?.Invoke());
+                };
+
                 SettingsUI.OpenRelicsUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenRelicsUI ¿äÃ» Ã³¸®");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenRelicsUI ìš”ì²­ ì²˜ë¦¬");
                     if (!RelicInfoPanelUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "[StageManager] RelicInfoPanelUI°¡ ÇÒ´çµÇÁö ¾Ê¾Æ ÇØ´ç Ã¢À» ¿­ ¼ö ¾ø½À´Ï´Ù."), this);
+                            "[StageManager] RelicInfoPanelUIê°€ í• ë‹¹ë˜ì§€ ì•Šì•„ í•´ë‹¹ ì°½ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), this);
                         return;
                     }
 
-                    BlackboxHandle.Of(this).Exert(RelicInfoPanelUI, "RelicsUI ¿­±â");
+                    BlackboxHandle.Of(this).Exert(RelicInfoPanelUI, "RelicsUI ì—´ê¸°");
                     RelicInfoPanelUI.Open();
                 };
 
                 SettingsUI.OpenGuideUI += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenGuideUI ¿äÃ» Ã³¸®");
+                    using var _ = BlackboxHandle.Of(this).ExertScope(SettingsUI, "SettingsUI -> OpenGuideUI ìš”ì²­ ì²˜ë¦¬");
                     if (!GuideAndWorldRecordsUI)
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "[StageManager] GuideAndWorldRecordsUI°¡ ÇÒ´çµÇÁö ¾Ê¾Æ ÇØ´ç Ã¢À» ¿­ ¼ö ¾ø½À´Ï´Ù."), this);
+                            "[StageManager] GuideAndWorldRecordsUIê°€ í• ë‹¹ë˜ì§€ ì•Šì•„ í•´ë‹¹ ì°½ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."), this);
                         return;
                     }
 
-                    BlackboxHandle.Of(this).Exert(GuideAndWorldRecordsUI, "GuideUI ¿­±â");
+                    BlackboxHandle.Of(this).Exert(GuideAndWorldRecordsUI, "GuideUI ì—´ê¸°");
                     GuideAndWorldRecordsUI.Open();
                 };
             }
@@ -388,12 +396,12 @@ namespace Game.Stage
             {
                 if (controlObj is IInputLayerSubject subject)
                 {
-                    BlackboxHandle.Of(this).Exert(subject, $"µî·Ï: {controlObj.name}");
+                    BlackboxHandle.Of(this).Exert(subject, $"ë“±ë¡: {controlObj.name}");
                     InputHub.Add(subject);
                 }
                 if (controlObj is IInputLayerController controller)
                 {
-                    BlackboxHandle.Of(this).Exert(controller, $"ÃÊ±âÈ­: {controlObj.name}");
+                    BlackboxHandle.Of(this).Exert(controller, $"ì´ˆê¸°í™”: {controlObj.name}");
                     controller.Initialize(InputHub);
                 }
             }
@@ -414,7 +422,7 @@ namespace Game.Stage
                 if (!_rubielObject)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(Rubiel)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(Rubiel)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -424,7 +432,7 @@ namespace Game.Stage
                 if (!_portal)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(Portal)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(Portal)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -434,7 +442,7 @@ namespace Game.Stage
                 if (!Canvas)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(Canvas)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(Canvas)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -444,7 +452,7 @@ namespace Game.Stage
                 if (!PlayerUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(PlayerUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(PlayerUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -454,7 +462,7 @@ namespace Game.Stage
                 if (!RelicAcquisitionUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(RelicAcquisitionUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(RelicAcquisitionUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -464,7 +472,7 @@ namespace Game.Stage
                 if (!RelicInfoPanelUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(RelicInfoPanelUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(RelicInfoPanelUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -474,7 +482,7 @@ namespace Game.Stage
                 if (!PlayerUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(PlayerUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(PlayerUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -484,7 +492,7 @@ namespace Game.Stage
                 if (!SettingsUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(SettingsUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(SettingsUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -494,7 +502,7 @@ namespace Game.Stage
                 if (!DialogueUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(DialogueUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(DialogueUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -504,7 +512,7 @@ namespace Game.Stage
                 if (!BubbleDialogueUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(BubbleDialogueUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(BubbleDialogueUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
 
@@ -514,14 +522,14 @@ namespace Game.Stage
                 if (!GuideAndWorldRecordsUI)
                 {
                     Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"¾À¿¡¼­ {nameof(GuideAndWorldRecordsUI)}À»(¸¦) Ã£´Â µ¥ ½ÇÆĞÇß½À´Ï´Ù."), this);
+                        $"ì”¬ì—ì„œ {nameof(GuideAndWorldRecordsUI)}ì„(ë¥¼) ì°¾ëŠ” ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), this);
                 }
             }
         }
 
         public void Register(IPlayer player, bool connectUI = true)
         {
-            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, $"PlayerManager¿¡ Player µî·Ï, _isDestroyed: {_isDestroyed}");
+            using var _ = BlackboxHandle.Of(this).ExertScope(PlayerManager, $"PlayerManagerì— Player ë“±ë¡, _isDestroyed: {_isDestroyed}");
             if (_isDestroyed) return;
 
             if (!PlayerManager.Register(player))
@@ -529,7 +537,7 @@ namespace Game.Stage
 
             if (connectUI)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "UIManager¿¡ PlayerUI µî·Ï");
+                BlackboxHandle.Of(this).Exert(UIManager, "UIManagerì— PlayerUI ë“±ë¡");
 
                 var vm = new PlayerVM(player);
                 var ui = PlayerUI;
@@ -545,14 +553,14 @@ namespace Game.Stage
             if (_isDestroyed)
                 return;
 
-            using var _ = BlackboxHandle.Of(this).ExertScope(monster, "MonsterManager¿¡ Monster µî·Ï");
+            using var _ = BlackboxHandle.Of(this).ExertScope(monster, "MonsterManagerì— Monster ë“±ë¡");
 
             if (!MonsterManager.Register(monster))
                 return;
 
             if (createUI)
             {
-                BlackboxHandle.Of(this).Exert(UIManager, "UIManager¿¡ MonsterUI µî·Ï");
+                BlackboxHandle.Of(this).Exert(UIManager, "UIManagerì— MonsterUI ë“±ë¡");
 
                 var vm = new MonsterVM(monster);
                 var ui = UILibrary.HealthBar;

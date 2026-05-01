@@ -61,7 +61,7 @@ namespace Game.Stage
                 onDialogueEnd: () =>
                 {
                     UnblockInputs();
-
+                    
                     StageManager.Box.gameObject.SetActive(true);
                     StageManager.Portal.gameObject.SetActive(true);
 
