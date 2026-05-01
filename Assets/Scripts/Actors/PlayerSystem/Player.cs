@@ -118,6 +118,18 @@ namespace Actors.PlayerSystem
         private SkillManager skillManager;
         private CharacterStateController characterStateController;
         private DamageRoulette damageRoulette;
+        private Ultimate ultimate;
+
+        private static PersistedPlayerState persistedPlayerState;
+        private static bool hasPersistedPlayerState;
+        private static bool persistEnabled = true;
+
+        private struct PersistedPlayerState
+        {
+            public PlayerStats Stats;
+            public int CurrentHealth;
+            public float UltimateGauge;
+        }
 
         // �߰�: �÷��̾��� ���� ������ ���� ����
         private SpriteRenderer spriteRenderer;
@@ -136,6 +148,14 @@ namespace Actors.PlayerSystem
 
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             damageRoulette = GetComponent<DamageRoulette>();
+            ultimate = GetComponentInChildren<Ultimate>(true);
+
+            if (hasPersistedPlayerState)
+            {
+                playerStats = persistedPlayerState.Stats;
+                playerHealth.SetInitialHealth(persistedPlayerState.CurrentHealth);
+            }
+            persistEnabled = true;
 
             if (damageRoulette)
             {
@@ -153,11 +173,27 @@ namespace Actors.PlayerSystem
         {
             ConditionChanged += cond => print($"Player: {cond}");
 
+            if (hasPersistedPlayerState && ultimate != null)
+                ultimate.SetCooldownGauge(persistedPlayerState.UltimateGauge);
+
             if (LevelManager.Instance != null && LevelManager.Instance.PlayerHasDied)
             {
                 characterStateController.EnqueueTransition<Spawn>();
                 LevelManager.Instance.PlayerHasDied = false;
             }
+        }
+
+        public static void ClearPersistedProgress()
+        {
+            hasPersistedPlayerState = false;
+            persistEnabled = false;
+        }
+
+        public static void PersistCurrentPlayerProgress()
+        {
+            var player = FindObjectOfType<Player>();
+            if (player != null)
+                player.PersistState();
         }
 
         public void DefaultAttack()
@@ -215,6 +251,9 @@ namespace Actors.PlayerSystem
 
         void OnDestroy()
         {
+            if (persistEnabled)
+                PersistState();
+
             if (damageRoulette)
             {
                 damageRoulette.BonusApplied -= OnSkillRouletteApplied;
@@ -222,6 +261,20 @@ namespace Actors.PlayerSystem
             }
 
             Destroying?.Invoke();
+        }
+
+        private void PersistState()
+        {
+            if (playerHealth == null)
+                return;
+
+            persistedPlayerState = new PersistedPlayerState
+            {
+                Stats = playerStats,
+                CurrentHealth = playerHealth.CurrentHealth,
+                UltimateGauge = ultimate != null ? ultimate.CooldownGauge : 1f
+            };
+            hasPersistedPlayerState = true;
         }
     }
 }

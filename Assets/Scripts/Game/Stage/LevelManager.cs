@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Actors;
+using Actors.PlayerSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -108,6 +109,7 @@ public class LevelManager : MonoBehaviour
             RelicManager.Instance.ClearAllOwnedRelics();
 
         SkillManager.ClearPersistedSkillLoadout();
+        Player.ClearPersistedProgress();
 
         CurrentStage = 0;
 
@@ -151,6 +153,7 @@ public class LevelManager : MonoBehaviour
     }
     public void LoadNextScene(string sceneName)
     {
+        Player.PersistCurrentPlayerProgress();
         SceneManager.LoadScene(sceneName);
     }
 
