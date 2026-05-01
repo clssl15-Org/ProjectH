@@ -34,6 +34,9 @@ namespace UI.PlayerView
         public void OnSkillChanged(SkillType targetSkill) => _skillSelectionManager.OnSkillChanged(targetSkill);
         public void AddSkill(SkillType targetSkill) => _skillSelectionManager.AddSkill(targetSkill);
 
+        public void ShowRouletteResult(float bonus) => _skillRouletteManager.ShowResult(bonus);
+        public void ClearRouletteResult() => _skillRouletteManager.ClearResult();
+
         // Skill Cooltime Manager
         public void EnableCooltime(Func<float> getCooltimeRate) => _skillCooltimeManager.Enable(getCooltimeRate);
         public void DisableCooltime() => _skillCooltimeManager.Disable();

@@ -57,6 +57,8 @@ namespace UI.PlayerView
             _sfxAudioController = GetComponent<SfxAudioController>();
 
             _skillRouletteVideoPlayer.clip = null;
+            _effectVideoPlayer.isLooping = true;
+            _effectMaskVideoPlayer.isLooping = true;
             _effectVideoPlayer.gameObject.SetActive(false);
         }
 
@@ -80,7 +82,6 @@ namespace UI.PlayerView
                             !isGoodBouns ? "PlayerRoulette_A" : "PlayerRoulette_B",
                             AudioSourceController.PlayOption.Independently);
 
-                        Disable();
                         callback?.Invoke();
                     }
                 });
@@ -97,6 +98,8 @@ namespace UI.PlayerView
 
                     _effectVideoPlayer.clip = _effectVideos[effectIdx].Video;
                     _effectMaskVideoPlayer.clip = _effectVideos[effectIdx].AlphaMask;
+                    _effectVideoPlayer.isLooping = true;
+                    _effectMaskVideoPlayer.isLooping = true;
 
                     _effectVideoPlayer.Play();
                     _effectMaskVideoPlayer.Play();
@@ -115,6 +118,14 @@ namespace UI.PlayerView
             _skillRouletteEnabler.Disable();
             DisableInternal();
         }
+
+        public void ShowResult(float bonus) { }
+
+        public void ClearResult()
+        {
+            Disable();
+        }
+
         private void DisableInternal()
         {
             _skillRouletteVideoPlayer.Stop();

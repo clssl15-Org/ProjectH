@@ -6,27 +6,28 @@ namespace World
     public class PortalDetector : MonoBehaviour
     {
         public bool IsDetected { get; private set; }
+        public bool CanNotifyPlayerDetected { get; set; } = true;
         public event Action PlayerDetected;
 
-        private bool _hasDetected;
+        private bool _hasNotified;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (!collision.gameObject.CompareTag("Player"))
+            if (IsDetected || !collision.gameObject.CompareTag("Player"))
                 return;
 
             IsDetected = true;
 
-            if (_hasDetected)
+            if (!CanNotifyPlayerDetected || _hasNotified)
                 return;
 
-            _hasDetected = true;
+            _hasNotified = true;
             PlayerDetected?.Invoke();
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (!collision.gameObject.CompareTag("Player"))
+            if (!IsDetected || !collision.gameObject.CompareTag("Player"))
                 return;
 
             IsDetected = false;
