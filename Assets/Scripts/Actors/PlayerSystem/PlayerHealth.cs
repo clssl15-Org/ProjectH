@@ -51,6 +51,8 @@ namespace Actors.PlayerSystem
         {
             TakeDamage(damage);
             CharacterStateController.EnqueueTransition<Stun>();
+
+            print("Player Stunned! Health: " + currentHealth + "/" + MaxHealth);
         }
         public void TakeDamage(int damage) => TakeDamage(damage, Direction.Center);
         public void TakeDamage(int damage, Direction direction, float? knockbackForce = null)
