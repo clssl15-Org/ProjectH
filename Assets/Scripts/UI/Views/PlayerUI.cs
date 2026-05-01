@@ -62,6 +62,8 @@ namespace UI
             _skillUI.InitializeSkills(player.HavingSkills.ToArray());
             player.SkillAdded += _skillUI.AddSkill;
             player.SkillChanged += _skillUI.OnSkillChanged;
+            player.SkillRouletteApplied += _skillUI.ShowRouletteResult;
+            player.SkillRouletteCleared += _skillUI.ClearRouletteResult;
 
             player.CooltimeEnabled += _skillUI.EnableCooltime;
             player.CooltimeDisabled += _skillUI.DisableCooltime;
@@ -123,6 +125,8 @@ namespace UI
 
                 _player.SkillAdded -= _skillUI.AddSkill;
                 _player.SkillChanged -= _skillUI.OnSkillChanged;
+                _player.SkillRouletteApplied -= _skillUI.ShowRouletteResult;
+                _player.SkillRouletteCleared -= _skillUI.ClearRouletteResult;
                 _player.CooltimeEnabled -= _skillUI.EnableCooltime;
                 _player.CooltimeDisabled -= _skillUI.DisableCooltime;
                 _player = null;

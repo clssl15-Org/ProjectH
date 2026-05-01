@@ -10,6 +10,9 @@ public class DamageRoulette : MonoBehaviour
     public bool isApplied = false;
     public bool canUseSkill = true;
 
+    public event Action<float> BonusApplied;
+    public event Action BonusCleared;
+
     private SkillManager skillManager;
 
     private Player player;
@@ -92,6 +95,7 @@ public class DamageRoulette : MonoBehaviour
             transform.root.GetComponentInChildren<Player>().RouletteDamageMultiplier = bonus;
             skillManager.canChangeSkill = false;
             canUseSkill = true;
+            BonusApplied?.Invoke(bonus);
         });
 
         return true;
@@ -123,5 +127,6 @@ public class DamageRoulette : MonoBehaviour
         isApplied = false;
         skillManager.canChangeSkill = true;
         canUseSkill = true;
+        BonusCleared?.Invoke();
     }
 }

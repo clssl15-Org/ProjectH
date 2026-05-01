@@ -107,6 +107,8 @@ namespace Actors.PlayerSystem
             add => skillManager.SkillChanged += value;
             remove => skillManager.SkillChanged -= value;
         }
+        public event Action<float> SkillRouletteApplied;
+        public event Action SkillRouletteCleared;
 
         public event Action Destroying;
 
@@ -134,6 +136,12 @@ namespace Actors.PlayerSystem
 
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             damageRoulette = GetComponent<DamageRoulette>();
+
+            if (damageRoulette)
+            {
+                damageRoulette.BonusApplied += OnSkillRouletteApplied;
+                damageRoulette.BonusCleared += OnSkillRouletteCleared;
+            }
         }
 
         public void Inject(PlatformManager platformManager)
@@ -198,8 +206,20 @@ namespace Actors.PlayerSystem
         public void NotifyCondition(PlayerCondition condition) =>
             ConditionChanged?.Invoke(condition);
 
+        private void OnSkillRouletteApplied(float bonus) =>
+            SkillRouletteApplied?.Invoke(bonus);
+
+        private void OnSkillRouletteCleared() =>
+            SkillRouletteCleared?.Invoke();
+
         void OnDestroy()
         {
+            if (damageRoulette)
+            {
+                damageRoulette.BonusApplied -= OnSkillRouletteApplied;
+                damageRoulette.BonusCleared -= OnSkillRouletteCleared;
+            }
+
             Destroying?.Invoke();
         }
     }
