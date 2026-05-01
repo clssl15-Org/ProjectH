@@ -57,6 +57,8 @@ namespace UI.PlayerView
             _sfxAudioController = GetComponent<SfxAudioController>();
 
             _skillRouletteVideoPlayer.clip = null;
+            _effectVideoPlayer.isLooping = true;
+            _effectMaskVideoPlayer.isLooping = true;
             _effectVideoPlayer.gameObject.SetActive(false);
         }
 
@@ -96,6 +98,8 @@ namespace UI.PlayerView
 
                     _effectVideoPlayer.clip = _effectVideos[effectIdx].Video;
                     _effectMaskVideoPlayer.clip = _effectVideos[effectIdx].AlphaMask;
+                    _effectVideoPlayer.isLooping = true;
+                    _effectMaskVideoPlayer.isLooping = true;
 
                     _effectVideoPlayer.Play();
                     _effectMaskVideoPlayer.Play();
