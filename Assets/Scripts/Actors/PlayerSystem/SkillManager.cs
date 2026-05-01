@@ -74,8 +74,20 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
+        if (IsAnySkillOnCooldown())
+        {
+            return;
+        }
+
         CharacterStateController.EnqueueTransition(skills[selectedIndex]);
     }
+
+    private bool IsAnySkillOnCooldown()
+    {
+        return GetComponentsInChildren<CooldownTimer>()
+            .Any(timer => timer.CooldownType == CooldownType.Skill && timer.IsOnCooldown);
+    }
+
     public void UseUltimate()
     {
         if (ultimateSkill == null)

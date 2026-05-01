@@ -60,6 +60,8 @@ namespace Actors.PlayerSystem
             {
                 CharacterStateController.EnqueueTransition<NormalMovement>();
                 Player.ResetRandomSkillBuff();
+                if (DamageRoulette)
+                    DamageRoulette.ResetRoulette();
             }
         }
 
