@@ -203,7 +203,7 @@ namespace UI
             _effectAnimation.SetActive(false);
 
 
-            _coinDescripton.text = $"강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}";
+            _coinDescripton.text = $"<align=center><size=120%>강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}</size></align>";
             var reinforced = _forceSuccess || RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
 
             var coinClip = _videoClips.FirstOrDefault(v => v.VideoType
@@ -287,9 +287,10 @@ namespace UI
                             out var description,
                             reinforced);
 
-                        _relicDescrption.text =
-                            $"강화 {(reinforced ? "성공" : "실패")}\n\n" +
-                            description;
+                        if (reinforced)
+                            _relicDescrption.text = $"<size=120%><color=#76ffff>강화 성공</color></size>\n\n{description}";
+                        else
+                            _relicDescrption.text = $"<size=120%><color=#FF0000>강화 실패</color></size>\n\n{description}";
 
                         _toThrowCoinBtn.gameObject.SetActive(false);
                         _closeBtn.gameObject.SetActive(true);
