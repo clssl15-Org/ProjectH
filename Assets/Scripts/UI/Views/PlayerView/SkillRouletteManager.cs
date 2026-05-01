@@ -80,7 +80,6 @@ namespace UI.PlayerView
                             !isGoodBouns ? "PlayerRoulette_A" : "PlayerRoulette_B",
                             AudioSourceController.PlayOption.Independently);
 
-                        Disable();
                         callback?.Invoke();
                     }
                 });
@@ -115,6 +114,14 @@ namespace UI.PlayerView
             _skillRouletteEnabler.Disable();
             DisableInternal();
         }
+
+        public void ShowResult(float bonus) { }
+
+        public void ClearResult()
+        {
+            Disable();
+        }
+
         private void DisableInternal()
         {
             _skillRouletteVideoPlayer.Stop();
