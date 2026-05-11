@@ -17,6 +17,7 @@ namespace Actors
         ESkill,
         Ultimate,
         Damage,
+        MaxHealthChanged,
         Die
     }
 

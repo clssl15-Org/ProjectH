@@ -111,7 +111,17 @@ namespace UI
         private void OnRelicLost(RelicDataSO relicSO)
         {
             using var __ = BlackboxHandle.Of(this).ExertScope(_relicManager, $"Relic Lost: {relicSO.name}");
-            _relicManager.RemoveRelic(relicSO.RelicNumber);
+
+            var relicId = relicSO.RelicNumber;
+            // 같은 종류의 유물이 아직 남아 있으면 HUD 아이콘은 유지합니다.
+            if (RelicManager.Instance
+                && RelicManager.Instance.OwnedRelics.TryGetValue(relicId, out var ownedRelics)
+                && ownedRelics.Count > 0)
+            {
+                return;
+            }
+
+            _relicManager.RemoveRelic(relicId);
         }
 
 

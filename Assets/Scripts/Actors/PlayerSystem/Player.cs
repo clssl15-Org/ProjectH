@@ -140,6 +140,8 @@ namespace Actors.PlayerSystem
             playerStats = originStats.CreateRuntimeStats();
             playerHealth = GetComponent<PlayerHealth>();
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
+            playerHealth.Healed += () => ConditionChanged?.Invoke(PlayerCondition.Heal);
+            playerHealth.OnMaxHealthChanged += () => ConditionChanged?.Invoke(PlayerCondition.MaxHealthChanged);
             playerHealth.OnInitialized += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
 
             platformDetector = GetComponent<PlatformDetector>();

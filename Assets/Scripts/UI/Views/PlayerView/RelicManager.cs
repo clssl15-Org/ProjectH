@@ -26,6 +26,10 @@ namespace UI.PlayerView
 
         public void AddRelic(RelicDataSO relicData)
         {
+            // 이미 표시 중인 유물은 보유 수가 늘어나도 HUD 아이콘을 중복 생성하지 않습니다.
+            if (_relics.Any(rUI => rUI.ID == relicData.RelicNumber))
+                return;
+
             var relicUI = Instantiate(_relicPrefab);
 
             relicUI.Initialize(relicData);

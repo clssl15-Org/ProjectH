@@ -95,7 +95,8 @@ namespace UI
             ThrowIfDisposed();
 
             if (condition == PlayerCondition.Damage
-                || condition == PlayerCondition.Heal)
+                || condition == PlayerCondition.Heal
+                || condition == PlayerCondition.MaxHealthChanged)
             {
                 HealthRateChanged?.Invoke(HealthRate);
             }
