@@ -51,7 +51,10 @@ namespace Game.Stage
             // 스킬 얻을 때 이동
             StageManager.RelicAcquisitionUI.Disabling += () =>
             {
-                if (!IsFirstArrival || _nameChanged)
+                _skillAcquired = true;
+                _portalDetector.CanNotifyPlayerDetected = true;
+
+                if (IsFirstArrival && _nameChanged)
                     To(BlockName.FirstSkillAcquire_Dialogue);
             };
 
@@ -63,7 +66,10 @@ namespace Game.Stage
                     if (_portalReached) return;
                     _portalReached = true;
 
-                    To(BlockName.TownPortal);
+                    if (IsFirstArrival)
+                        To(BlockName.TownPortal);
+                    else
+                        StageManager.Portal.IsInteractable = true;
                 }
             };
         }
@@ -211,12 +217,7 @@ namespace Game.Stage
                 dialogueTitle: "Stage0_FirstSkillAcquire",
                 onDialogueEnd: () => To(BlockName.FirstSkillAcquire_Guide))
                 .OnEntered(BlockInputs)
-                .OnExited(() =>
-                {
-                    _skillAcquired = true;
-                    _portalDetector.CanNotifyPlayerDetected = true;
-                    UnblockInputs();
-                });
+                .OnExited(UnblockInputs);
 
             yield return new Block(
                 BlockName.FirstSkillAcquire_Guide)

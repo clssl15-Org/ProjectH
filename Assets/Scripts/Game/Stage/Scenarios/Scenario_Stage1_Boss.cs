@@ -20,12 +20,22 @@ namespace Game.Stage
         {
             yield return new Block(
                 BlockName.To_Contact)
+                .OnEntered(() =>
+                {
+                    if (!IsFirstArrival)
+                        Rubiel.SetToInvisible();
+                })
                 .OnUpdated<Block>(self =>
                 {
                     if (IsPlayerOnGround && IsRubielClose)
                     {
-                        BlockInputs();
-                        To(BlockName.Contact);
+                        if (IsFirstArrival)
+                        {
+                            BlockInputs();
+                            To(BlockName.Contact);
+                        }
+                        else
+                            To(BlockName.Battle);
                     }
                 });
 
@@ -52,7 +62,7 @@ namespace Game.Stage
                         self.ToNextToken = true;
 
                         BlockInputs();
-                        SetRubielToVisible(RubielVisibilityMode.NearToPlayer, () => To(BlockName.Passed_1));
+                        SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed_1));
                     }
                 });
 
