@@ -61,9 +61,19 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
 
-                        BlockInputs();
-                        SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed_1));
-                    }
+                        if (IsFirstArrival)
+                        {
+                            BlockInputs();
+                            SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed_1));
+                        }
+                        else
+                        {
+                            StageManager.Box.gameObject.SetActive(true);
+                            StageManager.Portal.gameObject.SetActive(true);
+
+                            Exit();
+                        }
+                    };
                 });
 
             yield return new DialogueBlock(

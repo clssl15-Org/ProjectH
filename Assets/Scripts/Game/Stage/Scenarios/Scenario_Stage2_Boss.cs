@@ -60,8 +60,18 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
 
-                        BlockInputs();
-                        SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed));
+                        if (IsFirstArrival)
+                        {
+                            BlockInputs();
+                            SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed));
+                        }
+                        else
+                        {
+                            StageManager.Box.gameObject.SetActive(true);
+                            StageManager.Portal.gameObject.SetActive(true);
+
+                            Exit();
+                        }
                     }
                 });
 
