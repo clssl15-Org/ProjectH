@@ -12242,6 +12242,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f00d251753a86f04a91121d3ee45598e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1447994458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447994444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60710c109b8445a7a415003e47c492de, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _stageManager: {fileID: 0}
+  _clearObjectsRoot: {fileID: 0}
+  _boxObject: {fileID: 0}
+  _portalObject: {fileID: 0}
+  _fallbackDelay: 60
+  _activateBox: 1
+  _activatePortal: 1
+  _useUnscaledTime: 1
 --- !u!1001 &1661415641
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12788,6 +12808,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1447994456}
+    - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1447994458}
   m_SourcePrefab: {fileID: 100100000, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
 --- !u!1 &2096213010
 GameObject:

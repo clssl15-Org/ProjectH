@@ -8091,6 +8091,9 @@ PrefabInstance:
       addedObject: {fileID: 1708227666}
     - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1708227668}
+    - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1708227667}
   m_SourcePrefab: {fileID: 100100000, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
 --- !u!1 &1309707465
@@ -12192,6 +12195,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {fileID: 1708227658}
   _quitOnExport: 1
+--- !u!114 &1708227668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708227646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60710c109b8445a7a415003e47c492de, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _stageManager: {fileID: 0}
+  _clearObjectsRoot: {fileID: 0}
+  _boxObject: {fileID: 0}
+  _portalObject: {fileID: 0}
+  _fallbackDelay: 60
+  _activateBox: 1
+  _activatePortal: 1
+  _useUnscaledTime: 1
 --- !u!1 &1767267615
 GameObject:
   m_ObjectHideFlags: 0
@@ -12644,7 +12667,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2505524848997802511, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2645848787326272074, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_Sprite
@@ -12660,7 +12683,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3081893152640507319, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4831682683386955444, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12708,7 +12731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8221930841844602569, guid: 01f8678bdc5de9542895f4ab7bdd1f3d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

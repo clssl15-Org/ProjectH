@@ -1179,6 +1179,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1648177261}
+    - targetCorrespondingSourceObject: {fileID: 9072449599195621900, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1648177262}
   m_SourcePrefab: {fileID: 100100000, guid: fefa9544299f9514ab09e0d5eca1d1bc, type: 3}
 --- !u!114 &966802508 stripped
 MonoBehaviour:
@@ -17687,6 +17690,29 @@ MonoBehaviour:
   _display: 
   NextSceneName: EndingScene
   ToEndingKey: 48
+--- !u!114 &1648177262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648177251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60710c109b8445a7a415003e47c492de, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _fallbackMode: 1
+  _stageManager: {fileID: 0}
+  _finalBossStageManager: {fileID: 1648177252}
+  _clearObjectsRoot: {fileID: 0}
+  _boxObject: {fileID: 0}
+  _portalObject: {fileID: 0}
+  _endingSceneName: EndingScene
+  _fallbackDelay: 60
+  _activateBox: 1
+  _activatePortal: 1
+  _useUnscaledTime: 1
 --- !u!224 &1832197030 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3161491346017096740, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
