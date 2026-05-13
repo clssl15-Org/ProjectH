@@ -51,6 +51,7 @@ public class LevelManager : MonoBehaviour
         RebindSpawnManagerForScene(SceneManager.GetActiveScene());
 
         ResetState();
+        SyncCurrentStageFromScene(SceneManager.GetActiveScene());
     }
 
     private void OnDestroy()
@@ -62,6 +63,7 @@ public class LevelManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         RebindSpawnManagerForScene(scene);
+        SyncCurrentStageFromScene(scene);
     }
 
     /// <summary>
@@ -169,6 +171,32 @@ public class LevelManager : MonoBehaviour
     {
         Player.PersistCurrentPlayerProgress();
         SceneManager.LoadScene(sceneName);
+    }
+
+    private void SyncCurrentStageFromScene(Scene scene)
+    {
+        if (TryGetStageNumber(scene.name, out int stageNumber))
+            CurrentStage = stageNumber;
+    }
+
+    private static bool TryGetStageNumber(string sceneName, out int stageNumber)
+    {
+        stageNumber = 0;
+
+        int stageTextIndex = sceneName.IndexOf("Stage", System.StringComparison.Ordinal);
+        if (stageTextIndex < 0)
+            return false;
+
+        int digitStartIndex = stageTextIndex + "Stage".Length;
+        if (digitStartIndex >= sceneName.Length || !char.IsDigit(sceneName[digitStartIndex]))
+            return false;
+
+        int digitEndIndex = digitStartIndex;
+        while (digitEndIndex < sceneName.Length && char.IsDigit(sceneName[digitEndIndex]))
+            digitEndIndex++;
+
+        string stageNumberText = sceneName.Substring(digitStartIndex, digitEndIndex - digitStartIndex);
+        return int.TryParse(stageNumberText, out stageNumber);
     }
 
     void ShuffleAndPick()
