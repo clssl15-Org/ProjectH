@@ -316,7 +316,7 @@ public class RelicManager : MonoBehaviour
             return "";
 
         float added = data.CanStack
-            ? nextValue - previousValue
+            ? previousValue
             : nextValue - data.BaseValue;
         return added > 0f ? $"(+{FormatValue(added)}%)" : "";
     }
