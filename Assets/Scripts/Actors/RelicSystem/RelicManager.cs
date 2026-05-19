@@ -242,6 +242,7 @@ public class RelicManager : MonoBehaviour
         float reinforcedNextValue = data.CanStack ? currentValue + data.CoinFlipValue : data.CoinFlipValue;
         float firstValue = 0f;
         bool hasFirstValue = data.CanStack && TryGetFirstRelicValue(data.RelicNumber, out firstValue);
+        float comparisonValue = hasFirstValue ? firstValue : data.BaseValue;
 
         return new RelicAcquisitionDto(
             data,
@@ -249,8 +250,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue, firstValue, hasFirstValue),
-            BuildDescription(data, reinforcedNextValue, firstValue, hasFirstValue));
+            BuildDescription(data, normalNextValue, comparisonValue, hasFirstValue),
+            BuildDescription(data, reinforcedNextValue, comparisonValue, hasFirstValue || data.CoinFlipValue > data.BaseValue));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -318,7 +319,9 @@ public class RelicManager : MonoBehaviour
         float firstValue = data.CanStack && TryGetFirstRelicValue(key, out var value)
             ? value
             : 0f;
-        description = BuildDescription(data, valueSum, firstValue, hadStackBeforeAdd);
+        bool reinforcedFirstStack = data.CanStack && !hadStackBeforeAdd && valueSum > data.BaseValue;
+        float comparisonValue = hadStackBeforeAdd ? firstValue : data.BaseValue;
+        description = BuildDescription(data, valueSum, comparisonValue, hadStackBeforeAdd || reinforcedFirstStack);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
