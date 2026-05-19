@@ -109,6 +109,25 @@ public class RelicManager : MonoBehaviour
         return sum;
     }
 
+    private bool TryGetFirstRelicValue(int id, out float value)
+    {
+        value = 0f;
+
+        if (!ownedRelics.TryGetValue(id, out var relics) || relics.Count == 0)
+            return false;
+
+        foreach (var relicObj in relics)
+        {
+            if (relicObj && relicObj.TryGetComponent<Relic>(out var relicScript))
+            {
+                value = relicScript.Value;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void GetRandomRelicData(bool forceSuccess = false)
     {
         int currentSkillCount = GetSkillRelicCount();
@@ -221,6 +240,9 @@ public class RelicManager : MonoBehaviour
         float currentValue = data.CanStack ? GetValueSum(data.RelicNumber) : 0f;
         float normalNextValue = data.CanStack ? currentValue + data.BaseValue : data.BaseValue;
         float reinforcedNextValue = data.CanStack ? currentValue + data.CoinFlipValue : data.CoinFlipValue;
+        float firstValue = data.CanStack && TryGetFirstRelicValue(data.RelicNumber, out var value)
+            ? value
+            : 0f;
 
         return new RelicAcquisitionDto(
             data,
@@ -228,8 +250,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue, currentValue),
-            BuildDescription(data, reinforcedNextValue, currentValue));
+            BuildDescription(data, normalNextValue, firstValue),
+            BuildDescription(data, reinforcedNextValue, firstValue));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -279,8 +301,6 @@ public class RelicManager : MonoBehaviour
             return;
         }
 
-        float previousValue = data.CanStack ? GetValueSum(key) : 0f;
-
         // 생성 및 리스트 추가
         GameObject relicObj = Instantiate(prefab, this.transform);
 
@@ -295,29 +315,40 @@ public class RelicManager : MonoBehaviour
         }
 
         float valueSum = GetValueSum(key);
-        description = BuildDescription(data, valueSum, previousValue);
+        float firstValue = data.CanStack && TryGetFirstRelicValue(key, out var value)
+            ? value
+            : 0f;
+        description = BuildDescription(data, valueSum, firstValue);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
     }
 
-    private static string BuildDescription(RelicDataSO data, float nextValue, float previousValue)
+    private static string BuildDescription(RelicDataSO data, float nextValue, float firstValue)
     {
         string description = data.Description + "\n" + "\n";
         string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
-        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, previousValue));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, firstValue));
 
         return description + effectDesc;
     }
 
-    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float previousValue)
+    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float firstValue)
     {
-        if (Mathf.Approximately(previousValue, 0f))
-            return "";
+        float added;
 
-        float added = data.CanStack
-            ? previousValue
-            : nextValue - data.BaseValue;
+        if (data.CanStack)
+        {
+            if (Mathf.Approximately(firstValue, 0f))
+                return "";
+
+            added = nextValue - firstValue;
+        }
+        else
+        {
+            added = nextValue - data.BaseValue;
+        }
+
         return added > 0f ? $"(+{FormatValue(added)}%)" : "";
     }
 
