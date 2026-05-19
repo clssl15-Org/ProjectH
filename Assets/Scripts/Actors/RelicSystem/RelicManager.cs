@@ -312,6 +312,9 @@ public class RelicManager : MonoBehaviour
 
     private static string BuildValueChangeText(RelicDataSO data, float nextValue, float previousValue)
     {
+        if (Mathf.Approximately(previousValue, 0f))
+            return "";
+
         float added = data.CanStack
             ? nextValue - previousValue
             : nextValue - data.BaseValue;
