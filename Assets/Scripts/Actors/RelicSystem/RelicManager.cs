@@ -311,7 +311,30 @@ public class RelicManager : MonoBehaviour
     {
         float added = nextValue - data.BaseValue;
 
-        return added > 0f ? $"(+{FormatValue(added)}%)" : "";
+        return added > 0f ? $"(+{FormatValue(added)}{GetValueUnitSuffix(data)})" : "";
+    }
+
+    /// <summary>
+    /// <see cref="RelicDataSO.NomalEffect"/>의 @ 뒤 단위(%·회·분·단 등)를 반환합니다. @가 없으면 %를 씁니다.
+    /// </summary>
+    private static string GetValueUnitSuffix(RelicDataSO data)
+    {
+        string effect = data.NomalEffect;
+        int atIndex = effect.IndexOf('@');
+        if (atIndex < 0 || atIndex >= effect.Length - 1)
+            return "%";
+
+        int start = atIndex + 1;
+        int end = start;
+        while (end < effect.Length)
+        {
+            char c = effect[end];
+            if (c == '<' || c == ' ' || c == '(' || c == ')')
+                break;
+            end++;
+        }
+
+        return end > start ? effect.Substring(start, end - start) : "%";
     }
 
     private static string FormatValue(float value)
