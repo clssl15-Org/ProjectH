@@ -11,14 +11,43 @@ public class RelicManager : MonoBehaviour
     // 런타임 렐릭 설명 저장소
     public readonly static Dictionary<int, string> RelicDescriptionRegistry = new();
 
+    public readonly struct RelicAcquisitionDto
+    {
+        public RelicAcquisitionDto(
+            RelicDataSO data,
+            bool forceSuccess,
+            float currentValue,
+            float normalNextValue,
+            float reinforcedNextValue,
+            string normalDescription,
+            string reinforcedDescription)
+        {
+            Data = data;
+            ForceSuccess = forceSuccess;
+            CurrentValue = currentValue;
+            NormalNextValue = normalNextValue;
+            ReinforcedNextValue = reinforcedNextValue;
+            NormalDescription = normalDescription;
+            ReinforcedDescription = reinforcedDescription;
+        }
+
+        public RelicDataSO Data { get; }
+        public bool ForceSuccess { get; }
+        public bool CanStack => Data != null && Data.CanStack;
+        public float CurrentValue { get; }
+        public float NormalNextValue { get; }
+        public float ReinforcedNextValue { get; }
+        public string NormalDescription { get; }
+        public string ReinforcedDescription { get; }
+    }
+
     public Player player;
 
     [Header("Relic Prefab Registry")]
     // 모든 유물 프리팹을 인스펙터에서 등록합니다.
     [SerializeField] private List<GameObject> relicPrefabs;
 
-    // relicData, description, forceSuccess
-    public event Action<RelicDataSO, string, bool> RelicAcquiring;
+    public event Action<RelicAcquisitionDto> RelicAcquiring;
     public event Action<RelicDataSO, string> RelicAcquired;
     public event Action<RelicDataSO> RelicLost;
 
@@ -148,22 +177,7 @@ public class RelicManager : MonoBehaviour
 
         if (selectedData == null) selectedData = candidates.Last().Key;
 
-        string description = selectedData.Description + "\n" + "\n";
-        string effectDesc = selectedData.NomalEffect.Replace("@", selectedData.BaseValue.ToString());
-        effectDesc = effectDesc.Replace("$", "");
-        description += effectDesc;
-
-        foreach (Action<RelicDataSO, string, bool> callback in RelicAcquiring.GetInvocationList())
-        {
-            try
-            {
-                callback.Invoke(selectedData, description, forceSuccess);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"RelicAcquiring 콜백 실패: {ex}", this);
-            }
-        }
+        NotifyRelicAcquiring(selectedData, forceSuccess);
     }
     // (디버그용) 선택한 렐릭 강제 추가
     public void GetRelicData(int key, bool forceSuccess = false)
@@ -178,12 +192,44 @@ public class RelicManager : MonoBehaviour
             return;
         }
 
-        string description = targetData.Description + "\n" + "\n";
-        string effectDesc = targetData.NomalEffect.Replace("@", targetData.BaseValue.ToString());
-        effectDesc = effectDesc.Replace("$", "");
-        description += effectDesc;
+        NotifyRelicAcquiring(targetData, forceSuccess);
+    }
 
-        RelicAcquiring?.Invoke(targetData, description, forceSuccess);
+    private void NotifyRelicAcquiring(RelicDataSO data, bool forceSuccess)
+    {
+        var handlers = RelicAcquiring;
+        if (handlers == null)
+            return;
+
+        var acquisition = BuildRelicAcquisitionDto(data, forceSuccess);
+
+        foreach (Action<RelicAcquisitionDto> callback in handlers.GetInvocationList())
+        {
+            try
+            {
+                callback.Invoke(acquisition);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"RelicAcquiring 콜백 실패: {ex}", this);
+            }
+        }
+    }
+
+    private RelicAcquisitionDto BuildRelicAcquisitionDto(RelicDataSO data, bool forceSuccess)
+    {
+        float currentValue = data.CanStack ? GetValueSum(data.RelicNumber) : 0f;
+        float normalNextValue = data.CanStack ? currentValue + data.BaseValue : data.BaseValue;
+        float reinforcedNextValue = data.CanStack ? currentValue + data.CoinFlipValue : data.CoinFlipValue;
+
+        return new RelicAcquisitionDto(
+            data,
+            forceSuccess,
+            currentValue,
+            normalNextValue,
+            reinforcedNextValue,
+            BuildDescription(data, normalNextValue, currentValue),
+            BuildDescription(data, reinforcedNextValue, currentValue));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -233,6 +279,8 @@ public class RelicManager : MonoBehaviour
             return;
         }
 
+        float previousValue = data.CanStack ? GetValueSum(key) : 0f;
+
         // 생성 및 리스트 추가
         GameObject relicObj = Instantiate(prefab, this.transform);
 
@@ -246,23 +294,38 @@ public class RelicManager : MonoBehaviour
             relicScript.OnAcquire();
         }
 
-        description = data.Description + "\n" + "\n";
         float valueSum = GetValueSum(key);
-        string effectDesc = data.NomalEffect.Replace("@", valueSum.ToString());
-        float added = valueSum - data.BaseValue;
-
-        if (added > 0)
-        {
-            effectDesc = effectDesc.Replace("$", $"(+{added}%)");
-        }
-        else
-        {
-            effectDesc = effectDesc.Replace("$", "");
-        }
-        description += effectDesc;
+        description = BuildDescription(data, valueSum, previousValue);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
+    }
+
+    private static string BuildDescription(RelicDataSO data, float nextValue, float previousValue)
+    {
+        string description = data.Description + "\n" + "\n";
+        string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, previousValue));
+
+        return description + effectDesc;
+    }
+
+    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float previousValue)
+    {
+        if (data.CanStack)
+            return $"({FormatValue(previousValue)}% → {FormatValue(nextValue)}%)";
+
+        float added = nextValue - data.BaseValue;
+        return added > 0f ? $"(+{FormatValue(added)}%)" : "";
+    }
+
+    private static string FormatValue(float value)
+    {
+        float rounded = Mathf.Round(value);
+        if (Mathf.Approximately(value, rounded))
+            return Mathf.RoundToInt(value).ToString();
+
+        return value.ToString("0.##");
     }
 
     // --- 유물 제거 ---

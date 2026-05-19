@@ -72,6 +72,7 @@ namespace UI
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer;
         private RelicDataSO _relic;
+        private RelicManager.RelicAcquisitionDto _relicAcquisition;
         private bool _forceSuccess;
         private EnableWithAnimation _enabler;
 
@@ -147,8 +148,10 @@ namespace UI
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
-        private void OnRelicAcquiring(RelicDataSO relicInfo, string description, bool forceSuccess = false)
+        private void OnRelicAcquiring(RelicManager.RelicAcquisitionDto relicAcquisition)
         {
+            var relicInfo = relicAcquisition.Data;
+
             if (!this)
             {
                 // 정상적으로 구독 해제되지 않은 UI 처리
@@ -170,13 +173,14 @@ namespace UI
             _isOperating = true;
             _isOperated = false;
             _relic = relicInfo;
-            _forceSuccess = forceSuccess;
+            _relicAcquisition = relicAcquisition;
+            _forceSuccess = relicAcquisition.ForceSuccess;
 
             Enable();
 
             _relicIcon.sprite = relicInfo.Icon;
             _relicNametag.text = relicInfo.RelicName;
-            _relicDescrption.text = description;
+            _relicDescrption.text = relicAcquisition.NormalDescription;
 
             _coinRawVideoPlayer.clip = null;
             _coinMaskVideoPlayer.clip = null;
@@ -202,8 +206,9 @@ namespace UI
             _coinThrowMessage.SetActive(true);
             _effectAnimation.SetActive(false);
 
-
-            _coinDescripton.text = $"<align=center><size=120%>강화 성공 시 능력치 {_relic.BaseValue} → {_relic.CoinFlipValue}</size></align>";
+            string normalNextValue = FormatValue(_relicAcquisition.NormalNextValue);
+            string reinforcedNextValue = FormatValue(_relicAcquisition.ReinforcedNextValue);
+            _coinDescripton.text = $"<align=center><size=120%>강화 성공 시 능력치 {normalNextValue} → {reinforcedNextValue}</size></align>";
             var reinforced = _forceSuccess || RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
 
             var coinClip = _videoClips.FirstOrDefault(v => v.VideoType
@@ -380,6 +385,15 @@ namespace UI
             _effectTimer?.Dispose();
 
             RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
+        }
+
+        private static string FormatValue(float value)
+        {
+            float rounded = Mathf.Round(value);
+            if (Mathf.Approximately(value, rounded))
+                return Mathf.RoundToInt(value).ToString();
+
+            return value.ToString("0.##");
         }
     }
 }
