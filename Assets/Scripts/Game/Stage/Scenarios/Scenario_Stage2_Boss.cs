@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Infrastructure.StateMachines.Fsm;
+using UnityEngine;
 
 namespace Game.Stage
 {
@@ -67,8 +68,7 @@ namespace Game.Stage
                         }
                         else
                         {
-                            StageManager.Box.gameObject.SetActive(true);
-                            StageManager.Portal.gameObject.SetActive(true);
+                            ActivateClearObjects();
 
                             Exit();
                         }
@@ -81,12 +81,38 @@ namespace Game.Stage
                 onDialogueEnd: () =>
                 {
                     UnblockInputs();
-                    
-                    StageManager.Box.gameObject.SetActive(true);
-                    StageManager.Portal.gameObject.SetActive(true);
+
+                    ActivateClearObjects();
 
                     Exit();
                 });
+        }
+
+        private void ActivateClearObjects()
+        {
+            GameObject boxObject = StageManager.Box.gameObject;
+            GameObject portalObject = StageManager.Portal.gameObject;
+            GameObject clearObjectsRoot = FindCommonRoot(boxObject, portalObject);
+
+            if (clearObjectsRoot && !clearObjectsRoot.activeSelf)
+                clearObjectsRoot.SetActive(true);
+
+            boxObject.SetActive(true);
+            portalObject.SetActive(true);
+        }
+
+        private static GameObject FindCommonRoot(GameObject first, GameObject second)
+        {
+            Transform candidate = first.transform;
+            while (candidate)
+            {
+                if (second.transform.IsChildOf(candidate))
+                    return candidate.gameObject;
+
+                candidate = candidate.parent;
+            }
+
+            return first.transform.parent ? first.transform.parent.gameObject : first;
         }
     }
 }
