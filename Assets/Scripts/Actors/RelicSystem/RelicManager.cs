@@ -109,25 +109,6 @@ public class RelicManager : MonoBehaviour
         return sum;
     }
 
-    private bool TryGetFirstRelicValue(int id, out float value)
-    {
-        value = 0f;
-
-        if (!ownedRelics.TryGetValue(id, out var relics) || relics.Count == 0)
-            return false;
-
-        foreach (var relicObj in relics)
-        {
-            if (relicObj && relicObj.TryGetComponent<Relic>(out var relicScript))
-            {
-                value = relicScript.Value;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public void GetRandomRelicData(bool forceSuccess = false)
     {
         int currentSkillCount = GetSkillRelicCount();
@@ -240,9 +221,6 @@ public class RelicManager : MonoBehaviour
         float currentValue = data.CanStack ? GetValueSum(data.RelicNumber) : 0f;
         float normalNextValue = data.CanStack ? currentValue + data.BaseValue : data.BaseValue;
         float reinforcedNextValue = data.CanStack ? currentValue + data.CoinFlipValue : data.CoinFlipValue;
-        float firstValue = 0f;
-        bool hasFirstValue = data.CanStack && TryGetFirstRelicValue(data.RelicNumber, out firstValue);
-        float comparisonValue = hasFirstValue ? firstValue : data.BaseValue;
 
         return new RelicAcquisitionDto(
             data,
@@ -250,8 +228,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue, comparisonValue, hasFirstValue),
-            BuildDescription(data, reinforcedNextValue, comparisonValue, hasFirstValue || data.CoinFlipValue > data.BaseValue));
+            BuildDescription(data, normalNextValue),
+            BuildDescription(data, reinforcedNextValue));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -292,8 +270,6 @@ public class RelicManager : MonoBehaviour
         {
             currentCount = ownedRelics[key].Count;
         }
-        bool hadStackBeforeAdd = data.CanStack && currentCount > 0;
-
         // 최대 중첩 수 초과 시 추가 중단
         if (currentCount >= data.MaxStackCount)
         {
@@ -316,41 +292,24 @@ public class RelicManager : MonoBehaviour
         }
 
         float valueSum = GetValueSum(key);
-        float firstValue = data.CanStack && TryGetFirstRelicValue(key, out var value)
-            ? value
-            : 0f;
-        bool reinforcedFirstStack = data.CanStack && !hadStackBeforeAdd && valueSum > data.BaseValue;
-        float comparisonValue = hadStackBeforeAdd ? firstValue : data.BaseValue;
-        description = BuildDescription(data, valueSum, comparisonValue, hadStackBeforeAdd || reinforcedFirstStack);
+        description = BuildDescription(data, valueSum);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
     }
 
-    private static string BuildDescription(RelicDataSO data, float nextValue, float firstValue, bool showStackChange)
+    private static string BuildDescription(RelicDataSO data, float nextValue)
     {
         string description = data.Description + "\n" + "\n";
         string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
-        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, firstValue, showStackChange));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue));
 
         return description + effectDesc;
     }
 
-    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float firstValue, bool showStackChange)
+    private static string BuildValueChangeText(RelicDataSO data, float nextValue)
     {
-        float added;
-
-        if (data.CanStack)
-        {
-            if (!showStackChange)
-                return "";
-
-            added = nextValue - firstValue;
-        }
-        else
-        {
-            added = nextValue - data.BaseValue;
-        }
+        float added = nextValue - data.BaseValue;
 
         return added > 0f ? $"(+{FormatValue(added)}%)" : "";
     }
