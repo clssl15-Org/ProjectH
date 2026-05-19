@@ -240,9 +240,8 @@ public class RelicManager : MonoBehaviour
         float currentValue = data.CanStack ? GetValueSum(data.RelicNumber) : 0f;
         float normalNextValue = data.CanStack ? currentValue + data.BaseValue : data.BaseValue;
         float reinforcedNextValue = data.CanStack ? currentValue + data.CoinFlipValue : data.CoinFlipValue;
-        float firstValue = data.CanStack && TryGetFirstRelicValue(data.RelicNumber, out var value)
-            ? value
-            : 0f;
+        float firstValue = 0f;
+        bool hasFirstValue = data.CanStack && TryGetFirstRelicValue(data.RelicNumber, out firstValue);
 
         return new RelicAcquisitionDto(
             data,
@@ -250,8 +249,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue, firstValue),
-            BuildDescription(data, reinforcedNextValue, firstValue));
+            BuildDescription(data, normalNextValue, firstValue, hasFirstValue),
+            BuildDescription(data, reinforcedNextValue, firstValue, hasFirstValue));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -292,6 +291,7 @@ public class RelicManager : MonoBehaviour
         {
             currentCount = ownedRelics[key].Count;
         }
+        bool hadStackBeforeAdd = data.CanStack && currentCount > 0;
 
         // 최대 중첩 수 초과 시 추가 중단
         if (currentCount >= data.MaxStackCount)
@@ -318,28 +318,28 @@ public class RelicManager : MonoBehaviour
         float firstValue = data.CanStack && TryGetFirstRelicValue(key, out var value)
             ? value
             : 0f;
-        description = BuildDescription(data, valueSum, firstValue);
+        description = BuildDescription(data, valueSum, firstValue, hadStackBeforeAdd);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
     }
 
-    private static string BuildDescription(RelicDataSO data, float nextValue, float firstValue)
+    private static string BuildDescription(RelicDataSO data, float nextValue, float firstValue, bool showStackChange)
     {
         string description = data.Description + "\n" + "\n";
         string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
-        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, firstValue));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, firstValue, showStackChange));
 
         return description + effectDesc;
     }
 
-    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float firstValue)
+    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float firstValue, bool showStackChange)
     {
         float added;
 
         if (data.CanStack)
         {
-            if (Mathf.Approximately(firstValue, 0f))
+            if (!showStackChange)
                 return "";
 
             added = nextValue - firstValue;
