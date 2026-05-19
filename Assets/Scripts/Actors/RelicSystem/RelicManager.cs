@@ -312,10 +312,9 @@ public class RelicManager : MonoBehaviour
 
     private static string BuildValueChangeText(RelicDataSO data, float nextValue, float previousValue)
     {
-        if (data.CanStack)
-            return $"({FormatValue(previousValue)}% → {FormatValue(nextValue)}%)";
-
-        float added = nextValue - data.BaseValue;
+        float added = data.CanStack
+            ? nextValue - previousValue
+            : nextValue - data.BaseValue;
         return added > 0f ? $"(+{FormatValue(added)}%)" : "";
     }
 
