@@ -10,8 +10,6 @@ public class KnightHealerPotion : Relic
     private float launchForce = 5f;
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         // 1. 포션 생성
         GameObject potion = Instantiate(potionPrefab, transform.position, Quaternion.identity);
         Potion potionScript = potion.GetComponent<Potion>();

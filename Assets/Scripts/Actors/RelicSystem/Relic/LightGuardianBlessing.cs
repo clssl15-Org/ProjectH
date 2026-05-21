@@ -10,8 +10,6 @@ public class LightGuardianBlessing : Relic
     private PlayerHealth playerHealth;
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         playerHealth = RelicManager.Instance.player.GetComponent<PlayerHealth>();
         GameEvents.OnMonsterDied += OnPlayerHeal;
     }

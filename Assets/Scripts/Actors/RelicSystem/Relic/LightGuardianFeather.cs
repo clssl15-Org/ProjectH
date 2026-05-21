@@ -6,8 +6,6 @@ public class LightGuardianFeather : Relic
 {
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         RelicManager.Instance.player.playerStats.maxDashCount += 1;
 
         if (value == 2)

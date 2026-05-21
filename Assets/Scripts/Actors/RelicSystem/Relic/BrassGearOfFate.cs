@@ -7,8 +7,6 @@ public class BrassGearOfFate : Relic
     private int[] originProb;
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         originProb = RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities;
 
         int[] newProb = originProb;

@@ -3,25 +3,26 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Relic", menuName = "Project H/RelicData")]
 public class RelicDataSO : ScriptableObject
 {
-    [Header("±âº» Á¤º¸")]
-    [SerializeField] private int relicNumber;     // ³Ñ¹ö
-    [SerializeField] private Sprite icon;            // ½ºÇÁ¶óÀÌÆ®
-    [SerializeField] private string relicName;    // À¯¹° ÀÌ¸§
+    [Header("?? ????")]
+    [SerializeField] private int relicNumber;     // ???
+    [SerializeField] private Sprite icon;            // ?????????
+    [SerializeField] private string relicName;    // ???? ???
 
     [TextArea]
-    [SerializeField] private string description;     // ¼³¸í
+    [SerializeField] private string description;     // ????
     [TextArea]
-    [SerializeField] private string nomalEffect;    // ÀÏ¹Ý È¿°ú ¼³¸í
+    [SerializeField] private string nomalEffect;    // ??? ??? ????
 
-    [Header("¼öÄ¡ Á¤º¸")]
-    [SerializeField] private float baseValue;        // ±âº» value (¿¹: µ¥¹ÌÁö Áõ°¡·® 0.1f)
-    [SerializeField] private float coinFlipValue;    // µ¿Àü ¾Õ¸é ¹öÇÁ value
+    [Header("??? ????")]
+    [SerializeField] private float baseValue;        // ?? value (??: ?????? ?????? 0.1f)
+    [SerializeField] private float coinFlipValue;    // ???? ??? ???? value
 
-    [Header("¼³Á¤")]
-    [SerializeField] private bool canStack;          // Áßº¹ °¡´É ¿©ºÎ
-    [SerializeField] private int maxStackCount = 1;  // ÃÖ´ë ÁßÃ¸ °³¼ö
+    [Header("????")]
+    [SerializeField] private bool canStack;          // ??? ???? ????
+    [Tooltip("???? ??? ??? ????. -1??? ???? ????. ??? ??? ?????? ???? ????(1??)?? ???????.")]
+    [SerializeField] private float maxAccumulatedValue = -1f;
 
-    // --- ¿ÜºÎ Á¢±Ù¿ë ÇÁ·ÎÆÛÆ¼ (Getter) ---
+    // --- ??? ????? ??????? (Getter) ---
     public int RelicNumber => relicNumber;
     public Sprite Icon => icon;
     public string RelicName => relicName;
@@ -30,5 +31,7 @@ public class RelicDataSO : ScriptableObject
     public float BaseValue => baseValue;
     public float CoinFlipValue => coinFlipValue;
     public bool CanStack => canStack;
-    public int MaxStackCount => maxStackCount;
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½. &lt; 0 ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.</summary>
+    public float MaxAccumulatedValue => maxAccumulatedValue;
+    public bool HasAccumulationCap => canStack && maxAccumulatedValue >= 0f;
 }

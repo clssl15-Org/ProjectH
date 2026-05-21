@@ -8,8 +8,6 @@ public class GaleKnightBoots : Relic
     private CooldownTimer cooldownTimer;
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         RelicManager.Instance.player.playerStats.moveSpeedMultiplier += value;
 
 

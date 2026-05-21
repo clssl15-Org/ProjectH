@@ -7,8 +7,6 @@ public class ScoutAccuracyGlasses : Relic
 {
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         Player player = RelicManager.Instance.player;
         RangedAttack skill = player.StatesGO.GetComponent<RangedAttack>();
         skill.BonusMultiplier += value * 0.01f;

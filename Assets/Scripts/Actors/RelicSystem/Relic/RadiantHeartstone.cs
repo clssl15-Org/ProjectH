@@ -6,8 +6,6 @@ public class RadiantHeartstone : Relic
 {
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         RelicManager.Instance.player.playerStats.ultimateCooldownMultiplier += value * 0.01f;
     }
     protected override void OnLoseCore()

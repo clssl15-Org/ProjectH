@@ -6,8 +6,6 @@ public class DevotedKnightFragmentShield : Relic
 {
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         RelicManager.Instance.player.sieldCount += (int)value;
         RelicManager.Instance.player.PlayerHealth.OnSieldBreak += OnLose;
     }

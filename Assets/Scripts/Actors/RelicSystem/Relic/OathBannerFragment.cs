@@ -7,8 +7,6 @@ public class OathBannerFragment : Relic
 {
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         Player player = RelicManager.Instance.player;
         Skill3 firstSkill = player.StatesGO.GetComponent<Skill3>();
         firstSkill.BonusMultiplier += value * 0.01f;

@@ -122,15 +122,8 @@ public class RelicManager : MonoBehaviour
             RelicDataSO data = prefab.GetComponent<Relic>().Data;
             int id = data.RelicNumber;
 
-            // 1. 현재 보유 개수 확인
-            int currentCount = 0;
-            if (ownedRelics.ContainsKey(id))
-            {
-                currentCount = ownedRelics[id].Count;
-            }
-
-            // 2. 보유 개수가 최대 중첩 수 이상이면 후보에서 제외
-            if (currentCount >= data.MaxStackCount)
+            // 1. 최대 누적값(또는 중복 불가 1회) 도달 시 후보에서 제외
+            if (IsRelicAtMaxAccumulation(data))
             {
                 continue;
             }
@@ -216,11 +209,41 @@ public class RelicManager : MonoBehaviour
         }
     }
 
+    public bool IsRelicAtMaxAccumulation(RelicDataSO data)
+    {
+        if (data == null)
+            return true;
+
+        int id = data.RelicNumber;
+
+        if (!data.CanStack)
+        {
+            return ownedRelics.ContainsKey(id) && ownedRelics[id].Count > 0;
+        }
+
+        if (!data.HasAccumulationCap)
+            return false;
+
+        return GetValueSum(id) >= data.MaxAccumulatedValue - 0.001f;
+    }
+
+    public float GetCappedAcquisitionValue(RelicDataSO data, float pendingValue, float currentSum)
+    {
+        if (!data.CanStack || !data.HasAccumulationCap)
+            return pendingValue;
+
+        return Mathf.Min(pendingValue, Mathf.Max(0f, data.MaxAccumulatedValue - currentSum));
+    }
+
     private RelicAcquisitionDto BuildRelicAcquisitionDto(RelicDataSO data, bool forceSuccess)
     {
-        float currentValue = data.CanStack ? GetValueSum(data.RelicNumber) : 0f;
-        float normalNextValue = data.CanStack ? currentValue + data.BaseValue : data.BaseValue;
-        float reinforcedNextValue = data.CanStack ? currentValue + data.CoinFlipValue : data.CoinFlipValue;
+        float currentValue = data.CanStack && data.HasAccumulationCap ? GetValueSum(data.RelicNumber) : 0f;
+        float normalNextValue = data.CanStack && data.HasAccumulationCap
+            ? currentValue + GetCappedAcquisitionValue(data, data.BaseValue, currentValue)
+            : data.BaseValue;
+        float reinforcedNextValue = data.CanStack && data.HasAccumulationCap
+            ? currentValue + GetCappedAcquisitionValue(data, data.CoinFlipValue, currentValue)
+            : data.CoinFlipValue;
 
         return new RelicAcquisitionDto(
             data,
@@ -228,8 +251,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue),
-            BuildDescription(data, reinforcedNextValue));
+            BuildDescription(data, normalNextValue, currentValue, showMaxAccumulationReached: false),
+            BuildDescription(data, reinforcedNextValue, currentValue, showMaxAccumulationReached: false));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -264,16 +287,23 @@ public class RelicManager : MonoBehaviour
 
         RelicDataSO data = prefab.GetComponent<Relic>().Data;
 
-        // 현재 보유량 체크
-        int currentCount = 0;
-        if (ownedRelics.ContainsKey(key))
+        if (IsRelicAtMaxAccumulation(data))
         {
-            currentCount = ownedRelics[key].Count;
+            string capLabel = data.HasAccumulationCap
+                ? $"최대 누적값({data.MaxAccumulatedValue})"
+                : "중복 불가";
+            description = $"유물 '{data.RelicName}'(Key:{key})은 {capLabel}에 도달하여 더 이상 추가할 수 없습니다.";
+            Debug.LogWarning(description);
+            return;
         }
-        // 최대 중첩 수 초과 시 추가 중단
-        if (currentCount >= data.MaxStackCount)
+
+        float currentSum = data.HasAccumulationCap ? GetValueSum(key) : 0f;
+        float pendingValue = isReinforced ? data.CoinFlipValue : data.BaseValue;
+        float acquisitionValue = GetCappedAcquisitionValue(data, pendingValue, currentSum);
+
+        if (data.HasAccumulationCap && acquisitionValue <= 0.001f)
         {
-            description = $"유물 '{data.RelicName}'(Key:{key})은 최대 중첩 수({data.MaxStackCount})에 도달하여 더 이상 추가할 수 없습니다.";
+            description = $"유물 '{data.RelicName}'(Key:{key})은 최대 누적값({data.MaxAccumulatedValue})에 도달하여 더 이상 추가할 수 없습니다.";
             Debug.LogWarning(description);
             return;
         }
@@ -283,7 +313,7 @@ public class RelicManager : MonoBehaviour
 
         if (relicObj.TryGetComponent<Relic>(out var relicScript))
         {
-            relicScript.isReinforced = isReinforced;
+            relicScript.PrepareAcquire(isReinforced, acquisitionValue);
 
             if (!ownedRelics.ContainsKey(key)) ownedRelics[key] = new List<GameObject>();
             ownedRelics[key].Add(relicObj);
@@ -292,26 +322,40 @@ public class RelicManager : MonoBehaviour
         }
 
         float valueSum = GetValueSum(key);
-        description = BuildDescription(data, valueSum);
+        description = BuildDescription(data, valueSum, valueSum, showMaxAccumulationReached: true);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
     }
 
-    private static string BuildDescription(RelicDataSO data, float nextValue)
+    private static bool IsAtMaxAccumulatedValue(RelicDataSO data, float value)
     {
-        string description = data.Description + "\n" + "\n";
+        return data.HasAccumulationCap && value >= data.MaxAccumulatedValue - 0.001f;
+    }
+
+    private static string BuildDescription(
+        RelicDataSO data,
+        float nextValue,
+        float currentValue = 0f,
+        bool showMaxAccumulationReached = false)
+    {
+        string description = data.Description + "\n";
         string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
-        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, currentValue));
+
+        if (showMaxAccumulationReached && IsAtMaxAccumulatedValue(data, nextValue))
+            effectDesc += "\n\n최대 누적치 도달";
 
         return description + effectDesc;
     }
 
-    private static string BuildValueChangeText(RelicDataSO data, float nextValue)
+    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float currentValue)
     {
-        float added = nextValue - data.BaseValue;
+        float added = data.CanStack && data.HasAccumulationCap
+            ? nextValue - currentValue
+            : nextValue - data.BaseValue;
 
-        return added > 0f ? $"(+{FormatValue(added)}{GetValueUnitSuffix(data)})" : "";
+        return added > 0.001f ? $"(+{FormatValue(added)}{GetValueUnitSuffix(data)})" : "";
     }
 
     /// <summary>

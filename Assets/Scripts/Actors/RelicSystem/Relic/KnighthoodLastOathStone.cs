@@ -10,8 +10,6 @@ public class KnighthoodLastOathStone : Relic
     private bool isActivated = false;
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         playerHealth = RelicManager.Instance.player.PlayerHealth;
         playerHealth.Damaged += Activate;
         playerHealth.Healed += Activate;

@@ -6,8 +6,6 @@ public class TimeFaultFragment : Relic
 {
     public override void OnAcquire()
     {
-        OnReinforcedAcquire();
-
         RelicManager.Instance.player.playerStats.skillCooldownMultiplier += value * 0.01f;
     }
     protected override void OnLoseCore()
