@@ -175,6 +175,64 @@ public class RelicManager : MonoBehaviour
 
         NotifyRelicAcquiring(selectedData, forceSuccess);
     }
+    private static readonly int[] DebugPriorityRelicIds = { 1, 2, 3 };
+
+    /// <summary>
+    /// 디버그용: 첫 3개는 001·002·003 고정, 나머지는 등록된 유물 중 랜덤으로 <see cref="AddRelic"/>합니다.
+    /// </summary>
+    public void DebugAddRandomRelics(int totalCount)
+    {
+        if (totalCount <= 0)
+            return;
+
+        int priorityCount = Mathf.Min(totalCount, DebugPriorityRelicIds.Length);
+        for (int i = 0; i < priorityCount; i++)
+        {
+            int id = DebugPriorityRelicIds[i];
+            AddRelic(id, out _, StartCoinRandom(id));
+        }
+
+        int randomNeeded = totalCount - priorityCount;
+        for (int i = 0; i < randomNeeded; i++)
+        {
+            List<int> pool = BuildDebugRandomRelicPool();
+            if (pool.Count == 0)
+            {
+                Debug.LogWarning("[RelicDebug] 더 이상 추가할 수 있는 유물이 없습니다.", this);
+                return;
+            }
+
+            int pickedId = pool[UnityEngine.Random.Range(0, pool.Count)];
+            AddRelic(pickedId, out _, StartCoinRandom(pickedId));
+        }
+    }
+
+    private List<int> BuildDebugRandomRelicPool()
+    {
+        var pool = new List<int>();
+
+        foreach (GameObject prefab in relicPrefabs)
+        {
+            if (prefab == null || !prefab.TryGetComponent<Relic>(out var relic))
+                continue;
+
+            RelicDataSO data = relic.Data;
+            if (data == null)
+                continue;
+
+            int id = data.RelicNumber;
+            if (Array.IndexOf(DebugPriorityRelicIds, id) >= 0)
+                continue;
+
+            if (IsRelicAtMaxAccumulation(data))
+                continue;
+
+            pool.Add(id);
+        }
+
+        return pool;
+    }
+
     // (디버그용) 선택한 렐릭 강제 추가
     public void GetRelicData(int key, bool forceSuccess = false)
     {
