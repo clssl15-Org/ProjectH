@@ -32,7 +32,7 @@ namespace Actors.PlayerSystem
         private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
         private float attackAngle = 0f;
 
-        private float attackPower => Player.playerStats.attackPower;
+        private int attackPower => Player.AttackPower;
 
         private float attackCursor = 0f;
 

@@ -31,7 +31,7 @@ namespace Actors.PlayerSystem
         [SerializeField]
         private float cooldownDuration = 5f;
 
-        private float attackPower => Player.playerStats.attackPower;
+        private int attackPower => Player.AttackPower;
         private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
         private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 

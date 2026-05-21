@@ -24,13 +24,13 @@ namespace Actors.PlayerSystem
         private float jumpInterval = 0.1f;
 
         [Header("Juicy Jump Settings")]
-        [SerializeField] private float jumpBufferTime = 0.15f; // Á¡ÇÁ ÀÔ·Â ÀúÀå ½Ã°£
-        [SerializeField] private float apexBonusMultiplier = 1.2f; // Á¤Á¡¿¡¼­ ÀÌµ¿ ¼Óµµ º¸³Ê½º
-        [SerializeField] private float apexThreshold = 0.5f;      // Á¤Á¡À¸·Î ÆÇÁ¤ÇÒ YÃà ¼Óµµ ÀÓ°è°ª
-        [SerializeField] private float gravityScale = 3f;         // ±âº» Áß·Â ¹èÀ²
-        [SerializeField] private float fallMultiplier = 1.2f;       // ÇÏ°­ ½Ã Áß·Â ¹èÀ²
-        [SerializeField] private float apexGravityMultiplier = 0.2f;     // Á¤Á¡¿¡¼­ Áß·Â ¹èÀ²
-        private float jumpBufferCounter; // ¹öÆÛ Å¸ÀÌ¸Ó
+        [SerializeField] private float jumpBufferTime = 0.15f; // ì í”„ ì…ë ¥ ì €ì¥ ì‹œê°„
+        [SerializeField] private float apexBonusMultiplier = 1.2f; // ì •ì ì—ì„œ ì´ë™ ì†ë„ ë³´ë„ˆìŠ¤
+        [SerializeField] private float apexThreshold = 0.5f;      // ì •ì ìœ¼ë¡œ íŒì •í•  Yì¶• ì†ë„ ì„ê³„ê°’
+        [SerializeField] private float gravityScale = 3f;         // ê¸°ë³¸ ì¤‘ë ¥ ë°°ìœ¨
+        [SerializeField] private float fallMultiplier = 1.2f;       // í•˜ê°• ì‹œ ì¤‘ë ¥ ë°°ìœ¨
+        [SerializeField] private float apexGravityMultiplier = 0.2f;     // ì •ì ì—ì„œ ì¤‘ë ¥ ë°°ìœ¨
+        private float jumpBufferCounter; // ë²„í¼ íƒ€ì´ë¨¸
 
 
         private int extraJumpCount;
@@ -50,7 +50,7 @@ namespace Actors.PlayerSystem
         {
             if (isDone)
             {
-                // ÂøÁö Á÷Àü¿¡ Á¡ÇÁ¸¦ ´­·¯¼­ ¹öÆÛ°¡ ³²¾ÆÀÖ´Ù¸é ´Ù½Ã Jump »óÅÂ¸¦ Àç½ÃÀÛ
+                // ì°©ì§€ ì§ì „ì— ì í”„ë¥¼ ëˆŒëŸ¬ì„œ ë²„í¼ê°€ ë‚¨ì•„ìˆë‹¤ë©´ ë‹¤ì‹œ Jump ìƒíƒœë¥¼ ì¬ì‹œì‘
                 if (jumpBufferCounter > 0f)
                 {
                     CharacterStateController.EnqueueTransition<Jump>();
@@ -68,7 +68,7 @@ namespace Actors.PlayerSystem
             {
                 CharacterStateController.EnqueueTransition<Dash>();
             }
-            if (CharacterActions.changeSkill.Started) // TODO:  Á¡ÇÁÇÒ¶§µµ ½ºÅ³ º¯°æ °¡´ÉÄÉ
+            if (CharacterActions.changeSkill.Started) // TODO:  ì í”„í• ë•Œë„ ìŠ¤í‚¬ ë³€ê²½ ê°€ëŠ¥ì¼€
             {
                 //CharacterStateController.EnqueueTransition<Eskill>();
             }
@@ -86,7 +86,7 @@ namespace Actors.PlayerSystem
         {
             ProcessVelocity(dt);
 
-            // »óÈ²¿¡ µû¸¥ Áß·Â ½ºÄÉÀÏ Á¶Á¤
+            // ìƒí™©ì— ë”°ë¥¸ ì¤‘ë ¥ ìŠ¤ì¼€ì¼ ì¡°ì •
             ApplyBetterGravity();
 
             float jumpIntervalDt = dt / jumpInterval;
@@ -104,7 +104,7 @@ namespace Actors.PlayerSystem
             if (jumpBufferCounter > 0f && extraJumpCount > 0 && (jumpCursor >= 1f))
             {
                 ApplyJump(subsequentJumpForce);
-                // ¹öÆÛ¸¦ ¼Ò¸ğÇßÀ¸¹Ç·Î ÃÊ±âÈ­
+                // ë²„í¼ë¥¼ ì†Œëª¨í–ˆìœ¼ë¯€ë¡œ ì´ˆê¸°í™”
                 jumpBufferCounter = 0;
             }
             /*
@@ -138,10 +138,10 @@ namespace Actors.PlayerSystem
         }
         private void ProcessVelocity(float dt)
         {
-            // Á¤Á¡ ÆÇÁ¤
+            // ì •ì  íŒì •
             bool isAtApex = Mathf.Abs(CharacterActor.Velocity.y) < apexThreshold;
 
-            // Á¤Á¡ÀÏ ¶§ ÁÂ¿ì ÀÌµ¿ ¼Óµµ¿¡ º¸³Ê½º¸¦ ÁÖ¾î Æ÷¹°¼±À» ³Ğ°Ô ¸¸µê
+            // ì •ì ì¼ ë•Œ ì¢Œìš° ì´ë™ ì†ë„ì— ë³´ë„ˆìŠ¤ë¥¼ ì£¼ì–´ í¬ë¬¼ì„ ì„ ë„“ê²Œ ë§Œë“¦
             float currentMaxSpeed = isAtApex ? subsequentJumpSpeed * apexBonusMultiplier : subsequentJumpSpeed;
             float currentAcceleration = CharacterActor.IsLanded ? acceleration : airAcceleration;
 
@@ -156,15 +156,15 @@ namespace Actors.PlayerSystem
 
         private void ApplyBetterGravity()
         {
-            if (CharacterActor.Velocity.y < 0) // ÇÏ°­ Áß
+            if (CharacterActor.Velocity.y < 0) // í•˜ê°• ì¤‘
             {
                 CharacterActor.Rigidbody.gravityScale = gravityScale * fallMultiplier;
             }
-            else if (Mathf.Abs(CharacterActor.Velocity.y) < apexThreshold) // Á¤Á¡ ºÎ±Ù
+            else if (Mathf.Abs(CharacterActor.Velocity.y) < apexThreshold) // ì •ì  ë¶€ê·¼
             {
                 CharacterActor.Rigidbody.gravityScale = gravityScale * apexGravityMultiplier;
             }
-            else // ÀÏ¹İ »ó½Â
+            else // ì¼ë°˜ ìƒìŠ¹
             {
                 CharacterActor.Rigidbody.gravityScale = gravityScale;
             }

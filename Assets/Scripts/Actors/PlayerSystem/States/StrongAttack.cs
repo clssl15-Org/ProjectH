@@ -47,7 +47,6 @@ namespace Actors.PlayerSystem
         [Header("Gizmos")]
         private bool isHitBoxEnabled = false;
 
-        private float attackPower => Player.playerStats.attackPower;
         private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 
         private CooldownTimer cooldownTimer;

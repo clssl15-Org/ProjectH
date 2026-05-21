@@ -83,19 +83,19 @@ namespace UI
 
             if (!_closeBtn)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_closeBtn)} 컴포넌트가 유효하지 않습니다.")));
+                    Ctx($"{nameof(_closeBtn)} ????????? ??????? ??????.")));
 
             if (!_relicListParent)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_relicListParent)} 컴포넌트가 유효하지 않습니다.")));
+                    Ctx($"{nameof(_relicListParent)} ????????? ??????? ??????.")));
 
             if (!_relicInfoPrefab)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_relicInfoPrefab)} 컴포넌트가 유효하지 않습니다.")));
+                    Ctx($"{nameof(_relicInfoPrefab)} ????????? ??????? ??????.")));
 
             if (!_animation)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_animation)} 컴포넌트가 유효하지 않습니다.")));
+                    Ctx($"{nameof(_animation)} ????????? ??????? ??????.")));
 
 
             _relicInfoPrefab.gameObject.SetActive(false);
@@ -135,17 +135,20 @@ namespace UI
                     if (!RelicManager.Instance.TryGetRelicData(relicId, out var relicData))
                     {
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                            $"{nameof(RelicManager.Instance)}에서 {nameof(relicId)} '{relicId}'을(를) 가지는 렐릭을 찾지 못했습니다. " +
-                            $"해당 렐릭은 목록에 표시되지 않습니다.")),
+                            $"{nameof(RelicManager.Instance)}???? {nameof(relicId)} '{relicId}'??(??) ?????? ?????? ??? ????????. " +
+                            $"??? ?????? ???? ?????? ??????.")),
                             this);
 
                         continue;
                     }
 
+                    if (relicData.HiddenFromRelicUI)
+                        continue;
+
                     var relicInfo = Instantiate(_relicInfoPrefab);
                     BlackboxHandle.Of(this).Write($"Add: {relicData.RelicName}");
 
-                    // 런타임 설명으로 가져오기
+                    // ????? ???????? ????????
                     var description = RelicManager.RelicDescriptionRegistry.TryGetValue(relicId, out var desc)
                         ? desc
                         : relicData.Description;
@@ -160,7 +163,7 @@ namespace UI
             else
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    Ctx($"{nameof(RelicManager.Instance)}이(가) 유효하지 않습니다. 올바르지 않은 렐릭 목록이 표시될 수 있습니다.")), this);
+                    Ctx($"{nameof(RelicManager.Instance)}??(??) ??????? ??????. ?????? ???? ???? ????? ???? ?? ??????.")), this);
             }
 
             ((IEnablable)this).Enable();

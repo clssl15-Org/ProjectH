@@ -1,25 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Rules;
-using Actors.PlayerSystem;
 
+/// <summary>
+/// 몬스터 처치 시 체력 회복. 실제 처리는 <see cref="RelicManager"/>의 사망 이벤트 구독에서 수행합니다.
+/// </summary>
 public class LightGuardianBlessing : Relic
 {
-    private PlayerHealth playerHealth;
-    public override void OnAcquire()
-    {
-        playerHealth = RelicManager.Instance.player.GetComponent<PlayerHealth>();
-        GameEvents.OnMonsterDied += OnPlayerHeal;
-    }
-    protected override void OnLoseCore()
-    {
-        GameEvents.OnMonsterDied -= OnPlayerHeal;
-    }
+    public override void OnAcquire() { }
 
-    public void OnPlayerHeal()
-    {
-        playerHealth.HealByPercent(value * 0.01f);
-    }
+    protected override void OnLoseCore() { }
 }

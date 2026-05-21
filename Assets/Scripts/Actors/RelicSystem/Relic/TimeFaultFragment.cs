@@ -6,10 +6,13 @@ public class TimeFaultFragment : Relic
 {
     public override void OnAcquire()
     {
-        RelicManager.Instance.player.playerStats.skillCooldownMultiplier += value * 0.01f;
+        ref var stats = ref RelicManager.Instance.player.playerStats;
+        stats.skillCooldownMultiplier = Mathf.Max(0.01f, stats.skillCooldownMultiplier - value * 0.01f);
     }
+
     protected override void OnLoseCore()
     {
-        RelicManager.Instance.player.playerStats.skillCooldownMultiplier -= value * 0.01f;
+        ref var stats = ref RelicManager.Instance.player.playerStats;
+        stats.skillCooldownMultiplier += value * 0.01f;
     }
 }

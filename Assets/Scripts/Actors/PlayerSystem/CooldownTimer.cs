@@ -32,6 +32,12 @@ namespace Actors.PlayerSystem
             StartCoroutine(CooldownCoroutine(dt));
         }
 
+        public void AddDuration(float extra)
+        {
+            timeRemaining += extra;
+            totalTime += extra;
+        }
+
         IEnumerator CooldownCoroutine(float dt)
         {
             while (timeRemaining > 0)

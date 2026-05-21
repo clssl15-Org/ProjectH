@@ -76,7 +76,7 @@ public class Box : MonoBehaviour
     IEnumerator GenerateUI()
     {
         yield return new WaitForSeconds(0.5f);
-        // UI ����
+        // UI Â»Ã½Â¼Âº
         RelicManager.Instance.GetRandomRelicData();
     }
 }

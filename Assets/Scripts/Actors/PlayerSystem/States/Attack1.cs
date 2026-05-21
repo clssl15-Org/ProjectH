@@ -47,7 +47,7 @@ namespace Actors.PlayerSystem
         private Vector2 attackPoint = Vector2.zero;
         private float scaledSize = 1.0f;
 
-        private float attackPower => Player.playerStats.attackPower;
+        private int attackPower => Player.AttackPower;
 
         private float attackCursor = 0f;
         private float attackElapsedCursor = 0f;

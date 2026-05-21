@@ -278,6 +278,7 @@ public class TransAI : MonsterBase
         }
         else
         {
+            NotifyMonsterDied();
             Destroy(gameObject, 1.5f);
         }
     }

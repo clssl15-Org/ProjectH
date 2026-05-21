@@ -348,8 +348,9 @@ public class DeerBeatleAI : MonsterBase
 
     void Dead()
     {
+        NotifyMonsterDied();
+
         rigidbody2D.velocity = Vector2.zero;
-        // 사망 애니메이션/로직
         Destroy(gameObject, 1.5f);
     }
 

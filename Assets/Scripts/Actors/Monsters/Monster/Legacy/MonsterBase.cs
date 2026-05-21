@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Rules;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
@@ -23,4 +24,6 @@ public abstract class MonsterBase : MonoBehaviour
     {
         currentState = newState;
     }
+
+    protected void NotifyMonsterDied() => GameEvents.NotifyMonsterDied();
 }

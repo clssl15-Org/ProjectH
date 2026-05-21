@@ -38,7 +38,6 @@ namespace Actors.PlayerSystem
         [SerializeField]
         private float invincibleEndTime = 0.5f;
 
-        private float attackPower => Player.playerStats.attackPower;
         private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
         private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 

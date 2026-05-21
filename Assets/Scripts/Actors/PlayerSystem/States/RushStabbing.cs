@@ -56,7 +56,6 @@ namespace Actors.PlayerSystem
         private Vector2 scaledSize = new Vector2(1.0f, 1.0f);
         private float attackAngle = 0f;
 
-        private float attackPower => Player.playerStats.attackPower;
         private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
         private float SkillCooldownMultiplier => Player.playerStats.skillCooldownMultiplier;
 

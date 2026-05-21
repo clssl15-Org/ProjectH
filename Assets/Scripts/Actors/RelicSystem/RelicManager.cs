@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
+using Rules;
 using UnityEngine;
 
 public class RelicManager : MonoBehaviour
@@ -57,6 +58,8 @@ public class RelicManager : MonoBehaviour
 
     private readonly float[] skillArtifactProbs = { 33.333f, 25.0f, 40.0f, 0f };
     private readonly float[] normalArtifactProbs = { 0f, 3.846f, 4.615f, 7.692f };
+
+    private const int LightGuardianBlessingRelicId = 6;
 
     private void Awake()
     {
@@ -308,6 +311,9 @@ public class RelicManager : MonoBehaviour
             return;
         }
 
+        if (!player)
+            player = FindObjectOfType<Player>();
+
         // 생성 및 리스트 추가
         GameObject relicObj = Instantiate(prefab, this.transform);
 
@@ -452,11 +458,28 @@ public class RelicManager : MonoBehaviour
     private void OnEnable()
     {
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        GameEvents.OnMonsterDied += ApplyLightGuardianBlessingOnKill;
     }
 
     private void OnDisable()
     {
         UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        GameEvents.OnMonsterDied -= ApplyLightGuardianBlessingOnKill;
+    }
+
+    private void ApplyLightGuardianBlessingOnKill()
+    {
+        float healPercent = GetValueSum(LightGuardianBlessingRelicId);
+        if (healPercent <= 0f)
+            return;
+
+        if (!player)
+            player = FindObjectOfType<Player>();
+
+        if (player?.PlayerHealth == null)
+            return;
+
+        player.PlayerHealth.HealByPercent(healPercent * 0.01f);
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)

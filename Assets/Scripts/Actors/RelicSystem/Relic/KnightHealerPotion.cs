@@ -7,7 +7,7 @@ public class KnightHealerPotion : Relic
     [SerializeField]
     private GameObject potionPrefab;
 
-    private float launchForce = 5f;
+    private float launchForce = 0.2f;
     public override void OnAcquire()
     {
         // 1. 포션 생성
@@ -21,9 +21,8 @@ public class KnightHealerPotion : Relic
         if (rb != null)
         {
             // 3. 랜덤한 X축 값과 일정한 상단 Y축 값 설정
-            // X는 -1.0 ~ 1.0 사이, Y는 1.5 ~ 2.0 사이로 설정하여 위쪽으로 유도
-            float randomX = Random.Range(-1.5f, 1.5f);
-            float randomY = Random.Range(1.8f, 2.5f);
+            float randomX = Random.Range(-0.1f, 0.1f);
+            float randomY = Random.Range(0.1f, 0.2f);
 
             Vector2 launchDirection = new Vector2(randomX, randomY).normalized;
 
@@ -31,7 +30,7 @@ public class KnightHealerPotion : Relic
             rb.AddForce(launchDirection * launchForce, ForceMode2D.Impulse);
 
             // 5. 약간의 회전력을 주어 더 자연스럽게 연출
-            float randomTorque = Random.Range(-10f, 10f);
+            float randomTorque = Random.Range(-1f, 1f);
             rb.AddTorque(randomTorque, ForceMode2D.Impulse);
         }
     }
