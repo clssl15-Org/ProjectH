@@ -139,6 +139,7 @@ namespace Actors.PlayerSystem
         /// </summary>
         public void ChangeMaxHealth()
         {
+            currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
             OnMaxHealthChanged?.Invoke();
         }
 

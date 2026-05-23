@@ -90,7 +90,7 @@ return delta > 0.001f ? $"(+{FormatValue(delta)}{GetValueUnitSuffix(data)})" : "
 
 ---
 
-# 3. 최대체력은 증가하는데 실제 바가 안 늘어나는 문제
+# 3. [완료] 최대체력은 증가하는데 실제 바가 안 늘어나는 문제
 
 ## 원인
 
@@ -117,3 +117,28 @@ return delta > 0.001f ? $"(+{FormatValue(delta)}{GetValueUnitSuffix(data)})" : "
 ## 정리
 
 원인은 최대체력 증가 로직이 아니라 UI 갱신 계약의 정보 부족과 바 폭 계산 방식이었다. 현재 구현은 이 경로를 보강한 상태다.
+
+## 해결 방안
+
+최대체력 변경을 단순한 현재 체력 비율 변화로만 다루지 말고, UI 갱신 데이터에 현재 체력과 최대체력을 함께 전달한다.
+
+구현 기준은 다음과 같다.
+
+- `PlayerHealth.ChangeMaxHealth()`는 현재 체력을 새 최대체력 범위 안으로 보정한 뒤 최대체력 변경 이벤트를 발생시킨다.
+- `Player`는 `PlayerHealth.OnMaxHealthChanged`를 받아 `PlayerCondition.MaxHealthChanged`로 전달한다.
+- `PlayerVM`은 `Damage`, `Heal`뿐 아니라 `MaxHealthChanged`에서도 `HealthRateChanged`를 발생시킨다.
+- `PlayerVM.HealthRate`는 정규화된 비율만 만들지 않고 `new(_player.HP, _player.MaxHP)`처럼 현재 체력과 최대체력을 함께 담는다.
+- `HealthRateData`는 `HealthRate`, `Health`, `MaxHealth`를 함께 보관한다.
+- `HealthBarUI.SetHealthRate()`는 최초 최대체력을 기준값으로 저장한 뒤, 현재 최대체력 비율만큼 전체 바 폭을 늘리고, 그 폭 안에서 현재 체력 비율만큼 `_mask` 폭을 계산한다.
+
+예시 방향:
+
+```csharp
+var width = _originalWidth * Mathf.Max(data.MaxHealth / _baseMaxHealth, 0f);
+Transform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+_mask.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, data.HealthRate * width);
+```
+
+이렇게 하면 최대체력 증가 시 UI 컨테이너 자체가 커지므로, 내부 수치는 증가했지만 화면의 전체 체력바 길이가 그대로 남는 문제가 사라진다.
+
+단, 이 해결은 최대체력 바의 길이를 늘리는 처리이지 현재 체력을 같이 회복시키는 처리는 아니다. 최대체력 증가와 현재 체력 회복은 별도 정책으로 유지된다.
