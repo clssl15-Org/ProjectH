@@ -403,7 +403,7 @@ public class RelicManager : MonoBehaviour
         float currentValue = 0f,
         bool showMaxAccumulationReached = false)
     {
-        string description = data.Description + "\n";
+        string description = data.Description + "\n" + "\n";
         string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
         effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, currentValue));
 
