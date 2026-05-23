@@ -11,7 +11,7 @@ namespace Actors.PlayerSystem
         public float moveSpeed = 5f;
         public int maxDashCount = 1;
         public int maxJumpCount = 2;
-        public bool canJumpAfterDash = false;
+        public bool canJumpAfterDash = true;
 
         public int additionalMaxHealth = 0;
         public int additionalAttackPower = 0;
