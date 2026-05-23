@@ -94,7 +94,7 @@ return delta > 0.001f ? $"(+{FormatValue(delta)}{GetValueUnitSuffix(data)})" : "
 
 ## 원인
 
-최대체력 값 자체는 `SacredProtectionMark`가 `playerStats.maxHeathMultiplier`를 바꾸고 `PlayerHealth.ChangeMaxHealth()`를 호출하면서 증가한다. 문제는 그 변경이 UI가 전체 바 폭을 늘리는 데 필요한 정보로 전달되지 않았다는 점이다.
+최대체력 값 자체는 `SacredProtectionMark`가 `playerStats.maxHeathMultiplier`를 바꾸면서 증가한다. 문제는 그 변경이 UI가 전체 바 폭을 늘리는 데 필요한 정보로 전달되지 않았다는 점이다.
 
 문제 발생 당시 흐름은 다음과 같았다.
 
@@ -109,6 +109,8 @@ return delta > 0.001f ? $"(+{FormatValue(delta)}{GetValueUnitSuffix(data)})" : "
 현재 코드에는 이 문제를 해결하는 방향의 변경이 이미 들어와 있다.
 
 - `PlayerCondition.MaxHealthChanged`가 존재한다.
+- `SacredProtectionMark`는 배율을 바꾸기 전의 최대체력을 `previousMax`로 저장한 뒤, 배율 변경 후 `PlayerHealth.NotifyMaxHealthChanged(previousMax)`를 호출한다.
+- `PlayerHealth.NotifyMaxHealthChanged(previousMaxHealth)`는 새 최대체력과 이전 최대체력을 비교해 현재 체력을 보정하고, 마지막 최대체력 기준값을 갱신한다.
 - `Player`가 `PlayerHealth.OnMaxHealthChanged`를 `ConditionChanged`로 전달한다.
 - `PlayerVM`이 `MaxHealthChanged`에서도 `HealthRateChanged`를 발생시킨다.
 - `HealthRateData`가 `Health`와 `MaxHealth`를 함께 들고 간다.
@@ -124,7 +126,8 @@ return delta > 0.001f ? $"(+{FormatValue(delta)}{GetValueUnitSuffix(data)})" : "
 
 구현 기준은 다음과 같다.
 
-- `PlayerHealth.ChangeMaxHealth()`는 현재 체력을 새 최대체력 범위 안으로 보정한 뒤 최대체력 변경 이벤트를 발생시킨다.
+- 최대체력을 바꾸는 쪽은 변경 전 `health.MaxHealth`를 먼저 저장한 뒤, 스탯 변경 후 `PlayerHealth.NotifyMaxHealthChanged(previousMax)`를 호출한다.
+- `PlayerHealth.NotifyMaxHealthChanged(previousMaxHealth)`는 최대체력이 증가할 때 현재 체력을 이전 최대체력 이상으로 올리지 않고, 최대체력이 감소할 때는 현재 체력을 새 최대체력 이하로 낮춘 뒤 최대체력 변경 이벤트를 발생시킨다.
 - `Player`는 `PlayerHealth.OnMaxHealthChanged`를 받아 `PlayerCondition.MaxHealthChanged`로 전달한다.
 - `PlayerVM`은 `Damage`, `Heal`뿐 아니라 `MaxHealthChanged`에서도 `HealthRateChanged`를 발생시킨다.
 - `PlayerVM.HealthRate`는 정규화된 비율만 만들지 않고 `new(_player.HP, _player.MaxHP)`처럼 현재 체력과 최대체력을 함께 담는다.
@@ -142,3 +145,4 @@ _mask.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, data.HealthRate *
 이렇게 하면 최대체력 증가 시 UI 컨테이너 자체가 커지므로, 내부 수치는 증가했지만 화면의 전체 체력바 길이가 그대로 남는 문제가 사라진다.
 
 단, 이 해결은 최대체력 바의 길이를 늘리는 처리이지 현재 체력을 같이 회복시키는 처리는 아니다. 최대체력 증가와 현재 체력 회복은 별도 정책으로 유지된다.
+그래서 최대체력이 100에서 120으로 늘어나도 현재 체력은 자동으로 120까지 차지 않고, 기존 현재 체력 또는 이전 최대체력 범위 안에 남는다.
