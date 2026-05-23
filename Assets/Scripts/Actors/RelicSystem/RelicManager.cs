@@ -312,8 +312,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue, currentValue, showMaxAccumulationReached: false),
-            BuildDescription(data, reinforcedNextValue, currentValue, showMaxAccumulationReached: false));
+            BuildDescription(data, normalNextValue, showMaxAccumulationReached: false),
+            BuildDescription(data, reinforcedNextValue, showMaxAccumulationReached: false));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -386,7 +386,7 @@ public class RelicManager : MonoBehaviour
         }
 
         float valueSum = GetValueSum(key);
-        description = BuildDescription(data, valueSum, valueSum, showMaxAccumulationReached: true);
+        description = BuildDescription(data, valueSum, showMaxAccumulationReached: true);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
@@ -399,25 +399,22 @@ public class RelicManager : MonoBehaviour
 
     private static string BuildDescription(
         RelicDataSO data,
-        float nextValue,
-        float currentValue = 0f,
+        float displayValue,
         bool showMaxAccumulationReached = false)
     {
         string description = data.Description?.TrimEnd('\r', '\n') ?? string.Empty;
-        string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
-        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, currentValue));
+        string effectDesc = data.NomalEffect.Replace("@", FormatValue(displayValue));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, displayValue));
 
-        if (showMaxAccumulationReached && IsAtMaxAccumulatedValue(data, nextValue))
+        if (showMaxAccumulationReached && IsAtMaxAccumulatedValue(data, displayValue))
             effectDesc += "\n\n최대 누적치 도달";
 
         return description + "\n\n" + effectDesc;
     }
 
-    private static string BuildValueChangeText(RelicDataSO data, float nextValue, float currentValue)
+    private static string BuildValueChangeText(RelicDataSO data, float displayValue)
     {
-        float added = data.CanStack && data.HasAccumulationCap
-            ? nextValue - currentValue
-            : nextValue - data.BaseValue;
+        float added = displayValue - data.BaseValue;
 
         return added > 0.001f ? $"(+{FormatValue(added)}{GetValueUnitSuffix(data)})" : "";
     }
