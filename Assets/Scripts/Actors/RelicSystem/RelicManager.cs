@@ -403,14 +403,14 @@ public class RelicManager : MonoBehaviour
         float currentValue = 0f,
         bool showMaxAccumulationReached = false)
     {
-        string description = data.Description + "\n";
+        string description = data.Description?.TrimEnd('\r', '\n') ?? string.Empty;
         string effectDesc = data.NomalEffect.Replace("@", FormatValue(nextValue));
         effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, nextValue, currentValue));
 
         if (showMaxAccumulationReached && IsAtMaxAccumulatedValue(data, nextValue))
             effectDesc += "\n\n최대 누적치 도달";
 
-        return description + effectDesc;
+        return description + "\n\n" + effectDesc;
     }
 
     private static string BuildValueChangeText(RelicDataSO data, float nextValue, float currentValue)

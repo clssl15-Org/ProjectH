@@ -40,6 +40,28 @@ return description + "\n\n" + effectDesc;
 
 추가로, 이미 SO 데이터에 들어간 끝 개행을 직접 정리할 수도 있지만, 데이터가 다시 섞일 가능성이 있으므로 런타임 문자열 조립부에서 한 번 더 정규화하는 편이 안전하다.
 
+### 해결 보고서
+`RelicManager.BuildDescription()`에서 유물 설명 문자열 조립 방식을 수정했다.
+
+수정 위치:
+- `Assets/Scripts/Actors/RelicSystem/RelicManager.cs`
+- `BuildDescription()`
+
+적용 내용:
+- `data.Description`을 그대로 쓰지 않고 `TrimEnd('\r', '\n')`으로 끝 개행을 먼저 제거한다.
+- 기본 설명과 효과 설명 사이를 `"\n\n"`으로 연결한다.
+- `description`이 null인 경우에도 빈 문자열로 처리해 문자열 조립이 깨지지 않게 했다.
+
+수정 후 동작:
+- 유물 SO의 `description` 끝이 `\r`, `\r\n`, `\r\n\n`, 개행 없음 중 무엇이든 출력 간격이 동일해진다.
+- 최종 출력은 항상 `기본 설명 + 빈 줄 + 효과 설명` 형태가 된다.
+- SO 데이터 자체를 전부 정리하지 않아도 런타임에서 공통 포맷이 보장된다.
+
+검증:
+- `dotnet build Assembly-CSharp.csproj --no-restore` 실행 결과 빌드 성공.
+- 오류 0개.
+- 기존 nullability 계열 경고는 남아 있으나, 이번 수정으로 새 컴파일 오류는 발생하지 않았다.
+
 ---
 ## 2. 유물 동전던지기 전/후 누적 표시 문제
 
