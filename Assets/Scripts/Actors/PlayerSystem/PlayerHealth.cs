@@ -21,10 +21,8 @@ namespace Actors.PlayerSystem
         {
             get => currentHealth;
         }
-        private int currentHealth = -1;
+        private int currentHealth;
         private int? initialHealthOverride;
-        private int _lastMaxHealth = -1;
-        private int _pendingCurrentHealthCap = -1;
 
         /// <summary>
         /// �ӽ� ����
@@ -47,21 +45,9 @@ namespace Actors.PlayerSystem
 
         private void Start()
         {
-            if (currentHealth < 0)
-            {
-                if (_pendingCurrentHealthCap > 0)
-                    currentHealth = _pendingCurrentHealthCap;
-                else
-                    currentHealth = initialHealthOverride.HasValue
-                        ? Mathf.Clamp(initialHealthOverride.Value, 0, MaxHealth)
-                        : MaxHealth;
-            }
-            else
-            {
-                currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
-            }
-
-            _lastMaxHealth = MaxHealth;
+            currentHealth = initialHealthOverride.HasValue
+                ? Mathf.Clamp(initialHealthOverride.Value, 0, MaxHealth)
+                : MaxHealth;
             OnInitialized?.Invoke();
         }
 
@@ -151,31 +137,10 @@ namespace Actors.PlayerSystem
         /// �ִ�ü���� �������� �� ȣ��
         /// ����� �ִ�ü���� ������Ƽ���� ���ǹǷ� �̺�Ʈ�� �߻�
         /// </summary>
-        public void NotifyMaxHealthChanged(int previousMaxHealth)
-        {
-            int newMax = MaxHealth;
-
-            if (currentHealth < 0 && previousMaxHealth > 0 && newMax > previousMaxHealth)
-            {
-                _pendingCurrentHealthCap = previousMaxHealth;
-            }
-            else if (previousMaxHealth > 0 && newMax > previousMaxHealth && currentHealth >= previousMaxHealth)
-            {
-                currentHealth = previousMaxHealth;
-            }
-            else if (currentHealth > newMax)
-            {
-                currentHealth = newMax;
-            }
-
-            _lastMaxHealth = newMax;
-            OnMaxHealthChanged?.Invoke();
-        }
-
         public void ChangeMaxHealth()
         {
-            int previousMax = _lastMaxHealth > 0 ? _lastMaxHealth : MaxHealth;
-            NotifyMaxHealthChanged(previousMax);
+            currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+            OnMaxHealthChanged?.Invoke();
         }
 
         private void Die()

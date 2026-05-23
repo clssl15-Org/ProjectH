@@ -40,7 +40,7 @@ public class Potion : MonoBehaviour
 
     private void Apply()
     {
-        RelicManager.Instance.player.PlayerHealth.HealByPercent(value * 0.01f);
+        RelicManager.Instance.player.GetComponent<PlayerHealth>().HealByPercent(value);
         LevelManager.Instance.SoundManager.PlayActionSound(PlayerAction.PotionUse);
         Destroy(gameObject);
     }

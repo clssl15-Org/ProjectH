@@ -4,85 +4,26 @@ using UnityEngine.SceneManagement;
 
 public class KnighthoodLastOathStone : Relic
 {
-    private static KnighthoodLastOathStone? primaryInstance;
-
     private PlayerHealth? playerHealth;
-    private bool isBuffActive;
+    private bool isActivated;
 
     public override void OnAcquire()
     {
-        var manager = RelicManager.Instance;
-        int relicId = data.RelicNumber;
-        int stackCount = manager.OwnedRelics.TryGetValue(relicId, out var owned)
-            ? owned.Count
-            : 1;
-
-        if (stackCount <= 1)
-        {
-            BecomePrimary();
-            return;
-        }
-
-        primaryInstance?.EvaluateBuffState();
-        enabled = false;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SubscribeToPlayerHealth();
+        Activate();
     }
 
     protected override void OnLoseCore()
     {
-        if (this == primaryInstance)
-        {
-            TearDownPrimary();
-
-            if (TryPromoteNextPrimary())
-                return;
-        }
-        else
-        {
-            primaryInstance?.EvaluateBuffState(excludeFromSum: this);
-        }
-    }
-
-    private void BecomePrimary(KnighthoodLastOathStone? excludeFromSum = null)
-    {
-        primaryInstance = this;
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SubscribeToPlayerHealth();
-        EvaluateBuffState(excludeFromSum);
-    }
-
-    private void TearDownPrimary()
-    {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         UnsubscribeFromPlayerHealth();
 
-        if (isBuffActive)
-        {
-            isBuffActive = false;
-            ApplyAttackPowerMultiplier(0.5f);
-        }
+        if (!isActivated)
+            return;
 
-        primaryInstance = null;
-    }
-
-    private bool TryPromoteNextPrimary()
-    {
-        if (!RelicManager.Instance.OwnedRelics.TryGetValue(data.RelicNumber, out var list))
-            return false;
-
-        foreach (var relicObj in list)
-        {
-            if (relicObj == null || relicObj == gameObject)
-                continue;
-
-            if (!relicObj.TryGetComponent<KnighthoodLastOathStone>(out var next))
-                continue;
-
-            next.enabled = true;
-            next.BecomePrimary(excludeFromSum: this);
-            return true;
-        }
-
-        return false;
+        isActivated = false;
+        RelicManager.Instance.player.playerStats.attackPowerMultiplier /= 2;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => SubscribeToPlayerHealth();
@@ -99,8 +40,8 @@ public class KnighthoodLastOathStone : Relic
         }
 
         playerHealth = player.PlayerHealth;
-        playerHealth.Damaged += OnHealthChanged;
-        playerHealth.Healed += OnHealthChanged;
+        playerHealth.Damaged += Activate;
+        playerHealth.Healed += Activate;
     }
 
     private void UnsubscribeFromPlayerHealth()
@@ -108,55 +49,30 @@ public class KnighthoodLastOathStone : Relic
         if (playerHealth == null)
             return;
 
-        playerHealth.Damaged -= OnHealthChanged;
-        playerHealth.Healed -= OnHealthChanged;
+        playerHealth.Damaged -= Activate;
+        playerHealth.Healed -= Activate;
         playerHealth = null;
     }
 
-    private void OnHealthChanged() => EvaluateBuffState();
-
-    private void EvaluateBuffState(KnighthoodLastOathStone? excludeFromSum = null)
+    public void Activate()
     {
-        if (this != primaryInstance || playerHealth == null)
+        if (playerHealth == null)
             return;
 
-        float thresholdPercent = GetCombinedThresholdPercent(excludeFromSum);
-        float healthThreshold = playerHealth.MaxHealth * thresholdPercent * 0.01f;
-        bool shouldBeActive = playerHealth.CurrentHealth <= healthThreshold;
+        float healthThreshold = playerHealth.MaxHealth * value * 0.01f;
 
-        if (shouldBeActive && !isBuffActive)
+        if (!isActivated)
         {
-            isBuffActive = true;
-            ApplyAttackPowerMultiplier(2f);
+            if (playerHealth.CurrentHealth <= healthThreshold)
+            {
+                isActivated = true;
+                RelicManager.Instance.player.playerStats.attackPowerMultiplier *= 2;
+            }
         }
-        else if (!shouldBeActive && isBuffActive)
+        else if (playerHealth.CurrentHealth > healthThreshold)
         {
-            isBuffActive = false;
-            ApplyAttackPowerMultiplier(0.5f);
+            isActivated = false;
+            RelicManager.Instance.player.playerStats.attackPowerMultiplier /= 2;
         }
-    }
-
-    private static void ApplyAttackPowerMultiplier(float factor)
-    {
-        var player = RelicManager.Instance.player;
-        var stats = player.playerStats;
-        stats.attackPowerMultiplier *= factor;
-        player.playerStats = stats;
-    }
-
-    private float GetCombinedThresholdPercent(KnighthoodLastOathStone? excludeFromSum = null)
-    {
-        float sum = RelicManager.Instance.GetValueSum(data.RelicNumber);
-
-        if (excludeFromSum != null)
-            sum -= excludeFromSum.value;
-
-        return sum;
-    }
-
-    private void OnDestroy()
-    {
-        if (this == primaryInstance)
-            primaryInstance = null;
     }
 }

@@ -6,27 +6,12 @@ public class SacredProtectionMark : Relic
 {
     public override void OnAcquire()
     {
-        var player = RelicManager.Instance.player;
-        var health = player.PlayerHealth;
-        int previousMax = health.MaxHealth;
-
-        var stats = player.playerStats;
-        stats.maxHeathMultiplier += value * 0.01f;
-        player.playerStats = stats;
-
-        health.NotifyMaxHealthChanged(previousMax);
+        RelicManager.Instance.player.playerStats.maxHeathMultiplier += value * 0.01f;
+        RelicManager.Instance.player.PlayerHealth.ChangeMaxHealth();
     }
-
     protected override void OnLoseCore()
     {
-        var player = RelicManager.Instance.player;
-        var health = player.PlayerHealth;
-        int previousMax = health.MaxHealth;
-
-        var stats = player.playerStats;
-        stats.maxHeathMultiplier -= value * 0.01f;
-        player.playerStats = stats;
-
-        health.NotifyMaxHealthChanged(previousMax);
+        RelicManager.Instance.player.playerStats.maxHeathMultiplier -= value * 0.01f;
+        RelicManager.Instance.player.PlayerHealth.ChangeMaxHealth();
     }
 }

@@ -1,14 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LightGuardianFeather : Relic
 {
     public override void OnAcquire()
     {
-        RelicManager.Instance.player.playerStats.maxDashCount += isReinforced ? 2 : 1;
+        RelicManager.Instance.player.playerStats.maxDashCount += 1;
+
+        if (value == 2)
+        {
+            RelicManager.Instance.player.playerStats.canJumpAfterDash = true;
+        }
     }
 
     protected override void OnLoseCore()
     {
-        RelicManager.Instance.player.playerStats.maxDashCount -= isReinforced ? 2 : 1;
+        RelicManager.Instance.player.playerStats.maxDashCount -= 1;
+
+        if (value == 2)
+        {
+            RelicManager.Instance.player.playerStats.canJumpAfterDash = false;
+        }
     }
 }
