@@ -13,6 +13,9 @@ namespace Game.Stage
 {
     public class Scenario_Stage3_Boss : ScenarioManager
     {
+        private const string FinalBossContactArrivalKey = "Stage3Boss:FinalBossContact";
+        private const string EndingArrivalKey = "Stage3Boss:Ending";
+
         [Space]
         [SerializeField] private string NextSceneName = "EndingScene";
         [SerializeField] private KeyCode ToEndingKey;
@@ -92,7 +95,13 @@ namespace Game.Stage
 
                         SetFinalBossTransitionInvincible(true);
                         BlockInputs();
-                        new Timer(2f, _ => To(BlockName.Contact_FinalBoss));
+                        new Timer(2f, _ =>
+                        {
+                            if (ConsumePostBossArrival(FinalBossContactArrivalKey))
+                                To(BlockName.Contact_FinalBoss);
+                            else
+                                SkipFinalBossContact();
+                        });
                     }
                 });
 
@@ -101,8 +110,7 @@ namespace Game.Stage
                 dialogueTitle: "Stage3_Stage3_FinalBoss",
                 onDialogueEnd: () =>
                 {
-                    UnblockInputs();
-                    To(BlockName.Battle_FinalBoss);
+                    ToFinalBossBattle();
                 })
                 .OnEntered(() => BgmPlayManager.Play(BgmName.Final_Boss));
 
@@ -130,8 +138,11 @@ namespace Game.Stage
 
                             BgmPlayManager.Stop();
 
-                            if (GameServices) GameServices.IsGameCleared = true;
-                            To(BlockName.To_Ending);
+                            SetGameCleared();
+                            if (ConsumePostBossArrival(EndingArrivalKey))
+                                To(BlockName.To_Ending);
+                            else
+                                ChangeToEndingScene();
                         });
                     }
                 });
@@ -153,16 +164,44 @@ namespace Game.Stage
                 dialogueTitle: "Ending_Arrival",
                 onDialogueEnd: () =>
                 {
-                    if (GameServices)
-                    {
-                        GameServices.IsGameCleared = true;
-
-                        FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include).CloseScreen(() =>
-                            GameServices.ChangeScene(NextSceneName, this));
-                    }
-
-                    Exit();
+                    ChangeToEndingScene();
                 });
+        }
+
+        private bool ConsumePostBossArrival(string arrivalKey)
+        {
+            return !GameServices || GameServices.ConsumeFirstScenarioArrival(arrivalKey, this);
+        }
+
+        private void SkipFinalBossContact()
+        {
+            BgmPlayManager.Play(BgmName.Final_Boss);
+            ToFinalBossBattle();
+        }
+
+        private void ToFinalBossBattle()
+        {
+            UnblockInputs();
+            To(BlockName.Battle_FinalBoss);
+        }
+
+        private void ChangeToEndingScene()
+        {
+            SetGameCleared();
+
+            if (GameServices)
+            {
+                FindAnyObjectByType<DarkscreenUI>(FindObjectsInactive.Include).CloseScreen(() =>
+                    GameServices.ChangeScene(NextSceneName, this));
+            }
+
+            Exit();
+        }
+
+        private void SetGameCleared()
+        {
+            if (GameServices)
+                GameServices.IsGameCleared = true;
         }
 
         private void ToEnding()
