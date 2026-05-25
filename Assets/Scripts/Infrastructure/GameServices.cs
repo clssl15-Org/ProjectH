@@ -15,6 +15,7 @@ namespace Infrastructure
         public abstract bool PlayerHasDied { get; }
         public abstract bool IsStage3Reached { get; set; }
         public abstract bool IsGameCleared { get; set; }
+        public abstract bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null);
         public abstract void SetPlayerName(string playerName, object context = null);
 
         public abstract void ToFirstScene(object context = null);

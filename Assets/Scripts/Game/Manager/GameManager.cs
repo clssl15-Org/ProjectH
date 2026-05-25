@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
@@ -45,6 +46,7 @@ namespace Game
 
         // Properties
         private Management.SoundManager _soundManager;
+        private readonly HashSet<string> _reachedScenarioKeys = new();
 
         // Injections
         [SerializeField] private bool _injectOnSceneLoading = true;
@@ -104,6 +106,7 @@ namespace Game
 
             IsStage3Reached = false;
             IsGameCleared = false;
+            _reachedScenarioKeys.Clear();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
@@ -185,6 +188,27 @@ namespace Game
 
             _gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var playerInfo);
             playerInfo.Name = playerName;
+        }
+
+        public override bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null)
+        {
+            using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
+                $"시나리오 최초도달 여부를 확인합니다. Key: '{scenarioKey}'", context);
+
+            if (string.IsNullOrWhiteSpace(scenarioKey))
+            {
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
+                    "시나리오 최초도달 키가 비어 있습니다. 안전하게 재도달로 처리합니다.")),
+                    this);
+                return false;
+            }
+
+            bool isFirstArrival = _reachedScenarioKeys.Add(scenarioKey);
+            BlackboxHandle.Of(this).Write(isFirstArrival
+                ? "아직 도달하지 않은 시나리오입니다. 최초도달로 기록합니다."
+                : "이미 도달한 시나리오입니다. 재도달로 처리합니다.");
+
+            return isFirstArrival;
         }
 
         public override void ToFirstScene(object context = null) => ChangeScene(_firstSceneName, context);

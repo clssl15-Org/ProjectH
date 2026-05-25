@@ -19,9 +19,10 @@ namespace Game.Stage
 
         [SerializeField] private bool _overrideFirstArrival;
         [SerializeField] private bool _isFirstArrival = true;
+        [SerializeField] private string _arrivalKey;
 
         protected bool IsFirstArrival => !_overrideFirstArrival.Resolve(false)
-            ? !GameServices.PlayerHasDied : _isFirstArrival;
+            ? _isFirstArrivalForCurrentRun : _isFirstArrival;
 
         [Tooltip("디버그용 스토리 진행 버튼")]
         [SerializeField] private KeyCode _proceedKey = KeyCode.Alpha0;
@@ -48,6 +49,8 @@ namespace Game.Stage
         private IInputHub _inputHub;
         private IDisposable _rubielVisibleHandle;
         private bool _isInitialized = false;
+        private bool _isFirstArrivalResolved = false;
+        private bool _isFirstArrivalForCurrentRun = true;
 
         internal class ScenarioMachine : Work
         {
@@ -109,7 +112,11 @@ namespace Game.Stage
             _inputHub.Remove(this);
         }
 
-        protected virtual void Start() => Machine?.Enter();
+        protected virtual void Start()
+        {
+            ResolveFirstArrival();
+            Machine?.Enter();
+        }
         protected virtual void Update()
         {
             Machine?.Update();
@@ -252,6 +259,43 @@ namespace Game.Stage
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Exit");
             Machine.Exit();
+        }
+
+        private void ResolveFirstArrival()
+        {
+            if (_isFirstArrivalResolved)
+                return;
+
+            _isFirstArrivalResolved = true;
+
+            if (_overrideFirstArrival.Resolve(false))
+            {
+                _isFirstArrivalForCurrentRun = _isFirstArrival;
+                return;
+            }
+
+            if (!GameServices)
+            {
+                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
+                    $"[{nameof(ScenarioManager)}] {nameof(GameServices)}가 주입되지 않아 최초도달로 처리합니다."),
+                    this);
+                _isFirstArrivalForCurrentRun = true;
+                return;
+            }
+
+            _isFirstArrivalForCurrentRun = GameServices.ConsumeFirstScenarioArrival(GetArrivalKey(), this);
+        }
+
+        private string GetArrivalKey()
+        {
+            if (!string.IsNullOrWhiteSpace(_arrivalKey))
+                return _arrivalKey.Trim();
+
+            var scene = gameObject.scene;
+            if (scene.IsValid() && !string.IsNullOrWhiteSpace(scene.name))
+                return scene.name;
+
+            return GetType().FullName;
         }
 
         private void OnDestroy()
