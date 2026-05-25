@@ -6,6 +6,8 @@ namespace Game.Stage
 {
     public class Scenario_Stage1_Boss : ScenarioManager
     {
+        private const string PassedArrivalKey = "Stage1Boss:Passed";
+
         private new SingleBossStageManager StageManager => (SingleBossStageManager)base.StageManager;
 
         private enum BlockName
@@ -62,7 +64,7 @@ namespace Game.Stage
                     {
                         self.ToNextToken = true;
 
-                        if (IsFirstArrival)
+                        if (ConsumePassedArrival())
                         {
                             BlockInputs();
                             SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed_1));
@@ -105,6 +107,11 @@ namespace Game.Stage
 
             boxObject.SetActive(true);
             portalObject.SetActive(true);
+        }
+
+        private bool ConsumePassedArrival()
+        {
+            return !GameServices || GameServices.ConsumeFirstScenarioArrival(PassedArrivalKey, this);
         }
 
         private static GameObject FindCommonRoot(GameObject first, GameObject second)
