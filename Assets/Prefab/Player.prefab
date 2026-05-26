@@ -535,7 +535,7 @@ MonoBehaviour:
   comboTimeWindow: 0.1
   nextComboTime: 0.9
   comboInputTimeWindow: 0.5
-  damageMultiplier: 1
+  damageMultiplier: 0.5
   attackRange: 2
   attackAngle: 90
   attackPointOffset: {x: 0, y: 0}
@@ -558,7 +558,7 @@ MonoBehaviour:
   comboTimeWindow: 0.1
   nextComboTime: 0.9
   comboInputTimeWindow: 0.5
-  damageMultiplier: 1
+  damageMultiplier: 0.5
   attackSize: {x: 3.5, y: 2}
   attackPointOffset: {x: 0, y: 0}
 --- !u!114 &6706362520032002163
@@ -577,7 +577,7 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: fd4a4b3344e5ef64c9b8dc1e03eba9e3, type: 2}
   attackDuration: 0.5
   damageApplyTime: 0.2
-  damageMultiplier: 1.5
+  damageMultiplier: 0.75
   attackSize: {x: 3.2, y: 1}
   attackPointOffset: {x: 1, y: 0}
 --- !u!114 &1992306446285886652
@@ -702,7 +702,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   directionMode: 1
-  damageRatio: 75
+  damageRatio: 25
   attackSize: {x: 3, y: 1}
   attackPointOffset: {x: 1, y: 0}
   invincibleStartTime: 0
@@ -727,8 +727,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6317047554263875150, guid: a811840dc3e307e4781ac75002df6ec7, type: 3}
   isSizeSynced: 1
   offset: {x: 0, y: 0}
-  damageMultiplier: 3
-  cooldownDuration: 5
+  damageMultiplier: 0.8
+  cooldownDuration: 1.5
 --- !u!114 &2303108416702557745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,12 +746,12 @@ MonoBehaviour:
   skillDuration: 0.77
   damageApplyTime: 0.5
   directionMode: 1
-  damageRatio: 150
+  damageRatio: 75
   attackSize: {x: 3.8, y: 3}
   attackPointOffset: {x: 0.8, y: 0.5}
   invincibleStartTime: 0
   invincibleEndTime: 1
-  cooldownDuration: 10
+  cooldownDuration: 12
 --- !u!114 &916220530954613708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,8 +816,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 1593081316257219599, guid: b8b4e3d86b932914492642bd89243e7d, type: 3}
   isSizeSynced: 1
   offset: {x: 2, y: 0}
-  damageRatio: 100
-  cooldownDuration: 10
+  damageRatio: 50
+  cooldownDuration: 8
   invincibleStartTime: 0
   invincibleEndTime: 1
 --- !u!114 &2168851036350252161
@@ -836,13 +836,13 @@ MonoBehaviour:
   runtimeAnimatorController: {fileID: 9100000, guid: e14c16b1ff1d2c14da1d86eabdc15423, type: 2}
   nextRuntimeAnimatorController: {fileID: 9100000, guid: f164b92de8ab8d24d9957d3ef1bcc6e4, type: 2}
   skillDuration: 0.6
-  cancleTime: 0.8
+  cancleTime: 0.4
   auraEffectDestroyTiming: 0.4
   auraEffectPrefab: {fileID: 976038449137352176, guid: 0df22f801db488743867823e25b25368, type: 3}
   projectilePrefab: {fileID: 1611088545178221253, guid: c65d8d0525c3aa847b65f93a12605006, type: 3}
   targetRadius: 12
   directionMode: 1
-  damageRatio: 747.6
+  damageRatio: 150
   attackSize: {x: 1, y: 1}
   attackPointOffset: {x: 3, y: 0}
   invincibleStartTime: 0

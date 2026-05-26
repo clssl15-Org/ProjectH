@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c02144d3c00a6c428655611f2ead9c9, type: 3}
   m_Name: 3. Dark Therion Stats
   m_EditorClassIdentifier: 
-  _maxHP: 2000
+  _maxHP: 200
   _useCustomSpeed: 1
   _moveSpeed: 3
   _speed: 50
@@ -20,11 +20,11 @@ MonoBehaviour:
   _attackCooltime: 0.5
   _invincibleDuration: 0.5
   _delayBeforeAttack: 0.5
-  _projectileAttackPower: 20
+  _projectileAttackPower: 15
   _projectileCount: 3
   _projectileSpeed: 20
   _projectileFireGap: 0.8
-  _bulletAttackPower: 20
+  _bulletAttackPower: 15
   _bulletCircleCount: 3
   _bulletCircleStartRadius: 1
   _bulletCircleRadiusStep: 0.5
@@ -32,4 +32,4 @@ MonoBehaviour:
   _bulletCircleRadiusSpeedBase: 3
   _bulletCircleRadiusSpeedStep: 1
   _bulletAngularSpeed: 90
-  _spikeAttackPower: 20
+  _spikeAttackPower: 15
