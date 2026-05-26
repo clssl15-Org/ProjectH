@@ -597,8 +597,8 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
+  - component: {fileID: 519420035}
   - component: {fileID: 519420029}
-  - component: {fileID: 519420033}
   - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
@@ -681,25 +681,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 733599824}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &519420033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40c0a6ccdb1011944aa501f7208b69e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  smoothSpeed: 0
-  offset: {x: 0, y: 0, z: 0}
-  cameraMinX: -39
-  cameraMaxX: 41
-  cameraMinY: -10
-  cameraMaxY: 15
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,6 +693,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5140f8cc95c796244899712242e0a3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &519420035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda7235eccd69fe46a3dc5ee6bdafb85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  smoothSpeed: 0
+  offset: {x: 0, y: 0, z: 0}
+  cameraMinX: -20
+  cameraMaxX: 20
+  cameraMinY: -13.8
+  cameraMaxY: 20.4
 --- !u!1001 &529434410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17685,6 +17685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _overrideFirstArrival: 0
   _isFirstArrival: 1
+  _arrivalKey: 
   _proceedKey: 48
   <TargetRubielDistance>k__BackingField: 3
   _display: 
@@ -17700,8 +17701,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60710c109b8445a7a415003e47c492de, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   _fallbackMode: 1
   _stageManager: {fileID: 0}
   _finalBossStageManager: {fileID: 1648177252}

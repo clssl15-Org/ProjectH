@@ -133,8 +133,11 @@ namespace Game.Stage
 
         private void ActivateClearObjects()
         {
-            if (_clearObjectsRoot && !_clearObjectsRoot.activeSelf)
-                _clearObjectsRoot.SetActive(true);
+            if (_clearObjectsRoot)
+            {
+                ClearObjectsActivator.ActivateRootAndChildren(_clearObjectsRoot);
+                return;
+            }
 
             if (_activateBox && _boxObject && !_boxObject.activeSelf)
                 _boxObject.SetActive(true);

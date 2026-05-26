@@ -11,6 +11,8 @@ public class Potion : MonoBehaviour
     [SerializeField]
     private Vector3 fSpriteWorldOffset = new Vector3(0f, -0.94f, 0f);
 
+    private bool isPlayerInRange = false;
+
     private void Start()
     {
         HideFSprite();
@@ -22,13 +24,15 @@ public class Potion : MonoBehaviour
             UpdateFSpriteTransform();
         }
     }
-    private void OnTriggerStay2D(Collider2D collision)
+
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
         {
             Apply();
         }
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.gameObject.CompareTag("Player"))
@@ -36,7 +40,8 @@ public class Potion : MonoBehaviour
             return;
         }
 
-        ShowFSprite();
+        isPlayerInRange = true;
+        Fsprite.SetActive(true);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -66,6 +71,7 @@ public class Potion : MonoBehaviour
             return;
         }
 
+        isPlayerInRange = false;
         Fsprite.SetActive(false);
     }
 
