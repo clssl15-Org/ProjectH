@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 694132363, guid: 0bf194a91cee5714595477c35428c674, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -536,7 +536,7 @@ MonoBehaviour:
   nextComboTime: 0.9
   comboInputTimeWindow: 0.5
   damageMultiplier: 1
-  attackRange: 1.5
+  attackRange: 2
   attackAngle: 90
   attackPointOffset: {x: 0, y: 0}
 --- !u!114 &7060794913466188731
@@ -559,7 +559,7 @@ MonoBehaviour:
   nextComboTime: 0.9
   comboInputTimeWindow: 0.5
   damageMultiplier: 1
-  attackSize: {x: 2, y: 2}
+  attackSize: {x: 3.5, y: 2}
   attackPointOffset: {x: 0, y: 0}
 --- !u!114 &6706362520032002163
 MonoBehaviour:
@@ -578,7 +578,7 @@ MonoBehaviour:
   attackDuration: 0.5
   damageApplyTime: 0.2
   damageMultiplier: 1.5
-  attackSize: {x: 2, y: 1}
+  attackSize: {x: 3.2, y: 1}
   attackPointOffset: {x: 1, y: 0}
 --- !u!114 &1992306446285886652
 MonoBehaviour:

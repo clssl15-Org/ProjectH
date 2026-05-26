@@ -96,11 +96,13 @@ namespace Game.Stage
             GameObject portalObject = StageManager.Portal.gameObject;
             GameObject clearObjectsRoot = FindCommonRoot(boxObject, portalObject);
 
-            if (clearObjectsRoot && !clearObjectsRoot.activeSelf)
-                clearObjectsRoot.SetActive(true);
-
-            boxObject.SetActive(true);
-            portalObject.SetActive(true);
+            if (clearObjectsRoot)
+                ClearObjectsActivator.ActivateRootAndChildren(clearObjectsRoot);
+            else
+            {
+                boxObject.SetActive(true);
+                portalObject.SetActive(true);
+            }
         }
 
         private bool ConsumePassedArrival()

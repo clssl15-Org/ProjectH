@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Game.Stage;
 
 namespace Actors
 {
@@ -57,8 +58,7 @@ namespace Actors
 
         private void OnAllMonstersCleared()
         {
-            if (clearObject != null)
-                clearObject.SetActive(true);
+            ClearObjectsActivator.ActivateRootAndChildren(clearObject);
         }
         public void WaveComplete(MonsterSpawner spawner)
         {
