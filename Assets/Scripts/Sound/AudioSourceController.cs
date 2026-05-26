@@ -50,8 +50,11 @@ namespace Sound
         private AudioSource _audioSource;
         private bool _isInitialized = false;
 
+#if PRINT_SOUND
         private const bool PrintSound = true;
-
+#else
+        private const bool PrintSound = true;
+#endif
 
         protected virtual void Awake() => EnsureInitialization();
         private void EnsureInitialization()
