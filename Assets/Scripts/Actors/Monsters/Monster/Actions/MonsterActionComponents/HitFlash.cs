@@ -8,7 +8,8 @@ namespace Actors.Monsters.Actions
 
             if (!Owner.StandaloneHitAction.TryHit(
                 reason: out var reason,
-                callback: result => Interrupt(result.ResultType.ToInterruptType())))
+                callback: result => Interrupt(result.ResultType.ToInterruptType()),
+                allowRestart: true))
             {
                 Interrupt(reason.ResultType.ToInterruptType());
                 return;

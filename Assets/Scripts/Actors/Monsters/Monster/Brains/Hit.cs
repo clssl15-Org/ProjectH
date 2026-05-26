@@ -26,7 +26,7 @@ namespace Actors.Monsters.Brains
             _doKnockback = doKnockback;
         }
 
-        public override bool CheckCondition() => !Owner.TryGetCurrentAction(out var monsterAction) || _monsterAction != monsterAction;
+        public override bool CheckCondition() => Owner.IsAlive;
 
         protected override void OnOpen(object[] inputs)
         {
@@ -49,7 +49,8 @@ namespace Actors.Monsters.Brains
                 Name: _monsterAction,
                 Callback: result => Complete(result),
                 Inputs: new object[] { Owner.StatsInfo.InvincibleDuration }),
-                out var reason))
+                out var reason,
+                allowRestart: true))
             {
                 Debug.LogWarning(Owner.FormatLogMessage(
                     $"{_monsterAction} 행동에 실패하였기 때문에 {GetType().Name} 상태로 진입할 수 없습니다.\n{reason}"));

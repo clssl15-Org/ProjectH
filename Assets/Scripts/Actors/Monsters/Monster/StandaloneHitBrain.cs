@@ -20,17 +20,24 @@ namespace Actors.Monsters.Brains
 
         public bool TryTakeDamage(DamageInfo damageInfo)
         {
-            if (IsDamaging) return false;
             if (!_owner.IsAlive) return false;
 
-            IsDamaging = true;
             _owner.HP -= damageInfo.Damage;
 
-            _notification = new MonsterConditionData(MonsterCondition.Damaged, damageInfo);
-            _owner.NotifyCondition(_notification);
+            var notification = new MonsterConditionData(MonsterCondition.Damaged, damageInfo);
+            _owner.NotifyCondition(notification);
 
             if (DoKnockback && damageInfo.HasKnockback)
                 _owner.Knockback(damageInfo.Direction, damageInfo.KnockbackForce);
+
+            if (IsDamaging)
+            {
+                notification.Complete();
+                return true;
+            }
+
+            IsDamaging = true;
+            _notification = notification;
 
             if (!_owner.StandaloneHitAction.TryHit(out var reason, _ => Complete(), playTime: _owner.StatsInfo.InvincibleDuration))
             {
@@ -39,7 +46,7 @@ namespace Actors.Monsters.Brains
                         $"Hit 행동에 실패하였기 때문에 Hit 상태로 진입할 수 없습니다.\n{reason}"));
 
                 Complete();
-                return false;
+                return true;
             }
 
             return true;

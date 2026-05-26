@@ -50,6 +50,9 @@ namespace Actors.Monsters.Actions
                 return false;
             }
 
+            if (_isRunning)
+                RestoreMaterial();
+
             _callback = callback;
 
             _mainAnimationLength = playTime.HasValue
@@ -108,10 +111,17 @@ namespace Actors.Monsters.Actions
 
         public void StopAction()
         {
+            if (!_isRunning)
+                return;
+
             RestoreMaterial();
             _isRunning = false;
 
-            _callback?.Invoke(new(_succeeded
+            var callback = _callback;
+            _callback = null;
+            _mainAnimationRemainingTime = null;
+
+            callback?.Invoke(new(_succeeded
                 ? ResultType.Success
                 : ResultType.Interrupted));
         }

@@ -67,7 +67,7 @@ namespace Actors.PlayerSystem
 
         private float currentSpeedMultiplier = 1f;
 
-        //private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
+        private HashSet<IDamageable> hitEnemies = new HashSet<IDamageable>();
         public CooldownTimer CooldownTimer => cooldownTimer;
         private CooldownTimer cooldownTimer;
 
@@ -91,10 +91,10 @@ namespace Actors.PlayerSystem
                 if (hitCollider.CompareTag("Player"))
                     continue;
 
-                //if (hitEnemies.Contains(damageableObject))
-                //    continue;
+                if (hitEnemies.Contains(damageableObject))
+                    continue;
 
-                //hitEnemies.Add(damageableObject);
+                hitEnemies.Add(damageableObject);
                 int amount = Player.CalculateDamage(damageRatio * BonusMultiplier * skillPowerMultiflier);
                 damageableObject.TakeDamage(amount);
                 print(amount);
@@ -181,12 +181,14 @@ namespace Actors.PlayerSystem
         public override void ExitBehaviour(float dt)
         {
             Player.Invincible = false;
+            hitEnemies.Clear();
         }
 
         private void ResetSkill()
         {
             isDone = false;
             skillCursor = 0;
+            hitEnemies.Clear();
         }
 
 #if UNITY_EDITOR
