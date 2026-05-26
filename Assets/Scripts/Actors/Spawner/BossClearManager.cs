@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Actors;
+using Game.Stage;
 using UnityEngine;
 
 public class BossClearManager : MonoBehaviour
@@ -84,7 +85,6 @@ public class BossClearManager : MonoBehaviour
 
     private void ShowClearObject()
     {
-        if (clearObject != null)
-            clearObject.SetActive(true);
+        ClearObjectsActivator.ActivateRootAndChildren(clearObject);
     }
 }
