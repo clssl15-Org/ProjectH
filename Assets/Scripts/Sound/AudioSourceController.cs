@@ -53,7 +53,7 @@ namespace Sound
 #if PRINT_SOUND
         private const bool PrintSound = true;
 #else
-        private const bool PrintSound = true;
+        private const bool PrintSound = false;
 #endif
 
         protected virtual void Awake() => EnsureInitialization();
