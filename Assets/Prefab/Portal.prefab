@@ -162,7 +162,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 827034111, guid: db64e4a3be2d27b4088e2add83fff30c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -186,9 +186,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d457a64583ffdc439b260d8b39b34b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <IsInteractable>k__BackingField: 1
   Fsprite: {fileID: 4164009634244330239}
   mask: {fileID: 7929536846086165765}
   levelType: 1
+  toDesignatedLevel: 0
+  designatedLevelName: 
 --- !u!61 &177057529736446829
 BoxCollider2D:
   m_ObjectHideFlags: 0
