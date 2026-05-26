@@ -7,15 +7,22 @@ namespace UI
         public float HealthRate { get; }
         public float Health { get; }
         public float MaxHealth { get; }
+        public float BaseMaxHealth { get; }
 
         public HealthRateData(float healthRate)
         {
             HealthRate = NormalizeHealthRate(healthRate);
             Health = HealthRate;
             MaxHealth = 1f;
+            BaseMaxHealth = 1f;
         }
 
         public HealthRateData(float health, float maxHealth)
+            : this(health, maxHealth, maxHealth)
+        {
+        }
+
+        public HealthRateData(float health, float maxHealth, float baseMaxHealth)
         {
             if (maxHealth <= 0f)
             {
@@ -26,8 +33,18 @@ namespace UI
                 maxHealth = 1f;
             }
 
+            if (baseMaxHealth <= 0f)
+            {
+                Debug.LogWarning(
+                    $"기준 최대 체력은 0보다 커야 하지만 '{baseMaxHealth}'이(가) 입력되었습니다. " +
+                    $"체력바 폭 계산을 위해 기준 최대 체력을 현재 최대 체력 '{maxHealth}'(으)로 정규화합니다.");
+
+                baseMaxHealth = maxHealth;
+            }
+
             Health = health;
             MaxHealth = maxHealth;
+            BaseMaxHealth = baseMaxHealth;
             HealthRate = NormalizeHealthRate(health / maxHealth);
         }
 

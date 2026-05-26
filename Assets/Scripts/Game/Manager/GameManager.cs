@@ -125,9 +125,9 @@ namespace Game
                     LevelManager.Instance.MarkPlayerDied();
                     
                     if (scene.name == _bossSceneName)
-                        ChangeScene(_unlockSceneName);
+                        ChangeScene(_unlockSceneName, preservePlayerProgress: false);
                     else
-                        ChangeScene(_firstSceneName);
+                        ChangeScene(_firstSceneName, preservePlayerProgress: false);
                 };
             }
 
@@ -212,13 +212,14 @@ namespace Game
         }
 
         public override void ToFirstScene(object context = null) => ChangeScene(_firstSceneName, context);
-        public override void ChangeScene(string sceneName, object context = null)
+        public override void ChangeScene(string sceneName, object context = null, bool preservePlayerProgress = true)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
                 $"씬을 '{sceneName}'(으)로 설정합니다.", context);
 
             try
             {
+                PreparePlayerProgressForSceneChange(preservePlayerProgress);
                 SceneManager.LoadScene(sceneName);
                 BlackboxHandle.Of(this).Write("씬 전환에 성공했습니다.");
             }
@@ -228,6 +229,24 @@ namespace Game
                     $"씬 전환에 실패했습니다.\n{ex.ToString()}"));
                 throw;
             }
+        }
+
+        private static void PreparePlayerProgressForSceneChange(bool preservePlayerProgress)
+        {
+            if (preservePlayerProgress)
+            {
+                Actors.PlayerSystem.Player.TryPersistCurrentPlayerProgress();
+                return;
+            }
+
+            if (global::LevelManager.Instance != null)
+            {
+                global::LevelManager.Instance.ResetState();
+                return;
+            }
+
+            global::SkillManager.ClearPersistedSkillLoadout();
+            Actors.PlayerSystem.Player.ClearPersistedProgress();
         }
 
         public override void Quit(object context = null)

@@ -45,7 +45,7 @@ namespace Game.Stage
             }
 
             if (_gameServices.IsGameCleared)
-                _gameServices.ChangeScene("Title", this);
+                _gameServices.ChangeScene("Title", this, preservePlayerProgress: false);
             else
                 _gameServices.ToFirstScene(this);
         }

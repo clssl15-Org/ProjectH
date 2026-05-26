@@ -13,8 +13,6 @@ namespace UI
 
         [SerializeField] private RectTransform _mask;
         private float _originalWidth;
-        private float _baseMaxHealth = 1f;
-        private bool _hasBaseMaxHealth = false;
 
         private bool _awaken = false;
 
@@ -64,20 +62,13 @@ namespace UI
             HealthRateVM.Disposed -= Destroy;
 
             HealthRateVM = null;
-            _baseMaxHealth = 1f;
-            _hasBaseMaxHealth = false;
             Transform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _originalWidth);
         }
 
         private void SetHealthRate(HealthRateData data)
         {
-            if (!_hasBaseMaxHealth)
-            {
-                _baseMaxHealth = Mathf.Max(data.MaxHealth, 1f);
-                _hasBaseMaxHealth = true;
-            }
-
-            var width = _originalWidth * Mathf.Max(data.MaxHealth / _baseMaxHealth, 0f);
+            var baseMaxHealth = Mathf.Max(data.BaseMaxHealth, 1f);
+            var width = _originalWidth * Mathf.Max(data.MaxHealth / baseMaxHealth, 0f);
             Transform.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
                 width);

@@ -14,7 +14,7 @@ namespace UI
             get
             {
                 ThrowIfDisposed();
-                return new(_player.HP, _player.MaxHP);
+                return new(_player.HP, _player.MaxHP, _player.BaseMaxHP);
             }
         }
         public event Action<HealthRateData> HealthRateChanged;

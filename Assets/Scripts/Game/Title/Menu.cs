@@ -100,10 +100,29 @@ namespace Game.Title
                 BlackboxHandle.Of(this).Exert(_darkscreen, "Close Screen");
 
                 BgmPlayManager.Stop();
-                _darkscreen.CloseScreen(() => SceneManager.LoadScene(_gameSceneName));
+                _darkscreen.CloseScreen(LoadGameScene);
             }
             else
-                SceneManager.LoadScene(_gameSceneName);
+                LoadGameScene();
+        }
+
+        private void LoadGameScene()
+        {
+            if (_gameServices)
+            {
+                _gameServices.ChangeScene(_gameSceneName, this, preservePlayerProgress: false);
+                return;
+            }
+
+            if (global::LevelManager.Instance != null)
+                global::LevelManager.Instance.ResetState();
+            else
+            {
+                global::SkillManager.ClearPersistedSkillLoadout();
+                Actors.PlayerSystem.Player.ClearPersistedProgress();
+            }
+
+            SceneManager.LoadScene(_gameSceneName);
         }
 
         public void ToGuide()

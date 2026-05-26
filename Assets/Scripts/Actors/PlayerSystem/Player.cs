@@ -33,6 +33,9 @@ namespace Actors.PlayerSystem
         public SkillType SelectedSkillType => skillManager.SelectedSkillType;
 
         public int MaxHP => playerHealth.MaxHealth;
+        public int BaseMaxHP => originStats != null
+            ? Mathf.Max(1, (int)((originStats.maxHealth + originStats.additionalMaxHealth) * originStats.maxHeathMultiplier))
+            : MaxHP;
         public int AttackPower => (int)((playerStats.attackPower + playerStats.additionalAttackPower) * playerStats.attackPowerMultiplier);
 
         public bool canMove { get; set; } = true;
@@ -192,9 +195,17 @@ namespace Actors.PlayerSystem
 
         public static void PersistCurrentPlayerProgress()
         {
+            TryPersistCurrentPlayerProgress();
+        }
+
+        public static bool TryPersistCurrentPlayerProgress()
+        {
             var player = FindObjectOfType<Player>();
-            if (player != null)
-                player.PersistState();
+            if (player == null || !player.CanPersistProgress())
+                return false;
+
+            player.PersistState();
+            return true;
         }
 
         public void DefaultAttack()
@@ -263,7 +274,7 @@ namespace Actors.PlayerSystem
 
         void OnDestroy()
         {
-            if (persistEnabled)
+            if (CanPersistProgress())
                 PersistState();
 
             if (damageRoulette)
@@ -273,6 +284,13 @@ namespace Actors.PlayerSystem
             }
 
             Destroying?.Invoke();
+        }
+
+        private bool CanPersistProgress()
+        {
+            return persistEnabled
+                && playerHealth != null
+                && playerHealth.IsAlive;
         }
 
         private void PersistState()

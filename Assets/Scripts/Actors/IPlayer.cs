@@ -41,6 +41,7 @@ namespace Actors
         event Action<PlayerCondition> ConditionChanged;
 
         int MaxHP { get; }
+        int BaseMaxHP { get; }
         int CurrentPlatform { get; }
         Direction Direction { get; }
 
