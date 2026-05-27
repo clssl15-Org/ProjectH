@@ -13134,10 +13134,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1063658805}
     m_Modifications:
+    - target: {fileID: 17792805638952250, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 900
+      objectReference: {fileID: 0}
     - target: {fileID: 2064393131316274526, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1906719311, guid: 6d1b375c7d9fba14796c93ed49f3ef7e, type: 3}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _maxMaskWidth
+      value: 900
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _minMaskWidth
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3161491346017096740, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -13226,13 +13238,21 @@ PrefabInstance:
       propertyPath: m_text
       value: "\uCF08\uBCA0\uB85C\uC2A4"
       objectReference: {fileID: 0}
+    - target: {fileID: 7061240949751792222, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 186.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061240949751792222, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Name
       value: Boss UI
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

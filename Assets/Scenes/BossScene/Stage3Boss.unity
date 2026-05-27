@@ -130,10 +130,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1968865846}
     m_Modifications:
+    - target: {fileID: 17792805638952250, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 890
+      objectReference: {fileID: 0}
     - target: {fileID: 2064393131316274526, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1376727521, guid: 2e4dd03dc955b494499f45e3fe2d3f60, type: 3}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _maxMaskWidth
+      value: 890
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _minMaskWidth
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 3161491346017096740, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -238,13 +250,21 @@ PrefabInstance:
       propertyPath: m_characterSpacing
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7061240949751792222, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 188.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061240949751792222, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Name
       value: Werbellion UI
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -720,10 +740,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1968865846}
     m_Modifications:
+    - target: {fileID: 17792805638952250, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 875
+      objectReference: {fileID: 0}
     - target: {fileID: 2064393131316274526, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -621693550, guid: e044b876baa64974aaa09fbc7cf94511, type: 3}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _maxMaskWidth
+      value: 875
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _minMaskWidth
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 3161491346017096740, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -847,6 +879,14 @@ PrefabInstance:
     - target: {fileID: 6579639683431655527, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_characterSpacing
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061240949751792222, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 189.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061240949751792222, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Name
@@ -18272,10 +18312,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1968865846}
     m_Modifications:
+    - target: {fileID: 17792805638952250, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 875
+      objectReference: {fileID: 0}
     - target: {fileID: 2064393131316274526, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -992734821, guid: 3ae6919044ae3e644b16d5f4b4c0d3c1, type: 3}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _maxMaskWidth
+      value: 875
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956358612471795155, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+      propertyPath: _minMaskWidth
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 3161491346017096740, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

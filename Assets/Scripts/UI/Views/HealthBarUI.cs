@@ -12,9 +12,10 @@ namespace UI
         protected IHealthRateVM HealthRateVM { get; private set; }
 
         [SerializeField] private RectTransform _mask;
+        [SerializeField, Min(0f)] private float _minMaskWidth = 0f;
+        [SerializeField, Min(0f)] private float _maxMaskWidth = 0f;
         private float _originalWidth;
-
-        private bool _awaken = false;
+        private bool _awaken;
 
 
         protected virtual void Awake()
@@ -74,7 +75,23 @@ namespace UI
                 width);
             _mask.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
-                data.HealthRate * width);
+                GetMaskWidth(data.HealthRate, width));
+        }
+
+
+        private float GetMaskWidth(float healthRate, float width)
+        {
+            var widthScale = _originalWidth > 0f ? width / _originalWidth : 1f;
+            var minMaskWidth = _minMaskWidth * widthScale;
+            var maxMaskWidth = (_maxMaskWidth > 0f
+                    ? Mathf.Max(_maxMaskWidth, _minMaskWidth)
+                    : _originalWidth)
+                * widthScale;
+
+            minMaskWidth = Mathf.Clamp(minMaskWidth, 0f, width);
+            maxMaskWidth = Mathf.Clamp(maxMaskWidth, minMaskWidth, width);
+
+            return Mathf.Lerp(minMaskWidth, maxMaskWidth, Mathf.Clamp01(healthRate));
         }
 
         public void SetParent(RectTransform parent) => Transform.SetParent(parent);
