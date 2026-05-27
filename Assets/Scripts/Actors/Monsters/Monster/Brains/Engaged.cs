@@ -1,6 +1,7 @@
 using System;
 using Infrastructure;
 using Infrastructure.StateMachines.BT;
+using UnityEngine;
 
 namespace Actors.Monsters.Brains
 {
@@ -12,6 +13,13 @@ namespace Actors.Monsters.Brains
         public float LowerRangeTolerance { get; set; } = 0.2f;
 
         public const float DefaultTargetAttackRange = 3f;
+        private const float ActualMoveEpsilon = 0.001f;
+
+        private float _lastPositionX;
+        private Direction _lastMoveDirection;
+        private float _lastSampleFixedTime;
+        private bool _hasMoveSample;
+        private bool _isBlocked;
 
         // Content
         public enum RangeType
@@ -62,6 +70,16 @@ namespace Actors.Monsters.Brains
             }
         }
 
+        protected override void OnOpen(object[] _)
+        {
+            _lastPositionX = Owner.transform.position.x;
+            _lastMoveDirection = Direction.Center;
+            _lastSampleFixedTime = Time.fixedTime;
+            _hasMoveSample = false;
+            _isBlocked = false;
+            Blackboard.IsMoved = false;
+        }
+
         protected override void OnTick()
         {
             if (!Owner.DetectedPlayer)
@@ -77,16 +95,72 @@ namespace Actors.Monsters.Brains
             var rangeDelta = posDelta - TargetAttackRange;
             if (rangeDelta < -LowerRangeTolerance)
             {
-                Blackboard.IsMoved = Owner.TryMove(Owner.Direction.Flip());
+                TryMoveAndUpdateActualMovement(Owner.Direction.Flip());
                 return;
             }
             if (rangeDelta > UpperRangeTolerance)
             {
-                Blackboard.IsMoved = Owner.TryMove();
+                TryMoveAndUpdateActualMovement(Owner.Direction);
                 return;
             }
             
             Complete();
+        }
+
+        private void TryMoveAndUpdateActualMovement(Direction direction)
+        {
+            var currentPositionX = Owner.transform.position.x;
+            var canMove = Owner.TryMove(direction);
+
+            if (!canMove)
+            {
+                UpdateMoveSample(currentPositionX, direction);
+                Blackboard.IsMoved = false;
+                _isBlocked = true;
+                Owner.StopMoving();
+                return;
+            }
+
+            if (!_hasMoveSample)
+            {
+                UpdateMoveSample(currentPositionX, direction);
+                Blackboard.IsMoved = true;
+                _isBlocked = false;
+                return;
+            }
+
+            if (Mathf.Approximately(Time.fixedTime, _lastSampleFixedTime))
+            {
+                Blackboard.IsMoved = !_isBlocked;
+
+                if (_isBlocked)
+                    Owner.StopMoving();
+
+                return;
+            }
+
+            var deltaX = currentPositionX - _lastPositionX;
+            var moved = _lastMoveDirection switch
+            {
+                Direction.Left => deltaX < -ActualMoveEpsilon,
+                Direction.Right => deltaX > ActualMoveEpsilon,
+                _ => Mathf.Abs(deltaX) > ActualMoveEpsilon
+            };
+
+            UpdateMoveSample(currentPositionX, direction);
+            Blackboard.IsMoved = moved;
+            _isBlocked = !moved;
+
+            if (!moved)
+                Owner.StopMoving();
+        }
+
+        private void UpdateMoveSample(float positionX, Direction direction)
+        {
+            _lastPositionX = positionX;
+            _lastMoveDirection = direction;
+            _lastSampleFixedTime = Time.fixedTime;
+            _hasMoveSample = true;
         }
     }
 }
