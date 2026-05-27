@@ -10,6 +10,8 @@ namespace Infrastructure
     {
         [Tooltip("이 필드를 할당하지 않으면 자신의 Collider2D 컴포넌트가 자동으로 선택됩니다.")]
         [SerializeField] private Collider2D _myCollider;
+        [Tooltip("When enabled, casts from the previous position to the current position so fast triggers do not skip targets.")]
+        [SerializeField] private bool _useSweepDetection;
         [field: SerializeField] public string[] TargetTags { get; set; }
 
         public event Action<Collider2D> CollisionEntered;
@@ -19,8 +21,11 @@ namespace Infrastructure
         private ContactFilter2D _contactFilter;
 
         private readonly List<Collider2D> _overlapResults = new();
+        private readonly List<RaycastHit2D> _sweepResults = new();
         private readonly HashSet<Collider2D> _currentCollisions = new();
         private readonly HashSet<Collider2D> _previousCollisions = new();
+        private Vector2 _previousPosition;
+        private bool _hasPreviousPosition;
 
         private void Awake()
         {
@@ -37,20 +42,19 @@ namespace Infrastructure
             _contactFilter.useTriggers = true;
         }
 
+        private void OnEnable()
+        {
+            ResetSweepPosition();
+        }
+
         private void FixedUpdate()
         {
             if (!_myCollider)
                 return;
 
-            var count = _myCollider.OverlapCollider(_contactFilter, _overlapResults);
-
             _currentCollisions.Clear();
-            for (int i = 0; i < count; i++)
-            {
-                var collision = _overlapResults[i];
-                if (collision && IsTarget(collision))
-                    _currentCollisions.Add(collision);
-            }
+            CollectOverlaps();
+            CollectSweptCollisions();
 
             foreach (var collision in _currentCollisions)
             {
@@ -94,6 +98,64 @@ namespace Infrastructure
             }
 
             _previousCollisions.Clear();
+            _hasPreviousPosition = false;
+        }
+
+        private void CollectOverlaps()
+        {
+            var count = _myCollider.OverlapCollider(_contactFilter, _overlapResults);
+
+            for (int i = 0; i < count; i++)
+                TryAddCollision(_overlapResults[i]);
+        }
+
+        private void CollectSweptCollisions()
+        {
+            if (!_useSweepDetection)
+                return;
+
+            var currentPosition = (Vector2)_myCollider.transform.position;
+            if (!_hasPreviousPosition)
+            {
+                SetSweepPosition(currentPosition);
+                return;
+            }
+
+            var delta = currentPosition - _previousPosition;
+            SetSweepPosition(currentPosition);
+
+            if (delta.sqrMagnitude <= Mathf.Epsilon)
+                return;
+
+            _sweepResults.Clear();
+            var distance = delta.magnitude;
+            var count = _myCollider.Cast(-delta / distance, _contactFilter, _sweepResults, distance);
+
+            for (int i = 0; i < count; i++)
+                TryAddCollision(_sweepResults[i].collider);
+        }
+
+        private void TryAddCollision(Collider2D collision)
+        {
+            if (collision && collision != _myCollider && IsTarget(collision))
+                _currentCollisions.Add(collision);
+        }
+
+        private void ResetSweepPosition()
+        {
+            if (!_myCollider)
+                _myCollider = GetComponent<Collider2D>();
+
+            if (_myCollider)
+                SetSweepPosition(_myCollider.transform.position);
+            else
+                _hasPreviousPosition = false;
+        }
+
+        private void SetSweepPosition(Vector2 position)
+        {
+            _previousPosition = position;
+            _hasPreviousPosition = true;
         }
 
         private bool IsTarget(Collider2D collision)

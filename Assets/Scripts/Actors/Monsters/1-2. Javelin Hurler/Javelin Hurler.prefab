@@ -541,7 +541,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &564014180303406030
 MonoBehaviour:
@@ -569,6 +569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 1
 --- !u!114 &459678580550843554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,6 +583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 5153200412536948667}
+  _useSweepDetection: 1
   <TargetTags>k__BackingField: []
 --- !u!114 &2313376805574766416
 MonoBehaviour:

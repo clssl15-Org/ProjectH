@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Infrastructure;
 using UnityEngine;
@@ -19,10 +20,16 @@ namespace Actors.Monsters
         }
 
         [SerializeField, Min(0)] private float _tolerance = 1f;
+        [SerializeField] private bool _useSweepDetection;
 
         private PlatformManager _platformManager;
         private string[] _collisionTags;
         private bool _arrived = false;
+        private Collider2D _collider;
+        private ContactFilter2D _contactFilter;
+        private readonly List<RaycastHit2D> _sweepResults = new();
+        private Vector2 _previousPosition;
+        private bool _hasPreviousPosition;
 
         /// <summary>
         /// 안정적인 충돌 처리를 위해 도착 처리를 지연시키는 프레임 수
@@ -33,6 +40,13 @@ namespace Actors.Monsters
         private void Awake()
         {
             Rigidbody = GetComponent<Rigidbody2D>();
+            _collider = GetComponent<Collider2D>();
+            _contactFilter.useTriggers = true;
+        }
+
+        private void OnEnable()
+        {
+            ResetSweepPosition();
         }
 
         public virtual void Initialize(PlatformManager platformManager, params string[] collisionTags)
@@ -63,32 +77,95 @@ namespace Actors.Monsters
             }
         }
 
+        private void FixedUpdate()
+        {
+            DetectSweptArrivals();
+        }
+
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (_arrived
-                || _collisionTags == null
-                || _collisionTags.Length == 0)
-                return;
-
-            if (_collisionTags.Any(t => collider.gameObject.CompareTag(t)))
-            {
-                _arrived = true;
-                Arrive();
-            }
+            TryArrive(collider);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            TryArrive(collision.gameObject);
+        }
+
+        private void DetectSweptArrivals()
+        {
+            if (!_useSweepDetection)
+                return;
+
             if (_arrived
                 || _collisionTags == null
                 || _collisionTags.Length == 0)
                 return;
 
-            if (_collisionTags.Any(t => collision.gameObject.CompareTag(t)))
+            if (!_collider)
+                _collider = GetComponent<Collider2D>();
+
+            if (!_collider)
+                return;
+
+            var currentPosition = (Vector2)_collider.transform.position;
+            if (!_hasPreviousPosition)
             {
-                _arrived = true;
-                Arrive();
+                SetSweepPosition(currentPosition);
+                return;
             }
+
+            var delta = currentPosition - _previousPosition;
+            SetSweepPosition(currentPosition);
+
+            if (delta.sqrMagnitude <= Mathf.Epsilon)
+                return;
+
+            _sweepResults.Clear();
+            var distance = delta.magnitude;
+            var count = _collider.Cast(-delta / distance, _contactFilter, _sweepResults, distance);
+
+            for (int i = 0; i < count; i++)
+            {
+                var hitCollider = _sweepResults[i].collider;
+                if (hitCollider && hitCollider != _collider && TryArrive(hitCollider.gameObject))
+                    return;
+            }
+        }
+
+        private bool TryArrive(Collider2D collider) =>
+            collider && TryArrive(collider.gameObject);
+
+        private bool TryArrive(GameObject collision)
+        {
+            if (_arrived
+                || _collisionTags == null
+                || _collisionTags.Length == 0)
+                return false;
+
+            if (!_collisionTags.Any(collision.CompareTag))
+                return false;
+
+            _arrived = true;
+            Arrive();
+            return true;
+        }
+
+        private void ResetSweepPosition()
+        {
+            if (!_collider)
+                _collider = GetComponent<Collider2D>();
+
+            if (_collider)
+                SetSweepPosition(_collider.transform.position);
+            else
+                _hasPreviousPosition = false;
+        }
+
+        private void SetSweepPosition(Vector2 position)
+        {
+            _previousPosition = position;
+            _hasPreviousPosition = true;
         }
 
         private void Arrive()
