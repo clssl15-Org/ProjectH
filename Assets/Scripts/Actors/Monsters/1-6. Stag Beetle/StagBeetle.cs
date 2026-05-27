@@ -59,7 +59,7 @@ namespace Actors.Monsters
                     .AddChild(new Hit(doKnockback: false))
                     .AddChild(new ValidPlatform()
                         .AddChild(new PlayerDetected()
-                            .AddChild(new Engaged(range: 5f)
+                            .AddChild(new Engaged(Engaged.RangeType.Contact, range: 5f)
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
                             )
