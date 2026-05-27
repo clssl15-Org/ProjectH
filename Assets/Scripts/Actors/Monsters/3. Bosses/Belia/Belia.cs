@@ -26,6 +26,8 @@ namespace Actors.Monsters.Bosses
         [Space]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
         [SerializeField, Min(0)] private float _targetPlayerRange = 5f;
+        [SerializeField] private Transform _border_l;
+        [SerializeField] private Transform _border_r;
         [Space]
         [SerializeField] private Weapon _slashWeapon;
         [SerializeField, Min(0)] private float _slashActiveTiming;
@@ -155,8 +157,7 @@ namespace Actors.Monsters.Bosses
                     )
                     .AddComponent(new Do(true)
                         .OnOpening(() =>
-                            monster.transform.position
-                                += monster.Direction.ToVector3() * monster._slashMoveDistance
+                            monster.transform.position = monster.GetSlashMoveTargetPosition()
                         ),
                         after: new(curvedAreaAttackEnter)
                     )
@@ -217,6 +218,32 @@ namespace Actors.Monsters.Bosses
 
 
         // Content
+        private Vector3 GetSlashMoveTargetPosition()
+        {
+            var targetPosition =
+                transform.position + Direction.ToVector3() * _slashMoveDistance;
+
+            if (!_border_l || !_border_r)
+                return targetPosition;
+
+            var leftBorderX = Mathf.Min(_border_l.position.x, _border_r.position.x);
+            var rightBorderX = Mathf.Max(_border_l.position.x, _border_r.position.x);
+            var colliderExtentX = Collider.bounds.extents.x;
+
+            var minX = leftBorderX + colliderExtentX;
+            var maxX = rightBorderX - colliderExtentX;
+
+            if (minX > maxX)
+            {
+                var centerX = (leftBorderX + rightBorderX) * 0.5f;
+                minX = centerX;
+                maxX = centerX;
+            }
+
+            targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
+            return targetPosition;
+        }
+
         public void InitializePlayer(IPlayer player)
         {
             _player = player;
