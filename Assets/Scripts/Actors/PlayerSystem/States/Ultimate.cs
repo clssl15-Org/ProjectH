@@ -71,7 +71,6 @@ namespace Actors.PlayerSystem
         [Header("Gizmos")]
         private bool isHitBoxEnabled = false;
 
-        private float skillPowerMultiflier => Player.playerStats.skillPowerMultiplier;
         private float ultimateCooldownMultiplier => Player.playerStats.ultimateCooldownMultiplier;
 
         private float skillCursor = 0f; 
@@ -177,7 +176,7 @@ namespace Actors.PlayerSystem
                     GameObject newProjectile = Instantiate(projectilePrefab, position, rotation);
                     newProjectile.GetComponent<UltimateProjectileMovement>().ResetProjectile(dt, direction);
                     newProjectile.GetComponent<UltimateProjectileMovement>().GrowRadius(targetRadius);
-                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(damageRatio * skillPowerMultiflier);
+                    newProjectile.GetComponent<ProjectileDamage>().Damage = (int)(damageRatio);
                     newProjectile.GetComponent<SpriteRenderer>().flipX = CharacterActor.Forward.x < 0 ? true : false;
 
                 }
