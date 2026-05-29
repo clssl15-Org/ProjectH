@@ -12,12 +12,19 @@ public class BossClearManager : MonoBehaviour
     [SerializeField]
     private GameObject clearObject;
 
+    [Tooltip("SingleBossStageManager + ScenarioManager가 있으면 클리어 오브젝트는 시나리오(대화 종료 후)에서 켭니다.")]
+    [SerializeField]
+    private bool _deferClearObjectsToScenario = true;
+
     private readonly List<(IMonster monster, Action handler)> _subscriptions = new();
     private int _remainingAlive;
 
     private void OnEnable()
     {
         ClearSubscriptions();
+
+        if (_deferClearObjectsToScenario && IsClearObjectsHandledByScenario())
+            return;
 
         if (bossMonsters == null || bossMonsters.Length == 0)
             return;
@@ -86,5 +93,11 @@ public class BossClearManager : MonoBehaviour
     private void ShowClearObject()
     {
         ClearObjectsActivator.ActivateRootAndChildren(clearObject);
+    }
+
+    private static bool IsClearObjectsHandledByScenario()
+    {
+        return FindAnyObjectByType<SingleBossStageManager>(FindObjectsInactive.Include)
+            && FindAnyObjectByType<ScenarioManager>(FindObjectsInactive.Include);
     }
 }
