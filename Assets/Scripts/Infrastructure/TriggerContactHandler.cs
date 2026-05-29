@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Infrastructure
 {
@@ -12,7 +13,7 @@ namespace Infrastructure
         [SerializeField] private Collider2D _myCollider;
         [Tooltip("When enabled, casts from the previous position to the current position so fast triggers do not skip targets.")]
         [SerializeField] private bool _useSweepDetection;
-        [field: SerializeField] public string[] TargetTags { get; set; }
+        [field: SerializeField, FormerlySerializedAs("<TargetTags>k__BackingField")] public string[] ExclusionTags { get; set; } = Array.Empty<string>();
 
         public event Action<Collider2D> CollisionEntered;
         public event Action<Collider2D> CollisionExited;
@@ -40,6 +41,8 @@ namespace Infrastructure
             }
 
             _contactFilter.useTriggers = true;
+            _contactFilter.useLayerMask = true;
+            _contactFilter.layerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         }
 
         private void OnEnable()
@@ -74,7 +77,7 @@ namespace Infrastructure
 
             foreach (var collision in _previousCollisions)
             {
-                if (_currentCollisions.Contains(collision) || !IsTarget(collision))
+                if (_currentCollisions.Contains(collision) || !IsAllowed(collision))
                     continue;
 
                 if (collision.TryGetComponent<DestroyEventHandler>(out var destHandler))
@@ -137,7 +140,7 @@ namespace Infrastructure
 
         private void TryAddCollision(Collider2D collision)
         {
-            if (collision && collision != _myCollider && IsTarget(collision))
+            if (collision && collision != _myCollider && IsAllowed(collision))
                 _currentCollisions.Add(collision);
         }
 
@@ -158,12 +161,9 @@ namespace Infrastructure
             _hasPreviousPosition = true;
         }
 
-        private bool IsTarget(Collider2D collision)
+        private bool IsAllowed(Collider2D collision)
         {
-            if (TargetTags == null || TargetTags.Length == 0)
-                return true;
-
-            return TargetTags.Any(tag => collision.CompareTag(tag));
+            return ExclusionTags == null || !ExclusionTags.Any(tag => collision.CompareTag(tag));
         }
     }
 }

@@ -24,7 +24,6 @@ namespace Actors.Monsters
         protected virtual void Awake()
         {
             _contactHandler = GetComponent<TriggerContactHandler>();
-            _contactHandler.TargetTags = new[] { "Player" };
 
             _contactHandler.CollisionEntered += c =>
             {
