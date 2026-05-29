@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Infrastructure;
 using UnityEngine;
 
 public enum PlayerAction
@@ -34,7 +36,6 @@ public struct ActionSound
 public class SoundManager : MonoBehaviour
 {
     [Header("Audio Sources")]
-    [Tooltip("효과음을 재생할 오디오 소스")]
     public AudioSource sfxSource;
     public AudioSource loopSfxSource;
 
@@ -42,8 +43,65 @@ public class SoundManager : MonoBehaviour
     public ActionSound[] actionSounds;
 
     private Coroutine fadeOutCoroutine;
+    private GameServices _gameServices;
+    private bool _sfxChangedSubscribed;
+    private float _loopClipVolume = 1f;
 
-    // 외부에서 사운드를 재생할 때 호출하는 함수
+    private void Start()
+    {
+        EnsureGameServices();
+        ApplySfxVolume();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeFromSfxChanged();
+    }
+
+    private void EnsureGameServices()
+    {
+        if (_gameServices) return;
+
+        _gameServices = FindAnyObjectByType<GameServices>(FindObjectsInactive.Include);
+        SubscribeToSfxChanged();
+    }
+
+    private void SubscribeToSfxChanged()
+    {
+        if (_sfxChangedSubscribed || _gameServices == null) return;
+
+        _gameServices.SfxChanged += OnSfxVolumeChanged;
+        _sfxChangedSubscribed = true;
+    }
+
+    private void UnsubscribeFromSfxChanged()
+    {
+        if (!_sfxChangedSubscribed || _gameServices == null) return;
+
+        _gameServices.SfxChanged -= OnSfxVolumeChanged;
+        _sfxChangedSubscribed = false;
+    }
+
+    private void OnSfxVolumeChanged(int _) => ApplySfxVolume();
+
+    private float SfxVolumeScale => (_gameServices?.SfxVolume ?? 100) / 100f;
+
+    private void ApplySfxVolume()
+    {
+        sfxSource.volume = SfxVolumeScale;
+
+        if (loopSfxSource.isPlaying)
+            loopSfxSource.volume = _loopClipVolume * SfxVolumeScale;
+    }
+
+    private void Update()
+    {
+        if (Time.timeScale != 0f) return;
+
+        if (loopSfxSource.isPlaying)
+            ResetLoopSound();
+    }
+
     public void PlayActionSound(PlayerAction action)
     {
         foreach (var sound in actionSounds)
@@ -55,20 +113,20 @@ public class SoundManager : MonoBehaviour
                 return;
             }
         }
-        Debug.LogWarning($"[SoundManager] {action}에 해당하는 사운드 클립이 없습니다!");
     }
-    // 반복 소리 재생 시작
     public void PlayLoopSound(PlayerAction action)
     {
+        if (Time.timeScale == 0f) return;
+
         foreach (var sound in actionSounds)
         {
             if (sound.action == action && sound.clip != null)
             {
-                // 이미 같은 소리가 재생 중이면 무시
                 if (loopSfxSource.clip == sound.clip && loopSfxSource.isPlaying) return;
 
                 loopSfxSource.clip = sound.clip;
-                loopSfxSource.volume = sound.volume > 0 ? sound.volume : 1f;
+                _loopClipVolume = sound.volume > 0 ? sound.volume : 1f;
+                loopSfxSource.volume = _loopClipVolume * SfxVolumeScale;
                 loopSfxSource.loop = true;
                 loopSfxSource.Play();
                 return;
@@ -95,7 +153,6 @@ public class SoundManager : MonoBehaviour
             {
                 StopCoroutine(fadeOutCoroutine);
             }
-            // 부드럽게 종료하기
             fadeOutCoroutine = StartCoroutine(FadeOutRoutine(0.1f));
         }
     }
