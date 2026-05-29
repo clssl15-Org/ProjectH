@@ -30,7 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.094, y: -0.189, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 155474134151876369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82,7 +82,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &516844076069038095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,6 +308,7 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+  _detectionStep: 0.1
 --- !u!114 &7167642575890220686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,8 +504,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.725, y: -0.205, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.86, y: 0.86, z: 0.86}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 155474134151876369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -643,7 +645,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &1684838212659111304
 MonoBehaviour:
   m_ObjectHideFlags: 0
