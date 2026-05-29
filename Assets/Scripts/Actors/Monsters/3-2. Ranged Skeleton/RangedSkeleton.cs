@@ -92,7 +92,7 @@ namespace Actors.Monsters
 
             _projectileLauncher = GetComponent<KinematicProjectileLauncher>();
             _projectileLauncher
-                .Initialize(this, PlatformManager, "Player", "Ground")
+                .Initialize(this, PlatformManager)
                 .SetProjectileInitializer(
                     p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);
 

@@ -16,14 +16,14 @@ namespace Actors.Monsters.Bosses
             Configuration configuration,
             PlatformManager platformManager,
             float gravityScale,
-            params string[] collisionTags)
+            params string[] exclusionTags)
         {
             GetComponent<SpriteSizeHandler>()
                 .Initialize(configuration)
                 .RequestApplyScaleFactor();
 
             GetComponent<Rigidbody2D>().gravityScale = gravityScale;
-            GetComponent<Projectile>().Initialize(platformManager, collisionTags);
+            GetComponent<Projectile>().Initialize(platformManager, exclusionTags);
 
             return this;
         }

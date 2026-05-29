@@ -74,7 +74,7 @@ namespace Actors.Monsters.Bosses
                     }
 
                     var projectile = projectileGO.GetComponent<KinematicProjectile>();
-                    projectile.Initialize(DarkTherion.PlatformManager, "Player", "Ground");
+                    projectile.Initialize(DarkTherion.PlatformManager);
 
                     projectile.Launch(
                         posDelta,

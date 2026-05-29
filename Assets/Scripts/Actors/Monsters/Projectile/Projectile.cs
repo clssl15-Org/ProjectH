@@ -23,7 +23,7 @@ namespace Actors.Monsters
         [SerializeField] private bool _useSweepDetection;
 
         private PlatformManager _platformManager;
-        private string[] _collisionTags;
+        private string[] _exclusionTags = Array.Empty<string>();
         private bool _arrived = false;
         private Collider2D _collider;
         private ContactFilter2D _contactFilter;
@@ -42,6 +42,8 @@ namespace Actors.Monsters
             Rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<Collider2D>();
             _contactFilter.useTriggers = true;
+            _contactFilter.useLayerMask = true;
+            _contactFilter.layerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         }
 
         private void OnEnable()
@@ -49,10 +51,10 @@ namespace Actors.Monsters
             ResetSweepPosition();
         }
 
-        public virtual void Initialize(PlatformManager platformManager, params string[] collisionTags)
+        public virtual void Initialize(PlatformManager platformManager, params string[] exclusionTags)
         {
             _platformManager = platformManager;
-            _collisionTags = collisionTags;
+            _exclusionTags = exclusionTags ?? Array.Empty<string>();
         }
 
         protected virtual void Update()
@@ -97,9 +99,7 @@ namespace Actors.Monsters
             if (!_useSweepDetection)
                 return;
 
-            if (_arrived
-                || _collisionTags == null
-                || _collisionTags.Length == 0)
+            if (_arrived)
                 return;
 
             if (!_collider)
@@ -138,12 +138,10 @@ namespace Actors.Monsters
 
         private bool TryArrive(GameObject collision)
         {
-            if (_arrived
-                || _collisionTags == null
-                || _collisionTags.Length == 0)
+            if (_arrived)
                 return false;
 
-            if (!_collisionTags.Any(collision.CompareTag))
+            if (_exclusionTags.Any(collision.CompareTag))
                 return false;
 
             _arrived = true;

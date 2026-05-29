@@ -22,7 +22,7 @@ namespace Actors.Monsters
 
         private IMonsterInternal _owner;
         private PlatformManager _platformManager;
-        private string[] _collisionTags;
+        private string[] _exclusionTags = Array.Empty<string>();
 
 
         // Content
@@ -37,11 +37,11 @@ namespace Actors.Monsters
             }
         }
 
-        public KinematicProjectileLauncher Initialize(IMonsterInternal owner, PlatformManager platformManager, params string[] collisionTags)
+        public KinematicProjectileLauncher Initialize(IMonsterInternal owner, PlatformManager platformManager, params string[] exclusionTags)
         {
             _owner = owner;
             _platformManager = platformManager;
-            _collisionTags = collisionTags;
+            _exclusionTags = exclusionTags ?? Array.Empty<string>();
 
             return this;
         }
@@ -141,7 +141,7 @@ namespace Actors.Monsters
 
         private KinematicProjectile InitializeProjectile(KinematicProjectile projectile)
         {
-            projectile.Initialize(_platformManager, _collisionTags);
+            projectile.Initialize(_platformManager, _exclusionTags);
 
             if (_projectileInitializers != null)
             {

@@ -211,7 +211,7 @@ namespace Actors.Monsters
         private void InitializeSpikeLauncher()
         {
             _spikeLauncher
-                .Initialize(this, PlatformManager, "Player", "Ground")
+                .Initialize(this, PlatformManager)
                 .SetProjectileInitializer(
                     p => p.GetComponent<SpriteSizeHandler>().Initialize(_spikeScaleFactor, true),
                     p => p.GetComponent<Weapon>().AttackPower = StatsInfo.AttackPower);

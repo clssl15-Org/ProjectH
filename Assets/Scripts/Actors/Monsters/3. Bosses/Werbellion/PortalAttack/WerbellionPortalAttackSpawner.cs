@@ -92,7 +92,7 @@ namespace Actors.Monsters.Bosses
 
             var projectile = Instantiate(_projectilePrefab).GetComponent<KinematicProjectile>();
             projectile.transform.position = transform.position;
-            projectile.Initialize(_platformManager, "Player", "Ground");
+            projectile.Initialize(_platformManager);
 
             if (_initializers != null)
             {

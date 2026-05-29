@@ -116,7 +116,7 @@ namespace Actors.Monsters
         private void InitializeComponents()
         {
             _spikeLauncher
-                .Initialize(this, PlatformManager, "Ground", "Player")
+                .Initialize(this, PlatformManager)
                 .SetProjectileInitializer(
                     p => p.GetComponent<SpriteSizeHandler>().Initialize(Configuration, true));
         }

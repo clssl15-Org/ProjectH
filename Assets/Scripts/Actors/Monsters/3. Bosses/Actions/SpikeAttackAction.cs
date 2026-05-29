@@ -114,7 +114,7 @@ namespace Actors.Monsters.Bosses
                     UnityEngine.Object.Instantiate(_spikePrefab.gameObject)
                     .GetComponent<KinematicProjectile>();
 
-                spike.Initialize(Owner.PlatformManager, "Player", "Ground");
+                spike.Initialize(Owner.PlatformManager);
 
                 switch (_spawnPointType)
                 {
