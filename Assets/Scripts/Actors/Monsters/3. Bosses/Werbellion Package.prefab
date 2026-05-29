@@ -190,7 +190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &4066213628536586104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -795,6 +796,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!1 &3538217299599159596
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,7 +1023,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &2615237427494459927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1285,6 +1288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!1 &4083348053365577667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1879,7 +1883,7 @@ GameObject:
   - component: {fileID: 7259942266412793238}
   - component: {fileID: 1690783099554521750}
   - component: {fileID: 8342574464072529673}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Stun Attack Weapon
   m_TagString: MonsterAttack
   m_Icon: {fileID: 0}
@@ -1986,7 +1990,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &8342574464072529673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2313,7 +2318,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &3796500828974225351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2637,7 +2643,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &5536812651792109898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2852,6 +2859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!1 &7770860423613543033
 GameObject:
   m_ObjectHideFlags: 0
@@ -3052,6 +3060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!1 &8213877967849156542
 GameObject:
   m_ObjectHideFlags: 0
