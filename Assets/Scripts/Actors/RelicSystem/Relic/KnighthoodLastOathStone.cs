@@ -59,6 +59,7 @@ public class KnighthoodLastOathStone : Relic
         {
             isBuffActive = false;
             ApplyAttackPowerMultiplier(0.5f);
+            ApplyRangedBonusMultiplier(0.5f);
         }
 
         primaryInstance = null;
@@ -128,11 +129,13 @@ public class KnighthoodLastOathStone : Relic
         {
             isBuffActive = true;
             ApplyAttackPowerMultiplier(2f);
+            ApplyRangedBonusMultiplier(2f);
         }
         else if (!shouldBeActive && isBuffActive)
         {
             isBuffActive = false;
             ApplyAttackPowerMultiplier(0.5f);
+            ApplyRangedBonusMultiplier(0.5f);
         }
     }
 
@@ -142,6 +145,18 @@ public class KnighthoodLastOathStone : Relic
         var stats = player.playerStats;
         stats.attackPowerMultiplier *= factor;
         player.playerStats = stats;
+    }
+
+    private static void ApplyRangedBonusMultiplier(float factor)
+    {
+        var player = RelicManager.Instance.player;
+        if (player?.StatesGO == null)
+            return;
+
+        if (!player.StatesGO.TryGetComponent<RangedAttack>(out var rangedAttack))
+            return;
+
+        rangedAttack.BonusMultiplier *= factor;
     }
 
     private float GetCombinedThresholdPercent(KnighthoodLastOathStone? excludeFromSum = null)
