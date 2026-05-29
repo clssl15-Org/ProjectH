@@ -12,26 +12,42 @@ using UnityEditor;
 namespace Game
 {
     /// <summary>
-    /// 게임플레이 전체를 관리하는 매니저입니다.
+    /// 寃뚯엫?뵆?젅?씠 ?쟾泥대?? 愿?由ы븯?뒗 留ㅻ땲????엯?땲?떎.
     /// </summary>
     /// <remarks>
-    /// 이 객체는 모든 씬에 걸쳐 존재하는 단일 인스턴스입니다.
+    /// ?씠 媛앹껜?뒗 紐⑤뱺 ?뵮?뿉 嫄몄퀜 議댁옱?븯?뒗 ?떒?씪 ?씤?뒪?꽩?뒪?엯?땲?떎.
     /// </remarks>
     public sealed class GameManager : GameServices
     {
         // Forwardings
         public override event Action<int> BgmChanged
         {
-            add => _soundManager.BgmChanged += value;
-            remove => _soundManager.BgmChanged -= value;
+            add
+            {
+                if (_soundManager != null)
+                    _soundManager.BgmChanged += value;
+            }
+            remove
+            {
+                if (_soundManager != null)
+                    _soundManager.BgmChanged -= value;
+            }
         }
         public override event Action<int> SfxChanged
         {
-            add => _soundManager.SfxChanged += value;
-            remove => _soundManager.SfxChanged -= value;
+            add
+            {
+                if (_soundManager != null)
+                    _soundManager.SfxChanged += value;
+            }
+            remove
+            {
+                if (_soundManager != null)
+                    _soundManager.SfxChanged -= value;
+            }
         }
-        public override int BgmVolume => _soundManager.BgmVolume;
-        public override int SfxVolume => _soundManager.SfxVolume;
+        public override int BgmVolume => _soundManager != null ? _soundManager.BgmVolume : 70;
+        public override int SfxVolume => _soundManager != null ? _soundManager.SfxVolume : 70;
 
         public override bool IsStage3Reached { get; set; }
         public override bool IsGameCleared { get; set; }
@@ -79,14 +95,14 @@ namespace Game
                 openLogOption: OpenLogOption.Open,
                 exceptionHandlingOption: ExceptionHandlingOption.CrashExport);
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("?씤?뒪?꽩?뒪媛? ?깮?꽦?릺?뿀?뒿?땲?떎.");
 
             _soundManager = GetComponentInChildren<Management.SoundManager>();
             if (_soundManager)
-                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager 등록.");
+                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager ?벑濡?.");
             else 
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    "자식 컴포넌트에서 _soundManager을(를) 찾지 못했습니다."));
+                    "?옄?떇 而댄룷?꼳?듃?뿉?꽌 _soundManager?쓣(瑜?) 李얠?? 紐삵뻽?뒿?땲?떎."));
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -96,13 +112,13 @@ namespace Game
             if (_isStarted) return;
             _isStarted = true;
 
-            // 게임 최초 시작 시
+            // 寃뚯엫 理쒖큹 ?떆?옉 ?떆
             if (_gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var player))
                 player.Name = _configuration.InitialPlayerName;
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteError(Ctx(
-                    $"{nameof(_gameAssetLibrary)}에서 {World.Character.Player}을(를) 찾지 못했기 때문에 " +
-                    $"플레이어 이름을 '{_configuration.InitialPlayerName}'(으)로 변경할 수 없습니다.")));
+                    $"{nameof(_gameAssetLibrary)}?뿉?꽌 {World.Character.Player}?쓣(瑜?) 李얠?? 紐삵뻽湲? ?븣臾몄뿉 " +
+                    $"?뵆?젅?씠?뼱 ?씠由꾩쓣 '{_configuration.InitialPlayerName}'(?쑝)濡? 蹂?寃쏀븷 ?닔 ?뾾?뒿?땲?떎.")));
 
             IsStage3Reached = false;
             IsGameCleared = false;
@@ -111,7 +127,7 @@ namespace Game
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
         {
-            var message = Ctx($"씬 '{scene.name}'이(가) 로드되었습니다.");
+            var message = Ctx($"?뵮 '{scene.name}'?씠(媛?) 濡쒕뱶?릺?뿀?뒿?땲?떎.");
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
 
@@ -119,7 +135,7 @@ namespace Game
             {
                 stageManager.PlayerDied += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).WriteScope("플레이어 사망");
+                    using var _ = BlackboxHandle.Of(this).WriteScope("?뵆?젅?씠?뼱 ?궗留?");
 
                     LevelManager.Instance.ResetState();
                     LevelManager.Instance.MarkPlayerDied();
@@ -135,7 +151,7 @@ namespace Game
             {
                 if (!stageManager)
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        Ctx("StageManager 컴포넌트를 찾는 데 실패했기 때문에 ScenarioManager를 초기화할 수 없습니다.")));
+                        Ctx("StageManager 而댄룷?꼳?듃瑜? 李얜뒗 ?뜲 ?떎?뙣?뻽湲? ?븣臾몄뿉 ScenarioManager瑜? 珥덇린?솕?븷 ?닔 ?뾾?뒿?땲?떎.")));
 
                 BlackboxHandle.Of(this).Exert(scenarioManager, "Initialize");
                 scenarioManager.Initialize(stageManager);
@@ -150,7 +166,7 @@ namespace Game
             {
                 if (!TryFindScript<Injector>(scene, out var injector))
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. 주입을 수행할 수 없습니다.")));
+                        Ctx("Injector 而댄룷?꼳?듃瑜? 李얜뒗 ?뜲 ?떎?뙣?뻽?뒿?땲?떎. 二쇱엯?쓣 ?닔?뻾?븷 ?닔 ?뾾?뒿?땲?떎.")));
 
                 injector.AddInjection(this, typeof(GameServices));
                 foreach (var injection in _injections)
@@ -165,14 +181,14 @@ namespace Game
         public override void SetBgmVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Bgm 볼륨을 {volume}(으)로 설정합니다.", context);
+                $"Bgm 蹂쇰ⅷ?쓣 {volume}(?쑝)濡? ?꽕?젙?빀?땲?떎.", context);
 
             _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Sfx 볼륨을 {volume}(으)로 설정합니다.", context);
+                $"Sfx 蹂쇰ⅷ?쓣 {volume}(?쑝)濡? ?꽕?젙?빀?땲?떎.", context);
 
             _soundManager.SetSfxVolume(volume);
         }
@@ -180,11 +196,11 @@ namespace Game
         public override void SetPlayerName(string playerName, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"플레이어 이름을 '{playerName}'(으)로 설정합니다.", context);
+                $"?뵆?젅?씠?뼱 ?씠由꾩쓣 '{playerName}'(?쑝)濡? ?꽕?젙?빀?땲?떎.", context);
 
             if (!_gameAssetLibrary)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(Ctx(
-                    "GameAssetLibrary가 할당되지 않았습니다. 플레이어 이름을 설정할 수 없습니다.")));
+                    "GameAssetLibrary媛? ?븷?떦?릺吏? ?븡?븯?뒿?땲?떎. ?뵆?젅?씠?뼱 ?씠由꾩쓣 ?꽕?젙?븷 ?닔 ?뾾?뒿?땲?떎.")));
 
             _gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var playerInfo);
             playerInfo.Name = playerName;
@@ -193,20 +209,20 @@ namespace Game
         public override bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"시나리오 최초도달 여부를 확인합니다. Key: '{scenarioKey}'", context);
+                $"?떆?굹由ъ삤 理쒖큹?룄?떖 ?뿬遺?瑜? ?솗?씤?빀?땲?떎. Key: '{scenarioKey}'", context);
 
             if (string.IsNullOrWhiteSpace(scenarioKey))
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    "시나리오 최초도달 키가 비어 있습니다. 안전하게 재도달로 처리합니다.")),
+                    "?떆?굹由ъ삤 理쒖큹?룄?떖 ?궎媛? 鍮꾩뼱 ?엳?뒿?땲?떎. ?븞?쟾?븯寃? ?옱?룄?떖濡? 泥섎━?빀?땲?떎.")),
                     this);
                 return false;
             }
 
             bool isFirstArrival = _reachedScenarioKeys.Add(scenarioKey);
             BlackboxHandle.Of(this).Write(isFirstArrival
-                ? "아직 도달하지 않은 시나리오입니다. 최초도달로 기록합니다."
-                : "이미 도달한 시나리오입니다. 재도달로 처리합니다.");
+                ? "?븘吏? ?룄?떖?븯吏? ?븡??? ?떆?굹由ъ삤?엯?땲?떎. 理쒖큹?룄?떖濡? 湲곕줉?빀?땲?떎."
+                : "?씠誘? ?룄?떖?븳 ?떆?굹由ъ삤?엯?땲?떎. ?옱?룄?떖濡? 泥섎━?빀?땲?떎.");
 
             return isFirstArrival;
         }
@@ -215,18 +231,18 @@ namespace Game
         public override void ChangeScene(string sceneName, object context = null, bool preservePlayerProgress = true)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"씬을 '{sceneName}'(으)로 설정합니다.", context);
+                $"?뵮?쓣 '{sceneName}'(?쑝)濡? ?꽕?젙?빀?땲?떎.", context);
 
             try
             {
                 PreparePlayerProgressForSceneChange(preservePlayerProgress);
                 SceneManager.LoadScene(sceneName);
-                BlackboxHandle.Of(this).Write("씬 전환에 성공했습니다.");
+                BlackboxHandle.Of(this).Write("?뵮 ?쟾?솚?뿉 ?꽦怨듯뻽?뒿?땲?떎.");
             }
             catch (Exception ex)
             {
                 Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                    $"씬 전환에 실패했습니다.\n{ex.ToString()}"));
+                    $"?뵮 ?쟾?솚?뿉 ?떎?뙣?뻽?뒿?땲?떎.\n{ex.ToString()}"));
                 throw;
             }
         }
@@ -252,7 +268,7 @@ namespace Game
         public override void Quit(object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                "게임을 종료합니다.", context);
+                "寃뚯엫?쓣 醫낅즺?빀?땲?떎.", context);
 
 #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
@@ -274,8 +290,8 @@ namespace Game
                         script = found;
                     else
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                            $"씬 '{scene.name}'의 '{found.name}'에서 {nameof(T)} 컴포넌트가 중복으로 발견되었습니다. " +
-                            $"첫 번째로 발견된 객채 '{script.name}'의 컴포넌트를 사용합니다.")),
+                            $"?뵮 '{scene.name}'?쓽 '{found.name}'?뿉?꽌 {nameof(T)} 而댄룷?꼳?듃媛? 以묐났?쑝濡? 諛쒓껄?릺?뿀?뒿?땲?떎. " +
+                            $"泥? 踰덉㎏濡? 諛쒓껄?맂 媛앹콈 '{script.name}'?쓽 而댄룷?꼳?듃瑜? ?궗?슜?빀?땲?떎.")),
                             this);
                 }
             }
@@ -285,7 +301,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager가 삭제되었습니다.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager媛? ?궘?젣?릺?뿀?뒿?땲?떎.");
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 

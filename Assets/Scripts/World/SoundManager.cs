@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Infrastructure;
 using UnityEngine;
 
 public enum PlayerAction
@@ -43,13 +42,13 @@ public class SoundManager : MonoBehaviour
     public ActionSound[] actionSounds;
 
     private Coroutine fadeOutCoroutine;
-    private GameServices _gameServices;
+    private Game.Management.SoundManager _volumeSettings;
     private bool _sfxChangedSubscribed;
     private float _loopClipVolume = 1f;
 
     private void Start()
     {
-        EnsureGameServices();
+        EnsureVolumeSettings();
         ApplySfxVolume();
     }
 
@@ -58,33 +57,33 @@ public class SoundManager : MonoBehaviour
         UnsubscribeFromSfxChanged();
     }
 
-    private void EnsureGameServices()
+    private void EnsureVolumeSettings()
     {
-        if (_gameServices) return;
+        if (_volumeSettings) return;
 
-        _gameServices = FindAnyObjectByType<GameServices>(FindObjectsInactive.Include);
+        _volumeSettings = FindAnyObjectByType<Game.Management.SoundManager>(FindObjectsInactive.Exclude);
         SubscribeToSfxChanged();
     }
 
     private void SubscribeToSfxChanged()
     {
-        if (_sfxChangedSubscribed || _gameServices == null) return;
+        if (_sfxChangedSubscribed || _volumeSettings == null) return;
 
-        _gameServices.SfxChanged += OnSfxVolumeChanged;
+        _volumeSettings.SfxChanged += OnSfxVolumeChanged;
         _sfxChangedSubscribed = true;
     }
 
     private void UnsubscribeFromSfxChanged()
     {
-        if (!_sfxChangedSubscribed || _gameServices == null) return;
+        if (!_sfxChangedSubscribed || _volumeSettings == null) return;
 
-        _gameServices.SfxChanged -= OnSfxVolumeChanged;
+        _volumeSettings.SfxChanged -= OnSfxVolumeChanged;
         _sfxChangedSubscribed = false;
     }
 
     private void OnSfxVolumeChanged(int _) => ApplySfxVolume();
 
-    private float SfxVolumeScale => (_gameServices?.SfxVolume ?? 100) / 100f;
+    private float SfxVolumeScale => (_volumeSettings?.SfxVolume ?? 100) / 100f;
 
     private void ApplySfxVolume()
     {
