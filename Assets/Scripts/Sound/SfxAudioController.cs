@@ -7,13 +7,46 @@ namespace Sound
         IInjectable<GameServices>
     {
         [field: SerializeField, Min(0)] public float VolumeRate { get; set; } = 1;
-        private GameServices _gameServices;
+        private Game.Management.SoundManager _volumeSettings;
+        private bool _sfxChangedSubscribed;
 
-        void IInjectable<GameServices>.Inject(GameServices gameServices)
+        void IInjectable<GameServices>.Inject(GameServices _) => EnsureVolumeSettings();
+
+        private void Start() => EnsureVolumeSettings();
+
+        private void OnDestroy()
         {
-            _gameServices = gameServices;
+            UnsubscribeFromSfxChanged();
+        }
+
+        private void EnsureVolumeSettings()
+        {
+            if (_volumeSettings) return;
+
+            _volumeSettings = FindAnyObjectByType<Game.Management.SoundManager>(FindObjectsInactive.Exclude);
+            if (!_volumeSettings) return;
+
+            SubscribeToSfxChanged();
             ApplySettings();
         }
+
+        private void SubscribeToSfxChanged()
+        {
+            if (_sfxChangedSubscribed || !_volumeSettings) return;
+
+            _volumeSettings.SfxChanged += OnSfxVolumeChanged;
+            _sfxChangedSubscribed = true;
+        }
+
+        private void UnsubscribeFromSfxChanged()
+        {
+            if (!_sfxChangedSubscribed || !_volumeSettings) return;
+
+            _volumeSettings.SfxChanged -= OnSfxVolumeChanged;
+            _sfxChangedSubscribed = false;
+        }
+
+        private void OnSfxVolumeChanged(int _) => ApplySettings();
 
 #if DEBUG_MODE
         private void Update() => ApplySettings();
@@ -21,7 +54,7 @@ namespace Sound
         protected virtual void ApplySettings()
         {
             Volume = Mathf.RoundToInt(
-                VolumeRate * (_gameServices?.SfxVolume ?? 100));
+                VolumeRate * (_volumeSettings?.SfxVolume ?? 100));
         }
     }
 }
