@@ -33,14 +33,19 @@ namespace UI
                 if (_inputField)
                     _inputField.text = string.Empty;
 
-                _typeHandler.gameObject.SetActive(!value);
-                _inputField.gameObject.SetActive(value);
-
                 if (value)
+                {
+                    RequestCursorVisibility();
+                    _typeHandler.gameObject.SetActive(false);
+                    _inputField.gameObject.SetActive(true);
                     ActivateInputField();
-
-                ApplyInputModeCursorVisibility();
-                new Timer(0.01f, _ => ApplyInputModeCursorVisibility());
+                }
+                else
+                {
+                    _typeHandler.gameObject.SetActive(true);
+                    _inputField.gameObject.SetActive(false);
+                    ReleaseCursorVisibility();
+                }
             }
         }
         public string InputText => _inputField.text;
@@ -163,24 +168,29 @@ namespace UI
             ReleaseCursorVisibility();
         }
 
-        private void OnDestroy() => _cursorVisibilityController?.ReleaseVisible(this);
+        private void OnDestroy() => ReleaseCursorVisibility();
 
         private void RefreshCursorVisibility()
         {
             if (_isOpened && _isInputMode)
-                _cursorVisibilityController?.RequestVisible(this);
+                ApplyInputModeCursorVisibility();
             else
                 ReleaseCursorVisibility();
         }
 
         private void ApplyInputModeCursorVisibility()
         {
-            if (_isInputMode)
-                _cursorVisibilityController?.RequestVisible(this);
-            else
+            if (!_isInputMode)
+            {
                 ReleaseCursorVisibility();
+                return;
+            }
+
+            RequestCursorVisibility();
+            ActivateInputField();
         }
 
+        private void RequestCursorVisibility() => _cursorVisibilityController?.RequestVisible(this);
         private void ReleaseCursorVisibility() => _cursorVisibilityController?.ReleaseVisible(this);
 
         private void ActivateInputField()

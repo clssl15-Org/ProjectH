@@ -5355,6 +5355,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2315106140095183188, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: _attackMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2315106140095183188, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: _useDebugStatsInfo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2321217941921193818, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.48
@@ -5411,6 +5419,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -1.96
       objectReference: {fileID: 0}
+    - target: {fileID: 4805477925239308035, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5043042323104404208, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -5431,6 +5443,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5685663211306556806, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5709146450124479466, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.07
@@ -5441,7 +5457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5871204439046336970, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6524387266099606478, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_IsActive
@@ -5483,6 +5499,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7689128562386930846, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689128562386930846, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689128562386930846, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689128562386930846, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7936637963701139278, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: _attackMode
       value: 1
@@ -5494,6 +5526,10 @@ PrefabInstance:
     - target: {fileID: 8157886144223584061, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_LocalPosition.y
       value: -2.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202514941539279678, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8599140989085128628, guid: ce76b3c49111e9b4f8e42fa07bb31b59, type: 3}
       propertyPath: m_IsActive
