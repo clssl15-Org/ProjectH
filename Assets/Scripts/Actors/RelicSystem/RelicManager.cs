@@ -51,6 +51,10 @@ public class RelicManager : MonoBehaviour
     public event Action<RelicAcquisitionDto> RelicAcquiring;
     public event Action<RelicDataSO, string> RelicAcquired;
     public event Action<RelicDataSO> RelicLost;
+    public event Action AcquisitionUiClosed;
+
+    public Vector3? AcquisitionSourcePosition { get; private set; }
+    public bool IsAcquisitionFlowActive { get; private set; }
 
     // 현재 플레이어가 소유한 유물 오브젝트들 (Key: RelicNumber)
     private Dictionary<int, List<GameObject>> ownedRelics = new Dictionary<int, List<GameObject>>();
@@ -249,12 +253,22 @@ public class RelicManager : MonoBehaviour
         NotifyRelicAcquiring(targetData, forceSuccess);
     }
 
+    public void SetAcquisitionSourcePosition(Vector3 position) => AcquisitionSourcePosition = position;
+
+    public void NotifyAcquisitionUiClosed()
+    {
+        IsAcquisitionFlowActive = false;
+        AcquisitionUiClosed?.Invoke();
+        AcquisitionSourcePosition = null;
+    }
+
     private void NotifyRelicAcquiring(RelicDataSO data, bool forceSuccess)
     {
         var handlers = RelicAcquiring;
         if (handlers == null)
             return;
 
+        IsAcquisitionFlowActive = true;
         var acquisition = BuildRelicAcquisitionDto(data, forceSuccess);
 
         foreach (Action<RelicAcquisitionDto> callback in handlers.GetInvocationList())

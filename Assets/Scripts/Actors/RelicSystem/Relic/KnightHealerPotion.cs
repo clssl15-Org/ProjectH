@@ -8,31 +8,47 @@ public class KnightHealerPotion : Relic
     private GameObject potionPrefab;
 
     private float launchForce = 0.2f;
+
     public override void OnAcquire()
     {
-        // 1. 포션 생성
-        GameObject potion = Instantiate(potionPrefab, transform.position, Quaternion.identity);
+        var manager = RelicManager.Instance;
+        if (manager.IsAcquisitionFlowActive)
+        {
+            manager.AcquisitionUiClosed += SpawnPotionWhenUiClosed;
+            return;
+        }
+
+        SpawnPotionAt(GetSpawnPosition(manager));
+    }
+
+    private void SpawnPotionWhenUiClosed()
+    {
+        var manager = RelicManager.Instance;
+        manager.AcquisitionUiClosed -= SpawnPotionWhenUiClosed;
+        SpawnPotionAt(GetSpawnPosition(manager));
+    }
+
+    private Vector3 GetSpawnPosition(RelicManager manager) =>
+        manager.AcquisitionSourcePosition ?? transform.position;
+
+    private void SpawnPotionAt(Vector3 position)
+    {
+        GameObject potion = Instantiate(potionPrefab, position, Quaternion.identity);
         Potion potionScript = potion.GetComponent<Potion>();
         potionScript.value = value;
 
-        // 2. 물리 컴포넌트 가져오기
         Rigidbody2D rb = potion.GetComponent<Rigidbody2D>();
+        if (rb == null)
+            return;
 
-        if (rb != null)
-        {
-            // 3. 랜덤한 X축 값과 일정한 상단 Y축 값 설정
-            float randomX = Random.Range(-0.1f, 0.1f);
-            float randomY = Random.Range(0.1f, 0.2f);
+        float randomX = Random.Range(-0.1f, 0.1f);
+        float randomY = Random.Range(0.1f, 0.2f);
+        Vector2 launchDirection = new Vector2(randomX, randomY).normalized;
 
-            Vector2 launchDirection = new Vector2(randomX, randomY).normalized;
+        rb.AddForce(launchDirection * launchForce, ForceMode2D.Impulse);
 
-            // 4. 힘 가하기 (Impulse 모드는 순간적인 힘을 줄 때 적합합니다)
-            rb.AddForce(launchDirection * launchForce, ForceMode2D.Impulse);
-
-            // 5. 약간의 회전력을 주어 더 자연스럽게 연출
-            float randomTorque = Random.Range(-1f, 1f);
-            rb.AddTorque(randomTorque, ForceMode2D.Impulse);
-        }
+        float randomTorque = Random.Range(-1f, 1f);
+        rb.AddTorque(randomTorque, ForceMode2D.Impulse);
     }
     protected override void OnLoseCore()
     {

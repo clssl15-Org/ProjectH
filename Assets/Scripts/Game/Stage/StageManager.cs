@@ -350,6 +350,8 @@ namespace Game.Stage
                     RelicAcquisitionUI.CoinDropped += () => _sfxPlayManager.Play(SfxName.CoinDrop);
                 }
 
+                RelicAcquisitionUI.Disabling += () => RelicManager.Instance?.NotifyAcquisitionUiClosed();
+
                 ((IInputLayerController)RelicAcquisitionUI).Initialize(InputHub);
                 ((ICursorVisibilityControllerUser)RelicAcquisitionUI).Initialize(_cursorVisibilityController);
             }

@@ -12,10 +12,10 @@ using UnityEditor;
 namespace Game
 {
     /// <summary>
-    /// ê²Œì„?”Œ? ˆ?´ ? „ì²´ë?? ê´?ë¦¬í•˜?Š” ë§¤ë‹ˆ????…?‹ˆ?‹¤.
+    /// ê²Œì„?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ì²´ï¿½?? ï¿½?ë¦¬í•˜?ï¿½ï¿½ ë§¤ë‹ˆ????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.
     /// </summary>
     /// <remarks>
-    /// ?´ ê°ì²´?Š” ëª¨ë“  ?”¬?— ê±¸ì³ ì¡´ì¬?•˜?Š” ?‹¨?¼ ?¸?Š¤?„´?Š¤?…?‹ˆ?‹¤.
+    /// ?ï¿½ï¿½ ê°ì²´?ï¿½ï¿½ ëª¨ë“  ?ï¿½ï¿½?ï¿½ï¿½ ê±¸ì³ ì¡´ì¬?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.
     /// </remarks>
     public sealed class GameManager : GameServices
     {
@@ -95,14 +95,14 @@ namespace Game
                 openLogOption: OpenLogOption.Open,
                 exceptionHandlingOption: ExceptionHandlingOption.CrashExport);
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("?¸?Š¤?„´?Š¤ê°? ?ƒ?„±?˜?—ˆ?Šµ?‹ˆ?‹¤.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.");
 
             _soundManager = GetComponentInChildren<Management.SoundManager>();
             if (_soundManager)
-                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager ?“±ë¡?.");
+                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager ?ï¿½ï¿½ï¿½?.");
             else 
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    "??‹ ì»´í¬?„Œ?Š¸?—?„œ _soundManager?„(ë¥?) ì°¾ì?? ëª»í–ˆ?Šµ?‹ˆ?‹¤."));
+                    "?ï¿½ï¿½?ï¿½ï¿½ ì»´í¬?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ _soundManager?ï¿½ï¿½(ï¿½?) ì°¾ï¿½?? ëª»í–ˆ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½."));
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -112,13 +112,13 @@ namespace Game
             if (_isStarted) return;
             _isStarted = true;
 
-            // ê²Œì„ ìµœì´ˆ ?‹œ?‘ ?‹œ
+            // ê²Œì„ ìµœì´ˆ ?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½
             if (_gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var player))
                 player.Name = _configuration.InitialPlayerName;
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteError(Ctx(
-                    $"{nameof(_gameAssetLibrary)}?—?„œ {World.Character.Player}?„(ë¥?) ì°¾ì?? ëª»í–ˆê¸? ?•Œë¬¸ì— " +
-                    $"?”Œ? ˆ?´?–´ ?´ë¦„ì„ '{_configuration.InitialPlayerName}'(?œ¼)ë¡? ë³?ê²½í•  ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤.")));
+                    $"{nameof(_gameAssetLibrary)}?ï¿½ï¿½?ï¿½ï¿½ {World.Character.Player}?ï¿½ï¿½(ï¿½?) ì°¾ï¿½?? ëª»í–ˆï¿½? ?ï¿½ï¿½ë¬¸ì— " +
+                    $"?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ë¦„ì„ '{_configuration.InitialPlayerName}'(?ï¿½ï¿½)ï¿½? ï¿½?ê²½í•  ?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.")));
 
             IsStage3Reached = false;
             IsGameCleared = false;
@@ -127,7 +127,7 @@ namespace Game
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
         {
-            var message = Ctx($"?”¬ '{scene.name}'?´(ê°?) ë¡œë“œ?˜?—ˆ?Šµ?‹ˆ?‹¤.");
+            var message = Ctx($"?ï¿½ï¿½ '{scene.name}'?ï¿½ï¿½(ï¿½?) ë¡œë“œ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.");
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
 
@@ -135,7 +135,7 @@ namespace Game
             {
                 stageManager.PlayerDied += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).WriteScope("?”Œ? ˆ?´?–´ ?‚¬ë§?");
+                    using var _ = BlackboxHandle.Of(this).WriteScope("?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ï¿½?");
 
                     LevelManager.Instance.ResetState();
                     LevelManager.Instance.MarkPlayerDied();
@@ -151,7 +151,7 @@ namespace Game
             {
                 if (!stageManager)
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        Ctx("StageManager ì»´í¬?„Œ?Š¸ë¥? ì°¾ëŠ” ?° ?‹¤?Œ¨?–ˆê¸? ?•Œë¬¸ì— ScenarioManagerë¥? ì´ˆê¸°?™”?•  ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤.")));
+                        Ctx("StageManager ì»´í¬?ï¿½ï¿½?ï¿½ï¿½ï¿½? ì°¾ëŠ” ?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½ë¬¸ì— ScenarioManagerï¿½? ì´ˆê¸°?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.")));
 
                 BlackboxHandle.Of(this).Exert(scenarioManager, "Initialize");
                 scenarioManager.Initialize(stageManager);
@@ -166,7 +166,7 @@ namespace Game
             {
                 if (!TryFindScript<Injector>(scene, out var injector))
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        Ctx("Injector ì»´í¬?„Œ?Š¸ë¥? ì°¾ëŠ” ?° ?‹¤?Œ¨?–ˆ?Šµ?‹ˆ?‹¤. ì£¼ì…?„ ?ˆ˜?–‰?•  ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤.")));
+                        Ctx("Injector ì»´í¬?ï¿½ï¿½?ï¿½ï¿½ï¿½? ì°¾ëŠ” ?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. ì£¼ì…?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.")));
 
                 injector.AddInjection(this, typeof(GameServices));
                 foreach (var injection in _injections)
@@ -181,14 +181,14 @@ namespace Game
         public override void SetBgmVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Bgm ë³¼ë¥¨?„ {volume}(?œ¼)ë¡? ?„¤? •?•©?‹ˆ?‹¤.", context);
+                $"Bgm ë³¼ë¥¨?ï¿½ï¿½ {volume}(?ï¿½ï¿½)ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.", context);
 
             _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Sfx ë³¼ë¥¨?„ {volume}(?œ¼)ë¡? ?„¤? •?•©?‹ˆ?‹¤.", context);
+                $"Sfx ë³¼ë¥¨?ï¿½ï¿½ {volume}(?ï¿½ï¿½)ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.", context);
 
             _soundManager.SetSfxVolume(volume);
         }
@@ -196,11 +196,11 @@ namespace Game
         public override void SetPlayerName(string playerName, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"?”Œ? ˆ?´?–´ ?´ë¦„ì„ '{playerName}'(?œ¼)ë¡? ?„¤? •?•©?‹ˆ?‹¤.", context);
+                $"?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ë¦„ì„ '{playerName}'(?ï¿½ï¿½)ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.", context);
 
             if (!_gameAssetLibrary)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(Ctx(
-                    "GameAssetLibraryê°? ?• ?‹¹?˜ì§? ?•Š?•˜?Šµ?‹ˆ?‹¤. ?”Œ? ˆ?´?–´ ?´ë¦„ì„ ?„¤? •?•  ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤.")));
+                    "GameAssetLibraryï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ë¦„ì„ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.")));
 
             _gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var playerInfo);
             playerInfo.Name = playerName;
@@ -209,20 +209,20 @@ namespace Game
         public override bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"?‹œ?‚˜ë¦¬ì˜¤ ìµœì´ˆ?„?‹¬ ?—¬ë¶?ë¥? ?™•?¸?•©?‹ˆ?‹¤. Key: '{scenarioKey}'", context);
+                $"?ï¿½ï¿½?ï¿½ï¿½ë¦¬ì˜¤ ìµœì´ˆ?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ï¿½?ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. Key: '{scenarioKey}'", context);
 
             if (string.IsNullOrWhiteSpace(scenarioKey))
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    "?‹œ?‚˜ë¦¬ì˜¤ ìµœì´ˆ?„?‹¬ ?‚¤ê°? ë¹„ì–´ ?ˆ?Šµ?‹ˆ?‹¤. ?•ˆ? „?•˜ê²? ?¬?„?‹¬ë¡? ì²˜ë¦¬?•©?‹ˆ?‹¤.")),
+                    "?ï¿½ï¿½?ï¿½ï¿½ë¦¬ì˜¤ ìµœì´ˆ?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ï¿½? ë¹„ì–´ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ì²˜ë¦¬?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.")),
                     this);
                 return false;
             }
 
             bool isFirstArrival = _reachedScenarioKeys.Add(scenarioKey);
             BlackboxHandle.Of(this).Write(isFirstArrival
-                ? "?•„ì§? ?„?‹¬?•˜ì§? ?•Š??? ?‹œ?‚˜ë¦¬ì˜¤?…?‹ˆ?‹¤. ìµœì´ˆ?„?‹¬ë¡? ê¸°ë¡?•©?‹ˆ?‹¤."
-                : "?´ë¯? ?„?‹¬?•œ ?‹œ?‚˜ë¦¬ì˜¤?…?‹ˆ?‹¤. ?¬?„?‹¬ë¡? ì²˜ë¦¬?•©?‹ˆ?‹¤.");
+                ? "?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½??? ?ï¿½ï¿½?ï¿½ï¿½ë¦¬ì˜¤?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. ìµœì´ˆ?ï¿½ï¿½?ï¿½ï¿½ï¿½? ê¸°ë¡?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½."
+                : "?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½ë¦¬ì˜¤?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ì²˜ë¦¬?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.");
 
             return isFirstArrival;
         }
@@ -231,18 +231,18 @@ namespace Game
         public override void ChangeScene(string sceneName, object context = null, bool preservePlayerProgress = true)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"?”¬?„ '{sceneName}'(?œ¼)ë¡? ?„¤? •?•©?‹ˆ?‹¤.", context);
+                $"?ï¿½ï¿½?ï¿½ï¿½ '{sceneName}'(?ï¿½ï¿½)ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.", context);
 
             try
             {
                 PreparePlayerProgressForSceneChange(preservePlayerProgress);
                 SceneManager.LoadScene(sceneName);
-                BlackboxHandle.Of(this).Write("?”¬ ? „?™˜?— ?„±ê³µí–ˆ?Šµ?‹ˆ?‹¤.");
+                BlackboxHandle.Of(this).Write("?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ê³µí–ˆ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.");
             }
             catch (Exception ex)
             {
                 Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                    $"?”¬ ? „?™˜?— ?‹¤?Œ¨?–ˆ?Šµ?‹ˆ?‹¤.\n{ex.ToString()}"));
+                    $"?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.\n{ex.ToString()}"));
                 throw;
             }
         }
@@ -268,7 +268,7 @@ namespace Game
         public override void Quit(object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                "ê²Œì„?„ ì¢…ë£Œ?•©?‹ˆ?‹¤.", context);
+                "ê²Œì„?ï¿½ï¿½ ì¢…ë£Œ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.", context);
 
 #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
@@ -290,8 +290,8 @@ namespace Game
                         script = found;
                     else
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                            $"?”¬ '{scene.name}'?˜ '{found.name}'?—?„œ {nameof(T)} ì»´í¬?„Œ?Š¸ê°? ì¤‘ë³µ?œ¼ë¡? ë°œê²¬?˜?—ˆ?Šµ?‹ˆ?‹¤. " +
-                            $"ì²? ë²ˆì§¸ë¡? ë°œê²¬?œ ê°ì±„ '{script.name}'?˜ ì»´í¬?„Œ?Š¸ë¥? ?‚¬?š©?•©?‹ˆ?‹¤.")),
+                            $"?ï¿½ï¿½ '{scene.name}'?ï¿½ï¿½ '{found.name}'?ï¿½ï¿½?ï¿½ï¿½ {nameof(T)} ì»´í¬?ï¿½ï¿½?ï¿½ï¿½ï¿½? ì¤‘ë³µ?ï¿½ï¿½ï¿½? ë°œê²¬?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½. " +
+                            $"ï¿½? ë²ˆì§¸ï¿½? ë°œê²¬?ï¿½ï¿½ ê°ì±„ '{script.name}'?ï¿½ï¿½ ì»´í¬?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.")),
                             this);
                 }
             }
@@ -301,7 +301,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("GameManagerê°? ?‚­? œ?˜?—ˆ?Šµ?‹ˆ?‹¤.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameManagerï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½.");
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
