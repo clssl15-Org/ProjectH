@@ -13,7 +13,8 @@ namespace UI
     public class DialogueUI : MonoBehaviour,
         IDialogueUI,
         IInjectable<GameAssetLibrary>,
-        IEnablable
+        IEnablable,
+        ICursorVisibilityControllerUser
     {
         [Header("UI Components")]
         [SerializeField] private Image _portraitUI;
@@ -34,6 +35,12 @@ namespace UI
 
                 _typeHandler.gameObject.SetActive(!value);
                 _inputField.gameObject.SetActive(value);
+
+                if (value)
+                    ActivateInputField();
+
+                ApplyInputModeCursorVisibility();
+                new Timer(0.01f, _ => ApplyInputModeCursorVisibility());
             }
         }
         public string InputText => _inputField.text;
@@ -44,15 +51,26 @@ namespace UI
         public event Action Disabling;
 
         #region Interfaces
-        Action IEnablable.OnEnabling => null;
+        Action IEnablable.OnEnabling => () =>
+        {
+            _isOpened = true;
+            RefreshCursorVisibility();
+        };
         Action IEnablable.OnEnabled => null;
-        Action IEnablable.OnDisabling => () => Disabling?.Invoke();
+        Action IEnablable.OnDisabling => () =>
+        {
+            _isOpened = false;
+            ReleaseCursorVisibility();
+            Disabling?.Invoke();
+        };
         Action IEnablable.OnDisabled => null;
         #endregion
 
         private GameAssetLibrary _gameAssetLibrary;
         private EnableWithAnimation _enabler;
+        private CursorVisibilityController _cursorVisibilityController;
         private bool _isInputMode;
+        private bool _isOpened;
         private bool _isAwake;
 
         private void Start()
@@ -72,6 +90,8 @@ namespace UI
         }
 
         void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary) => _gameAssetLibrary = gameAssetLibrary;
+        void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
+            _cursorVisibilityController = cursorVisibilityController;
 
         public void SetContent(DialogueLine dialogueData)
         {
@@ -130,13 +150,46 @@ namespace UI
         public void SetToEnabled()
         {
             Start();
+            _isOpened = true;
             _enabler.SetToEnabled();
+            RefreshCursorVisibility();
         }
 
         public void SetToDisabled()
         {
             Start();
+            _isOpened = false;
             _enabler.SetToDisabled();
+            ReleaseCursorVisibility();
+        }
+
+        private void OnDestroy() => _cursorVisibilityController?.ReleaseVisible(this);
+
+        private void RefreshCursorVisibility()
+        {
+            if (_isOpened && _isInputMode)
+                _cursorVisibilityController?.RequestVisible(this);
+            else
+                ReleaseCursorVisibility();
+        }
+
+        private void ApplyInputModeCursorVisibility()
+        {
+            if (_isInputMode)
+                _cursorVisibilityController?.RequestVisible(this);
+            else
+                ReleaseCursorVisibility();
+        }
+
+        private void ReleaseCursorVisibility() => _cursorVisibilityController?.ReleaseVisible(this);
+
+        private void ActivateInputField()
+        {
+            if (!_inputField)
+                return;
+
+            _inputField.Select();
+            _inputField.ActivateInputField();
         }
     }
 }

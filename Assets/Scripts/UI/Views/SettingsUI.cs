@@ -12,6 +12,7 @@ namespace UI
         IStandaloneUpdatable,
         IEnablable,
         IInputLayerController,
+        ICursorVisibilityControllerUser,
         IInjectable<GameServices>,
         IInjectable<SfxPlayManager>,
         IInjectable<DarkscreenUI>
@@ -44,6 +45,7 @@ namespace UI
         private float _lastSamplePlayTime;
 
         private IInputHub _inputHub;
+        private CursorVisibilityController _cursorVisibilityController;
         private EmptyInputSubject _openerSubject;
         private bool _isInitialized = false;
 
@@ -58,6 +60,7 @@ namespace UI
             _sfxScroll.value = _gameServices.SfxVolume / 100f;
 
             transform.SetAsLastSibling();
+            _cursorVisibilityController?.RequestVisible(this);
 
             if (_inputHub != null)
             {
@@ -76,6 +79,7 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
+            _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_darkscreenUI)
             {
@@ -227,6 +231,8 @@ namespace UI
             return _openerSubject;
         }
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
+            _cursorVisibilityController = cursorVisibilityController;
 
         void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
         void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPalyManager) => _sfxPlayManager = sfxPalyManager;
@@ -295,6 +301,7 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
+            _cursorVisibilityController?.ReleaseVisible(this);
             Destroying?.Invoke();
             _openerSubject?.Dispose();
             _enabler?.Dispose();

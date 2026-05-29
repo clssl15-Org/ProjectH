@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6768248553744328129}
   - component: {fileID: 8000193672366935469}
   - component: {fileID: 1858815759649128289}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,7 +82,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &1858815759649128289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +321,7 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+  _detectionStep: 0.1
 --- !u!114 &4988676114289121319
 MonoBehaviour:
   m_ObjectHideFlags: 0

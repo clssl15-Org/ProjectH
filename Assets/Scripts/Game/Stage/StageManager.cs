@@ -72,6 +72,7 @@ namespace Game.Stage
         internal PlayerManager PlayerManager { get; private set; }
         internal MonsterManager MonsterManager { get; private set; }
 
+        private CursorVisibilityController _cursorVisibilityController;
         private bool _isDestroyed = false;
 
 
@@ -186,6 +187,9 @@ namespace Game.Stage
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Start");
             if (AutoBindDependencies) AutoBindDependenciesInScene();
+
+            _cursorVisibilityController = new CursorVisibilityController();
+            _cursorVisibilityController.ResetToGameplay();
 
             #region Player / Monsters
             if (AutoBindScenePlayer)
@@ -328,6 +332,8 @@ namespace Game.Stage
 
             if (DialogueUI)
             {
+                ((ICursorVisibilityControllerUser)DialogueUI).Initialize(_cursorVisibilityController);
+
                 if (_sfxPlayManager)
                     DialogueUI.TextTyped += () => _sfxPlayManager.Play(SfxName.Text);
             }
@@ -345,12 +351,17 @@ namespace Game.Stage
                 }
 
                 ((IInputLayerController)RelicAcquisitionUI).Initialize(InputHub);
+                ((ICursorVisibilityControllerUser)RelicAcquisitionUI).Initialize(_cursorVisibilityController);
             }
             if (RelicInfoPanelUI)
+            {
                 ((IInputLayerController)RelicInfoPanelUI).Initialize(InputHub);
+                ((ICursorVisibilityControllerUser)RelicInfoPanelUI).Initialize(_cursorVisibilityController);
+            }
             if (SettingsUI)
             {
                 ((IInputLayerController)SettingsUI).Initialize(InputHub);
+                ((ICursorVisibilityControllerUser)SettingsUI).Initialize(_cursorVisibilityController);
 
                 SettingsUI.RestartUI += () =>
                 {
@@ -389,7 +400,10 @@ namespace Game.Stage
                 };
             }
             if (GuideAndWorldRecordsUI)
+            {
                 ((IInputLayerController)GuideAndWorldRecordsUI).Initialize(InputHub);
+                ((ICursorVisibilityControllerUser)GuideAndWorldRecordsUI).Initialize(_cursorVisibilityController);
+            }
 
 
             foreach (var controlObj in _additionalInputControllers.Concat(_additionalInputControllables))
@@ -574,6 +588,7 @@ namespace Game.Stage
         protected virtual void OnDestroy()
         {
             _isDestroyed = true;
+            _cursorVisibilityController?.RestoreVisible();
 
             if (LevelManager.Instance?.SpawnManager)
             {

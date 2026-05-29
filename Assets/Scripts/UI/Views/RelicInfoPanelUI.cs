@@ -12,6 +12,7 @@ namespace UI
         IStandaloneUpdatable,
         IEnablable,
         IInputLayerController,
+        ICursorVisibilityControllerUser,
         IInjectable<DarkscreenUI>
     {
         [field: SerializeField] public KeyCode OpenKey { get; set; } = KeyCode.Tab;
@@ -31,6 +32,7 @@ namespace UI
 
             Time.timeScale = 0f;
             transform.SetAsLastSibling();
+            _cursorVisibilityController?.RequestVisible(this);
 
             if (_darkscreenUI)
             {
@@ -49,6 +51,7 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
+            _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_darkscreenUI)
             {
@@ -67,6 +70,7 @@ namespace UI
 
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
+        private CursorVisibilityController _cursorVisibilityController;
         private EmptyInputSubject _openerSubject;
         private DarkscreenUI _darkscreenUI;
         private bool _isInitialized = false;
@@ -118,6 +122,8 @@ namespace UI
         }
 
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
+            _cursorVisibilityController = cursorVisibilityController;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         public void Open()
@@ -211,6 +217,7 @@ namespace UI
 
         private void OnDestroy()
         {
+            _cursorVisibilityController?.ReleaseVisible(this);
             Destroying?.Invoke();
             _enabler?.Dispose();
         }

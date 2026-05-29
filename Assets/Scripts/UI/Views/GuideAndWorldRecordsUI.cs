@@ -12,6 +12,7 @@ namespace UI
     public class GuideAndWorldRecordsUI : MonoBehaviour,
         IEnablable,
         IInputLayerController,
+        ICursorVisibilityControllerUser,
         IInjectable<GameServices>,
         IInjectable<DarkscreenUI>
     {
@@ -34,6 +35,7 @@ namespace UI
 
             Time.timeScale = 0f;
             transform.SetAsLastSibling();
+            _cursorVisibilityController?.RequestVisible(this);
 
             if (_darkscreenUI)
             {
@@ -52,6 +54,7 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
+            _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_darkscreenUI)
             {
@@ -73,6 +76,7 @@ namespace UI
 
         private EnableWithAnimation _enabler;
         private IInputHub _inputHub;
+        private CursorVisibilityController _cursorVisibilityController;
         private GameServices _gameServices;
         private DarkscreenUI _darkscreenUI;
         private bool _isInitialized = false;
@@ -109,6 +113,8 @@ namespace UI
         }
 
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
+            _cursorVisibilityController = cursorVisibilityController;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
         void IInjectable<GameServices>.Inject(GameServices gameServices) => _gameServices = gameServices;
 
@@ -167,6 +173,7 @@ namespace UI
 
         private void OnDestroy()
         {
+            _cursorVisibilityController?.ReleaseVisible(this);
             _enabler?.Dispose();
         }
 

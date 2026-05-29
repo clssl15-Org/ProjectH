@@ -16,6 +16,7 @@ namespace UI
         IEnablable,
         IView,
         IInputLayerController,
+        ICursorVisibilityControllerUser,
         IInjectable<DarkscreenUI>
     {
         [Header("Main")]
@@ -69,6 +70,7 @@ namespace UI
         private const float MaxCoinAnimationPlaySpeed = 10f;
 
         private IInputHub _inputHub;
+        private CursorVisibilityController _cursorVisibilityController;
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer;
         private RelicDataSO _relic;
@@ -94,6 +96,7 @@ namespace UI
 
             _toThrowCoinBtn.gameObject.SetActive(true);
             _closeBtn.gameObject.SetActive(false);
+            _cursorVisibilityController?.RequestVisible(this);
 
             if (_inputHub != null)
             {
@@ -106,6 +109,7 @@ namespace UI
         {
             using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
+            _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_inputHub != null)
             {
@@ -146,6 +150,8 @@ namespace UI
         }
 
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
+        void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
+            _cursorVisibilityController = cursorVisibilityController;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         private void OnRelicAcquiring(RelicManager.RelicAcquisitionDto relicAcquisition)
@@ -376,6 +382,7 @@ namespace UI
             if (_isDestroyed) return;
             _isDestroyed = true;
 
+            _cursorVisibilityController?.ReleaseVisible(this);
             _enabler?.Dispose();
             Destroying?.Invoke();
 
