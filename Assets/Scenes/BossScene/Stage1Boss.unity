@@ -888,6 +888,7 @@ MonoBehaviour:
   bossMonsters:
   - {fileID: 429792412}
   clearObject: {fileID: 1993454382}
+  _deferClearObjectsToScenario: 1
 --- !u!4 &893665102
 Transform:
   m_ObjectHideFlags: 0
@@ -12285,7 +12286,7 @@ MonoBehaviour:
   _boxObject: {fileID: 0}
   _portalObject: {fileID: 0}
   _endingSceneName: EndingScene
-  _fallbackDelay: 60
+  _fallbackDelay: 2
   _activateBox: 1
   _activatePortal: 1
   _useUnscaledTime: 1
