@@ -37,6 +37,10 @@ namespace Actors
         [SerializeField]
         private GameObject monsterSpawnIndicator;
 
+        [Header("완료 감시 설정")]
+        [SerializeField, Min(0.1f)]
+        private float activeMonsterCheckInterval = 0.5f;
+
         public GameAssetLibrary gameAssetLibrary;
         public PlatformManager platformManager;
         public Configuration configuration;
@@ -52,6 +56,8 @@ namespace Actors
         private Dictionary<MonsterTier, List<GameObject>> tierCandidates = new Dictionary<MonsterTier, List<GameObject>>();
 
         private Action<IMonster> monsterCreated;
+        private float activeMonsterCheckTimer;
+        private bool isPhaseAdvanceQueued;
 
         private enum MonsterTier
         {
@@ -70,6 +76,19 @@ namespace Actors
 
             RegisterToSpawnManager();
             StartSpawner();
+        }
+
+        private void Update()
+        {
+            if (!isSpawning || IsAllPhasesComplete || isPhaseAdvanceQueued)
+                return;
+
+            activeMonsterCheckTimer += Time.deltaTime;
+            if (activeMonsterCheckTimer < Mathf.Max(0.1f, activeMonsterCheckInterval))
+                return;
+
+            activeMonsterCheckTimer = 0f;
+            CheckActiveMonstersCleared();
         }
 
         public void Inject(GameAssetLibrary gameAssetLibrary) =>
@@ -127,6 +146,8 @@ namespace Actors
             }
 
             isSpawning = true;
+            activeMonsterCheckTimer = 0f;
+            isPhaseAdvanceQueued = false;
             currentPhaseIndex = -1; // StartNextPhase에서 0으로 증가하여 시작
             StartNextPhase();
         }
@@ -480,11 +501,13 @@ namespace Actors
             if (phase == null)
             {
                 Debug.LogWarning($"[{gameObject.name}] Phase {currentPhaseIndex + 1} is null. Skipping to next phase.", this);
-                StartCoroutine(WaitAndStartNextPhase());
+                QueueStartNextPhase();
                 return;
             }
 
             // 다음 페이즈 시작 전, 추적 리스트 초기화
+            activeMonsterCheckTimer = 0f;
+            isPhaseAdvanceQueued = false;
             activeMonsters.Clear();
 
             // 임시 스폰 위치 리스트 초기화
@@ -504,13 +527,23 @@ namespace Actors
             {
                 Debug.LogWarning($"[{gameObject.name}] 페이즈 {currentPhaseIndex + 1}: 스폰된 몬스터가 없어 즉시 다음 페이즈로 넘어갑니다.");
                 // 한 프레임 대기 후 다음 페이즈 호출 (무한 재귀 방지)
-                StartCoroutine(WaitAndStartNextPhase());
+                QueueStartNextPhase();
             }
+        }
+
+        private void QueueStartNextPhase()
+        {
+            if (!isSpawning || IsAllPhasesComplete || isPhaseAdvanceQueued)
+                return;
+
+            isPhaseAdvanceQueued = true;
+            StartCoroutine(WaitAndStartNextPhase());
         }
 
         private IEnumerator WaitAndStartNextPhase()
         {
             yield return new WaitForSeconds(1);
+            isPhaseAdvanceQueued = false;
             StartNextPhase();
         }
 
@@ -524,6 +557,7 @@ namespace Actors
 
             Debug.Log($"*** [{gameObject.name}] 모든 스폰 페이즈를 완료했습니다. ***");
             isSpawning = false;
+            isPhaseAdvanceQueued = false;
 
             IsAllPhasesComplete = true;
             var spawnManager = LevelManager.Instance?.SpawnManager;
@@ -719,14 +753,32 @@ namespace Actors
                 // 1. 추적 리스트에서 사망한 몬스터를 제거 
                 activeMonsters.Remove(deadMonster);
 
-                // 2. 활성 몬스터가 0마리가 되었는지 확인 
-                if (isSpawning && activeMonsters.Count == 0)
-                {
-                    print("test: all monsters dead");
-                    // 3. 현재 페이즈의 모든 몬스터가 사망했으므로, 다음 페이즈 시작 
-                    StartCoroutine(WaitAndStartNextPhase());
-                }
+                CheckActiveMonstersCleared();
             }
+        }
+
+        private void CheckActiveMonstersCleared()
+        {
+            RemoveInactiveMonsters();
+
+            if (isSpawning && activeMonsters.Count == 0)
+                QueueStartNextPhase();
+        }
+
+        private void RemoveInactiveMonsters()
+        {
+            activeMonsters.RemoveAll(IsInactiveMonster);
+        }
+
+        private static bool IsInactiveMonster(GameObject monsterObject)
+        {
+            if (!monsterObject)
+                return true;
+
+            if (!monsterObject.TryGetComponent<IMonster>(out var monster))
+                return true;
+
+            return !monster.IsAlive;
         }
     }
 }
