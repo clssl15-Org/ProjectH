@@ -12,10 +12,10 @@ using UnityEditor;
 namespace Game
 {
     /// <summary>
-    /// 게임?��?��?�� ?��체�?? �?리하?�� 매니????��?��?��.
+    /// 게임플레이 전체를 관리하는 매니저입니다.
     /// </summary>
     /// <remarks>
-    /// ?�� 객체?�� 모든 ?��?�� 걸쳐 존재?��?�� ?��?�� ?��?��?��?��?��?��?��.
+    /// 이 객체는 모든 씬에 걸쳐 존재하는 단일 인스턴스입니다.
     /// </remarks>
     public sealed class GameManager : GameServices
     {
@@ -95,14 +95,14 @@ namespace Game
                 openLogOption: OpenLogOption.Open,
                 exceptionHandlingOption: ExceptionHandlingOption.CrashExport);
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("?��?��?��?���? ?��?��?��?��?��?��?��.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("인스턴스가 생성되었습니다.");
 
             _soundManager = GetComponentInChildren<Management.SoundManager>();
             if (_soundManager)
-                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager ?���?.");
+                BlackboxHandle.Of(this).Exert(_soundManager, "SoundManager 등록.");
             else 
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    "?��?�� 컴포?��?��?��?�� _soundManager?��(�?) 찾�?? 못했?��?��?��."));
+                    "자식 컴포넌트에서 _soundManager를(을) 찾을 수 없었습니다."));
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -112,13 +112,13 @@ namespace Game
             if (_isStarted) return;
             _isStarted = true;
 
-            // 게임 최초 ?��?�� ?��
+            // 게임 최초 시작 시
             if (_gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var player))
                 player.Name = _configuration.InitialPlayerName;
             else
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteError(Ctx(
-                    $"{nameof(_gameAssetLibrary)}?��?�� {World.Character.Player}?��(�?) 찾�?? 못했�? ?��문에 " +
-                    $"?��?��?��?�� ?��름을 '{_configuration.InitialPlayerName}'(?��)�? �?경할 ?�� ?��?��?��?��.")));
+                    $"{nameof(_gameAssetLibrary)}에서 {World.Character.Player}를(을) 찾을 수 없기 때문에 " +
+                    $"플레이어 이름을 '{_configuration.InitialPlayerName}'(으)로 변경할 수 없습니다.")));
 
             IsStage3Reached = false;
             IsGameCleared = false;
@@ -127,7 +127,7 @@ namespace Game
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
         {
-            var message = Ctx($"?�� '{scene.name}'?��(�?) 로드?��?��?��?��?��.");
+            var message = Ctx($"씬 '{scene.name}'이(가) 로드되었습니다.");
             using var __ = BlackboxHandle.Of(this).WriteScope(message);
             Debug.Log(message, this);
 
@@ -135,7 +135,7 @@ namespace Game
             {
                 stageManager.PlayerDied += () =>
                 {
-                    using var _ = BlackboxHandle.Of(this).WriteScope("?��?��?��?�� ?���?");
+                    using var _ = BlackboxHandle.Of(this).WriteScope("플레이어 사망");
 
                     LevelManager.Instance.ResetState();
                     LevelManager.Instance.MarkPlayerDied();
@@ -151,7 +151,7 @@ namespace Game
             {
                 if (!stageManager)
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        Ctx("StageManager 컴포?��?���? 찾는 ?�� ?��?��?���? ?��문에 ScenarioManager�? 초기?��?�� ?�� ?��?��?��?��.")));
+                        Ctx("StageManager 컴포넌트를 찾는 데 실패했기 때문에 ScenarioManager를 초기화할 수 없습니다.")));
 
                 BlackboxHandle.Of(this).Exert(scenarioManager, "Initialize");
                 scenarioManager.Initialize(stageManager);
@@ -166,7 +166,7 @@ namespace Game
             {
                 if (!TryFindScript<Injector>(scene, out var injector))
                     throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                        Ctx("Injector 컴포?��?���? 찾는 ?�� ?��?��?��?��?��?��. 주입?�� ?��?��?�� ?�� ?��?��?��?��.")));
+                        Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. 주입을 수행할 수 없습니다.")));
 
                 injector.AddInjection(this, typeof(GameServices));
                 foreach (var injection in _injections)
@@ -181,14 +181,14 @@ namespace Game
         public override void SetBgmVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Bgm 볼륨?�� {volume}(?��)�? ?��?��?��?��?��.", context);
+                $"Bgm 볼륨을 {volume}(으)로 설정합니다.", context);
 
             _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"Sfx 볼륨?�� {volume}(?��)�? ?��?��?��?��?��.", context);
+                $"Sfx 볼륨을 {volume}(으)로 설정합니다.", context);
 
             _soundManager.SetSfxVolume(volume);
         }
@@ -196,11 +196,11 @@ namespace Game
         public override void SetPlayerName(string playerName, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"?��?��?��?�� ?��름을 '{playerName}'(?��)�? ?��?��?��?��?��.", context);
+                $"플레이어 이름을 '{playerName}'(으)로 설정합니다.", context);
 
             if (!_gameAssetLibrary)
                 throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(Ctx(
-                    "GameAssetLibrary�? ?��?��?���? ?��?��?��?��?��. ?��?��?��?�� ?��름을 ?��?��?�� ?�� ?��?��?��?��.")));
+                    "GameAssetLibrary가 할당되지 않았습니다. 플레이어 이름을 설정할 수 없습니다.")));
 
             _gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var playerInfo);
             playerInfo.Name = playerName;
@@ -209,20 +209,20 @@ namespace Game
         public override bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"?��?��리오 최초?��?�� ?���?�? ?��?��?��?��?��. Key: '{scenarioKey}'", context);
+                $"시나리오 최초도달 여부를 확인합니다. Key: '{scenarioKey}'", context);
 
             if (string.IsNullOrWhiteSpace(scenarioKey))
             {
                 Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    "?��?��리오 최초?��?�� ?���? 비어 ?��?��?��?��. ?��?��?���? ?��?��?���? 처리?��?��?��.")),
+                    "시나리오 최초도달 키가 비어 있습니다. 안전하게 재도달로 처리합니다.")),
                     this);
                 return false;
             }
 
             bool isFirstArrival = _reachedScenarioKeys.Add(scenarioKey);
             BlackboxHandle.Of(this).Write(isFirstArrival
-                ? "?���? ?��?��?���? ?��??? ?��?��리오?��?��?��. 최초?��?���? 기록?��?��?��."
-                : "?���? ?��?��?�� ?��?��리오?��?��?��. ?��?��?���? 처리?��?��?��.");
+                ? "아직 도달하지 않은 시나리오입니다. 최초도달로 기록합니다."
+                : "이미 도달한 시나리오입니다. 재도달로 처리합니다.");
 
             return isFirstArrival;
         }
@@ -231,18 +231,18 @@ namespace Game
         public override void ChangeScene(string sceneName, object context = null, bool preservePlayerProgress = true)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                $"?��?�� '{sceneName}'(?��)�? ?��?��?��?��?��.", context);
+                $"씬을 '{sceneName}'(으)로 설정합니다.", context);
 
             try
             {
                 PreparePlayerProgressForSceneChange(preservePlayerProgress);
                 SceneManager.LoadScene(sceneName);
-                BlackboxHandle.Of(this).Write("?�� ?��?��?�� ?��공했?��?��?��.");
+                BlackboxHandle.Of(this).Write("씬 전환에 성공했습니다.");
             }
             catch (Exception ex)
             {
                 Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                    $"?�� ?��?��?�� ?��?��?��?��?��?��.\n{ex.ToString()}"));
+                    $"씬 전환에 실패했습니다.\n{ex.ToString()}"));
                 throw;
             }
         }
@@ -268,7 +268,7 @@ namespace Game
         public override void Quit(object context = null)
         {
             using var _ = BlackboxHandle.Of(this).WriteOrExertedScope(
-                "게임?�� 종료?��?��?��.", context);
+                "게임을 종료합니다.", context);
 
 #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
@@ -290,8 +290,8 @@ namespace Game
                         script = found;
                     else
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                            $"?�� '{scene.name}'?�� '{found.name}'?��?�� {nameof(T)} 컴포?��?���? 중복?���? 발견?��?��?��?��?��. " +
-                            $"�? 번째�? 발견?�� 객채 '{script.name}'?�� 컴포?��?���? ?��?��?��?��?��.")),
+                            $"씬 '{scene.name}'의 '{found.name}'에서 {nameof(T)} 컴포넌트가 중복으로 발견되었습니다. " +
+                            $"첫 번째로 발견된 객체 '{script.name}'의 컴포넌트를 사용합니다.")),
                             this);
                 }
             }
@@ -301,7 +301,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager�? ?��?��?��?��?��?��?��.");
+            using var _ = BlackboxHandle.Of(this).WriteScope("GameManager가 삭제되었습니다.");
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 

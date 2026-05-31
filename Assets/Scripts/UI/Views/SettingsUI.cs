@@ -209,8 +209,8 @@ namespace UI
                 {
                     using var _ = BlackboxHandle.Of(this).ExertedScope(_exitBtn, "게임 종료");
 
-                    if(_gameServices)
-                        _gameServices.Quit(this);
+                    if (_gameServices)
+                        _gameServices.ChangeScene("Title", this, false);
                     else
                         Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
                             "gameServices가 유효하지 않기 때문에 게임을 종료할 수 없습니다.")), this);
