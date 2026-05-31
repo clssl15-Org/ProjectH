@@ -130,9 +130,7 @@ namespace Actors
 
         public void SetToBig()
         {
-            if (CurrentShape == Shape.Big) return;
             CurrentShape = Shape.Big;
-
             _targetFollower.IsEnabled = false;
 
             _animPlayer.Play(new("Big"));
@@ -140,9 +138,7 @@ namespace Actors
         }
         public void SetToSmall()
         {
-            if (CurrentShape == Shape.Small) return;
             CurrentShape = Shape.Small;
-
             _targetFollower.IsEnabled = true;
 
             _animPlayer.Play(new("Small"));

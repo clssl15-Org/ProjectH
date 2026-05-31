@@ -35,11 +35,7 @@ namespace Actors.PlayerSystem
 
         [Header("Attack Stats")]
         [SerializeField]
-#if PLAYER_DEBUG_MODE
         private float damageRatio = 1.0f;
-#else
-        private float damageRatio = 0f;
-#endif
 
         [Header("Attack Range")]
         [SerializeField]
@@ -65,7 +61,11 @@ namespace Actors.PlayerSystem
         private float cooldownRecoveryAmount = 0.02f;
 
         public float CooldownGauge => cooldownGauge;
+#if PLAYER_DEBUG_MODE
         private float cooldownGauge = 1f;
+#else
+        private float cooldownGauge = 0f;
+#endif
 
         public void SetCooldownGauge(float value)
         {
