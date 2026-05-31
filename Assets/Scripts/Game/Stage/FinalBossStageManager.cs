@@ -25,6 +25,7 @@ namespace Game.Stage
         [SerializeField] private GameObject _werbellionPackage;
         [SerializeField] private GameObject _werbellionObject;
         [SerializeField] private BossUI _werbellionUI;
+        [SerializeField] private DeferredSceneObjects _werbellionPotions;
 
         [Header("State Disply")]
         [SerializeField, TextArea(3, 10)]
@@ -190,6 +191,8 @@ namespace Game.Stage
 
         private void StartWerbellion()
         {
+            _werbellionPotions?.Activate();
+
             _twinBossManager.gameObject.SetActive(false);
             RegisterBoss(_werbellion, _werbellionUI);
 
