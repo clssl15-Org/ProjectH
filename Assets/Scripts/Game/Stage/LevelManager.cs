@@ -67,43 +67,75 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// DDOL LevelManager와 별도로 씬마다 둔 SpawnManager(WaveDataList 등)를 현재 씬 기준으로 다시 연결합니다.
+    /// DDOL SpawnManager를 유지한 채, 씬마다 둔 SpawnManager(WaveDataList 등) 설정만 현재 씬 기준으로 반영합니다.
     /// sceneLoaded는 해당 씬의 Start 호출 전에 불리므로 MonsterSpawner 등록 시점과 맞습니다.
     /// </summary>
     private void RebindSpawnManagerForScene(Scene scene)
     {
-        SpawnManager inScene = FindSpawnManagerInScene(scene);
-        SpawnManager next = inScene != null ? inScene : _spawnManagerOnLevelRoot;
-
-        if (next == null)
+        if (_spawnManagerOnLevelRoot == null)
         {
-            Debug.LogWarning("SpawnManager를 찾을 수 없습니다. 씬 또는 LevelManager 오브젝트에 배치해 주세요.", this);
+            SpawnManager inScene = FindSceneSpawnManagerConfigurationSource(scene);
+            SpawnManager next = inScene != null ? inScene : null;
+
+            if (next == null)
+            {
+                Debug.LogWarning("SpawnManager를 찾을 수 없습니다. 씬 또는 LevelManager 오브젝트에 배치해 주세요.", this);
+                return;
+            }
+
+            if (_spawnManager != null && _spawnManager != next)
+                _spawnManager.Clear();
+
+            _spawnManager = next;
+            _spawnManager.RefreshClearObjectForLoadedScene(scene);
             return;
         }
 
-        if (_spawnManager != null && _spawnManager != next)
+        SpawnManager sceneSource = FindSceneSpawnManagerConfigurationSource(scene);
+
+        if (_spawnManager != null && _spawnManager != _spawnManagerOnLevelRoot)
             _spawnManager.Clear();
 
-        _spawnManager = next;
-        _spawnManager.RefreshClearObjectForLoadedScene();
+        _spawnManagerOnLevelRoot.Clear();
+
+        if (sceneSource != null && sceneSource != _spawnManagerOnLevelRoot)
+            _spawnManagerOnLevelRoot.ApplyConfigurationFrom(sceneSource);
+
+        _spawnManager = _spawnManagerOnLevelRoot;
+        _spawnManager.RefreshClearObjectForLoadedScene(scene);
     }
 
-    private static SpawnManager FindSpawnManagerInScene(Scene scene)
+    /// <summary>
+    /// 씬에서 waveDataList·clearObject 등을 읽어올 SpawnManager를 고릅니다.
+    /// 곧 파괴되는 LevelManager 복제본보다 standalone SpawnManager를 우선합니다.
+    /// </summary>
+    private static SpawnManager FindSceneSpawnManagerConfigurationSource(Scene scene)
     {
         if (!scene.IsValid() || !scene.isLoaded)
             return null;
 
-        foreach (var root in scene.GetRootGameObjects())
+        SpawnManager standaloneCandidate = null;
+        SpawnManager levelManagerCandidate = null;
+
+        foreach (GameObject root in scene.GetRootGameObjects())
         {
-            var found = root.GetComponentsInChildren<SpawnManager>(true);
-            if (found.Length == 0)
-                continue;
-            if (found.Length > 1)
-                Debug.LogWarning($"씬 '{scene.name}'에 SpawnManager가 {found.Length}개 있습니다. 첫 번째만 사용합니다.", found[0]);
-            return found[0];
+            foreach (SpawnManager spawnManager in root.GetComponentsInChildren<SpawnManager>(true))
+            {
+                var levelManager = spawnManager.GetComponent<LevelManager>();
+                if (levelManager != null)
+                {
+                    if (LevelManager.Instance != null && levelManager == LevelManager.Instance)
+                        continue;
+
+                    levelManagerCandidate ??= spawnManager;
+                    continue;
+                }
+
+                standaloneCandidate ??= spawnManager;
+            }
         }
 
-        return null;
+        return standaloneCandidate ?? levelManagerCandidate;
     }
 
     public void ResetState()
