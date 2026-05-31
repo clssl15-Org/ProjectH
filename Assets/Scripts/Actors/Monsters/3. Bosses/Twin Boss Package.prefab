@@ -253,6 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!114 &8351560841252506170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,7 +267,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &7330524454948710795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,6 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!114 &9176108340496004677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,7 +499,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &5509435351769182748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,6 +717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!114 &2324169171492815347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726,7 +731,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &7218939920034425659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1134,7 +1140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &6260784467558026640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1259,7 +1266,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &4362225961267172411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,8 +1332,8 @@ MonoBehaviour:
   _bosses:
   - {fileID: 5878542944565762321}
   - {fileID: 8431915662518892015}
-  _reviveTime: 10
-  _bonusTime: 10
+  _reviveTime: 30
+  _bonusTime: 15
   _forceClearKey: 0
 --- !u!1 &5810666194657943169
 GameObject:
@@ -1529,6 +1537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!114 &2370805863220502616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1542,7 +1551,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &8911338215755570463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1780,6 +1790,7 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+  _detectionStep: 0.1
 --- !u!114 &6005502055445277112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1816,6 +1827,8 @@ MonoBehaviour:
   _stateDisplay: 
   _attackMode: 0
   _targetPlayerRange: 2.5
+  _border_l: {fileID: 0}
+  _border_r: {fileID: 0}
   _slashWeapon: {fileID: 6260784467558026640}
   _slashActiveTiming: 0.16666667
   _slashActiveDuration: 0.41666666
@@ -2294,6 +2307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!114 &4340361036849176816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2307,7 +2321,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &8428484046983266307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2545,6 +2560,7 @@ MonoBehaviour:
   _platformManager: {fileID: 0}
   _detectionHeight: 1
   _detectionRange: 1
+  _detectionStep: 0.1
 --- !u!114 &6705220806252355649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2945,6 +2961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 0
 --- !u!114 &131660593629845982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2958,7 +2975,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 0
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &7081298206172769217
 MonoBehaviour:
   m_ObjectHideFlags: 0
