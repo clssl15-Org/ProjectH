@@ -12,9 +12,11 @@ namespace UI
         protected IHealthRateVM HealthRateVM { get; private set; }
 
         [SerializeField] private RectTransform _mask;
+        [SerializeField] private RectTransform _gauge;
         [SerializeField, Min(0f)] private float _minMaskWidth = 0f;
         [SerializeField, Min(0f)] private float _maxMaskWidth = 0f;
         private float _originalWidth;
+        private float _originalGaugeWidth;
         private bool _awaken;
 
 
@@ -30,6 +32,7 @@ namespace UI
 
             Transform = GetComponent<RectTransform>();
             _originalWidth = Transform.rect.width;
+            _originalGaugeWidth = _gauge ? _gauge.rect.width : 0f;
         }
 
         public void Connect(IHealthRateVM vm)
@@ -64,6 +67,8 @@ namespace UI
 
             HealthRateVM = null;
             Transform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _originalWidth);
+            if (_gauge)
+                _gauge.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _originalGaugeWidth);
         }
 
         private void SetHealthRate(HealthRateData data)
@@ -73,9 +78,19 @@ namespace UI
             Transform.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
                 width);
+            if (_gauge)
+                _gauge.SetSizeWithCurrentAnchors(
+                    RectTransform.Axis.Horizontal,
+                    GetGaugeWidth(width));
             _mask.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
                 GetMaskWidth(data.HealthRate, width));
+        }
+
+        private float GetGaugeWidth(float width)
+        {
+            var widthScale = _originalWidth > 0f ? width / _originalWidth : 1f;
+            return _originalGaugeWidth * widthScale;
         }
 
 

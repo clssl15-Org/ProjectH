@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Game.Stage;
+using UnityEngine.SceneManagement;
 
 namespace Actors
 {
@@ -18,18 +19,42 @@ namespace Actors
         [SerializeField]
         private GameObject clearObject;
 
+        [SerializeField, Min(1)]
+        private int completionWatchdogFrameInterval = 10;
+
         [SerializeField]
         public List<WaveData> waveDataList = new List<WaveData>();
 
         public List<MonsterSpawner> SpawnerList { get; private set; } = new List<MonsterSpawner>();
 
         private Action<IMonster> monsterCreated;
+
+        private int completionWatchdogFrameCounter;
+        private int lastSpawnerRegistrationFrame = -1;
+        private bool clearObjectsActivated;
+        private bool missingClearObjectWarningLogged;
+
+        private void Update()
+        {
+            if (clearObjectsActivated || SpawnerList.Count == 0)
+                return;
+
+            completionWatchdogFrameCounter++;
+            if (completionWatchdogFrameCounter < Mathf.Max(1, completionWatchdogFrameInterval))
+                return;
+
+            completionWatchdogFrameCounter = 0;
+            CheckAllSpawnersComplete(logIncompleteSpawners: false);
+        }
+
         public void AddSpawner(MonsterSpawner spawner)
         {
             if (spawner != null && !SpawnerList.Contains(spawner))
             {
-                spawner.GetComponent<MonsterSpawner>().OnMonsterCreate(monsterCreated);
+                spawner.OnMonsterCreate(monsterCreated);
                 SpawnerList.Add(spawner);
+                completionWatchdogFrameCounter = 0;
+                lastSpawnerRegistrationFrame = Time.frameCount;
             }
         }
 
@@ -43,23 +68,92 @@ namespace Actors
 
         public void CheckAllSpawnersComplete()
         {
+            CheckAllSpawnersComplete(logIncompleteSpawners: true);
+        }
+
+        private void CheckAllSpawnersComplete(bool logIncompleteSpawners)
+        {
+            RemoveInvalidSpawners();
+
+            if (clearObjectsActivated)
+                return;
+
             if (SpawnerList.Count == 0) return;
 
+            List<string> incompleteSpawners = null;
             foreach (var spawner in SpawnerList)
             {
                 if (!spawner.IsAllPhasesComplete)
                 {
-                    return;
+                    incompleteSpawners ??= new List<string>();
+                    incompleteSpawners.Add(spawner.name);
                 }
             }
+
+            if (incompleteSpawners != null)
+            {
+                if (logIncompleteSpawners)
+                {
+                    Debug.LogWarning(
+                        $"[SpawnManager] Waiting for {incompleteSpawners.Count}/{SpawnerList.Count} spawners before activating ClearObjects in scene '{SceneManager.GetActiveScene().name}': {string.Join(", ", incompleteSpawners)}",
+                        this);
+                }
+
+                return;
+            }
+
+            if (IsSpawnerRegistrationSettling())
+                return;
 
             OnAllMonstersCleared();
         }
 
         private void OnAllMonstersCleared()
         {
+            if (clearObjectsActivated)
+                return;
+
+            ResolveClearObjectReference();
+            if (!clearObject)
+            {
+                if (!missingClearObjectWarningLogged)
+                {
+                    Debug.LogWarning($"[SpawnManager] ClearObjects was not found in scene '{SceneManager.GetActiveScene().name}'.", this);
+                    missingClearObjectWarningLogged = true;
+                }
+
+                return;
+            }
+
+            missingClearObjectWarningLogged = false;
             ClearObjectsActivator.ActivateRootAndChildren(clearObject);
+            clearObjectsActivated = true;
         }
+
+        private void RemoveInvalidSpawners()
+        {
+            int removedCount = SpawnerList.RemoveAll(spawner => !spawner);
+            if (removedCount > 0)
+            {
+                Debug.LogWarning($"[SpawnManager] Removed {removedCount} invalid spawner references before checking stage clear.", this);
+            }
+        }
+
+        private void ResolveClearObjectReference()
+        {
+            var found = GameObject.Find("ClearObjects");
+            if (found != null)
+                clearObject = found;
+        }
+
+        private bool IsSpawnerRegistrationSettling()
+        {
+            if (lastSpawnerRegistrationFrame < 0)
+                return false;
+
+            return Time.frameCount - lastSpawnerRegistrationFrame < Mathf.Max(1, completionWatchdogFrameInterval);
+        }
+
         public void WaveComplete(MonsterSpawner spawner)
         {
             if (spawner == null)
@@ -120,13 +214,19 @@ namespace Actors
         {
             monsterCreated = null;
             SpawnerList.Clear();
+            completionWatchdogFrameCounter = 0;
+            lastSpawnerRegistrationFrame = -1;
+            clearObjectsActivated = false;
+            missingClearObjectWarningLogged = false;
         }
 
         public void RefreshClearObjectForLoadedScene()
         {
-            var found = GameObject.Find("ClearObjects");
-            if (found != null)
-                clearObject = found;
+            ResolveClearObjectReference();
+            completionWatchdogFrameCounter = 0;
+            lastSpawnerRegistrationFrame = -1;
+            clearObjectsActivated = false;
+            missingClearObjectWarningLogged = false;
 
             if (clearObject == null)
                 return;

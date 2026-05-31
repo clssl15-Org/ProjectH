@@ -115,14 +115,14 @@ namespace Actors
 
             if (phases == null || phases.Count == 0)
             {
-                Debug.LogError($"[{gameObject.name}] 스폰 페이즈가 설정되지 않았습니다.", this);
+                CompleteWithoutSpawning("No spawn phases are configured");
                 return;
             }
 
             BuildRuntimePhases();
             if (runtimePhases.Count == 0)
             {
-                Debug.LogError($"[{gameObject.name}] 실행 가능한 스폰 페이즈가 없습니다.", this);
+                CompleteWithoutSpawning("No runnable spawn phases are available");
                 return;
             }
 
@@ -153,7 +153,11 @@ namespace Actors
             runtimePhases.Clear();
             foreach (SpawnPhase phase in phases)
             {
-                runtimePhases.Add(ClonePhase(phase));
+                SpawnPhase runtimePhase = ClonePhase(phase);
+                if (runtimePhase != null)
+                    runtimePhases.Add(runtimePhase);
+                else
+                    Debug.LogWarning($"[{gameObject.name}] Ignored a null spawn phase.", this);
             }
 
             if (!ShouldUseEnhancedFinalSmallMapPhase())
@@ -473,11 +477,20 @@ namespace Actors
         /// </summary>
         private void StartPhase(SpawnPhase phase)
         {
+            if (phase == null)
+            {
+                Debug.LogWarning($"[{gameObject.name}] Phase {currentPhaseIndex + 1} is null. Skipping to next phase.", this);
+                StartCoroutine(WaitAndStartNextPhase());
+                return;
+            }
+
             // 다음 페이즈 시작 전, 추적 리스트 초기화
             activeMonsters.Clear();
 
             // 임시 스폰 위치 리스트 초기화
-            tmpSpawnPoint = new List<Transform>(spawnPoint);
+            tmpSpawnPoint = spawnPoint != null
+                ? new List<Transform>(spawnPoint)
+                : new List<Transform>();
 
             // 1. 고정 스폰 풀 처리
             ProcessFixedPool(phase.fixedMonsterPool);
@@ -506,19 +519,36 @@ namespace Actors
         /// </summary>
         private void OnAllPhasesComplete()
         {
+            if (IsAllPhasesComplete)
+                return;
+
             Debug.Log($"*** [{gameObject.name}] 모든 스폰 페이즈를 완료했습니다. ***");
             isSpawning = false;
 
             IsAllPhasesComplete = true;
-            if (LevelManager.Instance.SpawnManager != null)
+            var spawnManager = LevelManager.Instance?.SpawnManager;
+            if (spawnManager != null)
             {
-                LevelManager.Instance.SpawnManager.CheckAllSpawnersComplete();
+                spawnManager.CheckAllSpawnersComplete();
+            }
+            else
+            {
+                Debug.LogWarning($"[{gameObject.name}] SpawnManager is missing, so stage clear completion could not be checked.", this);
             }
 
-            if (isLargeMapWave)
+            if (isLargeMapWave && spawnManager != null)
             {
-                LevelManager.Instance.SpawnManager.WaveComplete(this);
+                spawnManager.WaveComplete(this);
             }
+        }
+
+        private void CompleteWithoutSpawning(string reason)
+        {
+            Debug.LogWarning(
+                $"[{gameObject.name}] {reason}. Marking this spawner complete so ClearObjects is not blocked.",
+                this);
+
+            OnAllPhasesComplete();
         }
 
         /// <summary>
@@ -605,8 +635,12 @@ namespace Actors
 
             if (tmpSpawnPoint.Count == 0)
             {
-                tmpSpawnPoint = new List<Transform>(spawnPoint);
+                tmpSpawnPoint = spawnPoint != null
+                    ? new List<Transform>(spawnPoint)
+                    : new List<Transform>();
             }
+
+            tmpSpawnPoint.RemoveAll(point => !point);
 
             if (tmpSpawnPoint.Count == 0)
             {
