@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System;
 using Game.Stage;
 using UnityEngine.SceneManagement;
@@ -220,19 +221,47 @@ namespace Actors
             missingClearObjectWarningLogged = false;
         }
 
-        public void RefreshClearObjectForLoadedScene()
+        /// <summary>
+        /// 씬에 배치된 SpawnManager의 waveDataList 등 씬 전용 설정을 DDOL 인스턴스로 복사합니다.
+        /// </summary>
+        public void ApplyConfigurationFrom(SpawnManager source)
         {
-            ResolveClearObjectReference();
-            completionWatchdogFrameCounter = 0;
-            lastSpawnerRegistrationFrame = -1;
-            clearObjectsActivated = false;
-            missingClearObjectWarningLogged = false;
+            if (source == null || source == this)
+                return;
+
+            waveDataList = source.waveDataList != null
+                ? new List<WaveData>(source.waveDataList)
+                : new List<WaveData>();
+        }
+
+        public void RefreshClearObjectForLoadedScene(Scene scene)
+        {
+            GameObject found = FindClearObjectsInScene(scene);
+            if (found != null)
+                clearObject = found;
 
             if (clearObject == null)
                 return;
 
             if (LevelManager.Instance != null && LevelManager.Instance.ExploreCount > 0)
                 clearObject.SetActive(false);
+        }
+
+        private static GameObject FindClearObjectsInScene(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+                return null;
+
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                foreach (Transform child in root.GetComponentsInChildren<Transform>(true))
+                {
+                    if (child.name == "ClearObjects")
+                        return child.gameObject;
+                }
+            }
+
+            return null;
         }
     }
 }
