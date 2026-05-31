@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Actors.Monsters;
 using Actors.PlayerSystem;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
 
 namespace Actors.PlayerSystem
 {
     public class PlayerDebug : MonoBehaviour
     {
+#if PLAYER_DEBUG_MODE
         [SerializeField]
         private PlayerHealth playerHealth;
         [SerializeField]
@@ -95,9 +96,10 @@ namespace Actors.PlayerSystem
         {
             RelicManager.Instance.AddRelic(relicKey, out _, false);
         }
+#endif
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && PLAYER_DEBUG_MODE 
     [CustomEditor(typeof(PlayerDebug))]
     public class DebugButton : Editor
     {

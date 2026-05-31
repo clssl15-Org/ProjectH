@@ -35,7 +35,11 @@ namespace Actors.PlayerSystem
 
         [Header("Attack Stats")]
         [SerializeField]
+#if PLAYER_DEBUG_MODE
         private float damageRatio = 1.0f;
+#else
+        private float damageRatio = 0f;
+#endif
 
         [Header("Attack Range")]
         [SerializeField]
