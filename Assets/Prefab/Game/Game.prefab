@@ -85,7 +85,6 @@ GameObject:
   - component: {fileID: 4950576554456026468}
   - component: {fileID: 7889603405413448161}
   - component: {fileID: 3632647419853842006}
-  - component: {fileID: 4000332937720792618}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -246,17 +245,3 @@ MonoBehaviour:
   <DarkscreenUI>k__BackingField: {fileID: 0}
   _fadeInOnStart: 1
   _bgm: 0
---- !u!114 &4000332937720792618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9072449599195621900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 3632647419853842006}
-  _quitOnExport: 1

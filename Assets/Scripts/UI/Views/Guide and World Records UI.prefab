@@ -958,7 +958,6 @@ GameObject:
   - component: {fileID: 2527340326936309207}
   - component: {fileID: 7342540858429754172}
   - component: {fileID: 7258967299053696889}
-  - component: {fileID: 1101595618562419486}
   - component: {fileID: 4725759113804277451}
   m_Layer: 5
   m_Name: Guide and World Records UI
@@ -1035,20 +1034,6 @@ MonoBehaviour:
   _ToMultiRecordBtn: {fileID: 7582843653130325333}
   _multiRecords: {fileID: 9222794564471892329}
   _ToMultiGuideBtn: {fileID: 2020927363220235027}
---- !u!114 &1101595618562419486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4088256128515803559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 7258967299053696889}
-  _quitOnExport: 1
 --- !u!114 &4725759113804277451
 MonoBehaviour:
   m_ObjectHideFlags: 0

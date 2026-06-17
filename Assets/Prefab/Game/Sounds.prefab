@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8461259551279555003}
   - component: {fileID: 5188482448521381227}
-  - component: {fileID: 8332823396052505187}
   m_Layer: 0
   m_Name: Sounds
   m_TagString: Untagged
@@ -48,20 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setListenerIfPossible: 1
---- !u!114 &8332823396052505187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 63169035838290792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 5188482448521381227}
-  _quitOnExport: 1
 --- !u!1 &3793666495424857569
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +58,6 @@ GameObject:
   - component: {fileID: 101089689883278876}
   - component: {fileID: 1527249304819550444}
   - component: {fileID: 2555858503816877553}
-  - component: {fileID: 6920663794310494529}
   m_Layer: 0
   m_Name: Bgm
   m_TagString: Untagged
@@ -222,20 +206,6 @@ MonoBehaviour:
   - Name: 8
     AudioClip: {fileID: 8300000, guid: b05710976e29e6043b13d2667f9c3d2b, type: 3}
   _fadeDuration: 0.7
---- !u!114 &6920663794310494529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3793666495424857569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 2555858503816877553}
-  _quitOnExport: 1
 --- !u!1 &6844992286313829961
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +217,6 @@ GameObject:
   - component: {fileID: 8986469891561091877}
   - component: {fileID: 8010560065017897451}
   - component: {fileID: 430039563613760267}
-  - component: {fileID: 5967712002236071308}
   m_Layer: 0
   m_Name: Sfx
   m_TagString: Untagged
@@ -393,17 +362,3 @@ MonoBehaviour:
     AudioClip: {fileID: 8300000, guid: b9b2e8b644a6cff47829c44f83999344, type: 3}
   - Name: 7
     AudioClip: {fileID: 8300000, guid: de5b1a3173e5c124bba3b72ad527d85a, type: 3}
---- !u!114 &5967712002236071308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6844992286313829961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 430039563613760267}
-  _quitOnExport: 1

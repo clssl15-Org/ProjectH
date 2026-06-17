@@ -2327,7 +2327,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2007383320}
   - component: {fileID: 2007383321}
-  - component: {fileID: 2007383322}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -2371,20 +2370,6 @@ MonoBehaviour:
   _settingsUI: {fileID: 907351896}
   _animation: {fileID: 694081956}
   _gameSceneName: Stage0 0
---- !u!114 &2007383322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007383319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 2007383321}
-  _quitOnExport: 1
 --- !u!1 &2008743079
 GameObject:
   m_ObjectHideFlags: 0
@@ -2398,7 +2383,6 @@ GameObject:
   - component: {fileID: 2008743083}
   - component: {fileID: 2008743084}
   - component: {fileID: 2008743080}
-  - component: {fileID: 2008743085}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2480,20 +2464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19052516c81045b4eabe50cd59783529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2008743085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2008743079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adddb7a4d7c6d3479b5a567c327b74e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 2008743080}
-  _quitOnExport: 1
 --- !u!1 &2025704689
 GameObject:
   m_ObjectHideFlags: 0
