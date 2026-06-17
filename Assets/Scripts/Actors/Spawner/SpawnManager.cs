@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using Game.Stage;
-using UnityEngine.SceneManagement;
 
 namespace Actors
 {
