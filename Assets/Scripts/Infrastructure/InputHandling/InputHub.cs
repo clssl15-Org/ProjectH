@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BlackboxSystem;
 using UnityEngine;
 
 namespace Infrastructure
@@ -14,7 +13,6 @@ namespace Infrastructure
         public void Add(IInputLayerSubject subject) => AddAfter(null, subject);
         public void AddAfter(IInputLayerSubject target, IInputLayerSubject subject)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Add");
             if (subject == null) throw new ArgumentNullException(nameof(subject));
 
             if (_subjects.Contains(subject))
@@ -23,7 +21,6 @@ namespace Infrastructure
                 _subjectData.Remove(subject);
             }
 
-            BlackboxHandle.Of(this).Exert(subject, $"Add, after: {target}");
 
             var idx = _subjects.Contains(target) ? _subjects.IndexOf(target) + 1 : _subjects.Count;
             _subjects.Insert(idx, subject);
@@ -43,16 +40,14 @@ namespace Infrastructure
 
         private void SetAwake(IInputLayerSubject subject, bool awake)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Set Awake");
 
             if (subject == null)
                 throw new ArgumentNullException(nameof(subject));
             if (!_subjects.Contains(subject))
                 throw new ArgumentException(
-                    BlackboxHandle.Of(this).WriteError("Á¸ÀçÇÏÁö ¾Ê´Â subject¸¦ WakeUpÇÏ·Á°í ½ÃµµÇß½À´Ï´Ù."));
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ subjectï¿½ï¿½ WakeUpï¿½Ï·ï¿½ï¿½ï¿½ ï¿½Ãµï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
 
             var (wasAwake, awakeChanged, onDestroy) = _subjectData[subject];
-            BlackboxHandle.Of(this).Exert(subject, $"Set Sleep, {wasAwake} -> {awake}");
 
             _subjectData[subject] = (awake, awakeChanged, onDestroy);
             EvaluateInputState();
@@ -60,10 +55,8 @@ namespace Infrastructure
 
         public void Remove(IInputLayerSubject subject)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Remove");
             if (!_subjects.Contains(subject)) return;
 
-            BlackboxHandle.Of(this).Exert(subject, "Remove");
 
             if (subject is IAwakableInputLayerSubject aSubject)
                 aSubject.InputAwakeStateChanged -= _subjectData[subject].awakeChanged;
@@ -78,11 +71,8 @@ namespace Infrastructure
 
         public void Block(object requester)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Block: {requester}");
             if (requester == null || _blockers.ContainsKey(requester))
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(requester)} '{requester}'Àº(´Â) À¯È¿ÇÏÁö ¾Ê°Å³ª ÀÌ¹Ì Block »óÅÂÀÔ´Ï´Ù.");
                 return;
             }
 
@@ -92,11 +82,8 @@ namespace Infrastructure
 
         public void Unblock(object requester)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Unblock: {requester}");
             if (requester == null || !_blockers.ContainsKey(requester))
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(requester)} '{requester}'Àº(´Â) À¯È¿ÇÏÁö ¾Ê°Å³ª Block »óÅÂ°¡ ¾Æ´Õ´Ï´Ù.");
                 return;
             }
 
@@ -106,7 +93,6 @@ namespace Infrastructure
 
         private void EvaluateInputState()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Evaluate Input State");
             bool doBlock = false;
 
             for (int i = _subjects.Count - 1; i >= 0; i--)
@@ -116,12 +102,10 @@ namespace Infrastructure
 
                 if (doBlock)
                 {
-                    BlackboxHandle.Of(this).Exert(subject, "Block");
                     subject.AllowInput = false;
                 }
                 else
                 {
-                    BlackboxHandle.Of(this).Exert(subject, "Unblock");
                     subject.AllowInput = true;
                 }
 
@@ -132,7 +116,6 @@ namespace Infrastructure
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             foreach (var (subject, (_, awakeChanged, onDestroy)) in _subjectData)
             {

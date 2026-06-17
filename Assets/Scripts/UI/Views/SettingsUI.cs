@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Infrastructure;
 using Sound;
 using UnityEngine;
@@ -52,7 +51,6 @@ namespace UI
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
             Time.timeScale = 0f;
 
             _lastSamplePlayTime = Time.unscaledTime;
@@ -64,32 +62,27 @@ namespace UI
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Block");
                 _inputHub.Block(this);
             }
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Enable Darkscreen");
                 _darkscreenUI.EnableFor(this, Disable);
             }
         };
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
             _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Disable Darkscreen");
                 _darkscreenUI.Disable();
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock");
                 _inputHub.Unblock(this);
             }
         };
@@ -100,39 +93,31 @@ namespace UI
         private void Awake() => ((IStandaloneInitializable)this).StandaloneInitialize();
         void IStandaloneInitializable.StandaloneInitialize()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
 
             if (_isInitialized) return;
             _isInitialized = true;
 
             if (!_animation)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"{nameof(_animation)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.")));
+                throw new InvalidOperationException(Ctx($"{nameof(_animation)} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½."));
 
             if (!_bgmScroll)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_bgmScroll)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _bgmScroll.onValueChanged.AddListener(val =>
                 {
                     var vol = Mathf.RoundToInt(val * 100);
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_bgmScroll, $"Set Bgm Vol: {vol}");
 
                     _gameServices.SetBgmVolume(vol, this);
                 });
 
             if (!_sfxScroll)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_sfxScroll)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _sfxScroll.onValueChanged.AddListener(val =>
                 {
                     var vol = Mathf.RoundToInt(val * 100);
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_sfxScroll, $"Set Sfx Vol: {vol}");
 
                     _gameServices.SetSfxVolume(vol, this);
 
@@ -146,68 +131,52 @@ namespace UI
                         }
                     }
                     else
-                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            $"{nameof(_sfxPlayManager)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê±â ¶§¹®¿¡ »ùÇÃ »ç¿îµå¸¦ Àç»ýÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                        Debug.LogWarning($"{nameof(_sfxPlayManager)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                             this);
                 });
 
             if (!_continueBtn)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_continueBtn)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _continueBtn.onClick.AddListener(() =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_continueBtn, "Continue");
                     ((IEnablable)this).Disable();
                 });
 
             if (!_restartBtn)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_restartBtn)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _restartBtn.onClick.AddListener(() =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_restartBtn, "Restart");
                     OnRestart();
                 });
 
             if (!_guideBtn)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_guideBtn)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _guideBtn.onClick.AddListener(() =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_guideBtn, "Show Guide");
                     OnOpenGuideUI();
                 });
 
             if (!_relicsBtn)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_relicsBtn)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _relicsBtn.onClick.AddListener(() =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_relicsBtn, "Show Relics");
                     OnOpenRelicsUI();
                 });
 
             if (!_exitBtn)
             {
-                BlackboxHandle.Of(this).Write(
-                    $"{nameof(_exitBtn)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
             }
             else
                 _exitBtn.onClick.AddListener(() =>
                 {
-                    using var _ = BlackboxHandle.Of(this).ExertedScope(_exitBtn, "°ÔÀÓ Á¾·á");
 
                     if (_gameServices)
                     {
@@ -215,8 +184,8 @@ namespace UI
                         _gameServices.ChangeScene("Title", this, true);
                     }
                     else
-                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                            "gameServices°¡ À¯È¿ÇÏÁö ¾Ê±â ¶§¹®¿¡ °ÔÀÓÀ» Á¾·áÇÒ ¼ö ¾ø½À´Ï´Ù.")), this);
+                        Debug.LogWarning(Ctx(
+                            "gameServicesï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."), this);
                 });
 
 
@@ -259,8 +228,8 @@ namespace UI
         {
             if (RestartUI == null)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"{nameof(RestartUI)} ÀÌº¥Æ®¿¡ µî·ÏµÈ ´ë¸®ÀÚ°¡ ¾øÀ¸¹Ç·Î °¡ÀÌµå UI¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.")),
+                Debug.LogWarning(Ctx(
+                    $"{nameof(RestartUI)} ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ïµï¿½ ï¿½ë¸®ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ UIï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."),
                     this);
                 return;
             }
@@ -272,8 +241,8 @@ namespace UI
         {
             if (OpenGuideUI == null)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"{nameof(OpenGuideUI)} ÀÌº¥Æ®¿¡ µî·ÏµÈ ´ë¸®ÀÚ°¡ ¾øÀ¸¹Ç·Î °¡ÀÌµå UI¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.")),
+                Debug.LogWarning(Ctx(
+                    $"{nameof(OpenGuideUI)} ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ïµï¿½ ï¿½ë¸®ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ UIï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."),
                     this);
                 return;
             }
@@ -285,8 +254,8 @@ namespace UI
         {
             if (OpenRelicsUI == null)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"{nameof(OpenRelicsUI)} ÀÌº¥Æ®¿¡ µî·ÏµÈ ´ë¸®ÀÚ°¡ ¾øÀ¸¹Ç·Î À¯¹° UI¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.")),
+                Debug.LogWarning(Ctx(
+                    $"{nameof(OpenRelicsUI)} ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ïµï¿½ ï¿½ë¸®ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ UIï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."),
                     this);
                 return;
             }
@@ -302,7 +271,6 @@ namespace UI
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _cursorVisibilityController?.ReleaseVisible(this);
             Destroying?.Invoke();

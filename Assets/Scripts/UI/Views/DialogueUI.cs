@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Dialogue;
 using Infrastructure;
 using TMPro;
@@ -80,7 +79,6 @@ namespace UI
 
         private void Start()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Awake, wasAwake: {_isAwake}");
 
             if (_isAwake) return;
             _isAwake = true;
@@ -90,7 +88,6 @@ namespace UI
 
             _typeHandler.TextTyped += () => TextTyped?.Invoke();
 
-            BlackboxHandle.Of(this).Write("Set To Disabled");
             SetToDisabled();
         }
 
@@ -100,7 +97,6 @@ namespace UI
 
         public void SetContent(DialogueLine dialogueData)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Content: {dialogueData.Character}");
             GetData(dialogueData, out var name, out var portrait, out var dialogueText);
 
             _nametagUI.text = name;
@@ -109,8 +105,7 @@ namespace UI
             if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
                 dialogueText = dialogueText.Replace("{player}", playerInfo.Name, StringComparison.OrdinalIgnoreCase);
             else
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "Player Á¤º¸¸¦ °¡Á®¿ÀÁö ¸øÇß±â ¶§¹®¿¡ {player} ¹®ÀÚ¿­À» Ä¡È¯ÇÏÁö ¸øÇß½À´Ï´Ù."));
+                Debug.LogWarning("Player ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {player} ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ Ä¡È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
 
             _typeHandler.TypeDialogue(dialogueText);
         }
@@ -125,8 +120,7 @@ namespace UI
         {
             if (!_gameAssetLibrary.TryGetCharacterInfo(dialogueData.Character, out var characterInfo))
             {
-                throw new ArgumentException(BlackboxHandle.Of(this).WriteError(
-                    $"{nameof(dialogueData)}ÀÇ Ä³¸¯ÅÍ Å¸ÀÔ '{dialogueData.Character}'¿¡ ÇØ´çÇÏ´Â {nameof(CharacterInfoSO)}À»(¸¦) Ã£Áö ¸øÇÏ¿´½À´Ï´Ù."),
+                throw new ArgumentException($"{nameof(dialogueData)}ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ '{dialogueData.Character}'ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ {nameof(CharacterInfoSO)}ï¿½ï¿½(ï¿½ï¿½) Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                     nameof(dialogueData));
             }
 
@@ -137,10 +131,8 @@ namespace UI
 
         public void Enable()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Enable");
             Start();
 
-            BlackboxHandle.Of(this).Exert(_enabler, "Enable");
             _enabler.Enable();
         }
 

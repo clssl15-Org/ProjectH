@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using BlackboxSystem;
 using UnityEngine;
 using Infrastructure;
 
@@ -29,19 +28,16 @@ namespace Sound
             if (_isAwake) return;
             _isAwake = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             _audioSource = GetComponent<AudioSource>();
         }
 
         public void Play(TAudioName name)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Play: {name}");
 
             var clip = _audios.FirstOrDefault(a => a.Name.Equals(name));
             if (clip.Name == null || clip.AudioClip == null)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteError(
-                    $"'{name}' ¿Àµð¿À ÆÄÀÏÀ» °¡Á®¿À´Â µ¥ ½ÇÆÐÇß½À´Ï´Ù."),
+                Debug.LogWarning($"'{name}' ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.",
                     this);
                 return;
             }
@@ -52,14 +48,12 @@ namespace Sound
 
         public void Stop()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Stop");
             _audioSource.Stop();
         }
 
         public void SetVolume(int volume)
         {
             volume = Mathf.Clamp(volume, 0, 100);
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Volume to {volume}");
 
             _audioSource.volume = volume / 100f;
         }

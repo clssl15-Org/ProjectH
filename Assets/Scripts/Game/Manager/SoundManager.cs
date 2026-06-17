@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using BlackboxSystem;
 using UnityEngine;
 
 namespace Game.Management
@@ -18,7 +17,6 @@ namespace Game.Management
         public void SetBgmVolume(int volume)
         {
             volume = Mathf.Clamp(volume, 0, 100);
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Bgm Volume: {volume}");
 
             BgmVolume = volume;
             BgmChanged?.Invoke(volume);
@@ -27,7 +25,6 @@ namespace Game.Management
         public void SetSfxVolume(int volume)
         {
             volume = Mathf.Clamp(volume, 0, 100);
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Sfx Volume: {volume}");
 
             SfxVolume = volume;
             SfxChanged?.Invoke(volume);
@@ -35,7 +32,6 @@ namespace Game.Management
 
         public void SetListenerIfPossible()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Listener If Possible: {_setListenerIfPossible}");
             if (!_setListenerIfPossible) return;
 
             var listeners = FindObjectsByType<AudioListener>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -46,22 +42,19 @@ namespace Game.Management
                 var togglable = listeners.FirstOrDefault(l => l.gameObject.activeInHierarchy);
                 if (togglable)
                 {
-                    Debug.Log(BlackboxHandle.Of(this).WriteMessage(
-                        $"[SoundManager] '{togglable.name}'ÀÇ Listener¸¦ È°¼ºÈ­ÇÕ´Ï´Ù."),
+                    Debug.Log($"[SoundManager] '{togglable.name}'ï¿½ï¿½ Listenerï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Õ´Ï´ï¿½.",
                         this);
 
                     togglable.enabled = true;
                     return;
                 }
 
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "[SoundManager] ºñÈ°¼ºÈ­µÈ °´Ã¼¿¡ Listener°¡ Á¸ÀçÇÕ´Ï´Ù. ¼Ò¸®°¡ Á¤»óÀûÀ¸·Î Ãâ·ÂµÇÁö ¾ÊÀ» ¼ö ÀÖ½À´Ï´Ù."),
+                Debug.LogWarning("[SoundManager] ï¿½ï¿½È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ Listenerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½. ï¿½Ò¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Âµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.",
                     this);
                 return;
             }
 
-            Debug.Log(BlackboxHandle.Of(this).WriteMessage(
-                "[SoundManager] À¯È¿ÇÑ Listener°¡ ¾øÀ¸¹Ç·Î »õ Audio Listener °´Ã¼¸¦ »ý¼ºÇÕ´Ï´Ù."),
+            Debug.Log("[SoundManager] ï¿½ï¿½È¿ï¿½ï¿½ Listenerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ Audio Listener ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.",
                 this);
 
             new GameObject("Audio Listener", typeof(AudioListener));

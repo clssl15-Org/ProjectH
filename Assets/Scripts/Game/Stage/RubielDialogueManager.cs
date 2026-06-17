@@ -2,8 +2,6 @@ using Actors;
 using Actors.PlayerSystem;
 using Dialogue;
 using UnityEngine;
-using BlackboxSystem;
-
 namespace Game
 {
     public class RubielDialogueManager : DialogueManager
@@ -23,8 +21,7 @@ namespace Game
             {
                 if (string.IsNullOrWhiteSpace(DialogueTitle))
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"{nameof(DialogueTitle)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê±â ‹š¹®¿¡ ´ëÈ­¸¦ Àç»ýÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                    Debug.LogWarning($"{nameof(DialogueTitle)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                         this);
                     return;
                 }

@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +28,6 @@ namespace UI.PlayerView
         // Content
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             _work = new Work()
                 .AddChild(new Work(State.Idle)
@@ -42,9 +40,8 @@ namespace UI.PlayerView
                     {
                         if (_getCooltimeRate == null)
                         {
-                            Debug.LogWarning(BlackboxHandle.Of(this).WriteError(
-                                $"[SkillCooltimeManager] {nameof(_getCooltimeRate)} ÀÌº¥Æ®°¡ nullÀÌ±â ¶§¹®¿¡ " +
-                                $"{nameof(State.Cooltime)} ¸ðµå·Î ÁøÀÔÇÒ ¼ö ¾ø½À´Ï´Ù."));
+                            Debug.LogWarning($"[SkillCooltimeManager] {nameof(_getCooltimeRate)} ï¿½Ìºï¿½Æ®ï¿½ï¿½ nullï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " +
+                                $"{nameof(State.Cooltime)} ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 
                             _image.fillAmount = 0f;
                             _work.SetNextToNone();
@@ -69,7 +66,6 @@ namespace UI.PlayerView
 
         private void Start()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Start");
             _work?.Enter();
         }
 
@@ -82,7 +78,6 @@ namespace UI.PlayerView
 
         private void SetEnable(bool enable)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Set Enable, '{_isEnabled}' -> '{enable}'");
 
             if (_isEnabled == enable) return;
             _isEnabled = enable;
@@ -157,7 +152,6 @@ namespace UI.PlayerView
 
         private void OnDestroy()
         {
-            BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _enableTimer?.Dispose();
 

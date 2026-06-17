@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Actors;
-using BlackboxSystem;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
@@ -24,7 +23,7 @@ namespace Game.Stage
         protected bool IsFirstArrival => !_overrideFirstArrival.Resolve(false)
             ? _isFirstArrivalForCurrentRun : _isFirstArrival;
 
-        [Tooltip("µð¹ö±×¿ë ½ºÅä¸® ÁøÇà ¹öÆ°")]
+        [Tooltip("ï¿½ï¿½ï¿½ï¿½×¿ï¿½ ï¿½ï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°")]
         [SerializeField] private KeyCode _proceedKey = KeyCode.Alpha0;
         [field: SerializeField] protected float TargetRubielDistance { get; private set; } = 3f;
 
@@ -63,7 +62,6 @@ namespace Game.Stage
         // Content
         public void Initialize(StageManager stageManager)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
 
             if (_isInitialized) return;
             _isInitialized = true;
@@ -87,13 +85,11 @@ namespace Game.Stage
 
         void IInputLayerController.Initialize(IInputHub inputHub)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("InputHub Injected");
             _inputHub = inputHub;
         }
 
         protected void BlockInputs()
         {
-            BlackboxHandle.Of(this).Exert(_inputHub, "Block");
 
             if (StageManager.PlayerUI != null)
                 _inputHub.AddAfter(StageManager.PlayerUI, this);
@@ -106,7 +102,6 @@ namespace Game.Stage
         }
         protected void UnblockInputs()
         {
-            BlackboxHandle.Of(this).Exert(_inputHub, "Unblock");
 
             _inputHub.Remove(StageManager.DialogueManager);
             _inputHub.Remove(this);
@@ -252,12 +247,10 @@ namespace Game.Stage
 
         public void To(object blockName)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"To: {blockName}");
             Machine.SetNext(blockName);
         }
         public void Exit()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Exit");
             Machine.Exit();
         }
 
@@ -276,8 +269,7 @@ namespace Game.Stage
 
             if (!GameServices)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    $"[{nameof(ScenarioManager)}] {nameof(GameServices)}°¡ ÁÖÀÔµÇÁö ¾Ê¾Æ ÃÖÃÊµµ´Þ·Î Ã³¸®ÇÕ´Ï´Ù."),
+                Debug.LogWarning($"[{nameof(ScenarioManager)}] {nameof(GameServices)}ï¿½ï¿½ ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ ï¿½ï¿½ï¿½Êµï¿½ï¿½Þ·ï¿½ Ã³ï¿½ï¿½ï¿½Õ´Ï´ï¿½.",
                     this);
                 _isFirstArrivalForCurrentRun = true;
                 return;
@@ -300,7 +292,6 @@ namespace Game.Stage
 
         private void OnDestroy()
         {
-            BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _rubielVisibleHandle?.Dispose();
             Destroying?.Invoke();

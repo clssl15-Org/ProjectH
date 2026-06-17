@@ -1,4 +1,3 @@
-using BlackboxSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -39,8 +38,7 @@ namespace Sound
             if (AudioPlayManager)
                 AudioPlayManager.Play(HoverSound);
             else
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "AudioPlayManager°¡ À¯È¿ÇÏÁö ¾Ê±â ‹š¹®¿¡ Hover ¼Ò¸®¸¦ Àç»ýÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                Debug.LogWarning("AudioPlayManagerï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Hover ï¿½Ò¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                     this);
         }
 
@@ -49,8 +47,7 @@ namespace Sound
             if (AudioPlayManager)
                 AudioPlayManager.Play(ClickSound);
             else
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "AudioPlayManager°¡ À¯È¿ÇÏÁö ¾Ê±â ‹š¹®¿¡ Click ¼Ò¸®¸¦ Àç»ýÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                Debug.LogWarning("AudioPlayManagerï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Click ï¿½Ò¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                     this);
         }
 

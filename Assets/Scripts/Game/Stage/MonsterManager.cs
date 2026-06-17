@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors;
-using BlackboxSystem;
 using UnityEngine;
 
 namespace Game.Stage
@@ -17,11 +16,9 @@ namespace Game.Stage
         // Content
         public bool Register(IMonster monster)
         {
-            BlackboxHandle.Of(this).Exert(monster, "∏ÛΩ∫≈Õ µÓ∑œ");
 
             if (!monster.IsValid())
-                throw new ArgumentException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx("¿Ø»ø«œ¡ˆ æ ¿∫ monster ¿Œ¿⁄∞° ¿‘∑¬µ«æ˙Ω¿¥œ¥Ÿ.")),
+                throw new ArgumentException(Ctx("ÔøΩÔøΩ»øÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ monster ÔøΩÔøΩÔøΩ⁄∞ÔøΩ ÔøΩ‘∑¬µ«æÔøΩÔøΩÔøΩÔøΩœ¥ÔøΩ."),
                     nameof(monster));
 
             if (_monsters.Contains(monster))
@@ -36,14 +33,12 @@ namespace Game.Stage
         private void OnDestroy() => Destroy();
         internal void Destroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Destroy, wasDestroyed: {_isDestroyed}");
 
             if (_isDestroyed) return;
             _isDestroyed = true;
 
             _monsters.ToList().ForEach(m =>
             {
-                BlackboxHandle.Of(this).Exert(m, "∏ÛΩ∫≈Õ ªË¡¶");
                 m.Destroy();
             });
             _monsters.Clear();

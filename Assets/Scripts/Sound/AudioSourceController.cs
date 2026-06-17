@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Linq;
-using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 
@@ -62,7 +61,6 @@ namespace Sound
             if (_isInitialized) return;
             _isInitialized = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Initialize");
             _audioSource = GetComponent<AudioSource>();
         }
 
@@ -84,9 +82,8 @@ namespace Sound
                 return;
 
             if (!TryPlay(name, playOption, independentPlayTime, fadingDuration))
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"'{name}' 오디오를 재생하는 데 실패했습니다. " +
-                    $"오디오 목록: {(_audios?.Length > 0 ? ("\n" + string.Join(", ", _audios.Select(a => a.Name))) : "None")}"));
+                throw new InvalidOperationException($"'{name}' 오디오를 재생하는 데 실패했습니다. " +
+                    $"오디오 목록: {(_audios?.Length > 0 ? ("\n" + string.Join(", ", _audios.Select(a => a.Name))) : "None")}");
         }
 
         public bool TryPlay(
@@ -95,7 +92,6 @@ namespace Sound
             float? independentPlayTime = null,
             float fadingDuration = 0)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Play {name}, playOption: {playOption}, fadingDuration: {fadingDuration}");
             if (!gameObject) return false;
 
             EnsureInitialization();
@@ -210,7 +206,6 @@ namespace Sound
 
         public void Stop()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Stop");
             EnsureInitialization();
 
             _audioSource.Stop();

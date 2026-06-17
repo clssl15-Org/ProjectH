@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Infrastructure;
 using Sound;
 using UI;
@@ -42,26 +41,22 @@ namespace Game.Title
 
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             _enabler = new EnableWithAnimation(_animation, gameObject.activeSelf)
                 .InitializeWithIEnablable(this);
 
             if (_darkscreen)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreen, "Set To Disable");
                 _darkscreen.SetToDisabled();
             }
         }
 
         void IInjectable<GameServices>.Inject(GameServices gameServices)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("gameServices Injected");
             _gameServices = gameServices;
         }
         void IInjectable<BgmPlayManager>.Inject(BgmPlayManager bgmPlayManager)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("bgmPlayManager Injected");
             _bgmPlayManager = bgmPlayManager;
         }
 
@@ -69,10 +64,8 @@ namespace Game.Title
         {
             if (_enabler.IsEnabled && Input.GetKeyDown(KeyCode.Escape))
             {
-                using var _ = BlackboxHandle.Of(this).WriteScope("Esc");
                 if (!AllowInput)
                 {
-                    BlackboxHandle.Of(this).Write("Input has been blocked");
                     return;
                 }
 
@@ -88,16 +81,13 @@ namespace Game.Title
         #region Actions
         public void ToPlay()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("To Play");
             if (!AllowInput)
             {
-                BlackboxHandle.Of(this).Write("Input has been blocked");
                 return;
             }
 
             if (_darkscreen)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreen, "Close Screen");
 
                 BgmPlayManager.Stop();
                 _darkscreen.CloseScreen(LoadGameScene);
@@ -127,10 +117,8 @@ namespace Game.Title
 
         public void ToGuide()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("To Guide");
             if (!AllowInput)
             {
-                BlackboxHandle.Of(this).Write("Input Blocked");
                 return;
             }
 
@@ -139,32 +127,26 @@ namespace Game.Title
 
         public void ToSettings()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("To Settings");
             if (!AllowInput)
             {
-                BlackboxHandle.Of(this).Write("Input has been blocked");
                 return;
             }
 
             if (_settingsUI)
             {
-                BlackboxHandle.Of(this).Exert(_settingsUI, "Enable");
                 _settingsUI.Enable();
             }
             else
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    $"[Menu] {nameof(_settingsUI)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê±â ¶§¹®¿¡ ToSettings ¸Þ¼­µå¸¦ ¼öÇàÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                Debug.LogWarning($"[Menu] {nameof(_settingsUI)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ToSettings ï¿½Þ¼ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                     this);
             }
         }
 
         public void ToQuit()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("To Quit");
             if (!AllowInput)
             {
-                BlackboxHandle.Of(this).Write("Input Blocked");
                 return;
             }
 
@@ -173,8 +155,7 @@ namespace Game.Title
             else
             {
                 Debug.LogWarning(
-                    BlackboxHandle.Of(this).WriteMessage(
-                        $"[Menu] {nameof(_gameServices)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê±â ¶§¹®¿¡ Quit ¸Þ¼­µå¸¦ ¼öÇàÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                    $"[Menu] {nameof(_gameServices)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Quit ï¿½Þ¼ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                     this);
             }
         }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlackboxSystem;
 using UI;
 using UnityEngine;
 
@@ -24,40 +23,34 @@ namespace Game.Stage
         // Content
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             
             if (!_canvas)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"[{nameof(UIManager)}] {nameof(_canvas)} ÄÄÆ÷³ÍÆ®°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù."));
+                throw new InvalidOperationException($"[{nameof(UIManager)}] {nameof(_canvas)} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
         }
         internal void SetCanvas(RectTransform canvas)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"SetCanvas: {canvas}");
 
             if (_canvas != null)
-                Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"Äµ¹ö½º¸¦ ±³Ã¼ÇÕ´Ï´Ù. '{_canvas}' -> '{canvas}'")));
+                Debug.Log(Ctx(
+                    $"Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½Õ´Ï´ï¿½. '{_canvas}' -> '{canvas}'"));
             _canvas = canvas;
         }
         internal void SetWorldUI(RectTransform worldUI)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"SetWorldUI: {worldUI}");
 
             if (_worldUI != null)
-                Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"WorldUI¸¦ ±³Ã¼ÇÕ´Ï´Ù. '{_worldUI}' -> '{worldUI}'")));
+                Debug.Log(Ctx(
+                    $"WorldUIï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½Õ´Ï´ï¿½. '{_worldUI}' -> '{worldUI}'"));
             _worldUI = worldUI;
         }
 
         public void RegisterVM(IViewModel viewModel)
         {
-            using var _ = BlackboxHandle.Of(this).ExertScope(viewModel, "RegisterVM");
 
             if (viewModel == null)
                 throw new ArgumentNullException(
                     nameof(viewModel),
-                    BlackboxHandle.Of(this).WriteError(
-                        Ctx("µî·ÏÇÒ ÀÎÀÚ´Â nullÀÏ ¼ö ¾ø½À´Ï´Ù.")));
+                    Ctx("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú´ï¿½ nullï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."));
 
             if (_viewModels.Contains(viewModel))
                 return;
@@ -72,13 +65,11 @@ namespace Game.Stage
 
         public void RegisterView(IView view, bool worldUIParent = false)
         {
-            using var _ = BlackboxHandle.Of(this).ExertScope(view, "RegisterView");
 
             if (view == null)
                 throw new ArgumentNullException(
                     nameof(view),
-                    BlackboxHandle.Of(this).CrashExport(
-                    Ctx("µî·ÏÇÒ ÀÎÀÚ´Â nullÀÏ ¼ö ¾ø½À´Ï´Ù.")));
+                    Ctx("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú´ï¿½ nullï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."));
 
             if (_views.Contains(view))
                 return;
@@ -95,16 +86,13 @@ namespace Game.Stage
             if (_isDestroyed) return;
             _isDestroyed = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             _views.ToList().ForEach(v =>
             {
-                BlackboxHandle.Of(this).Exert(v, "Destroy view");
                 v.Destroy();
             });
             _viewModels.ToList().ForEach(vm =>
             {
-                BlackboxHandle.Of(this).Exert(vm, "Destroy viewModel");
                 vm.Dispose();
             });
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 
@@ -57,7 +56,6 @@ namespace Sound
 
             _instance = this;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             _audioSource = GetComponent<AudioSource>();
             _audioSource.loop = true;
         }
@@ -87,13 +85,11 @@ namespace Sound
 
         public static void Play(BgmName name)
         {
-            using var _ = BlackboxHandle.Of(_instance).WriteScope($"Play BGM: {name}");
 
             var clipData = _instance._bgms.FirstOrDefault(a => a.Name == name);
             if (clipData.Name == BgmName.None || clipData.AudioClip == null)
             {
-                Debug.LogWarning(BlackboxHandle.Of(_instance).WriteError(
-                    $"'{name}' BGM ÆÄÀÏÀ» °¡Á®¿À´Â µ¥ ½ÇÆÐÇß½À´Ï´Ù."),
+                Debug.LogWarning($"'{name}' BGM ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.",
                     _instance);
                 return;
             }
@@ -106,7 +102,6 @@ namespace Sound
 
         public static void Stop()
         {
-            using var _ = BlackboxHandle.Of(_instance).WriteScope($"Stop BGM, validGO: {_instance != null}");
             if (!_instance) return;
 
             if (_fadeCoroutine != null) _instance.StopCoroutine(_fadeCoroutine);
@@ -134,7 +129,6 @@ namespace Sound
             volume = Mathf.Clamp(volume, 0, 100);
             _targetVolume = volume / 100f;
 
-            using var _ = BlackboxHandle.Of(_instance).WriteScope($"Set BGM Volume to {volume}");
 
             if (_fadeCoroutine == null)
                 _audioSource.volume = _targetVolume;

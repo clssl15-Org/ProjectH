@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using UnityEngine;
 
 namespace UI
@@ -51,7 +50,6 @@ namespace UI
         public void Show(IContainer container) => Show(container.Text, container.GetPosition, container.Offset);
         public void Show(string text, Func<Vector2> getPosition, Vector2 offset)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Show: {text}");
 
             _getPosition = getPosition;
             _offset = offset;
@@ -74,7 +72,6 @@ namespace UI
 
         public void Hide()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Hide");
 
             _typeHandler.ClearText();
             _getPosition = null;

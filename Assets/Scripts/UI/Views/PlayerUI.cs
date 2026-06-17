@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -46,7 +45,6 @@ namespace UI
         // Content
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             if (_isAwaked) return;
             _isAwaked = true;
@@ -56,7 +54,6 @@ namespace UI
 
         public void Connect(PlayerVM player)
         {
-            using var _ = BlackboxHandle.Of(this).ExertScope(player, $"Connect: {player}");
             _player = player;
 
             _skillUI.InitializeSkills(player.HavingSkills.ToArray());
@@ -71,7 +68,7 @@ namespace UI
             _ultimateUI.Initialize(() => player.CurrentUltimateCooldown);
             _skillBtn.onClick.AddListener(ApplyRandomSkillBuff);
 
-            // TODO: Player Input ¹è¼± ÀÛ¾÷
+            // TODO: Player Input ï¿½è¼± ï¿½Û¾ï¿½
             //_defaultAttackBtn.onClick.AddListener(_player.DefaultAttack);
             //_rangedAttackBtn.onClick.AddListener(_player.RangedAttack);
             //_ultimateBtn.onClick.AddListener(null);
@@ -79,18 +76,15 @@ namespace UI
             _healthBar.Connect(_player);
 
 
-            #region RelicManager ¿¬°á
+            #region RelicManager ï¿½ï¿½ï¿½ï¿½
             if (!RelicManager.Instance)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"[{nameof(PlayerUI)}] {nameof(RelicManager.Instance)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù."));
-            BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Connect");
+                throw new InvalidOperationException($"[{nameof(PlayerUI)}] {nameof(RelicManager.Instance)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
 
             foreach (var id in RelicManager.Instance.OwnedRelics.Keys)
             {
                 if (!RelicManager.Instance.TryGetRelicData(id, out var relicData))
                 {
-                    Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                        $"[{nameof(PlayerUI)}] Relic ID '{id}'¿¡ ÇØ´çÇÏ´Â {nameof(RelicDataSO)}À»(¸¦) Ã£À» ¼ö ¾ø½À´Ï´Ù."),
+                    Debug.LogWarning($"[{nameof(PlayerUI)}] Relic ID '{id}'ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ {nameof(RelicDataSO)}ï¿½ï¿½(ï¿½ï¿½) Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                         this);
                     continue;
                 }
@@ -105,15 +99,13 @@ namespace UI
 
         private void OnRelicAcquired(RelicDataSO relicSO, string _)
         {
-            using var __ = BlackboxHandle.Of(this).ExertScope(_relicManager, $"Relic Acquired: {relicSO.name}");
             _relicManager.AddRelic(relicSO);
         }
         private void OnRelicLost(RelicDataSO relicSO)
         {
-            using var __ = BlackboxHandle.Of(this).ExertScope(_relicManager, $"Relic Lost: {relicSO.name}");
 
             var relicId = relicSO.RelicNumber;
-            // °°Àº Á¾·ùÀÇ À¯¹°ÀÌ ¾ÆÁ÷ ³²¾Æ ÀÖÀ¸¸é HUD ¾ÆÀÌÄÜÀº À¯ÁöÇÕ´Ï´Ù.
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ HUD ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
             if (RelicManager.Instance
                 && RelicManager.Instance.OwnedRelics.TryGetValue(relicId, out var ownedRelics)
                 && ownedRelics.Count > 0)
@@ -127,11 +119,9 @@ namespace UI
 
         public void Disconnect()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Disconnect");
 
             if (_player != null)
             {
-                BlackboxHandle.Of(this).Exert(_player, "Disconnect");
 
                 _player.SkillAdded -= _skillUI.AddSkill;
                 _player.SkillChanged -= _skillUI.OnSkillChanged;
@@ -151,13 +141,12 @@ namespace UI
 
             if (RelicManager.Instance)
             {
-                BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Disconnect");
                 RelicManager.Instance.RelicAcquired -= OnRelicAcquired;
                 RelicManager.Instance.RelicLost -= OnRelicLost;
             }
         }
 
-        // ¿©±â¼­ UI ÀÌº¥Æ® Ã³¸®
+        // ï¿½ï¿½ï¿½â¼­ UI ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½
         private void Update()
         {
             if (!AllowInput)
@@ -189,7 +178,7 @@ namespace UI
                     continue;
 
                 ExecuteEvents.Execute(btn.gameObject, ped, ExecuteEvents.pointerUpHandler);
-                EventSystem.current.SetSelectedGameObject(null); // ¹öÆ° ¶ÃÀ» ¶§ ÇÏÀÌ¶óÀÌÆ® ÀÜ»ó ¾ø¾Ö±â
+                EventSystem.current.SetSelectedGameObject(null); // ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ® ï¿½Ü»ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½
             }
 
             foreach (var btn in _currentSelectedButtons)
@@ -209,29 +198,24 @@ namespace UI
         private void SelectNextSkill()
         {
             if (_player == null)
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    "[PlayerUI] Player°¡ nullÀÌ±â ¶§¹®¿¡ SelectNextSkill ¸Þ¼­µå¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù."));
+                Debug.LogWarning("[PlayerUI] Playerï¿½ï¿½ nullï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SelectNextSkill ï¿½Þ¼ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 
             _player.ChangeSkill();
         }
 
         private void ApplyRandomSkillBuff()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Apply Random Skill Buff");
             if (!_player.TrySkillRoulette(out var appliedBonus, out var apply)) return;
 
-            BlackboxHandle.Of(this).Write($"Bouns: {appliedBonus}");
 
-            // _probTableÀº 0ºÎÅÍ 100±îÁö Á¤¼ö
+            // _probTableï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ 100ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             appliedBonus = Mathf.RoundToInt((appliedBonus - 1) * 100);
 
             var index = _probTable.Count(prob => appliedBonus >= prob) - 1;
             index = Mathf.Clamp(index, 0, _probTable.Length - 1);
 
-            BlackboxHandle.Of(this).Write($"Index: {index}");
             _skillUI.EnableRoulette(index, () =>
             {
-                BlackboxHandle.Of(this).Exert(_player, "Apply Damage");
                 apply();
             });
         }
@@ -245,7 +229,6 @@ namespace UI
 
         public void Destroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             Disconnect();
             Destroying?.Invoke();

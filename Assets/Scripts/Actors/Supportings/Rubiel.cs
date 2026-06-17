@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Infrastructure;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -42,11 +41,9 @@ namespace Actors
 
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             if (!_player)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteMessage(
-                    $"[Rubiel] {nameof(_player)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù."));
+                throw new InvalidOperationException($"[Rubiel] {nameof(_player)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
 
             _spriteRenderer = GetComponent<SpriteRenderer>();   
             _ssh = GetComponent<SpriteSizeHandler>();
@@ -75,7 +72,6 @@ namespace Actors
 
         public void ChangeShape()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Change Shape");
 
             if (CurrentShape == Shape.Small)
                 ToBig();
@@ -84,7 +80,6 @@ namespace Actors
         }
         public void ChangeVisibility()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Change Visibility");
 
             if (CurrentVisibility == Visibility.Invisible)
                 ToVisible();

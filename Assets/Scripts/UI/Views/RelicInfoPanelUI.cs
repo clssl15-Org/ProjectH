@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using BlackboxSystem;
 using Infrastructure;
 using UI.RelicInfoPanelView;
 using UnityEngine;
@@ -28,7 +27,6 @@ namespace UI
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
 
             Time.timeScale = 0f;
             transform.SetAsLastSibling();
@@ -36,32 +34,27 @@ namespace UI
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Enable");
                 _darkscreenUI.EnableFor(this, ((IEnablable)this).Disable);
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
                 _inputHub.Block(this);
             }
         };
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
             _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Disable");
                 _darkscreenUI.Disable();
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
                 _inputHub.Unblock(this);
             }
         };
@@ -80,26 +73,21 @@ namespace UI
         private void Awake() => Initialize();
         public void Initialize()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
 
             if (_isInitialized) return;
             _isInitialized = true;
 
             if (!_closeBtn)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_closeBtn)} ????????? ??????? ??????.")));
+                throw new InvalidOperationException(Ctx($"{nameof(_closeBtn)} ????????? ??????? ??????."));
 
             if (!_relicListParent)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_relicListParent)} ????????? ??????? ??????.")));
+                throw new InvalidOperationException(Ctx($"{nameof(_relicListParent)} ????????? ??????? ??????."));
 
             if (!_relicInfoPrefab)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_relicInfoPrefab)} ????????? ??????? ??????.")));
+                throw new InvalidOperationException(Ctx($"{nameof(_relicInfoPrefab)} ????????? ??????? ??????."));
 
             if (!_animation)
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(_animation)} ????????? ??????? ??????.")));
+                throw new InvalidOperationException(Ctx($"{nameof(_animation)} ????????? ??????? ??????."));
 
 
             _relicInfoPrefab.gameObject.SetActive(false);
@@ -111,7 +99,6 @@ namespace UI
 
             _closeBtn.onClick.AddListener(Close);
 
-            BlackboxHandle.Of(this).Write("Set To Disable");
             ((IEnablable)this).SetToDisabled();
         }
 
@@ -128,7 +115,6 @@ namespace UI
 
         public void Open()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Open");
 
             if (RelicManager.Instance)
             {
@@ -140,9 +126,9 @@ namespace UI
                 {
                     if (!RelicManager.Instance.TryGetRelicData(relicId, out var relicData))
                     {
-                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(Ctx(
+                        Debug.LogWarning(Ctx(
                             $"{nameof(RelicManager.Instance)}???? {nameof(relicId)} '{relicId}'??(??) ?????? ?????? ??? ????????. " +
-                            $"??? ?????? ???? ?????? ??????.")),
+                            $"??? ?????? ???? ?????? ??????."),
                             this);
 
                         continue;
@@ -152,7 +138,6 @@ namespace UI
                         continue;
 
                     var relicInfo = Instantiate(_relicInfoPrefab);
-                    BlackboxHandle.Of(this).Write($"Add: {relicData.RelicName}");
 
                     // ????? ???????? ????????
                     var description = RelicManager.RelicDescriptionRegistry.TryGetValue(relicId, out var desc)
@@ -168,15 +153,13 @@ namespace UI
             }
             else
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    Ctx($"{nameof(RelicManager.Instance)}??(??) ??????? ??????. ?????? ???? ???? ????? ???? ?? ??????.")), this);
+                Debug.LogWarning(Ctx($"{nameof(RelicManager.Instance)}??(??) ??????? ??????. ?????? ???? ???? ????? ???? ?? ??????."), this);
             }
 
             ((IEnablable)this).Enable();
         }
         public void Close()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Close");
             ((IEnablable)this).Disable();
         }
 

@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +30,6 @@ namespace UI
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
 
             Time.timeScale = 0f;
             transform.SetAsLastSibling();
@@ -39,32 +37,27 @@ namespace UI
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Enable");
                 _darkscreenUI.EnableFor(this, ((IEnablable)this).Disable);
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
                 _inputHub.Block(this);
             }
         };
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
             _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_darkscreenUI)
             {
-                BlackboxHandle.Of(this).Exert(_darkscreenUI, "Disable");
                 _darkscreenUI.Disable();
             }
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
                 _inputHub.Unblock(this);
             }
         };
@@ -86,7 +79,6 @@ namespace UI
         private void Awake() => Initialize();
         public void Initialize()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize, wasInitialized: {_isInitialized}");
 
             if (_isInitialized) return;
             _isInitialized = true;
@@ -108,7 +100,6 @@ namespace UI
                 _multiRecords.SetActive(false);
             });
 
-            BlackboxHandle.Of(this).Write("Set To Disable");
             ((IEnablable)this).SetToDisabled();
         }
 
@@ -121,7 +112,6 @@ namespace UI
 
         public void Open()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Open, mode: {MultiDisplayMode}");
 
             if (!MultiDisplayMode)
             {
@@ -141,7 +131,6 @@ namespace UI
 
         public void Close()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Close");
             ((IEnablable)this).Disable();
         }
 

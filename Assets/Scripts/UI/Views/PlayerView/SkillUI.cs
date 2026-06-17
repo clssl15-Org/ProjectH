@@ -1,6 +1,5 @@
 using System;
 using Actors.PlayerSystem;
-using BlackboxSystem;
 using UnityEngine;
 
 namespace UI.PlayerView
@@ -15,14 +14,11 @@ namespace UI.PlayerView
 
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             _skillRouletteManager = GetComponent<SkillRouletteManager>();   
             _skillSelectionManager = GetComponent<SkillSelectionManager>();
             _skillCooltimeManager = GetComponent<SkillCooltimeManager>();
 
-            BlackboxHandle.Of(this).Exert(_skillSelectionManager, "Awake from SkillUI");
-            BlackboxHandle.Of(this).Exert(_skillCooltimeManager, "Awake from SkillUI");
         }
 
         // Skill Roulette Manager

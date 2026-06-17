@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlackboxSystem;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,7 +9,7 @@ using UnityEditor;
 namespace Infrastructure
 {
     /// <summary>
-    /// InjectionÀº Start() ¸Þ¼­µå°¡ È£ÃâµÇ±â ÀÌÀü¿¡ È£ÃâµË´Ï´Ù.
+    /// Injectionï¿½ï¿½ Start() ï¿½Þ¼ï¿½ï¿½å°¡ È£ï¿½ï¿½Ç±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½Ë´Ï´ï¿½.
     /// </summary>
     public class Injector : MonoBehaviour
     {
@@ -22,20 +21,19 @@ namespace Infrastructure
         }
 
         [SerializeField] private List<Injection> _injections;
-        [Tooltip("GameManager°¡ È°¼ºÈ­µÇ¾î ÀÖÁö ¾ÊÀ» ¶§ ÀÌ Ç×¸ñÀ» Ã¼Å©ÇÏ¿© Injector¸¦ È°¼ºÈ­ÇÒ ¼ö ÀÖ½À´Ï´Ù.")]
+        [Tooltip("GameManagerï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ç¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ Ã¼Å©ï¿½Ï¿ï¿½ Injectorï¿½ï¿½ È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.")]
         [SerializeField] private bool _injectOnAwake = false;
         private bool _isInjected = false;
 
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             if (_injectOnAwake)
             {
-                Debug.Log(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"'{nameof(_injectOnAwake)}'ÀÌ(°¡) trueÀÌ¹Ç·Î Inject¸¦ ¼öÇàÇÕ´Ï´Ù. " +
-                    $"GameManager¸¦ »ç¿ëÁßÀÌ¶ó¸é Inject´Â GameManager¿¡¼­¸¸ ÀÌ·ç¾îÁ®¾ß ÇÕ´Ï´Ù. " +
-                    $"GameManager¸¦ »ç¿ëÇÏÁö ¾Ê´Â °ÍÀÌ ÀÇµµµÈ µ¿ÀÛÀÎÁö È®ÀÎÇÏ¼¼¿ä.")),
+                Debug.Log(Ctx(
+                    $"'{nameof(_injectOnAwake)}'ï¿½ï¿½(ï¿½ï¿½) trueï¿½Ì¹Ç·ï¿½ Injectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½. " +
+                    $"GameManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ Injectï¿½ï¿½ GameManagerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ´Ï´ï¿½. " +
+                    $"GameManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½."),
                     this);
 
                 Inject();
@@ -46,12 +44,11 @@ namespace Infrastructure
 
         public void AddInjection(MonoBehaviour injection, Type intendedType = null)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Add Injection: {injection.name} (Intended type: {intendedType})");
 
             if (!injection)
             {
-                Debug.LogError(BlackboxHandle.Of(this).WriteMessage(Ctx(
-                    $"{nameof(injection)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.")),
+                Debug.LogError(Ctx(
+                    $"{nameof(injection)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½."),
                     this);
                 return;
             }
@@ -66,12 +63,10 @@ namespace Infrastructure
 
         public void Inject()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Inject");
 
             if (_isInjected)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    Ctx("ÀÌ¹Ì Inject°¡ ¼öÇàµÇ¾ú½À´Ï´Ù. Áßº¹ ½ÇÇàÀ» ¹æÁöÇÕ´Ï´Ù.")),
+                Debug.LogWarning(Ctx("ï¿½Ì¹ï¿½ Injectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½."),
                     this);
                 return;
             }
@@ -83,8 +78,7 @@ namespace Infrastructure
             {
                 if (!injection.Item)
                 {
-                    Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                        Ctx($"{nameof(_injections)} ¹è¿­¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÌ ÀÖ½À´Ï´Ù.")),
+                    Debug.LogError(Ctx($"{nameof(_injections)} ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½."),
                         this);
                     continue;
                 }
@@ -95,12 +89,10 @@ namespace Infrastructure
 
         private void Inject(Injection injection)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Inject ({injection.Item.ToString() ?? "null"})");
 
             if (!injection.Item)
             {
-                Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"{nameof(injection)}ÀÌ(°¡) À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.")),
+                Debug.LogError(Ctx($"{nameof(injection)}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½."),
                     this);
                 return;
             }
@@ -111,8 +103,7 @@ namespace Infrastructure
             var injectMethod = injectableInterfaceType.GetMethod("Inject");
             if (injectMethod == null)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    Ctx($"IInjectable<{targetType.Name}> ¿¡ Inject ¸Þ¼­µå°¡ ¾ø½À´Ï´Ù.")));
+                throw new InvalidOperationException(Ctx($"IInjectable<{targetType.Name}> ï¿½ï¿½ Inject ï¿½Þ¼ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."));
             }
 
             var behaviours = FindObjectsOfType<MonoBehaviour>(true);
@@ -127,7 +118,6 @@ namespace Infrastructure
                 if (!injectableInterfaceType.IsAssignableFrom(behaviourType))
                     continue;
 
-                BlackboxHandle.Of(this).Exert(behaviour, $"Injecting: {injection.Item} as {injectableInterfaceType}");
                 injectMethod.Invoke(behaviour, new object[] { injection.Item });
             }
         }

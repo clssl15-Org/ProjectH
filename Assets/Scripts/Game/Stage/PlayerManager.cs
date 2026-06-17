@@ -1,6 +1,5 @@
 using System;
 using Actors;
-using BlackboxSystem;
 using UnityEngine;
 
 namespace Game.Stage
@@ -17,19 +16,16 @@ namespace Game.Stage
         {
             if (player == null || !player.gameObject)
             {
-                throw new ArgumentException(BlackboxHandle.Of(this).CrashExport(
-                    Ctx($"Register: À¯È¿ÇÏÁö ¾ÊÀº ÀÎÀÚ '{((player != null && player.gameObject) ? player.gameObject.name : "null")}'ÀÌ(°¡) ÀÔ·ÂµÇ¾ú½À´Ï´Ù.")),
+                throw new ArgumentException(Ctx($"Register: ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ '{((player != null && player.gameObject) ? player.gameObject.name : "null")}'ï¿½ï¿½(ï¿½ï¿½) ï¿½Ô·ÂµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."),
                     nameof(player));
             }
 
-            using var _ = BlackboxHandle.Of(this).ExertScope(player, "ÇÃ·¹ÀÌ¾î µî·Ï");
 
             if (_player != null)
             {
                 if (_player != player)
                 {
-                    throw new ArgumentException(BlackboxHandle.Of(this).CrashExport(
-                        Ctx($"Register: ÀÌ¹Ì ±âÁ¸ ÇÃ·¹ÀÌ¾î '{_player.name}'ÀÌ(°¡) Á¸ÀçÇÏ±â ¶§¹®¿¡ »õ ÇÃ·¹ÀÌ¾î '{player.name}'À»(¸¦) µî·ÏÇÒ ¼ö ¾ø½À´Ï´Ù.")),
+                    throw new ArgumentException(Ctx($"Register: ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ '{_player.name}'ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ '{player.name}'ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½."),
                         nameof(player));
                 }
                 else
@@ -52,11 +48,9 @@ namespace Game.Stage
             if (_isDestroyed) return;
             _isDestroyed = true;
 
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             if (_player != null && _player.gameObject)
             {
-                BlackboxHandle.Of(this).Exert(_player, "ÇÃ·¹ÀÌ¾î Destroy");
                 Destroy(_player.gameObject);
             }
 

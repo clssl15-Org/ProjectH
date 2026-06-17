@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
-using BlackboxSystem;
 using Sound;
 using UnityEngine;
 
@@ -15,8 +14,8 @@ namespace UI.PlayerView
         [SerializeField] private RectTransform _iconGroup;
 
         [Header("Settings")]
-        [SerializeField] private float _iconWidth = 100f;   // ¾ÆÀÌÄÜ °£°Ý (ÀÌµ¿ ´ÜÀ§)
-        [SerializeField] private float _moveSpeed = 10f;    // ÀÌµ¿ ¼Óµµ (Lerp Speed)
+        [SerializeField] private float _iconWidth = 100f;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½)
+        [SerializeField] private float _moveSpeed = 10f;    // ï¿½Ìµï¿½ ï¿½Óµï¿½ (Lerp Speed)
 
         [Serializable]
         private struct IconInfo
@@ -26,7 +25,7 @@ namespace UI.PlayerView
         }
         [SerializeField] private IconInfo[] _iconConfigs;
 
-        // [¼öÁ¤] Inspector ¼³Á¤¿ë(IconInfo)°ú ·±Å¸ÀÓ »ý¼º¿ë(RuntimeIcon)À» ºÐ¸®ÇÏ¿© °ü¸®
+        // [ï¿½ï¿½ï¿½ï¿½] Inspector ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(IconInfo)ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(RuntimeIcon)ï¿½ï¿½ ï¿½Ð¸ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½
         private class RuntimeIcon
         {
             public SkillType SkillType;
@@ -36,18 +35,17 @@ namespace UI.PlayerView
         private readonly List<RuntimeIcon> _icons = new();
         private Dictionary<SkillType, GameObject> _configMap;
 
-        private int _targetIndex = 0;       // ¸ñÇ¥ ÀÎµ¦½º
-        private float _targetPosX = 0f;     // ¸ñÇ¥ X ÁÂÇ¥
-        private bool _needsTeleport = false; // ÀÌµ¿ ¿Ï·á ÈÄ ¼ø°£ÀÌµ¿ ÇÊ¿ä ¿©ºÎ
+        private int _targetIndex = 0;       // ï¿½ï¿½Ç¥ ï¿½Îµï¿½ï¿½ï¿½
+        private float _targetPosX = 0f;     // ï¿½ï¿½Ç¥ X ï¿½ï¿½Ç¥
+        private bool _needsTeleport = false; // ï¿½Ìµï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         private SfxAudioController _sfxAudioController;
 
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
             _sfxAudioController = GetComponent<SfxAudioController>();
 
-            // O(1) °Ë»öÀ» À§ÇÑ Ä³½Ì
+            // O(1) ï¿½Ë»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½
             _configMap = _iconConfigs.ToDictionary(x => x.SkillType, x => x.IconPrefab);
         }
 
@@ -72,16 +70,15 @@ namespace UI.PlayerView
 
         public void Initialize(SkillType[] skills)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: [{string.Join(", ", skills)}]");
 
-            // 1. ±âÁ¸ Á¤¸®
+            // 1. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             for (int i = _iconGroup.childCount - 1; i >= 0; i--)
                 Destroy(_iconGroup.GetChild(i).gameObject);
             _icons.Clear();
 
             if (skills.Length == 0) return;
 
-            // [¼öÁ¤] LINQ Áö¿¬ Æò°¡ ¿À·ù¸¦ ¸·±â À§ÇØ ¸í½ÃÀû List º¹»ç ÈÄ ´õ¹Ì Ãß°¡
+            // [ï¿½ï¿½ï¿½ï¿½] LINQ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ List ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
             List<SkillType> skillsToCreate = skills.ToList();
             if (skillsToCreate.Count > 1)
             {
@@ -92,8 +89,8 @@ namespace UI.PlayerView
             {
                 if (!_configMap.TryGetValue(skill, out var prefab) || prefab == null)
                 {
-                    // [ÇÙ½É] Inspector¿¡ ÇÁ¸®ÆÕÀÌ µî·ÏµÇÁö ¾Ê¾Æ Á¶¿ëÈ÷ ¹«½ÃµÇ´Â ¹ö±×¸¦ Àâ±â À§ÇÑ ¿¡·¯ ·Î±×
-                    Debug.LogError($"[SkillSelectionManager] {skill} ÇÁ¸®ÆÕÀÌ _iconConfigs¿¡ ´©¶ôµÇ¾ú½À´Ï´Ù! UI¿¡ Ç¥½ÃµÇÁö ¾Ê½À´Ï´Ù.");
+                    // [ï¿½Ù½ï¿½] Inspectorï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÃµÇ´ï¿½ ï¿½ï¿½ï¿½×¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½
+                    Debug.LogError($"[SkillSelectionManager] {skill} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ _iconConfigsï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½! UIï¿½ï¿½ Ç¥ï¿½Ãµï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
                     continue;
                 }
 
@@ -103,10 +100,10 @@ namespace UI.PlayerView
                 _icons.Add(new RuntimeIcon { SkillType = skill, RectTransform = instance.GetComponent<RectTransform>() });
             }
 
-            // 3. ¾ÆÀÌÄÜµéÀ» °¡·Î·Î Âß ¹èÄ¡
+            // 3. ï¿½ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î·ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡
             ArrangeIconsHorizontally();
 
-            // ÃÊ±â »óÅÂ ¼³Á¤
+            // ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             _targetIndex = 0;
             _targetPosX = 0;
             _iconGroup.anchoredPosition = Vector2.zero;
@@ -116,14 +113,13 @@ namespace UI.PlayerView
         {
             for (int i = 0; i < _icons.Count; i++)
             {
-                // [¼öÁ¤] GetComponent ¿À¹öÇìµå Á¦°Å (RuntimeIcon »ý¼º ½Ã ¹Ì¸® Ä³½ÌÇÔ)
+                // [ï¿½ï¿½ï¿½ï¿½] GetComponent ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (RuntimeIcon ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¸ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½)
                 _icons[i].RectTransform.anchoredPosition = new Vector2(i * _iconWidth, 0);
             }
         }
 
         public void OnSkillChanged(SkillType targetSkill)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Change Skill Icon: {targetSkill}");
 
             int dummyIndex = _icons.Count - 1;
             if (_targetIndex == dummyIndex)
@@ -141,12 +137,10 @@ namespace UI.PlayerView
             _needsTeleport = (targetIndex == dummyIndex);
 
             _sfxAudioController.Play("PlayerSkillChange", AudioSourceController.PlayOption.Independently);
-            BlackboxHandle.Of(this).Write($"Moving to index {_targetIndex} (TargetX: {_targetPosX})");
         }
 
         public void AddSkill(SkillType targetSkill)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Add Skill: {targetSkill}");
 
             var newIcon = CreateRuntimeIconInstance(targetSkill);
 
@@ -168,7 +162,7 @@ namespace UI.PlayerView
                 _icons.Insert(insertIndex, newIcon);
                 newIcon.RectTransform.SetSiblingIndex(insertIndex);
 
-                // [¼öÁ¤] ·±Å¸ÀÓ¿¡ ½ºÅ³ Ãß°¡ ½Ã, ÇöÀç Å¸°ÙÀÌ ´õ¹Ì ÂÊ¿¡ ÀÖ¾ú´Ù¸é Å¸°Ù ÀÎµ¦½ºµµ ¹Ð¾îÁÖ¾î¾ß À§Ä¡°¡ Æ¢Áö ¾ÊÀ½
+                // [ï¿½ï¿½ï¿½ï¿½] ï¿½ï¿½Å¸ï¿½Ó¿ï¿½ ï¿½ï¿½Å³ ï¿½ß°ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½Ö¾ï¿½ï¿½Ù¸ï¿½ Å¸ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¾ï¿½ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Æ¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (_targetIndex >= insertIndex)
                 {
                     _targetIndex++;
@@ -178,15 +172,13 @@ namespace UI.PlayerView
             }
 
             ArrangeIconsHorizontally();
-            BlackboxHandle.Of(this).Write($"Skill Added. Total Count: {_icons.Count}");
         }
 
         private RuntimeIcon CreateRuntimeIconInstance(SkillType skill)
         {
             if (!_configMap.TryGetValue(skill, out var prefab) || prefab == null)
             {
-                throw new InvalidOperationException(BlackboxHandle.Of(this).WriteError(
-                    $"[SkillManager] Prefab not found for {skill}. Inspector¸¦ È®ÀÎÇÏ¼¼¿ä."));
+                throw new InvalidOperationException($"[SkillManager] Prefab not found for {skill}. Inspectorï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             }
 
             var instance = Instantiate(prefab, _iconGroup, false);
@@ -197,10 +189,10 @@ namespace UI.PlayerView
 
         private int FindSmartTargetIndex(SkillType targetSkill)
         {
-            // [¼öÁ¤] ¿ª¹æÇâÀ¸·Î Æ¨±â´Â °ÍÀ» ¸·±â À§ÇØ 'ÇöÀç ÀÎµ¦½º ÀÌÈÄ'¿¡¼­ ¸ÕÀú Å½»öÇÏ¿© Á¤¹æÇâ ÁøÇà À¯µµ
+            // [ï¿½ï¿½ï¿½ï¿½] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Æ¨ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 'ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             int forwardIndex = _icons.FindIndex(_targetIndex, x => x.SkillType == targetSkill);
 
-            // ÇöÀç À§Ä¡ ÀÌÈÄ¿¡ ¾ø´Ù¸é Ã³À½ºÎÅÍ ´Ù½Ã Å½»ö
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ Å½ï¿½ï¿½
             int basicIndex = forwardIndex != -1 ? forwardIndex : _icons.FindIndex(x => x.SkillType == targetSkill);
 
             if (basicIndex == -1) return -1;
@@ -223,7 +215,6 @@ namespace UI.PlayerView
 
             _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
 
-            BlackboxHandle.Of(this).Write("Teleported logic applied (Infinite Scroll)");
         }
     }
 }

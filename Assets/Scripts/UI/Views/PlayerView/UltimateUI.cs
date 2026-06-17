@@ -1,5 +1,4 @@
 using System;
-using BlackboxSystem;
 using Infrastructure;
 using Infrastructure.StateMachines.Fsm;
 using UnityEngine;
@@ -30,7 +29,6 @@ namespace UI.PlayerView
         // Content
         private void Awake()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Awake");
 
             _work = new Work()
                 .AddChild(new Work(State.Idle)
@@ -42,7 +40,6 @@ namespace UI.PlayerView
 
                         if (rate >= 1f)
                         {
-                            using var _ = BlackboxHandle.Of(this).WriteScope("Gauge reached 100%, transitioning to Charged state.");
                             _work.SetNext(State.Charged);
                         }
                     }),
@@ -61,7 +58,6 @@ namespace UI.PlayerView
                     {
                         if (_getGaugeRate() < 1f)
                         {
-                            using var _ = BlackboxHandle.Of(this).WriteScope("Gauge dropped below 100%, returning to Idle state.");
                             _work.SetNext(State.Idle);
                         }
                     })
@@ -75,19 +71,17 @@ namespace UI.PlayerView
 
         public void Initialize(Func<float> getGaugeRate)
         {
-            BlackboxHandle.Of(this).WriteScope("Initialize");
             _getGaugeRate = getGaugeRate;
         }
 
         private void Start()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Start");
             _work?.Enter();
         }
 
         private void SetGauge(float targetAmount)
         {
-            // ±âÁ¸ Å¸ÀÌ¸Ó°¡ µ¹°í ÀÖ´Ù¸é Ãë¼Ò
+            // ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸Ó°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½
             _gaugeTimer?.Dispose();
 
             float startAmount = _gauge.fillAmount;
@@ -99,7 +93,7 @@ namespace UI.PlayerView
             IDisposable timer = null;
             timer = _gaugeTimer = Loco.Subscribe(() =>
             {
-                // _gaugeDealyRate°¡ 0ÀÌ°Å³ª À½¼öÀÏ °æ¿ì 0À¸·Î ³ª´©±â ¹æÁö ¹× Áï½Ã Àû¿ë
+                // _gaugeDealyRateï¿½ï¿½ 0ï¿½Ì°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (_gaugeDealyRate <= 0f)
                 {
                     _gauge.fillAmount = targetAmount;
@@ -109,16 +103,16 @@ namespace UI.PlayerView
 
                 elapsedTime += Time.unscaledTime;
 
-                // 0.0 ~ 1.0 »çÀÌÀÇ ½Ã°£ ÁøÇàµµ
+                // 0.0 ~ 1.0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½àµµ
                 float t = Mathf.Clamp01(elapsedTime / _gaugeDealyRate);
 
-                // °¨°¢ÀûÀÎ ÅÙ¼ÇÀ» À§ÇÑ Ease Out Cubic °î¼± Àû¿ë
-                // t°¡ 1¿¡ °¡±î¿öÁú¼ö·Ï º¯È­·®ÀÌ ÁÙ¾îµé¾î ºÎµå·´°Ô ¾ÈÂøÇÕ´Ï´Ù.
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ease Out Cubic ï¿½î¼± ï¿½ï¿½ï¿½ï¿½
+                // tï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¾ï¿½ï¿½ï¿½ ï¿½Îµå·´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
                 float easeT = 1f - Mathf.Pow(1f - t, 3);
 
                 _gauge.fillAmount = Mathf.Lerp(startAmount, targetAmount, easeT);
 
-                // ÁøÇàÀÌ ¿Ï·áµÇ¾úÀ» ¶§
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½
                 if (t >= 1f)
                 {
                     _gauge.fillAmount = targetAmount;
@@ -145,7 +139,6 @@ namespace UI.PlayerView
 
         private void OnDestroy()
         {
-            BlackboxHandle.Of(this).WriteScope("Destroy");
 
             if (_work != null)
             {

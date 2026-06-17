@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using BlackboxSystem;
 using Infrastructure;
 using UI;
 using UnityEngine;
@@ -42,7 +41,6 @@ namespace Dialogue
             RectTransform canvasTrasnform,
             Func<Character, Func<Vector2>> getTransform)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Initialize: {dialogueUI}, {bubbleDialogueUI}");
 
             _dialogueUI = dialogueUI;
             _bubbleDialogueUI = bubbleDialogueUI;
@@ -53,23 +51,19 @@ namespace Dialogue
 
         void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("GameAssetLibrary Injected");
             _gameAssetLibrary = gameAssetLibrary;
         }
         void IInjectable<DialogueScriptLibrary>.Inject(DialogueScriptLibrary dialogueScriptLibrary)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("DialogueScriptLibrary Injected");
             _dialogueScriptLibrary = dialogueScriptLibrary;
         }
 
         public void Play(string title, bool openDialogue = true, bool closeDialogue = true, Action callback = null)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Play: {title}");
 
             if (!string.IsNullOrEmpty(_currentScriptTitle))
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    $"ÀÌ¹Ì ½ºÆ®¸³Æ® '{_currentScriptTitle}'ÀÌ(°¡) Àç»ý ÁßÀÌ±â ¶§¹®¿¡ »õ·Î¿î ½ºÅ©¸³Æ® '{title}'À»(¸¦) Àç»ýÇÒ ¼ö ¾ø½À´Ï´Ù."),
+                Debug.LogWarning($"ï¿½Ì¹ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Æ® '{_currentScriptTitle}'ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ® '{title}'ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.",
                     this);
                 return;
             }
@@ -78,9 +72,8 @@ namespace Dialogue
             {
                 var currentScriptList = string.Join(", ", _dialogueScriptLibrary.AllScriptTitles);
 
-                Debug.LogError(BlackboxHandle.Of(this).WriteError(
-                    $"'{title}'À»(¸¦) Á¦¸ñÀ¸·Î °¡Áö´Â ´ëÈ­¸¦ {nameof(DialogueScriptLibrary)}¿¡¼­ Ã£´Â µ¥ ½ÇÆÐÇß½À´Ï´Ù.\n" +
-                    $"ÀüÃ¼ ´ëÈ­ ¸ñ·Ï: {currentScriptList}"),
+                Debug.LogError($"'{title}'ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ {nameof(DialogueScriptLibrary)}ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.\n" +
+                    $"ï¿½ï¿½Ã¼ ï¿½ï¿½È­ ï¿½ï¿½ï¿½: {currentScriptList}",
                     this);
                 return;
             }
@@ -92,14 +85,12 @@ namespace Dialogue
             {
                 CalculateAndSetBubbleSize(script);
 
-                BlackboxHandle.Of(this).Exert(_bubbleDialogueUI, "Enable");
                 _bubbleDialogueUI.transform.SetAsLastSibling();
 
                 _currentUI = _bubbleDialogueUI;
             }
             else
             {
-                BlackboxHandle.Of(this).Exert(_dialogueUI, "Enable");
                 _dialogueUI.transform.SetAsLastSibling();
                 if (openDialogue) _dialogueUI.Enable();
 
@@ -122,7 +113,6 @@ namespace Dialogue
 
                     if (script.ShowOneRandomLine || currentIdx >= script.Count - 1)
                     {
-                        using var _ = BlackboxHandle.Of(this).WriteScope($"Stopping: {currentIdx}");
 
                         Stop(closeDialogue);
                         callback?.Invoke();
@@ -140,7 +130,6 @@ namespace Dialogue
                 else
                     currentIdx++;
 
-                using var _ = BlackboxHandle.Of(this).WriteScope($"Play Dialogue: {currentIdx}");
 
                 if (script.TargetStyle == DialogueStyle.ChatBubble)
                 {
@@ -150,8 +139,7 @@ namespace Dialogue
                     if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
                         dialogueText = dialogueText.Replace("{player}", playerInfo.Name, StringComparison.OrdinalIgnoreCase);
                     else
-                        Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                            "Player Á¤º¸¸¦ °¡Á®¿ÀÁö ¸øÇß±â ¶§¹®¿¡ {player} ¹®ÀÚ¿­À» Ä¡È¯ÇÏÁö ¸øÇß½À´Ï´Ù."));
+                        Debug.LogWarning("Player ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {player} ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ Ä¡È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
 
                     var characterPosition = _getTransform(line.Character);
 
@@ -194,7 +182,6 @@ namespace Dialogue
 
         public void Stop(bool closeDialogue = true)
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Stop");
 
             _updateHandle?.Dispose();
             _updateHandle = null;
@@ -214,7 +201,6 @@ namespace Dialogue
 
         private void OnDestroy()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Destroy");
 
             Stop();
             Destroying?.Invoke();

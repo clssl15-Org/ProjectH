@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Linq;
-using BlackboxSystem;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
@@ -88,7 +87,6 @@ namespace UI
         #region Interfaces
         Action IEnablable.OnEnabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Enabling");
             Time.timeScale = 0f;
 
             _relicPage.SetActive(true);
@@ -100,20 +98,17 @@ namespace UI
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Block All");
                 _inputHub.Block(this);
             }
         };
         Action IEnablable.OnEnabled => null;
         Action IEnablable.OnDisabling => () =>
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Disabling");
             Time.timeScale = 1f;
             _cursorVisibilityController?.ReleaseVisible(this);
 
             if (_inputHub != null)
             {
-                BlackboxHandle.Of(this).Exert(_inputHub, "Unblock All");
                 _inputHub.Unblock(this);
             }
 
@@ -165,13 +160,11 @@ namespace UI
                 return;
             }
 
-            using var _ = BlackboxHandle.Of(this).WriteScope($"Relic Acquiring: {relicInfo.name}");
             if (_darkscreenUI) _darkscreenUI.EnableFor(this, () => { if (_isOperated) Close(); });
 
             if (_isOperating)
             {
-                Debug.LogWarning(BlackboxHandle.Of(this).WriteMessage(
-                    $"{nameof(RelicAcquisitionUI)} 이미 선행 작업이 진행 중이므로 새로운 렐릭을 얻을 수 없습니다."),
+                Debug.LogWarning($"{nameof(RelicAcquisitionUI)} 이미 선행 작업이 진행 중이므로 새로운 렐릭을 얻을 수 없습니다.",
                     this);
                 return;
             }
@@ -196,7 +189,6 @@ namespace UI
 
         private void ToThrowCoin()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("To Throw Coin");
 
             _relicPage.SetActive(false);
             _coinPage.SetActive(true);
@@ -257,7 +249,6 @@ namespace UI
 
             void ThrowCoin()
             {
-                using var _ = BlackboxHandle.Of(this).WriteScope("Throw Coin");
                 var coinAnimationPlaySpeed = CoinAnimationPlaySpeed;
 
                 if (UseCoinReadyImage)
@@ -275,7 +266,6 @@ namespace UI
                 _effectTimer = reinforced ?
                     new Timer(_effectPlayTiming / coinAnimationPlaySpeed, succeeded =>
                     {
-                        BlackboxHandle.Of(this).Write($"Effect Ended, succeeded: {succeeded}");
 
                         _effectAnimation.SetActive(true);
                         _coinEffectVideoPlayer.playbackSpeed = 1f;
@@ -287,12 +277,10 @@ namespace UI
                 _coinTimer?.Dispose();
                 _coinTimer = new Timer((float)coinClip.Video.length / coinAnimationPlaySpeed, succeeded =>
                 {
-                    using var _ = BlackboxHandle.Of(this).WriteScope($"Play Ended, succeeded: {succeeded}");
                     _isOperated = true;
 
                     if (succeeded)
                     {
-                        BlackboxHandle.Of(this).Exert(RelicManager.Instance, "Add Relic");
                         RelicManager.Instance.AddRelic(
                             _relic.RelicNumber,
                             out var description,
@@ -310,9 +298,7 @@ namespace UI
                         _relicPage.SetActive(true);
                     }
                     else
-                        Debug.LogWarning(BlackboxHandle.Of(this).ExertMessage(
-                            RelicManager.Instance,
-                            "Play Failed"));
+                        Debug.LogWarning("Play Failed");
                 },
                 useAbsoluteTime: true);
 
@@ -332,7 +318,6 @@ namespace UI
 
         private void Close()
         {
-            using var _ = BlackboxHandle.Of(this).WriteScope("Close");
             if (_darkscreenUI) _darkscreenUI.Disable();
 
             _updater?.Dispose();
