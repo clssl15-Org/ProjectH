@@ -15,7 +15,8 @@ namespace Game.Stage
 {
     [RequireComponent(typeof(Injector), typeof(InputHub), typeof(UIManager))]
     [RequireComponent(typeof(PlayerManager), typeof(MonsterManager))]
-    public class StageManager : MonoBehaviour
+    public class StageManager : MonoBehaviour,
+        IInjectable<SfxPlayManager>
     {
         [field: Tooltip("게임이 시작될 때 필요한 구성 요소들을 씬에서 찾아 자동으로 등록합니다")]
         [field: SerializeField] protected bool AutoBindDependencies { get; set; } = true;
@@ -78,6 +79,13 @@ namespace Game.Stage
 
 
         // Front
+        void IInjectable<SfxPlayManager>.Inject(SfxPlayManager sfxPlayManager)
+        {
+            if (!sfxPlayManager) return;
+
+            _sfxPlayManager = sfxPlayManager;
+        }
+
         protected virtual void Awake()
         {
             using var _ = BlackboxHandle.Of(this).Construct("스테이지 매니저 초기화를 시작합니다.", out _blackbox);

@@ -79,6 +79,7 @@ namespace Game
         // Content
         private void Awake()
         {
+#if BLACKBOX
             BlackboxHandle.Configure(
                 Application.persistentDataPath,
                 Debug.Log,
@@ -89,6 +90,7 @@ namespace Game
                 OpenLogOption.Open,
                 ExceptionHandlingOption.None,
                 TargetTypes.Full);
+#endif
 
             using var _ = BlackboxHandle.Of(this).Construct("게임 매니저 초기화를 시작합니다.", out _blackbox);
 
