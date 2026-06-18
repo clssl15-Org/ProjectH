@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Actors;
 using Actors.PlayerSystem;
+using BlackThunder.BlackboxSystem;
 using Infrastructure;
 
 namespace UI
@@ -68,11 +69,14 @@ namespace UI
 
         private IDisposable _updater;
         private bool? _isSkillCooltime = null;
+        private BlackboxHandle _blackbox;
 
 
         // Content
         public PlayerVM(IPlayer player)
         {
+            using var _ = BlackboxHandle.Of(this).Construct("플레이어 ViewModel 생성을 시작합니다.", out _blackbox);
+
             if (player == null)
                 throw new ArgumentNullException(
                     nameof(player),
@@ -143,14 +147,28 @@ namespace UI
             ThrowIfDisposed();
             if (_player == null) return;
 
+            using var _ = _blackbox.Scope("ViewModel에서 스킬 변경을 요청합니다.").With(_player);
+            using (_blackbox.Exert(_player, "플레이어 스킬 변경을 요청합니다."))
             _player.ChangeSkill();
         }
         public bool TrySkillRoulette(out float appliedBonus, out Action apply)
         {
             ThrowIfDisposed();
 
-            if (_player == null
-                || !_player.TrySkillRoulette(out var rouletteCtx))
+            if (_player == null)
+            {
+                (appliedBonus, apply) = (default, default);
+                return false;
+            }
+
+            using var _ = _blackbox.Scope("ViewModel에서 스킬 룰렛을 요청합니다.").With(_player);
+
+            DamageRoulette.Context rouletteCtx;
+            bool isRouletteReady;
+            using (_blackbox.Exert(_player, "플레이어 스킬 룰렛 생성을 요청합니다."))
+            isRouletteReady = _player.TrySkillRoulette(out rouletteCtx);
+
+            if (!isRouletteReady)
             {
                 (appliedBonus, apply) = (default, default);
                 return false;
@@ -219,6 +237,8 @@ namespace UI
         public void Dispose()
         {
             if (IsDisposed) return;
+            using var _ = _blackbox.Scope("플레이어 ViewModel을 정리합니다.");
+
             IsDisposed = true;
 
             _updater?.Dispose();

@@ -16,6 +16,7 @@ namespace UI
         IView,
         IInputLayerController,
         ICursorVisibilityControllerUser,
+        IInjectable<GameAssetLibrary>,
         IInjectable<DarkscreenUI>
     {
         [Header("Main")]
@@ -70,6 +71,7 @@ namespace UI
 
         private IInputHub _inputHub;
         private CursorVisibilityController _cursorVisibilityController;
+        private GameAssetLibrary _gameAssetLibrary = null!;
         private DarkscreenUI _darkscreenUI;
         private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer;
         private RelicDataSO _relic;
@@ -147,6 +149,7 @@ namespace UI
         void IInputLayerController.Initialize(IInputHub inputHub) => _inputHub = inputHub;
         void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
             _cursorVisibilityController = cursorVisibilityController;
+        void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary) => _gameAssetLibrary = gameAssetLibrary;
         void IInjectable<DarkscreenUI>.Inject(DarkscreenUI darkscreenUI) => _darkscreenUI = darkscreenUI;
 
         private void OnRelicAcquiring(RelicManager.RelicAcquisitionDto relicAcquisition)
@@ -179,7 +182,7 @@ namespace UI
 
             _relicIcon.sprite = relicInfo.Icon;
             _relicNametag.text = relicInfo.RelicName;
-            _relicDescrption.text = relicAcquisition.NormalDescription;
+            _relicDescrption.text = FormatUiText(relicAcquisition.NormalDescription);
 
             _coinRawVideoPlayer.clip = null;
             _coinMaskVideoPlayer.clip = null;
@@ -287,9 +290,11 @@ namespace UI
                             reinforced);
 
                         if (reinforced)
-                            _relicDescrption.text = $"<size=120%><color=#76ffff>강화 성공</color></size>\n\n{description}";
+                            _relicDescrption.text = FormatUiText(
+                                $"<size=120%>{RelicManager.BlueHighlightOpenTag}강화 성공{RelicManager.BlueHighlightCloseTag}</size>\n\n{description}");
                         else
-                            _relicDescrption.text = $"<size=120%><color=#FF0000>강화 실패</color></size>\n\n{description}";
+                            _relicDescrption.text = FormatUiText(
+                                $"<size=120%>{UiRichTextFormatter.RedHighlightOpenTag}강화 실패{UiRichTextFormatter.RedHighlightCloseTag}</size>\n\n{description}");
 
                         _toThrowCoinBtn.gameObject.SetActive(false);
                         _closeBtn.gameObject.SetActive(true);
@@ -387,5 +392,7 @@ namespace UI
 
             return value.ToString("0.##");
         }
+
+        private string FormatUiText(string text) => UiRichTextFormatter.ApplyHighlights(text, _gameAssetLibrary);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BlackThunder.BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -45,7 +46,7 @@ namespace Game
                     _soundManager.SfxChanged -= value;
             }
         }
-        public override int BgmVolume => _soundManager != null ? _soundManager.BgmVolume : 70;
+        public override int BgmVolume => _soundManager != null ? _soundManager.BgmVolume : 50;
         public override int SfxVolume => _soundManager != null ? _soundManager.SfxVolume : 70;
 
         public override bool IsStage3Reached { get; set; }
@@ -58,6 +59,8 @@ namespace Game
         [SerializeField] private string _firstSceneName = "Stage0 0";
         [SerializeField] private string _unlockSceneName = "Record_Unlocked";
         [SerializeField] private string _bossSceneName = "Stage3Boss";
+        [Space]
+        [SerializeField] private KeyCode _exportBlackboxKey = KeyCode.E;
 
         // Properties
         private Management.SoundManager _soundManager;
@@ -70,20 +73,34 @@ namespace Game
         // Internal
         private static GameManager _instance;
         private static bool _isStarted;
+        private BlackboxHandle _blackbox;
 
 
         // Content
         private void Awake()
         {
+            BlackboxHandle.Configure(
+                Application.persistentDataPath,
+                Debug.Log,
+                Debug.LogWarning,
+                false,
+                ExportFormat.Txt,
+                FullExportOption.Full,
+                OpenLogOption.Open,
+                ExceptionHandlingOption.None,
+                TargetTypes.Full);
+
+            using var _ = BlackboxHandle.Of(this).Construct("게임 매니저 초기화를 시작합니다.", out _blackbox);
+
             if (_instance && _instance != this)
             {
+                _blackbox.Write("중복 GameManager 인스턴스를 제거합니다.").With(_instance);
                 Destroy(gameObject);
                 return;
             }
 
             _instance = this;
             DontDestroyOnLoad(gameObject);
-
 
 
             _soundManager = GetComponentInChildren<Management.SoundManager>();
@@ -96,6 +113,8 @@ namespace Game
         private void Start()
         {
             if (_isStarted) return;
+            using var _ = _blackbox.Scope("게임 시작 상태를 초기화합니다.");
+
             _isStarted = true;
 
             // 게임 최초 시작 시
@@ -111,15 +130,19 @@ namespace Game
             _reachedScenarioKeys.Clear();
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode _ = default)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode = default)
         {
+            using var _ = _blackbox.Scope($"씬 로드 처리를 시작합니다. scene: {scene.name}");
+
             var message = Ctx($"씬 '{scene.name}'이(가) 로드되었습니다.");
             Debug.Log(message, this);
 
             if (TryFindScript<StageManager>(scene, out var stageManager))
             {
+                _blackbox.Write("StageManager를 찾았습니다.").With(stageManager);
                 stageManager.PlayerDied += () =>
                 {
+                    _blackbox.Write("플레이어 사망 흐름을 처리합니다.").With(stageManager);
 
                     LevelManager.Instance.ResetState();
                     LevelManager.Instance.MarkPlayerDied();
@@ -136,6 +159,7 @@ namespace Game
                 if (!stageManager)
                     throw new InvalidOperationException(Ctx("StageManager 컴포넌트를 찾는 데 실패했기 때문에 ScenarioManager를 초기화할 수 없습니다."));
 
+                using (_blackbox.Exert(scenarioManager, "시나리오 매니저 초기화를 요청합니다."))
                 scenarioManager.Initialize(stageManager);
             }
 
@@ -144,34 +168,51 @@ namespace Game
         }
         private void Inject(Scene scene)
         {
+            using var _ = _blackbox.Scope($"씬 주입 처리를 시작합니다. scene: {scene.name}");
+
             if (_injectOnSceneLoading)
             {
                 if (!TryFindScript<Injector>(scene, out var injector))
                     throw new InvalidOperationException(Ctx("Injector 컴포넌트를 찾는 데 실패했습니다. 주입을 수행할 수 없습니다."));
 
-                injector.AddInjection(this, typeof(GameServices));
-                foreach (var injection in _injections)
+                using (_blackbox.Exert(injector, "게임 서비스와 추가 주입 객체 등록을 요청합니다."))
                 {
-                    if (injection)
-                        injector.AddInjection(injection);
+                    injector.AddInjection(this, typeof(GameServices));
+                    foreach (var injection in _injections)
+                    {
+                        if (injection)
+                            injector.AddInjection(injection);
+                    }
+
+                    injector.Inject();
                 }
-                injector.Inject();
             }
         }
 
         public override void SetBgmVolume(int volume, object context = null)
         {
+            using var _ = context != null
+                ? _blackbox.Scope($"BGM 볼륨 변경을 요청합니다. volume: {volume}").With(context)
+                : _blackbox.Scope($"BGM 볼륨 변경을 요청합니다. volume: {volume}");
 
+            using (_blackbox.Exert(_soundManager, "BGM 볼륨 변경을 전달합니다."))
             _soundManager.SetBgmVolume(volume);
         }
         public override void SetSfxVolume(int volume, object context = null)
         {
+            using var _ = context != null
+                ? _blackbox.Scope($"SFX 볼륨 변경을 요청합니다. volume: {volume}").With(context)
+                : _blackbox.Scope($"SFX 볼륨 변경을 요청합니다. volume: {volume}");
 
+            using (_blackbox.Exert(_soundManager, "SFX 볼륨 변경을 전달합니다."))
             _soundManager.SetSfxVolume(volume);
         }
 
         public override void SetPlayerName(string playerName, object context = null)
         {
+            using var _ = context != null
+                ? _blackbox.Scope($"플레이어 이름 변경을 요청합니다. playerName: {playerName}").With(context)
+                : _blackbox.Scope($"플레이어 이름 변경을 요청합니다. playerName: {playerName}");
 
             if (!_gameAssetLibrary)
                 throw new InvalidOperationException(Ctx(
@@ -183,9 +224,13 @@ namespace Game
 
         public override bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null)
         {
+            using var _ = context != null
+                ? _blackbox.Scope($"시나리오 최초 도달 여부를 확인합니다. key: {scenarioKey}").With(context)
+                : _blackbox.Scope($"시나리오 최초 도달 여부를 확인합니다. key: {scenarioKey}");
 
             if (string.IsNullOrWhiteSpace(scenarioKey))
             {
+                _blackbox.Write("비어 있는 시나리오 키가 입력되어 false로 처리합니다.");
                 Debug.LogWarning(Ctx(
                     "시나리오 최초도달 키가 비어 있습니다. 안전하게 재도달로 처리합니다."),
                     this);
@@ -193,13 +238,25 @@ namespace Game
             }
 
             bool isFirstArrival = _reachedScenarioKeys.Add(scenarioKey);
+            _blackbox.Write($"시나리오 최초 도달 결과입니다. key: {scenarioKey}, isFirstArrival: {isFirstArrival}");
 
             return isFirstArrival;
         }
 
-        public override void ToFirstScene(object context = null) => ChangeScene(_firstSceneName, context);
+        public override void ToFirstScene(object context = null)
+        {
+            using var _ = context != null
+                ? _blackbox.Scope("첫 씬으로 이동을 요청합니다.").With(context)
+                : _blackbox.Scope("첫 씬으로 이동을 요청합니다.");
+
+            ChangeScene(_firstSceneName, context);
+        }
+
         public override void ChangeScene(string sceneName, object context = null, bool preservePlayerProgress = true)
         {
+            using var _ = context != null
+                ? _blackbox.Scope($"씬 전환을 요청합니다. scene: {sceneName}, preservePlayerProgress: {preservePlayerProgress}").With(context)
+                : _blackbox.Scope($"씬 전환을 요청합니다. scene: {sceneName}, preservePlayerProgress: {preservePlayerProgress}");
 
             try
             {
@@ -208,6 +265,7 @@ namespace Game
             }
             catch (Exception ex)
             {
+                _blackbox.WriteError($"씬 전환에 실패했습니다. scene: {sceneName}, error: {ex}");
                 Debug.LogError($"씬 전환에 실패했습니다.\n{ex.ToString()}");
                 throw;
             }
@@ -221,18 +279,29 @@ namespace Game
                 return;
             }
 
-            if (global::LevelManager.Instance != null)
+            if (LevelManager.Instance != null)
             {
-                global::LevelManager.Instance.ResetState();
+                LevelManager.Instance.ResetState();
                 return;
             }
 
-            global::SkillManager.ClearPersistedSkillLoadout();
+            SkillManager.ClearPersistedSkillLoadout();
             Actors.PlayerSystem.Player.ClearPersistedProgress();
+        }
+
+        private void Update()
+        {
+#if DEBUG_MODE || PLAYER_DEBUG_MODE
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(_exportBlackboxKey))
+                _blackbox.Export();
+#endif
         }
 
         public override void Quit(object context = null)
         {
+            using var _ = context != null
+                ? _blackbox.Scope("게임 종료를 요청합니다.").With(context)
+                : _blackbox.Scope("게임 종료를 요청합니다.");
 
 #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
@@ -265,6 +334,7 @@ namespace Game
 
         private void OnDestroy()
         {
+            using var _ = _blackbox.Scope("게임 매니저를 정리합니다.");
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 

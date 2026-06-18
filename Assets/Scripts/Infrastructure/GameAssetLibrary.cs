@@ -7,6 +7,9 @@ namespace Infrastructure
 {
     public class GameAssetLibrary : MonoBehaviour
     {
+        public static Color DefaultUiBlueHighlightColor { get; } = new Color(0.2f, 0.5411765f, 0.8313726f, 1f);
+        public static Color DefaultUiRedHighlightColor { get; } = new Color(1f, 0f, 0f, 1f);
+
         [Header("Indicators")]
         [SerializeField] private GameObject _playerDetection;
         [SerializeField] private GameObject _exclamationMark;
@@ -14,6 +17,10 @@ namespace Infrastructure
 
         [Header("Materials")]
         [SerializeField] private Material _solidColor;
+
+        [Header("UI Colors")]
+        [SerializeField] private Color _uiBlueHighlightColor = new Color(0.2f, 0.5411765f, 0.8313726f, 1f);
+        [SerializeField] private Color _uiRedHighlightColor = new Color(1f, 0f, 0f, 1f);
 
         [Header("Characters / Dialogues")]
         [SerializeField] private CharacterInfoSO[] _characters;
@@ -24,6 +31,8 @@ namespace Infrastructure
         public TextMeshPro Indicator_Text => Instantiate(_text);
 
         public Material Materials_SolidColor => Instantiate(_solidColor);
+        public Color UiBlueHighlightColor => _uiBlueHighlightColor;
+        public Color UiRedHighlightColor => _uiRedHighlightColor;
 
         public bool TryGetCharacterInfo(Character character, out CharacterInfoSO characterInfo)
         {

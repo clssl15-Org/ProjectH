@@ -110,6 +110,7 @@ namespace Game.Stage
         protected virtual void Start()
         {
             ResolveFirstArrival();
+            Rubiel?.SetToSmall();
             Machine?.Enter();
         }
         protected virtual void Update()

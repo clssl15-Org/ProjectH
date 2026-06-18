@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Actors;
 using Actors.PlayerSystem;
+using BlackThunder.BlackboxSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +22,7 @@ public class LevelManager : MonoBehaviour
     private SpawnManager _spawnManager;
     private SpawnManager _spawnManagerOnLevelRoot;
     private SoundManager _soundManager;
+    private BlackboxHandle _blackbox;
 
     public bool PlayerHasDied { get; private set; }
     public bool IsPlayerDeathRestartPending { get; private set; }
@@ -34,8 +36,11 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        using var _ = BlackboxHandle.Of(this).Construct("레벨 매니저 초기화를 시작합니다.", out _blackbox);
+
         if (_isInitialized)
         {
+            _blackbox.Write("중복 LevelManager 인스턴스를 제거합니다.").With(Instance);
             Destroy(gameObject);
             return;
         }
@@ -56,12 +61,16 @@ public class LevelManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        using var _ = _blackbox.Scope("레벨 매니저를 정리합니다.");
+
         if (Instance == this)
             SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        using var _ = _blackbox.Scope($"씬 로드에 맞춰 레벨 상태를 갱신합니다. scene: {scene.name}");
+
         RebindSpawnManagerForScene(scene);
         SyncCurrentStageFromScene(scene);
     }
@@ -72,6 +81,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void RebindSpawnManagerForScene(Scene scene)
     {
+        using var _ = _blackbox.Scope($"씬 SpawnManager 설정을 다시 연결합니다. scene: {scene.name}");
+
         if (_spawnManagerOnLevelRoot == null)
         {
             SpawnManager inScene = FindSceneSpawnManagerConfigurationSource(scene);
@@ -140,6 +151,8 @@ public class LevelManager : MonoBehaviour
 
     public void ResetState()
     {
+        using var _ = _blackbox.Scope("레벨 진행 상태를 초기화합니다.");
+
         if (RelicManager.Instance != null)
             RelicManager.Instance.ClearAllOwnedRelics();
 
@@ -156,11 +169,15 @@ public class LevelManager : MonoBehaviour
     }
     public void MarkPlayerDied()
     {
+        using var _ = _blackbox.Scope("플레이어 사망 상태를 표시합니다.");
+
         PlayerHasDied = true;
         IsPlayerDeathRestartPending = true;
     }
     public bool ConsumePlayerDeathRestart()
     {
+        using var _ = _blackbox.Scope("플레이어 사망 재시작 요청을 소비합니다.");
+
         if (!IsPlayerDeathRestartPending)
             return false;
 
@@ -169,6 +186,8 @@ public class LevelManager : MonoBehaviour
     }
     public void MoveNextLevel(LevelType nextLevelType)
     {
+        using var _ = _blackbox.Scope($"다음 레벨 이동을 계산합니다. nextLevelType: {nextLevelType}");
+
         string nextScene = default;
         switch (nextLevelType)
         {
@@ -201,6 +220,8 @@ public class LevelManager : MonoBehaviour
     }
     public void LoadNextScene(string sceneName)
     {
+        using var _ = _blackbox.Scope($"다음 씬을 로드합니다. scene: {sceneName}");
+
         Player.PersistCurrentPlayerProgress();
         SceneManager.LoadScene(sceneName);
     }

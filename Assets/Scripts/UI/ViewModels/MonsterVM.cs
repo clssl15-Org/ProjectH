@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Actors;
+using BlackThunder.BlackboxSystem;
 using UnityEngine;
 
 namespace UI
@@ -47,11 +48,14 @@ namespace UI
         // Internal
         private IMonster _monster;
         private Collider2D _collider;
+        private BlackboxHandle _blackbox;
 
 
         // Content
         public MonsterVM(IMonster monster)
         {
+            using var _ = BlackboxHandle.Of(this).Construct("몬스터 ViewModel 생성을 시작합니다.", out _blackbox);
+
             if (monster == null)
                 throw new ArgumentNullException(
                     nameof(monster),
@@ -77,6 +81,8 @@ namespace UI
         public void Dispose()
         {
             if (IsDisposed) return;
+            using var _ = _blackbox.Scope("몬스터 ViewModel을 정리합니다.");
+
             IsDisposed = true;
 
             _monster.ConditionChanged -= Update;

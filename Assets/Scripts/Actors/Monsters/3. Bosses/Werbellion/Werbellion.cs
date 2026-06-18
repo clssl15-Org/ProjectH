@@ -297,6 +297,13 @@ namespace Actors.Monsters.Bosses
                     FormatLogMessage($"{nameof(_punchAttackWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
                     this);
 
+            if (_straightAreaAttackPrefab)
+                _straightAreaAttackPrefab.AttackPower = StatsInfo.StraightAreaAttackPower;
+            else
+                Debug.LogWarning(
+                    FormatLogMessage($"{nameof(_straightAreaAttackPrefab)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
+                    this);
+
             if (_stunAttackweapon)
             {
                 _stunAttackweapon.AttackPower = 0;
@@ -308,9 +315,11 @@ namespace Actors.Monsters.Bosses
                     this);
 
             foreach (var spawner in _portalAttackSpawners)
+            {
                 spawner
                     .Initialize(PlatformManager, () => _player.transform.position)
                     .SetInitializer(p => p.GetComponent<Weapon>().AttackPower = StatsInfo.PortalAttackPower);
+            }
 
             ActionController = new WerbellionActionController(this);
             ActionController.Enter();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BlackThunder.BlackboxSystem;
 using UI;
 using UnityEngine;
 
@@ -18,17 +19,20 @@ namespace Game.Stage
         private readonly HashSet<IViewModel> _viewModels = new();
         private readonly HashSet<IView> _views = new();
         private bool _isDestroyed = false;
+        private BlackboxHandle _blackbox;
 
 
         // Content
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).Construct("UI 매니저 초기화를 시작합니다.", out _blackbox);
             
             if (!_canvas)
                 throw new InvalidOperationException($"[{nameof(UIManager)}] {nameof(_canvas)} ������Ʈ�� ��ȿ���� �ʽ��ϴ�.");
         }
         internal void SetCanvas(RectTransform canvas)
         {
+            using var _ = _blackbox.Scope("Canvas 부모를 설정합니다.").With(canvas);
 
             if (_canvas != null)
                 Debug.Log(Ctx(
@@ -37,6 +41,7 @@ namespace Game.Stage
         }
         internal void SetWorldUI(RectTransform worldUI)
         {
+            using var _ = _blackbox.Scope("World UI 부모를 설정합니다.").With(worldUI);
 
             if (_worldUI != null)
                 Debug.Log(Ctx(
@@ -46,6 +51,7 @@ namespace Game.Stage
 
         public void RegisterVM(IViewModel viewModel)
         {
+            using var _ = _blackbox.Scope("ViewModel을 등록합니다.").With(viewModel);
 
             if (viewModel == null)
                 throw new ArgumentNullException(
@@ -65,6 +71,7 @@ namespace Game.Stage
 
         public void RegisterView(IView view, bool worldUIParent = false)
         {
+            using var _ = _blackbox.Scope($"View를 등록합니다. worldUIParent: {worldUIParent}").With(view);
 
             if (view == null)
                 throw new ArgumentNullException(
@@ -83,6 +90,8 @@ namespace Game.Stage
         private void OnDestroy() => Destroy();
         internal void Destroy()
         {
+            using var _ = _blackbox.Scope("UI 매니저 등록 객체를 정리합니다.");
+
             if (_isDestroyed) return;
             _isDestroyed = true;
 

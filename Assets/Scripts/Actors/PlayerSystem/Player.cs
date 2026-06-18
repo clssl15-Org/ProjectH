@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BlackThunder.BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using World;
@@ -123,6 +124,7 @@ namespace Actors.PlayerSystem
         private DamageRoulette damageRoulette;
         private Ultimate ultimate;
         private readonly HashSet<object> invincibleOverrideSources = new();
+        private BlackboxHandle _blackbox;
 
         private static PersistedPlayerState persistedPlayerState;
         private static bool hasPersistedPlayerState;
@@ -140,6 +142,8 @@ namespace Actors.PlayerSystem
         
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).Construct("플레이어 초기화를 시작합니다.", out _blackbox);
+
             playerStats = originStats.CreateRuntimeStats();
             playerHealth = GetComponent<PlayerHealth>();
             playerHealth.Damaged += () => ConditionChanged?.Invoke(PlayerCondition.Damage);
@@ -173,11 +177,15 @@ namespace Actors.PlayerSystem
 
         public void Inject(PlatformManager platformManager)
         {
+            using var _ = _blackbox.Scope("플랫폼 매니저를 주입받습니다.").With(platformManager);
+
             GetComponent<PlatformDetector>().SetPlatformManager(platformManager);
         }
 
         public void Start()
         {
+            using var _ = _blackbox.Scope("플레이어 시작 설정을 적용합니다.");
+
             ConditionChanged += cond => print($"Player: {cond}");
 
             if (hasPersistedPlayerState && ultimate != null)
@@ -189,17 +197,23 @@ namespace Actors.PlayerSystem
 
         public static void ClearPersistedProgress()
         {
+            using var _ = BlackboxHandle.Of(typeof(Player)).Scope("저장된 플레이어 진행 상태를 초기화합니다.");
+
             hasPersistedPlayerState = false;
             persistEnabled = false;
         }
 
         public static void PersistCurrentPlayerProgress()
         {
+            using var _ = BlackboxHandle.Of(typeof(Player)).Scope("현재 플레이어 진행 상태 저장을 요청합니다.");
+
             TryPersistCurrentPlayerProgress();
         }
 
         public static bool TryPersistCurrentPlayerProgress()
         {
+            using var _ = BlackboxHandle.Of(typeof(Player)).Scope("현재 플레이어 진행 상태 저장 가능 여부를 확인합니다.");
+
             var player = FindObjectOfType<Player>();
             if (player == null || !player.CanPersistProgress())
                 return false;
@@ -210,10 +224,14 @@ namespace Actors.PlayerSystem
 
         public void DefaultAttack()
         {
+            using var _ = _blackbox.Scope("기본 공격을 요청합니다.");
+
             characterStateController.EnqueueTransition<Attack1>();
         }
         public void RangedAttack()
         {
+            using var _ = _blackbox.Scope("원거리 공격을 요청합니다.");
+
             characterStateController.EnqueueTransition<RangedAttack>();
         }
 
@@ -226,37 +244,55 @@ namespace Actors.PlayerSystem
         }
         public int CalculateDamage(float value)
         {
+            using var _ = _blackbox.Scope($"피해량을 계산합니다. value: {value}");
+
             int damage = (int)(value * RouletteDamageMultiplier);
             return damage;
         }
         public void ChangeSkill()
         {
+            using var _ = _blackbox.Scope("선택 스킬 변경을 요청합니다.");
+
             skillManager.ChangeSkill();
         }
         public bool TrySkillRoulette(out DamageRoulette.Context context)
         {
+            using var _ = _blackbox.Scope("스킬 룰렛 시도를 요청합니다.");
+
             return damageRoulette.TrySkillRoulette(out context);
         }
 
         public void ResetRandomSkillBuff()
         {
+            using var _ = _blackbox.Scope("랜덤 스킬 버프를 초기화합니다.");
+
             RouletteDamageMultiplier = 1;
         }
 
         public void UseSkill()
         {
+            using var _ = _blackbox.Scope("스킬 사용을 요청합니다.");
+
             skillManager.UseSkill();
         }
         public void UseUltimate()
         {
+            using var _ = _blackbox.Scope("궁극기 사용을 요청합니다.");
+
             skillManager.UseUltimate();
         }
 
-        public void NotifyCondition(PlayerCondition condition) =>
+        public void NotifyCondition(PlayerCondition condition)
+        {
+            using var _ = _blackbox.Scope($"플레이어 상태 변경을 알립니다. condition: {condition}");
+
             ConditionChanged?.Invoke(condition);
+        }
 
         public void SetInvincibleOverride(object source, bool enabled)
         {
+            using var _ = _blackbox.Scope($"무적 오버라이드를 설정합니다. enabled: {enabled}").With(source);
+
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
@@ -274,6 +310,8 @@ namespace Actors.PlayerSystem
 
         void OnDestroy()
         {
+            using var _ = _blackbox.Scope("플레이어를 정리합니다.");
+
             if (CanPersistProgress())
                 PersistState();
 

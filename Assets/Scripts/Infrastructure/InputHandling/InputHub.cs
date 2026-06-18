@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BlackThunder.BlackboxSystem;
 using UnityEngine;
 
 namespace Infrastructure
@@ -9,10 +10,20 @@ namespace Infrastructure
         private readonly List<IInputLayerSubject> _subjects = new();
         private readonly Dictionary<IInputLayerSubject, (bool isAwake, Action<bool> awakeChanged, Action onDestroy)> _subjectData = new();
         private readonly Dictionary<object, EmptyInputSubject> _blockers = new();
+        private BlackboxHandle _blackbox;
+
+        private void Awake()
+        {
+            using var _ = BlackboxHandle.Of(this).Construct("입력 허브 초기화를 시작합니다.", out _blackbox);
+        }
 
         public void Add(IInputLayerSubject subject) => AddAfter(null, subject);
         public void AddAfter(IInputLayerSubject target, IInputLayerSubject subject)
         {
+            using var _ = target != null
+                ? _blackbox.Scope("입력 계층 대상을 등록합니다.").With(target, subject)
+                : _blackbox.Scope("입력 계층 대상을 등록합니다.").With(subject);
+
             if (subject == null) throw new ArgumentNullException(nameof(subject));
 
             if (_subjects.Contains(subject))
@@ -55,6 +66,8 @@ namespace Infrastructure
 
         public void Remove(IInputLayerSubject subject)
         {
+            using var _ = _blackbox.Scope("입력 계층 대상을 제거합니다.").With(subject);
+
             if (!_subjects.Contains(subject)) return;
 
 
@@ -71,6 +84,8 @@ namespace Infrastructure
 
         public void Block(object requester)
         {
+            using var _ = _blackbox.Scope("입력 차단을 요청합니다.").With(requester);
+
             if (requester == null || _blockers.ContainsKey(requester))
             {
                 return;
@@ -82,6 +97,8 @@ namespace Infrastructure
 
         public void Unblock(object requester)
         {
+            using var _ = _blackbox.Scope("입력 차단 해제를 요청합니다.").With(requester);
+
             if (requester == null || !_blockers.ContainsKey(requester))
             {
                 return;
@@ -116,6 +133,7 @@ namespace Infrastructure
 
         private void OnDestroy()
         {
+            using var _ = _blackbox.Scope("입력 허브를 정리합니다.");
 
             foreach (var (subject, (_, awakeChanged, onDestroy)) in _subjectData)
             {

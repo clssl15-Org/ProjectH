@@ -31,6 +31,7 @@ namespace Actors
         [SerializeField] private Transform _player;
         [SerializeField] private KeyCode _changeShapeKey = KeyCode.None;
         [SerializeField] private KeyCode _changeVisibilityKey = KeyCode.None;
+        [SerializeField] private bool _setToSmallOnStart;
 
         private SpriteRenderer _spriteRenderer;
         private SpriteSizeHandler _ssh;
@@ -41,9 +42,8 @@ namespace Actors
 
         private void Awake()
         {
-
             if (!_player)
-                throw new InvalidOperationException($"[Rubiel] {nameof(_player)}��(��) ��ȿ���� �ʽ��ϴ�.");
+                throw new InvalidOperationException($"[Rubiel] {nameof(_player)}이(가) 유효하지 않습니다.");
 
             _spriteRenderer = GetComponent<SpriteRenderer>();   
             _ssh = GetComponent<SpriteSizeHandler>();
@@ -55,7 +55,11 @@ namespace Actors
             _spriteRenderer.material = Instantiate(_spriteRenderer.material);
         }
 
-        private void Start() => SetToSmall();
+        private void Start()
+        {
+            if (_setToSmallOnStart)
+                SetToSmall();
+        }
 
         private void Update()
         {

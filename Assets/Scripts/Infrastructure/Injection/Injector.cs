@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BlackThunder.BlackboxSystem;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,9 +25,11 @@ namespace Infrastructure
         [Tooltip("GameManager�� Ȱ��ȭ�Ǿ� ���� ���� �� �� �׸��� üũ�Ͽ� Injector�� Ȱ��ȭ�� �� �ֽ��ϴ�.")]
         [SerializeField] private bool _injectOnAwake = false;
         private bool _isInjected = false;
+        private BlackboxHandle _blackbox;
 
         private void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).Construct("Injector 초기화를 시작합니다.", out _blackbox);
 
             if (_injectOnAwake)
             {
@@ -44,6 +47,10 @@ namespace Infrastructure
 
         public void AddInjection(MonoBehaviour injection, Type intendedType = null)
         {
+            using var _ = _blackbox.Scope(
+                intendedType != null
+                    ? $"주입 객체를 등록합니다. intendedType: {intendedType.Name}"
+                    : "주입 객체를 등록합니다.").With(injection);
 
             if (!injection)
             {
@@ -63,6 +70,7 @@ namespace Infrastructure
 
         public void Inject()
         {
+            using var _ = _blackbox.Scope("등록된 객체 주입을 시작합니다.");
 
             if (_isInjected)
             {

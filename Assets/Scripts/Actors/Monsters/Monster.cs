@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Actors.Monsters.Actions;
 using Actors.Monsters.Brains;
+using BlackThunder.BlackboxSystem;
 using Infrastructure;
 using UnityEngine;
 using World;
@@ -157,6 +158,7 @@ namespace Actors.Monsters
         private int _hp;
         private Direction _direction;
         bool _ignorePlayerInternaction = false;
+        private BlackboxHandle _blackbox;
 
 
         // Content
@@ -169,6 +171,9 @@ namespace Actors.Monsters
             Configuration configuration,
             PlatformManager platformManager)
         {
+            using var _ = _blackbox.Scope("몬스터 외부 의존성을 초기화합니다.")
+                .With(gameAssetsLibrary, configuration, platformManager);
+
             Inject(gameAssetsLibrary);
             Inject(configuration);
             Inject(platformManager);
@@ -180,11 +185,15 @@ namespace Actors.Monsters
 
         private void Inject(GameAssetLibrary gameAssetsLibrary)
         {
+            using var _ = _blackbox.Scope("게임 에셋 라이브러리를 주입받습니다.").With(gameAssetsLibrary);
+
             GameAssetsLibrary = gameAssetsLibrary;
         }
 
         private void Inject(Configuration configuration)
         {
+            using var _ = _blackbox.Scope("설정 정보를 주입받습니다.").With(configuration);
+
             Configuration = configuration;
 
             if (TryGetComponent<SpriteSizeHandler>(out var sizeHandler))
@@ -193,12 +202,16 @@ namespace Actors.Monsters
 
         private void Inject(PlatformManager platformManager)
         {
+            using var _ = _blackbox.Scope("플랫폼 매니저를 주입받습니다.").With(platformManager);
+
             PlatformManager = platformManager;
         }
         #endregion
 
         protected virtual void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).Construct("몬스터 초기화를 시작합니다.", out _blackbox);
+
             Collider = GetComponent<Collider2D>();
             Rigidbody = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -237,15 +250,17 @@ namespace Actors.Monsters
 
         protected virtual void Start()
         {
-            #region ??? ??????? ????
+            using var _ = _blackbox.Scope("몬스터 시작 설정을 적용합니다.");
+
+            #region 필수 의존성 확인
             if (!PlatformManager)
                 throw new InvalidOperationException(FormatLogMessage(
-                    $"{nameof(PlatformManager)}??(??) ????? ???? ??? ?????? ????? ?????? ?? ???????."));
+                    $"{nameof(PlatformManager)}이(가) 주입되지 않아 몬스터를 시작할 수 없습니다."));
 
             if (!GameAssetsLibrary)
                 Debug.LogWarning(FormatLogMessage(
-                    $"?? ????? {nameof(GameAssetsLibrary)}??(??) ?????? ???? ??????. " +
-                    "???? ????? ?????????? ??????? ???? ?? ??????."));
+                    $"{nameof(GameAssetsLibrary)}이(가) 주입되지 않았습니다. " +
+                    "피격 연출 등 에셋 참조 기능이 정상 동작하지 않을 수 있습니다."));
 
             var platformDetector = GetComponent<PlatformDetector>();
             PlatformDetector = platformDetector;
@@ -349,6 +364,8 @@ namespace Actors.Monsters
         internal virtual void Die() => Die(true);
         protected void Die(bool destroySelf)
         {
+            using var _ = _blackbox.Scope($"몬스터 사망 처리를 시작합니다. destroySelf: {destroySelf}");
+
             Destroyed?.Invoke();
             GameEvents.NotifyMonsterDied();
 
@@ -399,9 +416,16 @@ namespace Actors.Monsters
         #endregion
 
 
-        public void Destroy() => Destroy(gameObject);
+        public void Destroy()
+        {
+            using var _ = _blackbox.Scope("몬스터 파괴를 요청합니다.");
+
+            Destroy(gameObject);
+        }
         protected virtual void OnDestroy()
         {
+            using var _ = _blackbox.Scope("몬스터를 정리합니다.");
+
             Destroyed?.Invoke();
             Brain?.Dispose();
 

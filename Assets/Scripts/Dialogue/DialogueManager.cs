@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BlackThunder.BlackboxSystem;
 using Infrastructure;
 using UI;
 using UnityEngine;
@@ -34,6 +35,12 @@ namespace Dialogue
         private IDialogueUI _currentUI;
         private string _currentScriptTitle = string.Empty;
         private IDisposable _updateHandle;
+        private BlackboxHandle _blackbox;
+
+        private void Awake()
+        {
+            using var _ = BlackboxHandle.Of(this).Construct("대화 매니저 초기화를 시작합니다.", out _blackbox);
+        }
 
         public void Initialize(
             DialogueUI dialogueUI,
@@ -41,6 +48,7 @@ namespace Dialogue
             RectTransform canvasTrasnform,
             Func<Character, Func<Vector2>> getTransform)
         {
+            using var _ = _blackbox.Scope("대화 UI 참조를 초기화합니다.").With(dialogueUI, bubbleDialogueUI, canvasTrasnform);
 
             _dialogueUI = dialogueUI;
             _bubbleDialogueUI = bubbleDialogueUI;
@@ -51,15 +59,20 @@ namespace Dialogue
 
         void IInjectable<GameAssetLibrary>.Inject(GameAssetLibrary gameAssetLibrary)
         {
+            using var _ = _blackbox.Scope("게임 에셋 라이브러리를 주입받습니다.").With(gameAssetLibrary);
+
             _gameAssetLibrary = gameAssetLibrary;
         }
         void IInjectable<DialogueScriptLibrary>.Inject(DialogueScriptLibrary dialogueScriptLibrary)
         {
+            using var _ = _blackbox.Scope("대화 스크립트 라이브러리를 주입받습니다.").With(dialogueScriptLibrary);
+
             _dialogueScriptLibrary = dialogueScriptLibrary;
         }
 
         public void Play(string title, bool openDialogue = true, bool closeDialogue = true, Action callback = null)
         {
+            using var _ = _blackbox.Scope($"대화 재생을 시작합니다. title: {title}, openDialogue: {openDialogue}, closeDialogue: {closeDialogue}");
 
             if (!string.IsNullOrEmpty(_currentScriptTitle))
             {
@@ -182,6 +195,7 @@ namespace Dialogue
 
         public void Stop(bool closeDialogue = true)
         {
+            using var _ = _blackbox.Scope($"대화 재생을 종료합니다. title: {_currentScriptTitle}, closeDialogue: {closeDialogue}");
 
             _updateHandle?.Dispose();
             _updateHandle = null;
@@ -201,6 +215,7 @@ namespace Dialogue
 
         private void OnDestroy()
         {
+            using var _ = _blackbox.Scope("대화 매니저를 정리합니다.");
 
             Stop();
             Destroying?.Invoke();

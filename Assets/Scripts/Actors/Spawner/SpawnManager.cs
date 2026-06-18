@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using BlackThunder.BlackboxSystem;
 using Game.Stage;
 
 namespace Actors
@@ -32,6 +33,12 @@ namespace Actors
         private int lastSpawnerRegistrationFrame = -1;
         private bool clearObjectsActivated;
         private bool missingClearObjectWarningLogged;
+        private BlackboxHandle _blackbox;
+
+        private void Awake()
+        {
+            using var _ = BlackboxHandle.Of(this).Construct("스폰 매니저 초기화를 시작합니다.", out _blackbox);
+        }
 
         private void Update()
         {
@@ -48,6 +55,8 @@ namespace Actors
 
         public void AddSpawner(MonsterSpawner spawner)
         {
+            using var _ = _blackbox.Scope("스포너를 등록합니다.").With(spawner);
+
             if (spawner != null && !SpawnerList.Contains(spawner))
             {
                 spawner.OnMonsterCreate(monsterCreated);
@@ -59,6 +68,8 @@ namespace Actors
 
         public void OnMonsterCreate(Action<IMonster> monsterCreated)
         {
+            using var _ = _blackbox.Scope("몬스터 생성 콜백을 등록합니다.");
+
             this.monsterCreated = monsterCreated;
 
             foreach (var spawner in SpawnerList)
@@ -67,6 +78,8 @@ namespace Actors
 
         public void CheckAllSpawnersComplete()
         {
+            using var _ = _blackbox.Scope("전체 스포너 완료 상태를 확인합니다.");
+
             CheckAllSpawnersComplete(logIncompleteSpawners: true);
         }
 
@@ -109,6 +122,8 @@ namespace Actors
 
         private void OnAllMonstersCleared()
         {
+            using var _ = _blackbox.Scope("모든 몬스터 정리 완료 처리를 시작합니다.");
+
             if (clearObjectsActivated)
                 return;
 
@@ -155,6 +170,8 @@ namespace Actors
 
         public void WaveComplete(MonsterSpawner spawner)
         {
+            using var _ = _blackbox.Scope("웨이브 완료 처리를 시작합니다.").With(spawner);
+
             if (spawner == null)
             {
                 Debug.LogWarning("WaveComplete called with null spawner.", this);
@@ -211,6 +228,8 @@ namespace Actors
 
         public void Clear()
         {
+            using var _ = _blackbox.Scope("스폰 매니저 등록 상태를 정리합니다.");
+
             monsterCreated = null;
             SpawnerList.Clear();
             completionWatchdogFrameCounter = 0;
@@ -224,6 +243,8 @@ namespace Actors
         /// </summary>
         public void ApplyConfigurationFrom(SpawnManager source)
         {
+            using var _ = _blackbox.Scope("씬 전용 스폰 설정을 복사합니다.").With(source);
+
             if (source == null || source == this)
                 return;
 
@@ -234,6 +255,8 @@ namespace Actors
 
         public void RefreshClearObjectForLoadedScene(Scene scene)
         {
+            using var _ = _blackbox.Scope($"로드된 씬의 ClearObjects 참조를 갱신합니다. scene: {scene.name}");
+
             GameObject found = FindClearObjectsInScene(scene);
             if (found != null)
                 clearObject = found;

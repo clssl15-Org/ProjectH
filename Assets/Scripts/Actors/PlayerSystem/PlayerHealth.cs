@@ -108,7 +108,7 @@ namespace Actors.PlayerSystem
             RecentKnockback = direction;
 
             Damaged?.Invoke();
-            Debug.Log("Player Health: " + currentHealth + "/" + MaxHealth + $", Knockback: {direction}");
+            Debug.Log($"Player Health: {currentHealth} / {MaxHealth} (-{damage}), Knockback: {direction}");
             if (currentHealth <= 0)
             {
                 Die();

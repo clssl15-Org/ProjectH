@@ -8,6 +8,8 @@ using UnityEngine;
 public class RelicManager : MonoBehaviour
 {
     public static RelicManager Instance { get; private set; }
+    public const string BlueHighlightOpenTag = "<ui-blue>";
+    public const string BlueHighlightCloseTag = "</ui-blue>";
     
     // 런타임 렐릭 설명 저장소
     public readonly static Dictionary<int, string> RelicDescriptionRegistry = new();
@@ -430,7 +432,9 @@ public class RelicManager : MonoBehaviour
     {
         float added = displayValue - data.BaseValue;
 
-        return added > 0.001f ? $"(+{FormatValue(added)}{GetValueUnitSuffix(data)})" : "";
+        return added > 0.001f
+            ? $"{BlueHighlightOpenTag}(+{FormatValue(added)}{GetValueUnitSuffix(data)}){BlueHighlightCloseTag}"
+            : "";
     }
 
     /// <summary>
@@ -448,7 +452,7 @@ public class RelicManager : MonoBehaviour
         while (end < effect.Length)
         {
             char c = effect[end];
-            if (c == '<' || c == ' ' || c == '(' || c == ')')
+            if (c == '<' || c == ' ' || c == '(' || c == ')' || c == '$')
                 break;
             end++;
         }

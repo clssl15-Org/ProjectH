@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Actors;
 using Actors.Monsters.Bosses;
+using BlackThunder.BlackboxSystem;
 using Dialogue;
 using Infrastructure;
 using Sound;
@@ -73,11 +74,13 @@ namespace Game.Stage
 
         private CursorVisibilityController _cursorVisibilityController;
         private bool _isDestroyed = false;
+        private BlackboxHandle _blackbox;
 
 
         // Front
         protected virtual void Awake()
         {
+            using var _ = BlackboxHandle.Of(this).Construct("스테이지 매니저 초기화를 시작합니다.", out _blackbox);
 
             InputHub = GetComponent<InputHub>();
             UIManager = GetComponent<UIManager>();
@@ -174,6 +177,8 @@ namespace Game.Stage
 
         protected virtual void Start()
         {
+            using var _ = _blackbox.Scope("스테이지 구성을 시작합니다.");
+
             if (AutoBindDependencies) AutoBindDependenciesInScene();
 
             _cursorVisibilityController = new CursorVisibilityController();
@@ -216,11 +221,11 @@ namespace Game.Stage
                     {
                         new Timer(
                             0.3f,
-                            _ => BgmPlayManager.Stop());
+                            timer => BgmPlayManager.Stop());
 
                         new Timer(
                             1.3f,
-                            _ => DarkscreenUI.CloseScreen(() => PlayerDied?.Invoke()));
+                            timer => DarkscreenUI.CloseScreen(() => PlayerDied?.Invoke()));
                     }
                 };
             }
@@ -253,6 +258,7 @@ namespace Game.Stage
             #region Managers
             if (LevelManager.Instance?.SpawnManager)
             {
+                _blackbox.Write("스폰 매니저 몬스터 생성 콜백을 연결합니다.").With(LevelManager.Instance.SpawnManager);
                 LevelManager.Instance.SpawnManager.OnMonsterCreate(monster => Register(monster));
             }
             else
@@ -262,6 +268,7 @@ namespace Game.Stage
 
             if (_dialogueManager)
             {
+                using (_blackbox.Exert(_dialogueManager, "대화 매니저 초기화를 요청합니다."))
                 _dialogueManager.Initialize(
                     DialogueUI,
                     BubbleDialogueUI,
@@ -500,10 +507,19 @@ namespace Game.Stage
 
         public void Register(IPlayer player, bool connectUI = true)
         {
+            using var _ = _blackbox.Scope($"플레이어 등록을 시작합니다. connectUI: {connectUI}").With(player);
+
             if (_isDestroyed) return;
 
-            if (!PlayerManager.Register(player))
+            bool isRegistered;
+            using (_blackbox.Exert(PlayerManager, "플레이어 매니저에 플레이어 등록을 요청합니다."))
+            isRegistered = PlayerManager.Register(player);
+
+            if (!isRegistered)
+            {
+                _blackbox.Write("이미 등록된 플레이어라 추가 처리를 건너뜁니다.").With(player);
                 return;
+            }
 
             if (connectUI)
             {
@@ -512,19 +528,31 @@ namespace Game.Stage
                 var ui = PlayerUI;
                 ui.Connect(vm);
 
-                UIManager.RegisterVM(vm);
-                UIManager.RegisterView(ui);
+                using (_blackbox.Exert(UIManager, "플레이어 UI 등록을 요청합니다."))
+                {
+                    UIManager.RegisterVM(vm);
+                    UIManager.RegisterView(ui);
+                }
             }
         }
 
         public void Register(IMonster monster, bool createUI = true)
         {
+            using var _ = _blackbox.Scope($"몬스터 등록을 시작합니다. createUI: {createUI}").With(monster);
+
             if (_isDestroyed)
                 return;
 
 
-            if (!MonsterManager.Register(monster))
+            bool isRegistered;
+            using (_blackbox.Exert(MonsterManager, "몬스터 매니저에 몬스터 등록을 요청합니다."))
+            isRegistered = MonsterManager.Register(monster);
+
+            if (!isRegistered)
+            {
+                _blackbox.Write("이미 등록된 몬스터라 추가 처리를 건너뜁니다.").With(monster);
                 return;
+            }
 
             if (createUI)
             {
@@ -533,13 +561,18 @@ namespace Game.Stage
                 var ui = UILibrary.HealthBar;
                 ui.Connect(vm);
 
-                UIManager.RegisterVM(vm);
-                UIManager.RegisterView(ui, true);
+                using (_blackbox.Exert(UIManager, "몬스터 UI 등록을 요청합니다."))
+                {
+                    UIManager.RegisterVM(vm);
+                    UIManager.RegisterView(ui, true);
+                }
             }
         }
 
         protected virtual void OnDestroy()
         {
+            using var _ = _blackbox.Scope("스테이지 매니저를 정리합니다.");
+
             _isDestroyed = true;
             _cursorVisibilityController?.RestoreVisible();
 

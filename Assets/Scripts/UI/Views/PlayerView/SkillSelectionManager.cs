@@ -14,8 +14,8 @@ namespace UI.PlayerView
         [SerializeField] private RectTransform _iconGroup;
 
         [Header("Settings")]
-        [SerializeField] private float _iconWidth = 100f;   // ������ ���� (�̵� ����)
-        [SerializeField] private float _moveSpeed = 10f;    // �̵� �ӵ� (Lerp Speed)
+        [SerializeField] private float _iconWidth = 100f;   // 아이콘 간격 (이동 단위)
+        [SerializeField] private float _moveSpeed = 10f;    // 이동 속도 (Lerp Speed)
 
         [Serializable]
         private struct IconInfo
@@ -25,7 +25,7 @@ namespace UI.PlayerView
         }
         [SerializeField] private IconInfo[] _iconConfigs;
 
-        // [����] Inspector ������(IconInfo)�� ��Ÿ�� ������(RuntimeIcon)�� �и��Ͽ� ����
+        // [수정] Inspector 설정용(IconInfo)과 런타임 생성용(RuntimeIcon)을 분리하여 관리
         private class RuntimeIcon
         {
             public SkillType SkillType;
@@ -35,17 +35,19 @@ namespace UI.PlayerView
         private readonly List<RuntimeIcon> _icons = new();
         private Dictionary<SkillType, GameObject> _configMap;
 
-        private int _targetIndex = 0;       // ��ǥ �ε���
-        private float _targetPosX = 0f;     // ��ǥ X ��ǥ
-        private bool _needsTeleport = false; // �̵� �Ϸ� �� �����̵� �ʿ� ����
+        private int _targetIndex = 0;       // 목표 인덱스
+        private float _targetPosX = 0f;     // 목표 X 좌표
+        private float _startPosX = 0f;      // 시작 X 좌표
+        private bool _needsTeleport = false; // 이동 완료 후 순간이동 필요 여부
 
         private SfxAudioController _sfxAudioController;
 
         private void Awake()
         {
             _sfxAudioController = GetComponent<SfxAudioController>();
+            RefreshStartPosition();
 
-            // O(1) �˻��� ���� ĳ��
+            // O(1) 검색을 위한 캐싱
             _configMap = _iconConfigs.ToDictionary(x => x.SkillType, x => x.IconPrefab);
         }
 
@@ -70,15 +72,14 @@ namespace UI.PlayerView
 
         public void Initialize(SkillType[] skills)
         {
-
-            // 1. ���� ����
+            // 1. 기존 정리
             for (int i = _iconGroup.childCount - 1; i >= 0; i--)
                 Destroy(_iconGroup.GetChild(i).gameObject);
             _icons.Clear();
 
             if (skills.Length == 0) return;
 
-            // [����] LINQ ���� �� ������ ���� ���� ����� List ���� �� ���� �߰�
+            // [수정] LINQ 지연 평가 오류를 막기 위해 명시적 List 복사 후 더미 추가
             List<SkillType> skillsToCreate = skills.ToList();
             if (skillsToCreate.Count > 1)
             {
@@ -89,8 +90,8 @@ namespace UI.PlayerView
             {
                 if (!_configMap.TryGetValue(skill, out var prefab) || prefab == null)
                 {
-                    // [�ٽ�] Inspector�� �������� ��ϵ��� �ʾ� ������ ���õǴ� ���׸� ��� ���� ���� �α�
-                    Debug.LogError($"[SkillSelectionManager] {skill} �������� _iconConfigs�� ����Ǿ����ϴ�! UI�� ǥ�õ��� �ʽ��ϴ�.");
+                    // [핵심] Inspector에 프리팹이 등록되지 않아 조용히 무시되는 버그를 잡기 위한 에러 로그
+                    Debug.LogError($"[SkillSelectionManager] {skill} 프리팹이 _iconConfigs에 누락되었습니다! UI에 표시되지 않습니다.");
                     continue;
                 }
 
@@ -100,20 +101,20 @@ namespace UI.PlayerView
                 _icons.Add(new RuntimeIcon { SkillType = skill, RectTransform = instance.GetComponent<RectTransform>() });
             }
 
-            // 3. �����ܵ��� ���η� �� ��ġ
+            // 3. 아이콘들을 가로로 쭉 배치
             ArrangeIconsHorizontally();
 
-            // �ʱ� ���� ����
+            // 초기 상태 설정
             _targetIndex = 0;
-            _targetPosX = 0;
-            _iconGroup.anchoredPosition = Vector2.zero;
+            _targetPosX = GetTargetPosX(_targetIndex);
+            _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
         }
 
         private void ArrangeIconsHorizontally()
         {
             for (int i = 0; i < _icons.Count; i++)
             {
-                // [����] GetComponent ������� ���� (RuntimeIcon ���� �� �̸� ĳ����)
+                // [수정] GetComponent 오버헤드 제거 (RuntimeIcon 생성 시 미리 캐싱함)
                 _icons[i].RectTransform.anchoredPosition = new Vector2(i * _iconWidth, 0);
             }
         }
@@ -133,7 +134,7 @@ namespace UI.PlayerView
             if (targetIndex == -1 || targetIndex == _targetIndex) return;
 
             _targetIndex = targetIndex;
-            _targetPosX = -1 * (_targetIndex * _iconWidth);
+            _targetPosX = GetTargetPosX(_targetIndex);
             _needsTeleport = (targetIndex == dummyIndex);
 
             _sfxAudioController.Play("PlayerSkillChange", AudioSourceController.PlayOption.Independently);
@@ -162,11 +163,11 @@ namespace UI.PlayerView
                 _icons.Insert(insertIndex, newIcon);
                 newIcon.RectTransform.SetSiblingIndex(insertIndex);
 
-                // [����] ��Ÿ�ӿ� ��ų �߰� ��, ���� Ÿ���� ���� �ʿ� �־��ٸ� Ÿ�� �ε����� �о��־�� ��ġ�� Ƣ�� ����
+                // [수정] 런타임에 스킬 추가 시, 현재 타겟이 더미 쪽에 있었다면 타겟 인덱스도 밀어주어야 위치가 튀지 않음
                 if (_targetIndex >= insertIndex)
                 {
                     _targetIndex++;
-                    _targetPosX = -1 * (_targetIndex * _iconWidth);
+                    _targetPosX = GetTargetPosX(_targetIndex);
                     _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
                 }
             }
@@ -178,7 +179,7 @@ namespace UI.PlayerView
         {
             if (!_configMap.TryGetValue(skill, out var prefab) || prefab == null)
             {
-                throw new InvalidOperationException($"[SkillManager] Prefab not found for {skill}. Inspector�� Ȯ���ϼ���.");
+                throw new InvalidOperationException($"[SkillManager] Prefab not found for {skill}. Inspector를 확인하세요.");
             }
 
             var instance = Instantiate(prefab, _iconGroup, false);
@@ -189,10 +190,10 @@ namespace UI.PlayerView
 
         private int FindSmartTargetIndex(SkillType targetSkill)
         {
-            // [����] ���������� ƨ��� ���� ���� ���� '���� �ε��� ����'���� ���� Ž���Ͽ� ������ ���� ����
+            // [수정] 역방향으로 튕기는 것을 막기 위해 '현재 인덱스 이후'에서 먼저 탐색하여 정방향 진행 유도
             int forwardIndex = _icons.FindIndex(_targetIndex, x => x.SkillType == targetSkill);
 
-            // ���� ��ġ ���Ŀ� ���ٸ� ó������ �ٽ� Ž��
+            // 현재 위치 이후에 없다면 처음부터 다시 탐색
             int basicIndex = forwardIndex != -1 ? forwardIndex : _icons.FindIndex(x => x.SkillType == targetSkill);
 
             if (basicIndex == -1) return -1;
@@ -211,10 +212,21 @@ namespace UI.PlayerView
         private void ForceResetToStartIndex()
         {
             _targetIndex = 0;
-            _targetPosX = 0;
+            _targetPosX = GetTargetPosX(_targetIndex);
 
             _iconGroup.anchoredPosition = new Vector2(_targetPosX, _iconGroup.anchoredPosition.y);
 
+        }
+
+        private void RefreshStartPosition()
+        {
+            _startPosX = _iconGroup.anchoredPosition.x;
+            _targetPosX = GetTargetPosX(_targetIndex);
+        }
+
+        private float GetTargetPosX(int targetIndex)
+        {
+            return _startPosX - targetIndex * _iconWidth;
         }
     }
 }
