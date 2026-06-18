@@ -33,10 +33,9 @@ namespace UI.PlayerView
             if (_relics.Any(rUI => rUI.ID == relicData.RelicNumber))
                 return;
 
-            var relicUI = Instantiate(_relicPrefab);
+            var relicUI = Instantiate(_relicPrefab, _transform, false);
 
             relicUI.Initialize(relicData);
-            relicUI.GetComponent<RectTransform>().SetParent(_transform);
 
             _relics.Add(relicUI);
 
@@ -47,8 +46,7 @@ namespace UI.PlayerView
                     if (_seal)
                         Destroy(_seal);
 
-                    _seal = Instantiate(_sealPrefab);
-                    _seal.GetComponent<RectTransform>().SetParent(_transform);
+                    _seal = Instantiate(_sealPrefab, _transform, false);
                 }
 
                 _seal.SetCount(_relics.Count - _maxRelicCount);

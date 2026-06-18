@@ -1,7 +1,7 @@
+using System;
 using Infrastructure;
 using UnityEngine;
 using World;
-using System;
 
 namespace Actors.Monsters.Bosses
 {
@@ -9,6 +9,8 @@ namespace Actors.Monsters.Bosses
     [RequireComponent(typeof(Rigidbody2D), typeof(Projectile))]
     public class FallingStone : MonoBehaviour
     {
+        [SerializeField, Min(0.01f)] private float _scale = 1f;
+
         public event Action GroundReached;
         private bool _hasReachedGround;
 
@@ -25,6 +27,7 @@ namespace Actors.Monsters.Bosses
             GetComponent<Rigidbody2D>().gravityScale = gravityScale;
             GetComponent<Projectile>().Initialize(platformManager, exclusionTags);
 
+            transform.localScale = Vector3.one * _scale;
             return this;
         }
 

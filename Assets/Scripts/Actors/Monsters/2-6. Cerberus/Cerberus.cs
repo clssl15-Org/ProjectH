@@ -250,20 +250,38 @@ namespace Actors.Monsters.Bosses
                         .OnOpening(() => monster.AudioPlayer.Play("AmbushAttack_Out")),
                         after: new(ambush_attack_animOut_soundDelay)
                     )
+                    .AddComponent(
+                        new Do(true, () => monster.SetBodyVisible(false)),
+                        after: new(ambush_attack_animOut)
+                    )
+                    .AddDelay(
+                        0f,
+                        out var ambush_hideBody,
+                        after: new(ambush_attack_animOut)
+                    )
                     .AddDelay(
                         monster._ambushReadyTime,
                         out var ambush_attack_await,
-                        after: new(ambush_attack_animOut)
+                        after: new(ambush_hideBody)
+                    )
+                    .AddComponent(
+                        new Do(true, () => monster.SetBodyVisible(true)),
+                        after: new(ambush_attack_await)
+                    )
+                    .AddDelay(
+                        0f,
+                        out var ambush_showBody,
+                        after: new(ambush_attack_await)
                     )
                     .AddAnimationComponent(
                         "AmbushAttackIn",
                         out var ambush_attack_animIn,
-                        after: new(ambush_attack_await)
+                        after: new(ambush_showBody)
                     )
                     .AddDelay(
                         0.0f, // HACK: 사운드 타이밍
                         out var ambush_attack_animIn_soundDelay,
-                        after: new(ambush_attack_await))
+                        after: new(ambush_showBody))
                     .AddComponent(new Do(true)
                         .OnOpening(() => monster.AudioPlayer.Play("AmbushAttack_In")),
                         after: new(ambush_attack_animIn_soundDelay)
@@ -271,7 +289,7 @@ namespace Actors.Monsters.Bosses
                     .AddDelay(
                         0.4f,
                         out var ambush_attack,
-                        after: new(ambush_attack_await)
+                        after: new(ambush_showBody)
                     )
                     .AddComponent(
                         new Do(true, () => monster._ambushAttackManager.ShowSmokeEffect()),
@@ -311,6 +329,12 @@ namespace Actors.Monsters.Bosses
         public void InitializePlayer(IPlayer player)
         {
             _player = player;
+        }
+
+        private void SetBodyVisible(bool visible)
+        {
+            if (SpriteRenderer)
+                SpriteRenderer.enabled = visible;
         }
 
         protected override void Awake()
@@ -393,7 +417,11 @@ namespace Actors.Monsters.Bosses
         }
 
         // 사망 후 삭제 방지
-        internal override void Die() => Die(false);
+        internal override void Die()
+        {
+            SetBodyVisible(true);
+            Die(false);
+        }
 
         protected override string GetDisplayContent()
         {

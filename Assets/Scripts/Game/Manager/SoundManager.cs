@@ -10,8 +10,8 @@ namespace Game.Management
         public event Action<int> BgmChanged;
         public event Action<int> SfxChanged;
 
-        public int BgmVolume { get; private set; } = 70;
-        public int SfxVolume { get; private set; } = 70;
+        [field: SerializeField] public int BgmVolume { get; private set; } = 50;
+        [field: SerializeField] public int SfxVolume { get; private set; } = 70;
 
         [SerializeField] private bool _setListenerIfPossible = true;
         private BlackboxHandle _blackbox;
@@ -55,19 +55,19 @@ namespace Game.Management
                 var togglable = listeners.FirstOrDefault(l => l.gameObject.activeInHierarchy);
                 if (togglable)
                 {
-                    Debug.Log($"[SoundManager] '{togglable.name}'�� Listener�� Ȱ��ȭ�մϴ�.",
+                    Debug.Log($"[SoundManager] '{togglable.name}'의 Listener를 활성화합니다.",
                         this);
 
                     togglable.enabled = true;
                     return;
                 }
 
-                Debug.LogWarning("[SoundManager] ��Ȱ��ȭ�� ��ü�� Listener�� �����մϴ�. �Ҹ��� ���������� ��µ��� ���� �� �ֽ��ϴ�.",
+                Debug.LogWarning("[SoundManager] 비활성화된 객체에 Listener가 존재합니다. 소리가 정상적으로 출력되지 않을 수 있습니다.",
                     this);
                 return;
             }
 
-            Debug.Log("[SoundManager] ��ȿ�� Listener�� �����Ƿ� �� Audio Listener ��ü�� �����մϴ�.",
+            Debug.Log("[SoundManager] 유효한 Listener가 없으므로 새 Audio Listener 객체를 생성합니다.",
                 this);
 
             new GameObject("Audio Listener", typeof(AudioListener));

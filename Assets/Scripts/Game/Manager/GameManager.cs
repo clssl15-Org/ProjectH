@@ -46,8 +46,8 @@ namespace Game
                     _soundManager.SfxChanged -= value;
             }
         }
-        public override int BgmVolume => _soundManager != null ? _soundManager.BgmVolume : 50;
-        public override int SfxVolume => _soundManager != null ? _soundManager.SfxVolume : 70;
+        public override int BgmVolume => _soundManager.BgmVolume;
+        public override int SfxVolume => _soundManager.SfxVolume;
 
         public override bool IsStage3Reached { get; set; }
         public override bool IsGameCleared { get; set; }
