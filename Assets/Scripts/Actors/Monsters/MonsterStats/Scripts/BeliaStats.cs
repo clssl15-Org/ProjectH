@@ -7,8 +7,8 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Belia Stats", menuName = "Project H/Monster Stats/Belia Stats")]
-    public class BeliaStats : MonsterStats
+    [CreateAssetMenu(fileName = "Velia Stats", menuName = "Project H/Monster Stats/Velia Stats")]
+    public class VeliaStats : MonsterStats
     {
         [Header("특수 공격")]
         [SerializeField, Min(0)] private int _slashAttackPower = 1;
@@ -25,13 +25,13 @@ namespace Actors.Monsters
         private T InvalidProperty<T>(string propertyName)
         {
             throw new InvalidOperationException(
-                $"'{propertyName}' property of {nameof(BeliaStats)} is not supported. Use specific properties instead.");
+                $"'{propertyName}' property of {nameof(VeliaStats)} is not supported. Use specific properties instead.");
         }
 
         
 #if UNITY_EDITOR
-        [CustomEditor(typeof(BeliaStats)), CanEditMultipleObjects]
-        protected class BeliaStatsEditor : MonsterStatsEditor
+        [CustomEditor(typeof(VeliaStats)), CanEditMultipleObjects]
+        protected class VeliaStatsEditor : MonsterStatsEditor
         {
             public override void OnInspectorGUI()
             {
@@ -42,7 +42,7 @@ namespace Actors.Monsters
                     "_attackCooltime",
                 };
 
-                SetSpeedProperty((BeliaStats)target, excludings);
+                SetSpeedProperty((VeliaStats)target, excludings);
 
                 DrawPropertiesExcluding(serializedObject, excludings.ToArray());
                 serializedObject.ApplyModifiedProperties();

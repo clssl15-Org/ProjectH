@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 1-3. Stage0_Arrival_Reentry
+  m_EditorClassIdentifier: 
+  _title: Stage0_Arrival_Reentry
+  _language: 3
+  _showOneRandomLine: 1
+  _targetStyle: 2
+  _lines:
+  - Character: 2
+    Dialogue: "You pushed a bit closer to Lumenveil this time, didn't you? …Be careful."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Ah… you still don't remember. It's fine. We just start over."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "You’ve adapted already."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "You were a bit faster this time."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Dying… you’ve grown used to it by now, haven't you?"
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "I suppose I don't even need to tell you anymore."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Which loop was this again...?"
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "(No Response)"
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

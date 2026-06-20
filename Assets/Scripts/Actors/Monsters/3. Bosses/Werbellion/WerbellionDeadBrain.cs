@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Werbellion
+    public partial class Verbelion
     {
-        private class WerbellionDeadBrain : BTNode<IMonsterInternal, MonsterBlackboard>
+        private class VerbelionDeadBrain : BTNode<IMonsterInternal, MonsterBlackboard>
         {
             // Internal
-            private Werbellion Werbellion => (Werbellion)Owner;
+            private Verbelion Verbelion => (Verbelion)Owner;
 
             private readonly string _isOnAir;
             private readonly string _deadAir;
@@ -18,7 +18,7 @@ namespace Actors.Monsters.Bosses
 
 
             // Content
-            public WerbellionDeadBrain(
+            public VerbelionDeadBrain(
                 string isOnAir = "IsOnAir",
                 string deadAir = "DeadAir",
                 string deadGround = "DeadGround")
@@ -47,8 +47,8 @@ namespace Actors.Monsters.Bosses
                     actionToDo = _deadAir;
 
                     var targetPosition = new Vector2(
-                        Werbellion.transform.position.x,
-                        Werbellion._groundPoints[0].transform.position.y);
+                        Verbelion.transform.position.x,
+                        Verbelion._groundPoints[0].transform.position.y);
 
                     inputs = new object[]
                     { 

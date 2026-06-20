@@ -6,7 +6,7 @@ using World;
 namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(MonsterAudioPlayer))]
-    public class WerbellionPortalAttackSpawner : MonoBehaviour
+    public class VerbelionPortalAttackSpawner : MonoBehaviour
     {
         [SerializeField] private GameObject _effect;
         [SerializeField] private KinematicProjectile _projectilePrefab;
@@ -31,7 +31,7 @@ namespace Actors.Monsters.Bosses
 
         private void Awake() => _audioPlayer = GetComponent<MonsterAudioPlayer>();
 
-        public WerbellionPortalAttackSpawner Initialize(
+        public VerbelionPortalAttackSpawner Initialize(
             PlatformManager platformManager,
             Func<Vector2> getTargetPosition)
         {
@@ -41,7 +41,7 @@ namespace Actors.Monsters.Bosses
             return this;
         }
 
-        public WerbellionPortalAttackSpawner SetInitializer(params Action<KinematicProjectile>[] initializers)
+        public VerbelionPortalAttackSpawner SetInitializer(params Action<KinematicProjectile>[] initializers)
         {
             _initializers = initializers;
             return this;
@@ -53,15 +53,15 @@ namespace Actors.Monsters.Bosses
         {
             if (!_projectilePrefab)
                 throw new InvalidOperationException(
-                    $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_projectilePrefab)}을(를) 가지고 있어야 합니다.");
+                    $"{nameof(VerbelionPortalAttackSpawner)}은(는) {nameof(_projectilePrefab)}을(를) 가지고 있어야 합니다.");
 
             if (!_platformManager)
                 throw new InvalidOperationException(
-                    $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_platformManager)}을(를) 가지고 있어야 합니다.");
+                    $"{nameof(VerbelionPortalAttackSpawner)}은(는) {nameof(_platformManager)}을(를) 가지고 있어야 합니다.");
 
             if (_getTargetPosition == null && !_target)
                 throw new InvalidOperationException(
-                    $"{nameof(WerbellionPortalAttackSpawner)}은(는) {nameof(_getTargetPosition)} 혹은 {nameof(_target)} " +
+                    $"{nameof(VerbelionPortalAttackSpawner)}은(는) {nameof(_getTargetPosition)} 혹은 {nameof(_target)} " +
                     $"둘 중 하나를 가지고 있어야 합니다.");
 
             if (_configuration)

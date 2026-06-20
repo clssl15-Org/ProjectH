@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 4-4. Stage3_TwinBoss_Reentry
+  m_EditorClassIdentifier: 
+  _title: Stage3_TwinBoss_Reentry
+  _language: 3
+  _showOneRandomLine: 1
+  _targetStyle: 2
+  _lines:
+  - Character: 4
+    Dialogue: "Here you are again. How long will you hold out this time?"
+    _overrides:
+      Name: "Therion"
+      Portrait: {fileID: 0}
+  - Character: 3
+    Dialogue: "Repetition is not salvation."
+    _overrides:
+      Name: "Velia"
+      Portrait: {fileID: 0}
+  - Character: 4
+    Dialogue: "Still haven't given up, Knight?"
+    _overrides:
+      Name: "Therion"
+      Portrait: {fileID: 0}
+  - Character: 3
+    Dialogue: "The light has already failed time and time again."
+    _overrides:
+      Name: "Velia"
+      Portrait: {fileID: 0}

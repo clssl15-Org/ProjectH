@@ -5,8 +5,8 @@ namespace World
         None,
         Player,
         Rubiel,
-        Belia,
+        Velia,
         DarkTherion,
-        Werbellion,
+        Verbelion,
     }
 }

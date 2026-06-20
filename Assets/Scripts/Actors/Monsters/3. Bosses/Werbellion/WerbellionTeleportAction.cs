@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Werbellion
+    public partial class Verbelion
     {
-        private class WerbellionTeleportComponent : MonsterActionComponent
+        private class VerbelionTeleportComponent : MonsterActionComponent
         {
             protected override void OnEnter(object position)
             {
-                var werbellion = (Werbellion)Owner;
+                var Verbelion = (Verbelion)Owner;
                 Vector2 targetPosition;
 
                 if (position is Vector3 targetPositionV3)
@@ -18,18 +18,18 @@ namespace Actors.Monsters.Bosses
                     targetPosition = targetPositionV2;
                 else
                     throw new System.ArgumentException(
-                        $"WerbellionTeleportComponent: {nameof(position)}은(는) Vector2(3) 형식이어야 하지만" +
+                        $"VerbelionTeleportComponent: {nameof(position)}은(는) Vector2(3) 형식이어야 하지만" +
                         $"'{position?.GetType().Name ?? "null"}'형식이 입력되었습니다.");
 
-                werbellion.transform.position = targetPosition;
-                werbellion.transform.localScale = new Vector3
+                Verbelion.transform.position = targetPosition;
+                Verbelion.transform.localScale = new Vector3
                 {
-                    x = werbellion.transform.position.x
-                        - werbellion.DetectedPlayer.transform.position.x
+                    x = Verbelion.transform.position.x
+                        - Verbelion.DetectedPlayer.transform.position.x
                         > 0 ? -1: 1,
                     y = 1,
                     z = 1,
-                } * werbellion.transform.localScale.z;
+                } * Verbelion.transform.localScale.z;
 
                 Interrupt(InterruptType.Completed);
             }

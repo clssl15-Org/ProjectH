@@ -12,7 +12,7 @@ using UnityEditor;
 namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction), typeof(MonsterAudioPlayer))]
-    public partial class Werbellion : Monster<WerbellionStats>, IBoss, IPlayerInitializable
+    public partial class Verbelion : Monster<VerbelionStats>, IBoss, IPlayerInitializable
     {
         // Front
         public enum AttackMode
@@ -29,7 +29,7 @@ namespace Actors.Monsters.Bosses
         private const string IsOnAir = nameof(IsOnAir);
 
 
-        [Header("Werbellion")]
+        [Header("Verbelion")]
         [SerializeField] private Transform[] _groundPoints;
         [SerializeField] private Transform[] _airPoints;
         [Space]
@@ -46,7 +46,7 @@ namespace Actors.Monsters.Bosses
         [SerializeField] private Transform[] _spikeSpawnPoints;
         [Space]
         [SerializeField] private GameObject _portalAttackSpawnerParent;
-        [SerializeField] private WerbellionPortalAttackSpawner[] _portalAttackSpawners;
+        [SerializeField] private VerbelionPortalAttackSpawner[] _portalAttackSpawners;
         [Space]
         [SerializeField] private Weapon _stunAttackweapon;
         [SerializeField, Min(0)] private float _stunAttackActiveTiming;
@@ -70,13 +70,13 @@ namespace Actors.Monsters.Bosses
 
         internal override GameObject DetectedPlayer => _player?.gameObject;
         internal override PlatformDetector PlatformDetector => throw new InvalidOperationException(
-            $"{nameof(Werbellion)}은(는) '{nameof(PlatformDetector)}' 프로퍼티를 사용하지 않습니다.");
+            $"{nameof(Verbelion)}은(는) '{nameof(PlatformDetector)}' 프로퍼티를 사용하지 않습니다.");
 
 
         // Internal
-        private class WerbellionBrain : MonsterBrain
+        private class VerbelionBrain : MonsterBrain
         {
-            public WerbellionBrain(IMonsterInternal owner) : base(owner)
+            public VerbelionBrain(IMonsterInternal owner) : base(owner)
             {
                 Blackboard.Properties[IsAwake] = false;
                 Blackboard.Properties[IsOnAir] = false;
@@ -84,21 +84,21 @@ namespace Actors.Monsters.Bosses
                 AddChild(new Alive(opened: () => owner.Rigidbody.gravityScale = 0f)
                     .AddChild(new Idle("Spawn", IsAwake, haltOnActionEnd: false))
                     .AddChild(new Awaken(IsAwake)
-                        .AddChild(new WerbellionTeleportBrain())
-                        .AddChild(new WerbellionAttackBrain())
+                        .AddChild(new VerbelionTeleportBrain())
+                        .AddChild(new VerbelionAttackBrain())
                         .AddChild(new Await(
                             MonsterActionType.Idle,
                             owner.StatsInfo.AttackCooltime)
                         )
                     )
                 );
-                AddChild(new WerbellionDeadBrain());
+                AddChild(new VerbelionDeadBrain());
             }
         }
 
-        private class WerbellionActionController : MonsterActionController
+        private class VerbelionActionController : MonsterActionController
         {
-            public WerbellionActionController(Werbellion monster) : base(monster)
+            public VerbelionActionController(Verbelion monster) : base(monster)
             {
                 AddChild(new MonsterAction("Spawn")
                     .AddAnimationComponent(out var spawn)
@@ -115,7 +115,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new Do(true)
                         .OnOpening(() => monster.AudioPlayer.Play("TeleportIn"))
                     )
-                    .AddComponent(new WerbellionTeleportComponent(), after: new(teleportIn))
+                    .AddComponent(new VerbelionTeleportComponent(), after: new(teleportIn))
                     .AddAnimationComponent("TeleportOut", after: new(teleportIn), interruptPriority: InterruptPriority.High)
                     .AddComponent(new Do(true)
                         .OnOpening(() => monster.AudioPlayer.Play("TeleportOut")),
@@ -189,7 +189,7 @@ namespace Actors.Monsters.Bosses
                     .AddComponent(new Do(true)
                         .OnOpening(() => monster.AudioPlayer.Play("TeleportIn"))
                     )
-                    .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_a))
+                    .AddComponent(new VerbelionTeleportComponent(), after: new(portal_teleportIn_a))
                     .AddAnimationComponent("TeleportOut", out var portal_teleportOut_a, after: new(portal_teleportIn_a))
                     .AddComponent(new Do(true)
                         .OnOpening(() => monster.AudioPlayer.Play("TeleportOut")),
@@ -198,7 +198,7 @@ namespace Actors.Monsters.Bosses
 
                     // 공격
                     .AddAnimationComponent(after: new(portal_teleportOut_a))
-                    .AddComponent(new WerbellionPortalAttackAction(
+                    .AddComponent(new VerbelionPortalAttackAction(
                             monster.PlatformManager,
                             monster._portalAttackSpawnerParent,
                             monster._portalAttackSpawners,
@@ -214,7 +214,7 @@ namespace Actors.Monsters.Bosses
                         .OnOpening(() => monster.AudioPlayer.Play("TeleportIn")),
                         after: new(portal_attacked)
                     )
-                    .AddComponent(new WerbellionTeleportComponent(), after: new(portal_teleportIn_b))
+                    .AddComponent(new VerbelionTeleportComponent(), after: new(portal_teleportIn_b))
                     .AddAnimationComponent("TeleportOut", after: new(portal_teleportIn_b), interruptPriority: InterruptPriority.High)
                     .AddComponent(new Do(true)
                         .OnOpening(() => monster.AudioPlayer.Play("TeleportOut")),
@@ -246,7 +246,7 @@ namespace Actors.Monsters.Bosses
                 );
                 AddChild(new MonsterAction("DeadAir")
                     .AddAnimationComponent("TeleportIn", out var dead_teleportIn)
-                    .AddComponent(new WerbellionTeleportComponent(), after: new(dead_teleportIn))
+                    .AddComponent(new VerbelionTeleportComponent(), after: new(dead_teleportIn))
                     .AddAnimationComponent("TeleportOut", out var dead_teleportOut, after: new(dead_teleportIn))
                     .AddComponent(new Do(true, () => Owner.Rigidbody.gravityScale = 1f), after: new(dead_teleportOut))
                     .AddAnimationComponent("Dead", after: new(dead_teleportOut), interruptPriority: InterruptPriority.High)
@@ -272,7 +272,7 @@ namespace Actors.Monsters.Bosses
         {
             if (!_spikePrefab)
                 throw new InvalidOperationException(
-                    $"{nameof(Werbellion)}은(는) '{nameof(_spikePrefab)}'을(를) 가지고 있어야 합니다.");
+                    $"{nameof(Verbelion)}은(는) '{nameof(_spikePrefab)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
             AudioPlayer = GetComponent<MonsterAudioPlayer>();
@@ -321,10 +321,10 @@ namespace Actors.Monsters.Bosses
                     .SetInitializer(p => p.GetComponent<Weapon>().AttackPower = StatsInfo.PortalAttackPower);
             }
 
-            ActionController = new WerbellionActionController(this);
+            ActionController = new VerbelionActionController(this);
             ActionController.Enter();
 
-            Brain = new WerbellionBrain(this);
+            Brain = new VerbelionBrain(this);
             StandaloneHitBrain.DoKnockback = false;
 
             // 시작 애니메이션 지연 방지
@@ -382,13 +382,13 @@ namespace Actors.Monsters.Bosses
         //internal override void Die() => Die(false);
 
 #if UNITY_EDITOR
-        [CustomEditor(typeof(Werbellion))]
-        private class WerbellionEditor : Editor
+        [CustomEditor(typeof(Verbelion))]
+        private class VerbelionEditor : Editor
         {
             public override void OnInspectorGUI()
             {
                 base.OnInspectorGUI();
-                var target = (Werbellion)base.target;
+                var target = (Verbelion)base.target;
 
                 if (!target._autoAwake && GUILayout.Button("Awake"))
                     target.Commence();

@@ -285,9 +285,9 @@ namespace Game.Stage
                     {
                         Character.Player => Player?.transform.position ?? default,
                         Character.Rubiel => Rubiel?.AnchorPos ?? default,
-                        Character.Belia => FindAnyObjectByType<Belia>()?.transform.position ?? default,
+                        Character.Velia => FindAnyObjectByType<Velia>()?.transform.position ?? default,
                         Character.DarkTherion => FindAnyObjectByType<DarkTherion>()?.transform.position ?? default,
-                        Character.Werbellion => FindAnyObjectByType<Werbellion>()?.transform.position ?? default,
+                        Character.Verbelion => FindAnyObjectByType<Verbelion>()?.transform.position ?? default,
 
                         _ => throw new InvalidOperationException($"[StageManager] 캐릭터 {character}의 타입이 유효하지 않습니다.")
                     });

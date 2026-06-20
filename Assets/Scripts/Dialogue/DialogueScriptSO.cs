@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure;
 using UnityEngine;
 
 namespace Dialogue
@@ -8,6 +9,8 @@ namespace Dialogue
     public class DialogueScriptSO : ScriptableObject, IReadOnlyList<DialogueLine>
     {
         [SerializeField] private string _title;
+        [SerializeField] private Language _language;
+        [Space]
         [SerializeField] private bool _showOneRandomLine;
         [SerializeField] private DialogueStyle _targetStyle;
         [Space]
@@ -23,7 +26,9 @@ namespace Dialogue
 
         public IEnumerator<DialogueLine> GetEnumerator()
         {
-            if (Lines == null) yield break;
+            if (Lines == null)
+                yield break;
+
             foreach (var line in Lines)
                 yield return line;
         }

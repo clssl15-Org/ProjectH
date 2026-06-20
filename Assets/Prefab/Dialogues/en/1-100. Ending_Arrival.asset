@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 1-100. Ending_Arrival
+  m_EditorClassIdentifier: 
+  _title: Ending_Arrival
+  _language: 3
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 2
+    Dialogue: "……It is over."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "Is it finally… safe now?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Yes."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "The frozen time is flowing once again."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "I can feel it… the light, the wind."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "I see."
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Let us return to the village of light."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "…This time, we will not be coming back."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 2-2. Stage1_Arrival_Reentry
+  m_EditorClassIdentifier: 
+  _title: Stage1_Arrival_Reentry
+  _language: 3
+  _showOneRandomLine: 1
+  _targetStyle: 2
+  _lines:
+  - Character: 2
+    Dialogue: "The darkness doesn't recede easily."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "The monsters are gathering once more."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Stay sharp, {player}."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "We must venture deeper this time."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "…Let's try to hold out a little longer this run."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "(No Response)"
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

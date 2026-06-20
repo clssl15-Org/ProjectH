@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Belia
+    public partial class Velia
     {
-        private class BeliaCurvedAreaAttackAction : MonsterActionComponent
+        private class VeliaCurvedAreaAttackAction : MonsterActionComponent
         {
             public float EffectLength { get; set; }
 
@@ -20,7 +20,7 @@ namespace Actors.Monsters.Bosses
 
             private MonsterAnimationPlayer AnimationPlayer => MonsterAction.Owner.AnimationPlayer;
 
-            public BeliaCurvedAreaAttackAction(
+            public VeliaCurvedAreaAttackAction(
                 GameObject curveEffectPrefab,
                 Vector2 curveEffectWorldPosition,
                 float effectLength = 1)

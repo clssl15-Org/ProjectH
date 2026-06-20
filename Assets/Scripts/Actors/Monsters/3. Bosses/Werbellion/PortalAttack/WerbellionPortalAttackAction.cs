@@ -8,17 +8,17 @@ using Scp = Infrastructure.StateMachines.Scp;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Werbellion
+    public partial class Verbelion
     {
-        internal class WerbellionPortalAttackAction : MonsterActionComponent
+        internal class VerbelionPortalAttackAction : MonsterActionComponent
         {
             private Sequence _sequence;
             private float _elapsedTime;
 
-            public WerbellionPortalAttackAction(
+            public VerbelionPortalAttackAction(
                 PlatformManager _,
                 GameObject spawnersParent,
-                IEnumerable<WerbellionPortalAttackSpawner> spawners,
+                IEnumerable<VerbelionPortalAttackSpawner> spawners,
                 Func<Vector2> __,
                 float spawnGap = 0.7f)
             {

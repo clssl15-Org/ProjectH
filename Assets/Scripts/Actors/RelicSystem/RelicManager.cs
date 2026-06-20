@@ -448,6 +448,13 @@ public class RelicManager : MonoBehaviour
             return "%";
 
         int start = atIndex + 1;
+        bool hasLeadingSpace = false;
+        while (start < effect.Length && effect[start] == ' ')
+        {
+            hasLeadingSpace = true;
+            start++;
+        }
+
         int end = start;
         while (end < effect.Length)
         {
@@ -457,7 +464,12 @@ public class RelicManager : MonoBehaviour
             end++;
         }
 
-        return end > start ? effect.Substring(start, end - start) : "%";
+        if (end <= start)
+            return "%";
+
+        return hasLeadingSpace
+            ? $" {effect.Substring(start, end - start)}"
+            : effect.Substring(start, end - start);
     }
 
     private static string FormatValue(float value)

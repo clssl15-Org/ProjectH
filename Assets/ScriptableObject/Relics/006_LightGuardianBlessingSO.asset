@@ -14,12 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicNumber: 6
   icon: {fileID: 21300000, guid: 729cbdbf9502d06438f1fe067e0b3e65, type: 3}
-  relicName: "\uBE5B\uC758 \uC218\uD638\uC790\uC758 \uCD95\uBCF5 "
-  description: "\uBE5B\uC758 \uC218\uD638\uC790\uAC00 \uB0A8\uAE34 \uCD95\uBCF5\uC758
-    \uD754\uC801. \n\uC804\uD22C \uC18D\uC5D0\uC11C\uB3C4 \uC0DD\uBA85\uC774 \uB418\uC0B4\uC544\uB098\uB294
-    \uAE30\uC801\uC744 \uBD80\uC5EC\uD55C\uB2E4.\r"
-  nomalEffect: "\uBAAC\uC2A4\uD130 \uCC98\uCE58 \uC2DC \uCCB4\uB825 @%$
-    \uD68C\uBCF5\r"
+  localizedDescriptions:
+  - language: 2
+    relicName: "\uBE5B\uC758 \uC218\uD638\uC790\uC758 \uCD95\uBCF5 "
+    description: "\uBE5B\uC758 \uC218\uD638\uC790\uAC00 \uB0A8\uAE34 \uCD95\uBCF5\uC758
+      \uD754\uC801. \n\uC804\uD22C \uC18D\uC5D0\uC11C\uB3C4 \uC0DD\uBA85\uC774 \uB418\uC0B4\uC544\uB098\uB294
+      \uAE30\uC801\uC744 \uBD80\uC5EC\uD55C\uB2E4.\r"
+    nomalEffect: "\uBAAC\uC2A4\uD130 \uCC98\uCE58 \uC2DC \uCCB4\uB825 @%$
+      \uD68C\uBCF5\r"
+  - language: 3
+    relicName: "Blessing of the Lumen Guardian"
+    description: "A trace of the blessing left behind by the Lumen Guardian. It grants a miracle that rekindles life even in the midst of battle."
+    nomalEffect: "Restores @%$ HP upon defeating a monster"
   baseValue: 2
   coinFlipValue: 4
   canStack: 1

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public class WerbellionPortalAttackProjectile : KinematicProjectile
+    public class VerbelionPortalAttackProjectile : KinematicProjectile
     {
         [SerializeField] string _explodeAnimName = "PortalExploding";
 

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 2-5. Stage1_Boss_Passed_2
+  m_EditorClassIdentifier: 
+  _title: Stage1_Boss_Passed_2
+  _language: 3
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 1
+    Dialogue: "What… was that thing?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "A creature left behind in the Ruined Forest. It was devoured by darkness, leaving almost nothing of its original form."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Ever since the Prince of Lumengard fell, this forest has twisted right along with him."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "The Prince?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Therion."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "The last prince of Lumengard."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "He… caused all of this?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "For now, leave it at that. Right now, moving forward is our only priority."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

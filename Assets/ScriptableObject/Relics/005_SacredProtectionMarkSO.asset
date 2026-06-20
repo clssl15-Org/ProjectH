@@ -14,11 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicNumber: 5
   icon: {fileID: 21300000, guid: cc37c1a712eb9d24fb1c1571c3f7fe9c, type: 3}
-  relicName: "\uC131\uC5ED\uC758 \uC218\uD638\uBB38\uC591"
-  description: "\uC131\uC5ED\uC744 \uC9C0\uD0A4\uB358 \uAE30\uC0AC\uB2E8\uC774 \uC0C8\uAE34
-    \uBCF4\uD638\uC758 \uAC01\uC778. \n\uBB38\uC591\uC5D0\uC11C \uD750\uB974\uB294
-    \uBE5B\uC774 \uB2F9\uC2E0\uC758 \uC0DD\uBA85\uB825\uC744 \uAC15\uD654\uD55C\uB2E4.\r\n"
-  nomalEffect: "\uCD5C\uB300\uCCB4\uB825 @%$ \uC99D\uAC00"
+  localizedDescriptions:
+  - language: 2
+    relicName: "\uC131\uC5ED\uC758 \uC218\uD638\uBB38\uC591"
+    description: "\uC131\uC5ED\uC744 \uC9C0\uD0A4\uB358 \uAE30\uC0AC\uB2E8\uC774 \uC0C8\uAE34
+      \uBCF4\uD638\uC758 \uAC01\uC778. \n\uBB38\uC591\uC5D0\uC11C \uD750\uB974\uB294
+      \uBE5B\uC774 \uB2F9\uC2E0\uC758 \uC0DD\uBA85\uB825\uC744 \uAC15\uD654\uD55C\uB2E4.\r\n"
+    nomalEffect: "\uCD5C\uB300\uCCB4\uB825 @%$ \uC99D\uAC00"
+  - language: 3
+    relicName: "Warding Glyph of the Sanctuary"
+    description: "A protective imprint engraved by the knights who once guarded the sanctuary. The light flowing from the glyph empowers your very life force."
+    nomalEffect: "Increases Max HP by @%$"
   baseValue: 10
   coinFlipValue: 20
   canStack: 1

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 1-6. Stage0_FirstSkillAcquire
+  m_EditorClassIdentifier: 
+  _title: Stage0_FirstSkillAcquire
+  _language: 3
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 2
+    Dialogue: "This is the power you once wielded."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Press the [E] key to change the form of your power, and click the [Mouse Wheel] to unleash it."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Scroll the wheel, and the unstable mana will fluctuate like a roulette. If fortune favors you, you might deal devastating damage."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "It's an anomaly born from unstable mana, but for now, we need this power."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

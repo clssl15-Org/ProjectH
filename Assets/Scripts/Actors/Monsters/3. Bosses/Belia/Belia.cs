@@ -11,7 +11,7 @@ using UnityEditor;
 namespace Actors.Monsters.Bosses
 {
     [RequireComponent(typeof(StandaloneHitAction), typeof(MonsterAudioPlayer))]
-    public partial class Belia : Monster<BeliaStats>, ITwinBoss
+    public partial class Velia : Monster<VeliaStats>, ITwinBoss
     {
         // Front
         public enum AttackMode
@@ -22,7 +22,7 @@ namespace Actors.Monsters.Bosses
             Dash
         }
 
-        [Header("Belia")]
+        [Header("Velia")]
         [Space]
         [SerializeField] private AttackMode _attackMode = AttackMode.Any;
         [SerializeField, Min(0)] private float _targetPlayerRange = 5f;
@@ -76,9 +76,9 @@ namespace Actors.Monsters.Bosses
 
 
         // Internal
-        private class BeliaBrain : MonsterBrain
+        private class VeliaBrain : MonsterBrain
         {
-            public BeliaBrain(Belia owner) : base(owner)
+            public VeliaBrain(Velia owner) : base(owner)
             {
                 Blackboard.Properties[ITwinBoss.IsAwake] = false;
 
@@ -99,7 +99,7 @@ namespace Actors.Monsters.Bosses
                                 .AddChild(new Adjusting(MonsterActionType.Walk))
                                 .AddChild(new DeadEnd())
                             )
-                            .AddChild(new BeliaAttackBrain())
+                            .AddChild(new VeliaAttackBrain())
                         )
                         .AddChild(new NotValidPlatform())
                     )
@@ -109,9 +109,9 @@ namespace Actors.Monsters.Bosses
             }
         }
 
-        private class BeliaActionController : MonsterActionController
+        private class VeliaActionController : MonsterActionController
         {
-            public BeliaActionController(Belia monster) : base(monster)
+            public VeliaActionController(Velia monster) : base(monster)
             {
                 AddChild(new MonsterAction(MonsterActionType.Idle)
                     .AddAnimationComponent()
@@ -136,7 +136,7 @@ namespace Actors.Monsters.Bosses
                         "CurvedAreaAttackStart",
                         out var curvedAreaAttackEnter
                     )
-                    .AddComponent(new BeliaCurvedAreaAttackAction(
+                    .AddComponent(new VeliaCurvedAreaAttackAction(
                         monster._curveEffectPrefab,
                         monster._curveEffectWorldPosition,
                         monster._curveEffectLength)
@@ -185,7 +185,7 @@ namespace Actors.Monsters.Bosses
                         .SetInterruptPriotiy(InterruptPriority.Low),
                         after: new(dashAttack_delay)
                     )
-                    .AddComponent(new BeliaDashAttackAction(
+                    .AddComponent(new VeliaDashAttackAction(
                         monster._dashForce),
                         after: new(dashAttack_delay)
                     )
@@ -253,7 +253,7 @@ namespace Actors.Monsters.Bosses
         {
             if (!_curveEffectPrefab)
                 throw new InvalidOperationException(
-                    $"{nameof(Belia)}은(는) '{nameof(_curveEffectPrefab)}'을(를) 가지고 있어야 합니다.");
+                    $"{nameof(Velia)}은(는) '{nameof(_curveEffectPrefab)}'을(를) 가지고 있어야 합니다.");
 
             base.Awake();
             AudioPlayer = GetComponent<MonsterAudioPlayer>();
@@ -289,10 +289,10 @@ namespace Actors.Monsters.Bosses
                     FormatLogMessage($"{nameof(_dashWeapon)}이(가) 등록되지 않았으므로 공격력 설정이 반영되지 않았습니다."),
                     this);
 
-            ActionController = new BeliaActionController(this);
+            ActionController = new VeliaActionController(this);
             ActionController.Enter();
 
-            Brain = new BeliaBrain(this);
+            Brain = new VeliaBrain(this);
 
 
             // ------- Debug -------
@@ -345,13 +345,13 @@ namespace Actors.Monsters.Bosses
 
 
 #if UNITY_EDITOR
-        [CustomEditor(typeof(Belia))]
-        private class BeliaEditor : Editor
+        [CustomEditor(typeof(Velia))]
+        private class VeliaEditor : Editor
         {
             public override void OnInspectorGUI()
             {
                 base.OnInspectorGUI();
-                var target = (Belia)base.target;
+                var target = (Velia)base.target;
 
                 if (!target._autoAwake && GUILayout.Button("Awake"))
                     target.Commence();

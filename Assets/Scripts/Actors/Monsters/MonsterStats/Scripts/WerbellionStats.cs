@@ -7,8 +7,8 @@ using UnityEditor;
 
 namespace Actors.Monsters
 {
-    [CreateAssetMenu(fileName = "Werbellion Stats", menuName = "Project H/Monster Stats/Werbellion Stats")]
-    public class WerbellionStats : MonsterStats
+    [CreateAssetMenu(fileName = "Verbelion Stats", menuName = "Project H/Monster Stats/Verbelion Stats")]
+    public class VerbelionStats : MonsterStats
     {
         [Header("특수 공격")]
         [SerializeField, Min(0)] private int _punchAttackPower = 1;
@@ -32,13 +32,13 @@ namespace Actors.Monsters
         private T InvalidProperty<T>(string propertyName)
         {
             throw new InvalidOperationException(
-                $"'{propertyName}' property of {nameof(WerbellionStats)} is not supported. Use specific properties instead.");
+                $"'{propertyName}' property of {nameof(VerbelionStats)} is not supported. Use specific properties instead.");
         }
 
         
 #if UNITY_EDITOR
-        [CustomEditor(typeof(WerbellionStats)), CanEditMultipleObjects]
-        protected class WerbellionStatsEditor : MonsterStatsEditor
+        [CustomEditor(typeof(VerbelionStats)), CanEditMultipleObjects]
+        protected class VerbelionStatsEditor : MonsterStatsEditor
         {
             public override void OnInspectorGUI()
             {
@@ -48,7 +48,7 @@ namespace Actors.Monsters
                     "_attackPower",
                 };
 
-                SetSpeedProperty((WerbellionStats)target, excludings);
+                SetSpeedProperty((VerbelionStats)target, excludings);
 
                 DrawPropertiesExcluding(serializedObject, excludings.ToArray());
                 serializedObject.ApplyModifiedProperties();

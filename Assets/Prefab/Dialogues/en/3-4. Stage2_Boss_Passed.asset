@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 3-4. Stage2_Boss_Passed
+  m_EditorClassIdentifier: 
+  _title: Stage2_Boss_Passed
+  _language: 3
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 2
+    Dialogue: "…It is over."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "I can feel it. The path leading to the castle has opened."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Lumenveil Castle… it is nothing like the places you have faced before."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "That is the place where everything began."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

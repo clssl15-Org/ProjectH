@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Werbellion
+    public partial class Verbelion
     {
-        private class WerbellionAttackBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
+        private class VerbelionAttackBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
         {
-            private Werbellion Werbellion => (Werbellion)Owner;
+            private Verbelion Verbelion => (Verbelion)Owner;
             private int _phase = -1;
             private int _beforeAirPos = -1;
             private readonly List<AttackMode> _avoidNext = new();
@@ -19,7 +19,7 @@ namespace Actors.Monsters.Bosses
             private MonsterConditionData _notification;
 
 
-            public WerbellionAttackBrain()
+            public VerbelionAttackBrain()
                 : base(name: MonsterActionType.Attack.ToString()) { }
 
             protected override void OnOpen(params object[] _)
@@ -60,7 +60,7 @@ namespace Actors.Monsters.Bosses
                     return false;
                 }
 
-                var attackmode = Werbellion._attackMode.Resolve(AttackMode.Any);
+                var attackmode = Verbelion._attackMode.Resolve(AttackMode.Any);
                 if (attackmode == AttackMode.Any)
                 {
                     do
@@ -103,7 +103,7 @@ namespace Actors.Monsters.Bosses
                     Inputs: new object[]
                     {
                         null,
-                        (Func<Vector2>)(() => Werbellion.DetectedPlayer.transform.position)
+                        (Func<Vector2>)(() => Verbelion.DetectedPlayer.transform.position)
                     },
                     Callback: result =>
                     {
@@ -128,8 +128,8 @@ namespace Actors.Monsters.Bosses
 
             private void AirAttack(string name)
             {
-                var groundPos = Werbellion.transform.position;
-                var airPos = (Vector2)Werbellion._airPoints.GetRandomItem(ref _beforeAirPos).position;
+                var groundPos = Verbelion.transform.position;
+                var airPos = (Vector2)Verbelion._airPoints.GetRandomItem(ref _beforeAirPos).position;
 
                 if (!Owner.TryDoAction(new(
                     name,
@@ -144,7 +144,7 @@ namespace Actors.Monsters.Bosses
 
                         // Attack
                         null,
-                        (Func<Vector2>)(() => Werbellion._targetPlayer.transform.position),
+                        (Func<Vector2>)(() => Verbelion._targetPlayer.transform.position),
 
                         // Teleport Out
                         null,

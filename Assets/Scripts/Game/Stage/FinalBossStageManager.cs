@@ -15,17 +15,17 @@ namespace Game.Stage
     {
         [Header("Twin Boss")]
         [SerializeField] private TwinBossManager _twinBossManager;
-        [SerializeField] private GameObject _beliaObject;
+        [SerializeField] private GameObject _VeliaObject;
         [SerializeField] private GameObject _darkTherionObject;
-        [SerializeField] private BossUI _beliaUI;
+        [SerializeField] private BossUI _VeliaUI;
         [SerializeField] private BossUI _darkTherionUI;
         [SerializeField, Min(0)] private float _intermissionTime = 1f;
 
         [Header("Final Boss")]
-        [SerializeField] private GameObject _werbellionPackage;
-        [SerializeField] private GameObject _werbellionObject;
-        [SerializeField] private BossUI _werbellionUI;
-        [SerializeField] private DeferredSceneObjects _werbellionPotions;
+        [SerializeField] private GameObject _VerbelionPackage;
+        [SerializeField] private GameObject _VerbelionObject;
+        [SerializeField] private BossUI _VerbelionUI;
+        [SerializeField] private DeferredSceneObjects _VerbelionPotions;
 
         [Header("State Disply")]
         [SerializeField, TextArea(3, 10)]
@@ -35,9 +35,9 @@ namespace Game.Stage
         public Phase CurrentPhase => _phase;
 
         // Internal
-        private IBoss _belia;
+        private IBoss _Velia;
         private IBoss _darkTherion;
-        private IBoss _werbellion;
+        private IBoss _Verbelion;
 
         public enum Phase
         {
@@ -63,13 +63,13 @@ namespace Game.Stage
                 throw new InvalidOperationException(
                     Ctx($"{nameof(_twinBossManager)}이(가) 유효하지 않습니다.'"));
 
-            if (!_beliaObject)
+            if (!_VeliaObject)
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_beliaObject)}이(가) 유효하지 않습니다.'"));
+                    Ctx($"{nameof(_VeliaObject)}이(가) 유효하지 않습니다.'"));
 
-            if (!_beliaObject.TryGetComponent(out _belia))
+            if (!_VeliaObject.TryGetComponent(out _Velia))
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_beliaObject)}이(가) {nameof(IBoss)} 컴포넌트를 가지고 있지 않습니다.'"));
+                    Ctx($"{nameof(_VeliaObject)}이(가) {nameof(IBoss)} 컴포넌트를 가지고 있지 않습니다.'"));
 
             if (!_darkTherionObject)
                 throw new InvalidOperationException(
@@ -79,29 +79,29 @@ namespace Game.Stage
                 throw new InvalidOperationException(
                     Ctx($"{nameof(_darkTherionObject)}이(가) {nameof(IBoss)} 컴포넌트를 가지고 있지 않습니다.'"));
 
-            if (!_beliaUI)
+            if (!_VeliaUI)
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_beliaUI)}이(가) 유효하지 않습니다.'"));
+                    Ctx($"{nameof(_VeliaUI)}이(가) 유효하지 않습니다.'"));
 
             if (!_darkTherionUI)
                 throw new InvalidOperationException(
                     Ctx($"{nameof(_darkTherionUI)}이(가) 유효하지 않습니다.'"));
 
-            if (!_werbellionPackage)
+            if (!_VerbelionPackage)
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_werbellionPackage)}이(가) 유효하지 않습니다.'"));
+                    Ctx($"{nameof(_VerbelionPackage)}이(가) 유효하지 않습니다.'"));
 
-            if (!_werbellionObject)
+            if (!_VerbelionObject)
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_werbellionObject)}이(가) 유효하지 않습니다.'"));
+                    Ctx($"{nameof(_VerbelionObject)}이(가) 유효하지 않습니다.'"));
 
-            if (!_werbellionObject.TryGetComponent(out _werbellion))
+            if (!_VerbelionObject.TryGetComponent(out _Verbelion))
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_werbellionObject)}이(가) {nameof(IBoss)} 컴포넌트를 가지고 있지 않습니다.'"));
+                    Ctx($"{nameof(_VerbelionObject)}이(가) {nameof(IBoss)} 컴포넌트를 가지고 있지 않습니다.'"));
 
-            if (!_werbellionUI)
+            if (!_VerbelionUI)
                 throw new InvalidOperationException(
-                    Ctx($"{nameof(_werbellionUI)}이(가) 유효하지 않습니다.'"));
+                    Ctx($"{nameof(_VerbelionUI)}이(가) 유효하지 않습니다.'"));
         }
 
         void IInjectable<GameServices>.Inject(GameServices gameServices)
@@ -145,7 +145,7 @@ namespace Game.Stage
             if (_phase == Phase.TwinBossReady)
                 StartTwinBoss();
             else if (_phase == Phase.FinalBossReady)
-                StartWerbellion();
+                StartVerbelion();
             else if (_phase > Phase.FinalBossReady)
                 Debug.LogWarning(
                     $"{nameof(_phase)}이(가) '{_phase}'이기 때문에 더 이상의 {nameof(Commence)}이(가) 불가능합니다.",
@@ -155,9 +155,9 @@ namespace Game.Stage
         private void StartInitial()
         {
             _twinBossManager.gameObject.SetActive(true);
-            _werbellionPackage.SetActive(false);
+            _VerbelionPackage.SetActive(false);
 
-            _beliaUI.SetToDisabled();
+            _VeliaUI.SetToDisabled();
             _darkTherionUI.SetToDisabled();
 
             _phase = Phase.TwinBossReady;
@@ -165,22 +165,22 @@ namespace Game.Stage
 
         private void StartTwinBoss()
         {
-            RegisterBoss(_belia, _beliaUI);
+            RegisterBoss(_Velia, _VeliaUI);
             RegisterBoss(_darkTherion, _darkTherionUI);
 
-            _beliaUI.Enable();
+            _VeliaUI.Enable();
             _darkTherionUI.Enable();
 
             _twinBossManager.Cleared += () =>
             {
                 _phase = Phase.Intermission;
 
-                _beliaUI.Disable();
+                _VeliaUI.Disable();
                 _darkTherionUI.Disable();
 
                 new Timer(_intermissionTime, _ =>
                 {
-                    _werbellionPackage.SetActive(true);
+                    _VerbelionPackage.SetActive(true);
                     _phase = Phase.FinalBossReady;
                 });
             };
@@ -189,12 +189,12 @@ namespace Game.Stage
             _phase = Phase.TwinBoss;
         }
 
-        private void StartWerbellion()
+        private void StartVerbelion()
         {
-            _werbellionPotions?.Activate();
+            _VerbelionPotions?.Activate();
 
             _twinBossManager.gameObject.SetActive(false);
-            RegisterBoss(_werbellion, _werbellionUI);
+            RegisterBoss(_Verbelion, _VerbelionUI);
 
             IDisposable handle = null;
             int frameCount = 1;
@@ -204,14 +204,14 @@ namespace Game.Stage
                 frameCount--;
                 if (frameCount > 0) return;
 
-                _werbellion.ConditionChanged += c =>
+                _Verbelion.ConditionChanged += c =>
                 {
                     if (c.Is(MonsterCondition.Dying))
                         StageCleared();
                 };
 
-                _werbellionUI.Enable();
-                _werbellion.Commence();
+                _VerbelionUI.Enable();
+                _Verbelion.Commence();
                 handle.Dispose();
             });
 

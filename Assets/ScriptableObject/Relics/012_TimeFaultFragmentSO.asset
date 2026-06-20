@@ -14,11 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicNumber: 12
   icon: {fileID: 21300000, guid: 65295b0d2aa52314bb86935e798a662e, type: 3}
-  relicName: "\uC2DC\uAC04\uB2E8\uCE35\uC758 \uD30C\uD3B8"
-  description: "\uBE5B\uC758 \uC18C\uC6A9\uB3CC\uC774 \uC18D\uC5D0\uC11C \uAC08\uB77C\uC838
-    \uB098\uC628 \uC2DC\uAC04\uC758 \uD30C\uD3B8. \uC804\uD22C \uD15C\uD3EC\uB97C
-    \uAC00\uC18D\uD574 \uC900\uB2E4."
-  nomalEffect: "\uC2A4\uD0AC \uCFE8\uD0C0\uC784 @%$ \uAC10\uC18C"
+  localizedDescriptions:
+  - language: 2
+    relicName: "\uC2DC\uAC04\uB2E8\uCE35\uC758 \uD30C\uD3B8"
+    description: "\uBE5B\uC758 \uC18C\uC6A9\uB3CC\uC774 \uC18D\uC5D0\uC11C \uAC08\uB77C\uC838
+      \uB098\uC628 \uC2DC\uAC04\uC758 \uD30C\uD3B8. \uC804\uD22C \uD15C\uD3EC\uB97C
+      \uAC00\uC18D\uD574 \uC900\uB2E4."
+    nomalEffect: "\uC2A4\uD0AC \uCFE8\uD0C0\uC784 @%$ \uAC10\uC18C"
+  - language: 3
+    relicName: "Shard of the Temporal Rift"
+    description: "A fragment of time split from the swirling vortex of light. It accelerates the very tempo of battle."
+    nomalEffect: "Reduces Skill Cooldown by @%$"
   baseValue: 20
   coinFlipValue: 40
   canStack: 1

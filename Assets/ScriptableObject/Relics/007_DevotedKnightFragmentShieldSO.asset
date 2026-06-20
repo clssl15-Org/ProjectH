@@ -14,11 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicNumber: 7
   icon: {fileID: 21300000, guid: ed5e2b552fecb5b46af6dbca42f48159, type: 3}
-  relicName: "\uD5CC\uC2E0 \uAE30\uC0AC\uC758 \uD30C\uD3B8 \uBC29\uD328"
-  description: "\uBAB8\uC744 \uB358\uC838 \uC804\uC6B0\uB97C \uC9C0\uD0A4\uB358 \uAE30\uC0AC\uB4E4\uC758
-    \uBC29\uD328 \uD30C\uD3B8. \n\uB9C8\uC9C0\uB9C9 \uC758\uC9C0\uAC00 \uB2F9\uC2E0\uC744
-    \uBCF4\uD638\uD55C\uB2E4.\r\n\n"
-  nomalEffect: "\uD53C\uACA9 @\uD68C$ \uBB34\uD6A8"
+  localizedDescriptions:
+  - language: 2
+    relicName: "\uD5CC\uC2E0 \uAE30\uC0AC\uC758 \uD30C\uD3B8 \uBC29\uD328"
+    description: "\uBAB8\uC744 \uB358\uC838 \uC804\uC6B0\uB97C \uC9C0\uD0A4\uB358 \uAE30\uC0AC\uB4E4\uC758
+      \uBC29\uD328 \uD30C\uD3B8. \n\uB9C8\uC9C0\uB9C9 \uC758\uC9C0\uAC00 \uB2F9\uC2E0\uC744
+      \uBCF4\uD638\uD55C\uB2E4.\r\n\n"
+    nomalEffect: "\uD53C\uACA9 @\uD68C$ \uBB34\uD6A8"
+  - language: 3
+    relicName: "Shield Fragment of the Devoted Knight"
+    description: "A splintered piece of a shield belonging to the knights who threw themselves into danger to protect their comrades. Their final, enduring will rises to shield you."
+    nomalEffect: "Nullifies @ instance$ of damage"
   baseValue: 1
   coinFlipValue: 2
   canStack: 1

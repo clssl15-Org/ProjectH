@@ -4,25 +4,25 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Werbellion
+    public partial class Verbelion
     {
-        private class WerbellionTeleportBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
+        private class VerbelionTeleportBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
         {
             // Internal
-            private Werbellion Werbellion => (Werbellion)Owner;
-            private Rigidbody2D Rigidbody => Werbellion.Rigidbody;
+            private Verbelion Verbelion => (Verbelion)Owner;
+            private Rigidbody2D Rigidbody => Verbelion.Rigidbody;
 
             private int _before = -1;
 
 
             // Content
-            public WerbellionTeleportBrain() : base(name: "Teleport") { }
+            public VerbelionTeleportBrain() : base(name: "Teleport") { }
 
             public override bool CheckCondition()
             {
-                if (Werbellion._groundPoints.Length == 0)
+                if (Verbelion._groundPoints.Length == 0)
                 {
-                    Debug.LogWarning(Werbellion.FormatLogMessage(
+                    Debug.LogWarning(Verbelion.FormatLogMessage(
                         $"{nameof(_groundPoints)}은(는) 하나 이상의 지점을 포함해야 합니다."));
                     return false;
                 }
@@ -32,7 +32,7 @@ namespace Actors.Monsters.Bosses
 
             protected override void OnOpen(params object[] _)
             {
-                var teleportPosition = (Vector2)Werbellion
+                var teleportPosition = (Vector2)Verbelion
                     ._groundPoints
                     .GetRandomItem(ref _before)
                     .position;

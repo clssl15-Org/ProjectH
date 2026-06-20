@@ -14,10 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicNumber: 4
   icon: {fileID: 21300000, guid: a50cf9c97707e2b4fb9f560bd2c184e3, type: 3}
-  relicName: "\uAE30\uC0AC \uCE58\uC720\uB2E8\uC758 \uD3EC\uC158"
-  description: "\uC804\uC7A5\uC744 \uB204\uBE44\uB358 \uAE30\uC0AC \uCE58\uC720\uB2E8\uC774
-    \uC0AC\uC6A9\uD558\uB358 \uC751\uAE09 \uD3EC\uC158.\r"
-  nomalEffect: "\uCCB4\uB825 @%$ \uD68C\uBCF5\r"
+  localizedDescriptions:
+  - language: 2
+    relicName: "\uAE30\uC0AC \uCE58\uC720\uB2E8\uC758 \uD3EC\uC158"
+    description: "\uC804\uC7A5\uC744 \uB204\uBE44\uB358 \uAE30\uC0AC \uCE58\uC720\uB2E8\uC774
+      \uC0AC\uC6A9\uD558\uB358 \uC751\uAE09 \uD3EC\uC158.\r"
+    nomalEffect: "\uCCB4\uB825 @%$ \uD68C\uBCF5\r"
+  - language: 3
+    relicName: "Potion of the Order's Medics"
+    description: "An emergency potion once utilized by the field medics of the Order as they traversed the battlegrounds."
+    nomalEffect: "Restores @%$ HP"
   baseValue: 20
   coinFlipValue: 40
   canStack: 1

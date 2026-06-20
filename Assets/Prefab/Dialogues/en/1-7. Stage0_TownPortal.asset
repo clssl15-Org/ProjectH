@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6d80d382855614687768576cf39b77, type: 3}
+  m_Name: 1-7. Stage0_TownPortal
+  m_EditorClassIdentifier: 
+  _title: Stage0_TownPortal
+  _language: 3
+  _showOneRandomLine: 0
+  _targetStyle: 1
+  _lines:
+  - Character: 1
+    Dialogue: "If I die… what happens to me?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "You return right here."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "…Here?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "I have bound time itself to this village."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "A seal of light is etched upon your soul."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "It will guide your return. Over and over, until it shatters."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: "How many times have I died now?"
+    _overrides:
+      Name: 
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "I don’t know."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "I gave up counting long before you did."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Yet, our destination remains the same."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}
+  - Character: 2
+    Dialogue: "Let us head to Lumenveil Castle."
+    _overrides:
+      Name: "Rubiel"
+      Portrait: {fileID: 0}

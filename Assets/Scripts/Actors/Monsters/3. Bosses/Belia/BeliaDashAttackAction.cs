@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Belia
+    public partial class Velia
     {
-        private class BeliaDashAttackAction : MonsterActionComponent
+        private class VeliaDashAttackAction : MonsterActionComponent
         {
             public float DashStartTime { get; set; }
             public float DashForce { get; set; }
 
-            public BeliaDashAttackAction(float dashStartTime = 0, float dashForce = 1000)
+            public VeliaDashAttackAction(float dashStartTime = 0, float dashForce = 1000)
             {
                 DashStartTime = dashStartTime;
                 DashForce = dashForce;

@@ -6,20 +6,20 @@ using UnityEngine;
 
 namespace Actors.Monsters.Bosses
 {
-    public partial class Belia
+    public partial class Velia
     {
-        private class BeliaAttackBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
+        private class VeliaAttackBrain : BTNode<IMonsterInternal, Brains.MonsterBlackboard>
         {
             // Internal
             private MonsterConditionData _notification;
 
 
             // Content
-            public BeliaAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
+            public VeliaAttackBrain() : base(name: MonsterActionType.Attack.ToString()) { }
 
             protected override void OnOpen(params object[] _)
             {
-                var owner = (Belia)Owner;
+                var owner = (Velia)Owner;
                 var mode = owner._attackMode.Resolve(AttackMode.Any);
 
                 if (owner._attackMode == AttackMode.Any)
