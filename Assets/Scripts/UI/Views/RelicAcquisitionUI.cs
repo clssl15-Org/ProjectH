@@ -378,8 +378,6 @@ namespace UI
         private void OnDestroy() => Destroy();
         public void Destroy()
         {
-            print("Destroy, " + _isDestroyed);
-
             if (_isDestroyed) return;
             _isDestroyed = true;
 

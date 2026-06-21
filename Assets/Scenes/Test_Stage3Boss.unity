@@ -240,7 +240,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Name
-      value: Werbellion UI
+      value: Verbelion UI
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_IsActive
@@ -474,14 +474,15 @@ MonoBehaviour:
   _playerObject: {fileID: 1579380809}
   _playerUI: {fileID: 754814529}
   _twinBossManager: {fileID: 1344018116}
-  _beliaObject: {fileID: 1628346888}
+  _VeliaObject: {fileID: 1628346888}
   _darkTherionObject: {fileID: 1262281830}
-  _beliaUI: {fileID: 1841481197}
+  _VeliaUI: {fileID: 1841481197}
   _darkTherionUI: {fileID: 687036760}
   _intermissionTime: 0.5
-  _werbellionPackage: {fileID: 1341548801}
-  _werbellionObject: {fileID: 771308551}
-  _werbellionUI: {fileID: 172800554}
+  _VerbelionPackage: {fileID: 1341548801}
+  _VerbelionObject: {fileID: 771308551}
+  _VerbelionUI: {fileID: 172800554}
+  _VerbelionPotions: {fileID: 0}
   _stateDisplay: 
 --- !u!1 &304982440
 GameObject:
@@ -1036,7 +1037,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: m_Name
-      value: Werbellion Package
+      value: Verbelion Package
       objectReference: {fileID: 0}
     - target: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: m_IsActive
@@ -9368,7 +9369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_Name
-      value: Belia UI
+      value: Velia UI
       objectReference: {fileID: 0}
     - target: {fileID: 8046639675565291723, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
       propertyPath: m_IsActive

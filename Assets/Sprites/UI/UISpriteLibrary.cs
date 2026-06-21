@@ -40,7 +40,11 @@ namespace UI
 
 
         // Content
-        private void Awake() => _instance = this;
+        private void Awake()
+        {
+            if (_instance) return;
+            _instance = this;
+        }
 
         public static Sprite GetSprite(UISpriteResource name, Language language)
         {

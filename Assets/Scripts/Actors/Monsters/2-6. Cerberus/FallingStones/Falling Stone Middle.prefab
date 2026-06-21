@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tolerance: 1
+  _useSweepDetection: 1
 --- !u!114 &-572191313404436363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b0db436a41c654fad931f23ad3d3ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scale: 1
 --- !u!114 &-1444979654268948884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollider: {fileID: 0}
-  <TargetTags>k__BackingField: []
+  _useSweepDetection: 1
+  <ExclusionTags>k__BackingField: []
 --- !u!114 &8883030010810835698
 MonoBehaviour:
   m_ObjectHideFlags: 0

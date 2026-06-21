@@ -5,6 +5,7 @@ using Actors.Monsters.Bosses;
 using Infrastructure;
 using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,17 +16,17 @@ namespace Game.Stage
     {
         [Header("Twin Boss")]
         [SerializeField] private TwinBossManager _twinBossManager;
-        [SerializeField] private GameObject _VeliaObject;
+        [SerializeField, FormerlySerializedAs("_beliaObject")] private GameObject _VeliaObject;
         [SerializeField] private GameObject _darkTherionObject;
-        [SerializeField] private BossUI _VeliaUI;
+        [SerializeField, FormerlySerializedAs("_beliaUI")] private BossUI _VeliaUI;
         [SerializeField] private BossUI _darkTherionUI;
         [SerializeField, Min(0)] private float _intermissionTime = 1f;
 
         [Header("Final Boss")]
-        [SerializeField] private GameObject _VerbelionPackage;
-        [SerializeField] private GameObject _VerbelionObject;
-        [SerializeField] private BossUI _VerbelionUI;
-        [SerializeField] private DeferredSceneObjects _VerbelionPotions;
+        [SerializeField, FormerlySerializedAs("_werbellionPackage")] private GameObject _VerbelionPackage;
+        [SerializeField, FormerlySerializedAs("_werbellionObject")] private GameObject _VerbelionObject;
+        [SerializeField, FormerlySerializedAs("_werbellionUI")] private BossUI _VerbelionUI;
+        [SerializeField, FormerlySerializedAs("_werbellionPotions")] private DeferredSceneObjects _VerbelionPotions;
 
         [Header("State Disply")]
         [SerializeField, TextArea(3, 10)]

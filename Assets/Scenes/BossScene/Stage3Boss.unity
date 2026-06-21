@@ -289,9 +289,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa875cf0dcbbfb4eb42063d4034f860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   _resource: {fileID: 11400000, guid: b6245b4e070386d41b4fcef92c5836a3, type: 2}
+--- !u!114 &17140490 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7986607897184331317, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+  m_PrefabInstance: {fileID: 17140487}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dcaa18f05d3c8e4c9f910d10cd72502, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &30036950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1010,7 +1021,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: m_Name
-      value: Werbellion Package
+      value: Verbelion Package
       objectReference: {fileID: 0}
     - target: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
       propertyPath: m_IsActive
@@ -1056,14 +1067,29 @@ PrefabInstance:
       propertyPath: _forceClear_2
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+  m_RemovedComponents: []
+  m_RemovedGameObjects: []
+  m_AddedGameObjects: []
+  m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
+--- !u!1 &583937167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3538217299599159596, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
+  m_PrefabInstance: {fileID: 583937166}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &583937168 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4083348053365577667, guid: 067552305ef30b346a7cd1b543e4b609, type: 3}
+  m_PrefabInstance: {fileID: 583937166}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &653316684 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8431915662518892015, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
+  m_PrefabInstance: {fileID: 1344018114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1344018117 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5878542944565762321, guid: 97d28e076d748b14b96784d4939aa1a1, type: 3}
   m_PrefabInstance: {fileID: 1344018114}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &666649636
@@ -1292,7 +1318,7 @@ GameObject:
   - component: {fileID: 887710002}
   - component: {fileID: 887710003}
   m_Layer: 0
-  m_Name: Werbellion Potions
+  m_Name: Verbelion Potions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18270,15 +18296,15 @@ MonoBehaviour:
   _fadeInOnStart: 1
   _bgm: 7
   _twinBossManager: {fileID: 1344018116}
-  _VeliaObject: {fileID: 0}
+  _VeliaObject: {fileID: 1344018117}
   _darkTherionObject: {fileID: 653316684}
-  _VeliaUI: {fileID: 0}
+  _VeliaUI: {fileID: 9085894716010420203}
   _darkTherionUI: {fileID: 966802508}
   _intermissionTime: 2
-  _VerbelionPackage: {fileID: 0}
-  _VerbelionObject: {fileID: 0}
-  _VerbelionUI: {fileID: 0}
-  _VerbelionPotions: {fileID: 0}
+  _VerbelionPackage: {fileID: 583937167}
+  _VerbelionObject: {fileID: 583937168}
+  _VerbelionUI: {fileID: 17140490}
+  _VerbelionPotions: {fileID: 887710003}
   _stateDisplay: 
 --- !u!114 &1648177253 stripped
 MonoBehaviour:
@@ -18827,6 +18853,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _resource: {fileID: 11400000, guid: f565534dfb19b254cb2e81a7405505a7, type: 2}
+--- !u!114 &9085894716010420203 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7986607897184331317, guid: 3b745b60878e85349837503c7daf7a83, type: 3}
+  m_PrefabInstance: {fileID: 9085894716010420200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dcaa18f05d3c8e4c9f910d10cd72502, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

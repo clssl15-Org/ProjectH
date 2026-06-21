@@ -14,8 +14,17 @@ namespace Game.Management
         public static event Action<Language> LanguageChanged;
 
         [SerializeField] private Language _targetLanguage = Language.Korean;
+        private static bool _isLanguageAutoSetted;
 
-        private void Awake() => SetLanguage(GetLanguageFromCurrentRegion(_targetLanguage));
+        private void Awake()
+        {
+            if (!_isLanguageAutoSetted)
+            {
+                _isLanguageAutoSetted = true;
+                SetLanguage(GetLanguageFromCurrentRegion(_targetLanguage));
+            }
+        }
+
         private static Language GetLanguageFromCurrentRegion(Language fallbackLanguage)
         {
             try

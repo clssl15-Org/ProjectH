@@ -12316,10 +12316,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _autoAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: _attackMode
       value: 2
       objectReference: {fileID: 0}
@@ -12327,10 +12323,6 @@ PrefabInstance:
       propertyPath: _targetPlayer
       value: 
       objectReference: {fileID: 94094723}
-    - target: {fileID: 2234362322493022801, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
-      propertyPath: _useDebugStatsInfo
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2842083982122723304, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -12425,6 +12417,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5024626629011867661, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5071567710513117751, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}
+      propertyPath: _useSweepDetection
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6964932226926918151, guid: 36b468868a8454d47811e4ccec617a9f, type: 3}

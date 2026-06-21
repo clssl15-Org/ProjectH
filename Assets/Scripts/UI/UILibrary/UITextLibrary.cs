@@ -31,6 +31,7 @@ namespace UI
         Coin_Success,
 
         RelicOfTheOrder_Title,
+        Stage0_NamePlaceholder,
     }
     
     public class UITextLibrary : MonoBehaviour
@@ -46,7 +47,9 @@ namespace UI
         // Content
         private void Awake()
         {
+            if (_instance) return;
             _instance = this;
+
             _texts = Parse(_textFile);
         }
 
