@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Game.Management;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
@@ -181,7 +182,7 @@ namespace UI
             Enable();
 
             _relicIcon.sprite = relicInfo.Icon;
-            _relicNametag.text = relicInfo.RelicName;
+            _relicNametag.text = relicInfo.GetRelicName(LanguageManager.Language);
             _relicDescrption.text = FormatUiText(relicAcquisition.NormalDescription);
 
             _coinRawVideoPlayer.clip = null;
@@ -209,7 +210,9 @@ namespace UI
 
             string normalNextValue = FormatValue(_relicAcquisition.NormalNextValue);
             string reinforcedNextValue = FormatValue(_relicAcquisition.ReinforcedNextValue);
-            _coinDescripton.text = $"<align=center><size=120%>강화 성공 시 능력치 {normalNextValue} → {reinforcedNextValue}</size></align>";
+            string successBonusMessage = UITextLibrary.GetText(UITextResource.Coin_SuccessBonus, LanguageManager.Language);
+
+            _coinDescripton.text = $"<align=center><size=120%>{successBonusMessage} {normalNextValue} → {reinforcedNextValue}</size></align>";
             var reinforced = _forceSuccess || RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
 
             var coinClip = _videoClips.FirstOrDefault(v => v.VideoType
@@ -290,11 +293,19 @@ namespace UI
                             reinforced);
 
                         if (reinforced)
+                        {
+                            var infoMessage = UITextLibrary.GetText(UITextResource.Coin_Success, LanguageManager.Language);
+
                             _relicDescrption.text = FormatUiText(
-                                $"<size=120%>{RelicManager.BlueHighlightOpenTag}강화 성공{RelicManager.BlueHighlightCloseTag}</size>\n\n{description}");
+                                $"<size=120%>{RelicManager.BlueHighlightOpenTag}{infoMessage}{RelicManager.BlueHighlightCloseTag}</size>\n\n{description}");
+                        }
                         else
+                        {
+                            var infoMessage = UITextLibrary.GetText(UITextResource.Coin_Failed, LanguageManager.Language);
+
                             _relicDescrption.text = FormatUiText(
-                                $"<size=120%>{UiRichTextFormatter.RedHighlightOpenTag}강화 실패{UiRichTextFormatter.RedHighlightCloseTag}</size>\n\n{description}");
+                                $"<size=120%>{UiRichTextFormatter.RedHighlightOpenTag}{infoMessage}{UiRichTextFormatter.RedHighlightCloseTag}</size>\n\n{description}");
+                        }
 
                         _toThrowCoinBtn.gameObject.SetActive(false);
                         _closeBtn.gameObject.SetActive(true);

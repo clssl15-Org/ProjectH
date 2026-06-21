@@ -641,7 +641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <OpenKey>k__BackingField: 9
-  <CloseKey>k__BackingField: 27
+  <CloseKeys>k__BackingField: 1b00000009000000
   _closeBtn: {fileID: 2551660268137255990}
   _relicListParent: {fileID: 3554552723969534572}
   _relicInfoPrefab: {fileID: 8783996122224119249}
@@ -734,6 +734,7 @@ GameObject:
   - component: {fileID: 2618268247702312302}
   - component: {fileID: 2009736250201066099}
   - component: {fileID: 4504475909018172962}
+  - component: {fileID: 6872141440443279687}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -857,6 +858,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6872141440443279687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3827506121857030789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e4317366d3337418befdc16e7d86d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resource: 19
 --- !u!1 &3848397307560141907
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ namespace UI
         Title_Exit,
 
         Settings_Language,
+        Settings_DisplayLanguage,
         Settings_Settings,
         Settings_Bgm,
         Settings_Sfx,
@@ -28,6 +29,8 @@ namespace UI
         Coin_SuccessBonus,
         Coin_Failed,
         Coin_Success,
+
+        RelicOfTheOrder_Title,
     }
     
     public class UITextLibrary : MonoBehaviour
@@ -104,8 +107,8 @@ namespace UI
                     throw new InvalidOperationException(
                         Ctx($"{lineNumber}번째 줄의 언어 문자열 앞에 UI 텍스트 이름이 없습니다."));
 
-                var languageCode = line.Substring(0, separatorIndex).Trim();
-                var text = line.Substring(separatorIndex + 1).Trim();
+                var languageCode = line[..separatorIndex].Trim();
+                var text = line[(separatorIndex + 1)..].Trim();
                 var language = ParseLanguage(languageCode, lineNumber);
 
                 if (texts[currentName].ContainsKey(language))

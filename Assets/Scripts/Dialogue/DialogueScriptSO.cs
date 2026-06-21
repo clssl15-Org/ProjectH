@@ -17,6 +17,7 @@ namespace Dialogue
         [SerializeField] private DialogueLine[] _lines;
 
         public string Title => _title;
+        public Language Language => _language;
         public bool ShowOneRandomLine => _showOneRandomLine;
         public DialogueStyle TargetStyle => _targetStyle;
         public DialogueLine[] Lines => _lines;

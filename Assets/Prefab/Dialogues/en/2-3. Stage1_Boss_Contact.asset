@@ -18,12 +18,15 @@ MonoBehaviour:
   _targetStyle: 2
   _lines:
   - Character: 2
-    Dialogue: "That is no creature of nature."
+    Dialogue: That is no creature of nature.
     _overrides:
-      Name: "Rubiel"
+      Name: Rubiel
       Portrait: {fileID: 0}
   - Character: 2
-    Dialogue: "It is a remnant devoured by darkness. When it approaches, do not hesitate!"
+    Dialogue: 'It is a remnant devoured by darkness.
+
+      When it approaches, do
+      not hesitate!'
     _overrides:
-      Name: "Rubiel"
+      Name: Rubiel
       Portrait: {fileID: 0}

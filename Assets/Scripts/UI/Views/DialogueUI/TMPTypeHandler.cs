@@ -28,13 +28,21 @@ namespace UI
         }
 
         /// <summary>
-        /// ÀÌ ¸Ş¼­µå´Â gameObject°¡ Active »óÅÂÀÏ ¶§¸¸ ½ÇÇàÇÒ ¼ö ÀÖ½À´Ï´Ù.
+        /// ì´ ë©”ì„œë“œëŠ” gameObjectê°€ Active ìƒíƒœì¼ ë•Œë§Œ ì‹¤í–‰í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
         /// </summary>
-        public void TypeDialogue(string textContent)
+        public void TypeDialogue(string textContent, bool showImmediately = false)
         {
             EnsureInitialization();
 
             if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
+            if (showImmediately)
+            {
+                _typingCoroutine = null;
+                _textUI.text = textContent;
+                _textUI.maxVisibleCharacters = int.MaxValue;
+                return;
+            }
+
             _typingCoroutine = StartCoroutine(TypeRoutine(textContent));
         }
 

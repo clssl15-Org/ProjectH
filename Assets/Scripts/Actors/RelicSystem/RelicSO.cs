@@ -16,13 +16,11 @@ public class RelicDataSO : ScriptableObject
         [TextArea]
         [SerializeField] private string nomalEffect;
 
-        public Language Language => language;
-        public string RelicName => relicName;
-        public string Description => description;
-        public string NomalEffect => nomalEffect;
+        public readonly Language Language => language;
+        public readonly string RelicName => relicName;
+        public readonly string Description => description;
+        public readonly string NomalEffect => nomalEffect;
     }
-
-    private const Language DefaultLanguage = Language.Korean;
 
     [Header("기본 정보")]
     [SerializeField] private int relicNumber;     // 넘버
@@ -43,9 +41,6 @@ public class RelicDataSO : ScriptableObject
     // --- 외부 접근용 프로퍼티 (Getter) ---
     public int RelicNumber => relicNumber;
     public Sprite Icon => icon;
-    public string RelicName => GetRelicName(DefaultLanguage);
-    public string Description => GetDescription(DefaultLanguage);
-    public string NomalEffect => GetNomalEffect(DefaultLanguage);
     public float BaseValue => baseValue;
     public float CoinFlipValue => coinFlipValue;
     public bool CanStack => canStack;
@@ -64,23 +59,14 @@ public class RelicDataSO : ScriptableObject
             throw new InvalidOperationException(
                 Ctx("언어별 유물 설명이 할당되지 않았습니다."));
 
-        var targetLanguage = NormalizeLanguage(language);
         foreach (var description in localizedDescriptions)
         {
-            if (description.Language == targetLanguage)
+            if (description.Language == language)
                 return description;
         }
 
         throw new InvalidOperationException(
-            Ctx($"{targetLanguage} 언어 유물 설명을 찾을 수 없습니다."));
-    }
-
-    private static Language NormalizeLanguage(Language language)
-    {
-        if (language == Language.None || language == Language.Undefined)
-            return DefaultLanguage;
-
-        return language;
+            Ctx($"{language} 언어 유물 설명을 찾을 수 없습니다."));
     }
 
     private string Ctx(string message) => $"[{nameof(RelicDataSO)}:{name}] {message}";

@@ -47,17 +47,17 @@ namespace UI
             _transform.sizeDelta = size;
         }
 
-        public void Show(IContainer container) => Show(container.Text, container.GetPosition, container.Offset);
-        public void Show(string text, Func<Vector2> getPosition, Vector2 offset)
+        public void Show(IContainer container, bool showImmediately = false) =>
+            Show(container.Text, container.GetPosition, container.Offset, showImmediately);
+        public void Show(string text, Func<Vector2> getPosition, Vector2 offset, bool showImmediately = false)
         {
-
             _getPosition = getPosition;
             _offset = offset;
 
             FixedUpdate();
             gameObject.SetActive(true);
 
-            _typeHandler.TypeDialogue(text);
+            _typeHandler.TypeDialogue(text, showImmediately);
         }
 
         public void SkipTyping() => _typeHandler.SkipTyping();

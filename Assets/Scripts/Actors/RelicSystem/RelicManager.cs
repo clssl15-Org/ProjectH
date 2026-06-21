@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Actors.PlayerSystem;
+using Game.Management;
+using Infrastructure;
 using Rules;
 using UnityEngine;
 
@@ -314,6 +316,7 @@ public class RelicManager : MonoBehaviour
 
     private RelicAcquisitionDto BuildRelicAcquisitionDto(RelicDataSO data, bool forceSuccess)
     {
+        var language = LanguageManager.Language;
         float currentValue = data.CanStack && data.HasAccumulationCap ? GetValueSum(data.RelicNumber) : 0f;
         float normalNextValue = data.CanStack && data.HasAccumulationCap
             ? currentValue + GetCappedAcquisitionValue(data, data.BaseValue, currentValue)
@@ -328,8 +331,8 @@ public class RelicManager : MonoBehaviour
             currentValue,
             normalNextValue,
             reinforcedNextValue,
-            BuildDescription(data, normalNextValue, showMaxAccumulationReached: false),
-            BuildDescription(data, reinforcedNextValue, showMaxAccumulationReached: false));
+            BuildDescription(data, normalNextValue, language, showMaxAccumulationReached: false),
+            BuildDescription(data, reinforcedNextValue, language, showMaxAccumulationReached: false));
     }
 
     // 현재 보유한 스킬 유물(ID 1,2,3) 개수를 세는 헬퍼 함수
@@ -366,10 +369,11 @@ public class RelicManager : MonoBehaviour
 
         if (IsRelicAtMaxAccumulation(data))
         {
+            var language = LanguageManager.Language;
             string capLabel = data.HasAccumulationCap
-                ? $"최대 누적값({data.MaxAccumulatedValue})"
-                : "중복 불가";
-            description = $"유물 '{data.RelicName}'(Key:{key})은 {capLabel}에 도달하여 더 이상 추가할 수 없습니다.";
+                ? GetMaxAccumulatedValueLabel(language, data.MaxAccumulatedValue)
+                : GetNonStackableLabel(language);
+            description = GetCannotAddRelicMessage(data, key, capLabel, language);
             Debug.LogWarning(description);
             return;
         }
@@ -380,7 +384,12 @@ public class RelicManager : MonoBehaviour
 
         if (data.HasAccumulationCap && acquisitionValue <= 0.001f)
         {
-            description = $"유물 '{data.RelicName}'(Key:{key})은 최대 누적값({data.MaxAccumulatedValue})에 도달하여 더 이상 추가할 수 없습니다.";
+            var language = LanguageManager.Language;
+            description = GetCannotAddRelicMessage(
+                data,
+                key,
+                GetMaxAccumulatedValueLabel(language, data.MaxAccumulatedValue),
+                language);
             Debug.LogWarning(description);
             return;
         }
@@ -402,10 +411,19 @@ public class RelicManager : MonoBehaviour
         }
 
         float valueSum = GetValueSum(key);
-        description = BuildDescription(data, valueSum, showMaxAccumulationReached: true);
+        description = BuildDescription(data, valueSum, LanguageManager.Language, showMaxAccumulationReached: true);
 
         RelicDescriptionRegistry[data.RelicNumber] = description;
         RelicAcquired?.Invoke(data, description);
+    }
+
+    public string BuildCurrentDescription(
+        RelicDataSO data,
+        Language language,
+        bool showMaxAccumulationReached = true)
+    {
+        float valueSum = data != null ? GetValueSum(data.RelicNumber) : 0f;
+        return BuildDescription(data, valueSum, language, showMaxAccumulationReached);
     }
 
     private static bool IsAtMaxAccumulatedValue(RelicDataSO data, float value)
@@ -416,33 +434,44 @@ public class RelicManager : MonoBehaviour
     private static string BuildDescription(
         RelicDataSO data,
         float displayValue,
+        Language language,
         bool showMaxAccumulationReached = false)
     {
-        string description = data.Description?.TrimEnd('\r', '\n') ?? string.Empty;
-        string effectDesc = data.NomalEffect.Replace("@", FormatValue(displayValue));
-        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, displayValue));
+        if (data == null)
+            return string.Empty;
+
+        string description = data.GetDescription(language)?.TrimEnd('\r', '\n') ?? string.Empty;
+        string normalEffect = data.GetNomalEffect(language) ?? string.Empty;
+        string effectDesc = normalEffect.Replace("@", FormatValue(displayValue));
+        effectDesc = effectDesc.Replace("$", BuildValueChangeText(data, displayValue, normalEffect, language));
 
         if (showMaxAccumulationReached && IsAtMaxAccumulatedValue(data, displayValue))
-            effectDesc += "\n\n최대 누적치 도달";
+            effectDesc += $"\n\n{GetMaxAccumulationReachedMessage(language)}";
 
         return description + "\n\n" + effectDesc;
     }
 
-    private static string BuildValueChangeText(RelicDataSO data, float displayValue)
+    private static string BuildValueChangeText(
+        RelicDataSO data,
+        float displayValue,
+        string normalEffect,
+        Language language)
     {
         float added = displayValue - data.BaseValue;
+        string unitSuffix = GetValueUnitSuffix(normalEffect);
+        if (ShouldHideValueUnitSuffix(language, unitSuffix))
+            unitSuffix = "";
 
         return added > 0.001f
-            ? $"{BlueHighlightOpenTag}(+{FormatValue(added)}{GetValueUnitSuffix(data)}){BlueHighlightCloseTag}"
+            ? $"{BlueHighlightOpenTag}(+{FormatValue(added)}{unitSuffix}){BlueHighlightCloseTag}"
             : "";
     }
 
     /// <summary>
-    /// <see cref="RelicDataSO.NomalEffect"/>의 @ 뒤 단위(%·회·분·단 등)를 반환합니다. @가 없으면 %를 씁니다.
+    /// 효과 설명의 @ 뒤 단위(%·회·분·단 등)를 반환합니다. @가 없으면 %를 씁니다.
     /// </summary>
-    private static string GetValueUnitSuffix(RelicDataSO data)
+    private static string GetValueUnitSuffix(string effect)
     {
-        string effect = data.NomalEffect;
         int atIndex = effect.IndexOf('@');
         if (atIndex < 0 || atIndex >= effect.Length - 1)
             return "%";
@@ -470,6 +499,36 @@ public class RelicManager : MonoBehaviour
         return hasLeadingSpace
             ? $" {effect.Substring(start, end - start)}"
             : effect.Substring(start, end - start);
+    }
+
+    private static bool ShouldHideValueUnitSuffix(Language language, string unitSuffix)
+    {
+        if (language != Language.Engilsh)
+            return false;
+
+        var trimmedUnitSuffix = unitSuffix.Trim();
+        return !string.IsNullOrEmpty(trimmedUnitSuffix) && trimmedUnitSuffix != "%";
+    }
+
+    private static string GetMaxAccumulationReachedMessage(Language language) =>
+        language == Language.Engilsh ? "Maximum accumulation reached" : "최대 누적치 도달";
+
+    private static string GetMaxAccumulatedValueLabel(Language language, float value) =>
+        language == Language.Engilsh ? $"maximum accumulation ({value})" : $"최대 누적값({value})";
+
+    private static string GetNonStackableLabel(Language language) =>
+        language == Language.Engilsh ? "non-stackable" : "중복 불가";
+
+    private static string GetCannotAddRelicMessage(
+        RelicDataSO data,
+        int key,
+        string capLabel,
+        Language language)
+    {
+        string relicName = data.GetRelicName(language);
+        return language == Language.Engilsh
+            ? $"Relic '{relicName}' (Key:{key}) has reached {capLabel} and cannot be added further."
+            : $"유물 '{relicName}'(Key:{key})은 {capLabel}에 도달하여 더 이상 추가할 수 없습니다.";
     }
 
     private static string FormatValue(float value)

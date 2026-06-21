@@ -23,85 +23,63 @@ namespace World
             public readonly string Name => name;
         }
 
-        private const Language DefaultLanguage = Language.Korean;
-
         [field: SerializeField] public Character Character { get; set; }
         [SerializeField] private CharacterLocalizedName[] localizedNames;
         [field: SerializeField] public Sprite Portrait { get; set; }
 
-        public string Name
-        {
-            get => GetName(DefaultLanguage);
-            set => SetNameForAllLanguages(value);
-        }
-
-        public string GetName(Language language) => GetLocalizedName(language).Name;
-
-        public void SetName(Language language, string name)
-        {
-            var targetLanguage = NormalizeLanguage(language);
-
-            if (localizedNames == null)
-                localizedNames = Array.Empty<CharacterLocalizedName>();
-
-            for (var i = 0; i < localizedNames.Length; i++)
-            {
-                if (localizedNames[i].Language != targetLanguage)
-                    continue;
-
-                localizedNames[i] = new CharacterLocalizedName(targetLanguage, name);
-                return;
-            }
-
-            Array.Resize(ref localizedNames, localizedNames.Length + 1);
-            localizedNames[localizedNames.Length - 1] = new CharacterLocalizedName(targetLanguage, name);
-        }
-
-        private void SetNameForAllLanguages(string name)
-        {
-            if (localizedNames == null || localizedNames.Length == 0)
-            {
-                SetName(DefaultLanguage, name);
-                return;
-            }
-
-            var hasDefaultLanguage = false;
-            for (var i = 0; i < localizedNames.Length; i++)
-            {
-                var language = NormalizeLanguage(localizedNames[i].Language);
-                if (language == DefaultLanguage)
-                    hasDefaultLanguage = true;
-
-                localizedNames[i] = new CharacterLocalizedName(language, name);
-            }
-
-            if (!hasDefaultLanguage)
-                SetName(DefaultLanguage, name);
-        }
-
-        private CharacterLocalizedName GetLocalizedName(Language language)
+        public string GetName(Language language)
         {
             if (localizedNames == null || localizedNames.Length == 0)
                 throw new InvalidOperationException(
                     Ctx("언어별 캐릭터 이름이 할당되지 않았습니다."));
 
-            var targetLanguage = NormalizeLanguage(language);
             foreach (var localizedName in localizedNames)
             {
-                if (localizedName.Language == targetLanguage)
-                    return localizedName;
+                if (localizedName.Language == language)
+                    return localizedName.Name;
             }
 
             throw new InvalidOperationException(
-                Ctx($"{targetLanguage} 언어 캐릭터 이름을 찾을 수 없습니다."));
+                Ctx($"{language} 언어 캐릭터 이름을 찾을 수 없습니다."));
         }
 
-        private static Language NormalizeLanguage(Language language)
+        public void SetName(Language language, string name)
         {
-            if (language == Language.None || language == Language.Undefined)
-                return DefaultLanguage;
+            localizedNames ??= Array.Empty<CharacterLocalizedName>();
 
-            return language;
+            for (var i = 0; i < localizedNames.Length; i++)
+            {
+                if (localizedNames[i].Language != language)
+                    continue;
+
+                localizedNames[i] = new CharacterLocalizedName(language, name);
+                return;
+            }
+
+            Array.Resize(ref localizedNames, localizedNames.Length + 1);
+            localizedNames[^1] = new CharacterLocalizedName(language, name);
+        }
+
+        public void SetNameForAllLanguages(string name)
+        {
+            var languages = (Language[])Enum.GetValues(typeof(Language));
+            int languageCount = 0;
+            foreach (var language in languages)
+            {
+                if (language != Language.None && language != Language.Undefined)
+                    languageCount++;
+            }
+
+            localizedNames = new CharacterLocalizedName[languageCount];
+            int index = 0;
+            foreach (var language in languages)
+            {
+                if (language == Language.None || language == Language.Undefined)
+                    continue;
+
+                localizedNames[index] = new CharacterLocalizedName(language, name);
+                index++;
+            }
         }
 
         private string Ctx(string message) => $"[{nameof(CharacterInfoSO)}:{name}] {message}";

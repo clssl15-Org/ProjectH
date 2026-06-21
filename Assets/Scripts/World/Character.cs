@@ -8,5 +8,7 @@ namespace World
         Velia,
         DarkTherion,
         Verbelion,
+        StagBeetle,
+        Cerberus,
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Game.Management;
 using Infrastructure;
 using UI.RelicInfoPanelView;
 using UnityEngine;
@@ -143,14 +144,15 @@ namespace UI
                     var relicInfo = Instantiate(_relicInfoPrefab);
 
                     // 런타임 설명으로 가져오기
-                    var description = RelicManager.RelicDescriptionRegistry.TryGetValue(relicId, out var desc)
-                        ? desc
-                        : relicData.Description;
+                    var relicName = relicData.GetRelicName(LanguageManager.Language);
+                    var description = RelicManager.Instance.BuildCurrentDescription(
+                        relicData,
+                        LanguageManager.Language);
 
-                    relicInfo.Initialize(relicData.Icon, relicData.RelicName, FormatUiText(description));
+                    relicInfo.Initialize(relicData.Icon, relicName, FormatUiText(description));
 
                     relicInfo.GetComponent<RectTransform>().SetParent(_relicListParent, false);
-                    relicInfo.name = _relicInfoPrefab.name + $" {relicData.RelicName}";
+                    relicInfo.name = _relicInfoPrefab.name + $" {relicName}";
                     relicInfo.gameObject.SetActive(true);
                 }
             }

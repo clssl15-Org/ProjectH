@@ -1,5 +1,6 @@
 using System;
 using Dialogue;
+using Game.Management;
 using Infrastructure;
 using TMPro;
 using UnityEngine;
@@ -95,7 +96,7 @@ namespace UI
         void ICursorVisibilityControllerUser.Initialize(CursorVisibilityController cursorVisibilityController) =>
             _cursorVisibilityController = cursorVisibilityController;
 
-        public void SetContent(DialogueLine dialogueData)
+        public void SetContent(DialogueLine dialogueData, bool showImmediately = false)
         {
             GetData(dialogueData, out var name, out var portrait, out var dialogueText);
 
@@ -103,11 +104,14 @@ namespace UI
             _portraitUI.sprite = portrait;
 
             if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
-                dialogueText = dialogueText.Replace("{player}", playerInfo.Name, StringComparison.OrdinalIgnoreCase);
+                dialogueText = dialogueText.Replace(
+                    "{player}",
+                    playerInfo.GetName(LanguageManager.Language),
+                    StringComparison.OrdinalIgnoreCase);
             else
-                Debug.LogWarning("Player ������ �������� ���߱� ������ {player} ���ڿ��� ġȯ���� ���߽��ϴ�.");
+                Debug.LogWarning("Player 정보를 가져오지 못했기 때문에 {player} 문자열을 치환하지 못했습니다.");
 
-            _typeHandler.TypeDialogue(dialogueText);
+            _typeHandler.TypeDialogue(dialogueText, showImmediately);
         }
 
         public void SkipTyping() => _typeHandler.SkipTyping();
@@ -120,11 +124,13 @@ namespace UI
         {
             if (!_gameAssetLibrary.TryGetCharacterInfo(dialogueData.Character, out var characterInfo))
             {
-                throw new ArgumentException($"{nameof(dialogueData)}�� ĳ���� Ÿ�� '{dialogueData.Character}'�� �ش��ϴ� {nameof(CharacterInfoSO)}��(��) ã�� ���Ͽ����ϴ�.",
+                throw new ArgumentException($"{nameof(dialogueData)}의 캐릭터 타입 '{dialogueData.Character}'에 해당하는 {nameof(CharacterInfoSO)}을(를) 찾지 못했습니다.",
                     nameof(dialogueData));
             }
 
-            name = !string.IsNullOrEmpty(dialogueData.NameOverride) ? dialogueData.NameOverride : characterInfo.Name;
+            name = !string.IsNullOrEmpty(dialogueData.NameOverride)
+                ? dialogueData.NameOverride
+                : characterInfo.GetName(LanguageManager.Language);
             portrait = dialogueData.PortraitOverride != null ? dialogueData.PortraitOverride : characterInfo.Portrait;
             dialogue = dialogueData.Dialogue;
         }

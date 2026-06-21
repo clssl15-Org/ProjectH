@@ -16,7 +16,7 @@ namespace UI
         Others_GuideWorldRecords,
     }
 
-    public class UIResourceLibrary : MonoBehaviour
+    public class UISpriteLibrary : MonoBehaviour
     {
         // Front
         [Serializable]
@@ -36,7 +36,7 @@ namespace UI
         [SerializeField] private SpritePackage[] _packages;
 
         // Internal
-        private static UIResourceLibrary _instance;
+        private static UISpriteLibrary _instance;
 
 
         // Content
@@ -81,6 +81,6 @@ namespace UI
                 Ctx($"{name} UI 리소스 패키지를 찾을 수 없습니다."));
         }
 
-        private static string Ctx(string message) => $"[{nameof(UIResourceLibrary)}] {message}";
+        private static string Ctx(string message) => $"[{nameof(UISpriteLibrary)}] {message}";
     }
 }

@@ -121,7 +121,7 @@ namespace Game
 
             // 게임 최초 시작 시
             if (_gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var player))
-                player.Name = _configuration.InitialPlayerName;
+                player.SetNameForAllLanguages(_configuration.InitialPlayerName);
             else
                 Debug.LogWarning(Ctx(
                     $"{nameof(_gameAssetLibrary)}에서 {World.Character.Player}를(을) 찾을 수 없기 때문에 " +
@@ -221,7 +221,7 @@ namespace Game
                     "GameAssetLibrary가 할당되지 않았습니다. 플레이어 이름을 설정할 수 없습니다."));
 
             _gameAssetLibrary.TryGetCharacterInfo(World.Character.Player, out var playerInfo);
-            playerInfo.Name = playerName;
+            playerInfo.SetNameForAllLanguages(playerName);
         }
 
         public override bool ConsumeFirstScenarioArrival(string scenarioKey, object context = null)

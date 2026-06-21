@@ -769,6 +769,7 @@ GameObject:
   - component: {fileID: 4434462368368648752}
   - component: {fileID: 8250124566021023083}
   - component: {fileID: 39664853635922490}
+  - component: {fileID: 8726803377786675274}
   m_Layer: 5
   m_Name: Throw Message
   m_TagString: Untagged
@@ -892,6 +893,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8726803377786675274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3987720386189250005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e4317366d3337418befdc16e7d86d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resource: 15
 --- !u!1 &4191926667717875254
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +920,7 @@ GameObject:
   - component: {fileID: 423331054033561738}
   - component: {fileID: 8577209532052809299}
   - component: {fileID: 1098245312964968908}
+  - component: {fileID: 215580720913254240}
   m_Layer: 5
   m_Name: Button B
   m_TagString: Untagged
@@ -1041,6 +1056,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <HoverSound>k__BackingField: 2
   <ClickSound>k__BackingField: 3
+--- !u!114 &215580720913254240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191926667717875254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4209f2962e7f0f40a185eb2bf83644a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resource: 2
+  _setNativeSize: 0
 --- !u!1 &4771494858378069126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,7 +1322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8300805450032259015
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1537,6 +1566,7 @@ GameObject:
   - component: {fileID: 1057240237092153659}
   - component: {fileID: 5365520065796679604}
   - component: {fileID: 7576786797017395582}
+  - component: {fileID: 1800764960502026091}
   m_Layer: 5
   m_Name: Button A
   m_TagString: Untagged
@@ -1672,6 +1702,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <HoverSound>k__BackingField: 2
   <ClickSound>k__BackingField: 1
+--- !u!114 &1800764960502026091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8072029083669701538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4209f2962e7f0f40a185eb2bf83644a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resource: 3
+  _setNativeSize: 0
 --- !u!1 &8577567193043061850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1689,7 +1733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &979585437989795669
 RectTransform:
   m_ObjectHideFlags: 0

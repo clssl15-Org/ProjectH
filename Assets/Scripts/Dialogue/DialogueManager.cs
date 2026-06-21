@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using BlackThunder.BlackboxSystem;
+using Game.Management;
 using Infrastructure;
 using UI;
 using UnityEngine;
@@ -33,13 +33,19 @@ namespace Dialogue
         private DialogueScriptLibrary _dialogueScriptLibrary;
 
         private IDialogueUI _currentUI;
+        private DialogueScriptSO _currentScript;
         private string _currentScriptTitle = string.Empty;
+        private int _currentLineIndex = -1;
+        private bool _currentCloseDialogue = true;
+        private Action _currentCallback;
         private IDisposable _updateHandle;
         private BlackboxHandle _blackbox;
+
 
         private void Awake()
         {
             using var _ = BlackboxHandle.Of(this).Construct("대화 매니저 초기화를 시작합니다.", out _blackbox);
+            LanguageManager.LanguageChanged += OnLanguageChanged;
         }
 
         public void Initialize(
@@ -76,27 +82,23 @@ namespace Dialogue
 
             if (!string.IsNullOrEmpty(_currentScriptTitle))
             {
-                Debug.LogWarning($"�̹� ��Ʈ��Ʈ '{_currentScriptTitle}'��(��) ��� ���̱� ������ ���ο� ��ũ��Ʈ '{title}'��(��) ����� �� �����ϴ�.",
+                Debug.LogWarning($"이미 스크립트 '{_currentScriptTitle}'을(를) 재생 중이기 때문에 새로운 스크립트 '{title}'을(를) 재생할 수 없습니다.",
                     this);
                 return;
             }
 
-            if (!_dialogueScriptLibrary.TryGetDialogueScript(title, out var script))
-            {
-                var currentScriptList = string.Join(", ", _dialogueScriptLibrary.AllScriptTitles);
-
-                Debug.LogError($"'{title}'��(��) �������� ������ ��ȭ�� {nameof(DialogueScriptLibrary)}���� ã�� �� �����߽��ϴ�.\n" +
-                    $"��ü ��ȭ ���: {currentScriptList}",
-                    this);
-                return;
-            }
+            var script = GetRequiredDialogueScript(title, LanguageManager.Language);
 
             _currentScriptTitle = title;
+            _currentScript = script;
+            _currentLineIndex = -1;
+            _currentCloseDialogue = closeDialogue;
+            _currentCallback = callback;
             OnPlayStarting();
 
-            if (script.TargetStyle == DialogueStyle.ChatBubble)
+            if (_currentScript.TargetStyle == DialogueStyle.ChatBubble)
             {
-                CalculateAndSetBubbleSize(script);
+                CalculateAndSetBubbleSize(_currentScript);
 
                 _bubbleDialogueUI.transform.SetAsLastSibling();
 
@@ -110,7 +112,6 @@ namespace Dialogue
                 _currentUI = _dialogueUI;
             }
 
-            int currentIdx = -1;
             PlayDialogue();
 
             _updateHandle = Loco.Subscribe(() =>
@@ -124,11 +125,12 @@ namespace Dialogue
                         return;
                     }
 
-                    if (script.ShowOneRandomLine || currentIdx >= script.Count - 1)
+                    if (_currentScript.ShowOneRandomLine || _currentLineIndex >= _currentScript.Count - 1)
                     {
 
-                        Stop(closeDialogue);
-                        callback?.Invoke();
+                        var callbackOnStop = _currentCallback;
+                        Stop(_currentCloseDialogue);
+                        callbackOnStop?.Invoke();
                         return;
                     }
 
@@ -138,32 +140,90 @@ namespace Dialogue
 
             void PlayDialogue()
             {
-                if (script.ShowOneRandomLine && script.Count > 0)
-                    currentIdx = UnityEngine.Random.Range(0, script.Count);
+                if (_currentScript.ShowOneRandomLine)
+                    _currentLineIndex = UnityEngine.Random.Range(0, _currentScript.Count);
                 else
-                    currentIdx++;
+                    _currentLineIndex++;
 
 
-                if (script.TargetStyle == DialogueStyle.ChatBubble)
-                {
-                    var line = script[currentIdx];
-                    var dialogueText = line.Dialogue;
+                RenderCurrentLine(showImmediately: false);
+            }
+        }
 
-                    if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
-                        dialogueText = dialogueText.Replace("{player}", playerInfo.Name, StringComparison.OrdinalIgnoreCase);
-                    else
-                        Debug.LogWarning("Player ������ �������� ���߱� ������ {player} ���ڿ��� ġȯ���� ���߽��ϴ�.");
+        private void OnLanguageChanged(Language language)
+        {
+            if (string.IsNullOrEmpty(_currentScriptTitle))
+                return;
 
-                    var characterPosition = _getTransform(line.Character);
+            var showImmediately = _currentUI?.IsTotallyTyped ?? true;
+            _currentScript = GetRequiredDialogueScript(_currentScriptTitle, language);
+            ClampCurrentLineIndex();
 
-                    _bubbleDialogueUI
-                        .Show(new BubbleContainer(_canvasTransform)
-                        .With(dialogueText, characterPosition, BubbleOffset));
-                }
+            RenderCurrentLine(showImmediately);
+        }
+
+        private DialogueScriptSO GetRequiredDialogueScript(string title, Language language)
+        {
+            if (_dialogueScriptLibrary == null)
+                throw new InvalidOperationException($"{nameof(DialogueScriptLibrary)}가 주입되지 않았습니다.");
+
+            if (_dialogueScriptLibrary.TryGetDialogueScript(title, language, out var script))
+            {
+                ValidateDialogueScript(script);
+                return script;
+            }
+
+            var currentScriptList = string.Join(", ", _dialogueScriptLibrary.AllScriptTitles);
+            throw new InvalidOperationException(
+                $"'{title}' 대화 스크립트({language})를 {nameof(DialogueScriptLibrary)}에서 찾지 못했습니다.\n" +
+                $"전체 대화 목록: {currentScriptList}");
+        }
+
+        private static void ValidateDialogueScript(DialogueScriptSO script)
+        {
+            if (script == null)
+                throw new InvalidOperationException("대화 스크립트가 비어 있습니다.");
+
+            if (script.Count <= 0)
+                throw new InvalidOperationException(
+                    $"'{script.Title}' 대화 스크립트({script.Language})에 대사가 없습니다.");
+        }
+
+        private void ClampCurrentLineIndex()
+        {
+            ValidateDialogueScript(_currentScript);
+            _currentLineIndex = Mathf.Clamp(_currentLineIndex, 0, _currentScript.Count - 1);
+        }
+
+        private void RenderCurrentLine(bool showImmediately)
+        {
+            ClampCurrentLineIndex();
+
+            if (_currentScript.TargetStyle == DialogueStyle.ChatBubble)
+            {
+                CalculateAndSetBubbleSize(_currentScript);
+
+                var line = _currentScript[_currentLineIndex];
+                var dialogueText = line.Dialogue;
+
+                if (_gameAssetLibrary.TryGetCharacterInfo(Character.Player, out var playerInfo))
+                    dialogueText = dialogueText.Replace(
+                        "{player}",
+                        playerInfo.GetName(LanguageManager.Language),
+                        StringComparison.OrdinalIgnoreCase);
                 else
-                {
-                    _dialogueUI.SetContent(script[currentIdx]);
-                }
+                    Debug.LogWarning("Player 정보를 가져오지 못했기 때문에 {player} 문자열을 치환하지 못했습니다.");
+
+                var characterPosition = _getTransform(line.Character);
+
+                _bubbleDialogueUI
+                    .Show(new BubbleContainer(_canvasTransform)
+                    .With(dialogueText, characterPosition, BubbleOffset),
+                    showImmediately);
+            }
+            else
+            {
+                _dialogueUI.SetContent(_currentScript[_currentLineIndex], showImmediately);
             }
         }
 
@@ -211,12 +271,17 @@ namespace Dialogue
 
             _currentUI = null;
             _currentScriptTitle = string.Empty;
+            _currentScript = null;
+            _currentLineIndex = -1;
+            _currentCloseDialogue = true;
+            _currentCallback = null;
         }
 
         private void OnDestroy()
         {
             using var _ = _blackbox.Scope("대화 매니저를 정리합니다.");
 
+            LanguageManager.LanguageChanged -= OnLanguageChanged;
             Stop();
             Destroying?.Invoke();
         }
