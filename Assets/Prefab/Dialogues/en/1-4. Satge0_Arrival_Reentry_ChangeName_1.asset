@@ -14,10 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _title: Satge0_Arrival_Reentry_ChangeName_1
   _language: 3
+  _showOneRandomLine: 0
   _targetStyle: 1
   _lines:
   - Character: 2
-    Dialogue: "What should I call you this time?"
+    Dialogue: What should I call you this time?
     _overrides:
-      Name: "Rubiel"
+      Name: Rubiel
+      Portrait: {fileID: 0}
+  - Character: 1
+    Dialogue: 
+    _overrides:
+      Name: 
       Portrait: {fileID: 0}

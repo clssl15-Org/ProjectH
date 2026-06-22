@@ -32,6 +32,9 @@ namespace UI
 
         RelicOfTheOrder_Title,
         Stage0_NamePlaceholder,
+
+        RecordUnlocked_Message1,
+        RecordUnlocked_Message2,
     }
     
     public class UITextLibrary : MonoBehaviour
