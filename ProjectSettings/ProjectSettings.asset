@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Creator
+  companyName: Lumen Studio
   productName: Last Lumen Knight
   defaultCursor: {fileID: 2800000, guid: a6f4ba63220d8474e8016f7e8cab0a62, type: 3}
   cursorHotspot: {x: 0, y: 0}
@@ -807,7 +807,7 @@ PlayerSettings:
     PS5: UNITY_POST_PROCESSING_STACK_V2
     QNX: UNITY_POST_PROCESSING_STACK_V2
     Stadia: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: UNITY_POST_PROCESSING_STACK_V2;BLACKBOX;_DEBUG_MODE;PLAYER_DEBUG_MODE
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;_BLACKBOX;_DEBUG_MODE;PLAYER_DEBUG_MODE
     VisionOS: UNITY_POST_PROCESSING_STACK_V2
     WebGL: UNITY_POST_PROCESSING_STACK_V2
     XboxOne: UNITY_POST_PROCESSING_STACK_V2
