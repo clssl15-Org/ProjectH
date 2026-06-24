@@ -20,13 +20,23 @@ public class DamageRoulette : MonoBehaviour
     // 룰렛 보너스 수치 정의
     private readonly float[] bonuses = { 1, 1.1f, 1.25f, 1.5f, 1.75f, 2 };
     // 기획서에 명시된 각 보너스별 확률 (%)
-    private int[] probabilities = { 22, 30, 25, 15, 6, 2 };
+    private static readonly int[] defaultProbabilities = { 22, 30, 25, 15, 6, 2 };
+    private int[] probabilities = defaultProbabilities.ToArray();
+
+    public static int[] DefaultProbabilities => defaultProbabilities.ToArray();
+
     public int[] Probabilities
     {
-        get => probabilities;
+        get => probabilities.ToArray();
         set
         {
-            probabilities = value;
+            if (value == null)
+                throw new ArgumentNullException(nameof(value), "룰렛 확률 배열이 null입니다.");
+
+            if (value.Length != bonuses.Length)
+                throw new ArgumentException("룰렛 확률 배열 길이가 보너스 배열 길이와 다릅니다.", nameof(value));
+
+            probabilities = value.ToArray();
         }
     }
 

@@ -1,26 +1,73 @@
-using System.Collections;
-using System.Collections.Generic;
+using Actors.PlayerSystem;
 using UnityEngine;
 
-public class BrassGearOfFate : Relic
+public class BrassGearOfFate : Relic, IRelicPlayerRebindHandler
 {
-    private int[] originProb;
+    private const int HighMultiplierStartIndex = 3;
+
     public override void OnAcquire()
     {
-        originProb = RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities;
-
-        int[] newProb = originProb;
-        newProb[0] -= (int)value;
-        newProb[1] -= (int)value;
-        newProb[2] -= (int)value;
-        newProb[3] += (int)value;
-        newProb[4] += (int)value;
-        newProb[5] += (int)value;
-
-        RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities = newProb;
+        SyncProbabilities();
     }
+
+    public void RebindPlayer(Player player)
+    {
+        SyncProbabilities(player);
+    }
+
     protected override void OnLoseCore()
     {
-        RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities = originProb;
+        SyncProbabilities(excludeFromSum: this);
+    }
+
+    private void SyncProbabilities(Player? targetPlayer = null, BrassGearOfFate? excludeFromSum = null)
+    {
+        var player = targetPlayer != null
+            ? targetPlayer
+            : RelicManager.Instance?.player ?? FindObjectOfType<Player>();
+
+        var roulette = GetRoulette(player);
+        roulette.Probabilities = BuildProbabilities(GetCombinedValue(excludeFromSum));
+    }
+
+    private float GetCombinedValue(BrassGearOfFate? excludeFromSum = null)
+    {
+        if (RelicManager.Instance == null)
+            return 0f;
+
+        float sum = RelicManager.Instance.GetValueSum(data.RelicNumber);
+
+        if (excludeFromSum != null)
+            sum -= excludeFromSum.value;
+
+        return Mathf.Max(0f, sum);
+    }
+
+    private static int[] BuildProbabilities(float combinedValue)
+    {
+        int[] probabilities = DamageRoulette.DefaultProbabilities;
+        int probabilityShift = Mathf.RoundToInt(combinedValue);
+
+        for (int i = 0; i < probabilities.Length; i++)
+        {
+            if (i < HighMultiplierStartIndex)
+                probabilities[i] -= probabilityShift;
+            else
+                probabilities[i] += probabilityShift;
+        }
+
+        return probabilities;
+    }
+
+    private static DamageRoulette GetRoulette(Player player)
+    {
+        if (player == null)
+            throw new System.ArgumentNullException(nameof(player));
+
+        var roulette = player.GetComponent<DamageRoulette>();
+        if (roulette == null)
+            throw new System.InvalidOperationException("[BrassGearOfFate] 플레이어의 DamageRoulette 컴포넌트를 찾을 수 없습니다.");
+
+        return roulette;
     }
 }
