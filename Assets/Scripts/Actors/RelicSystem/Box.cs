@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Infrastructure;
 using UnityEngine;
 
 public class Box : MonoBehaviour
@@ -26,6 +27,8 @@ public class Box : MonoBehaviour
     private void Update()
     {
         if (IsLocked)
+            return;
+        if (WorldInteractionInputBlocker.IsBlocked)
             return;
 
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.F) && !isBoxOpened)

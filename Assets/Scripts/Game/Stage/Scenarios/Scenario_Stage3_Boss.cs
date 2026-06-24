@@ -51,7 +51,7 @@ namespace Game.Stage
                 {
                     if (IsPlayerOnGround && IsRubielClose)
                     {
-                        BlockInputs();
+                        BlockInputs(blockWorldInteractions: true);
 
                         if (IsFirstArrival)
                             To(BlockName.Contact_TwinBoss_First);
@@ -94,7 +94,7 @@ namespace Game.Stage
                         self.ToNextToken = true;
 
                         SetFinalBossTransitionInvincible(true);
-                        BlockInputs();
+                        BlockInputs(blockWorldInteractions: true);
                         new Timer(2f, _ =>
                         {
                             if (ConsumePostBossArrival(FinalBossContactArrivalKey))
@@ -154,7 +154,7 @@ namespace Game.Stage
                     if (IsPlayerOnGround)
                     {
                         SetRubielToBig();
-                        BlockInputs();
+                        BlockInputs(blockWorldInteractions: true);
                         To(BlockName.Ending);
                     }
                 });
@@ -210,7 +210,7 @@ namespace Game.Stage
                 return;
 
             SetFinalBossTransitionInvincible(false);
-            BlockInputs();
+            BlockInputs(blockWorldInteractions: true);
             To(BlockName.Ending);
         }
 

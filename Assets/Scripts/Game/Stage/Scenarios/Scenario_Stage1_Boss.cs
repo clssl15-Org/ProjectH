@@ -34,7 +34,7 @@ namespace Game.Stage
                     {
                         if (IsFirstArrival)
                         {
-                            BlockInputs();
+                            BlockInputs(blockWorldInteractions: true);
                             To(BlockName.Contact);
                         }
                         else
@@ -66,7 +66,7 @@ namespace Game.Stage
 
                         if (ConsumePassedArrival())
                         {
-                            BlockInputs();
+                            BlockInputs(blockWorldInteractions: true);
                             SetRubielToVisible(RubielVisibilityMode.TeleportNearToPlayer, () => To(BlockName.Passed_1));
                         }
                         else

@@ -88,8 +88,11 @@ namespace Game.Stage
             _inputHub = inputHub;
         }
 
-        protected void BlockInputs()
+        protected void BlockInputs() => BlockInputs(false);
+        protected void BlockInputs(bool blockWorldInteractions)
         {
+            if (blockWorldInteractions)
+                WorldInteractionInputBlocker.Block(this);
 
             if (StageManager.PlayerUI != null)
                 _inputHub.AddAfter(StageManager.PlayerUI, this);
@@ -103,6 +106,7 @@ namespace Game.Stage
         protected void UnblockInputs()
         {
 
+            WorldInteractionInputBlocker.Unblock(this);
             _inputHub.Remove(StageManager.DialogueManager);
             _inputHub.Remove(this);
         }
@@ -294,6 +298,7 @@ namespace Game.Stage
         private void OnDestroy()
         {
 
+            WorldInteractionInputBlocker.Unblock(this);
             _rubielVisibleHandle?.Dispose();
             Destroying?.Invoke();
 

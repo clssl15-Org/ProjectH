@@ -45,6 +45,7 @@ public class Portal : MonoBehaviour, IInjectable<GameServices>
     {
         if (IsInteractable
             && isPlayerInRange
+            && !WorldInteractionInputBlocker.IsBlocked
             && Input.GetKeyDown(KeyCode.F))
         {
             Closing?.Invoke();

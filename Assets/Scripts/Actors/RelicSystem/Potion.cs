@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Actors.PlayerSystem;
+using Infrastructure;
 using UnityEngine;
 
 public class Potion : MonoBehaviour
@@ -27,6 +28,9 @@ public class Potion : MonoBehaviour
 
     private void Update()
     {
+        if (WorldInteractionInputBlocker.IsBlocked)
+            return;
+
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
         {
             Apply();
