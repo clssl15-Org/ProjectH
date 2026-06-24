@@ -13,14 +13,6 @@ public class ScoutAccuracyGlasses : Relic
     }
     protected override void OnLoseCore()
     {
-        Player player = RelicManager.Instance?.player;
-        if (player != null && player.StatesGO != null)
-        {
-            RangedAttack skill = player.StatesGO.GetComponent<RangedAttack>();
-            if (skill != null)
-            {
-                skill.BonusMultiplier -= value * 0.01f;
-            }
-        }
+        RelicManager.Instance.player.StatesGO.GetComponent<RangedAttack>().BonusMultiplier -= value * 0.01f;
     }
 }

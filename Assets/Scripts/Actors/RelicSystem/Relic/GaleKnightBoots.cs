@@ -74,11 +74,7 @@ public class GaleKnightBoots : Relic
         if (this != primaryInstance)
             return;
 
-        Player player = RelicManager.Instance?.player;
-        if (player != null)
-        {
-            player.playerStats.moveSpeedMultiplier -= moveSpeedBonus;
-        }
+        RelicManager.Instance.player.playerStats.moveSpeedMultiplier -= moveSpeedBonus;
     }
 
     private void OnDestroy()

@@ -8,36 +8,20 @@ public class BrassGearOfFate : Relic
     private int[] originProb;
     public override void OnAcquire()
     {
-        Player player = RelicManager.Instance.player;
-        if (player != null)
-        {
-            DamageRoulette roulette = player.GetComponent<DamageRoulette>();
-            if (roulette != null && roulette.Probabilities != null)
-            {
-                originProb = (int[])roulette.Probabilities.Clone();
+        originProb = RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities;
 
-                int[] newProb = (int[])originProb.Clone();
-                newProb[0] -= (int)value;
-                newProb[1] -= (int)value;
-                newProb[2] -= (int)value;
-                newProb[3] += (int)value;
-                newProb[4] += (int)value;
-                newProb[5] += (int)value;
+        int[] newProb = originProb;
+        newProb[0] -= (int)value;
+        newProb[1] -= (int)value;
+        newProb[2] -= (int)value;
+        newProb[3] += (int)value;
+        newProb[4] += (int)value;
+        newProb[5] += (int)value;
 
-                roulette.Probabilities = newProb;
-            }
-        }
+        RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities = newProb;
     }
     protected override void OnLoseCore()
     {
-        Player player = RelicManager.Instance?.player;
-        if (player != null)
-        {
-            DamageRoulette roulette = player.GetComponent<DamageRoulette>();
-            if (roulette != null && originProb != null)
-            {
-                roulette.Probabilities = originProb;
-            }
-        }
+        RelicManager.Instance.player.GetComponent<DamageRoulette>().Probabilities = originProb;
     }
 }

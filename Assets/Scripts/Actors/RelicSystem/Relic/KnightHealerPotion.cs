@@ -52,9 +52,6 @@ public class KnightHealerPotion : Relic
     }
     protected override void OnLoseCore()
     {
-        if (RelicManager.Instance != null)
-        {
-            RelicManager.Instance.AcquisitionUiClosed -= SpawnPotionWhenUiClosed;
-        }
+        
     }
 }

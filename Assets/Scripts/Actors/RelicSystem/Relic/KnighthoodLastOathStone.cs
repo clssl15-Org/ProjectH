@@ -67,7 +67,7 @@ public class KnighthoodLastOathStone : Relic
 
     private bool TryPromoteNextPrimary()
     {
-        if (RelicManager.Instance == null || !RelicManager.Instance.OwnedRelics.TryGetValue(data.RelicNumber, out var list))
+        if (!RelicManager.Instance.OwnedRelics.TryGetValue(data.RelicNumber, out var list))
             return false;
 
         foreach (var relicObj in list)
@@ -141,9 +141,7 @@ public class KnighthoodLastOathStone : Relic
 
     private static void ApplyAttackPowerMultiplier(float factor)
     {
-        var player = RelicManager.Instance?.player;
-        if (player == null)
-            return;
+        var player = RelicManager.Instance.player;
         var stats = player.playerStats;
         stats.attackPowerMultiplier *= factor;
         player.playerStats = stats;
@@ -151,8 +149,8 @@ public class KnighthoodLastOathStone : Relic
 
     private static void ApplyRangedBonusMultiplier(float factor)
     {
-        var player = RelicManager.Instance?.player;
-        if (player == null || player.StatesGO == null)
+        var player = RelicManager.Instance.player;
+        if (player?.StatesGO == null)
             return;
 
         if (!player.StatesGO.TryGetComponent<RangedAttack>(out var rangedAttack))
@@ -163,9 +161,6 @@ public class KnighthoodLastOathStone : Relic
 
     private float GetCombinedThresholdPercent(KnighthoodLastOathStone? excludeFromSum = null)
     {
-        if (RelicManager.Instance == null)
-            return 0f;
-
         float sum = RelicManager.Instance.GetValueSum(data.RelicNumber);
 
         if (excludeFromSum != null)

@@ -19,18 +19,14 @@ public class SacredProtectionMark : Relic
 
     protected override void OnLoseCore()
     {
-        var player = RelicManager.Instance?.player;
-        if (player != null)
-        {
-            var health = player.PlayerHealth;
-            if (health != null)
-            {
-                int previousMax = health.MaxHealth;
-                var stats = player.playerStats;
-                stats.maxHeathMultiplier -= value * 0.01f;
-                player.playerStats = stats;
-                health.NotifyMaxHealthChanged(previousMax);
-            }
-        }
+        var player = RelicManager.Instance.player;
+        var health = player.PlayerHealth;
+        int previousMax = health.MaxHealth;
+
+        var stats = player.playerStats;
+        stats.maxHeathMultiplier -= value * 0.01f;
+        player.playerStats = stats;
+
+        health.NotifyMaxHealthChanged(previousMax);
     }
 }
