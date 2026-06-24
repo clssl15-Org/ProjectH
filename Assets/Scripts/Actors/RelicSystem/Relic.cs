@@ -1,5 +1,11 @@
 using System;
+using Actors.PlayerSystem;
 using UnityEngine;
+
+public interface IRelicPlayerRebindHandler
+{
+    void RebindPlayer(Player player);
+}
 
 public abstract class Relic : MonoBehaviour
 {

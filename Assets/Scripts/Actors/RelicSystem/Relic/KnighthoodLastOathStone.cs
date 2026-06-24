@@ -1,13 +1,13 @@
 using Actors.PlayerSystem;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class KnighthoodLastOathStone : Relic
+public class KnighthoodLastOathStone : Relic, IRelicPlayerRebindHandler
 {
     private static KnighthoodLastOathStone? primaryInstance;
 
     private PlayerHealth? playerHealth;
     private bool isBuffActive;
+    private int _buffPlayerInstanceId;
 
     public override void OnAcquire()
     {
@@ -45,14 +45,12 @@ public class KnighthoodLastOathStone : Relic
     private void BecomePrimary(KnighthoodLastOathStone? excludeFromSum = null)
     {
         primaryInstance = this;
-        SceneManager.sceneLoaded += OnSceneLoaded;
         SubscribeToPlayerHealth();
         EvaluateBuffState(excludeFromSum);
     }
 
     private void TearDownPrimary()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
         UnsubscribeFromPlayerHealth();
 
         if (isBuffActive)
@@ -60,6 +58,7 @@ public class KnighthoodLastOathStone : Relic
             isBuffActive = false;
             ApplyAttackPowerMultiplier(0.5f);
             ApplyRangedBonusMultiplier(0.5f);
+            _buffPlayerInstanceId = 0;
         }
 
         primaryInstance = null;
@@ -86,13 +85,29 @@ public class KnighthoodLastOathStone : Relic
         return false;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => SubscribeToPlayerHealth();
+    public void RebindPlayer(Player player)
+    {
+        if (this != primaryInstance)
+            return;
 
-    private void SubscribeToPlayerHealth()
+        SubscribeToPlayerHealth(player);
+
+        if (isBuffActive && _buffPlayerInstanceId != player.GetInstanceID())
+        {
+            ApplyRangedBonusMultiplier(2f);
+            _buffPlayerInstanceId = player.GetInstanceID();
+        }
+
+        EvaluateBuffState();
+    }
+
+    private void SubscribeToPlayerHealth(Player? targetPlayer = null)
     {
         UnsubscribeFromPlayerHealth();
 
-        var player = RelicManager.Instance?.player ?? FindObjectOfType<Player>();
+        var player = targetPlayer != null
+            ? targetPlayer
+            : RelicManager.Instance?.player ?? FindObjectOfType<Player>();
         if (player == null)
         {
             Debug.LogWarning("[KnighthoodLastOathStone] Player not found; Damaged/Healed not subscribed.");
@@ -130,12 +145,14 @@ public class KnighthoodLastOathStone : Relic
             isBuffActive = true;
             ApplyAttackPowerMultiplier(2f);
             ApplyRangedBonusMultiplier(2f);
+            _buffPlayerInstanceId = RelicManager.Instance.player.GetInstanceID();
         }
         else if (!shouldBeActive && isBuffActive)
         {
             isBuffActive = false;
             ApplyAttackPowerMultiplier(0.5f);
             ApplyRangedBonusMultiplier(0.5f);
+            _buffPlayerInstanceId = 0;
         }
     }
 

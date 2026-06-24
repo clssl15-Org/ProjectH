@@ -630,5 +630,24 @@ public class RelicManager : MonoBehaviour
     {
         // 씬이 바뀌면 새로운 플레이어 오브젝트를 자동으로 할당
         player = FindObjectOfType<Player>();
+        RebindOwnedRelicsToPlayer();
+    }
+
+    private void RebindOwnedRelicsToPlayer()
+    {
+        if (!player)
+            return;
+
+        foreach (var relicList in ownedRelics.Values)
+        {
+            foreach (var relicObj in relicList)
+            {
+                if (!relicObj)
+                    continue;
+
+                if (relicObj.GetComponent<Relic>() is IRelicPlayerRebindHandler rebindHandler)
+                    rebindHandler.RebindPlayer(player);
+            }
+        }
     }
 }
