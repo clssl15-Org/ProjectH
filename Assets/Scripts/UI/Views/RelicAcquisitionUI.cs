@@ -43,7 +43,9 @@ namespace UI
         [SerializeField] private VideoPlayer _coinEffectMaskVideoPlayer;
         [SerializeField, Range(MinCoinAnimationPlaySpeed, MaxCoinAnimationPlaySpeed)] private float _coinAnimationPlaySpeed = 1f;
         [SerializeField] private float _effectPlayTiming = 1f;
-        [SerializeField, Max(0f)] private float _dropEventNotifyTiming = -2.6f;
+        [SerializeField, Tooltip("동전 영상 끝 기준 낙하음 알림 시간입니다. 음수면 영상 끝 이전에 알립니다.")]
+        private float _dropEventNotifyTiming = -2.6f;
+        [SerializeField, UnityEngine.Min(0f)] private float _coinCompletionGraceTime = 0.75f;
 
         public event Action CoinThrown;
         public event Action CoinDropped;
@@ -72,7 +74,7 @@ namespace UI
         private IInputHub _inputHub;
         private CursorVisibilityController _cursorVisibilityController;
         private DarkscreenUI _darkscreenUI;
-        private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer;
+        private IDisposable _updater, _coinTimer, _coinDropTimer, _effectTimer, _coinCompletionGuardTimer;
         private RelicDataSO _relic;
         private RelicManager.RelicAcquisitionDto _relicAcquisition;
         private bool _forceSuccess;
@@ -82,6 +84,9 @@ namespace UI
         private bool _isOperating;
         private bool _isOperated;
         private bool _isDestroyed;
+        private bool _isCoinCompletionHandled;
+        private bool _isCoinVideoEventSubscribed;
+        private bool _currentCoinReinforced;
 
         private readonly bool UseCoinReadyImage;
 
@@ -176,8 +181,10 @@ namespace UI
                 return;
             }
 
+            ClearCoinPlaybackGuards();
             _isOperating = true;
             _isOperated = false;
+            _isCoinCompletionHandled = false;
             _relic = relicInfo;
             _relicAcquisition = relicAcquisition;
             _forceSuccess = relicAcquisition.ForceSuccess;
@@ -216,9 +223,29 @@ namespace UI
             string reinforcedNextValue = FormatValue(_relicAcquisition.ReinforcedNextValue);
             _coinDescripton.text = $"<align=center><size=120%>강화 성공 시 능력치 {normalNextValue} → {reinforcedNextValue}</size></align>";
             var reinforced = _forceSuccess || RelicManager.Instance.StartCoinRandom(_relic.RelicNumber);
+            _currentCoinReinforced = reinforced;
+            _isCoinCompletionHandled = false;
 
             var coinClip = _videoClips.FirstOrDefault(v => v.VideoType
                 == (reinforced ? VideoType.CoinFront : VideoType.CoinBack));
+
+            _updater?.Dispose();
+            _updater = null;
+            ClearCoinPlaybackGuards();
+
+            if (!_coinRawVideoPlayer || !_coinMaskVideoPlayer)
+            {
+                Debug.LogError("동전 영상 재생기가 할당되지 않아 결과 화면으로 복구합니다.", this);
+                CompleteCoinThrow(reinforced, "동전 영상 재생기 누락");
+                return;
+            }
+
+            if (!TryGetClipPlayDuration(coinClip.Video, CoinAnimationPlaySpeed, out var coinPlayDuration))
+            {
+                Debug.LogWarning("동전 영상 클립이 없거나 길이가 비정상이라 결과 화면으로 복구합니다.", this);
+                CompleteCoinThrow(reinforced, "동전 클립 누락");
+                return;
+            }
 
             _coinRawVideoPlayer.playbackSpeed = 0f;
             _coinMaskVideoPlayer.playbackSpeed = 0f;
@@ -229,21 +256,31 @@ namespace UI
             _coinRawVideoPlayer.frame = 0;
             _coinMaskVideoPlayer.frame = 0;
 
+            var canPlayEffect = false;
             if (reinforced)
             {
                 var effectClip = _videoClips.FirstOrDefault(v => v.VideoType == VideoType.CoinEffect);
 
-                _coinEffectVideoPlayer.playbackSpeed = 0f;
-                _coinEffectMaskVideoPlayer.playbackSpeed = 0f;
+                if (_coinEffectVideoPlayer && _coinEffectMaskVideoPlayer && effectClip.Video && effectClip.AlphaMask)
+                {
+                    _coinEffectVideoPlayer.playbackSpeed = 0f;
+                    _coinEffectMaskVideoPlayer.playbackSpeed = 0f;
 
-                _coinEffectVideoPlayer.clip = effectClip.Video;
-                _coinEffectMaskVideoPlayer.clip = effectClip.AlphaMask;
+                    _coinEffectVideoPlayer.clip = effectClip.Video;
+                    _coinEffectMaskVideoPlayer.clip = effectClip.AlphaMask;
 
-                _coinEffectVideoPlayer.frame = 0;
-                _coinEffectMaskVideoPlayer.frame = 0;
+                    _coinEffectVideoPlayer.frame = 0;
+                    _coinEffectMaskVideoPlayer.frame = 0;
+                    canPlayEffect = true;
+                }
+                else
+                {
+                    Debug.LogWarning("동전 성공 효과 영상 구성이 없어 효과 재생만 건너뜁니다.", this);
+                }
             }
 
-            _updater?.Dispose();
+            SubscribeCoinVideoEvents();
+
             _updater = Loco.Subscribe(() =>
             {
                 if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) <= 0.001f)
@@ -266,16 +303,24 @@ namespace UI
                     _coinAnimation.SetActive(true);
                 }
 
+                if (_isCoinCompletionHandled)
+                    return;
+
                 _coinRawVideoPlayer.playbackSpeed = coinAnimationPlaySpeed;
                 _coinMaskVideoPlayer.playbackSpeed = coinAnimationPlaySpeed;
 
                 CoinThrown?.Invoke();
 
                 _effectTimer?.Dispose();
-                _effectTimer = reinforced ?
+                _effectTimer = canPlayEffect ?
                     new Timer(_effectPlayTiming / coinAnimationPlaySpeed, succeeded =>
                     {
+<<<<<<< Updated upstream
                         BlackboxHandle.Of(this).Write($"Effect Ended, succeeded: {succeeded}");
+=======
+                        if (!succeeded || _isCoinCompletionHandled)
+                            return;
+>>>>>>> Stashed changes
 
                         _effectAnimation.SetActive(true);
                         _coinEffectVideoPlayer.playbackSpeed = 1f;
@@ -285,8 +330,9 @@ namespace UI
                     : null;
 
                 _coinTimer?.Dispose();
-                _coinTimer = new Timer((float)coinClip.Video.length / coinAnimationPlaySpeed, succeeded =>
+                _coinTimer = new Timer(coinPlayDuration, succeeded =>
                 {
+<<<<<<< Updated upstream
                     using var _ = BlackboxHandle.Of(this).WriteScope($"Play Ended, succeeded: {succeeded}");
                     _isOperated = true;
 
@@ -313,6 +359,21 @@ namespace UI
                         Debug.LogWarning(BlackboxHandle.Of(this).ExertMessage(
                             RelicManager.Instance,
                             "Play Failed"));
+=======
+                    if (succeeded)
+                        CompleteCoinThrow(reinforced, "재생 시간 완료");
+                },
+                useAbsoluteTime: true);
+
+                _coinCompletionGuardTimer?.Dispose();
+                _coinCompletionGuardTimer = new Timer(coinPlayDuration + _coinCompletionGraceTime, succeeded =>
+                {
+                    if (!succeeded || _isCoinCompletionHandled)
+                        return;
+
+                    Debug.LogWarning("동전 완료 신호가 누락되어 안전장치로 결과 화면을 표시합니다.", this);
+                    CompleteCoinThrow(reinforced, "완료 안전장치");
+>>>>>>> Stashed changes
                 },
                 useAbsoluteTime: true);
 
@@ -336,18 +397,14 @@ namespace UI
             if (_darkscreenUI) _darkscreenUI.Disable();
 
             _updater?.Dispose();
-            _coinTimer?.Dispose();
-            _coinDropTimer?.Dispose();
-            _effectTimer?.Dispose();
+            ClearCoinPlaybackGuards();
 
             _updater = null;
-            _coinTimer = null;
-            _coinDropTimer = null;
-            _effectTimer = null;
 
             Disable();
             _isOperating = false;
             _isOperated = false;
+            _isCoinCompletionHandled = false;
         }
 
         public void Enable()
@@ -387,11 +444,152 @@ namespace UI
             Destroying?.Invoke();
 
             _updater?.Dispose();
+            ClearCoinPlaybackGuards();
+
+            if (RelicManager.Instance != null)
+                RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
+        }
+
+        private void CompleteCoinThrow(bool reinforced, string reason)
+        {
+            if (_isCoinCompletionHandled)
+                return;
+
+            _isCoinCompletionHandled = true;
+            _isOperated = true;
+            ClearCoinPlaybackGuards();
+
+            string description = string.Empty;
+            try
+            {
+                if (RelicManager.Instance == null)
+                    throw new InvalidOperationException($"{nameof(RelicManager)}.Instance가 없습니다.");
+
+                RelicManager.Instance.AddRelic(
+                    _relic.RelicNumber,
+                    out description,
+                    reinforced);
+
+                SetCoinResultDescription(reinforced, description);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"동전 결과 처리 중 오류가 발생했습니다. 원인: {reason}\n{ex}", this);
+                string fallbackDescription = string.IsNullOrEmpty(description)
+                    ? "유물 획득 처리 중 오류가 발생했습니다. 창을 닫은 뒤 진행 상태를 확인해 주세요."
+                    : description;
+
+                SetRelicDescriptionSafe(
+                    $"<size=120%>{UiRichTextFormatter.RedHighlightOpenTag}유물 획득 처리 오류{UiRichTextFormatter.RedHighlightCloseTag}</size>\n\n{fallbackDescription}");
+            }
+            finally
+            {
+                ShowCoinResultPage();
+            }
+        }
+
+        private void SetCoinResultDescription(bool reinforced, string description)
+        {
+            if (reinforced)
+            {
+                var infoMessage = UITextLibrary.GetText(UITextResource.Coin_Success, LanguageManager.Language);
+
+                SetRelicDescriptionSafe(
+                    $"<size=120%>{RelicManager.BlueHighlightOpenTag}{infoMessage}{RelicManager.BlueHighlightCloseTag}</size>\n\n{description}");
+            }
+            else
+            {
+                var infoMessage = UITextLibrary.GetText(UITextResource.Coin_Failed, LanguageManager.Language);
+
+                SetRelicDescriptionSafe(
+                    $"<size=120%>{UiRichTextFormatter.RedHighlightOpenTag}{infoMessage}{UiRichTextFormatter.RedHighlightCloseTag}</size>\n\n{description}");
+            }
+        }
+
+        private void ShowCoinResultPage()
+        {
+            if (!this)
+                return;
+
+            _toThrowCoinBtn.gameObject.SetActive(false);
+            _closeBtn.gameObject.SetActive(true);
+
+            _coinPage.SetActive(false);
+            _relicPage.SetActive(true);
+        }
+
+        private void SetRelicDescriptionSafe(string text)
+        {
+            try
+            {
+                _relicDescrption.text = FormatUiText(text);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"유물 설명 표시 중 오류가 발생했습니다.\n{ex}", this);
+                _relicDescrption.text = text;
+            }
+        }
+
+        private void SubscribeCoinVideoEvents()
+        {
+            if (!_coinRawVideoPlayer || _isCoinVideoEventSubscribed)
+                return;
+
+            _coinRawVideoPlayer.loopPointReached += OnCoinRawVideoLoopPointReached;
+            _coinRawVideoPlayer.errorReceived += OnCoinRawVideoErrorReceived;
+            _isCoinVideoEventSubscribed = true;
+        }
+
+        private void UnsubscribeCoinVideoEvents()
+        {
+            if (!_coinRawVideoPlayer || !_isCoinVideoEventSubscribed)
+                return;
+
+            _coinRawVideoPlayer.loopPointReached -= OnCoinRawVideoLoopPointReached;
+            _coinRawVideoPlayer.errorReceived -= OnCoinRawVideoErrorReceived;
+            _isCoinVideoEventSubscribed = false;
+        }
+
+        private void OnCoinRawVideoLoopPointReached(VideoPlayer source) =>
+            CompleteCoinThrow(_currentCoinReinforced, "영상 종료 이벤트");
+
+        private void OnCoinRawVideoErrorReceived(VideoPlayer source, string message)
+        {
+            Debug.LogWarning($"동전 영상 재생 오류가 발생하여 결과 화면으로 복구합니다. 오류: {message}", this);
+            CompleteCoinThrow(_currentCoinReinforced, "영상 오류");
+        }
+
+        private void ClearCoinPlaybackGuards()
+        {
+            UnsubscribeCoinVideoEvents();
+
             _coinTimer?.Dispose();
             _coinDropTimer?.Dispose();
             _effectTimer?.Dispose();
+            _coinCompletionGuardTimer?.Dispose();
 
-            RelicManager.Instance.RelicAcquiring -= OnRelicAcquiring;
+            _coinTimer = null;
+            _coinDropTimer = null;
+            _effectTimer = null;
+            _coinCompletionGuardTimer = null;
+        }
+
+        private static bool TryGetClipPlayDuration(VideoClip clip, float speed, out float playDuration)
+        {
+            playDuration = 0f;
+            if (clip == null)
+                return false;
+
+            if (speed <= 0f)
+                return false;
+
+            double length = clip.length;
+            if (double.IsNaN(length) || double.IsInfinity(length) || length <= 0d)
+                return false;
+
+            playDuration = (float)(length / speed);
+            return playDuration > 0f && !float.IsNaN(playDuration) && !float.IsInfinity(playDuration);
         }
 
         private static string FormatValue(float value)
