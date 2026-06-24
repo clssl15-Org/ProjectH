@@ -12,6 +12,10 @@ public class DevotedKnightFragmentShield : Relic
 
     protected override void OnLoseCore()
     {
-        RelicManager.Instance.player.PlayerHealth.OnSieldBreak -= OnLose;
+        Player player = RelicManager.Instance?.player;
+        if (player != null && player.PlayerHealth != null)
+        {
+            player.PlayerHealth.OnSieldBreak -= OnLose;
+        }
     }
 }

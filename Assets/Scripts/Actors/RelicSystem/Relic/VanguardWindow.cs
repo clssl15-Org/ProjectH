@@ -14,6 +14,14 @@ public class VanguardWindow : Relic
     }
     protected override void OnLoseCore()
     {
-
+        Player player = RelicManager.Instance?.player;
+        if (player != null && player.StatesGO != null)
+        {
+            RushStabbing firstSkill = player.StatesGO.GetComponent<RushStabbing>();
+            if (firstSkill != null)
+            {
+                firstSkill.BonusMultiplier -= value * 0.01f;
+            }
+        }
     }
 }

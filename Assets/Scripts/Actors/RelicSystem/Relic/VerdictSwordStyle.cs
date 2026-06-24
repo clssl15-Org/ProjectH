@@ -14,6 +14,14 @@ public class VerdictSwordStyle : Relic
     }
     protected override void OnLoseCore()
     {
-
+        Player player = RelicManager.Instance?.player;
+        if (player != null && player.StatesGO != null)
+        {
+            StrongAttack skill = player.StatesGO.GetComponent<StrongAttack>();
+            if (skill != null)
+            {
+                skill.BonusMultiplier -= value * 0.01f;
+            }
+        }
     }
 }

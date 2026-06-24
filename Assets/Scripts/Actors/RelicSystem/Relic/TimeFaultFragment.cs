@@ -12,7 +12,11 @@ public class TimeFaultFragment : Relic
 
     protected override void OnLoseCore()
     {
-        ref var stats = ref RelicManager.Instance.player.playerStats;
-        stats.skillCooldownMultiplier += value * 0.01f;
+        var player = RelicManager.Instance?.player;
+        if (player != null)
+        {
+            ref var stats = ref player.playerStats;
+            stats.skillCooldownMultiplier += value * 0.01f;
+        }
     }
 }

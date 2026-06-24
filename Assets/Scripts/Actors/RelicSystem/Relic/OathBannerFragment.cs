@@ -14,6 +14,14 @@ public class OathBannerFragment : Relic
     }
     protected override void OnLoseCore()
     {
-
+        Player player = RelicManager.Instance?.player;
+        if (player != null && player.StatesGO != null)
+        {
+            Skill3 firstSkill = player.StatesGO.GetComponent<Skill3>();
+            if (firstSkill != null)
+            {
+                firstSkill.BonusMultiplier -= value * 0.01f;
+            }
+        }
     }
 }
