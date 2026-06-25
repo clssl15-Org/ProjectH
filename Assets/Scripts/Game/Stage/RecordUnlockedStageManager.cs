@@ -7,6 +7,8 @@ namespace Game.Stage
 {
     public class RecordUnlockedStageManager : MonoBehaviour, IInjectable<GameServices>
     {
+        private const string TitleSceneName = "Title";
+
         [SerializeField] private TextMeshProUGUI[] _texts;
 
         [Header("Fade Settings")]
@@ -14,6 +16,11 @@ namespace Game.Stage
         [SerializeField, Min(0)] private float _displayDuration = 1f;
 
         private GameServices _gameServices;
+        private bool _hasRequestedSceneTransition;
+
+        public float ExpectedPlaybackDuration =>
+            _displayDuration + ((_texts?.Length ?? 0) * ((_fadeDuration * 2f) + _displayDuration));
+        public bool HasRequestedSceneTransition => _hasRequestedSceneTransition;
 
         void IInjectable<GameServices>.Inject(GameServices gameServices)
             => _gameServices = gameServices;
@@ -44,10 +51,31 @@ namespace Game.Stage
                 text.gameObject.SetActive(false);
             }
 
-            if (_gameServices.IsGameCleared)
-                _gameServices.ChangeScene("Title", this, preservePlayerProgress: false);
+            RequestSceneTransition(this);
+        }
+
+        public bool RequestSceneTransition(object context = null, GameServices overrideGameServices = null)
+        {
+            if (_hasRequestedSceneTransition)
+                return false;
+
+            GameServices targetGameServices = overrideGameServices ? overrideGameServices : _gameServices;
+            if (!targetGameServices)
+            {
+                Debug.LogError(
+                    $"[{nameof(RecordUnlockedStageManager)}] {nameof(GameServices)}가 없어 다음 씬으로 전환할 수 없습니다.",
+                    this);
+                return false;
+            }
+
+            _hasRequestedSceneTransition = true;
+
+            if (targetGameServices.IsGameCleared)
+                targetGameServices.ChangeScene(TitleSceneName, context ?? this, preservePlayerProgress: false);
             else
-                _gameServices.ToFirstScene(this);
+                targetGameServices.ToFirstScene(context ?? this);
+
+            return true;
         }
 
         private IEnumerator FadeRoutine(TextMeshProUGUI text, float targetAlpha, float duration)
