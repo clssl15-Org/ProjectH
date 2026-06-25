@@ -134,6 +134,7 @@ namespace Actors.PlayerSystem
         {
             public PlayerStats Stats;
             public int CurrentHealth;
+            public int SieldCount;
             public float UltimateGauge;
         }
 
@@ -164,6 +165,7 @@ namespace Actors.PlayerSystem
             {
                 playerStats = persistedPlayerState.Stats;
                 playerHealth.SetInitialHealth(persistedPlayerState.CurrentHealth);
+                sieldCount = Mathf.Max(0, persistedPlayerState.SieldCount);
             }
 
             persistEnabled = true;
@@ -340,6 +342,7 @@ namespace Actors.PlayerSystem
             {
                 Stats = playerStats,
                 CurrentHealth = playerHealth.CurrentHealth,
+                SieldCount = Mathf.Max(0, sieldCount),
                 UltimateGauge = ultimate != null ? ultimate.CooldownGauge : 1f
             };
             hasPersistedPlayerState = true;
